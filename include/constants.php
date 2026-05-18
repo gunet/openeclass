@@ -22,6 +22,9 @@
 @brief Enter only platform constants here.
 */
 
+/* version */
+define('ECLASS_VERSION', '4.4-dev');
+
 /* course status */
 define('COURSE_CLOSED', 0);
 define('COURSE_REGISTRATION', 1);
@@ -108,6 +111,7 @@ define('MODULE_ID_H5P', 52);
 define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_REQUEST', 100);
 define('MODULE_ID_SESSION', 101);
+define('MODULE_ID_STICKY_NOTES', 102);
 //user activities
 define('MODULE_ID_EBOOK_READ','FC1');
 define('MODULE_ID_VIDEO_WATCH','FC2');

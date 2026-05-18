@@ -624,7 +624,7 @@ class Question {
                 WHERE a.eurid = b.eurid AND a.question_id = ?d AND b.attempt_status=?d$extra_sql", $query_vars)->count;
 
         //BUILDING CORRECT ANSWER QUERY BASED ON QUESTION TYPE
-        if($type == UNIQUE_ANSWER || $type == MULTIPLE_ANSWER || $type == TRUE_FALSE){ //works wrong for MULTIPLE_ANSWER
+        if($type == UNIQUE_ANSWER || $type == MULTIPLE_ANSWER || $type == TRUE_FALSE){ //works wrongly for MULTIPLE_ANSWER
             $i=1;
             for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                 if ($objAnswerTmp->isCorrect($answerId)) {
@@ -683,7 +683,7 @@ class Question {
             $correct_answer_attempts = Database::get()->querySingle("SELECT COUNT(DISTINCT a.eurid) AS count
                     FROM exercise_answer_record a, exercise_user_record b, exercise_question c
                     WHERE a.eurid = b.eurid AND a.question_id = c.id AND a.weight=c.weight AND a.question_id = ?d AND b.attempt_status=?d$extra_sql", $query_vars)->count;
-        } else {
+        } else if (!($type == DRAG_AND_DROP_TEXT || $type == DRAG_AND_DROP_MARKERS || $type == CALCULATED || $type == ORDERING)) {
             // One Query to Rule Them All (except free text questions)
             // This query groups attempts and counts correct and incorrect answers
             // then counts attempts where (correct answers == total anticipated correct attempts)

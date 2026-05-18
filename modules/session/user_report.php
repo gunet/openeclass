@@ -120,9 +120,12 @@ if (isset($_GET['u'])) { //  stats per user
     <div class='col-12'>
         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
-                    <h3>$langAttendance</h3>";
+                    <h2 class='text-heading-h3'>$langAttendance</h2>";
                     if(($is_consultant or $is_course_reviewer) && !isset($_GET['format'])){
+                        $tool_content .= "<div class='d-flex gap-2'>";
                         $tool_content .= "<a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$sessionID&amp;u=$_GET[u]&amp;format=pdf' target='_blank' aria-label='$langOpenNewTab'>$langDumpPDF</a>";
+                        $tool_content .= "<a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$sessionID&amp;u=$_GET[u]&amp;format=excel'>$langDumpExcel</a>";
+                        $tool_content .= "</div>";
                     }
     $tool_content .= "
             </div>
@@ -212,7 +215,7 @@ if (isset($_GET['u'])) { //  stats per user
                                                     <strong class='title-default'>$langCompletionResources</strong>
                                                 </div>
                                                 <div class='col-md-9 col-12 title-default-line-height'>
-                                                    " . session_completed_resources_by_user($sessionID, $course_id, $_GET['u']) . "
+                                                    " . session_completed_resources_by_user($sessionID, $course_id, intval($_GET['u'])) . "
                                                 </div>
                                             </div>
                                         </li>
@@ -235,7 +238,9 @@ if (isset($_GET['u'])) { //  stats per user
 
 
     if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
-        pdf_session_output($sessionID);
+        pdf_session_output($sessionID, intval($_GET['u']));
+    } elseif (isset($_GET['format']) and $_GET['format'] == 'excel') {
+        require_once 'modules/session/user_report_dump.php';
     } else {
         draw($tool_content, 2);
     }
@@ -336,7 +341,7 @@ if (isset($_GET['u'])) { //  stats per user
                                 <input type='hidden' name='aboutU' value='{$row->id}' />
                                 <input type='hidden' name='aboutSession' value='{$sessionID}' />
                                 <input type='hidden' name='aboutTutor' value='{$tutorSession}' />
-                                " . rich_text_editor('addContent', 4, 20, $contentToModify) . "
+                                " . rich_text_editor('addContent', 4, 20, $contentToModify, options: array('id' => 'addContent')) . "
                             </div>
                             <div class='modal-footer d-flex justify-content-center align-items-center'>
                                 <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>
@@ -565,12 +570,13 @@ if (isset($_GET['u'])) { //  stats per user
  * @return void
  * @throws \Mpdf\MpdfException
  */
-function pdf_session_output($sid) {
+function pdf_session_output($sid, $user_id) {
     global $tool_content, $currentCourseName,
            $webDir, $course_id, $course_code, $langHasParticipatedInTool,
            $langHasNotParticipatedInTool;
 
     $sessionTitle = title_session($course_id,$sid);
+    $sessionParticipant = uid_to_name($user_id);
 
     $pdf_content = "
         <!DOCTYPE html>
@@ -590,7 +596,6 @@ function pdf_session_output($sid) {
             td { text-align: left; }
             .text-success { color: #228B22; }
             .text-danger { color: #D22B2B; }
-            .completed_resources { display: none; }
           </style>
         </head>
         <body>
@@ -656,7 +661,8 @@ function pdf_session_output($sid) {
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
     $mpdf->WriteHTML($pdf_content);
-    $mpdf->Output("$course_code user_report.pdf", 'I'); // 'D' or 'I' for download / inline display
+    $pdfTitle = $course_code . '__' . $sessionTitle . '__' . $sessionParticipant;
+    $mpdf->Output("$pdfTitle.pdf", 'I'); // 'D' or 'I' for download / inline display
     exit;
 }
 
@@ -699,8 +705,8 @@ function pdf_user_material_output($sid,$content_m,$user_n) {
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($sessionTitle) . "&nbsp;&nbsp;&nbsp;($startSession - $finishSession)</h2>
-        <h3>$langConsultant:&nbsp;&nbsp;$infoConsultant->givenname&nbsp;$infoConsultant->surname</h3>
-        <h3>$langMaterialForUser:&nbsp;&nbsp;" . q($nameUser) . "<h3>";
+        <h2 class='text-heading-h3'>$langConsultant:&nbsp;&nbsp;$infoConsultant->givenname&nbsp;$infoConsultant->surname</h2>
+        <h2 class='text-heading-h3'>$langMaterialForUser:&nbsp;&nbsp;" . q($nameUser) . "<h2>";
 
     $pdf_mcontent .= $content_m;
 

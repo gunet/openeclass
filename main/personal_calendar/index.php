@@ -441,7 +441,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                     <div class='form-group mt-4'>
                                                         <label for='newContent' class='col-sm-12 control-label-notes'>$langDescription</label>
                                                         <div class='col-sm-12'>
-                                                            " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
+                                                            " . rich_text_editor('newContent', 4, 20, $contentToModify, options: array('id' => 'newContent')) . "
                                                         </div>
                                                     </div>
 
@@ -768,7 +768,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                         <div class='form-group mt-4'>
                                                             <label for='newContent' class='col-sm-12 control-label-notes'>$langDescription</label>
                                                             <div class='col-sm-12'>
-                                                                " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
+                                                                " . rich_text_editor('newContent', 4, 20, $contentToModify, options: array('id' => 'newContent')) . "
                                                             </div>
                                                         </div>
 

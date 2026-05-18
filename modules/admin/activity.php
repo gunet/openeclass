@@ -21,7 +21,8 @@ $require_admin = true;
 $require_help = true;
 require_once '../../include/baseTheme.php';
 
-$helpTopic = 'users_administration';
+$helpTopic = 'course_administration';
+$helpSubTopic = 'courses_activities';
 
 $toolName = $langAdmin;
 $pageName = $langActivityCourse;
@@ -210,7 +211,7 @@ $(function() {
               <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3' data-id='$indirectId'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
 
-                    <h3>$heading</h3>
+                    <h2 class='text-heading-h3'>$heading</h2>
 
                     <div class='d-flex justify-content-end align-items-center'>$type " .
                         icon('fa-edit ps-2 pe-2', $langEdit, 'activity.php?edit=' . $indirectId) . "

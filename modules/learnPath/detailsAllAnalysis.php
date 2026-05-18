@@ -170,7 +170,7 @@ foreach ($usersList as $user) {
     }
 
     // ---- xls format ----
-    $data[] = ["$user->surname $user->givenname ($user->email)", ' ', ' ', $globaltime, $total . '%'];
+    $data[] = ["$user->surname $user->givenname ($user->email)", ' ', ' ', $globaltime, (($total <= 0) ? "-" : $total . '%')];
     foreach ($lpaths as $lpContent) {
         $data[] = [$lpContent[0], $lpContent[1], $lpContent[2], $lpContent[3], $lpContent[4], $lpContent[5]];
     }
@@ -187,7 +187,7 @@ foreach ($usersList as $user) {
             <td></td>
             <td>" . q($globaltime) . "</td>
             <td>"
-            . disp_progress_bar($total, 1) . "
+            . (($total <= 0) ? "-" : disp_progress_bar($total, 1)) . "
             </td><td></td>";
     $tool_content .= "</tr>";
     $tool_content .= $lp_content;

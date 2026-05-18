@@ -30,7 +30,8 @@ $toolName = $langAINode;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 const AI_KEY_DURATION_TIME = 365*24*60*60; // one year (in seconds)
 
 if (isset($_GET['edit_provider'])) {

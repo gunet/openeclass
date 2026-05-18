@@ -2,13 +2,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -179,10 +176,10 @@
                         @endif
 
                     </div>
-                </div>
-            </div>
+            </main>
         </div>
     </div>
+
 
     <script type='text/javascript'>
         $(document).ready(function() {
@@ -215,7 +212,20 @@
                         'sNext': '&rsaquo;',
                         'sLast': '&raquo;'
                     }
+                },
+                'tabIndex': -1,
+                'initComplete': function() {
+                    $('#assignment_table_{{ $course_code }} thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
                 }
+            });
+            $('#assignment_table_{{ $course_code }}').on('order.dt', function() {
+                $('#assignment_table_{{ $course_code }} thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
             $('.dt-search input').attr({
                 'class': 'form-control input-sm ms-0 mb-3',

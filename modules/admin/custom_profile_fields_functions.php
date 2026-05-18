@@ -167,7 +167,7 @@ function render_profile_fields_form($context, $valitron = false) {
                         } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
                             $val = $_REQUEST['cpf_'.$f->shortname];
                         }
-                        $return_string .= rich_text_editor('cpf_'.$f->shortname, 8, 20, $val);
+                        $return_string .= rich_text_editor('cpf_'.$f->shortname, 8, 20, $val, options: array('id' => 'cpf_'.$f->shortname));
                         if ($f->required == 0) {
                             $req_label = $langOptional;
                         } else {
@@ -388,7 +388,7 @@ function render_profile_fields_content($context) {
                                             }
 
                                             $return_str .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                                <h3>".$cat->name."</h3>
+                                                                <h2 class='text-heading-h3'>".q($cat->name)."</h2>
                                                             </div>
 
                                                             <div class='card-body'>";
@@ -406,7 +406,7 @@ function render_profile_fields_content($context) {
 
                                                                             $return_str .= "
                                                                                                 <div class='col-lg-4 col-12'>
-                                                                                                    <div class='title-default'>".$f->name."</div>
+                                                                                                    <div class='title-default'>".q($f->name)."</div>
                                                                                                 </div>
 
                                                                                                 <div class='col-lg-8 col-12 title-default-line-height'>

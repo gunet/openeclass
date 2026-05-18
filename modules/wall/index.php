@@ -24,16 +24,22 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_wrapper.php';
 
 ModalBoxHelper::loadModalBox(false);
-
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
 load_js('waypoints-infinite');
 load_js('screenfull/screenfull.min.js');
+load_js('suppressedWords/suppressedWords.js');
 
 $head_content .= "<script>
+            var urlAppend = '$urlAppend';
             $(function() {
+                initSuppressedWordsBlur();
+
                 var infinite = new Waypoint.Infinite({
-                  element: $('.infinite-container')[0]
+                  element: $('.infinite-container')[0],
+                  onAfterPageLoad: function() {
+                      initSuppressedWordsBlur();
+                  }
                 })
                 
                 $('.coloboxframe').click(function() {
@@ -103,6 +109,58 @@ $head_content .= "<script>
                 });
             });
         </script>";
+
+// Tab pattern accessibility
+$head_content .= "
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.wall-tablist .nav-link');
+
+        tabs.forEach(tab => {
+            if (tab.getAttribute('aria-selected') === 'true') {
+                tab.setAttribute('tabindex', '0');
+            } else {
+                tab.setAttribute('tabindex', '-1');
+            }
+        });
+
+        // Function to activate tab
+        function activateTabs(currentTabs) {
+            currentTabs.forEach(t => {
+                t.setAttribute('aria-selected', 'false');
+                t.setAttribute('tabindex', '-1');
+                t.classList.remove('tab-active');
+            });
+        }
+        
+        tabs.forEach((tab) => {
+            tab.addEventListener('keydown', (e) => {
+                const currentTabs = document.querySelectorAll('.wall-tablist .nav-link');
+                const currentIndex = Array.prototype.indexOf.call(currentTabs, document.activeElement);
+                if (currentIndex === -1) return; // safety check
+
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    const nextIndex = (currentIndex + 1) % currentTabs.length;
+                    activateTabs(currentTabs);
+                    currentTabs[nextIndex].setAttribute('aria-selected', 'true');
+                    currentTabs[nextIndex].setAttribute('tabindex', '0');
+                    currentTabs[nextIndex].classList.add('tab-active');
+                    currentTabs[nextIndex].focus();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    const prevIndex = (currentIndex - 1 + currentTabs.length) % currentTabs.length;
+                    activateTabs(currentTabs);
+                    currentTabs[prevIndex].setAttribute('aria-selected', 'true');
+                    currentTabs[prevIndex].setAttribute('tabindex', '0');
+                    currentTabs[prevIndex].classList.add('tab-active');
+                    currentTabs[prevIndex].focus();
+                }
+            });
+        });
+
+    });
+</script>";
 
 $pageName = $langWall;
 
@@ -367,7 +425,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $video_div = '<div class="form-group tab-pane fade" id="videos_div" role="tabpanel" aria-labelledby="nav_edit_video" style="padding:10px">
                               '.list_videos($id).'
                           </div>';
-            $video_li = '<li class="nav-item"><a id="nav_edit_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
+            $video_li = '<li class="nav-item"><a id="nav_edit_video" class="nav-link" data-bs-toggle="tab" href="#videos_div" role="tab" aria-controls="videos_div">'.$langVideo.'</a></li>';
         } else {
             $video_div = '';
             $video_li = '';
@@ -378,7 +436,7 @@ if (isset($_GET['showPost'])) { //show comments case
                               <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs($id, NULL, TRUE).'
                           </div>';
-            $docs_li = '<li class="nav-item"><a id="nav_edit_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
+            $docs_li = '<li class="nav-item"><a id="nav_edit_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div" role="tab" aria-controls="docs_div">'.$langDoc.'</a></li>';
         } else {
             $docs_div = '';
             $docs_li = '';
@@ -391,7 +449,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs($id,'mydocs', TRUE).'
                           </div>';
-            $mydocs_li = '<li class="nav-item"><a id="nav_edit_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
+            $mydocs_li = '<li class="nav-item"><a id="nav_edit_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div" role="tab" aria-controls="mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
             $mydocs_div = '';
             $mydocs_li = '';
@@ -401,7 +459,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $links_div = '<div class="form-group tab-pane fade" id="links_div" role="tabpanel" aria-labelledby="nav_edit_links" style="padding:10px">
                               '.list_links($id).'
                           </div>';
-            $links_li = '<li class="nav-item"><a id="nav_edit_links" class="nav-link" data-bs-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
+            $links_li = '<li class="nav-item"><a id="nav_edit_links" class="nav-link" data-bs-toggle="tab" href="#links_div" role="tab" aria-controls="links_div">'.$langLinks.'</a></li>';
         } else {
             $links_div = '';
             $links_li = '';
@@ -412,7 +470,7 @@ if (isset($_GET['showPost'])) { //show comments case
                 $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_edit_exercises" style="padding:10px">
                                 '.list_exercises($id).'
                             </div>';
-                $exercises_li = '<li class="nav-item"><a id="nav_edit_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
+                $exercises_li = '<li class="nav-item"><a id="nav_edit_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div" role="tab" aria-controls="exercises_div">'.$langExercises.'</a></li>';
             } else {
                 $exercises_div = '';
                 $exercises_li = '';
@@ -427,7 +485,7 @@ if (isset($_GET['showPost'])) { //show comments case
                 $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_edit_assigments" style="padding:10px">
                                 '.list_assignments($id).'
                             </div>';
-                $assignments_li = '<li class="nav-item"><a id="nav_edit_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
+                $assignments_li = '<li class="nav-item"><a id="nav_edit_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div" role="tab" aria-controls="assignments_div">'.$langWorks.'</a></li>';
             } else {
                 $assignments_div = '';
                 $assignments_li = '';
@@ -441,7 +499,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $chats_div = '<div class="form-group tab-pane fade" id="chats_div" role="tabpanel" aria-labelledby="nav_edit_chats" style="padding:10px">
                               '.list_chats($id).'
                           </div>';
-            $chats_li = '<li class="nav-item"><a id="nav_edit_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
+            $chats_li = '<li class="nav-item"><a id="nav_edit_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div" role="tab" aria-controls="chats_div">'.$langChat.'</a></li>';
         } else {
             $chats_div = '';
             $chats_li = '';
@@ -451,7 +509,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $polls_div = '<div class="form-group tab-pane fade" id="polls_div" role="tabpanel" aria-labelledby="nav_edit_polls" style="padding:10px">
                               '.list_polls($id).'
                           </div>';
-            $polls_li = '<li class="nav-item"><a id="nav_edit_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
+            $polls_li = '<li class="nav-item"><a id="nav_edit_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div" role="tab" aria-controls="polls_div">'.$langQuestionnaire.'</a></li>';
         } else {
             $polls_div = '';
             $polls_li = '';
@@ -461,7 +519,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $forums_div = '<div class="form-group tab-pane fade" id="forums_div" role="tabpanel" aria-labelledby="nav_edit_forums" style="padding:10px">
                               '.list_forums($id).'
                           </div>';
-            $forums_li = '<li class="nav-item"><a id="nav_edit_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
+            $forums_li = '<li class="nav-item"><a id="nav_edit_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div" role="tab" aria-controls="forums_div">'.$langForum.'</a></li>';
         } else {
             $forums_div = '';
             $forums_li = '';
@@ -479,8 +537,8 @@ if (isset($_GET['showPost'])) { //show comments case
                             </div>
                             <div class="panel panel-default mt-3 border-0">
                                 <div class="panel-body border-0">
-                                    <ul class="nav nav-tabs border-0">
-                                        <li class="nav-item"><a id="nav_edit_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
+                                    <ul class="nav nav-tabs border-0 wall-tablist" role="tablist">
+                                        <li class="nav-item"><a id="nav_edit_extvideo" class="nav-link active" aria-selected="true" data-bs-toggle="tab" href="#extvideo_video_div" role="tab" aria-controls="extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'
                                         '.$docs_li.'
                                         '.$mydocs_li.'

@@ -26,7 +26,6 @@
 use Widgets\WidgetArea;
 
 $require_login = true;
-define('HIDE_TOOL_TITLE', true);
 
 include '../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';

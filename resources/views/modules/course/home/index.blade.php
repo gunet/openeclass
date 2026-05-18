@@ -103,34 +103,66 @@
                     }
                 });
             });
+
+            
+            // After the calendar renders, disable click on cells without .events-link
+            setTimeout(function() {
+                document.querySelectorAll('.cal-month-box .cal-cell1').forEach(day => {
+                    const hasHoliday = day.querySelector('.cal-day-holiday') !== null;
+                    const hasEventsList = day.querySelector('.events-list') !== null;
+                    if (!hasHoliday && !hasEventsList) {
+                        day.style.pointerEvents = 'none'; // disable clickability
+                        day.classList.add('not-clickable');
+                    }
+                });
+            }, 100);
+
+            $('.month-prev-btn, .month-next-btn').on('click', function () {
+                setTimeout(function() {
+                        document.querySelectorAll('.cal-month-box .cal-cell1').forEach(day => {
+                            const hasHoliday = day.querySelector('.cal-day-holiday') !== null;
+                            const hasEventsList = day.querySelector('.events-list') !== null;
+                            if (!hasHoliday && !hasEventsList) {
+                                day.style.pointerEvents = 'none'; // disable clickability
+                                day.classList.add('not-clickable');
+                            }
+                        });
+                }, 100);
+            });
+            
         });
     </script>
 @endpush
 
 @if($course_info->view_type == 'units' and $countUnits > 0)
   @push('head_scripts')
-    <script src="{{ $urlServer }}/js/sortable/Sortable.min.js"></script>
+    <script src="{{ $urlServer }}js/sortable/Sortable.min.js"></script>
     <script type='text/javascript'>
         $(document).ready(function(){
-            Sortable.create(boxlistSort, {
-                    animation: 350,
-                    handle: '.fa-arrows',
-                    animation: 150,
-                    onUpdate: function (evt) {
-                        var itemEl = $(evt.item);
-                        var idReorder = itemEl.attr('data-id');
-                        var prevIdReorder = itemEl.prev().attr('data-id');
+            var el = document.getElementById('boxlistSort');
+            if (el) {
+                var sortableEl = el.querySelector('ul');
+                if (sortableEl) {
+                    Sortable.create(sortableEl, {
+                        handle: '.fa-arrows',
+                        animation: 150,
+                        onUpdate: function (evt) {
+                            var itemEl = $(evt.item);
+                            var idReorder = itemEl.attr('data-id');
+                            var prevIdReorder = itemEl.prev().attr('data-id');
 
-                        $.ajax({
-                        type: 'post',
-                        dataType: 'text',
-                        data: {
-                            toReorder: idReorder,
-                            prevReorder: prevIdReorder,
+                            $.ajax({
+                                type: 'post',
+                                dataType: 'text',
+                                data: {
+                                    toReorder: idReorder,
+                                    prevReorder: prevIdReorder,
+                                }
+                            });
                         }
-                        });
-                    }
-                });
+                    });
+                }
+            }
         });
     </script>
   @endpush
@@ -201,13 +233,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper course-wrapper-courseHome d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -235,7 +264,7 @@
 
                             <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <div>
-                                    <h3 class='mb-0'>{{ trans('langCourseProgram') }}</h3>
+                                    <h2 class='text-heading-h3 mb-0'>{{ trans('langCourseProgram') }}</h2>
                                 </div>
                                 <div>
                                     {!! $action_bar !!}
@@ -344,11 +373,9 @@
                             <div class='card panelCard card-transparent px-0 py-0 mt-4 border-0 mb-5'>
                                 @if ($is_editor)
                                     <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
-                                        <h3>
-                                            <div class='d-flex gap-2'>
-                                                {{ trans('langCourseUnits') }}
-                                            </div>
-                                        </h3>
+                                        <h2 class='text-heading-h3'>
+                                            {{ trans('langCourseUnits') }}
+                                        </h2>
                                         <div class='d-flex gap-2 flex-wrap'>
                                             <a id='cu-help-btn' class='helpAdminBtn add-unit-btn d-flex align-items-center' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}" role="button">
                                                 <i class="fa-solid fa-circle-question"></i>
@@ -404,7 +431,13 @@
                                     </div>
                                 @endif
                                 <div class='card-body card-body-default card-body-unit px-0 pt-0' id='boxlistSort'>
-                                    {!! $cunits_content !!}
+                                    @if ($carousel_or_row != 0)
+                                    <ul class='m-0 p-0' aria-label="{{ trans('langCourseUnits') }}" style='list-style-type: none;'>
+                                    @endif
+                                        {!! $cunits_content !!}
+                                    @if ($carousel_or_row != 0)
+                                    </ul>
+                                    @endif
                                 </div>
                             </div>
                         @endif
@@ -486,7 +519,7 @@
                         @if($course_info->view_type == 'sessions' && count($course_sessions) > 0)
                             <div class='card panelCard card-transparent card-sessions px-lg-4 py-lg-3 p-3 mt-4 mb-5'>
                                 <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
-                                    <h3>{{ trans('langSession') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langSession') }}</h2>
                                     <a class='TextRegular text-decoration-underline vsmall-text'
                                          href="{{ $urlAppend }}modules/session/index.php?course={{ $course_code }}">
                                          {{ trans('langAllSessions') }}
@@ -615,7 +648,6 @@
                             {!! html_entity_decode($course_home_main_area_widgets) !!}
                         @endif
 
-
                     </div>
 
 
@@ -623,7 +655,7 @@
                     <div class="@if(!$right_col_display) d-none @else d-block @endif">
                         <div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-3 mt-4 mt-xl-0'>
                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                <h3 class='mb-0'>{{ trans('langAgenda') }}</h3>
+                                <h2 class='text-heading-h3 mb-0'>{{ trans('langAgenda') }}</h2>
                             </div>
                         </div>
                         <div class="panel panel-admin panel-admin-calendar card-transparent p-0 border-0 sticky-column-course-home">
@@ -633,19 +665,19 @@
                             <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-important'></span>
-                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaDueDay') }}">{{ trans('langAgendaDueDay') }}</span>
+                                    <span class='agenda-comment' tabindex='0'>{{ trans('langAgendaDueDay') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-info'></span>
-                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaCourseEvent') }}">{{ trans('langAgendaCourseEvent') }}</span>
+                                    <span class='agenda-comment' tabindex='0'>{{ trans('langAgendaCourseEvent') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-success'></span>
-                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaSystemEvent') }}">{{ trans('langAgendaSystemEvent') }}</span>
+                                    <span class='agenda-comment' tabindex='0'>{{ trans('langAgendaSystemEvent') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-special'></span>
-                                    <span class='agenda-comment' aria-label="{{ trans('langAgendaPersonalEvent') }}">{{ trans('langAgendaPersonalEvent') }}</span>
+                                    <span class='agenda-comment' tabindex='0'>{{ trans('langAgendaPersonalEvent') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -656,7 +688,7 @@
 
                         <div class="card panelCard card-transparent border-0 mt-5 sticky-column-course-home">
                             <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
+                                <h2 class='text-heading-h3 mb-0'>{{ trans('langAnnouncements') }}</h2>
                                 <a class='TextRegular text-decoration-underline vsmall-text' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">{{ trans('langAllAnnouncements') }}...</a>
                             </div>
                             <div class='card-body card-body-default px-0 py-0'>
@@ -670,7 +702,7 @@
                             @if(isset($course_completion_id) and $course_completion_id > 0)
                                 <div class="card panelCard card-transparent border-0 mt-5 sticky-column-course-home">
                                     <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                        <h3 class='mb-0'>{{ trans('langCourseCompletion') }}</h3>
+                                        <h2 class='text-heading-h3 mb-0'>{{ trans('langCourseCompletion') }}</h2>
                                         @if ($is_editor)
                                             <a class='Course-home-ellipsis TextRegular text-decoration-underline vsmall-text' href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>
                                                 {{ $certified_users}}/{{ $studentUsers }} {{ trans('langUsersS') }}...
@@ -727,11 +759,18 @@
                             @endif
                         @endif
 
+
+                        @if ($uid && !$is_editor && (isset($is_collaborative_course) and !$is_collaborative_course))
+                            @if(!empty($points_game_widget))
+                                {!! $points_game_widget !!}
+                            @endif
+                        @endif
+
                         @if(isset($is_collaborative_course) and !$is_collaborative_course)
                             @if (isset($level) && !empty($level))
                                 <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
                                     <div class='card-header px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-                                        <h3 class='mb-3'>{{ trans('langOpenCourseShort') }}</h3>
+                                        <h2 class='text-heading-h3 mb-3'>{{ trans('langOpenCourseShort') }}</h2>
                                     </div>
                                     <div class='card-body card-body-default px-0 py-0'>
                                         <div class='card panelCard card-default px-lg-4 py-lg-3 p-3'>
@@ -749,7 +788,7 @@
                             @if($course_home_sidebar_widgets)
                                 <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
                                     <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>{{ trans('langWidgets') }}</h3>
+                                        <h2 class='text-heading-h3'>{{ trans('langWidgets') }}</h2>
                                     </div>
                                     <div class='card-body card-body-default px-0 py-0'>
                                         {!! html_entity_decode($course_home_sidebar_widgets) !!}
@@ -761,12 +800,12 @@
                     </div>
                 </div>
 
-            </div> <!-- end row -->
+            </main> <!-- end row -->
 
         </div>
 
     </div>
-</div>
+
 
 <div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
     <div class='modal-dialog'>
@@ -849,3 +888,70 @@
 @endif
 
 @endsection
+@if ($uid && !$is_editor && !empty($points_game_widget))
+<script>
+(function() {
+    // Wait for jQuery to be ready
+    if (typeof jQuery === 'undefined') {
+        console.error('jQuery not loaded yet!');
+        return;
+    }
+    
+    jQuery(document).ready(function($) {
+        console.log('Widget script starting...');
+        
+        var carousel = $('.points-game-carousel');
+        if (carousel.length === 0) {
+            console.log('No carousel found');
+            return;
+        }
+        
+        console.log('Carousel found!');
+        
+        var idx = 0;
+        var total = carousel.find('.slide-item').length;
+        
+        console.log('Total games:', total);
+        
+        function update() {
+            console.log('Updating to index:', idx);
+            
+            // Update slides
+            carousel.find('.slide-item').removeClass('active');
+            carousel.find('.slide-item').eq(idx).addClass('active');
+            
+            // Get and set name
+            var name = carousel.find('.slide-item').eq(idx).attr('data-name');
+            console.log('Game name:', name);
+            
+            carousel.find('.game-name').text(name || 'Παιχνίδι ' + (idx + 1));
+            
+            // Update buttons
+            carousel.find('.prev-btn').prop('disabled', idx === 0);
+            carousel.find('.next-btn').prop('disabled', idx === total - 1);
+        }
+        
+        // Bind events
+        carousel.find('.prev-btn').on('click', function() {
+            if (idx > 0) {
+                idx--;
+                update();
+            }
+        });
+        
+        carousel.find('.next-btn').on('click', function() {
+            if (idx < total - 1) {
+                idx++;
+                update();
+            }
+        });
+        
+        // Initialize
+        if (total > 0) {
+            console.log('Initializing...');
+            update();
+        }
+    });
+})();
+</script>
+@endif

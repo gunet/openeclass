@@ -45,9 +45,36 @@ function api_method($access) {
         }
 
         $course_id  = $GLOBALS['id'];
-        $_POST['department'][0]   = $GLOBALS['department_id'];
+        $target_department_id = $GLOBALS['department_id'];
+        $_POST['department'][0] = $target_department_id;
 
-        $course = Database::get()->queryArray("SELECT * FROM course WHERE id = ?s",$course_id );
+        // Check if target department is allowed for this token
+        if ($access->allowedDepartments !== null && !in_array($target_department_id, $access->allowedDepartments)) {
+            Access::error(403, 'Access denied: You do not have permission to create courses in this department', 403);
+        }
+
+        // Build department filter for source course if needed
+        $departmentFilter = '';
+        $queryParams = [$course_id];
+        
+        if ($access->allowedDepartments !== null) {
+            $placeholders = implode(',', array_fill(0, count($access->allowedDepartments), '?d'));
+            $departmentFilter = " AND EXISTS (
+                SELECT 1 FROM course_department cd 
+                WHERE cd.course = course.id 
+                AND cd.department IN ($placeholders)
+            )";
+            $queryParams = array_merge($queryParams, $access->allowedDepartments);
+        }
+
+
+        $course = Database::get()->queryArray("SELECT * FROM course WHERE id = ?d" . $departmentFilter, ...$queryParams);
+
+
+        // Check if course exists and is accessible
+        if (empty($course)) {
+            Access::error(404, 'Course not found or access denied', 404);
+        }
 
         $course_code    = $course[0]->code;
         $course_lang    = $course[0]->lang;
@@ -92,7 +119,7 @@ function api_method($access) {
             'id'                => $course_id,
             'title'             => $course_title,
             'code'              => $course_code,
-            'department id'     => $GLOBALS['department_id'],
+            'department id'     => $target_department_id,
         ], JSON_UNESCAPED_UNICODE);
         exit();
 

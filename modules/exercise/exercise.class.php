@@ -368,6 +368,15 @@ class Exercise
         return $this->is_exam;
     }
 
+    public function isSeb(): bool
+    {
+        if ($this->getOption('useSafeExamBrowser')) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getPassingGrade()
     {
         return $this->passing_grade;
@@ -899,7 +908,7 @@ class Exercise
      */
     public function delete(): void
     {
-        global $course_id;
+        global $course_id, $webDir, $course_code;
 
         $id = $this->id;
         Database::get()->query("DELETE FROM `exercise_with_questions` WHERE exercise_id = ?d", $id);
@@ -907,6 +916,10 @@ class Exercise
                                             WHERE course_id = ?d AND id = ?d", $course_id, $id);
         Database::get()->query("DELETE FROM `exercise_to_specific` WHERE exercise_id = ?d", $id);
         $deleted_rows = Database::get()->query("DELETE FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows;
+        if (file_exists("$webDir/courses/$course_code/exercise_seb_$id")) {
+            unlink("$webDir/courses/$course_code/exercise_seb_$id/config.seb");
+            rmdir("$webDir/courses/$course_code/exercise_seb_$id");
+        }
         if ($deleted_rows > 0) {
             Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $title));
         }
@@ -1775,27 +1788,6 @@ class Exercise
     }
 
     /**
-     * @brief calculate feedback depending on user score
-     * @param $score
-     * @return mixed|string
-     */
-    public function calculate_feedback($score)
-    {
-        $message = '';
-        $feedback_data = $this->getFeedback();
-        uasort($feedback_data, function ($a, $b) { // sort by grade in descending order
-            return $b['grade'] <=> $a['grade'];
-        });
-        foreach ($feedback_data as $feedback) {
-            if ($score >= $feedback['grade']) {
-                $message = $feedback['feedback_text'];
-                break;
-            }
-        }
-        return $message;
-    }
-
-    /**
      * Trigger AI evaluation for FREE_TEXT question responses
      */
     private function triggerAIEvaluation($answer_record_id, $question_id, $response_text)
@@ -1836,5 +1828,92 @@ class Exercise
             return false;
         }
     }
+
+    /**
+     * @brief Generates and saves a Safe Exam Browser (SEB) configuration file in XML format.
+     *
+     * @return void
+     */
+    public function createSafeExamBrowserConfigFile(): void
+    {
+        global $urlServer, $webDir, $course_code;
+
+        $start_url = $urlServer . "modules/exercise/exercise_submit.php?course=" . $course_code . "&exerciseId=" . $this->id;
+        $quit_url = $urlServer . "modules/exercise/index.php?course=" . $course_code;
+
+        $dom = new DOMImplementation();
+        $dtd = $dom->createDocumentType(
+            'plist',
+            '-//Apple//DTD PLIST 1.0//EN',
+            'http://www.apple.com/DTDs/PropertyList-1.0.dtd'
+        );
+
+        $xml = $dom->createDocument(null, 'plist', $dtd);
+        $xml->encoding = 'UTF-8';
+        $xml->formatOutput = true; // Set to false if you want it all on one line
+
+        $plist = $xml->documentElement;
+        $plist->setAttribute('version', '1.0');
+
+        $dict = $xml->createElement('dict');
+        $plist->appendChild($dict);
+
+        $settings = [
+            'showTaskBar'                  => true,
+            'allowWlan'                    => true,
+            'showReloadButton'             => false,
+            'showTime'                     => true,
+            'showInputLanguage'            => true,
+            'allowQuit'                    => true,
+            'quitURLConfirm'               => true,
+            'quitURL'                      => $quit_url,
+            'exitKeyCombinations'          => false, // don't use keyboard shortcut
+            'audioControlEnabled'          => true,
+            'audioMute'                    => false,
+            'allowSpellCheck'              => false,
+            'browserWindowAllowReload'     => false,
+            'URLFilterEnable'              => false,
+            'URLFilterEnableContentFilter' => false,
+            'URLFilterRules'               => 'array', // Special case for an empty array
+            'startURL'                     => $start_url,
+            'sendBrowserExamKey'           => true,
+            'browserWindowWebView'         => 2, // Chromium/WebView2 engine - recommended for Windows
+            'examSessionClearCookiesOnStart'=> false,
+            'allowPreferencesWindow'       => false,
+            'browserUserAgent'             => 'Open-eClass-Exam'
+        ];
+
+        foreach ($settings as $key => $value) {
+            $dict->appendChild($xml->createElement('key', $key));
+            if (is_bool($value)) {
+                $dict->appendChild($xml->createElement($value ? 'true' : 'false'));
+            } elseif (is_int($value)) {
+                $dict->appendChild($xml->createElement('integer', $value));
+            } elseif ($value === 'array') {
+                $dict->appendChild($xml->createElement('array'));
+            } else {
+                $dict->appendChild($xml->createElement('string', preg_replace('/&/','&amp;', $value)));
+            }
+        }
+
+        if (!file_exists("$webDir/courses/$course_code/exercise_seb_$this->id")) {
+            mkdir("$webDir/courses/$course_code/exercise_seb_$this->id");
+        }
+        $xml->save("$webDir/courses/$course_code/exercise_seb_$this->id/config.seb");
+    }
+
+    public function LaunchSafeExamBrowser()
+    {
+        global $course_code, $webDir;
+
+        $sebConfigXml = file_get_contents("$webDir/courses/$course_code/exercise_seb_$this->id/config.seb");
+
+        header('Content-Type: application/seb');
+        header('Content-Disposition: attachment; filename="config.seb"');
+        header('Content-Length: ' . strlen($sebConfigXml));
+        echo $sebConfigXml;
+        exit;
+    }
+
 }
 

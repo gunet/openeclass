@@ -14,7 +14,7 @@
 @if(get_config('eportfolio_enable'))
     @push('head_scripts')
         <script>
-            $(document).on('click', 'a.list-group-item[href*="resources.php?token="]', function(e) {
+            $(document).on('click', 'a.list-group-item[href*="resources.php"]', function(e) {
                 e.preventDefault();
 
                 const href = $(this).attr('href');
@@ -40,13 +40,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -167,7 +164,7 @@
                                                 </td>
                                                 <td class='text-center'>
                                                     @if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids))
-                                                        <i class='fa-solid fa-check'></i><br>
+                                                        <i class='fa-solid fa-check' data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('langYes') }}" aria-label="{{ trans('langYes') }}" tabindex="0"></i><br>
                                                         @foreach ($submission as $sub)
                                                             @if (isset($sub->group_id)) {{-- if is a group assignment --}}
                                                                 <div>
@@ -178,7 +175,7 @@
                                                             @endif
                                                         @endforeach
                                                     @else
-                                                        <i class='fa-regular fa-hourglass-half'></i><br>
+                                                        <i class='fa-regular fa-hourglass-half' data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ trans('langNo') }}" aria-label="{{ trans('langNo') }}" tabindex="0"></i><br>
                                                     @endif
                                                 </td>
                                                 <td class='text-center'>
@@ -200,7 +197,7 @@
                                                         {!! action_button(array(
                                                             array(
                                                                 'title' => trans('langAddResePortfolio'),
-                                                                'url' => $urlAppend . "main/eportfolio/resources.php?token=" .token_generate('eportfolio' . $uid) ."&amp;action=add&amp;type=work_submission&amp;rid=$row->id",
+                                                                'url' => $urlAppend . "main/eportfolio/resources.php?action=add&amp;type=work_submission&amp;rid=$row->id",
                                                                 'icon' => 'fa-star'
                                                                 )
                                                             ));
@@ -253,10 +250,10 @@
                         @endif
 
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
+
 
     <script type='text/javascript'>
         $(document).ready(function() {
@@ -289,7 +286,20 @@
                         'sNext': '&rsaquo;',
                         'sLast': '&raquo;'
                     }
+                },
+                'tabIndex': -1,
+                'initComplete': function() {
+                    $('#assignment_table_{{ $course_code }} thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
                 }
+            });
+            $('#assignment_table_{{ $course_code }}').on('order.dt', function() {
+                $('#assignment_table_{{ $course_code }} thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
             $('.dt-search input').attr({
                 'class': 'form-control input-sm ms-0 mb-3',

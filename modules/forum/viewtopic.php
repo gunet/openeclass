@@ -42,8 +42,11 @@ ModalBoxHelper::loadModalBox();
 $toolName = $langForums;
 
 load_js('tools.js');
+load_js('suppressedWords/suppressedWords.js');
+$head_content .= "<script>var urlAppend = '$urlAppend';$(function() { initSuppressedWordsBlur('.card-body, .panelCard'); });</script>";
 $head_content .= "
     <script type='text/javascript'>
+    
         function highlight(selector) {
             $(selector).removeClass('panel-default').removeClass('panel-primary').addClass('panel-success').css('border-color','green').css('border', '2px solid');
         }

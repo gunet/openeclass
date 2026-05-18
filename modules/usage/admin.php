@@ -95,9 +95,9 @@ $tool_content .= "
                     </div>
                 </div>
                 <div class='row row-cols-1 mt-md-4 mt-3'>
-                    <h3>
+                    <h2 class='text-heading-h3'>
                         $langChecks / $langReports
-                    </h3>
+                    </h2>
                     <div class='col'>                        
                         <ul class='list-group list-group-flush'>                                                        
                             <li class='list-group-item element'>

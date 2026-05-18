@@ -72,7 +72,7 @@ function render_eportfolio_fields_content($uid) {
                 <div class="card-body px-3 py-0">
                 <div class="d-flex align-items-center gap-2 border-bottom py-3">
                     <i class="'.$cat_icon.' Primary-500-cl"></i>
-                    <h3 class="mb-0">'. q($c->name) .'</h3>
+                    <h2 class="text-heading-h3 mb-0">'. q($c->name) .'</h2>
                 </div>';
 
             if ($j == 0) {
@@ -353,7 +353,7 @@ function render_eportfolio_fields_form() {
 
             <div class="card panelCard card-default px-lg-4 py-lg-3 mb-4" id="EditPortfolio'.$c->id.'">
                                        <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                                           <h3>' . q($c->name) .'</h3>
+                                           <h2 class="text-heading-h3">' . q($c->name) .'</h2>
                                        </div>
                                        <div class="card-body">
                                            <fieldset><legend class="mb-0" aria-label="'.$langForm.'"></legend>';
@@ -467,7 +467,7 @@ function render_eportfolio_fields_form() {
                         } elseif (isset($_REQUEST['epf_'.$f->shortname]) && isset($_REQUEST['epf_'.$f->shortname]) != '') {
                             $val = $_REQUEST['epf_'.$f->shortname];
                         }
-                        $return_string['panels'] .= rich_text_editor('epf_'.$f->shortname, 8, 20, $val);
+                        $return_string['panels'] .= rich_text_editor('epf_'.$f->shortname, 8, 20, $val, options: array('id' => 'epf_'.$f->shortname));
                         if ($f->required == 0) {
                             $req_label = $langOptional;
                         } else {
@@ -538,7 +538,7 @@ function render_eportfolio_fields_form() {
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title">'.$langePortfolioFieldsVisibilitySettings.' — '.$f->name.'</h5>
+                      <h5 class="modal-title">'.$langePortfolioFieldsVisibilitySettings.' — '.q($f->name).'</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">

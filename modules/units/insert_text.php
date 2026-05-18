@@ -24,7 +24,7 @@ function display_text_form() {
     $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='insert.php?course=$course_code' method='post'>
                       <input type='hidden' name='id' value='$id'>";
     $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>
-        " . rich_text_editor('comments', 4, 20, '') . "	        
+        " . rich_text_editor('comments', 4, 20, '', options: array('id' => 'comments')) . "	        
         <div class='d-flex justify-content-end mt-4 gap-2'><input class='btn submitAdminBtn' type='submit' name='submit_text' value='$langAdd'>
             <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
         </div>

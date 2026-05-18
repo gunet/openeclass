@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section" id="main-section-content">
+    <main id="main-section-content" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
             <div class='row m-auto'>
                 <div class='col-12 d-flex justify-content-center overflow-auto'>
@@ -10,7 +10,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
     
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.13.216/build/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.13.216/web/pdf_viewer.js"></script>

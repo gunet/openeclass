@@ -20,7 +20,7 @@
 
 $require_departmentmanage_user = true;
 $require_help = true;
-$helpTopic = 'users_administration';
+$helpTopic = 'course_administration';
 $helpSubTopic = 'mass_courses_creation';
 
 require_once '../../include/baseTheme.php';

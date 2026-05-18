@@ -70,7 +70,7 @@ $head_content .= "<script>
 
 $head_content .= 
     '<script>
-        $(document).on(\'click\', \'a.list-group-item[href*="resources.php?token="]\', function(e) {
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
             e.preventDefault();
 
             const href = $(this).attr(\'href\');
@@ -186,7 +186,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <div class='form-group mt-4'>
                   <label for='newContent' class='col-sm-12 control-label-notes'>$langNoteBody</label>
                   <div class='col-sm-12'>
-                    " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
+                    " . rich_text_editor('newContent', 4, 20, $contentToModify, options: array('id' => 'newContent')) . "
                   </div>
                 </div>
                 <div class='form-group mt-4'>
@@ -222,7 +222,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     <div class='col-12'>
         <div class='card panelCard card-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                <h3>".q($note->title)."</h3>
+                <h2 class='text-heading-h3'>".q($note->title)."</h2>
                 <div>
                 ".
                         action_button(array(
@@ -236,7 +236,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                                 'icon' => 'fa-xmark'),
                             array(
                                 'title' => $langAddResePortfolio,
-                                'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=note&amp;rid=".$note->id,
+                                'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=note&amp;rid=".$note->id,
                                 'icon' => 'fa-star',
                                 'show' => (get_config('eportfolio_enable') && $note->user_id==$uid))
                         ))
@@ -376,7 +376,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                         'icon' => 'fa-xmark'),
                     array(
                         'title' => $langAddResePortfolio,
-                        'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=note&amp;rid=".$note->id,
+                        'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=note&amp;rid=".$note->id,
                         'icon' => 'fa-star',
                         'show' => (get_config('eportfolio_enable') && $note->user_id==$uid)),
                     array('title' => $langMove . " " . $langUp,

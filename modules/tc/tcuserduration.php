@@ -339,7 +339,7 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
         </head>
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-         <h3>" . q($langStatsReport) . "</h3>
+         <h2 class='text-heading-h3'>" . q($langStatsReport) . "</h2>
          <p></p>";
 
     $pdf_content .= $tool_content;

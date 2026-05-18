@@ -55,7 +55,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
@@ -71,7 +71,7 @@
 
                     @include('layouts.partials.show_alert')
 
-                    <div class="col-12 overflow-auto">
+                    <div class="col-12">
                         <table id='course_results_table' class='table-default display'>
                             <thead>
                                 <tr class='list-header'>
@@ -100,6 +100,6 @@
                     @endif
             </div>
         </div>
-    </div>
+    </main>
 
 @endsection

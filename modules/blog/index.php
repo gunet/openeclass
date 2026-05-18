@@ -113,7 +113,7 @@ $head_content .= '<script type="text/javascript">
 
 $head_content .= 
     '<script>
-        $(document).on(\'click\', \'a.list-group-item[href*="resources.php?token="]\', function(e) {
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
             e.preventDefault();
 
             const href = $(this).attr(\'href\');
@@ -447,9 +447,9 @@ if ($action == "createPost") {
                                     </div>
             
                                     <div class='form-group mt-4'>
-                                        <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody</label>
+                                        <label for='newContentId' class='col-sm-12 control-label-notes'>$langBlogPostBody</label>
                                         <div class='col-sm-12'>
-                                            ".rich_text_editor('newContent', 4, 20, 'id="newContent"')."
+                                            ".rich_text_editor('newContent', 4, 20, '', options: array('id' => 'newContentId'))."
                                         </div>
                                     </div>
                                     $commenting_setting            
@@ -563,9 +563,9 @@ if ($action == "editPost") {
                 
                 
                                         <div class='form-group mt-4'>
-                                            <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
+                                            <label for='newContentId' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
                                             <div class='col-sm-12'>
-                                                ".rich_text_editor('newContent', 4, 20, $post->getContent())."
+                                                ".rich_text_editor('newContent', 4, 20, $post->getContent(), options: array('id' => 'newContentId'))."
                                             </div>
                                         </div>
                                         $commenting_setting
@@ -722,9 +722,9 @@ if ($action == "showPost") {
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
 
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     ".q($post->getTitle())."
-                                </h3>
+                                </h2>
 
                                 <div>
                                     ". action_button(array(
@@ -744,7 +744,7 @@ if ($action == "showPost") {
                                         ),
                                         array(
                                             'title' => $langAddResePortfolio,
-                                            'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
+                                            'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=blog&amp;rid=".$post->getId(),
                                             'icon' => 'fa-star',
                                             'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
                                         ),
@@ -918,7 +918,7 @@ if ($action == "showBlog") {
                                                 ),
                                                 array(
                                                     'title' => $langAddResePortfolio,
-                                                    'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
+                                                    'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=blog&amp;rid=".$post->getId(),
                                                     'icon' => 'fa-star',
                                                     'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
                                                 ),

@@ -58,9 +58,9 @@ doc_init();
 $searchEngine = SearchEngineFactory::create();
 
 if ($subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')) {
-    $head_content .= 
+    $head_content .=
     '<script>
-        $(document).on(\'click\', \'a.list-group-item[href*="resources.php?token="]\', function(e) {
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
             e.preventDefault();
 
             const href = $(this).attr(\'href\');
@@ -1522,6 +1522,7 @@ foreach ($result as $row) {
 
     $downloadMessage = $row->format == '.dir' ? $langDownloadDir : $langSave;
     $info['action_button'] = '';
+    $info['eportfolio_modal'] = '';
     if (!$is_in_tinymce) {
         $cmdDirName = getIndirectReference($row->path);
         if ($can_upload) {
@@ -1530,12 +1531,12 @@ foreach ($result as $row) {
                 $info['eportfolio_modal'] = '<div class="modal fade" id="modal_doc_'.$row->id.'" tabindex="-1" aria-labelledby="docModalLabel_'.$row->id.'" aria-hidden="true">
                 <div class="modal-dialog">
                 <div class="modal-content">
-            
+
                     <div class="modal-header">
                     <h5 class="modal-title" id="docModalLabel_'.$row->id.'">'.$langAddResePortfolio.' - '.$row->filename.'</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
                     </div>
-            
+
                     <div class="modal-body">
                     <form id="vis_form_doc_'.$row->id.'" name="vis_form_doc_'.$row->id.'" action="" method="post">
                         <div class="mb-3">
@@ -1553,12 +1554,10 @@ foreach ($result as $row) {
                         <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
                     </form>
                     </div>
-            
+
                 </div>
                 </div>
             </div>';
-            } else {
-                $indo['eportfolio_modal'] = '';
             }
 
             $xmlCmdDirName = ($row->format == ".meta" && get_file_extension($row->path) == 'xml') ? substr($row->path, 0, -4) : $row->path;
@@ -1607,9 +1606,14 @@ foreach ($result as $row) {
                       'url' => $download_url,
                       'icon' => 'fa-download'),
                 array('title' => $langAddResePortfolio,
-                      'url' => "{$urlAppend}main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=mydocs&amp;rid=".$row->id,
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?action=add&amp;type=mydocs&amp;rid=".$row->id,
                       'icon' => 'fa-star',
                       'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
+                array('title' => $langAddResePortfolioExternalAchievements,
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?action=add&amp;type=external_achievements&amp;rid=".$row->id,
+                      'icon' => 'fa-star',
+                      'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
+                
                 array('title' => $langDelete,
                       'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1&amp;" . generate_csrf_token_link_parameter() ,
                       'class' => 'delete',
@@ -1731,7 +1735,8 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'show' => !defined('EBOOK_DOCUMENTS')),
         array('title' => $langMindmap,
               'url' => "../mindmap/index.php?course=$course_code",
-              'icon' => 'fa-solid fa-sitemap'),
+              'icon' => 'fa-solid fa-sitemap',
+              'show' => !(defined('MY_DOCUMENTS') || defined('COMMON_DOCUMENTS'))),
         array('title' => $langCommonDocs,
               'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
               'icon' => 'fa-share-alt',
@@ -1739,7 +1744,6 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
         array('title' => $langQuotaBar,
               'url' => "{$base_url}showQuota=true",
               'icon' => 'fa-pie-chart')
-
         ), false);
 } else {
     $data['action_bar'] = $data['dialogBox'] = '';

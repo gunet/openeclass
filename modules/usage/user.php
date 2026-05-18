@@ -18,7 +18,7 @@
  *
  */
 
-if (isset($_REQUEST['u']) and $is_admin) {
+if (isset($_REQUEST['u']) and ($is_admin or $is_departmentmanage_user)) {
     $statsuser = intval($_REQUEST['u']);
     $add_link = "&amp;u=$statsuser";
 } else {
@@ -27,7 +27,8 @@ if (isset($_REQUEST['u']) and $is_admin) {
 }
 
 $urlback = "../../main/portfolio.php";
-if ($is_admin) {
+
+if ($is_admin or $is_departmentmanage_user) {
     $urlback = "../admin/listusers.php";
 }
 $action_bar = action_bar(array(
@@ -39,7 +40,7 @@ $action_bar = action_bar(array(
 ),false);
 $tool_content .= $action_bar;
 
-if ($is_admin) {
+if ($is_admin || $is_departmentmanage_user) {
     $toolName = "$langStatOf: "  . q(uid_to_name($statsuser)) . " (" . q(uid_to_name($statsuser, 'username')) . ")";
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
     $navigation[] = array('url' => '../admin/listusers.php', 'name' => $langListUsers);
@@ -53,7 +54,18 @@ $head_content .=
         user = $statsuser;
         course = null;
         stats = 'u';
-    </script>";
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#udetails1').on('order.dt', function() {
+                $('#udetails1 thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
+            });
+        });
+    </script>
+";
 
 require_once 'modules/usage/form.php';
 

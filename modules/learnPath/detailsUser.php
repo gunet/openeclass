@@ -156,11 +156,11 @@ if (count($lpList) == 0) {
                         <td colspan='4'><strong>$langTotal</strong></td>
                         <td>" . q($totalTimeSpent) . "</td>
                         <td></td>
-                        <td>" . disp_progress_bar($total_progress, 1) . "</td>
+                        <td>" . (($total_progress <= 0) ? "-" : disp_progress_bar($total_progress, 1)) . "</td>
                         <td></td>
                       </tr>";
     $data[] = [];
-    $data[] = [ $langTotal, '', '', '', $totalTimeSpent, '', $total_progress . '%' ];
+    $data[] = [ $langTotal, '', '', '', $totalTimeSpent, '', (($total_progress <= 0) ? "-" : $total_progress . '%') ];
 }
 $tool_content .= "</table></div>";
 
@@ -209,7 +209,7 @@ if (isset($_GET['xls'])) {
         <body><div style='height: 160px;'></div>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langTrackUser) . "</h2>
-        <h3> " . q(uid_to_name($_REQUEST['uInfo'])) . "</h3>";
+        <h2 class='text-heading-h3'> " . q(uid_to_name($_REQUEST['uInfo'])) . "</h2>";
 
     $pdf_content .= $tool_content;
     $pdf_content .= "</body></html>";

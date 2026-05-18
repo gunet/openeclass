@@ -344,7 +344,7 @@ if ($full) { // user questions results
                         $answer_text[] = $a->answer;
                     }
                 } else {
-                    $answer_text[] = $a->answer_text;
+                    $answer_text[] = get_default_scale_answer_text($a->answer_text);
                 }
             }
             $data[] = [ '', $langResults, $langResults . ' (%)' ];
@@ -440,7 +440,7 @@ function create_pdf($data) {
         </head>
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-         <h3>" . q($langResults) . "</h3>
+         <h2 class='text-heading-h3'>" . q($langResults) . "</h2>
          <p></p>";
 
     $pdf_content .= $content;

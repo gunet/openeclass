@@ -17,7 +17,7 @@
 @if ($theQuestion)
     <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
         <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-            <h3 class='mb-0'>{{ trans('langQuickSurvey') }}</h3>
+            <h2 class='text-heading-h3 mb-0'>{{ trans('langQuickSurvey') }}</h2>
         </div>
         <div class='card-body card-body-default px-0'>
             <div class='card panelCard card-default px-lg-4 py-lg-3 p-3'>

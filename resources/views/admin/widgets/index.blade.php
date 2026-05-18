@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
 <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -14,7 +14,7 @@
                     @include('layouts.partials.show_alert') 
 
                         <div class="col-12">
-                            <h3 class="">{{ trans('langInstalledWidgets') }}</h3>
+                            <h2 class="text-heading-h3">{{ trans('langInstalledWidgets') }}</h2>
                             <hr>
                             @if (count($installed_widgets))
                             <div id="widgets">
@@ -68,16 +68,16 @@
                             </div>
                             @endif
 
-                            <h3 class=" mt-5">{{ trans('langAvailableWidgets') }}</h3>
+                            <h2 class="text-heading-h3 mt-5">{{ trans('langAvailableWidgets') }}</h2>
                             <hr>
                             @if (count($uninstalled_widgets))
                             <div>
                                 @foreach ($uninstalled_widgets as $key => $uninstalled_widget)
                                     <div class="panel panel-default panel-default-admin mt-3">
                                         <div class="panel-heading">
-                                            <h3 class='mb-0'>
+                                            <h2 class='text-heading-h3 mb-0'>
                                                 {{ $uninstalled_widget->getName() }}
-                                            </h3>
+                                            </h2>
 
                                         </div>
                                         <div class="panel-body">
@@ -137,6 +137,6 @@
         </div>
 
 </div>
-</div>
+</main>
 
 @endsection

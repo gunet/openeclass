@@ -21,7 +21,7 @@
 $require_usermanage_user = true;
 $require_help = true;
 $helpTopic = 'users_administration';
-$helpSubTopic = 'teachers_request';
+$helpSubTopic = 'teachers_requests';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';

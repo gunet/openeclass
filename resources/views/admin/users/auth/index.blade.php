@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -11,35 +11,57 @@
 
             <div class='mt-4'></div>
 
-            @include('layouts.partials.show_alert') 
-            
+            @include('layouts.partials.show_alert')
+
             <div class='col-12'>
                 <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                     <label>{{ trans('langMethods') }}</label>
                     <ul>
                     @foreach ($auth_ids as $auth_id => $auth_name)
-                        <?php $auth_count = count_auth_users($auth_id); ?>
-                        @if ($auth_count > 0 or in_array($auth_id, $auth_active_ids))
-                            <li>
-                                {{ get_auth_info($auth_id) }}
-                                ({{ trans('langNbUsers') }}:
+                        @if ($auth_id != 14)
+                            <?php $auth_count = count_auth_users($auth_id); ?>
+                            @if ($auth_count > 0 or in_array($auth_id, $auth_active_ids))
+                                <li>
+                                    {{ get_auth_info($auth_id) }}
+                                    ({{ trans('langNbUsers') }}:
+                                    @if ($auth_count == 0)
+                                        0
+                                    @else
+                                        <a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type={{ $auth_id }}&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=0'>{{ $auth_count }}</a>
+                                    @endif
+                                    @if ($auth_id != 1 and $auth_count > 0)
+                                        - <a href='auth_change.php?auth={{ $auth_id }}'>{{ trans('langAuthChangeUser') }}</a>
+                                    @endif
+                                    )
+                                    @if (!in_array($auth_id, $auth_active_ids))
+                                        <br>
+                                        <span class='label label-warning'>{{ trans('langAuthWarnInactive') }}</span>
+                                    @endif
+                                </li>
+                            @endif
+                        @endif
+                    @endforeach
+                    </ul>
+                    @if (isset($auth_ids[14]))
+                        <?php $auth_count = count_auth_users(14); ?>
+                        @if ($auth_count > 0 or in_array(14, $auth_active_ids))
+                            <div class='mt-3 ps-3'>
+                                {{ get_auth_info(14) }}
+                                ( {{ trans('langNbUsers') }}:
                                 @if ($auth_count == 0)
                                     0
                                 @else
-                                    <a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type={{ $auth_id }}&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=0'>{{ $auth_count }}</a>
-                                @endif
-                                @if ($auth_id != 1 and $auth_count > 0)
-                                    - <a href='auth_change.php?auth={{ $auth_id }}'>{{ trans('langAuthChangeUser') }}</a>
+                                    {{ $auth_count }}
                                 @endif
                                 )
-                                @if (!in_array($auth_id, $auth_active_ids))
-                                    <br>
-                                    <span class='label label-warning'>{{ trans('langAuthWarnInactive') }}</span>
-                                @endif
-                            </li>
+{{--                                @if (!in_array(14, $auth_active_ids))--}}
+{{--                                    <br>--}}
+{{--                                    <span class='label label-warning'>{{ trans('langAuthWarnInactive') }}</span>--}}
+{{--                                @endif--}}
+                            </div>
                         @endif
-                    @endforeach
-                    </ul></span>
+                    @endif
+                </span>
                 </div>
             </div>
 
@@ -78,14 +100,14 @@
                                         [
                                             'title' => trans('langSecondaryAuthType'),
                                             'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;p=0",
-                                            'icon' => 'fa-circle-o',
+                                            'icon' => 'fa-regular fa-circle',
                                             'show' => $authMethod->auth_default > 1
                                         ],
                                         [
                                             'title' => trans('langConnTest'),
                                             'url' => "auth_test.php?auth=$authMethod->auth_id",
                                             'icon' => 'fa-plug',
-                                            'show' => $authMethod->auth_id != 1 && $authMethod->auth_settings
+                                            'show' => $authMethod->auth_id != 1 || $authMethod->auth_settings
                                         ],
                                         [
                                             'title' => $authMethod->auth_default ? trans('langDeactivate') : trans('langActivate'),
@@ -126,5 +148,5 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 @endsection

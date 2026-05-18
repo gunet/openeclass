@@ -157,7 +157,7 @@ $maxDeep = 1; // used to compute colspan of <td> cells - only single level depth
 
 $toolName = $LPname;
 
-$tool_content .= "<h3>" . q(uid_to_name($uInfo)) . "</h3>";
+$tool_content .= "<h2 class='text-heading-h3'>" . q(uid_to_name($uInfo)) . "</h2>";
 
 $tool_content .= "<div class='table-responsive'>
     <table class='table-default'>
@@ -260,7 +260,7 @@ foreach ($elementList as $module) {
     $tool_content .= "<td style='width:15%;'>" . disp_lesson_status($module['lesson_status']) . "</td>";
     //-- progression
     $displayScore = ($score === 0 && $module['raw'] <= 0 && $module['scoreMax'] <= 0) ? "-" : $score . "%" ;
-    $displayProgress = ($progress === 0 && is_null($module['progress_measure'])) ? "-" : disp_progress_bar($progress, 1) ;
+    $displayProgress = ((int)$progress === 0 && (is_null($module['progress_measure']) || $module['progress_measure'] <= 0)) ? "-" : disp_progress_bar($progress, 1);
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
         $tool_content .= "<td>" . $displayProgress . "</td><td class='text-end'>" . $displayScore . "</td>";
@@ -302,7 +302,9 @@ if ($moduleNbT == 0) {
     if (is_numeric($nbrOfVisibleModules)) {
         $bestProgress = @round($globalProg[$bestAttempt] / $nbrOfVisibleModules);
     }
-    if ($totalProgressMeasure) {
+    if ($bestProgress) {
+        $lpCombinedProgress = $bestProgress;
+    } else if ($totalProgressMeasure) {
         $lpCombinedProgress = $totalProgressMeasure;
     } else {
         $lpCombinedProgress = get_learnPath_combined_progress($path_id, $uInfo);
@@ -315,14 +317,14 @@ if ($moduleNbT == 0) {
                         <th class='ps-1' colspan='" . ($maxDeep + 4) . "'>" . ($totalTime != "0000:00:00" ? $langTotal : '&nbsp;') . "</></th>
                         <th><small>" . ($totalTime != "0000:00:00" ? $totalTime : '&nbsp;') . "</small></th>
                         <th>&nbsp;</th>
-                        <th class='ms-1 p-2'>" . disp_progress_bar($lpCombinedProgress, 1) . "</th>
+                        <th class='ms-1 p-2'>" . (($lpCombinedProgress <= 0) ? "-" : disp_progress_bar($lpCombinedProgress, 1)) . "</th>
                         <th class='ms-1 p-2 text-end'>$globalScoreDisplay</th>
                     </tr>";
     $data[] = [];
     if ($totalTime != "0000:00:00") {
         $data[] = [ $langTimeInLearnPath, $totalTime ];
     }
-    $data[] = [ $langTotalPercentCompleteness, $lpCombinedProgress . "%" ];
+    $data[] = [ $langTotalPercentCompleteness, (($lpCombinedProgress <= 0) ? "-" : $lpCombinedProgress . "%")];
     $data[] = [ $langMaxScore, $globalScoreDisplay];
 }
 $tool_content .= "</table></div>";

@@ -106,8 +106,6 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
                 continue;
             }
             $cellIterator = $row->getCellIterator();
-            // ignore empty cells
-            $cellIterator->setIterateOnlyExistingCells(TRUE);
             foreach ($cellIterator as $cell) {
                 $user_data[] = trim($cell->getValue());
             }
@@ -123,9 +121,8 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
                 continue;
             }
             if (isset($info['email'])) {
-                if (!valid_email($info['email'])) {
-                    Session::flash('message',$langUsersEmailWrong . ': ' . q($info['email']));
-                    Session::flash('alert-class', 'alert-danger');
+                if ($info['email'] !== '' and !valid_email($info['email'])) {
+                    Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
                     $email = '';
                 } else {
                     $email = $info['email'];
@@ -175,10 +172,10 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
         }
     }
 
-$data['unparsed_lines'] = $unparsed_lines;
-$data['new_users_info'] = $new_users_info;
+    $data['unparsed_lines'] = $unparsed_lines;
+    $data['new_users_info'] = $new_users_info;
 
-$view = 'admin.users.multireguser_result';
+    $view = 'admin.users.multireguser_result';
 
 } else {
     Database::get()->queryFunc("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name", function($n) use(&$facs) {
@@ -225,7 +222,7 @@ $view = 'admin.users.multireguser_result';
                 </ul></p>
             </div>
         </div>";
-    $data['rich_text_editor'] = rich_text_editor('emailNewBodyEditor', 4, 20, "$emailNewBody");
+    $data['rich_text_editor'] = rich_text_editor('emailNewBodyEditor', 4, 20, "$emailNewBody", options: array('id' => 'emailNewBodyEditor'));
     $view = 'admin.users.multireguser';
 }
 

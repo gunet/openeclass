@@ -18,7 +18,8 @@
  *
  */
 
-$require_admin = TRUE;
+$require_departmentmanage_user = true;
+$require_login = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/usage/usage.lib.php';

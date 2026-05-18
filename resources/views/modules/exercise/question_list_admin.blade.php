@@ -2,13 +2,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+    <div class='{{ $container }} module-container py-lg-0'>
+        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -24,7 +21,7 @@
                         <div class='col-12 mb-4'>
                             <div class='card panelCard border-card-left-default px-3 py-2 h-100'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ $exerciseTitle }}</h3>
+                                    <h2 class='text-heading-h3'>{{ $exerciseTitle }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <div class='row row-cols-1 g-3'>
@@ -37,7 +34,7 @@
 
                                         @if ($periodLabel)
                                             <div class='col-12'>
-                                                {!! $periodLabel !!} <strong>{{ $periodInfo }}</strong>
+                                                {!! $periodLabel !!} <strong>{!! $periodInfo !!}</strong>
                                             </div>
                                         @endif
 
@@ -144,29 +141,42 @@
                                     <form class='form-horizontal' role='form' method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&exerciseId={{ $exerciseId }}">
                                         <div class='form-group'>
                                             <div class='col-sm-12'>
-                                                <div class='checkbox' id='divcheckboxShuffleQuestions'>
+                                                <div class='radio' id='divradioNoRandomization'>
                                                     <label class='form-control-static label-container' aria-label='{{ trans('langSelect') }}'>
-                                                        <input id='checkboxShuffleQuestions' type='checkbox' name='enableShuffleQuestions' value='1' @if($shuffleQuestions == 1) checked @endif>
-                                                        <span class='checkmark'></span>
+                                                        <input id='radioNoRandomization' type='radio' name='randomizationType' value='none' @if($shuffleQuestions == 0 && $randomQuestions == 0) checked @endif>
+                                                        <span class='checkmark' style='border-radius: 50%;'></span>
+                                                        {{ trans('langNoRandomization') }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class='col-sm-12'>
+                                                <div class='radio' id='divradioShuffleQuestions'>
+                                                    <label class='form-control-static label-container' aria-label='{{ trans('langSelect') }}'>
+                                                        <input id='radioShuffleQuestions' type='radio' name='randomizationType' value='shuffle' @if($shuffleQuestions == 1) checked @endif>
+                                                        <span class='checkmark' style='border-radius: 50%;'></span>
                                                         {{ trans('langShuffleQuestions') }}
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class='col-sm-12'>
-                                                <div class='checkbox' id='divcheckboxRandomQuestions'>
+                                                <div class='radio' id='divradioRandomQuestions'>
                                                     <label class='form-control-static label-container' aria-label='{{ trans('langSelect') }}'>
-                                                        <input id='checkboxRandomQuestions'type='checkbox' name='enableRandomQuestions' value='1' @if($randomQuestions > 0) checked @endif">
-                                                        <span class='checkmark'></span>
+                                                        <input id='radioRandomQuestions' type='radio' name='randomizationType' value='random' @if($randomQuestions > 0) checked @endif>
+                                                        <span class='checkmark' style='border-radius: 50%;'></span>
                                                         {{ trans('langChooseRandomQuestions') }}
                                                     </label>
                                                 </div>
-                                                <label class='col-12 control-label-notes mt-2' for='inputRandomQuestions'>
-                                                    {{ trans('langsQuestions') }}
-                                                </label>
-                                                <div class='col-md-6 col-12'>
-                                                    <input id='inputRandomQuestions' class='form-control' type='text' name='numberOfRandomQuestions' value='@if ($randomQuestions > 0) {{ $randomQuestions }} @endif'>
+                                                <div id='divInputRandomQuestions' @if($randomQuestions == 0) style='display:none;' @endif>
+                                                    <label class='col-12 control-label-notes mt-2' for='inputRandomQuestions'>
+                                                        {{ trans('langQuestionCount') }}
+                                                    </label>
+                                                    <div class='col-md-6 col-12'>
+                                                        <input id='inputRandomQuestions' class='form-control' type='text' name='numberOfRandomQuestions' value='@if ($randomQuestions > 0) {{ $randomQuestions }} @endif'>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <input type='hidden' name='enableShuffleQuestions' id='hiddenShuffle' value='1' @if($shuffleQuestions != 1) disabled @endif>
+                                            <input type='hidden' name='enableRandomQuestions' id='hiddenRandom' value='1' @if($randomQuestions <= 0) disabled @endif>
                                         </div>
                                         <div class='form-group mt-4'>
                                             <div class='col-sm-12'>
@@ -232,8 +242,7 @@
                         @endif
 
                     </div>
-                </div>
-            </div>
+            </main>
         </div>
     </div>
 
@@ -270,24 +279,14 @@
                 });
             }
             RandomizationForm();
-            $('#checkboxShuffleQuestions').click(function() {
-                if ($(this).is(':checked')) {
-                    $('#checkboxRandomQuestions').prop('disabled', true);
-                    $('#inputRandomQuestions').prop('disabled', true);
-                    $('#divcheckboxRandomQuestions').addClass('not_visible');
+            $('input[name=\"randomizationType\"]').change(function() {
+                var val = $(this).val();
+                $('#hiddenShuffle').prop('disabled', val !== 'shuffle');
+                $('#hiddenRandom').prop('disabled', val !== 'random');
+                if (val === 'random') {
+                    $('#divInputRandomQuestions').show();
                 } else {
-                    $('#inputRandomQuestions').prop('disabled', false);
-                    $('#checkboxRandomQuestions').prop('disabled', false);
-                    $('#divcheckboxRandomQuestions').removeClass('not_visible');
-                }
-            });
-            $('#checkboxRandomQuestions').click(function() {
-                if ($(this).is(':checked')) {
-                    $('#checkboxShuffleQuestions').prop('disabled', true);
-                    $('#divcheckboxShuffleQuestions').addClass('not_visible');
-                } else {
-                    $('#checkboxShuffleQuestions').prop('disabled', false);
-                    $('#divcheckboxShuffleQuestions').removeClass('not_visible');
+                    $('#divInputRandomQuestions').hide();
                 }
             });
             $('.questionSelection').click( function(e){
@@ -420,13 +419,12 @@
                     }
                 }).find('div.modal-dialog').addClass('modal-lg');
             });
-            $('.menu-popover').on('shown.bs.popover', function () {
-                $('.warnLink').on('click', function(e){
-                    var modifyAllLink = $(this).attr('href');
-                    var modifyOneLink = modifyAllLink.concat('&clone=true');
-                    $('a#modifyAll').attr('href', modifyAllLink);
-                    $('a#modifyOne').attr('href', modifyOneLink);
-                });
+
+            $('.warnLink').on('click', function(e){
+                var modifyAllLink = $(this).attr('href');
+                var modifyOneLink = modifyAllLink.concat('&clone=true');
+                $('a#modifyAll').attr('href', modifyAllLink);
+                $('a#modifyOne').attr('href', modifyOneLink);
             });
 
             $(document).on('click', '.previewQuestion', function(e) {

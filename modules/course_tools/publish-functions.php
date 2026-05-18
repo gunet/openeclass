@@ -47,7 +47,7 @@ function new_publish_ltiapp() {
            $langLTIProviderKey, $langLTIProviderSecret, $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive,
            $langLTIAPPlertTitle, $langLTIAPPlertKey, $langLTIAPPlertSecret, $urlAppend, $langImgFormsDes, $langForm;
 
-    $textarea = rich_text_editor('desc', 4, 20, '');
+    $textarea = rich_text_editor('desc', 4, 20, '', options: array('id' => 'desc'));
     $key = random_secret(8);
     $secret = random_secret();
     $tool_content .= "
@@ -134,7 +134,7 @@ function edit_publish_ltiapp($id) {
 
     $row = Database::get()->querySingle("SELECT * FROM course_lti_publish WHERE id = ?d ", $id);
     $status = ($row->enabled == 1 ? 1 : 0);
-    $textarea = rich_text_editor('desc', 4, 20, $row->description);
+    $textarea = rich_text_editor('desc', 4, 20, $row->description, options: array('id' => 'desc'));
     $key = $row->lti_provider_key;
     $secret = $row->lti_provider_secret;
 

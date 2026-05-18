@@ -1,6 +1,6 @@
 @if(Session::has('message'))
     <div class='col-12 all-alerts'>
-        <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+        <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show focusable-alert" role="alert" tabindex='0'>
             @php
                 $alert_type = '';
                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
@@ -32,7 +32,7 @@
 @if (Session::hasMessages())
   <div class='col-12 all-alerts'>
     @foreach (Session::getMessages() as $alert_class => $alert_messages)
-      <div class="alert {{ $alert_class }} alert-dismissible fade show" role="alert">
+      <div class="alert {{ $alert_class }} alert-dismissible fade show focusable-alert" role="alert" tabindex='0'>
         <i class='fa-solid @switch ($alert_class)
           @case('alert-success') fa-circle-check @break
           @case('alert-info') fa-circle-info @break

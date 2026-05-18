@@ -31,6 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'exercises';
 
 require_once '../../include/baseTheme.php';
+require_once 'modules/exercise/exercise.lib.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';

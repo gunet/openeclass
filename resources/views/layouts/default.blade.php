@@ -88,6 +88,19 @@
     <script type="text/javascript" src="{{ $urlAppend }}js/viewStudentTeacher.js?v={{ $cache_suffix }}"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/sidebar_slider_action.js?v={{ $cache_suffix }}"></script>
 
+    {{-- This script below runs before any datatables are initialized --}}
+    <script>
+        $(document).ready(function() {
+            $(document).on('init.dt', function(e, settings) {
+                $('.dt-paging nav').attr('aria-label', '{{ js_escape(trans('langPagination')) }}');
+                $('li.dt-paging-button button.first').attr('aria-label', '{{ js_escape(trans('langDtFirstPage')) }}');
+                $('li.dt-paging-button button.previous').attr('aria-label', '{{ js_escape(trans('langDtPrevPage')) }}');
+                $('li.dt-paging-button button.next').attr('aria-label', '{{ js_escape(trans('langDtNextPage')) }}');
+                $('li.dt-paging-button button.last').attr('aria-label', '{{ js_escape(trans('langDtLastPage')) }}');
+            });
+        });
+    </script>
+
     {!! $head_content !!}
 
     @stack('head_scripts')
@@ -111,8 +124,11 @@
 
     <script>
         $(function() {
-            $('.action-button-dropdown').on('click', function () {
-                // Close all other open dropdowns except the one being opened
+            $(document).on('click', '.action-button-dropdown', function() {
+                $(this).find('.fa-gear').removeClass('fa-gear').addClass('fa-chevron-left');
+                if (!$(this).hasClass('show')) {
+                    $(this).find('.fa-chevron-left').removeClass('fa-chevron-left').addClass('fa-gear');
+                }
                 $('.action-button-dropdown.show').not(this).each(function() {
                     $(this).dropdown('hide');
                 });
@@ -120,8 +136,8 @@
                 $('.dt-scroll-head').addClass('no-overflow');
                 $('.dt-scroll-body').addClass('no-overflow');
             });
-
-            $('.action-button-dropdown').on('hide.bs.dropdown', function () {
+            $(document).on('hide.bs.dropdown', '.action-button-dropdown', function() {
+                $(this).find('.fa-chevron-left').removeClass('fa-chevron-left').addClass('fa-gear');
                 $('.table-responsive').removeClass('no-overflow');
                 $('.dt-scroll-head').removeClass('no-overflow');
                 $('.dt-scroll-body').removeClass('no-overflow');
@@ -149,69 +165,94 @@
                 </div>
             </div>
         @endif
-        @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
-        <main id="main">@yield('content')</main>
-        @include('layouts.partials.footerDesktop')
+
+        @unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
+            @include('layouts.partials.navheadDesktop', ['logo_img' => $logo_img])
+        @endunless
+
+        @yield('content')
+
+        @unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
+            @include('layouts.partials.footerDesktop')
+        @endunless
     </div>
 
-    @if(isset($_SESSION['uid']) && get_config('enable_quick_note'))
-        <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote" aria-label="{{ trans('langQuickNotesSide') }}">
-            <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip'
-                    data-bs-placement='bottom' data-bs-title="{{ trans('langQuickNotesSide') }}"></span>
-        </a>
-        <div class="modal fade" id="quickNote" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class='modal-title'>
-                            <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                            <h2 class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</h2>
+    {{-- Quick note button --}}
+    @unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
+        @if(isset($_SESSION['uid']) && get_config('enable_quick_note'))
+            <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote" aria-label="{{ trans('langQuickNotesSide') }}">
+                <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip'
+                        data-bs-placement='bottom' data-bs-title="{{ trans('langQuickNotesSide') }}"></span>
+            </a>
+            <div class="modal fade" id="quickNote" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class='modal-title'>
+                                <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
+                                <h2 class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</h2>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class='form-wrapper form-edit'>
-                            <form action='{{ $urlAppend }}main/notes/index.php' method='post'>
-                                <div class="mb-3">
-                                    <label for="title-note" class="control-label-notes">{{ trans('langTitle') }}&nbsp;<span class='text-danger'>(*)</span></label>
-                                    <input type="text" class="form-control" name='newTitle' id="title-note">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="content-note" class="control-label-notes">{{ trans('langContent') }}</label>
-                                    <textarea class="form-control" id="content-note" name='newContent'></textarea>
-                                </div>
-                                <div class="mb-5">
-                                    <a class='small-text text-decoration-underline' href='{{ $urlAppend }}main/notes/index.php'>{{ trans('langAllNotes') }}</a>
-                                </div>
-                                {!! generate_csrf_token_form_field() !!}
-                                <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
-                                    <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">{{ trans('langClose') }}</button>
-                                    <button type="submit" class="btn submitAdminBtn" name='submitNote'>{{ trans('langSubmit') }}</button>
-                                </div>
-                            </form>
+                        <div class="modal-body">
+                            <div class='form-wrapper form-edit'>
+                                <form action='{{ $urlAppend }}main/notes/index.php' method='post'>
+                                    <div class="mb-3">
+                                        <label for="title-note" class="control-label-notes">{{ trans('langTitle') }}&nbsp;<span class='text-danger'>(*)</span></label>
+                                        <input type="text" class="form-control" name='newTitle' id="title-note">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="content-note" class="control-label-notes">{{ trans('langContent') }}</label>
+                                        <textarea class="form-control" id="content-note" name='newContent'></textarea>
+                                    </div>
+                                    <div class="mb-5">
+                                        <a class='small-text text-decoration-underline' href='{{ $urlAppend }}main/notes/index.php'>{{ trans('langAllNotes') }}</a>
+                                    </div>
+                                    {!! generate_csrf_token_form_field() !!}
+                                    <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
+                                        <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">{{ trans('langClose') }}</button>
+                                        <button type="submit" class="btn submitAdminBtn" name='submitNote'>{{ trans('langSubmit') }}</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    @endif
+        @endif
+    @endunless
+
     <button class="btnScrollToTop" data-bs-scroll="up" aria-label="{{ trans('langScrollToTop') }}">
         <i class="fa-solid fa-arrow-up-from-bracket"></i>
     </button>
     <script>
         $(function() {
 
+            $('.focusable-alert').focus();
+
             var inputTreeModal = document.getElementById('dialog-set-value');
-            $('#treeModal').on('hidden.bs.modal', function () {
-                inputTreeModal.focus();
-            });
+            if (inputTreeModal) {
+                $('#treeModal').on('hidden.bs.modal', function () {
+                    inputTreeModal.focus();
+                });
+            }
             
             document.addEventListener('keydown', function(event) {
                 const activeElement = document.activeElement;
+                const modalBootBox = document.querySelector('.bootbox.show');
+                const modal = document.querySelector('.modal.show');
                 if (activeElement && (activeElement.type === 'checkbox' || activeElement.type === 'radio')) {
                     if (event.key === 'Enter') {
                         event.preventDefault();
                         activeElement.checked = !activeElement.checked;
                         activeElement.dispatchEvent(new Event('change'));
+                    }
+                }
+                if (event.key === 'Escape' || event.key === 'Esc') {
+                    if (modalBootBox) {
+                        $(modalBootBox).modal('hide');
+                    }
+                    if (modal) {
+                        $(modal).modal('hide');
                     }
                 }
             });
@@ -293,19 +334,32 @@
             @endif
 
             document.addEventListener('click', (event) => {
-                const dropdowns = document.querySelectorAll('.contextual-menu-action-button');
-                let isAnyOpen = false;
+                const dropdownsActionButtons = document.querySelectorAll('.contextual-menu-action-button');
+                const dropdownsActionBars = document.querySelectorAll('.contextual-menu-action-bar');
+                let isAnyOpenActionButton = false;
+                let isAnyOpenActionBar = false;
 
-                dropdowns.forEach((dropdown) => {
-                    if (dropdown.classList.contains('show')) {
-                        isAnyOpen = true;
+                dropdownsActionButtons.forEach((dropdownActionButton) => {
+                    if (dropdownActionButton.classList.contains('show')) {
+                        isAnyOpenActionButton = true;
+                    }
+                });
+                dropdownsActionBars.forEach((dropdownActionBar) => {
+                    if (dropdownActionBar.classList.contains('show')) {
+                        isAnyOpenActionBar = true;
                     }
                 });
 
-                if (isAnyOpen) {
+                if (isAnyOpenActionButton) {
                     $('.col_maincontent_active').addClass('action-button-on');
                 } else {
                     $('.col_maincontent_active').removeClass('action-button-on');
+                }
+
+                if (isAnyOpenActionBar) {
+                    $('.col_maincontent_active').addClass('action-bar-on');
+                } else {
+                    $('.col_maincontent_active').removeClass('action-bar-on');
                 }
             });
 

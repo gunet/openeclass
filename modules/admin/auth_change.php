@@ -36,10 +36,11 @@ require_once 'modules/auth/auth.inc.php';
 
 if (isset($_GET['auth'])) {
     $auth = $_GET['auth'];
-    $_SESSION['auth_temp'] = $auth;
+    $data['auth'] = $_SESSION['auth_temp'] = $auth;
 }
 
 if (!isset($auth)) {
+	 echo "<pre>";
     $data['auth'] = $auth = $_SESSION['auth_temp'];
 }
 

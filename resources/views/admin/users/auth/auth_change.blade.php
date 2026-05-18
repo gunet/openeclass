@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -33,7 +33,7 @@
                                 {!! selection($auth_methods_active, 'auth_change', '', "class='form-control' id='auth_change_id'") !!}
                             </div>
                         </div>
-                        <input type='hidden' name='auth' value='{{ getIndirectReference(intval($auth)) }}'>
+								<input type='hidden' name='auth' value='{{ getIndirectReference(intval($auth)) }}'>
                         <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
                             <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                         </div>
@@ -49,5 +49,5 @@
 
         </div>
     </div>
-</div>
+</main>
 @endsection

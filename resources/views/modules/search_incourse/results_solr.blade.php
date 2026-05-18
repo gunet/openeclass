@@ -213,13 +213,10 @@
         }
     </style>
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                     <div class="row">
 
@@ -266,7 +263,7 @@
                                             $facetLabel = $results['facetLabels'][$facetField] ?? $facetField;
                                         ?>
                                         <section class="filters__section">
-                                            <h3>{{ $facetLabel }}</h3>
+                                            <h2 class='text-heading-h3'>{{ $facetLabel }}</h2>
                                             <ul>
                                                 @foreach ($facetBuckets as $bucket)
                                                     <?php
@@ -390,10 +387,9 @@
                         </div> {{-- page --}}
 
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
 
 
 

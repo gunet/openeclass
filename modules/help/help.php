@@ -26,8 +26,8 @@ if (isset($_GET['language']) and $_GET['language'] == 'el') {
 }
 
 $siteName = '';
+include "../../include/constants.php";
 include "../../lang/$language/common.inc.php";
-include '../../include/main_lib.php';
 
 $course_help_modules = [
     'agenda',

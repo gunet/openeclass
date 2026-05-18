@@ -2,13 +2,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
-        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -40,7 +37,7 @@
                                     <ul class="tree-units">
                                         <li>
                                             <details>
-                                                <summary><h3 class='mb-0'>{{ trans('langDisplayAllUnits')}}</h3></summary>
+                                                <summary><h2 class='text-heading-h3 mb-0'>{{ trans('langDisplayAllUnits')}}</h2></summary>
                                                 <ul>
                                                     @foreach ($units as $cu)
                                                         <li @class([
@@ -72,7 +69,7 @@
                     <div class='col-12 mt-4'>
                         <div class="card panelCard card-default px-lg-4 py-lg-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>{{ $unit_title }}</h3>
+                                <h2 class='text-heading-h3'>{{ $unit_title }}</h2>
                                 @if ($is_editor and $q->flipped_flag == 2)
                                 <a aria-label="{{ trans('langActivities') }}" href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}"
                                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langActivities') }}">
@@ -487,9 +484,8 @@
 
                 </script>
 
-            </div>
+            </main>
         </div>
     </div>
-</div>
 
 @endsection

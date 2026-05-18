@@ -110,7 +110,20 @@ $(function() {
                            'sNext':     '&rsaquo;',
                            'sLast':     '&raquo;'
                        }
-                   }
+                },
+                'tabIndex': -1,
+                'initComplete': function() {
+                    $('#users_table{$course_id} thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                }
+    });
+    $('#users_table{$course_id}').on('order.dt', function() {
+        $('#users_table{$course_id} thead .dt-column-order').each(function() {
+            $(this).removeAttr('aria-label');
+            $(this).attr('aria-hidden', 'true');
+        });
     });
     $('#user_attendances_form').on('submit', function (e) {
         oTable.rows().nodes().page.len(-1).draw();
@@ -564,7 +577,7 @@ if ($is_editor) {
         } elseif (isset($_GET['addActivityTc'])) {
             $pageName = "$langAdd $langInsertTcMeeting";
         } else {
-            $pageName = $langGradebookAddActivity;
+            $pageName = "$langAdd $langGradebookAddActivity";
         }
     } elseif (isset($_GET['book'])) {
         $navigation[] = ['url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id", 'name' => $attendance->title];
@@ -575,9 +588,9 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary',
                   'button-class' => 'btn-success'),
-            array('title' => $langAttendanceBook,
+            array('title' => $langAttendanceActiveUsers,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
-                  'icon' => 'fa fa-reply',
+                  'icon' => 'fa fa-users',
                   'level' => 'primary-label')
             ));
     $tool_content .= $action_bar;

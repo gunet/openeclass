@@ -1,8 +1,8 @@
 <div class="panel panelCard card-default px-lg-4 py-lg-3 mt-3">
     <div class="panel-heading border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap">
-        <h3 class='mb-0'>
+        <h2 class='text-heading-h3 mb-0'>
             {{ trans('langPortfolioMainContent') }}
-        </h3>
+        </h2>
     </div>
     <div class="panel-body" id="portfolio_widget_main" data-widget-area-id="3">
         @php $countWidgets = 0; @endphp

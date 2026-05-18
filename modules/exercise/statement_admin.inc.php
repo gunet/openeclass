@@ -19,7 +19,8 @@
  */
 
 load_js('bootstrap-slider');
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 
 $head_content .= "<script>
 $(function() {
@@ -34,7 +35,14 @@ $(function() {
         }, 100);
     }
 
-    $('#questionCat').select2();
+
+    slimSelectFun (
+        '#questionCat', 
+        '" . js_escape(trans('langSearch')) . "', 
+        '" . js_escape(trans('langWelcomeSelect')) . "', 
+        '" . js_escape(trans('langSelectAll')) . "', 
+        '" . js_escape(trans('langListChoices')) . "'
+    );
     var diffArray = ['$langQuestionNotDefined','$langQuestionVeryEasy', '$langQuestionEasy', '$langQuestionModerate', '$langQuestionDifficult', '$langQuestionVeryDifficult']
     $('#questionDifficulty').slider({
         tooltip: 'hide',
@@ -395,13 +403,13 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     <label for='questionDescription' class='col-12 control-label-notes mb-1'>$langQuestionDescription</label>
                     <div class='col-12'>
 
-                      ". rich_text_editor('questionDescription', 4, 50, $questionDescription) ."
+                      ". rich_text_editor('questionDescription', 4, 50, $questionDescription, options: array('id' => 'questionDescription')) ."
                     </div>
                 </div>
                 <div class='row form-group mt-4'>
                     <label for='questionCat' class='col-12 control-label-notes mb-1'>$langQuestionCat</label>
                     <div class='col-12'>
-                        <select name='category' id='questionCat' class='form-select'>
+                        <select name='category' id='questionCat' class='form-control'>
                             $options
                         </select>
                     </div>
@@ -420,7 +428,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 <div class='row form-group mt-4'>
                     <label for='questionFeedback' class='col-12 control-label-notes mb-1'>$langQuestionFeedback</label>
                     <div class='col-12'>
-                      ". rich_text_editor('questionFeedback', 4, 50, $questionFeedback) ."
+                      ". rich_text_editor('questionFeedback', 4, 50, $questionFeedback, options: array('id' => 'questionFeedback')) ."
                     </div>
                 </div>
                 <div class='row'>

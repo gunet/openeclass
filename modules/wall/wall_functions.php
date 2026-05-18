@@ -291,11 +291,11 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
         <div class="card panelCard card-transparent border-0 mt-5">
           <div class="card-header card-header-default px-0 py-0 border-0 d-md-flex justify-content-md-between align-items-md-center">
 
-                <h3>'.$langWallPostsShow.'</h3>
+                <h2 class="text-heading-h3">'.$langWallPostsShow.'</h2>
 
           </div>
           <div class="card-body card-body-default p-0 mt-4">
-            <div class="infinite-container">';
+            <ul class="infinite-container m-0 p-0" aria-label="'.$langWallPostsShow.'" style="list-style-type: none;">';
 
     foreach ($posts as $post) {
         $user_id = $post->user_id;
@@ -380,7 +380,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
         }
 
         $ret .= '
-              <div class="infinite-item ">
+              <li class="infinite-item nav-item">
                 <div class="row margin-right-thin margin-left-thin margin-top-thin">
                   <div class="col-12 mb-4">
                     <div class="card panelCard px-lg-2 py-lg-2" style="border-color: '.$theme_border_color.';">
@@ -397,7 +397,7 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
 
                       <div class="card-body bubble overflow-auto Borders pt-0 pb-1">
                         <div class="margin-top-thin">
-                            <div class="userContent title-default pb-4">'.nl2br(standard_text_escape($content)).'</div>
+                            <div class="userContent title-default pb-4" tabindex="0">'.nl2br(standard_text_escape($content)).'</div>
                             ' . $extvideo_block . '
                         </div>' .
                         show_resources($id) . '
@@ -411,9 +411,9 @@ function generate_infinite_container_html($posts, $posts_per_page, $next_page, $
                   </div>
                 </div>
               </div>
-            </div>';
+            </li>';
     }
-    $ret .= '</div></div></div>';
+    $ret .= '</ul></div></div>';
 
     if (count($posts) == $posts_per_page) {
         $ret .= "<a class='infinite-more-link' href='{$urlAppend}modules/wall/loadMore.php?course=$course_code&page=$next_page'>$langMore</a>";

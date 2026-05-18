@@ -2,13 +2,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+    <div class='{{ $container }} module-container py-lg-0'>
+        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -60,7 +57,6 @@
                                         @endif
 
                                         <tr @if (!$row->active) class='not_visible' @endif>
-
                                             @if ($is_course_reviewer)
                                                 <td>
                                                     <div class='line-height-default'><a href='admin.php?course={{ $course_code }}&amp;exerciseId={{ $row->id }}&amp;preview=1'>{{ $row->title }}</a>
@@ -71,9 +67,12 @@
                                                             {{-- exercise has expired --}}
                                                             &nbsp;&nbsp;<span class='text-danger'>({{ trans('langHasExpiredS') }})</span>
                                                         @endif
-                                                        @if ($row->is_exam == 1)
-                                                            &nbsp;
-                                                            &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langExam')) !!}
+                                                        @if ($row->is_exam == 1)&nbsp; {{-- Exam Mode --}}
+                                                            @if (isSebEnabled($row->id))
+                                                                &nbsp;<img src="{{ $urlAppend }}resources/icons/seb.png" width="25" height="25" data-bs-original-title="{{ trans('langSafeExamBrowserInfo') }}" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="{{ trans('langSafeExamBrowserInfo') }}">
+                                                            @else
+                                                                &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langExam')) !!}
+                                                            @endif
                                                         @endif
                                                     </div>
                                                     @if (!empty($row->description))
@@ -207,15 +206,19 @@
                                                             <a class='ex_settings active_exercise @if ($row->password_lock && !$is_editor) password_protected @endif'
                                                                href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&eurId={{ exerciseIncompleteAttempts($row->id, $uid, $row->continue_time_limit) }}'>{{ $row->title }}</a>&nbsp;&nbsp;(<span
                                                                     style='color:darkgrey'>{{ trans('langAttemptActive') }}</span>)
-                                                    @elseif (exercisePausedAttempts($row->id, $uid)))
+                                                    @elseif (exercisePausedAttempts($row->id, $uid))
                                                         <td>
                                                             <a class='ex_settings paused_exercise @if ($row->password_lock && !$is_editor) password_protected @endif'
                                                                href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&amp;eurId={{ exercisePausedAttempts($row->id, $uid) }}'> {{ $row->title }}</a>&nbsp;&nbsp;(<span style='color:darkgrey'>{{ trans('langAttemptPausedS') }}</span>)
                                                     @else
                                                         <td>
                                                             <div class='line-height-default'>
-                                                                <a class='ex_settings @if ($row->password_lock && !$is_editor) password_protected @endif'
-                                                                   href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}'> {{ $row->title }}</a>
+                                                                @if (isSebEnabled($row->id))
+                                                                    <a href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}&seb=1'> {{ $row->title }}</a>
+                                                                @else
+                                                                    <a class='ex_settings @if ($row->password_lock && !$is_editor) password_protected @endif'
+                                                                       href='exercise_submit.php?course={{ $course_code }}&exerciseId={{ $row->id }}'> {{ $row->title }}</a>
+                                                                @endif
                                                                 @if (!$row->public)
                                                                     &nbsp;{{ icon('fa-lock', trans('langNonPublicFile')) }}
                                                                 @endif
@@ -237,7 +240,11 @@
                                                                     </span>
                                                                 @endif
                                                                 @if ($row->is_exam == 1)&nbsp;
-                                                                    &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langExam')) !!}
+                                                                    @if (isSebEnabled($row->id))
+                                                                        &nbsp;&nbsp;<img src="{{ $urlAppend }}resources/icons/seb.png" width="25" height="25" data-bs-original-title="{{ trans('langSafeExamBrowserInfo') }}" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="{{ trans('langSafeExamBrowserInfo') }}">
+                                                                    @else
+                                                                        &nbsp;{!! icon('fa-solid fa-chalkboard-user', trans('langExam')) !!}
+                                                                    @endif
                                                                 @endif
                                                     @endif
                                                         @elseif ($currentDate <= dateToObject(($row->start_date)))
@@ -333,8 +340,7 @@
                             </div>
                         @endif
                     </div>
-                </div>
-            </div>
+            </main>
         </div>
     </div>
 
@@ -380,7 +386,20 @@
                         sNext: '&rsaquo;',
                         sLast: '&raquo;'
                     }
+                },
+                tabIndex: -1,
+                initComplete: function() {
+                    $('#ex thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
                 }
+            });
+            $('#ex').on('order.dt', function() {
+                $('#ex thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
             $('.dt-search input').attr({
                 'class' : 'form-control input-sm ms-0 mb-3',

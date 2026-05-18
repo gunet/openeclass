@@ -260,7 +260,7 @@ if ($is_editor) {
                                 <div class='form-group mt-4'>
                                     <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
                                     <div class='col-sm-12'>
-                                    <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
+                                        <textarea class='form-control' name='newComment' id='newComment' rows='3' placeholder='$langDescription'></textarea>
                                     </div>
                                 </div>
 
@@ -303,26 +303,28 @@ load_js('sortable/Sortable.min.js');
 $head_content .= "
     <script>
         $(document).ready(function(){
-            Sortable.create(tosort,{
-                handle: '.fa-arrows',
-                animation: 150,
-                onEnd: function (evt) {
-
-                var itemEl = $(evt.item);
-
-                var idReorder = itemEl.attr('data-id');
-                var prevIdReorder = itemEl.prev().attr('data-id');
-
-                $.ajax({
-                  type: 'post',
-                  dataType: 'text',
-                  data: {
-                          toReorder: idReorder,
-                          prevReorder: prevIdReorder,
-                        }
-                    });
-                }
-            });
+            if ($('#tosort').length > 0) {
+                Sortable.create(tosort,{
+                    handle: '.fa-arrows',
+                    animation: 150,
+                    onEnd: function (evt) {
+    
+                    var itemEl = $(evt.item);
+    
+                    var idReorder = itemEl.attr('data-id');
+                    var prevIdReorder = itemEl.prev().attr('data-id');
+    
+                    $.ajax({
+                      type: 'post',
+                      dataType: 'text',
+                      data: {
+                              toReorder: idReorder,
+                              prevReorder: prevIdReorder,
+                            }
+                        });
+                    }
+                });
+            }            
 
             let confirmLpCleanAttemptHref;
 
@@ -360,7 +362,8 @@ if ($is_editor) {
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
                         'level' => 'primary-label',
-                        'button-class' => 'uploadBTN btn-success'),
+                        'button-class' => 'btn-success',
+                        'text-class' => 'uploadBTN'),
                     array('title' => $langCreate,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create",
                         'icon' => 'fa-plus-circle',
@@ -396,20 +399,7 @@ if ($is_editor) {
     $tool_content .= $action_bar;
 }
 
-// check if there are learning paths available
-$l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->count;
-if ($l == 0) {
-    $tool_content .= "
-                      <div class='col-12'>
-                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoLearningPath</span></div>
-                      </div>";
-    draw($tool_content, 2, null, $head_content);
-    exit();
-}
-//echo "<pre>";
-//var_dump($_SERVER);
-//echo "</pre>";
-$head_content .= "<link href='".$urlAppend."js/bundle/uppy.min.css' rel='stylesheet' />";
+$head_content .= "<link href='" . $urlAppend . "js/bundle/uppy.min.css' rel='stylesheet' />";
 $tool_content .= "
     <script>
         let isUppyLoaded = false;
@@ -515,6 +505,18 @@ $tool_content .= "
 ";
 
 $tool_content .= "<div class='col-12 drag_and_drop_container d-none mb-3'><div id='uppy'></div></div>";
+
+// check if there are learning paths available
+$l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->count;
+if ($l == 0) {
+    $tool_content .= "
+                      <div class='col-12'>
+                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoLearningPath</span></div>
+                      </div>";
+    draw($tool_content, 2, null, $head_content);
+    exit();
+}
+
 
 $tool_content .= "
 <div class='table-responsive'>
@@ -632,7 +634,8 @@ foreach ($result as $list) { // while ... learning path list
         $tool_content .= "
                     </div>
                 <div class='mt-2'><p>" . q($list->lp_comment) . "<p></div>
-            </td><td>" . ((isset($resultmodules[0]) && $resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
+            </td><td>" . (((count($resultmodules) > 0) && $resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
+
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -783,7 +786,7 @@ if (!$is_editor && $iterator != 1 && $uid) {
       <td class='text-start'><strong>$langTotal</strong>:</td>
       <td></td>
       <td class='text-start'><strong>$globaltime</strong:</td>
-      <td>" . disp_progress_bar($total, 1) . "</td>
+      <td>" . (($total <= 0) ? "-" : disp_progress_bar($total, 1)) . "</td>
       <td></td>
     </tr>";
 }

@@ -15,7 +15,7 @@
 
 @section('content')
 
-<div class="col-12 main-section searchcours">
+<main id="main" class="col-12 main-section searchcours">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -102,5 +102,5 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 @endsection

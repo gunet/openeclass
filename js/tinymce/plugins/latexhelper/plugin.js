@@ -1,74 +1,68 @@
 /**
- * LaTeX Helper Plugin for TinyMCE
- * Iframe Wrapper Version (Secure & Isolated)
+ * latexhelper plugin for TinyMCE 8+
+ * Open eClass 3.0 Compatibility
  */
 (function() {
-    'use strict';
+    "use strict";
 
-    tinymce.PluginManager.add('latexhelper', function(editor, url) {
-        
-        function openDialog() {
-            // Get current content
-            var content = editor.selection.getContent({format: 'text'});
-            content = content.replace(/^\\\(|\\\)$/g, '').replace(/^\[m\]|\[\/m\]$/g, '');
+    tinymce.PluginManager.add("latexhelper", function(editor, url) {
 
-            // Translations from PHP
-            var lang = (typeof window.latexHelperLang !== 'undefined') ? window.latexHelperLang : {};
+        const openDialog = () => {
+            let selectedText = editor.selection.getContent({ format: "text" });
+            selectedText = selectedText.replace(/^\\\(|\\\)$/g, "").replace(/^\[m\]|\[\/m\]$/g, "");
 
-            // Open dialog.html in an Iframe
-            var win = editor.windowManager.open({
-                title: lang.title || 'Insert LaTeX',
-                url: url + '/dialog.html',
+            const lang = window.latexHelperLang || { title: "Insert LaTeX" };
+
+            editor.windowManager.openUrl({
+                title: lang.title,
+                url: url + "/dialog.html",
                 width: 900,
                 height: 700,
-                buttons: [], // Dialog handles its own buttons
-                inline: 1
-            }, {
-                initialCode: content,
-                latexLang: lang
-            });
-        }
+                onMessage: (api, message) => {
 
-        window.addEventListener('message', function(event) {
-            if (event.origin !== window.location.origin) {
-                return;
-            }
+                    if (message.mceAction === "latexhelper-insert") {
+                        let content = message.content.trim();
 
-            var data = event.data;
+                        content = content.replace(/<\/?[^>]+(>|$)/g, "");
 
-            if (data.mceAction === 'latexhelper-insert') {
-                var cleanCode = data.content.trim();
-                
-                // Basic Sanitization
-                cleanCode = cleanCode.replace(/<\/?[^>]+(>|$)/g, "");
+                        if (content !== "") {
+                            editor.insertContent("\\(" + content + "\\)");
+                        }
+                        api.close();
+                    }
 
-                if (cleanCode !== '') {
-                    editor.insertContent('\\(' + cleanCode + '\\)');
+                    if (message.mceAction === "latexhelper-cancel") {
+                        api.close();
+                    }
+
+                    if (message.mceAction === "ready") {
+                        api.sendMessage({
+                            mceAction: "initialData",
+                            content: selectedText
+                        });
+                    }
                 }
-                editor.windowManager.close();
-            }
+            });
+        };
 
-            if (data.mceAction === 'latexhelper-cancel') {
-                editor.windowManager.close();
-            }
+        editor.ui.registry.addButton("latexhelper", {
+            text: "LaTeX",
+            tooltip: "Insert Math",
+            onAction: openDialog
         });
 
-        editor.addButton('latexhelper', {
-            text: 'LaTeX',
-            tooltip: 'Insert Math',
-            onclick: openDialog
-        });
-        
-        editor.addMenuItem('latexhelper', {
-            icon: 'latex',
-            text: 'LaTeX Math',
-            context: 'insert',
-            onclick: openDialog
+        editor.ui.registry.addMenuItem("latexhelper", {
+            text: "LaTeX Math",
+            icon: "latex",
+            onAction: openDialog
         });
 
         return {
             getMetadata: function() {
-                return { name: 'LaTeX Helper', url: 'https://www.openeclass.org' };
+                return {
+                    name: "LaTeX Helper (v8 Compatible)",
+                    url: "https://www.openeclass.org"
+                };
             }
         };
     });

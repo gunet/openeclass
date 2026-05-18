@@ -117,12 +117,18 @@ foreach ($courses as $course) {
 
     // anonymous see only title for reg/closed courses
     if (($course->visible == COURSE_CLOSED || $course->visible == COURSE_REGISTRATION) && $anonymous) {
-        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
+        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span>";
+        if ($course->public_code) {
+            $courseUrl .= "<small> (" . q($course->public_code) . ")</small>";
+        }
     }
 
     // closed courses url displays contact form for logged-in users
     if ($course->visible == COURSE_CLOSED && $uid > 1 && !in_array($course->id, $subscribed)) {
-        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
+        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span>";
+        if ($course->public_code) {
+            $courseUrl .= "<small> (" . q($course->public_code) . ")</small>";
+        }
         $disable_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course->id);
         if (!$disable_course_user_requests) {
             $courseUrl .= "<br/><small><em><a class='text-decoration-underline' href='../contact/index.php?course_id=" . intval($course->id) . "'>$langLabelCourseUserRequest</a></em></small>";
@@ -132,7 +138,10 @@ foreach ($courses as $course) {
 
     // reg courses url displays just title and subscription url for logged in non-subscribed users
     if ($course->visible == COURSE_REGISTRATION && $uid > 1 && !in_array($course->id, $subscribed)) {
-        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
+        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span>";
+        if ($course->public_code) {
+            $courseUrl .= "<small> (" . q($course->public_code) . ")</small>";
+        }
         $skipincourse = true;
     }
 

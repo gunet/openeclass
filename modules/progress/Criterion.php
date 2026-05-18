@@ -44,12 +44,46 @@ class Criterion extends CriterionAbstract {
     }
 
     public function evaluate($context) {
-        if ($this->ruler->assert($this->rule, $context)) {
-            $this->assertedAction($context);
-            return true;
-        } else {
-            $this->notAssertedAction($context);
-            return false;
+        if($this->criterion_type == 'recurring') {
+            if(is_null($this->max_points_from_criterion) && is_null($this->max_points_from_criterion_time_period)) { //no constraints, assign the points
+                $this->assignPointsRecurringAction($context['uid']);
+                return true;
+            } else{
+
+                if(!is_null($this->max_points_from_criterion)) {
+                    $sum_q = Database::get()->querySingle("select coalesce(sum(points_awarded),0) as s from user_points_game_criterion where user = ?d and points_game_criterion = ?d", $context['uid'], $this->id);
+                    $total = $sum_q->s + $this->points;
+                    if($total > $this->max_points_from_criterion) {
+                        return false;
+                    }
+                }
+
+                if(!is_null($this->max_points_from_criterion_time_period)) {
+                    $sum_q = Database::get()->querySingle("select coalesce(sum(points_awarded),0) as s from user_points_game_criterion where user = ?d and points_game_criterion = ?d and created >= DATE_SUB(NOW(), INTERVAL ?d DAY)", $context['uid'], $this->id, $this->time_period_in_days);
+                    $total = $sum_q->s + $this->points;
+                    if($total > $this->max_points_from_criterion_time_period) {
+                        return false;
+                    }
+                }
+
+                $this->assignPointsRecurringAction($context['uid']);
+                return true;
+
+            }
+        } else { //criteria for badges, certificates and onetime criteria for points games
+            if ($this->ruler->assert($this->rule, $context)) {
+                if($this->criterion_type == 'onetime') { //ponts games onetime event
+                    $this->assertedAction($context, $this->points);
+                } else { //badges or certificates event
+                    $this->assertedAction($context);
+                }
+                return true;
+            } else {
+                if ($this->criterion_type != 'onetime') {
+                    $this->notAssertedAction($context);
+                }
+                return false;
+            }
         }
     }
 

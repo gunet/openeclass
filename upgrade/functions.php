@@ -1425,7 +1425,9 @@ function upgrade_to_3_6($tbl_options): void
             `created` datetime,
             `expires` datetime,
             `bundle` int(11) not null default 0,
+            `allow_export` tinyint(1) not null default 1 COMMENT 'Controls if badge can be exported to external backpack',
             index `badge_course` (`course_id`),
+            index `idx_allow_export` (`allow_export`),
             foreign key (`course_id`) references `course` (`id`)
           ) $tbl_options");
 
@@ -3366,22 +3368,25 @@ function upgrade_to_4_1($tbl_options) : void {
  * @return void
  */
 function upgrade_to_4_2($tbl_options) : void {
-
     if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
         Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
     }
     if (!DBHelper::fieldExists('forum_topic', 'visible')) {
         Database::get()->query("ALTER TABLE forum_topic ADD visible TINYINT NOT NULL DEFAULT 1");
     }
+    if (!DBHelper::fieldExists('forum', 'visible')) {
+        Database::get()->query("ALTER TABLE forum ADD visible TINYINT NOT NULL DEFAULT 1");
+    }
     if (DBHelper::fieldExists('tc_attendance', 'id')) {
         Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
+    }
+    if (DBHelper::fieldExists('tc_log', 'id')) {
+        Database::get()->query("ALTER TABLE tc_log CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
     if (!DBHelper::fieldExists('exercise_question', 'options')) {
         Database::get()->query("ALTER TABLE exercise_question ADD options TEXT DEFAULT NULL");
     }
-
     DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE);
-
     if(!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
         // Use consistent data types before creating the foreign key
         Database::get()->query('ALTER TABLE `attendance_activities`
@@ -3389,24 +3394,21 @@ function upgrade_to_4_2($tbl_options) : void {
             CHANGE COLUMN `module_auto_id` `module_auto_id` INT NOT NULL DEFAULT 0');
         DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
     }
-
     if(!DBHelper::foreignKeyExists('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id')) {
         // Use consistent data types before creating the foreign key
         Database::get()->query('ALTER TABLE `attendance_book` CHANGE COLUMN `attendance_activity_id` `attendance_activity_id` INT NOT NULL DEFAULT 0');
-
         DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE);
     }
     DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
-
     DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
     DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
-
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
     if (!DBHelper::fieldExists('course_lti_app', 'visible')) {
         Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
     }
+    
     if (DBHelper::fieldExists('tc_attendance', 'id')) {
         Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
@@ -3417,7 +3419,6 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('h5p_content', 'creator_id')) {
         Database::get()->query("ALTER TABLE h5p_content ADD `creator_id` INT UNSIGNED NOT NULL DEFAULT 0");
     }
-
     // Use consistent data types before creating the foreign key in attendance
     Database::get()->query("ALTER TABLE attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_activities CHANGE id id INT NOT NULL AUTO_INCREMENT");
@@ -3427,7 +3428,6 @@ function upgrade_to_4_2($tbl_options) : void {
     Database::get()->query("ALTER TABLE attendance_users CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_users CHANGE attendance_id attendance_id INT NOT NULL");
     Database::get()->query("ALTER TABLE attendance_users MODIFY uid INT NOT NULL DEFAULT 0");
-
     if (!DBHelper::foreignKeyExists('attendance', 'course_id', 'course', 'id')) {
         DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
@@ -3461,7 +3461,6 @@ function upgrade_to_4_2($tbl_options) : void {
             `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`)) $tbl_options");
     }
-
     if (!DBHelper::tableExists('ai_modules')) {
         Database::get()->query("CREATE TABLE ai_modules (
             `id` SMALLINT NOT NULL AUTO_INCREMENT,
@@ -3477,7 +3476,6 @@ function upgrade_to_4_2($tbl_options) : void {
             `ai_module` int NOT NULL,
             PRIMARY KEY (`id`), KEY (`ai_module`, `course_id`))  $tbl_options");
     }
-
     // AI Evaluation Configuration Table for Exercise Questions
     if (!DBHelper::tableExists('exercise_ai_config')) {
         Database::get()->query("CREATE TABLE exercise_ai_config (
@@ -3497,7 +3495,6 @@ function upgrade_to_4_2($tbl_options) : void {
             FOREIGN KEY (`course_id`) REFERENCES `course`(`id`) ON DELETE CASCADE
         ) $tbl_options");
     }
-
     if (!DBHelper::tableExists('exercise_ai_evaluation')) {
         Database::get()->query("CREATE TABLE exercise_ai_evaluation (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3523,13 +3520,11 @@ function upgrade_to_4_2($tbl_options) : void {
             FOREIGN KEY (`student_record_id`) REFERENCES `exercise_user_record`(`eurid`) ON DELETE CASCADE
         ) $tbl_options");
     }
-
     if (!DBHelper::tableExists('permissions')) {
         Database::get()->query("CREATE TABLE `permissions` (
             `id` tinyint NOT NULL AUTO_INCREMENT,
             `permission` VARCHAR(255),
              PRIMARY KEY (`id`)) $tbl_options");
-
         Database::get()->query("INSERT INTO permissions(permission) VALUE('admin_course_users'),
              ('admin_course_modules'),
              ('backup_course'),
@@ -3537,7 +3532,6 @@ function upgrade_to_4_2($tbl_options) : void {
              ('can_upload_document'),
              ('can_upload_multimedia')");
     }
-
     if (!DBHelper::tableExists('user_permissions')) {
         Database::get()->query("CREATE TABLE user_permissions (
             `course_id` int NOT NULL DEFAULT '0',
@@ -3546,7 +3540,6 @@ function upgrade_to_4_2($tbl_options) : void {
             PRIMARY KEY (`course_id`,`user_id`,`permission_id`)
         ) $tbl_options");
     }
-
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
@@ -3554,7 +3547,6 @@ function upgrade_to_4_2($tbl_options) : void {
     // flipped classroom: index and seed data
     Database::get()->query("ALTER TABLE course_activities ADD UNIQUE KEY(activity_id, activity_type)");
     Database::get()->query("INSERT IGNORE INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18', 1, 0, 0, 0)");
-
     // course_user_request rejected fields
     if (!DBHelper::fieldExists('course_user_request', 'comment_rejected')) {
         Database::get()->query("ALTER TABLE course_user_request ADD `comment_rejected` TEXT DEFAULT NULL AFTER `comments`");
@@ -3562,23 +3554,18 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('course_user_request', 'ts_update')) {
         Database::get()->query("ALTER TABLE course_user_request ADD `ts_update` DATETIME DEFAULT NULL AFTER `ts`");
     }
-
     if (!DBHelper::fieldExists('course', 'uuid')) {
         Database::get()->query("ALTER TABLE course ADD `uuid` VARCHAR(40) NOT NULL DEFAULT 0 AFTER `id`");
     }
-
     if (!DBHelper::fieldExists('user', 'uuid')) {
         Database::get()->query("ALTER TABLE user ADD `uuid` VARCHAR(40) NOT NULL DEFAULT 0 AFTER `id`");
     }
-
     if (!DBHelper::fieldExists('poll_user_record', 'session_id')) {
         Database::get()->query("ALTER TABLE poll_user_record ADD `session_id` INT NOT NULL DEFAULT 0");
     }
-
     if (!DBHelper::fieldExists('exercise', 'results_date')) {
         Database::get()->query("ALTER TABLE exercise ADD results_date DATETIME DEFAULT NULL AFTER results");
     }
-
     if (!DBHelper::fieldExists('assignment', 'results_date')) {
         Database::get()->query("ALTER TABLE assignment ADD results_date DATETIME DEFAULT NULL AFTER submission_date;");
     }
@@ -3590,7 +3577,7 @@ function upgrade_to_4_2($tbl_options) : void {
  * @param $tbl_options
  * @return void
  */
-function upgrade_to_4_3() : void {
+function upgrade_to_4_3($tbl_options) : void {
 
     // Exercises
     if (DBHelper::fieldExists('exercise', 'general_feedback')) {
@@ -3704,10 +3691,11 @@ function upgrade_to_4_3() : void {
  * @param $tbl_options
  * @return void
  */
-function upgrade_to_4_4() : void {
+function upgrade_to_4_4($tbl_options) : void
+{
 
     global $langResearchProfiles, $langGoogleScholarProfile, $langScopusID, $langOrcid,
-           $langGreek, $langEnglish, $langAlbanian, $langArabic, $langFrench, $langGerman, $langSpanish, $langItalian, $langChinese, $langRussian, $langTurkish, 
+           $langGreek, $langEnglish, $langAlbanian, $langArabic, $langFrench, $langGerman, $langSpanish, $langItalian, $langChinese, $langRussian, $langTurkish,
            $langOtherLanguages, $langePortfolioOtherLanguagesDescr, $langLangProfLevel, $langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1,
            $langLangCEFRC2, $langSocialActivities, $langVolunteerActivities, $langVolontSocialAct,
            $langAboutMeDescr, $langePortfolioPersonalWebsiteDescr, $langEducationDescr, $langePortfolioEmploymentDescr,
@@ -3716,12 +3704,14 @@ function upgrade_to_4_4() : void {
            $langePortfolioAcademicSkillsDescr, $langePortfolioCareerSkillsDesc, $langePortfolioSocialActivitiesDescr,
            $langePortfolioVolunteerActivitiesDescr;
 
-    //E-portfolio
-    Database::get()->query("ALTER TABLE `user` ADD COLUMN eportfolio_token VARCHAR(64) DEFAULT NULL AFTER eportfolio_enable");
-    
-    $eportf_users = Database::get()->queryArray("SELECT id FROM `user` WHERE eportfolio_enable = ?d", 1);
-    foreach ($eportf_users as $eportf_user) {
-        Database::get()->query("UPDATE `user` SET eportfolio_token = ?s WHERE id = ?d", rtrim(strtr(base64_encode(random_bytes(16)), '+/', '-_'), '='), $eportf_user->id);
+    // E-portfolio
+    if (!DBHelper::fieldExists('user', 'eportfolio_token')) {
+        Database::get()->query("ALTER TABLE `user` ADD COLUMN eportfolio_token VARCHAR(64) DEFAULT NULL AFTER eportfolio_enable");
+
+        $eportf_users = Database::get()->queryArray("SELECT id FROM `user` WHERE eportfolio_enable = ?d", 1);
+        foreach ($eportf_users as $eportf_user) {
+            Database::get()->query("UPDATE `user` SET eportfolio_token = ?s WHERE id = ?d", rtrim(strtr(base64_encode(random_bytes(16)), '+/', '-_'), '='), $eportf_user->id);
+        }
     }
 
     $min_eportf_cat_order = Database::get()->querySingle("SELECT MIN(sortorder) AS min_order FROM eportfolio_fields_category");
@@ -3731,38 +3721,55 @@ function upgrade_to_4_4() : void {
         $min_eportf_cat_order = 0;
     }
 
-    $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langResearchProfiles', $min_eportf_cat_order)")->lastInsertID;
-    Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
-        ('gscholar', '$langGoogleScholarProfile', '', '5', $eportf_cat_id, 0, 0, ''),
-        ('scopus', '$langScopusID', '', '1', $eportf_cat_id, -1, 0, ''),
-        ('orcid', '$langOrcid', '', '5', $eportf_cat_id, -2, 0, '')");
-    $min_eportf_cat_order--;
+    $RPfc = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s", $langResearchProfiles);
+    if ($RPfc->cnt == 0) {
+        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langResearchProfiles', $min_eportf_cat_order)")->lastInsertID;
+        Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
+            ('gscholar', '$langGoogleScholarProfile', '', '5', $eportf_cat_id, 0, 0, ''),
+            ('scopus', '$langScopusID', '', '1', $eportf_cat_id, -1, 0, ''),
+            ('orcid', '$langOrcid', '', '5', $eportf_cat_id, -2, 0, '')");
+        $min_eportf_cat_order--;
+    }
 
-    $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langLangProfLevel', $min_eportf_cat_order)")->lastInsertID;
-    $lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
-    Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
-        ('el', '$langGreek', '', '4', $eportf_cat_id, 0, 0, '".serialize($lang_proficiency_levels)."'),
-        ('en', '$langEnglish', '', '4', $eportf_cat_id, -1, 0, '".serialize($lang_proficiency_levels)."'),
-        ('sq', '$langAlbanian', '', '4', $eportf_cat_id, -2, 0, '".serialize($lang_proficiency_levels)."'),
-        ('ar', '$langArabic', '', '4', $eportf_cat_id, -3, 0, '".serialize($lang_proficiency_levels)."'),
-        ('fr', '$langFrench', '', '4', $eportf_cat_id, -4, 0, '".serialize($lang_proficiency_levels)."'),
-        ('de', '$langGerman', '', '4', $eportf_cat_id, -5, 0, '".serialize($lang_proficiency_levels)."'),
-        ('it', '$langItalian', '', '4', $eportf_cat_id, -6, 0, '".serialize($lang_proficiency_levels)."'),
-        ('es', '$langSpanish', '', '4', $eportf_cat_id, -7, 0, '".serialize($lang_proficiency_levels)."'),
-        ('zh', '$langChinese', '', '4', $eportf_cat_id, -8, 0, '".serialize($lang_proficiency_levels)."'),
-        ('ru', '$langRussian', '', '4', $eportf_cat_id, -9, 0, '".serialize($lang_proficiency_levels)."'),
-        ('tr', '$langTurkish', '', '4', $eportf_cat_id, -10, 0, '".serialize($lang_proficiency_levels)."'),
-        ('other_languages', '$langOtherLanguages', '$langePortfolioOtherLanguagesDescr', '2', $eportf_cat_id, -11, 0, '')");
-    $min_eportf_cat_order--;
+    $RPlp = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s", $langLangProfLevel);
+    if ($RPlp->cnt == 0) {
+        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langLangProfLevel', $min_eportf_cat_order)")->lastInsertID;
+        $lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
+        Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
+            ('el', '$langGreek', '', '4', $eportf_cat_id, 0, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('en', '$langEnglish', '', '4', $eportf_cat_id, -1, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('sq', '$langAlbanian', '', '4', $eportf_cat_id, -2, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('ar', '$langArabic', '', '4', $eportf_cat_id, -3, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('fr', '$langFrench', '', '4', $eportf_cat_id, -4, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('de', '$langGerman', '', '4', $eportf_cat_id, -5, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('it', '$langItalian', '', '4', $eportf_cat_id, -6, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('es', '$langSpanish', '', '4', $eportf_cat_id, -7, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('zh', '$langChinese', '', '4', $eportf_cat_id, -8, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('ru', '$langRussian', '', '4', $eportf_cat_id, -9, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('tr', '$langTurkish', '', '4', $eportf_cat_id, -10, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('other_languages', '$langOtherLanguages', '$langePortfolioOtherLanguagesDescr', '2', $eportf_cat_id, -11, 0, '')");
+        $min_eportf_cat_order--;
+    }
 
-    $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langVolontSocialAct', $min_eportf_cat_order)")->lastInsertID;
-    Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
+    $RPvsa = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s", $langVolontSocialAct);
+    if ($RPvsa->cnt == 0) {
+        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langVolontSocialAct', $min_eportf_cat_order)")->lastInsertID;
+        Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
         ('social_activities', '$langSocialActivities', '', '2', $eportf_cat_id, 0, 0, ''),
         ('volunteer_activities', '$langVolunteerActivities', '', '2', $eportf_cat_id, -1, 0, '')");
+    }
 
-    Database::get()->query("ALTER TABLE eportfolio_fields ADD UNIQUE (shortname)");
-    Database::get()->query("ALTER TABLE eportfolio_fields_data ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1");
-    Database::get()->query("ALTER TABLE eportfolio_resource ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1, ADD reflection_comments TEXT NOT NULL");
+    if (!DBHelper::indexExists('eportfolio_fields', 'shortname')) {
+        Database::get()->query("ALTER TABLE eportfolio_fields ADD UNIQUE (shortname)");
+    }
+
+    if (!DBHelper::fieldExists('eportfolio_fields_data', 'visibility')) {
+        Database::get()->query("ALTER TABLE eportfolio_fields_data ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1");
+    }
+
+    if (!DBHelper::fieldExists('eportfolio_resource', 'reflection_comments')) {
+        Database::get()->query("ALTER TABLE eportfolio_resource ADD reflection_comments TEXT NULL");
+    }
 
     Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langAboutMeDescr, 'about_me');
     Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalWebsiteDescr, 'personal_website');
@@ -3779,7 +3786,362 @@ function upgrade_to_4_4() : void {
     Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioSocialActivitiesDescr, 'social_activities');
     Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioVolunteerActivitiesDescr, 'volunteer_activities');
 
+    // tenant table
+    if (!DBHelper::tableExists('tenant')) {
+        Database::get()->query("CREATE TABLE `tenant` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `name` varchar(200) NOT NULL,
+            `description` text DEFAULT NULL,
+            `department_id` int(11) NOT NULL,
+            `url` varchar(200) NOT NULL DEFAULT '',
+            `theme_id` int(11) DEFAULT NULL,
+            `created_at` DATETIME NOT NULL,
+            `updated_at` DATETIME NOT NULL,
+            `options` text DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `department_id` (`department_id`),
+            KEY `theme_id` (`theme_id`),
+            CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
+            CONSTRAINT FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)) $tbl_options");
+    }
+
+    // course resource usage table
+    if (!DBHelper::tableExists('course_resource_usage')) {
+        Database::get()->query("CREATE TABLE `course_resource_usage` (
+            `course_id` int(11) NOT NULL,
+            `disk_size` bigint DEFAULT NULL,
+            PRIMARY KEY (`course_id`),
+            KEY `idx_disk_size` (`disk_size`),
+            CONSTRAINT FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+                ON DELETE CASCADE ON UPDATE CASCADE
+            ) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('theme_options', 'tenant_id')) {
+        Database::get()->query("
+            ALTER TABLE theme_options
+            ADD tenant_id INT,
+            ADD CONSTRAINT `tenant_id`
+            FOREIGN KEY (`tenant_id`)
+            REFERENCES `tenant`(`id`)
+        ");
+    }
+
+    if (DBHelper::tableExists('admin_announcement') and !DBHelper::fieldExists('admin_announcement', 'tenant_id')) {
+        Database::get()->query("ALTER TABLE `admin_announcement` ADD `tenant_id` INT(11) DEFAULT NULL AFTER `id`");
+
+        Database::get()->query("ALTER TABLE `admin_announcement` ADD INDEX `idx_tenant_id` (`tenant_id`)");
+    }
+
+    if (!DBHelper::fieldExists('tenant', 'url_active')) {
+        Database::get()->query("ALTER TABLE tenant ADD url_active TINYINT(1) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('api_token', 'department_id')) {
+        Database::get()->query(
+            'ALTER TABLE `api_token`
+                        ADD `department_id` INT(11),
+                        ADD CONSTRAINT `fk_department_id`
+                        FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
+        );
+    }
+
+    if (!DBHelper::fieldExists('certificate_template', 'department_id')) {
+        Database::get()->query(
+            'ALTER TABLE `certificate_template`
+            ADD `department_id` INT(11) DEFAULT NULL,
+            ADD CONSTRAINT `fk_certificate_template_hierarchy`
+                FOREIGN KEY (`department_id`) REFERENCES `hierarchy`(`id`)
+                ON DELETE SET NULL
+                ON UPDATE CASCADE'
+        );
+    }
+
+    // Gamification
+    if (!DBHelper::tableExists('points_game')) {
+        Database::get()->query("CREATE TABLE `points_game` (
+            `id` int(11) not null auto_increment primary key,
+            `course_id` int(11) not null,
+            `title` varchar(255) not null,
+            `description` text,
+            `active` tinyint(1) not null default 1,
+            `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
+            `starts` datetime,
+            `expires` datetime,
+            `config` text,
+            index `points_game_course` (`course_id`),
+            foreign key (`course_id`) references `course` (`id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('points_game_criterion')) {
+        Database::get()->query("CREATE TABLE `points_game_criterion` (
+            `id` int(11) not null auto_increment primary key,
+            `points_game` int(11) not null,
+            `activity_type` varchar(255),
+            `module` int(11),
+            `resource` int(11),
+            `threshold` decimal(7,2),
+            `operator` varchar(20),
+            `points` int(11),
+            `criterion_type` varchar(20) not null,
+            `max_points_from_criterion` int(11),
+            `max_points_from_criterion_time_period` int(11),
+            `time_period_in_days` int(11),
+            foreign key (`points_game`) references `points_game`(`id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('points_game_levels')) {
+        Database::get()->query("CREATE TABLE `points_game_levels` (
+        `id` int(11) not null auto_increment primary key,
+        `points_game` int(11) not null,
+        `friendly_name` varchar(255),
+        `required_points` int(11) not null,
+        foreign key (`points_game`) references `points_game`(`id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('user_points_game_criterion')) {
+        Database::get()->query("CREATE TABLE `user_points_game_criterion` (
+        `id` int(11) not null auto_increment primary key,
+        `user` int(11) not null,
+        `points_game_criterion` int(11) not null,
+        `points_awarded` int(11) not null,
+        `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
+        foreign key (`user`) references `user`(`id`),
+        foreign key (`points_game_criterion`) references `points_game_criterion`(`id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('user_points_game_points')) {
+        Database::get()->query("CREATE TABLE `user_points_game_points` (
+            `id` int(11) not null auto_increment primary key,
+            `user` int(11) not null,
+            `points_game` int(11) not null,
+            `total_points` int(11) not null,
+            `current_level` int(11),
+            unique key `user_points_game_points` (`user`, `points_game`),
+            index `user_points_game_leaderboard` (`points_game`, `total_points` DESC),
+            foreign key (`user`) references `user`(`id`),
+            foreign key (`points_game`) references `points_game`(`id`),
+            foreign key (`current_level`) references `points_game_levels`(`id`)
+        ) $tbl_options");
+    }
+
+    //sticky notes
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_topic` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `course_id` int(11) NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `description` text DEFAULT NULL,
+        `allow_edit` tinyint(1) NOT NULL DEFAULT 1,
+        `allow_delete` tinyint(1) NOT NULL DEFAULT 1,
+        `has_categories` tinyint(1) NOT NULL DEFAULT 0,
+        `per_page` int(11) NOT NULL DEFAULT 20,
+        `is_active` tinyint(1) NOT NULL DEFAULT 1,
+        `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+        `created_by` int(11) NOT NULL,
+        PRIMARY KEY (`id`),
+        KEY `fk_sticky_notes_topics_course` (`course_id`),
+        KEY `fk_sticky_notes_topics_creator` (`created_by`),
+        CONSTRAINT `fk_sticky_notes_topics_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+        CONSTRAINT `fk_sticky_notes_topics_creator` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE CASCADE
+    ) $tbl_options");
+
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_category` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `topic_id` int(11) NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `sort_order` int(11) NOT NULL DEFAULT 0,
+        `created_at` datetime DEFAULT current_timestamp(),
+        PRIMARY KEY (`id`),
+        KEY `topic_id` (`topic_id`),
+        CONSTRAINT `sticky_notes_category_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `sticky_notes_topic` (`id`) ON DELETE CASCADE
+    ) $tbl_options");
+
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_post` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `topic_id` int(11) NOT NULL,
+        `category_id` int(11) DEFAULT NULL,
+        `content` varchar(500) NOT NULL,
+        `user_id` int(11) NOT NULL,
+        `color` varchar(10) DEFAULT NULL,
+        `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+        `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+        PRIMARY KEY (`id`),
+        KEY `fk_sticky_notes_post_topic` (`topic_id`),
+        KEY `fk_sticky_notes_post_creator` (`user_id`),
+        KEY `category_id` (`category_id`),
+        CONSTRAINT `fk_sticky_notes_post_creator` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+        CONSTRAINT `fk_sticky_notes_post_topic` FOREIGN KEY (`topic_id`) REFERENCES `sticky_notes_topic` (`id`) ON DELETE CASCADE,
+        CONSTRAINT `sticky_notes_post_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `sticky_notes_category` (`id`) ON DELETE SET NULL
+    ) $tbl_options");
+
+    if (!DBHelper::tableExists('course_import')) {
+        Database::get()->query("CREATE TABLE course_import (
+            id INT NOT NULL AUTO_INCREMENT, 
+            course_id INT NOT NULL, 
+            imported_course_id INT NOT NULL, 
+            imported DATETIME NOT NULL, 
+            PRIMARY KEY(id)
+       ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('seb_courses')) {
+        Database::get()->query("CREATE TABLE `seb_courses` (
+                            `id` int NOT NULL AUTO_INCREMENT,
+                            `course_id` int NOT NULL,
+                             PRIMARY KEY(`id`),
+                             UNIQUE KEY `course_id` (`course_id`)
+       ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('suppressed_words')) {
+        Database::get()->query("CREATE TABLE `suppressed_words` (
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `word` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+            `added_by` INT DEFAULT NULL,
+            `created_at` DATETIME NOT NULL,
+            PRIMARY KEY (`id`)) $tbl_options");
+
+        Database::get()->query("INSERT INTO `suppressed_words` (`word`, `created_at`) VALUES
+            ('χαζός', NOW()),
+            ('βλαμμένος', NOW()),
+            ('ανόητος', NOW()),
+            ('στόκος', NOW()),
+            ('τούβλο', NOW()),
+            ('moron', NOW()),
+            ('dumb', NOW()),
+            ('idiot', NOW()),
+            ('imbecile', NOW()),
+            ('jerk', NOW())");
+    }
 }
+/**
+ * @brief OpenBadges Backpack Integration - Database Migration
+ * Creates tables and fields for external backpack provider integration
+ * 
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_openbadges_backpack($tbl_options): void
+{
+    //Create backpack_provider table for managing external OpenBadges backpack providers
+    if (!DBHelper::tableExists('backpack_provider')) {
+        Database::get()->query("CREATE TABLE `backpack_provider` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(255) NOT NULL,
+            `api_url` VARCHAR(512) NOT NULL,
+            `ob_version` VARCHAR(50) DEFAULT 'OpenBadge v2.0',
+            `basic_auth_access_token` VARCHAR(512) DEFAULT NULL,
+            `refresh_access_token` VARCHAR(512) DEFAULT NULL,
+            `client_id` VARCHAR(255) DEFAULT NULL,
+            `client_secret` VARCHAR(255) DEFAULT NULL,
+            `authorization_endpoint` VARCHAR(512) DEFAULT NULL,
+            `token_endpoint` VARCHAR(512) DEFAULT NULL,
+            `registration_endpoint` VARCHAR(512) DEFAULT NULL,
+            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            `active` TINYINT(1) NOT NULL DEFAULT 1,
+            UNIQUE KEY `name` (`name`)
+        ) $tbl_options");
+    }
+
+    // Create user_backpack_connection table for user connections to backpack providers
+    if (!DBHelper::tableExists('user_backpack_connection')) {
+        Database::get()->query("CREATE TABLE `user_backpack_connection` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` INT(11) NOT NULL,
+            `backpack_provider_id` INT(11) NOT NULL,
+            `email` VARCHAR(255) DEFAULT NULL,
+            `password` VARCHAR(255) DEFAULT NULL,
+            `access_token` VARCHAR(512) DEFAULT NULL,
+            `refresh_token` VARCHAR(512) DEFAULT NULL,
+            `status` ENUM('connected', 'disconnected', 'error') DEFAULT 'disconnected',
+            `last_sync` DATETIME DEFAULT NULL,
+            `selected_collection_id` VARCHAR(512) DEFAULT NULL COMMENT 'Last selected collection for sync',
+            `selected_collection_name` VARCHAR(255) DEFAULT NULL COMMENT 'Display name of selected collection',
+            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY `user_provider` (`user_id`, `backpack_provider_id`),
+            FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    // Create user_badge_external table for imported external badges
+    if (!DBHelper::tableExists('user_badge_external')) {
+        Database::get()->query("CREATE TABLE `user_badge_external` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` INT(11) NOT NULL,
+            `backpack_provider_id` INT(11) NOT NULL,
+            `title` VARCHAR(255) NOT NULL,
+            `description` TEXT,
+            `image_url` VARCHAR(512),
+            `issuer` VARCHAR(255),
+            `issued_on` DATETIME,
+            `external_assertion_id` VARCHAR(512) NOT NULL,
+            `external_collection_id` VARCHAR(512),
+            `badge_data` LONGTEXT,
+            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY `user_assertion` (`user_id`, `external_assertion_id`(255)),
+            INDEX `user_id_idx` (`user_id`),
+            INDEX `backpack_provider_id_idx` (`backpack_provider_id`),
+            FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    // Add external_assertion_id field to user_badge table (for tracking exported badges)
+    if (!DBHelper::fieldExists('user_badge', 'external_assertion_id')) {
+        Database::get()->query("ALTER TABLE `user_badge` 
+            ADD `external_assertion_id` VARCHAR(512) DEFAULT NULL 
+            COMMENT 'External assertion ID if published to backpack'");
+        
+        // Add index for better query performance
+        if (!DBHelper::indexExists('user_badge', 'external_assertion_idx')) {
+            Database::get()->query("CREATE INDEX `external_assertion_idx` 
+                ON `user_badge` (`external_assertion_id`(255))");
+        }
+    }
+
+    // Ensure badge table has allow_export field (should exist from 3.6, but double-check)
+    if (!DBHelper::fieldExists('badge', 'allow_export')) {
+        Database::get()->query("ALTER TABLE `badge` 
+            ADD `allow_export` TINYINT(1) NOT NULL DEFAULT 1 
+            COMMENT 'Controls if badge can be exported to external backpack'");
+        
+        // Add index for filtering exportable badges
+        if (!DBHelper::indexExists('badge', 'idx_allow_export')) {
+            Database::get()->query("CREATE INDEX `idx_allow_export` 
+                ON `badge` (`allow_export`)");
+        }
+    }
+
+    // Create indexes for better performance on backpack operations
+    if (!DBHelper::indexExists('user_backpack_connection', 'user_status_idx')) {
+        Database::get()->query("CREATE INDEX `user_status_idx` 
+            ON `user_backpack_connection` (`user_id`, `status`)");
+    }
+
+    if (!DBHelper::indexExists('user_backpack_connection', 'provider_status_idx')) {
+        Database::get()->query("CREATE INDEX `provider_status_idx` 
+            ON `user_backpack_connection` (`backpack_provider_id`, `status`)");
+    }
+
+    if (!DBHelper::indexExists('user_badge_external', 'collection_idx')) {
+        Database::get()->query("CREATE INDEX `collection_idx` 
+            ON `user_badge_external` (`external_collection_id`(255))");
+    }
+
+    if (!DBHelper::indexExists('user_badge_external', 'created_at_idx')) {
+        Database::get()->query("CREATE INDEX `created_at_idx` 
+            ON `user_badge_external` (`created_at`)");
+    }
+}
+
 
 /**
  * @brief Create Indexes
