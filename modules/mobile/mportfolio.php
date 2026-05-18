@@ -70,7 +70,6 @@ function appendUserDetails ($root, $dom) {
     global $uid;
 
     $t = $root->appendChild($dom->createElement('user'));
-    $t->appendChild(new DOMAttr('username', q(uid_to_name($uid, 'username'))));
     $t->appendChild(new DOMAttr('givenname', q(uid_to_name($uid, 'givenname'))));
     $t->appendChild(new DOMAttr('surname', q(uid_to_name($uid, 'surname'))));
 
