@@ -28,22 +28,6 @@ $groupsArr = array();
 $toolsArr = array();
 
 $toolArr = lessonToolsMenu(false);
-$group = new stdClass();
-$group->id = 0;
-$group->name = $langIdentity;
-$groupsArr[] = $group;
-
-$tool = new stdClass();
-
-// course description
-$tool->id = 0;
-$tool->name = $langCourseProgram;
-$tool->link = $urlAppend . 'courses/' . $course_code . '/index.php?course=' . $course_code;
-$tool->img = 'coursedescription';
-$tool->type = 'coursedescription';
-$tool->active = true;
-$toolsArr[0][] = $tool;
-
 // course tools
 $offset = 1;
 for ($i = 0; $i < count($toolArr); $i++) {
@@ -79,7 +63,7 @@ exit();
  * @return string The generated XML as a string.
  */
 function createDom(array $groupsArr, array $toolsArr) {
-    global $status;
+    global $status, $uid;
 
     $dom = new DomDocument('1.0', 'utf-8');
 
@@ -104,7 +88,10 @@ function createDom(array $groupsArr, array $toolsArr) {
     if ($status == USER_TEACHER || $status == USER_STUDENT) {
         $stname = ($status == USER_TEACHER) ? 'teacher' : 'student';
         $st = $root->appendChild($dom->createElement('status'));
-        $st->appendChild(new DOMAttr('name', q($stname)));
+        $st->appendChild(new DOMAttr('name', $stname));
+        $st = $root->appendChild($dom->createElement('user'));
+        $st->appendChild(new DOMAttr('givenname', q(uid_to_name($uid, 'givenname'))));
+        $st->appendChild(new DOMAttr('surname', q(uid_to_name($uid, 'surname'))));
     }
 
     $dom->formatOutput = true;
