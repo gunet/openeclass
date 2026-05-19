@@ -48,6 +48,8 @@ $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
 
+load_js('bootstrap-datepicker');
+
 /**
  * Save structured syllabus sections to course_description table
  *
@@ -161,10 +163,11 @@ if (!isset($_POST['create_course'])) {
         $data['icon_course_registration'] = course_access_icon(COURSE_REGISTRATION);
         $data['icon_course_closed'] = course_access_icon(COURSE_CLOSED);
         $data['icon_course_inactive'] = course_access_icon(COURSE_INACTIVE);
-        $data['lang_select_options'] = lang_select_options('localize', "class='form-control' id='lang_selected'");
+        $data['lang_select_options'] = lang_select_options('localize', "id='lang_selected'");
         $data['rich_text_editor'] = rich_text_editor('description', 4, 20, $description, options: array('id' => 'description'));
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-select" id="course_license_id"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
+        $data['courseEndDate'] = $data['course_enableEndDate'] = '';
         generate_csrf_token_form_field();
 
         // course image
@@ -227,7 +230,6 @@ if (!isset($_POST['create_course'])) {
     redirect_to_home_page('modules/create_course/flipped_classroom.php');
 
 } else  { // create the course and the course database
-
     // validation in case it skipped JS validation
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $v = new Valitron\Validator($_POST);
@@ -327,6 +329,13 @@ if (!isset($_POST['create_course'])) {
             }
         }
 
+        if (isset($_POST['course_enableEndDate']) && $_POST['courseEndDate'] !== '') {
+            $courseEndDate = DateTime::createFromFormat('d-m-Y', $_POST['courseEndDate']);
+            $end_date = $courseEndDate->format('Y-m-d');
+        } else {
+            $end_date = null;
+        }
+
         $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,
                         lang = ?s,
@@ -343,6 +352,7 @@ if (!isset($_POST['create_course'])) {
                         flipped_flag = ?s,
                         view_type = ?s,
                         start_date = " . DBHelper::timeAfter() . ",
+                        end_date = ?s,
                         keywords = '',
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
@@ -354,7 +364,7 @@ if (!isset($_POST['create_course'])) {
             $code, $language, $title, $_POST['formvisible'],
             $course_license, $_POST['prof_names'], $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $typeCourse, $description, $course_image);
+            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $end_date, $typeCourse, $description, $course_image);
         $new_course_id = $result->lastInsertID;
         if (!$new_course_id) {
             Session::flash('message', $langGeneralError);
