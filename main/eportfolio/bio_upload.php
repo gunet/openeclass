@@ -22,6 +22,7 @@ $require_login = true;
 $require_valid_uid = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'main/eportfolio/eportfolio_functions.php';
 
 check_uid();
 check_guest();
@@ -70,6 +71,8 @@ elseif (isset($_POST['submit'])) {
         redirect_to_home_page('main/eportfolio/bio_upload.php');
     }
 }
+
+$head_content .= eportfolio_alert_css();
 
 $head_content .= "<script>
                     function confirmDel(url) {

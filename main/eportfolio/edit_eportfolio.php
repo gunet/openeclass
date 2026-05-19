@@ -111,12 +111,23 @@ if (isset($_POST['submit'])) {
     }
 }
 
+$head_content .= eportfolio_alert_css();
+
 $head_content .= "
         <script>
         $(function() {
             var navLinks = \$('#navbar-examplePortfolioEdit .nav-link');
+            var scrollLock = false;
+
+            navLinks.on('click', function() {
+                navLinks.removeClass('active');
+                \$(this).addClass('active');
+                scrollLock = true;
+                setTimeout(function() { scrollLock = false; }, 1000);
+            });
 
             function updateActive() {
+                if (scrollLock) return;
                 var scrollTop = \$(window).scrollTop();
                 var offset = 90;
                 var current = null;
@@ -149,7 +160,7 @@ $tool_content .=
     "<div class='row mt-4'>
         <div class='col-sm-9'>
             <form class='form-horizontal' action='$sec' method='post' enctype='multipart/form-data'>
-            <div data-bs-spy='scroll' data-bs-target='#navbar-examplePortfolioEdit' data-bs-offset='0' tabindex='0'>  ";
+            <div tabindex='0'>";
 
 //add custom profile fields
 $ret_str = render_eportfolio_fields_form();

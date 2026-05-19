@@ -23,6 +23,10 @@ define('EPF_DATE', 3);
 define('EPF_MENU', 4);
 define('EPF_LINK', 5);
 
+function eportfolio_alert_css() {
+    return '';
+}
+
 /**
  * Render e-portfolio fields content when viewing e-portfolio
  * @param $uid
@@ -30,7 +34,8 @@ define('EPF_LINK', 5);
  */
 function render_eportfolio_fields_content($uid) {
 
-    global $langEduEmpl, $langAchievements, $langGoalsSkills, $langContactInfo;
+    global $langEduEmpl, $langAchievements, $langGoalsSkills, $langContactInfo,
+           $langResearchProfiles, $langLangProfLevel, $langVolontSocialAct;
 
     // These fields are displayed in the profile card — skip them from category cards
     $profile_shortnames = ['birth_date', 'birth_place', 'gender', 'about_me', 'personal_website'];
@@ -40,16 +45,29 @@ function render_eportfolio_fields_content($uid) {
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav'>
-    <nav id='navbar-exampleIndexPortfolio' class='card-affixed flex-column align-items-stretch px-3 pb-3 sticky-top' style='z-index:0; top:70px; max-height:calc(100vh - 80px); overflow-y:auto;'>
+    <nav id='navbar-exampleIndexPortfolio' class='card-affixed flex-column align-items-stretch sticky-top'>
         <nav class='nav nav-pills flex-column'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
 
     $category_icons = [
-        $langEduEmpl      => 'fa-solid fa-graduation-cap',
-        $langAchievements => 'fa-solid fa-award',
-        $langGoalsSkills  => 'fa-solid fa-bullseye',
-        $langContactInfo  => 'fa-regular fa-address-book',
+        $langEduEmpl          => 'fa-solid fa-graduation-cap',
+        $langAchievements     => 'fa-solid fa-award',
+        $langGoalsSkills      => 'fa-solid fa-bullseye',
+        $langContactInfo      => 'fa-regular fa-address-book',
+        $langResearchProfiles => 'fa-solid fa-microscope',
+        $langLangProfLevel    => 'fa-solid fa-comments',
+        $langVolontSocialAct  => 'fa-solid fa-handshake-angle',
+    ];
+
+    $category_colors = [
+        $langEduEmpl          => '#3b82f6',
+        $langAchievements     => '#f59e0b',
+        $langGoalsSkills      => '#ef4444',
+        $langContactInfo      => '#10b981',
+        $langResearchProfiles => '#06b6d4',
+        $langLangProfLevel    => '#8b5cf6',
+        $langVolontSocialAct  => '#22c55e',
     ];
 
     $j = 0;
@@ -62,16 +80,19 @@ function render_eportfolio_fields_content($uid) {
         $cat_return_string['panels'] = "";
         $cat_return_string['right_menu'] = "";
 
-        $cat_icon = isset($category_icons[$c->name]) ? $category_icons[$c->name] : 'fa-solid fa-circle-dot';
+        $cat_icon  = isset($category_icons[$c->name])  ? $category_icons[$c->name]  : 'fa-solid fa-circle-dot';
+        $cat_color = isset($category_colors[$c->name]) ? $category_colors[$c->name] : '#6c757d';
 
         $res = Database::get()->queryArray("SELECT id, shortname, name, datatype, data FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
 
         if (count($res) > 0) {
             $cat_return_string['panels'] .= '
-            <div class="card panelCard card-default rounded-3" style="border: 1px solid #dee2e6; scroll-margin-top: 70px;" id="IndexPortfolio'.$c->id.'">
+            <div class="card panelCard card-default rounded-3 epf-panel-card" id="IndexPortfolio'.$c->id.'">
                 <div class="card-body px-3 py-0">
-                <div class="d-flex align-items-center gap-2 border-bottom py-3">
-                    <i class="'.$cat_icon.' Primary-500-cl"></i>
+                <div class="d-flex align-items-center gap-2 py-2">
+                    <div class="epf-cat-icon" style="background:'.$cat_color.';">
+                        <i class="'.$cat_icon.'"></i>
+                    </div>
                     <h2 class="text-heading-h3 mb-0">'. q($c->name) .'</h2>
                 </div>';
 
@@ -83,7 +104,7 @@ function render_eportfolio_fields_content($uid) {
 
             $j++;
 
-            $cat_return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools Neutral-900-cl' href='#IndexPortfolio$c->id'>" . q($c->name) . "</a>";
+            $cat_return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools' href='#IndexPortfolio$c->id'><span class='epf-nav-icon'><i class='" . $cat_icon . "'></i></span>" . q($c->name) . "</a>";
 
             foreach ($res as $f) {
 
@@ -119,7 +140,7 @@ function render_eportfolio_fields_content($uid) {
                     $showCat = true;
                     $showAll = true;
 
-                    $row  = '<div class="d-flex align-items-start border-bottom py-3">';
+                    $row  = '<div class="d-flex align-items-start border-bottom py-2">';
                     $row .= '<div class="col-4">'.q($f->name).'</div>';
                     $row .= '<div class="col-8">';
 
@@ -154,7 +175,7 @@ function render_eportfolio_fields_content($uid) {
            
             if (!empty($cat_rows)) {
                 $last = array_pop($cat_rows);
-                $cat_rows[] = str_replace('border-bottom py-3', 'py-3', $last);
+                $cat_rows[] = str_replace('border-bottom py-2', 'py-2', $last);
             }
             $cat_return_string['panels'] .= implode('', $cat_rows);
             $cat_return_string['panels'] .= '</div></div>';
@@ -186,7 +207,7 @@ function render_eportfolio_fields_content($uid) {
  * @param int $uid
  * @return string
  */
-function render_eportfolio_profile_card($uid) {
+function render_eportfolio_profile_card($uid, $resources_url = null, $resources_label = null) {
     global $urlServer, $langCopy, $langCopiedSucc, $langCopiedErr;
 
     // Same visibility logic as render_eportfolio_fields_content
@@ -266,12 +287,11 @@ function render_eportfolio_profile_card($uid) {
         : '';
     $about_html = $about_me_html ? "<p class='small mb-0 mt-1'>$about_me_html</p>" : '';
 
-    $link_html = '';
+    $link_row_html = '';
+    $link_script_html = '';
     if ($user->eportfolio_token) {
         $public_url = $urlServer . 'main/eportfolio/index.php?token=' . $user->eportfolio_token;
-        $link_html = "
-            <div class='me-4' style='margin-top:10px;'>
-                <div style='border-top: 1px solid #dee2e6; margin-bottom: 10px;'></div>
+        $link_row_html = "
                 <div class='d-flex align-items-center gap-2'>
                     <div class='d-flex align-items-center border rounded-2 flex-grow-1 px-3' style='height:32px;'>
                         <i class='fa-solid fa-link Primary-500-cl me-2 flex-shrink-0' style='line-height:1;'></i>
@@ -280,13 +300,13 @@ function render_eportfolio_profile_card($uid) {
                                style='font-size:0.85rem; padding-top:2px; padding-bottom:0; line-height:1;'
                                value='" . q($public_url) . "' readonly>
                     </div>
-                    <button class='btn btn-light border rounded-2 flex-shrink-0 p-0' id='copy-btn-card'
+                    <button class='btn btn-outline-primary rounded-2 flex-shrink-0 p-0' id='copy-btn-card'
                             data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langCopy) . "'
                             style='width:32px;height:32px;'>
-                        <i class='fa-regular fa-copy Neutral-500-cl'></i>
+                        <i class='fa-regular fa-copy'></i>
                     </button>
-                </div>
-            </div>
+                </div>";
+        $link_script_html = "
             <script>
             $(function() {
                 if (typeof Clipboard !== 'undefined') {
@@ -305,14 +325,27 @@ function render_eportfolio_profile_card($uid) {
             </script>";
     }
 
+    $resources_button_html = '';
+    if ($resources_url && $resources_label) {
+        $resources_button_html = "<a href='" . q($resources_url) . "' class='btn btn-outline-secondary flex-shrink-0' style='font-size:0.875rem;padding:5px 14px;border-radius:4px;white-space:nowrap;'><i class='fa-solid fa-paperclip me-2'></i>" . q($resources_label) . "</a>";
+    }
+
+    $link_html = '';
+    if ($link_row_html) {
+        $link_html = "<div class='me-4' style='margin-top:10px;'><div style='border-top: 1px solid #dee2e6; margin-bottom: 10px;'></div>" . $link_row_html . "</div>" . $link_script_html;
+    }
+
     return "
-        <div class='card panelCard card-default rounded-3' style='border: 1px solid #dee2e6;'>
+        <div class='card panelCard card-default rounded-3 epf-panel-card'>
             <div class='card-body px-3 py-3'>
                 <div class='d-flex align-items-start gap-4'>
                     <img class='rounded-circle flex-shrink-0 ms-4 mt-2' style='width:120px;height:120px;object-fit:cover;'
                          src='" . q($photo) . "' alt='" . $name . "'>
                     <div class='flex-grow-1'>
-                        <div class='fs-6 fw-bold'>$name</div>
+                        <div class='d-flex align-items-start justify-content-between gap-2 me-4'>
+                            <div class='fs-6 fw-bold'>$name</div>
+                            $resources_button_html
+                        </div>
                         $demographics_html
                         $about_html
                         $link_html
@@ -329,12 +362,36 @@ function render_eportfolio_profile_card($uid) {
 function render_eportfolio_fields_form() {
     global $uid, $langOptional, $langCompulsory, $langForm, $langProfileInfoPrivate, $langPublicePortfolioField, $langOpenToRegisteredUsers,
         $langePortfolioFieldsVisibilitySettings, $langClose,
-        $langPersInfo, $langAddPicture, $langReplacePicture, $langDeletePicture;
+        $langPersInfo, $langAddPicture, $langReplacePicture, $langDeletePicture,
+        $langEduEmpl, $langAchievements, $langGoalsSkills, $langContactInfo,
+        $langResearchProfiles, $langLangProfLevel, $langVolontSocialAct;
+
+    $form_category_icons = [
+        $langPersInfo         => 'fa-solid fa-user',
+        $langEduEmpl          => 'fa-solid fa-graduation-cap',
+        $langAchievements     => 'fa-solid fa-award',
+        $langGoalsSkills      => 'fa-solid fa-bullseye',
+        $langContactInfo      => 'fa-regular fa-address-book',
+        $langResearchProfiles => 'fa-solid fa-microscope',
+        $langLangProfLevel    => 'fa-solid fa-comments',
+        $langVolontSocialAct  => 'fa-solid fa-handshake-angle',
+    ];
+
+    $form_category_colors = [
+        $langPersInfo         => '#6c757d',
+        $langEduEmpl          => '#3b82f6',
+        $langAchievements     => '#f59e0b',
+        $langGoalsSkills      => '#ef4444',
+        $langContactInfo      => '#10b981',
+        $langResearchProfiles => '#06b6d4',
+        $langLangProfLevel    => '#8b5cf6',
+        $langVolontSocialAct  => '#22c55e',
+    ];
 
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav'>
-    <nav id='navbar-examplePortfolioEdit' class='card-affixed flex-column align-items-stretch px-3 pb-3 sticky-top' style='z-index:0; top:70px; max-height:calc(100vh - 80px); overflow-y:auto;'>
+    <nav id='navbar-examplePortfolioEdit' class='card-affixed flex-column align-items-stretch sticky-top'>
         <nav class='nav nav-pills flex-column'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
@@ -349,14 +406,19 @@ function render_eportfolio_fields_form() {
         if (count($res) > 0) {
 
 
+            $form_cat_icon  = isset($form_category_icons[$c->name])  ? $form_category_icons[$c->name]  : 'fa-solid fa-circle-dot';
+            $form_cat_color = isset($form_category_colors[$c->name]) ? $form_category_colors[$c->name] : '#6c757d';
             $return_string['panels'] .= '
-
-            <div class="card panelCard card-default px-lg-4 py-lg-3 mb-4" id="EditPortfolio'.$c->id.'">
-                                       <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                                           <h2 class="text-heading-h3">' . q($c->name) .'</h2>
-                                       </div>
-                                       <div class="card-body">
-                                           <fieldset><legend class="mb-0" aria-label="'.$langForm.'"></legend>';
+            <div class="card panelCard card-default rounded-3 mb-4 epf-panel-card" id="EditPortfolio'.$c->id.'">
+                <div class="card-body px-3 py-0">
+                    <div class="d-flex align-items-center gap-2 py-2">
+                        <div class="epf-cat-icon" style="background:'.$form_cat_color.';">
+                            <i class="'.$form_cat_icon.'"></i>
+                        </div>
+                        <h2 class="text-heading-h3 mb-0">' . q($c->name) . '</h2>
+                    </div>
+                    <div class="px-1 pb-3">
+                        <fieldset><legend class="mb-0" aria-label="'.$langForm.'"></legend>';
             if ($j == 0) {
                 $active = " class='active'";
             } else {
@@ -365,7 +427,7 @@ function render_eportfolio_fields_form() {
 
             $j++;
 
-            $return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools Neutral-900-cl' href='#EditPortfolio$c->id'>" . q($c->name) . "</a>";
+            $return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools' href='#EditPortfolio$c->id'><span class='epf-nav-icon'><i class='" . $form_cat_icon . "'></i></span>" . q($c->name) . "</a>";
 
             // Photo upload field in personal info category
             if ($c->name == $langPersInfo) {
@@ -398,7 +460,7 @@ function render_eportfolio_fields_form() {
                     $form_class = 'form-group has-error';
                     $help_block = '<span class="help-block Accent-200-cl">' . Session::getError('epf_'.$f->shortname) . '</span>';
                 } else {
-                    $form_class = 'form-group mb-4';
+                    $form_class = 'form-group mb-3';
                     $help_block = '';
                 }
 
@@ -414,7 +476,7 @@ function render_eportfolio_fields_form() {
                 }
 
                 if (isset($fdata) && $fdata != '') {
-                    $visibility = $data_res->visibility;
+                    $visibility = $data_res ? $data_res->visibility : EPF_VISIBLE_PUBLIC;
                 } else {
                     $visibility = EPF_VISIBLE_PUBLIC;
                 }
@@ -557,8 +619,9 @@ function render_eportfolio_fields_form() {
             }
 
             $return_string['panels'] .= '</fieldset>
-                       </div>
-                   </div>';
+                    </div>
+                </div>
+            </div>';
 
         }
     }

@@ -22,6 +22,7 @@ $require_login = false;
 $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'main/eportfolio/eportfolio_functions.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/group/group_functions.php';
@@ -1527,6 +1528,8 @@ if ($userdata) {
         $tool_content .= $social_share.'</div></div>';
     }
 }
+
+$head_content .= eportfolio_alert_css();
 
 if ($uid == $id) {
     draw($tool_content, 1, null, $head_content);
