@@ -172,6 +172,14 @@ class ExternalReposApp extends ExtApp
                 'icon' => 'fa-image',
                 'hardcoded_url' => true,
                 'api_endpoint' => 'https://pixabay.com/api/'
+            ],
+            'islandora' => [
+                'name' => 'Islandora',
+                'description' => $GLOBALS['langIslandoraDescription'] ?? 'Drupal/Islandora repository (JSON:API Search)',
+                'auth_types' => ['none', 'api_key'],
+                'icon' => 'fa-archive',
+                'hardcoded_url' => false,
+                'requires_url' => true
             ]
         ];
     }

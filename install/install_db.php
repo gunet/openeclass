@@ -2700,7 +2700,7 @@ $db->query("CREATE TABLE `session_user_material` (
 $db->query("CREATE TABLE `external_repository` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL,
-    `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay') NOT NULL,
+    `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay','islandora') NOT NULL,
     `base_url` varchar(512) DEFAULT NULL,
     `api_key` varchar(255) DEFAULT NULL,
     `auth_type` enum('none','api_key','oauth') NOT NULL DEFAULT 'none',

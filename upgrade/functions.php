@@ -4579,7 +4579,7 @@ function upgrade_external_repositories()
     Database::get()->query("CREATE TABLE IF NOT EXISTS `external_repository` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
         `name` varchar(255) NOT NULL,
-        `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay') NOT NULL,
+        `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay','islandora') NOT NULL,
         `base_url` varchar(512) DEFAULT NULL,
         `api_key` varchar(255) DEFAULT NULL,
         `auth_type` enum('none','api_key','oauth') NOT NULL DEFAULT 'none',
@@ -4611,12 +4611,26 @@ function upgrade_external_repositories()
         INDEX `idx_external_id` (`external_id`)
     ) $tbl_options");
     
+    // Extend external_repository.type enum with new values on existing installs.
+    // Idempotent: only runs when the value is missing from the column definition.
+    $col = Database::get()->querySingle("
+        SELECT COLUMN_TYPE AS t
+        FROM information_schema.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'external_repository'
+        AND COLUMN_NAME = 'type'
+    ");
+    if ($col && isset($col->t) && strpos($col->t, "'islandora'") === false) {
+        Database::get()->query("ALTER TABLE `external_repository`
+            MODIFY COLUMN `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay','islandora') NOT NULL");
+    }
+
     // Add foreign keys if they don't exist
     $fk_exists = Database::get()->querySingle("
-        SELECT CONSTRAINT_NAME 
-        FROM information_schema.TABLE_CONSTRAINTS 
-        WHERE CONSTRAINT_TYPE = 'FOREIGN KEY' 
-        AND TABLE_NAME = 'external_resource' 
+        SELECT CONSTRAINT_NAME
+        FROM information_schema.TABLE_CONSTRAINTS
+        WHERE CONSTRAINT_TYPE = 'FOREIGN KEY'
+        AND TABLE_NAME = 'external_resource'
         AND CONSTRAINT_NAME = 'external_resource_ibfk_1'
     ");
     

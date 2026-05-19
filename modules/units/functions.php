@@ -1985,6 +1985,21 @@ function show_extrepo($title, $comments, $resource_id, $ext_resource_id, $visibi
         }
     }
     
+    // Islandora preview (thumbnail-anchor; MVP, same pattern as DSpace)
+    if ($ext_res && $ext_res->repo_type === 'islandora' && !empty($ext_res->thumbnail_url)) {
+        $media_preview = "
+            <div class='mt-2 mb-2'>
+                <a href='" . q($ext_res->url) . "' target='_blank' rel='noopener noreferrer'>
+                    <img src='" . q($ext_res->thumbnail_url) . "'
+                         alt='" . q($title) . "'
+                         class='img-fluid'
+                         style='max-width: 400px; max-height: 300px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'
+                         loading='lazy'
+                         onerror=\"this.onerror=null; this.style.display='none';\">
+                </a>
+            </div>";
+    }
+
     $module_name = $langExternalResource ?? 'External Resource';
 
     return "

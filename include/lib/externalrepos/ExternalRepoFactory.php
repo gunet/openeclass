@@ -25,6 +25,7 @@ require_once __DIR__ . '/ReasonableGraphRepository.php';
 require_once __DIR__ . '/YouTubeRepository.php';
 require_once __DIR__ . '/WikipediaRepository.php';
 require_once __DIR__ . '/PixabayRepository.php';
+require_once __DIR__ . '/IslandoraRepository.php';
 
 /**
  * ExternalRepoFactory
@@ -42,7 +43,8 @@ class ExternalRepoFactory
         'reasonable_graph' => 'ReasonableGraphRepository',
         'youtube' => 'YouTubeRepository',
         'wikipedia' => 'WikipediaRepository',
-        'pixabay' => 'PixabayRepository'
+        'pixabay' => 'PixabayRepository',
+        'islandora' => 'IslandoraRepository'
     ];
 
     /**

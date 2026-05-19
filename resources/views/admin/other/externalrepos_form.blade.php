@@ -201,6 +201,11 @@
                                                     <i class='fa fa-info-circle me-2'></i>
                                                     {{ trans('langDSpaceApiHelp') }}
                                                 </div>
+                                            @elseif ($type === 'islandora')
+                                                <div class='alert alert-info'>
+                                                    <i class='fa fa-info-circle me-2'></i>
+                                                    {{ trans('langIslandoraApiHelp') }}
+                                                </div>
                                             @endif
                                         </div>
                                     </div>

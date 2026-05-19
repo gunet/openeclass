@@ -6888,4 +6888,15 @@ $langNoResourceAdded = "No resources were added";
 $langLoading = "Loading";
 $langClear = "Clear";
 $langUnsupportedRepoType = "Unsupported repository type";
+$langIslandoraDescription = "Drupal/Islandora repository (searched through the JSON:API Search API).";
+$langIslandoraApiHelp = "Enter the base URL of the Islandora site (e.g. https://islandora.example.com). The Search API, JSON:API and JSON:API Search API modules must be installed and the configured Search API index must be exposed.";
+$langIslandoraIndexName = "Search API index name";
+$langIslandoraIndexNameHelp = "Machine name of the Drupal Search API index (default: repository_items_index).";
+$langIslandoraLangCode = "Language prefix";
+$langIslandoraLangCodeHelp = "Drupal language path prefix used in URLs (e.g. el, en). Translated content is returned in this language.";
+$langIslandoraUrlPattern = "Item URL pattern";
+$langIslandoraUrlPatternHelp = "Template used to build item URLs. Available tokens: {base}, {lang}, {uuid}, {pid}. Default: {base}/{lang}/node/{uuid}.";
+$langIslandoraDescriptionField = "Description field";
+$langIslandoraDescriptionFieldHelp = "Optional attribute name from the JSON:API response to display as the item description (e.g. field_abstract). Leave empty to omit descriptions.";
+$langIslandoraTokenHelp = "Optional Bearer/JWT token for accessing restricted items. Leave empty for anonymous public access.";
 ?>

@@ -7550,4 +7550,15 @@ $langNoResourceAdded = "Δεν προστέθηκαν πόροι";
 $langLoading = "Φόρτωση";
 $langClear = "Καθαρισμός";
 $langUnsupportedRepoType = "Μη υποστηριζόμενος τύπος αποθετηρίου";
+$langIslandoraDescription = "Αποθετήριο Drupal/Islandora (αναζήτηση μέσω του JSON:API Search API).";
+$langIslandoraApiHelp = "Εισάγετε το βασικό URL του ιστοτόπου Islandora (π.χ. https://islandora.example.com). Πρέπει να είναι εγκατεστημένα τα Search API, JSON:API και JSON:API Search API, καθώς και το ρυθμισμένο Search API index να εκτίθεται.";
+$langIslandoraIndexName = "Όνομα Search API index";
+$langIslandoraIndexNameHelp = "Το machine name του Drupal Search API index (προεπιλογή: repository_items_index).";
+$langIslandoraLangCode = "Πρόθεμα γλώσσας";
+$langIslandoraLangCodeHelp = "Το πρόθεμα γλώσσας του Drupal που χρησιμοποιείται στα URLs (π.χ. el, en). Το μεταφρασμένο περιεχόμενο επιστρέφεται σε αυτή τη γλώσσα.";
+$langIslandoraUrlPattern = "Πρότυπο URL αντικειμένου";
+$langIslandoraUrlPatternHelp = "Πρότυπο για την κατασκευή URLs αντικειμένων. Διαθέσιμα tokens: {base}, {lang}, {uuid}, {pid}. Προεπιλογή: {base}/{lang}/node/{uuid}.";
+$langIslandoraDescriptionField = "Πεδίο περιγραφής";
+$langIslandoraDescriptionFieldHelp = "Προαιρετικό όνομα χαρακτηριστικού από την απόκριση JSON:API που θα εμφανίζεται ως περιγραφή του αντικειμένου (π.χ. field_abstract). Αφήστε κενό για παράλειψη.";
+$langIslandoraTokenHelp = "Προαιρετικό Bearer/JWT token για πρόσβαση σε αντικείμενα με περιορισμό. Αφήστε κενό για ανώνυμη δημόσια πρόσβαση.";
 ?>
