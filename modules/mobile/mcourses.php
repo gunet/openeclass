@@ -58,7 +58,7 @@ if (!defined('M_NOTERMINATE')) {
 //////////////////////////////////////////////////////////////////////////////////////
 
 function createCoursesDom($coursesArr) {
-    global $langMyCoursesProf, $langMyCoursesUser, $urlServer;
+    global $langMyCoursesProf, $langMyCoursesUser, $langNoCourseDescription, $urlServer;
 
     $dom = new DomDocument('1.0', 'utf-8');
 
@@ -88,13 +88,18 @@ function createCoursesDom($coursesArr) {
 
             $c = $cg->appendChild($dom->createElement('course'));
 
-            $titleStr = ($course->code === $course->public_code) ? $course->title : $course->title . ' - ' . $course->public_code;
-            $descriptionStr = html2text($course->description);
+            if (empty($course->description)) {
+                $descriptionStr = $langNoCourseDescription;
+            } else {
+                $descriptionStr = html2text($course->description);
+            }
+
             $course_image = (!is_null($course->course_image) && $course->course_image != '') ? "{$urlServer}courses/$course->code/image/$course->course_image" : "";
 
             $c->appendChild(new DOMAttr('code', $course->code));
-            $c->appendChild(new DOMAttr('title', $titleStr));
-            $c->appendChild(new DOMAttr('teacher', $course->prof_names));
+            $c->appendChild(new DOMAttr('public_code', $course->public_code));
+            $c->appendChild(new DOMAttr('title', $course->title));
+            $c->appendChild(new DOMAttr('teacher', trim($course->prof_names)));
             $c->appendChild(new DOMAttr('description', $descriptionStr));
             $c->appendChild(new DOMAttr('image', "$course_image"));
             $k++;
