@@ -8,97 +8,105 @@
     $up = new Permissions();
 @endphp
 
-@if (!isset($_GET['fromFlipped']))
-    <h1 class='visually-hidden'>
-        @if($course_code)
-            {{ trans('langCourse') }} : {{ $currentCourseName }}
-        @elseif($pageTitle)
-            {{ $pageTitle }}
+@if ($is_editor && isset($_SESSION['mobile']))
+    @include('layouts.partials.manageCourse',
+        [ $urlAppend => $urlAppend,
+          'coursePrivateCode' => $course_code,
+          'course_backup' => $up->has_course_backup_permission(),
+          'course_clone' => $up->has_course_clone_permission(),
+          'course_tools' => $up->has_course_modules_permission(),
+          'course_users' => $up->has_course_users_permission()
+        ])
+@elseif (!isset($_GET['fromFlipped']))
+        <h1 class='visually-hidden'>
+            @if($course_code)
+                {{ trans('langCourse') }} : {{ $currentCourseName }}
+            @elseif($pageTitle)
+                {{ $pageTitle }}
+            @endif
+        </h1>
+        @if ($course_code or $require_help or $breadcrumbs)
+            <div class='col-12 mt-4 @if (!isset($action_bar) or empty($action_bar)) mb-3 @endif'>
+        @else
+            <div class='col-12 @if (!isset($action_bar) or empty($action_bar)) mb-3 @endif'>
         @endif
-    </h1>
-    @if ($course_code or $require_help or $breadcrumbs)
-        <div class='col-12 mt-4 @if (!isset($action_bar) or empty($action_bar)) mb-3 @endif'>
-    @else
-        <div class='col-12 @if (!isset($action_bar) or empty($action_bar)) mb-3 @endif'>
-    @endif
-    <div class='d-flex gap-lg-5 gap-4'>
-        <div class='flex-grow-1'>
-            @if ($course_code)
-                {{-- course --}}
-                <div class='col-12 mb-2'>
-                    <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                        @if (isset($course_code))
-                            <a class='text-heading-h2 mb-0' href="{{$urlAppend}}courses/{{$course_code}}/">
-                                {{ $currentCourseName }}
-                            </a>
-                        @else
-                            <div class='text-heading-h2 mb-0'>{{ $currentCourseName }}</div>
-                        @endif
-                    </div>
-                    <div class='d-flex justify-content-start align-items-center gap-2 mt-2 flex-wrap'>
-                        <p>
-                            @if (course_id_to_public_code($course_id))
-                                {{ course_id_to_public_code($course_id) }}  -
-                            @endif
-                            {{ course_id_to_prof($course_id) }}
-                        </p>
-                        <div class='course-title-icons d-flex justify-content-start align-items-center gap-2'>
-                            {!! course_access_icon(course_status($course_id)) !!}
-                            @if($courseLicense > 0)
-                                {!! copyright_info($course_id) !!}
+        <div class='d-flex gap-lg-5 gap-4'>
+            <div class='flex-grow-1'>
+                @if ($course_code)
+                    {{-- course --}}
+                    <div class='col-12 mb-2'>
+                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                            @if (isset($course_code))
+                                <a class='text-heading-h2 mb-0' href="{{$urlAppend}}courses/{{$course_code}}/">
+                                    {{ $currentCourseName }}
+                                </a>
+                            @else
+                                <div class='text-heading-h2 mb-0'>{{ $currentCourseName }}</div>
                             @endif
                         </div>
-                    </div>
-                    @if (!isset($action_bar) or empty($action_bar))
-                        <div class="col-12 d-md-flex justify-content-md-between align-items-lg-start my-3">
-                            <div class='col-12 d-inline-flex'>
-                                <div class="action-bar-title mb-0">
-                                    {{ $toolName }}
-                                    @if ($pageName and ($pageName != $toolName))
-                                        - {{ $pageName }}
-                                    @endif
-                                </div>
+                        <div class='d-flex justify-content-start align-items-center gap-2 mt-2 flex-wrap'>
+                            <p>
+                                @if (course_id_to_public_code($course_id))
+                                    {{ course_id_to_public_code($course_id) }}  -
+                                @endif
+                                {{ course_id_to_prof($course_id) }}
+                            </p>
+                            <div class='course-title-icons d-flex justify-content-start align-items-center gap-2'>
+                                {!! course_access_icon(course_status($course_id)) !!}
+                                @if($courseLicense > 0)
+                                    {!! copyright_info($course_id) !!}
+                                @endif
                             </div>
                         </div>
-                    @endif
-                </div>
-            @else
-                @if($toolName)
-                    <div class='col-12 d-inline-flex'>
-                        <div class='text-heading-h2'>
-                            {{ $toolName }}
-                        </div>
-                    </div>
-                    @if (!isset($action_bar) or empty($action_bar))
-                        <div class='col-12 d-inline-flex mt-2'>
-                            @if ($pageName and ($pageName != $toolName))
-                                <div class='text-heading-h3'>
-                                    {{ $pageName }}
+                        @if (!isset($action_bar) or empty($action_bar))
+                            <div class="col-12 d-md-flex justify-content-md-between align-items-lg-start my-3">
+                                <div class='col-12 d-inline-flex'>
+                                    <div class="action-bar-title mb-0">
+                                        {{ $toolName }}
+                                        @if ($pageName and ($pageName != $toolName))
+                                            - {{ $pageName }}
+                                        @endif
+                                    </div>
                                 </div>
-                            @endif
+                            </div>
+                        @endif
+                    </div>
+                @else
+                    @if($toolName)
+                        <div class='col-12 d-inline-flex'>
+                            <div class='text-heading-h2'>
+                                {{ $toolName }}
+                            </div>
                         </div>
+                        @if (!isset($action_bar) or empty($action_bar))
+                            <div class='col-12 d-inline-flex mt-2'>
+                                @if ($pageName and ($pageName != $toolName))
+                                    <div class='text-heading-h3'>
+                                        {{ $pageName }}
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
                     @endif
                 @endif
-            @endif
-        </div>
-
-        <div class='d-flex flex-column'>
-            <!-- course admin menu -->
-            @if ($is_editor)
-                @include('layouts.partials.manageCourse',
-                    [ $urlAppend => $urlAppend,
-                      'coursePrivateCode' => $course_code,
-                      'course_backup' => $up->has_course_backup_permission(),
-                      'course_clone' => $up->has_course_clone_permission(),
-                      'course_tools' => $up->has_course_modules_permission(),
-                      'course_users' => $up->has_course_users_permission()
-                    ])
-            @endif
-            @if ($course_code) {{-- course --}}
-            <div class='d-flex justify-content-end align-items-end gap-2 mt-3'>
+            </div>
+            <div class='d-flex flex-column'>
+                <!-- course admin menu -->
+                @if ($is_editor)
+                    @include('layouts.partials.manageCourse',
+                        [ $urlAppend => $urlAppend,
+                          'coursePrivateCode' => $course_code,
+                          'course_backup' => $up->has_course_backup_permission(),
+                          'course_clone' => $up->has_course_clone_permission(),
+                          'course_tools' => $up->has_course_modules_permission(),
+                          'course_users' => $up->has_course_users_permission()
+                        ])
+                @endif
+                @if ($course_code) {{-- course --}}
+                    <div class='d-flex justify-content-end align-items-end gap-2 mt-3'>
                 @else
                     <div class='d-flex justify-content-end align-items-end gap-2'>
-                        @endif
+                @endif
                         <!-- active - inactive module_id -->
                         @if($module_id != MODULE_ID_COURSEINFO and $module_id != MODULE_ID_USERS
                             and $module_id != MODULE_ID_USAGE and $module_id != MODULE_ID_TOOLADMIN
@@ -154,7 +162,7 @@
                             </a>
                         @endif
                     </div>
+                </div>
             </div>
         </div>
-    </div>
-@endif
+    @endif

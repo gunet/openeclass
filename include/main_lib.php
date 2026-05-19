@@ -1210,9 +1210,13 @@ function visible_module($module_id, $course_id = null): bool
 
     $v = Database::get()->querySingle("SELECT visible FROM course_module
                                 WHERE module_id = ?d AND
-                                course_id = ?d", $module_id, $course_id)->visible;
-    if ($v == 1) {
-        return true;
+                                course_id = ?d", $module_id, $course_id);
+    if ($v) {
+        if ($v->visible == 1) {
+            return true;
+        } else {
+            return false;
+        }
     } else {
         return false;
     }

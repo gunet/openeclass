@@ -95,9 +95,9 @@ function createCoursesDom($coursesArr) {
             }
 
             $course_image = (!is_null($course->course_image) && $course->course_image != '') ? "{$urlServer}courses/$course->code/image/$course->course_image" : "";
+            $codeStr = (!empty($course->public_code) && $course->code !== $course->public_code) ? $course->public_code: $course->code;
 
-            $c->appendChild(new DOMAttr('code', $course->code));
-            $c->appendChild(new DOMAttr('public_code', $course->public_code));
+            $c->appendChild(new DOMAttr('code', $codeStr));
             $c->appendChild(new DOMAttr('title', $course->title));
             $c->appendChild(new DOMAttr('teacher', trim($course->prof_names)));
             $c->appendChild(new DOMAttr('description', $descriptionStr));
