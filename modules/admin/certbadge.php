@@ -572,8 +572,8 @@ if (isset($_GET['action'])) {
                     $is_allowed_to_configure_certificate = has_full_rights_on_certificate($cert_data->department_id);
                     $oldCert = false;
                     if (!str_contains($cert_data->filename, '.html')) { // new way
-                        $cert_image_path = getFilepaths('newCertificatePath', $cert_data->filename);
-                        $newThumbnailPath = getFilenames('newCertificatePath', $cert_data->filename, 'thumbnail');
+                        $cert_image_path = getFilepaths(true, $cert_data->id, 'thumbnail');
+                        $thumbnailPath = getFilenames(true, $cert_data->id, 'thumbnail');
                     } else { // old way
                         $oldCert = true;
                         $cert_image_path = $webDir . "/courses/user_progress_data/cert_templates/certificate{$cert_data->id}_thumbnail.png";
@@ -586,7 +586,7 @@ if (isset($_GET['action'])) {
                                                     </a>";
                         } else {
                             $cert_image_path_file = "<a href='$_SERVER[SCRIPT_NAME]?certificate_id=$cert_data->id&amp;preview=1&amp;newCertificates=true' target='_blank'>
-                                                        <img data-bs-toggle='tooltip' title='$langPreview' style='width:50px; height:50px;' src='{$newThumbnailPath}'>
+                                                        <img data-bs-toggle='tooltip' title='$langPreview' style='width:50px; height:50px;' src='{$thumbnailPath}'>
                                                     </a>";
                         }
                         

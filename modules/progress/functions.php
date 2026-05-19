@@ -76,7 +76,8 @@ function display_certificates(): void
             if (!file_exists($webDir . CERT_TEMPLATE_PATH . $thumbnail_filename)) {
                 $img_html = "<i class='fa-solid fa-ban fa-2x text-muted' title='$langNoThumbnail'></i>";
             } else {
-                $img_html = "<img src='" . $urlServer . CERT_TEMPLATE_PATH . $thumbnail_filename . "' style='width:80px;height:auto;border-radius:6px;' alt='" . q($template_name) . "'>";
+                $cert_thumbnail = certificate_thumbnails($data->template);
+                $img_html = "<img src='{$cert_thumbnail}' style='width:80px;height:auto;border-radius:6px;' alt='" . q($template_name) . "'>";
             }
 
             $pill = $data->active
@@ -659,7 +660,7 @@ function display_activities($element, $id, $unit_id = 0) {
            $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance,
            $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities, $langForumParticipation,
            $langPointsGameNoOneTimeActivities, $langPoints, $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod,
-           $langRubricCrit, $head_content, $uid, $langCompleted, $langSurveyNotStarted, $urlServer;
+           $langRubricCrit, $head_content, $uid, $langCompleted, $langSurveyNotStarted, $urlServer, $langAttendanceActList;
 
     load_js('bootstrap-table');
     
@@ -3555,8 +3556,9 @@ function display_settings($element, $element_id, $unit_id = 0): void
         } else {
             $template_details = get_certificate_template($data->template);
             $template_filename = $template_details[key($template_details)];
-            $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
-            $img_html = "<img src='" . $urlServer . CERT_TEMPLATE_PATH . q($thumbnail_filename) . "' style='width:65%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
+            //$thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
+            $thumbnail_filename = certificate_thumbnails($data->template);
+            $img_html = "<img src='{$thumbnail_filename}' style='width:65%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
         }
 
         $desc_html   = !empty($description) ? "<div style='font-size:14px;color:#6b7280;margin-top:6px;'>" . q($description) . "</div>" : '';
@@ -3879,14 +3881,17 @@ function certificate_settings($element, $element_id = 0) {
     load_js('bootstrap-datetimepicker');
     load_js('select2');
 
-    $head_content .= "<script type='text/javascript'>
+    $head_content .= "
+    <script type='text/javascript'>
         $(function() {
+
             $('#enddatepicker').datetimepicker({
-                    format: 'dd-mm-yyyy hh:ii',
-                    pickerPosition: 'bottom-right',
-                    language: '".$language."',
-                    autoclose: true
-                });
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-right',
+                language: '".$language."',
+                autoclose: true
+            });
+
             $('#enablecertdeadline').change(function() {
                 var dateType = $(this).prop('id').replace('enable', '');
                 if($(this).prop('checked')) {
@@ -3898,77 +3903,94 @@ function certificate_settings($element, $element_id = 0) {
                 }
             });
 
-         if ($('#selectWithIcon').length > 0) {
-            let urlServer = $('#urlServer').val();
-            let select2Data;
+            if ($('#selectWithIcon').length > 0) {
 
-            if ($('#certificate_hidden').length > 0) {
-                let data = JSON.parse($('#certificate_hidden').val());
-                select2Data = Object.keys(data).map(key => ({
-                  id: key,
-                  text: data[key],
-                  image: urlServer + 'courses/user_progress_data/cert_templates/certificate' + key + '_thumbnail.png'
-                }));
-            }
+                let urlServer = $('#urlServer').val();
+                let select2Data;
+                let certImage = {};
 
-            if ($('#badge_hidden').length > 0) {
-                let data = JSON.parse($('#badge_hidden').val());
-                select2Data = Object.keys(data).map(key => ({
-                  id: key,
-                  text: data[key],
-                  image: urlServer + 'courses/user_progress_data/badge_templates/' + data[key] + '.png',
-                  width: 48
-                }));
-            }
+                if ($('#certificate_hidden').length > 0) {
+                    let data = JSON.parse($('#certificate_hidden').val());
+                    
+                    let requests = Object.keys(data).map(key => {
+                        return $.ajax({
+                                    url: 'ajax_certificate.php',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    data: {
+                                        certificate_id: key
+                                    }
+                                }).then(response => {
+                                    if (response.success) {
+                                        certImage[key] = response.result;
+                                    }
+                                });
+                    });
 
-            $('#selectWithIcon').select2({
-                  data: select2Data,
-                  templateResult: formatOption,
-                });
-
-            function formatOption(option) {
-              let dareturn = '<span><img ' + (option.width ? 'width=' + option.width : '') + ' src=' + option.image + ' /> ' + option.text + '</span>';
-              return $(dareturn);
-            }
-
-            $('#selectWithIcon').on('change', function (e) {
-                let dataType = $(this).data('type');
-
-                if (dataType == 'certificate') {
-                    let imgPath = urlServer + 'courses/user_progress_data/cert_templates/certificate' + $('#selectWithIcon').val() + '_thumbnail.png';
-                    $('#selected_icon').attr('src', imgPath);
-                } else if (dataType === 'badge') {
-                    let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
-                    $('#selected_icon').attr('src', imgPath);
+                    Promise.all(requests).then(() => {
+                        select2Data = Object.keys(data).map(key => ({
+                            id: key,
+                            text: data[key],
+                            image: certImage[key]
+                        }));
+                        $('#selectWithIcon').select2({
+                            data: select2Data,
+                            templateResult: formatOption,
+                        });
+                        let imgPath = certImage[$('#selectWithIcon').val()];
+                        $('#selected_icon').attr('src', imgPath);
+                    });
                 }
 
-            });
+                if ($('#badge_hidden').length > 0) {
+                    let data = JSON.parse($('#badge_hidden').val());
+                    select2Data = Object.keys(data).map(key => ({
+                        id: key,
+                        text: data[key],
+                        image: urlServer + 'courses/user_progress_data/badge_templates/' + data[key] + '.png',
+                        width: 48
+                    }));
+                    $('#selectWithIcon').select2({
+                        data: select2Data,
+                        templateResult: formatOption,
+                    });
+                    let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
+                    $('#selected_icon').attr('src', imgPath);
+                    $('#selected_icon').attr('width', 48);
+                }
 
-            if ($('#certificate_hidden').length > 0) {
-                let imgPath = urlServer + 'courses/user_progress_data/cert_templates/certificate' + $('#selectWithIcon').val() + '_thumbnail.png';
-                $('#selected_icon').attr('src', imgPath);
+                function formatOption(option) {
+                    let dareturn = '<span><img ' + (option.width ? 'width=' + option.width : '') + ' src=' + option.image + ' /> ' + option.text + '</span>';
+                    return $(dareturn);
+                }
+
+                $('#selectWithIcon').on('change', function (e) {
+                    let dataType = $(this).data('type');
+                    if (dataType == 'certificate') {
+                        let imgPath = certImage[$('#selectWithIcon').val()];
+                        $('#selected_icon').attr('src', imgPath);
+                    } else if (dataType === 'badge') {
+                        let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
+                        $('#selected_icon').attr('src', imgPath);
+                    }
+                });
+
             }
-
-            if ($('#badge_hidden').length > 0) {
-                let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
-                $('#selected_icon').attr('src', imgPath);
-                $('#selected_icon').attr('width', 48);
-            }
-
-         }
 
         });
-        </script>";
+    </script>";
 
     if ($element_id > 0) {      // edit
-        $field = ($element == 'certificate')? 'template' : 'icon';
-        $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle, expires, allow_export
+        $field = ($element == 'certificate') ? 'template' : 'icon';
+        $allow_export_field = ($element == 'badge') ? ', allow_export' : '';
+        $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle, expires $allow_export_field
                                 FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
-        $issuer = $data->issuer;
-        $template = $data->$field;
-        $title = $data->title;
-        $description = $data->description;
-        $message = $data->message;
+                                
+        $issuer = $data->issuer ?? '';
+        $template = $data->$field ?? '';
+        $title = $data->title ?? '';
+        $description = $data->description ?? '';
+        $message = $data->message ?? '';
         $cert_id = ($element == 'certificate')? "<input type='hidden' name='certificate_id' value='$element_id'>" : "<input type='hidden' name='badge_id' value='$element_id'>";
         $name = 'edit_element';
         if ($data->expires != null) {

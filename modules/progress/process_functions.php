@@ -973,6 +973,7 @@ function get_certificate_templates() {
     foreach ($t as $data) {
         $templates[$data->id] = $data->name;
     }
+
     return $templates;
 }
 
@@ -1891,10 +1892,8 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
 
         if (isset($_GET['newCertificates'])) {
             $newCertificates = true;
-            $cert_path = getFilepaths('newCertificatePath', $q->filename);
-            $tmp_cert_file = getFilenames('newCertificatePath', $q->filename, 'html');
-            $cert_file_arr = explode('/', $tmp_cert_file);
-            $cert_file = $cert_file_arr[count($cert_file_arr) - 1];
+            $cert_path = getFilepaths(true, $q->id, '.html');
+            $cert_file = getFilenames(true, $q->id, '.html');
         } else {
             $cert_file = $q->filename;
         }
@@ -2168,58 +2167,111 @@ function check_session_progress($session_id = 0, $forUser = 0) {
 
 /**
  * @brief get new certificates path
- * @param $certifatesStatus
+ * @param $certificatesStatus
  * @param $filePath
  * @return type
  */
-function getFilepaths($certifatesStatus, $filePath) {
+function getFilepaths($certificatesStatus = false, $fileId, $fileType) {
     global $webDir;
 
-    if ($certifatesStatus == 'newCertificatePath') {
+    $folderPath = $webDir . '/courses/user_progress_data/cert_templates';
+
+    $fileRow = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $fileId);
+
+    if (!$fileRow) {
+        return null;
+    }
+
+    $filePath = $fileRow->filename;
+
+    if ($certificatesStatus) {
         $tmpFilePath = explode('/', $filePath);
-        $filePath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0];
-        $files = scandir($filePath);
-        foreach ($files as $f) {
-            $certPath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0] . '/' . $f;
-            if (is_dir($certPath) && $f != '.' && $f != '..' && !str_contains('.zip', $f)) {
-                return $certPath;
-            }  
+
+        $rootFolder = $folderPath . '/' . $tmpFilePath[0];
+
+        if (!is_dir($rootFolder)) {
+            return null;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
+                $rootFolder,
+                FilesystemIterator::SKIP_DOTS
+            )
+        );
+
+        foreach ($iterator as $file) {
+
+            if ($file->isFile() && str_contains($file->getFilename(), $fileType)) {
+                $folderPath = dirname($file->getPathname());
+            }
         }
     }
 
-    return;
+    return $folderPath;
 }
 
 /**
  * @brief get new certificates name
- * @param $certifatesStatus
+ * @param $certificatesStatus
  * @param $filePath
  * @param $fileType
  * @return type
  */
-function getFilenames($certifatesStatus, $filePath, $fileType) {
+function getFilenames($certificatesStatus = false, $fileId, $fileType)
+{
     global $webDir, $urlServer;
+
+    $fileRow = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $fileId);
+
+    if (!$fileRow) {
+        return null;
+    }
+
+    $filePath = $fileRow->filename;
 
     // Old certificate path
     $theFile = $urlServer . "courses/user_progress_data/cert_templates/" . $filePath;
 
-    if ($certifatesStatus == 'newCertificatePath') {
+    if ($certificatesStatus) {
+
         $tmpFilePath = explode('/', $filePath);
-        $filePath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0];
-        $files = scandir($filePath);
-        foreach ($files as $f) {
-            $certPath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0] . '/' . $f;
-            if (is_dir($certPath) && $f != '.' && $f != '..' && !str_contains('.zip', $f)) {
-                $cert_files = scandir($certPath);
-                foreach ($cert_files as $cf) {
-                    if (str_contains($cf, $fileType)) {
-                        $cert_image_path = $certPath . '/' . $cf;
-                        $theFile = $urlServer . "courses/user_progress_data/cert_templates/" . $tmpFilePath[0] . "/" . $f . "/" . $cf;  
-                    }
-                }
-            }  
+
+        $rootFolder = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0];
+
+        if (!is_dir($rootFolder)) {
+            return null;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
+                $rootFolder,
+                FilesystemIterator::SKIP_DOTS
+            )
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->isFile() && str_contains($file->getFilename(), $fileType)) {
+                $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/';
+                $theFile = $urlServer . str_replace($documentRoot, '', $file->getPathname());
+                break;
+            }
         }
     }
 
     return $theFile;
+}
+
+
+function certificate_thumbnails($cert_id) {
+    global $urlServer;
+
+    $filename = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $cert_id)->filename;
+    $arr = explode('/', $filename);
+    if (count($arr) < 2) {
+        return $urlServer . 'courses/user_progress_data/cert_templates/certificate' . $cert_id . '_thumbnail.png';
+    } else {
+        $thumbnail = getFilenames(true, $cert_id, 'thumbnail');
+        return $thumbnail;
+    }
 }
