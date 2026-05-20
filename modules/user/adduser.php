@@ -41,6 +41,7 @@ $pageName = $langAddUser;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsers);
 
 $up = new Permissions();
+$results = $data['search_surname'] = $data['search_givenname'] = $data['search_username'] = $data['search_am'] = '';
 
 if (!$up->has_course_users_permission()) {
     Session::Messages($langCheckCourseAdmin, 'alert-danger');
@@ -99,7 +100,7 @@ if (isset($_GET['add'])) {
         Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page("modules/user/index.php?course=$course_code");
-} else {
+} elseif (isset($_POST['search'])) {
     register_posted_variables(array(
         'search_surname' => true,
         'search_givenname' => true,
@@ -136,10 +137,18 @@ if (isset($_GET['add'])) {
     }
 
     $query = join(' AND ', $search);
-    if ($is_power_user) {
+    if ($is_departmentmanage_user) {
+        // dynamic filters for tenant
+        $tenantFilters = [
+            'surname' => $_POST['search_surname'] ?? '',
+            'givenname' => $_POST['search_givenname'] ?? '',
+            'username' => $_POST['search_username'] ?? '',
+            'am' => $_POST['search_am'] ?? ''
+        ];
 
+        $result = getTenantUsers($tenantFilters);
+    } else {
         if (!empty($query)) {
-
             Database::get()->query(
                 "CREATE TEMPORARY TABLE register_users_to_course AS
                     SELECT user_id FROM course_user WHERE course_id = ?d",
@@ -163,18 +172,8 @@ if (isset($_GET['add'])) {
         } else {
             $result = [];
         }
-    } else {
-
-        // dynamic filters for tenant
-        $tenantFilters = [
-            'surname'   => $_POST['search_surname'] ?? '',
-            'givenname' => $_POST['search_givenname'] ?? '',
-            'username'  => $_POST['search_username'] ?? '',
-            'am'        => $_POST['search_am'] ?? ''
-        ];
-
-        $result = getTenantUsers($tenantFilters);
     }
+
     if ($result) {
         $results = "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
                                 <thead><tr class='list-header'>
@@ -209,7 +208,6 @@ if (isset($_GET['add'])) {
         $results .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoUsersFound</span></div></div>";
     }
 }
-
 
 $data['results'] = $results;
 

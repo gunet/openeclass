@@ -20,25 +20,25 @@
                                     <div class='form-group'>
                                         <label for='surname' class='col-sm-6 control-label-notes'>{{ trans('langSurname') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
-                                            <input class='form-control' id='surname' type='text' name='search_surname' value='{!! q($search_surname) !!}' placeholder='{{ trans('langSurname') }}'>
+                                            <input class='form-control' id='surname' type='text' name='search_surname' value='{{ $search_surname }}' placeholder='{{ trans('langSurname') }}'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
                                         <label for='name' class='col-sm-6 control-label-notes'>{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
-                                            <input class='form-control' id='name' type='text' name='search_givenname' value='{!! q($search_givenname) !!}' placeholder='{{ trans('langName') }}'>
+                                            <input class='form-control' id='name' type='text' name='search_givenname' value='{{ $search_givenname }}' placeholder='{{ trans('langName') }}'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
                                         <label for='username' class='col-sm-6 control-label-notes'>{{ trans('langUsername') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
-                                            <input class='form-control' id='username' type='text' name='search_username' value='{!! q($search_username)  !!}' placeholder='{{ trans('langUsername') }}'>
+                                            <input class='form-control' id='username' type='text' name='search_username' value='{{ $search_username }}' placeholder='{{ trans('langUsername') }}'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
                                         <label for='am' class='col-sm-6 control-label-notes'>{{ trans('langAm') }}</label>
                                         <div class='col-sm-12'>
-                                            <input class='form-control' id='am' type='text' name='search_am' value='{!! q($search_am) !!}' placeholder='{{ trans('langAm') }}'></div>
+                                            <input class='form-control' id='am' type='text' name='search_am' value='{{ $search_am }}' placeholder='{{ trans('langAm') }}'></div>
                                     </div>
                                     <div class='form-group mt-5'>
                                         <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
