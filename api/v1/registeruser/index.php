@@ -32,6 +32,7 @@ function api_method($access) {
 
         if ( !valid_email($email)) {
             header('Content-Type: application/json');
+            header('X-Content-Type-Options: nosniff');
             echo json_encode('Not valid email', JSON_UNESCAPED_UNICODE);
             exit();
         }
@@ -48,6 +49,7 @@ function api_method($access) {
 
 
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode($result, JSON_UNESCAPED_UNICODE);
         exit();
     }

@@ -38,6 +38,8 @@ $toolName = $langGroups;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langGroups);
 $pageName = $langGroupsManagment;
 
+load_js('tools.js');
+load_js('slimselect');
 load_js('select2');
 
 $head_content .= "
@@ -302,7 +304,13 @@ $tool_content .= "<div class='col-12'>
 
                                                 $head_content .= "<script type='text/javascript'>
                                                     $(document).ready(function () {
-                                                        $('#select-tutor_$gr->id').select2();
+                                                        slimSelectFun (
+                                                            '#select-tutor_$gr->id', 
+                                                            '" . js_escape(trans('langSearch')) . "', 
+                                                            '" . js_escape(trans('langWelcomeSelect')) . "', 
+                                                            '" . js_escape(trans('langSelectAll')) . "', 
+                                                            '" . js_escape(trans('langListChoices')) . "'
+                                                        );
                                                     });
                                                     </script>
                                                     <script type='text/javascript' src='{$urlAppend}js/tools.js'></script>\n
@@ -362,7 +370,7 @@ $tool_content .= "<div class='col-12'>
                                                                                     <div class='row'>
                                                                                         <div class='col-12 form-group'>
                                                                                             <label for='select-tutor_$gr->id' class='control-label-notes mb-1'>$langGroupTutor</label>
-                                                                                            <select name='tutor_$gr->id[]' multiple id='select-tutor_$gr->id' class='form-select'>\n";
+                                                                                            <select name='tutor_$gr->id[]' multiple id='select-tutor_$gr->id' class='form-control'>\n";
 
 
                                                                                                 $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,

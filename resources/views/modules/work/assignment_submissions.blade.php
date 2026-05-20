@@ -29,6 +29,7 @@
                 ],
                 'lengthMenu': [10, 20, 50, -1],
                 'searchDelay': 1000,
+                'order' : [[1, 'desc']],
                 'oLanguage': {
                     'lengthLabels': {
                         '-1': '{{ trans('langAllOfThem') }}'
@@ -113,7 +114,7 @@
                 e.preventDefault();
                 bootbox.confirm({
                     closeButton: false,
-                    title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'> {{ trans('langConfirmDelete') }}</div>',
+                    title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h2 class=\'modal-title-default text-center mb-0\'> {{ trans('langConfirmDelete') }}</h2>',
                     message: '<p class=\'text-center\'> {{ trans('langDelWarnUserAssignment') }}</p>',
                     buttons: {
                         cancel: {
@@ -151,13 +152,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -180,9 +178,9 @@
                         <div class="col-12">
                             <div class="card panelCard px-lg-4 py-lg-3" @if($assign->deadline && $cdate > $assign->deadline) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h3 class="mb-0" style="line-height: 14px;">
+                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langAssignmentsSubmission')}}</em>
-                                    </h3>
+                                    </h2>
                                     <small><em>{{ trans('langPhase') }} (1)</em></small>
                                 </div>
                                 <div class="card-body">
@@ -248,9 +246,9 @@
                             </div>
                             <div class="card panelCard px-lg-4 py-lg-3 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif" @if($assign->due_date_review && ($cdate > $assign->due_date_review or $cdate < $assign->start_date_review)) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h3 class="mb-0" style="line-height: 14px;">
+                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langGradeReviews') }}</em>
-                                    </h3>
+                                    </h2>
                                     <small><em>{{ trans('langPhase') }} (2)</em></small>
                                 </div>
                                 <div class="card-body">
@@ -355,9 +353,9 @@
                             </div>
                             <div class="card panelCard px-lg-4 py-lg-3" @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate <= $assign->due_date_review) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h3 class="mb-0" style="line-height: 14px;">
+                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langFinalGrade') }}</em>
-                                    </h3>
+                                    </h2>
                                     <small>
                                         @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
                                             <em>{{ trans('langPhase') }} (3)</em>
@@ -404,11 +402,11 @@
                                                             {{ trans('langSurnameName') }}
                                                         </th>
                                                         @if ($assign->submission_type == 1)
-                                                            <th>{{ trans('langWorkOnlineText') }}</th>
+                                                            <th class="text-center">{{ trans('langWorkOnlineText') }}</th>
                                                         @elseif ($assign->submission_type == 2)
-                                                            <th>{{ trans('langOpenCoursesFiles') }}</th>
+                                                            <th class="text-center">{{ trans('langOpenCoursesFiles') }}</th>
                                                         @else
-                                                            <th>{{ trans('langFileName') }}</th>
+                                                            <th class="text-center">{{ trans('langFileName') }}</th>
                                                         @endif
                                                         @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {{-- neo pedio vathmos aksiologhshs mono gia peer review --}}
                                                             <th class="grade-col">
@@ -482,9 +480,9 @@
                                                             </td>
 
                                                             {{-- submission files --}}
-                                                            <td class='filename-col text-nowrap'>
+                                                            <td data-sort='{{ $row->submission_date }}' class='filename-col text-nowrap text-center'>
                                                                 @if ($assign->submission_type == 1)
-                                                                    <button class='onlineText btn btn-xs btn-default submitAdminBtn' data-id='{{ $row->id }}'>
+                                                                    <button class='onlineText btn btn-xs btn-default submitAdminBtn' data-id='{{ getIndirectReference($row->id) }}'>
                                                                         {{ trans('langQuestionView') }}
                                                                     </button>
                                                                 @elseif (!empty($row->file_name))
@@ -577,9 +575,9 @@
 
 
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
+
 
 @endsection

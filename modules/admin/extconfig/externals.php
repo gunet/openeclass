@@ -18,17 +18,13 @@
  *
  */
 
-foreach (ExtAppManager::$AppCategories as $category => $appNames) {
-    foreach ($appNames as $appName) {
-        require_once strtolower($appName) . '.php';
-    }
-}
+require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 
 class ExtAppManager {
 
     public static $AppCategories = [
-        'general' => ['APITokenApp', 'H5PApp', 'aiapp', 'TurnitinApp', 'LtiPublishApp', 'LimesurveyApp', 'PanoptoApp', 'SolrApp', 'ExternalReposApp'],
-        'teleconference' => ['BBBApp', 'ZoomApp', 'WebexApp','GoogleMeetApp', 'JitsiApp', 'MicrosoftTeamsApp', 'OpenDelosApp'],
+        'general' => ['APITokenApp', 'H5PApp', 'aiapp', 'TurnitinApp', 'SebApp', 'LtiPublishApp', 'LimesurveyApp', 'PanoptoApp', 'SolrApp', 'OpenBadgesApp', 'ExternalReposApp'],
+        'teleconference' => ['BBBApp', 'ZoomApp', 'WebexApp','GoogleMeetApp', 'JitsiApp', 'MicrosoftTeamsApp', 'OpenDelosApp', 'UniFlixApp'],
         'cloud' => ['GoogleDriveApp', 'OneDriveApp', 'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp'],
         'other' => ['AnalyticsApp', 'AntivirusApp', 'secondfaApp', 'UserWayApp', 'AutojudgeApp'],
     ];
@@ -56,10 +52,13 @@ class ExtAppManager {
             $categories = array();
             foreach (ExtAppManager::$AppCategories as $category => $appNames) {
                 foreach ($appNames as $appName) {
-                    require_once strtolower($appName) . '.php';
-                    $app = new $appName();
-                    $apps[$app->getName()] = $app;
-                    $categories[$app->getName()] = $category;
+                    $app_filename = strtolower($appName) . '.php';
+                    if (file_exists("modules/admin/extconfig/$app_filename")) {
+                        require_once $app_filename;
+                        $app = new $appName();
+                        $apps[$app->getName()] = $app;
+                        $categories[$app->getName()] = $category;
+                    }
                 }
             }
             ExtAppManager::$APPS = $apps;
@@ -103,7 +102,7 @@ abstract class ExtApp {
     private $params = array();
 
     public function __construct() {
-        $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::$ENABLED, "0", ExtParam::TYPE_BOOLEAN));
+        $this->registerParam(new GenericParam($this->getName(), $GLOBALS['langCEnabled'], ExtApp::$ENABLED, "0", ExtParam::TYPE_BOOLEAN));
     }
 
     public function isEnabled() {
@@ -212,19 +211,6 @@ abstract class ExtApp {
     public function getAppIcon() {
         return $this->getBaseURL() . "resources/icons/" . $this->getName() . ".png";
     }
-
-    public function update_tc_sessions($type) {
-
-        $r = Database::get()->querySingle("SELECT id FROM tc_servers
-                                            WHERE `type` = '$type' AND enabled = 'true'
-                                            ORDER BY weight ASC");
-        if ($r) {
-            $tc_id = $r->id;
-            Database::get()->query("UPDATE tc_session SET running_at = $tc_id");
-            Database::get()->query("UPDATE course_external_server SET external_server = $tc_id");
-        }
-    }
-
 }
 
 abstract class ExtParam {

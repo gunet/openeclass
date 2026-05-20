@@ -200,7 +200,7 @@ $tool_content .= "
           <div class='form-group emailbody hidden mt-4'>
             <label for='emailNewBodyEditor' class='col-sm-12 control-label-notes'>$langBodyMessage</label>
             <div class='col-sm-12'>" .
-              rich_text_editor('emailNewBodyEditor', 4, 20, $default_email_body) . "
+              rich_text_editor('emailNewBodyEditor', 4, 20, $default_email_body, options: array('id' => 'emailNewBodyEditor')) . "
             </div>
             <input type='hidden' class='emailNewBodyInput' name='emailNewBodyInput' value=0>
           </div>

@@ -27,6 +27,11 @@ require_once 'restore_functions.php';
 
 $toolName = $langImportCourse;
 
+if (!($is_admin || get_config('allow_teacher_import_course'))) {
+    header("Location:" . $urlServer . "index.php");
+    exit();
+}
+
 if (isset($_GET['do_fetch'])) {
     set_time_limit(0);
     $old_course_id = $_POST['import_course_id'];
@@ -67,13 +72,6 @@ if (isset($_GET['do_fetch'])) {
         // fetch and create course
         create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, false, true);
     }
-
-    $tool_content .= "<div class='col-12'>
-                        <div class='alert alert-info'>
-                            <i class='fa-solid fa-circle-info fa-lg'></i><span>$langImportCourseCompleted</span>
-                        </div>
-                     </div>";
-
     stop_output_buffering();
 }
 

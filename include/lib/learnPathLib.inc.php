@@ -36,6 +36,8 @@
 
 require_once 'modules/progress/LearningPathEvent.php';
 require_once 'modules/progress/LearningPathDurationEvent.php';
+require_once 'modules/progress/LearningPathProgressMeasureEvent.php';
+require_once 'modules/progress/LearningPathLessonStatusEvent.php';
 require_once 'modules/analytics/LpAnalyticsEvent.php';
 require_once 'include/lib/mediaresource.factory.php';
 
@@ -67,121 +69,6 @@ define('LEARNINGPATHMODULE_', 4);
 
 const SCORM_TIME_MASK = "/^([0-9]{2,4}):([0-9]{2}):([0-9]{2}).?([0-9]?[0-9]?)$/";
 const SCORM_2004_TIME_MASK = "/^PT(([0-9]{1,2})H)?(([0-9]{1,2})M)?(([0-9]{1,2}).?([0-9]?[0-9]?)S)?$/";
-
-/*
- * This function is used to display comments of module or learning path with admin links if needed.
- * Admin links are 'edit' and 'delete' links.
- *
- * @param string $type MODULE_ , LEARNINGPATH_ , LEARNINGPATHMODULE_
- * @param string $mode DISPLAY_ , UPDATE_ , DELETE_
- *
- * @author Thanos Kyritsis <atkyritsis@upnet.gr>
- * @author Piraux Sebastien <pir@cerdecam.be>
- * @author Lederer Guillaume <led@cerdecam.be>
- */
-
-function commentBox($type, $mode) {
-    global $is_editor, $langModify, $langSubmit,
-    $langAdd, $langConfirmDelete, $langDefaultLearningPathComment,
-    $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $course_code,
-    $course_id;
-
-    // will be set 'true' if the comment has to be displayed
-    $dsp = false;
-    $output = $defaultTxt = "";
-
-    // those vars will be used to build sql queries according to the comment type
-    switch ($type) {
-        case MODULE_ :
-            $defaultTxt = $langDefaultModuleComment;
-            $col_name = 'comment';
-            $tbl_name = 'lp_module';
-            if (isset($_REQUEST['module_id'])) {
-                $module_id = $_REQUEST['module_id'];
-            } else {
-                $module_id = $_SESSION['lp_module_id'];
-            }
-            $where_cond = "`module_id` = " . intval($module_id) . " AND `course_id` = " . intval($course_id);
-            break;
-        case LEARNINGPATH_ :
-            $defaultTxt = $langDefaultLearningPathComment;
-            $col_name = 'comment';
-            $tbl_name = 'lp_learnPath';
-            $where_cond = '`learnPath_id` = ' . intval($_SESSION['path_id']) . " AND `course_id` = " . intval($course_id);
-            break;
-        case LEARNINGPATHMODULE_ :
-            $defaultTxt = $langDefaultModuleAddedComment;
-            $col_name = 'specificComment';
-            $tbl_name = 'lp_rel_learnPath_module';
-            $where_cond = "`learnPath_id` = " . intval($_SESSION['path_id']) . " AND `module_id` = " . intval($_SESSION['lp_module_id']);
-            break;
-    }
-
-    // update mode
-    // allow to choose between
-    // - update and show the comment and the pencil and the delete cross (UPDATE_)
-    // - update and nothing displayed after form sent (UPDATENOTSHOWN_)
-    if (( $mode == UPDATE_ || $mode == UPDATENOTSHOWN_ ) && $is_editor) {
-        if (isset($_POST['insertCommentBox'])) {
-            Database::get()->query("UPDATE $tbl_name SET $col_name = ?s WHERE " . $where_cond . "", $_POST['insertCommentBox']);
-
-            if ($mode == UPDATE_) {
-                $dsp = true;
-            } else if ($mode == UPDATENOTSHOWN_) {
-                $dsp = false;
-            }
-        } else { // display form
-            // get info to fill the form in
-            $sql = "SELECT `" . $col_name . "`
-                       FROM `" . $tbl_name . "`
-                      WHERE " . $where_cond;
-            $oldComment = Database::get()->querySingle($sql)->$col_name;
-
-            $output .= "<div class='card-body'><form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <textarea class='form-control' name='insertCommentBox' rows='3'>$oldComment</textarea><br>
-                <input type='hidden' name='cmd' value='update$col_name' />
-                <input class='btn submitAdminBtn' type='submit' value=$langSubmit /></form></div>";
-        }
-    }
-
-    // delete mode
-    if ($mode == DELETE_ && $is_editor) {
-        $sql = "UPDATE `" . $tbl_name . "` SET `" . $col_name . "` = '' WHERE " . $where_cond;
-        Database::get()->query($sql);
-        $dsp = TRUE;
-    }
-
-    // display mode only or display was asked by delete mode or update mode
-    if ($mode == DISPLAY_ || $dsp == TRUE) {
-        $sql = "SELECT `" . $col_name . "` FROM `" . $tbl_name . "` WHERE " . $where_cond;
-
-        $result = Database::get()->querySingle($sql);
-        $currentComment = ($result && !empty($result->$col_name)) ? $result->$col_name : false;
-
-        // display nothing if this is the default comment and not an admin
-        if (($currentComment == $defaultTxt || empty($currentComment)) && !$is_editor) {
-            return $output;
-        }
-
-        $output .= "<div class='card-body'>";
-        if (empty($currentComment)) {
-            // if no comment and user is admin : display link to add a comment
-            if ($is_editor) {
-                $output .= '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . '">' . $langAdd . '</a>';
-            }
-        } else {
-            $output .=  standard_text_escape($currentComment);
-            if ($is_editor) {
-                $output .= "&nbsp;&nbsp;&nbsp;" . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "");
-                $output .= "&nbsp;&nbsp;&nbsp";
-                $output .= icon('fa-xmark link-delete', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
-            }
-        }
-        $output .= "</div>";
-    }
-
-    return $output;
-}
 
 /*
  * @brief: This function is used to display name of module or learning path with admin links if needed
@@ -219,7 +106,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
     // update mode
     if ($mode == UPDATE_ && $is_editor) {
 
-        if (isset($_POST['newName']) && !empty($_POST['newName'])) {
+        if (!empty($_POST['newName'])) {
             $num = Database::get()->querySingle("SELECT COUNT(`" . $col_name . "`) AS count
                                  FROM `" . $tbl_name . "`
                                 WHERE `" . $col_name . "` = ?s
@@ -244,7 +131,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
 
             if ($formlabel != FALSE) {
                 $output .= '<div class="col-12"><div class="d-flex justify-content-start align-items-center gap-2">'
-                        . '<input class="form-control max-input-width mt-0" type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '">'
+                        . '<input class="form-control max-input-width mt-0" type="text" name="newName" size="50" maxlength="255" value="' . q($oldName) . '">'
                         . '<button class="btn submitAdminBtn" type="submit" value="'.$langModify.'">'.$langModify.'</button>'
                         . '</div></div>'
                         . '<input type="hidden" name="cmd" value="updateName" />'
@@ -260,22 +147,79 @@ function nameBox($type, $mode, $formlabel = FALSE) {
         $result = Database::get()->querySingle($sql, $course_id);
 
         $currentName = ($result && !empty($result->name)) ? $result->name : false;
-        $output .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'><h3>" . q($currentName);
+        $output .= "<div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'><h2 class='text-heading-h3'>" . q($currentName);
         if ($is_editor) {
             $output .= '&nbsp;&nbsp;&nbsp;'.icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=updateName');
         }
-        $output .= "</h3></div>";
+        $output .= "</h2></div>";
     }
 
     return $output;
 }
 
+/**
+ * @brief: This function is used to display - edit the title - description of a learning path
+ * @param $path_id
+ * @return string
+ */
+function display_learn_path_title($path_id, $cmd = ''): string
+{
+    global $course_code, $langSubmit, $langName, $langModify, $langDescription, $is_editor;
+
+    $q = Database::get()->querySingle("SELECT name, comment FROM lp_learnPath WHERE learnPath_id = ?d", $path_id);
+    if ($q) {
+        $oldName = $q->name;
+        $oldComment = $q->comment;
+    } else {
+        $oldName = $oldComment = '';
+    }
+
+    if (isset($cmd) and $cmd == 'updateName') {
+        $output = "<div class='card-body'>
+                    <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&cmd=updateName'>
+                        <div class='row form-group'>
+                            <label class='col-12 control-label-notes mb-2'>
+                                $langName
+                            </label>
+                            <div class='col-12'>
+                                <input class='form-control' type='text' name='newName' maxlength='255' value='" . q($oldName) . "'>
+                            </div>
+                        </div>
+                        <div class='row mt-4 form-group'>
+                            <div class='col-12'>
+                                <label for='newContent' class='col-12 control-label-notes'>
+                                    $langDescription
+                                </label>
+                                <textarea class='form-control' name='newComment' rows='3'>" . q($oldComment) . "</textarea>
+                                <input type='hidden' name='path_id' value='$path_id'>
+                                <input class='btn submitAdminBtn mt-3' type='submit' name='submit_name' value='$langSubmit'>
+                            </div>
+                        </div>
+                    </form>
+               </div>";
+    } else {
+            $output = "<div class='card-body'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                        <h2 class='text-heading-h3'>" . q($oldName) . "</h2>";
+                        if ($is_editor) {
+                            $output .= icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;path_id=' . $_SESSION['path_id'] . '&amp;cmd=updateName');
+                        }
+                        $output .= "</div>
+                        <div class='card-body'>" .
+                            q($oldComment) .
+                       "</div>";
+            }
+
+    return $output;
+}
+
+
 /*
  * This function is used to display the correct image in the modules lists
- * It looks for the correct type in the array, and return the corresponding image name if found
+ * It looks for the correct type in the array and returns the corresponding image name if found
  * else it returns a default image
  *
- * @param  string $contentType type of content in learning path
+ * @param  string $contentType type of content in a learning path
  * @return string name of the image with extension
  *
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -508,6 +452,9 @@ function calculate_learnPath_combined_progress($modules): int {
             }
 
             // in case of scorm module, progression depends on the lesson status value
+            if ($module->progressMeasureMax) {
+                $modProgress = 100 * $module->progressMeasureMax;
+            }
             if (($module->contentType == "SCORM") && ($module->scoreMax <= 0) && (( $module->lesson_status == 'COMPLETED') || ($module->lesson_status == 'PASSED'))) {
                 $modProgress = 100;
             }
@@ -591,7 +538,7 @@ function get_learnPath_progress($lpid, $lpUid) {
     return calculate_learnPath_progress($lpid, $modules);
 }
 
-function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date = null, $course_id = null): array {
+function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date = null, $course_id = null, $return_null_score = false): array {
 
     if ($course_id == null) {
         $course_id = $GLOBALS['course_id'];
@@ -599,7 +546,7 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
 
     // find progression for this user in each module of the path
     $sql = "SELECT UMP.`raw` AS R, UMP.`scoreMax` AS SMax, M.`contentType` AS CTYPE, UMP.`lesson_status` AS STATUS, UMP.`total_time`,
-                   UMP.`started`, UMP.`accessed`, UMP.`attempt`
+                   UMP.`started`, UMP.`accessed`, UMP.`attempt`, UMP.`progress_measure` AS PM
              FROM `lp_learnPath` AS LP,
                   `lp_rel_learnPath_module` AS LPM,
                   `lp_user_module_progress` AS UMP,
@@ -621,30 +568,39 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
 
     $modules = Database::get()->queryArray($sql, ...$params);
     $totalProgress = 0;
-    $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = "";
+    $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = $totalScoreMax = "";
     $totalTime = "0000:00:00";
 
+    $max_progress_measure = 0;
     if (is_array($modules) && !empty($modules)) {
         $maxAttempt = 1; // discover number of attempts
         $modsForProg = array(); // prepare sub-arrays for progression calculation
         foreach ($modules as $module) {
+            if ((float) ($module->PM ?? 0) > (float) $max_progress_measure) {
+                $max_progress_measure = $module->PM;
+            }
             if ($module->attempt > $maxAttempt) {
                 $maxAttempt = $module->attempt;
             }
             $modsForProg[$module->attempt][] = $module;
         }
 
-        $global_progress = $global_started = $global_accessed = $global_status = $global_time = array();
+        $global_progress = $global_score_max = $global_started = $global_accessed = $global_status = $global_time = array();
         for ($i = 1; $i <= $maxAttempt; $i++) {
+            $global_score_max[$i] = "";
             $global_started[$i] = "";
             $global_accessed[$i] = "";
             $global_status[$i] = "";
             $global_time[$i] = "0000:00:00";
             // total progress calculation
-            $global_progress[$i] = calculate_learnPath_progress($lpid, $modsForProg[$i]);
+            $global_progress[$i] = (isset($modsForProg[$i])) ? calculate_learnPath_progress($lpid, $modsForProg[$i]) : 0;
         }
 
         foreach ($modules as $module) {
+            if (!empty($module->SMax)) {
+                $global_score_max[$module->attempt] = $module->SMax;
+            }
+
             // total time calculation
             $mtt = preg_replace('/\.[0-9]{0,2}/', '', $module->total_time ?? '');
             $global_time[$module->attempt] = addScormTime($global_time[$module->attempt], $mtt);
@@ -688,22 +644,31 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         }
 
         $totalProgress = $global_progress[$bestAttempt];
+        $totalScoreMax = $global_score_max[$bestAttempt];
         $totalStarted = $global_started[$bestAttempt];
         $totalAccessed = $global_accessed[$bestAttempt];
         $totalStatus = $global_status[$bestAttempt];
-        if ($totalStatus === "PASSED" && $totalProgress < 100) {
-            $totalStatus = "INCOMPLETE";
-        }
+        //if ($totalStatus === "PASSED" && $totalProgress < 100) {
+        //    $totalStatus = "INCOMPLETE";
+        //}
     }
+    $totalScoreMax = $totalScoreMax ?? null;
 
+    $totalTime = ($totalTime == '0000:00:00') ? '00:00:00': $totalTime;
     if ($total) {
-        return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt);
+        $score = $totalProgress;
+        if ($return_null_score && !$totalProgress) {
+            $totalProgress = null;
+        } else {
+            $totalProgress = $max_progress_measure ? (100 * $max_progress_measure) : $totalProgress;
+        }
+        return array($totalProgress, $totalTime, $totalStarted, $totalAccessed, $totalStatus, $maxAttempt, $score, $totalScoreMax);
     } else {
         $attempts = [];
         for ($i = 1; $i <= $maxAttempt; $i++) {
             if ($global_started[$i]) {
                 $attempts[$i] = [
-                    $global_progress[$i],
+                    ($return_null_score && !$global_score_max[$i]) ? null : $global_progress[$i],
                     $global_time[$i],
                     $global_started[$i],
                     $global_accessed[$i],
@@ -714,6 +679,30 @@ function get_learnPath_progress_details($lpid, $lpUid, $total=true, $from_date =
         }
         return $attempts;
     }
+}
+
+/**
+ * Common formatter for learning path progress/time/score outputs.
+ *
+ * @param int $attempts
+ * @param string $totalTime
+ * @param int $progress
+ * @param int $score
+ * @param int $scoreMax
+ */
+function format_lp_progress_display($attempts, $totalTime, $progress, $score, $scoreMax): array {
+    $hasAttempts = !empty($attempts);
+
+    $showTime = $hasAttempts || $totalTime !== "00:00:00";
+    $showProgress = ($hasAttempts || !empty($progress)) && $progress > 0;
+    $showScore = ($hasAttempts || !empty($score)) && (!empty($scoreMax) && $scoreMax > 0);
+
+    return [
+        'time' => $showTime ? q($totalTime) : '-',
+        'progress_html' => $showProgress ? disp_progress_bar($progress, 1) : '-',
+        'progress_text' => $showProgress ? $progress . '%' : '-',
+        'score' => $showScore ? $score . '%' : '-',
+    ];
 }
 
 function get_learnPath_bestAttempt_progress($lpid, $lpUid): array {
@@ -749,6 +738,7 @@ function get_learnPath_combined_progress($lpid, $lpUid): float {
                    MAX(UMP.`lesson_status`) as lesson_status,
                    MAX(UMP.`raw`) as raw,
                    MAX(UMP.`scoreMax`) as scoreMax,
+                   MAX(UMP.`progress_measure`) as progressMeasureMax,
                    MAX(UMP.`credit`) as credit,
                    MAX(A.`path`) as path
               FROM (`lp_module` AS M, `lp_rel_learnPath_module` AS LPM)
@@ -1137,7 +1127,7 @@ function get_module_tree($lpModules, $id, $field = 'module_id') {
  * Convert the time recorded in seconds to a scorm type
  *
  * @author Piraux Sebastien <pir@cerdecam.be>
- * @param $time time in seconds to convert to a scorm type time
+ * @param time in seconds to convert to a scorm type time
  * @return string compatible scorm type (smaller format)
  */
 function seconds_to_scorm_time($time) {
@@ -1158,7 +1148,7 @@ function seconds_to_scorm_time($time) {
 }
 
 /**
- * This function allows to see if a time string is the SCORM 2004 requested format:
+ * This function allows seeing if a time string is the SCORM 2004 requested format:
  * timeinterval(second,10,2): PThHmMsS
  *
  * @param ?string $time a suspected SCORM 2004 time value, returned by the javascript API
@@ -1192,6 +1182,17 @@ function extractScorm2004Time(?string $time): array {
     $seconds = intval($matches[6] ?? 0);
     $primes = intval($matches[7] ?? 0);
     return array($hours, $minutes, $seconds, $primes);
+}
+
+function scormTimeToSeconds(?string $time): int {
+    if (isScorm2004Time($time)) {
+        [$h, $m, $s] = extractScorm2004Time($time);
+    } elseif (isScormTime($time)) {
+        [$h, $m, $s] = extractScormTime($time);
+    } else {
+        return 0;
+    }
+    return $h * 3600 + $m * 60 + $s;
 }
 
 function calculateScormTime(int $hours1, int $minutes1, int $seconds1, int $primes1, int $hours2, int $minutes2, int $seconds2, int $primes2): string {
@@ -1402,33 +1403,6 @@ function disp_message_box($message, $style = FALSE) {
     return "$cell $message";
 }
 
-/*
- * Prepare the display of a clickable button
- *
- * @author Hugues Peeters <hugues.peeters@claroline.net>
- *
- * @param string $url url inserted into the 'href' part of the tag
- * @param string $text text inserted between the two <a>...</a> tags (note : it
- *        could also be an image ...)
- * @param string $confirmMessage (optionnal) introduce a javascript confirmation popup
- * @return string the button
- */
-
-function disp_button($url, $text, $confirmMessage = '') {
-    if (is_javascript_enabled() && !preg_match('~^Mozilla/4\.[1234567]~', $_SERVER['HTTP_USER_AGENT'])) {
-        if ($confirmMessage != '') {
-            $onClickCommand = "if(confirm('" . clean_str_for_javascript($confirmMessage) . "')){document.location='" . $url . "';return false}";
-        } else {
-            $onClickCommand = "document.location='" . $url . "';return false";
-        }
-
-        return '<button onclick="' . $onClickCommand . '">'
-                . $text
-                . '</button>&nbsp;' . "\n";
-    } else {
-        return '[ <a href="' . $url . '">' . $text . '</a> ]';
-    }
-}
 
 /*
  * Function used to draw a progression bar
@@ -1443,12 +1417,12 @@ function disp_button($url, $text, $confirmMessage = '') {
 
 function disp_progress_bar($progress, $factor) {
 
-
+    $progress = round($progress, 0, PHP_ROUND_HALF_UP);
     // Progress bar not displaying in mpdf library
     if (!isset($_GET['pdf'])) {
         $progressBar = "
         <div class='progress' style='display: inline-block; width: 150px; height:auto; margin-bottom:0px;'>
-            <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em; min-height:100%;'>
+            <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='color: #fff; width: $progress%; min-width: 2em; min-height:100%;'>
                 $progress%
             </div>
         </div>";
@@ -1467,19 +1441,19 @@ function disp_progress_bar($progress, $factor) {
  */
 function disp_lesson_status(string $lessonStatus): string {
     if ($lessonStatus == "NOT ATTEMPTED") {
-        return $GLOBALS['langNotAttempted'];
+        return $GLOBALS['langIncomplete'];
     } else if ($lessonStatus == "PASSED") {
-        return $GLOBALS['langPassed'];
+        return $GLOBALS['langCompleted'];
     } else if ($lessonStatus == "FAILED") {
-        return $GLOBALS['langFailed'];
+        return $GLOBALS['langIncomplete'];
     } else if ($lessonStatus == "COMPLETED") {
-        return $GLOBALS['langAlreadyBrowsed'];
+        return $GLOBALS['langCompleted'];
     } else if ($lessonStatus == "BROWSED") {
-        return $GLOBALS['langAlreadyBrowsed'];
+        return $GLOBALS['langIncomplete'];
     } else if ($lessonStatus == "INCOMPLETE") {
-        return $GLOBALS['langNeverBrowsed'];
+        return $GLOBALS['langIncomplete'];
     } else {
-        return strtolower($lessonStatus);
+        return $GLOBALS['langIncomplete'];
     }
 }
 
@@ -1495,7 +1469,7 @@ function enum_lesson_status(string $lessonStatus): int {
     } else if ($lessonStatus == "BROWSED") {
         return 4;
     } else if ($lessonStatus == "PASSED") {
-        return 5;
+        return 4;
     } else {
         return 0;
     }
@@ -1595,14 +1569,20 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 
         if (!$is_editor) {
             // check for blocked learning path
-            $rank0 = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath
-                                WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id)->rank;
+            $rank0Row = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath
+                                WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id);
+            if (!$rank0Row) {
+                header("Location: " . $depth . "index.php?course=$course_code");
+                exit();
+            }
+            $rank0 = $rank0Row->rank;
             $lps = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = ?d AND `rank` < ?d", $course_id, $rank0);
             foreach ($lps as $lp) {
                 if ($lp->lock == 'CLOSE') {
                     $prog = get_learnPath_progress($lp->learnPath_id, $_SESSION['uid']);
                     if ($prog < 100) {
                         header("Location: ./index.php?course=$course_code");
+                        exit();
                     }
                 }
             }
@@ -1621,6 +1601,10 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
     if (!$is_editor) { // check if we try to overwrite a blocked module
         $lpm_id = Database::get()->querySingle("SELECT `lock`, `rank` FROM lp_rel_learnPath_module
                                 WHERE `learnPath_id` = ?d AND module_id = ?d", $_SESSION['path_id'], $_SESSION['lp_module_id']);
+        if (!$lpm_id) {
+            header("Location: " . $depth . "index.php?course=$course_code");
+            exit();
+        }
         $q = Database::get()->queryArray("SELECT learnPath_module_id
                                             FROM lp_rel_learnPath_module
                                            WHERE learnPath_id = ?d
@@ -1631,12 +1615,91 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
                                                        WHERE learnPath_module_id = ?d
                                                          AND learnPath_id = ?d
                                                          AND user_id = ?d", $m->learnPath_module_id, $_SESSION['path_id'], $_SESSION['uid']);
-            if (($lpm_id->lock == 'CLOSE') && ($progress->credit != 'CREDIT' || ($progress->lesson_status != 'COMPLETED' && $progress->lesson_status != 'PASSED'))) {
+            if (($lpm_id->lock == 'CLOSE') && (!$progress || $progress->credit != 'CREDIT' || ($progress->lesson_status != 'COMPLETED' && $progress->lesson_status != 'PASSED'))) {
                 header("Location: " . $depth . "index.php?course=$course_code");
                 exit();
             }
         }
     }
+}
+
+/**
+ * AJAX-safe module validity check.
+ *
+ * Similar to check_LPM_validity() but designed for AJAX requests:
+ * - Does NOT redirect (header("Location:...")) on failure
+ * - Sets $_SESSION['lp_module_id'] to the requested module on success
+ * - Returns an array ['ok' => true/false, 'error' => string, 'code' => string]
+ *
+ * @param int    $moduleId    The requested module ID
+ * @param bool   $is_editor   Whether user is course editor
+ * @return array              ['ok' => true] on success, ['ok' => false, 'error' => ..., 'code' => ...] on failure
+ */
+function check_LPM_validity_ajax(int $moduleId, bool $is_editor): array {
+    global $course_id;
+
+    if (empty($_SESSION['path_id']) || empty($moduleId)) {
+        return ['ok' => false, 'error' => 'Missing path or module id', 'code' => 'LP_BAD_REQUEST'];
+    }
+
+    // Check learning path visibility
+    $lp = Database::get()->querySingle("SELECT visible FROM lp_learnPath WHERE learnPath_id = ?d AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
+    if (!$lp) {
+        return ['ok' => false, 'error' => 'Learning path not found', 'code' => 'LP_NOT_FOUND'];
+    }
+    if (!$is_editor && $lp->visible == 0) {
+        return ['ok' => false, 'error' => 'Learning path not accessible', 'code' => 'LP_FORBIDDEN'];
+    }
+
+    // Check blocked learning paths (prerequisite paths)
+    if (!$is_editor) {
+        $rank0 = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath
+                            WHERE learnPath_id = ?d AND `course_id` = ?d ORDER BY `rank` LIMIT 1", $_SESSION['path_id'], $course_id);
+        if ($rank0) {
+            $lps = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = ?d AND `rank` < ?d", $course_id, $rank0->rank);
+            foreach ($lps as $prereqLp) {
+                if ($prereqLp->lock == 'CLOSE') {
+                    $prog = get_learnPath_progress($prereqLp->learnPath_id, $_SESSION['uid']);
+                    if ($prog < 100) {
+                        return ['ok' => false, 'error' => 'Prerequisite learning path not completed', 'code' => 'LP_FORBIDDEN'];
+                    }
+                }
+            }
+        }
+    }
+
+    // Check module exists in path and is visible
+    $lpm = Database::get()->querySingle("SELECT visible, `lock`, `rank` FROM lp_rel_learnPath_module
+        WHERE learnPath_id = ?d AND module_id = ?d", $_SESSION['path_id'], $moduleId);
+    if (!$lpm) {
+        return ['ok' => false, 'error' => 'Module not found in this learning path', 'code' => 'LP_NOT_FOUND'];
+    }
+    if (!$is_editor && $lpm->visible == 0) {
+        return ['ok' => false, 'error' => 'Module not accessible', 'code' => 'LP_FORBIDDEN'];
+    }
+
+    // Check lock enforcement for non-editors
+    if (!$is_editor && $lpm->lock == 'CLOSE') {
+        $predecessors = Database::get()->queryArray("SELECT learnPath_module_id
+                                        FROM lp_rel_learnPath_module
+                                       WHERE learnPath_id = ?d
+                                         AND `rank` < ?d", $_SESSION['path_id'], $lpm->rank);
+        foreach ($predecessors as $m) {
+            $progress = Database::get()->querySingle("SELECT credit, lesson_status
+                                                FROM lp_user_module_progress
+                                               WHERE learnPath_module_id = ?d
+                                                 AND learnPath_id = ?d
+                                                 AND user_id = ?d", $m->learnPath_module_id, $_SESSION['path_id'], $_SESSION['uid']);
+            if (!$progress || ($progress->credit != 'CREDIT' || ($progress->lesson_status != 'COMPLETED' && $progress->lesson_status != 'PASSED'))) {
+                return ['ok' => false, 'error' => 'Module is locked', 'code' => 'LP_FORBIDDEN'];
+            }
+        }
+    }
+
+    // All checks passed — update session
+    $_SESSION['lp_module_id'] = $moduleId;
+
+    return ['ok' => true];
 }
 
 function deleteLearningPath($pathId) {
@@ -1715,6 +1778,12 @@ function triggerLPGame($courseId, $uid, $lpId, $eventName) {
 
     $eventData->activityType = LearningPathDurationEvent::ACTIVITY;
     LearningPathDurationEvent::trigger($eventName, $eventData);
+
+    $eventData->activityType = LearningPathProgressMeasureEvent::ACTIVITY;
+    LearningPathProgressMeasureEvent::trigger($eventName, $eventData);
+
+    $eventData->activityType = LearningPathLessonStatusEvent::ACTIVITY;
+    LearningPathLessonStatusEvent::trigger($eventName, $eventData);
 }
 
 /**

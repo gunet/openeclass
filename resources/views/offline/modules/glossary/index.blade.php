@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
 <div class='container module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
@@ -56,7 +56,7 @@
                                                 <span class='term-url'>
                                                     <small>
                                                         <a href='{{ $data->url }}' target='_blank' aria-label="{{ trans('langOpenNewTab') }}">{{ $data->url }}&nbsp;&nbsp;
-                                                        <i class='fa fa-external-link' style='color:#444;'></i></a>
+                                                        <i class='fa fa-external-link'></i></a>
                                                     </small>
                                                 </span>
                                             </div>
@@ -76,5 +76,5 @@
         </div>
     
 </div>
-</div>
+</main>
 @endsection

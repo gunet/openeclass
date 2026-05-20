@@ -176,10 +176,8 @@ $tool_content .= action_bar(array(
 $tool_content .= "
     <div class='oc-metedata-list'>
         <div class='col-12'>
+            <h2 class='text-heading-h3'>$langOpenCoursesCharacteristics</h2>
             <ul class='list-group list-group-flush'>
-                <li class='list-group-item list-group-item-action'>
-                    <div>$langOpenCoursesCharacteristics</div>
-                </li>
                 <li class='list-group-item element d-flex justify-content-start align-items-center gap-1 flex-wrap'>
                     <span class='badge $openAccessImgBadge'><i class='fa $openAccessImg'></i></span>
                     <div>$langOpenCoursesOpenAccess</div>
@@ -222,10 +220,8 @@ $tool_content .= "
                         
                             <form class='horizontal-form' role='form' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
 $tool_content .= <<<EOF
+                                <h2 class='text-heading-h3'>$langOpenCoursesCharacter</h2>
                                 <ul class='list-group list-group-flush oc-metedata-list'>
-                                    <li class='list-group-item list-group-item-action'>
-                                        <div>$langOpenCoursesCharacter</div>
-                                    </li>
                                     <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                         <div>$langOpenCoursesType <strong>($langOpenCoursesIsAMinusLevel)</strong></div>
                                         <label class='label-container' aria-label='$langSelect'>

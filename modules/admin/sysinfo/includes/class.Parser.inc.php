@@ -117,7 +117,7 @@ class Parser
                     $mount_parm[] = $parm;
                 }
             }
-        } elseif (CommonFunctions::rfts(((PSI_ROOT_FILESYSTEM === '')||(PHP_OS !== 'Linux'))?"/etc/mtab":"/proc/1/mounts", $mount)) {
+        } elseif (CommonFunctions::rfts(((PSI_ROOT_FILESYSTEM === '')||(PSI_OS !== 'Linux'))?"/etc/mtab":"/proc/1/mounts", $mount)) {
             $mount = preg_split("/\n/", $mount, -1, PREG_SPLIT_NO_EMPTY);
             foreach ($mount as $mount_line) {
                 if (preg_match("/(\S+) (\S+) (\S+) (\S+) ([0-9]+) ([0-9]+)/", $mount_line, $mount_buf)) {
@@ -131,7 +131,9 @@ class Parser
                 }
             }
         }
-        if (CommonFunctions::executeProgram('df', '-k '.$df_param, $df, PSI_DEBUG) && ($df!=="")) {
+        $df = "";
+        CommonFunctions::executeProgram('df', '-k '.$df_param, $df, PSI_DEBUG);
+        if ($df!=="") {
             $df = preg_split("/\n/", $df, -1, PREG_SPLIT_NO_EMPTY);
             if ($get_inodes && PSI_SHOW_INODES) {
                 if (CommonFunctions::executeProgram('df', '-i '.$df_param, $df2, PSI_DEBUG)) {

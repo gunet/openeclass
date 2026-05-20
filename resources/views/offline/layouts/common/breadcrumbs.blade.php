@@ -1,10 +1,10 @@
 
 <div class='col-12 breadcrumbs-container'>
 
-    <div class='d-inline-flex align-items-top overflow-hidden'>
+    <div class='breadcrumbs-init d-inline-flex align-items-top overflow-hidden w-100'>
 
         <!-- this is toggle-button in breadcrumb -->
-        <nav class="me-lg-0 me-2" role="navigation" aria-label="Navigation">
+        <nav class="me-lg-0 me-2" aria-label="Navigation">
             <a class="btn d-lg-none p-0" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" aria-label="{{ trans('langMenu') }}">
                 <svg id='collapse-left-menu-icon' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation">
                     <path d="M5 5C4.44772 5 4 5.44772 4 6V6.5C4 7.05228 4.44772 7.5 5 7.5H19.25C19.9404 7.5 20.5 6.94036 20.5 6.25C20.5 5.55964 19.9404 5 19.25 5H5Z" fill="#2B3944"/>
@@ -17,10 +17,10 @@
 
         @if (!empty($breadcrumbs))
             @if($course_code)
-                <nav style="--bs-breadcrumb-divider: '>';" class="d-flex justify-content-start breadcrumb-content" role="navigation" aria-label="breadcrumb">
+                <nav style="--bs-breadcrumb-divider: '>';" class="d-flex justify-content-start breadcrumb-content" aria-label="breadcrumb">
                     @else
                         <div class='col-12'>
-                            <nav style="--bs-breadcrumb-divider: '>';" class="w-auto h-auto" role="navigation" aria-label="breadcrumb">
+                            <nav style="--bs-breadcrumb-divider: '>';" class="w-auto h-auto" aria-label="breadcrumb">
                                 @endif
                                 <ol class="breadcrumb mb-0 @if(!$course_code) py-1 @endif">
                                     @foreach ($breadcrumbs as $key => $item)
@@ -32,7 +32,7 @@
                                                 </a>
                                             </li>
                                         @else
-                                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium" aria-current="page"><a class='pe-none Neutral-900-cl vsmall-text'>{!! $item['bread_text'] !!}</a></li>
+                                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium"><a class='pe-none Neutral-900-cl vsmall-text' aria-current="{!! $item['bread_text'] !!}">{!! $item['bread_text'] !!}</a></li>
                                         @endif
                                     @endforeach
                                 </ol>

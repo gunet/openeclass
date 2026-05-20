@@ -28,9 +28,8 @@ check_guest();
 
 $toolName = $langMyePortfolio;
 $pageName = $langUploadBio;
-$token = token_generate('eportfolio' . $uid);
 $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
-$navigation[] = array('url' => "index.php?id=$uid&token=$token", 'name' => $langMyePortfolio);
+$navigation[] = array('url' => "index.php", 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div></div>";
@@ -76,7 +75,7 @@ $head_content .= "<script>
                     function confirmDel(url) {
                           bootbox.confirm({ 
                             closeButton: false,
-                            title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
+                            title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h2 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h2>',
                             message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
                             buttons: {
                                 cancel: {
@@ -106,7 +105,7 @@ $tool_content .=
 enableCheckFileSize();
 if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $label = $langReplace;
-    $bio = "<a href='{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$uid&amp;token=$token'>$langBio</a>&nbsp;&nbsp;
+    $bio = "<a href='{$urlAppend}main/eportfolio/index.php?action=get_bio'>$langBio</a>&nbsp;&nbsp;
         <a class='btn deleteAdminBtn' onclick='return confirmDel(this.href)' href='$_SERVER[SCRIPT_NAME]?delete_bio=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>";
 } else {
     $label = $langPathUploadFile;
@@ -124,7 +123,7 @@ $tool_content .=
             <div class='form-group mt-5'>
                 <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                     <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-                    <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn'>$langCancel</a>
+                    <a href='{$urlAppend}main/eportfolio/index.php' class='btn cancelAdminBtn'>$langCancel</a>
                 </div>
             </div>";
 

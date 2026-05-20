@@ -242,7 +242,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
     $data['visibility'] = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
 
     $data['datatype'] = intval($_POST['datatype']);
-    $data['fielddescr_rich_text'] = rich_text_editor('fielddescr', 8, 20, '');
+    $data['fielddescr_rich_text'] = rich_text_editor('fielddescr', 8, 20, '', options: array('id' => 'fielddescr'));
 
     $view = 'admin.users.custom_profile_fields.createStep2';
 
@@ -280,7 +280,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         }
 
         load_js('validation.js');
-        $data['fielddescr_rich_text'] =  rich_text_editor('fielddescr', 8, 20, standard_text_escape($result->description));
+        $data['fielddescr_rich_text'] =  rich_text_editor('fielddescr', 8, 20, standard_text_escape($result->description), options: array('id' => 'fielddescr'));
 
         $data['field_types'] = $field_types = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langLink);
         $data['yes_no'] = array(0 => $langNo, 1 => $langYes);

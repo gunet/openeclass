@@ -14,7 +14,7 @@
                 language: "{{ js_escape(trans('langLanguageCode')) }}",
                 views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
                 onAfterViewLoad: function(view) {
-                    $("#current-month").text(this.getTitle());
+                    $("#current-month").text(this.getTitle()).attr("aria-label", this.getTitle());
                     $(".btn-group button").removeClass("active");
                     $("button[data-calendar-view='" + view + "']").addClass("active");
                 },
@@ -52,6 +52,31 @@
                     calendar.view($this.data("calendar-view"));
                 });
             });
+
+            // After the calendar renders, disable click on cells without .events-link
+            setTimeout(function() {
+                document.querySelectorAll('.cal-month-box .cal-cell1').forEach(day => {
+                    const hasHoliday = day.querySelector('.cal-day-holiday') !== null;
+                    const hasEventsList = day.querySelector('.events-list') !== null;
+                    if (!hasHoliday && !hasEventsList) {
+                        day.style.pointerEvents = 'none'; // disable clickability
+                        day.classList.add('not-clickable');
+                    }
+                });
+            }, 100);
+
+            $('.month-prev-btn, .month-next-btn').on('click', function () {
+                setTimeout(function() {
+                        document.querySelectorAll('.cal-month-box .cal-cell1').forEach(day => {
+                            const hasHoliday = day.querySelector('.cal-day-holiday') !== null;
+                            const hasEventsList = day.querySelector('.events-list') !== null;
+                            if (!hasHoliday && !hasEventsList) {
+                                day.style.pointerEvents = 'none'; // disable clickability
+                                day.classList.add('not-clickable');
+                            }
+                        });
+                }, 100);
+            });
         });
 
         function show_month(day,month,year){
@@ -65,39 +90,37 @@
     <link href="{{ $urlAppend }}template/modern/css/new_calendar.css?v={{ CACHE_SUFFIX }}" rel="stylesheet" type="text/css">
 @endpush
 
-<div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-3'>
+<div class='card bg-transparent card-transparent border-0 mb-3 w-100'>
     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-        <h3 class='mb-0'>
+        <h2 class='text-heading-h3 mb-0'>
             {{ trans('langAgenda') }}
-        </h3>
+        </h2>
         <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}main/personal_calendar/index.php">
             {{ trans('langDetails') }}
         </a>
     </div>
 </div>
-<div class='panel panel-admin panel-admin-calendar card-transparent border-0 mt-lg-0 mt-2 sticky-column-course-home'>
-
+<div class='panel panel-admin panel-admin-calendar card-transparent border-0 mt-lg-0 mt-2'>
     {!! $user_personal_calendar !!}
-
 </div>
 
-<div class='card bg-transparent card-transparent border-0 sticky-column-course-home'>
+<div class='card bg-transparent card-transparent border-0'>
     <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
         <div class='d-flex align-items-center px-2 py-1'>
             <span class='event event-important'></span>
-            <span class="agenda-comment"> {{ trans('langAgendaDueDay') }}</span>
+            <span class="agenda-comment" tabindex='0'> {{ trans('langAgendaDueDay') }}</span>
         </div>
         <div class='d-flex align-items-center px-2 py-1'>
             <span class='event event-info'></span>
-            <span class="agenda-comment">{{ trans('langAgendaCourseEvent') }}</span>
+            <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaCourseEvent') }}</span>
         </div>
         <div class='d-flex align-items-center px-2 py-1'>
             <span class='event event-success'></span>
-            <span class="agenda-comment">{{ trans('langAgendaSystemEvent') }}</span>
+            <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaSystemEvent') }}</span>
         </div>
         <div class='d-flex align-items-center px-2 py-1'>
             <span class='event event-special'></span>
-            <span class="agenda-comment">{{ trans('langAgendaPersonalEvent') }}</span>
+            <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaPersonalEvent') }}</span>
         </div>
     </div>
 </div>

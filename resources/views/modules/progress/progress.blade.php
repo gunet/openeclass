@@ -192,7 +192,7 @@
                                 </p>
                             @if ($badge->completed != 1)
                                 <div class="not_completed">
-                                    <div class="certificate_panel_percentage_compact center-block">{{ round($badge->completed_criteria / $badge->total_criteria * 100, 0) }}%</div>
+                                    <div class="certificate_panel_percentage_compact center-block">{{ $badge->total_criteria > 0 ? round($badge->completed_criteria / $badge->total_criteria * 100, 0) : 0 }}%</div>
                                 </div>
                             @endif
                             </a>
@@ -249,7 +249,7 @@
                                         {{-- <img class="badge_waiting" src="{{ $template_base }}/img/game/badge.png"> --}}
                                     </div>
                                 @else
-                                    <div class="certificate_panel_percentage">{{ round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) }}%</div>
+                                    <div class="certificate_panel_percentage">{{ $certificate->total_criteria > 0 ? round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) : 0 }}%</div>
                                 @endif
                             </div>
                         </a>

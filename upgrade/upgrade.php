@@ -112,12 +112,14 @@ if ($command_line or $ajax_call) {
     if (!isset($_SESSION['upgrade_started']) and version_compare($oldversion, '3.15', '>') and version_compare($oldversion, '4.0', '<')) {
         $_SESSION['upgrade_started'] = true;
     }
-    $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14', '3.15', '3.16', '4.0', '4.1', '4.2'];
+    $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14', '3.15', '3.16', '4.0', '4.1', '4.2', '4.3', '4.4'];
 
     if (isset($_SESSION['upgrade_step'])) {
         $step = $_SESSION['upgrade_step'];
     }
-
+if (!DBHelper::fieldExists('exercise_answer_record', 'centainty')) {
+        Database::get()->query("ALTER TABLE exercise_answer_record ADD `centainty` INT NOT NULL DEFAULT 0");
+    }
     foreach ($versions as $version) {
         if (version_compare($oldversion, $version, '<')) {
 
@@ -259,6 +261,18 @@ if ($command_line or $ajax_call) {
             } elseif ($version === '4.2') {
                 upgrade_to_4_2($tbl_options);
                 steps_finished();
+            } elseif ($version === '4.3') {
+                upgrade_to_4_3($tbl_options);
+                steps_finished();
+            } elseif ($version === '4.4') {
+                if ($step == 1) {
+                    upgrade_to_4_4($tbl_options);
+                    break_on_step();
+                }
+                if ($step == 2) {
+                    upgrade_openbadges_backpack($tbl_options);
+                    steps_finished();
+                }
             }
         }
         if ($command_line) {
@@ -381,9 +395,9 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
                   <div class='col-lg-8 col-md-10 m-auto py-4'>
                       <div class='card panelCard card-default h-100'>
                           <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     " . strtok($image, '.') . "
-                                </h3>
+                                </h2>
                           </div>
                           <div class='card-body'>
                               <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='{$urlAppend}/template/modern/images/screenshots/$image' alt='Image for current theme'/>

@@ -11,12 +11,10 @@
 @endpush
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
+<div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -89,10 +87,9 @@
 
 
                 </div>
-            </div>
+            </main>
         </div>
     </div>
-</div>
 
 
 <div class='modal fade' id='BookingHistoryDelete' tabindex='-1' aria-labelledby='BookingHistoryDelete' aria-hidden='true'>
@@ -102,7 +99,7 @@
                 <div class='modal-header'>
                     <div class='modal-title' id='BookingHistoryDelete'>
                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2">{!! trans('langDelete') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2">{!! trans('langDelete') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-center'>

@@ -97,6 +97,14 @@ if ($course->visible == COURSE_OPEN) {
     redirect_to_home_page('main/portfolio.php');
 }
 
+$course_tenant = getCourseTenant($course_id);
+$user_tenant = getUserTenant($uid);
+
+// Restrict access if user tries to open a course that belongs to a different tenant.
+if ($course_tenant->id !== $user_tenant->id) {
+    redirect_to_home_page();
+}
+
 $pageTitle = $langRegCourses;
 
 if ($course->visible == COURSE_CLOSED) {

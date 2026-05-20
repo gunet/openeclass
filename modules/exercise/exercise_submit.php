@@ -18,15 +18,15 @@
  *
  */
 
-include 'exercise.class.php';
-include 'question.class.php';
-include 'answer.class.php';
-include 'exercise.lib.php';
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
+require_once 'exercise.lib.php';
 
 $require_current_course = true;
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/attendance/functions.php';
 require_once 'modules/group/group_functions.php';
@@ -158,12 +158,12 @@ if (isset($_COOKIE['inExercise'])) {
     redirect_to_home_page($back_url);
 }
 
-// Check if an exercise ID exists in the URL
-// and if so it gets the exercise object either by the session (if it exists there)
+// Check if an exercise ID exists in the URL,
+// and if so, it gets the exercise object either by the session (if it exists there)
 // or by initializing it using the exercise ID
 if (isset($_REQUEST['exerciseId'])) {
     $exerciseId = intval($_REQUEST['exerciseId']);
-    // Check if exercise object exists in session
+    // Check if an exercise object exists in session
     if (isset($_SESSION['objExercise'][$exerciseId])) {
         $objExercise = $_SESSION['objExercise'][$exerciseId];
     } else {
@@ -191,6 +191,20 @@ if ($objExercise->isExam()) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
         header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
     }
+}
+// check if exercise uses SEB (Safe Exam Browser)
+if (isSebEnabled($_REQUEST['exerciseId']) && $objExercise->isSeb() && !isset($_GET['seb'])) {
+    if (!str_contains($_SERVER['HTTP_USER_AGENT'], 'Open-eClass-Exam')) { // User is NOT using SEB
+        Session::flash('message', "$langSEBInfo1");
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page($back_url);
+    }
+}
+
+// Safe Exam Browser intro
+if (isset($_GET['seb'])) {
+    view('modules.exercise.seb', ['course_code' => $course_code, 'eid' => $objExercise->selectId()]);
+    exit;
 }
 
 $pageName = $objExercise->selectTitle();
@@ -254,10 +268,10 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                 // Replace eurid of recorded audio with new eurid in document table.
                 // Replace recorded audio of old eurid with new eurid in exercise_answer_record table.
                 // It's a special case for oral question type.
-                $old_answers = Database::get()->queryArray("SELECT answer_record_id,answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+                $old_answers = Database::get()->queryArray("SELECT answer_record_id, answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
                 if (count($old_answers) > 0) {
                     foreach ($old_answers as $old_an) {
-                        if (strpos($old_an->answer, '.mp3') !== false) { // oral question
+                        if (isset($old_an->answer) && str_contains($old_an->answer, '.mp3')) { // oral question
                             $old_recorded = $old_an->answer;
                             $temp_old_recorded = explode('-', $old_recorded);
                             if (count($temp_old_recorded) == 4 && $temp_old_recorded[3] == $eurid . '.mp3') {
@@ -299,7 +313,7 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
 
 
 if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
-    // If the exercise is password protected
+    // If the exercise is password-protected
     $password = $objExercise->selectPasswordLock();
     if ($password && !$is_editor) {
         if(!isset($_SESSION['password'][$exerciseId][$attempt_value])) {
@@ -315,7 +329,7 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
 }
 
 
-// If the exercise is IP protected
+// If the exercise is IP-protected
 $ips = $objExercise->selectIPLock();
 if ($ips && !$is_editor){
     $user_ip = Log::get_client_ip();
@@ -329,8 +343,6 @@ if ($ips && !$is_editor){
 // If the user has clicked on the "Cancel" button,
 // end the exercise and return to the exercise list
 if (isset($_POST['buttonCancel'])) {
-
-
     $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     Database::get()->query("UPDATE exercise_user_record
         SET record_end_date = " . DBHelper::timeAfter() . ", attempt_status = ?d, total_score = 0, total_weighting = 0
@@ -358,6 +370,7 @@ $exerciseTempSave = $objExercise->selectTempSave();
 $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
+$exerciseCalcGradeMethod = $objExercise->getCalcGradeMethod();
 
 // In this php block we have been saving the subset of predefined answers in ordering question
 // when the exercise has MULTIPLE_PAGE_TYPE type or user press the save button.
@@ -505,11 +518,18 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                     e.preventDefault();
                     return false;
                 });
+
+                $('#cancelExercise,.noAcceptAttempt').css('cursor', 'pointer');
+                $('.noAcceptAttempt').on('click', function (e) {
+                    e.preventDefault();
+                    window.location.href='$urlServer'+'modules/exercise/index.php?course=$course_code';
+                });
             });
     </script>";
 
-    if ($stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
-        $tool_content .= "
+    if ($stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE &&
+        ($objExercise->selectAttemptsAllowed() == 0 or isset($_POST['acceptAttempt']))) {
+            $tool_content .= "
             <div class='col-12 d-flex justify-content-center align-items-center my-4 px-0'>
                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
                     <div class='card-body'>
@@ -533,7 +553,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                         <div class='modal-header'>
                             <div class='modal-title' id='cancelModalLabel'>
                                 <div class='icon-modal-default'><i class='fa-solid fa-triangle-exclamation Warning-200-cl fa-xl'></i></div>
-                                <div class='modal-title-default text-center mb-0'>$langDelTitle</div>
+                                <h2 class='modal-title-default text-center mb-0'>$langDelTitle</h2>
                             </div>
                         </div>
                         <div class='modal-body text-center py-0'>
@@ -544,8 +564,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                         </div>
                     </div>
                 </div>
-            </div>
-            ";
+            </div>";
     }
 
 }
@@ -555,8 +574,9 @@ $exercise_StartDate = new DateTime($objExercise->selectStartDate());
 $exercise_EndDate = $objExercise->selectEndDate();
 $exercise_EndDate = isset($exercise_EndDate) ? new DateTime($objExercise->selectEndDate()) : $exercise_EndDate;
 $choice = $_POST['choice'] ?? '';
+$certainty = $_POST['certainty'] ?? '';
 
-// If there are answers in the session get them
+// If there are answers in the session, get them
 if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
     $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
 } else {
@@ -584,7 +604,7 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
             $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
             $record_end_date = date('Y-m-d H:i:s', time());
             $objExercise->save_unanswered();
-            $objExercise->record_answers($choice, $exerciseResult, 'update');
+            $objExercise->record_answers($choice, $certainty, $exerciseResult, 'update');
             $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
                                           SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
@@ -623,7 +643,7 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
 }
 
 
-// If question list exists in the Session get it for there
+// If a question list exists in the Session get it for there
 // else get it using the appropriate object method and save it to the session
 if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     $questionList = $_SESSION['questionList'][$exerciseId][$attempt_value];
@@ -701,15 +721,15 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
                 $form_next_link = "{$urlAppend}modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$exerciseId";
                 $form_cancel_link = "{$urlAppend}modules/exercise/index.php?course=$course_code";
             }
-            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" .
-                ($left_attempts == 1 ? $langExerciseAttemptLeft : sprintf($langExerciseAttemptsLeft, $left_attempts)) .
-                ' ' . $langExerciseAttemptContinue . "</span></div>
-                <form action='$form_next_link' method='post'>
-                    <div class='col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap' style='margin-top:70px;'>
-                            <input class='btn successAdminBtn' style='float: right;' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
-                            <a href='$form_cancel_link' class='btn cancelAdminBtn'>$langCancel</a>
-                    </div>
-                </form>";
+            $tool_content .= "<div class='alert alert-warning d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <span>" . ($left_attempts == 1 ? $langExerciseAttemptLeft : sprintf($langExerciseAttemptsLeft, $left_attempts)) . ' ' . $langExerciseAttemptContinue . "</span>
+                                <form class='mt-0' action='$form_next_link' method='post'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap'>
+                                        <a href='$form_cancel_link' class='btn cancelAdminBtn noAcceptAttempt text-nowrap text-decoration-none'>$langCancel</a>
+                                        <input class='btn successAdminBtn' style='float: right;' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
+                                    </div>
+                                </form>
+                             </div>";
             unset_exercise_var($exerciseId);
             draw($tool_content, 2, null, $head_content);
             exit;
@@ -752,6 +772,7 @@ if ($exercise_EndDate) {
 $questionNum = count($exerciseResult) + 1;
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
+
     $time_expired = false;
     // check if user's time expired
     if (isset($timeleft) and $timeleft <= 0) {
@@ -760,7 +781,7 @@ if (isset($_POST['formSent'])) {
 
     // insert answers in the database and add them in the $exerciseResult array which is returned
     $action = isset($paused_attempt) ? 'update' : 'insert';
-    $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
+    $exerciseResult = $objExercise->record_answers($choice, $certainty, $exerciseResult, $action);
     $questionNum = count($exerciseResult) + 1;
     Database::get()->query('UPDATE exercise_user_record
         SET record_end_date = ' . DBHelper::timeAfter() . ', secs_remaining = ?d
@@ -778,7 +799,7 @@ if (isset($_POST['formSent'])) {
         }
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $totalScore = $objExercise->calculate_total_score($eurid);
-        $exerciseFeedback = $objExercise->selectFeedback();
+        $exerciseFeedback = $objExercise->getEndMessage();
 
         if ($objExercise->isRandom() or $objExercise->hasQuestionListWithRandomCriteria()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
@@ -876,7 +897,7 @@ if (isset($timeleft)) { // time remaining
 
 if (!empty($exerciseDescription)) { // description
     $tool_content .= "<div class='col-sm-12 mb-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
-    <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langDescription</h3></div>";
+    <div class='card-header border-0 d-flex justify-content-between align-items-center'><h2 class='text-heading-h3'>$langDescription</h2></div>";
     $tool_content .= "<div class='card-body'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
     $tool_content .= "</div></div>";
 }
@@ -1006,10 +1027,83 @@ if ($questionList) {
         $questionId = $questionList[$questionNumber];
 
         if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+
+            // Accessibility
+            $head_content .= "
+            <script type='text/javascript'>
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    const tabs = document.querySelectorAll('.exercise-tablist .question-tab');
+
+                    tabs.forEach(tab => {
+                        if (tab.getAttribute('aria-selected') === 'true') {
+                            tab.setAttribute('tabindex', '0');
+                        } else {
+                            tab.setAttribute('tabindex', '-1');
+                        }
+                    });
+
+                    // Function to activate tab
+                    function activateTabs(currentTabs) {
+                        currentTabs.forEach(t => {
+                            t.setAttribute('aria-selected', 'false');
+                            t.setAttribute('tabindex', '-1');
+                            t.classList.remove('tab-active');
+                        });
+                    }
+                    
+                    tabs.forEach((tab) => {
+                        tab.addEventListener('keydown', (e) => {
+                            const currentTabs = document.querySelectorAll('.exercise-tablist .question-tab');
+                            const currentIndex = Array.prototype.indexOf.call(currentTabs, document.activeElement);
+                            if (currentIndex === -1) return;
+                            if (e.key === 'ArrowRight') {
+                                e.preventDefault();
+                                const nextIndex = (currentIndex + 1) % currentTabs.length;
+                                activateTabs(currentTabs);
+                                currentTabs[nextIndex].setAttribute('aria-selected', 'true');
+                                currentTabs[nextIndex].setAttribute('tabindex', '0');
+                                currentTabs[nextIndex].classList.add('tab-active');
+                                currentTabs[nextIndex].focus();
+                            } else if (e.key === 'ArrowLeft') {
+                                e.preventDefault();
+                                const prevIndex = (currentIndex - 1 + currentTabs.length) % currentTabs.length;
+                                activateTabs(currentTabs);
+                                currentTabs[prevIndex].setAttribute('aria-selected', 'true');
+                                currentTabs[prevIndex].setAttribute('tabindex', '0');
+                                currentTabs[prevIndex].classList.add('tab-active');
+                                currentTabs[prevIndex].focus();
+                            }
+                        });
+                    });
+                });
+
+                $(function() {
+                    $('.question-tab[data-qid=$questionNumber]').focus();
+                    $('.question-tab').on('click keydown', function (e) {
+                        if (e.type === 'click' || (e.type === 'keydown' && e.key === 'Enter')) {
+                            e.preventDefault();
+                            $('#hidden_qid').prop('disabled', false);
+                            var qid = $(this).data('qid');
+                            $('#hidden_qid').val(qid);
+                            document.getElementById('hidden_qid').click();
+                        }
+                    });
+                    $(document).click(function(event) {
+                        if (!$(event.target).hasClass('question-tab')) {
+                            $('#hidden_qid').prop('disabled', true);
+                        }
+                    });
+                });
+            </script>";
+
             // display question numbering buttons
             $tool_content .= "<div class='card panelCard card-transparent p-0 border-0'>";
             $tool_content .= "<div class='card-body p-0 border-0'>";
-            $tool_content .= "<div class='d-flex justify-content-center p-0 flex-wrap gap-2 border-0'>";
+            $tool_content .= "<input type='hidden' id='hidden_qid' name='q_id'>";
+            $tool_content .= "<ul class='nav nav-tabs border-0 exercise-tablist p-2' role='tablist'>";
+            $tab_counter = 1;
+            $ariaSelected = '';
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {
@@ -1024,12 +1118,19 @@ if ($questionList) {
                 } else {
                     $extra_style = '';
                 }
+                if ($tab_counter == 1) {
+                    $ariaSelected = 'true';
+                } else {
+                    $ariaSelected = 'false';
+                }
+                $ariaLabelTitle = q($langQuestion) . ' ' . $k . ' ' . $title;
                 $tool_content .= "
-                    <div class='p-2' style='display: inline-block; margin-right: 10px;'>
-                        <input class='btn $class' $extra_style type='submit' name='q_id' id='q_num$k' value='$k' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$title'>
-                    </div>";
+                    <li class='nav-item' style='display: inline-block; margin-right: 10px; margin-bottom: 10px;' data-bs-toggle='tooltip' data-bs-placement='top' title='$title'>
+                        <a id='tab-link-{$q_id}' aria-controls='qPanel{$q_id}' aria-selected='$ariaSelected' class='btn $class nav-link question-tab' $extra_style type='submit' data-qid='$k' data-bs-toggle='tab' role='tab' aria-label='$ariaLabelTitle'>$k</a>
+                    </li>";
+                $tab_counter++;
             }
-            $tool_content .= "</div></div></div>";
+            $tool_content .= "</ul></div></div>";
         }
 
         $question = $questions[$questionList[$questionNumber]];
@@ -1045,7 +1146,7 @@ if ($questionList) {
 
 // "Temporary save" button
 if ($uid and $exerciseTempSave) {
-    $tempSaveButton = "<input class='btn submitAdminBtn blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
+    $tempSaveButton = "<button class='btn submitAdminBtn blockUI' type='submit' name='buttonSave'>$langTemporarySave</button>";
 } else {
     $tempSaveButton = '';
 }
@@ -1098,10 +1199,12 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap' style='margin-top:100px;'>";
 
 // "Cancel" button
-$tool_content .= "<input class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
+if (!isset($_SESSION['safe_exam_browser_view'])) {
+    $tool_content .= "<button class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton'>$langCancel</button>";
+}
 
 // "Submit" button
-$tool_content .= "<input class='btn successAdminBtn blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
+$tool_content .= "<button class='btn successAdminBtn blockUI' type='submit' name='buttonFinish'>$langExerciseFinalSubmit</button>";
 if ($exerciseType != SINGLE_PAGE_TYPE) {
     $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
 }

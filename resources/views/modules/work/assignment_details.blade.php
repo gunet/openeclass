@@ -1,9 +1,9 @@
 <div class='col-12'>
     <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-            <h3 class='mb-0'>
+            <h2 class='text-heading-h3 mb-0'>
                 {{ trans('langWorkInfo') }}
-            </h3>
+            </h2>
             @if ($is_editor)
                 <a href='{{ $urlAppend }}modules/work/index.php?course={{ $course_code }}&amp;id={{ $row->id }}&amp;choice=edit' aria-label='{{ trans('langEditChange') }}'>
                     <span class='fa-solid fa-edit fa-lg' title='{{ trans('langEditChange') }}' data-bs-toggle='tooltip'></span>

@@ -24,84 +24,30 @@ $require_noerrors = true;
 require_once('minit.php');
 require_once('include/tools.php');
 
-$toolArr = lessonToolsMenu(false);
-
 $groupsArr = array();
 $toolsArr = array();
 
-$group = new stdClass();
-$group->id = 0;
-$group->name = $langIdentity;
-$groupsArr[] = $group;
-
-$tool = new stdClass();
-$tool->id = 0;
-$tool->name = $langCourseProgram;
-$tool->link = $urlAppend . 'courses/' . $course_code;
-$tool->img = 'coursedescription';
-$tool->type = 'coursedescription';
-$tool->active = true;
-$toolsArr[0][] = $tool;
-
-$course_info = Database::get()->querySingle("SELECT view_type FROM course WHERE id = ?d", $course_id);
-if ($course_info->view_type == 'units') {
-    $first_unit_id = null;
-    if ($_SESSION['status'] == USER_TEACHER) {
-        $cu = Database::get()->querySingle("SELECT id FROM course_units
-                                             WHERE course_id = ?d AND `order` >= 0
-                                          ORDER BY `order` ASC LIMIT 1", $course_id);
-        if ($cu) {
-            $first_unit_id = $cu->id;
-        }
-    } else {
-        $cu = Database::get()->querySingle("SELECT id, start_week FROM course_units 
-                                            WHERE course_id = ?d 
-                                            AND visible = 1 AND `order` >= 0 
-                                            ORDER BY `order` ASC LIMIT 1", $course_id);
-        if ($cu) {
-            if (is_null($cu->start_week) or (!(is_null($cu->start_week)) and (date('Y-m-d') >= $cu->start_week))) {
-                $first_unit_id = $cu->id;
-            }
-        }
-    }
-
-    if (!is_null($first_unit_id)) {
-        $tool = new stdClass();
-        $tool->id = 1;
-        $tool->name = $langCourseUnits;
-        $tool->link = $urlAppend . 'modules/units/index.php?course=' . $course_code . '&id=' . $first_unit_id;
-        $tool->img = 'courseunits';
-        $tool->type = 'courseunits';
-        $tool->active = true;
-        $toolsArr[0][] = $tool;
-    }
-}
-
+$toolArr = lessonToolsMenu(false);
+// course tools
 $offset = 1;
+for ($i = 0; $i < count($toolArr); $i++) {
+    $id = $i + $offset;
 
-if (is_array($toolArr)) {
-    $numOfToolGroups = count($toolArr);
+    if ($toolArr[$i][0]['type'] == 'text') {
+        $group = new stdClass();
+        $group->id = $id;
+        $group->name = $toolArr[$i][0]['text'];
+        $groupsArr[] = $group;
 
-    for ($i = 0; $i < $numOfToolGroups; $i++) {
-        $id = $i + $offset;
-
-        if ($toolArr[$i][0]['type'] == 'text') {
-            $group = new stdClass();
-            $group->id = $id;
-            $group->name = $toolArr[$i][0]['text'];
-            $groupsArr[] = $group;
-
-            $numOfTools = count($toolArr[$i][1]);
-            for ($j = 0; $j < $numOfTools; $j++) {
-                $tool = new stdClass();
-                $tool->id = (isset($toolArr[$i][4][$j])) ? $toolArr[$i][4][$j] : null;
-                $tool->name = $toolArr[$i][1][$j];
-                $tool->link = $toolArr[$i][2][$j];
-                $tool->img = $toolArr[$i][3][$j];
-                $tool->type = getTypeFromImage($toolArr[$i][3][$j]);
-                $tool->active = getActiveFromImage($toolArr[$i][3][$j]);
-                $toolsArr[$id][] = $tool;
-            }
+        $numOfTools = count($toolArr[$i][1]);
+        for ($j = 0; $j < $numOfTools; $j++) {
+            $tool = new stdClass();
+            $tool->id = (isset($toolArr[$i][4][$j])) ? $toolArr[$i][4][$j] : null;
+            $tool->name = $toolArr[$i][1][$j];
+            $tool->link = $toolArr[$i][2][$j];
+            $tool->img = $toolArr[$i][3][$j];
+            $tool->active = visible_module($toolArr[$i][4][$j], $course_id);
+            $toolsArr[$id][] = $tool;
         }
     }
 }
@@ -109,10 +55,15 @@ if (is_array($toolArr)) {
 echo createDom($groupsArr, $toolsArr);
 exit();
 
-//////////////////////////////////////////////////////////////////////////////////////
-
-function createDom($groupsArr, $toolsArr) {
-    global $status;
+/**
+ * Generates an XML representation of tool groups and their associated tools.
+ *
+ * @param array $groupsArr An array of group objects, where each object contains information about a tool group.
+ * @param array $toolsArr An array where keys are group IDs and values are arrays of tool objects associated with the respective group.
+ * @return string The generated XML as a string.
+ */
+function createDom(array $groupsArr, array $toolsArr) {
+    global $status, $uid;
 
     $dom = new DomDocument('1.0', 'utf-8');
 
@@ -121,18 +72,15 @@ function createDom($groupsArr, $toolsArr) {
     foreach ($groupsArr as $group) {
 
         if (isset($toolsArr[$group->id])) {
-
             $g = $root->appendChild($dom->createElement('toolgroup'));
-            $gname = $g->appendChild(new DOMAttr('name', $group->name));
+            $g->appendChild(new DOMAttr('name', $group->name));
 
             foreach ($toolsArr[$group->id] as $tool) {
                 $t = $g->appendChild($dom->createElement('tool'));
-
-                $name = $t->appendChild(new DOMAttr('name', $tool->name));
-                $link = $t->appendChild(new DOMAttr('link', correctLink($tool->link)));
-                $redirect = $t->appendChild(new DOMAttr('redirect', correctRedirect($tool->link)));
-                $type = $t->appendChild(new DOMAttr('type', $tool->type));
-                $acti = $t->appendChild(new DOMAttr('active', $tool->active));
+                $t->appendChild(new DOMAttr('name', $tool->name));
+                $t->appendChild(new DOMAttr('link', correctLink($tool->link)));
+                $t->appendChild(new DOMAttr('redirect', correctRedirect($tool->link)));
+                $t->appendChild(new DOMAttr('active', $tool->active));
             }
         }
     }
@@ -140,7 +88,8 @@ function createDom($groupsArr, $toolsArr) {
     if ($status == USER_TEACHER || $status == USER_STUDENT) {
         $stname = ($status == USER_TEACHER) ? 'teacher' : 'student';
         $st = $root->appendChild($dom->createElement('status'));
-        $st->appendChild(new DOMAttr('name', q($stname)));
+        $st->appendChild(new DOMAttr('name', $stname));
+
     }
 
     $dom->formatOutput = true;
@@ -150,37 +99,16 @@ function createDom($groupsArr, $toolsArr) {
 
 function correctLink($value) {
     global $urlServer, $urlAppend;
-    $link = $urlServer . substr($value, strlen($urlAppend));
+
+    $link = $urlServer . substr($value, strlen($urlAppend)) . '&view=mobile';
     $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
     $redirect = 'redirect=' . urlencode($link);
+
     return $urlServer . 'modules/mobile/mlogin.php' . $profile . $redirect;
 }
 
 function correctRedirect($value) {
     global $urlServer, $urlAppend;
-    return $urlServer . substr($value, strlen($urlAppend));
-}
 
-function getTypeFromImage($value) {
-    $ret = $value;
-
-    if (substr($value, (strlen('_on.png') * -1)) == '_on.png') {
-        $ret = substr($value, 0, (strlen('_on.png') * -1));
-    }
-
-    if (substr($value, (strlen('_off.png') * -1)) == '_off.png') {
-        $ret = substr($value, 0, (strlen('_off.png') * -1));
-    }
-
-    return $ret;
-}
-
-function getActiveFromImage($value) {
-    $ret = "true";
-
-    if (substr($value, (strlen('_off.png') * -1)) === '_off.png') {
-        $ret = "false";
-    }
-
-    return $ret;
+    return $urlServer . substr($value, strlen($urlAppend)) . urlencode('&view=mobile');
 }

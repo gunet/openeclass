@@ -20,13 +20,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
-        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     
                 <div class="row">
 
@@ -49,7 +46,7 @@
                         <div class="card panelCard border-card-left-default px-lg-4 py-lg-3">
                             <div class='card-header border-0'>
                                 <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                    <h3>{{ trans('langDetails') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langDetails') }}</h2>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -121,12 +118,11 @@
                     </div>
 
                 </div>
-            </div>
+            </main>
 
         </div>
     
     </div>
-</div>
 
 
 
@@ -138,7 +134,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-solid fa-check fa-xl Neutral-500-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="doRegistrationLabel">{!! trans('langSubmitParticipation') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="doRegistrationLabel">{!! trans('langSubmitParticipation') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-center'>
@@ -164,7 +160,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="undoRegistrationLabel">{!! trans('langNoSubmitRegistration') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="undoRegistrationLabel">{!! trans('langNoSubmitRegistration') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-center'>

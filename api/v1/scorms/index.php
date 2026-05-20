@@ -1,5 +1,6 @@
 <?php
 
+
 /*
  *  ========================================================================
  *  * Open eClass
@@ -18,7 +19,9 @@
  *
  */
 
-function get_scorm_sco_id($course_code, $lp_id) {
+
+function get_scorm_sco_id($course_code, $lp_id)
+{
     $path = "courses/$course_code/scormPackages/path_$lp_id";
     if (is_dir($path)) {
         $path .= "/imsmanifest.xml";
@@ -31,7 +34,9 @@ function get_scorm_sco_id($course_code, $lp_id) {
     }
 }
 
-function api_method($access) {
+
+function api_method($access)
+{
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
     }
@@ -41,11 +46,17 @@ function api_method($access) {
         if (!$lp) {
             Access::error(3, "SCORM with id '$_GET[scorm_id]' not found");
         }
+
+        // Check if SCORM's course belongs to allowed departments
+        if (!Access::checkCourseDepartmentAccess($lp->course_id, $access->allowedDepartments)) {
+            Access::error(403, 'Error: course is not in an allowed department', 403);
+        }
+
         $lp_data = [
-                'id' => $lp->learnPath_id,
-                'name' => $lp->name,
-                'summary' => $lp->comment,
-                'order' => $lp->rank,
+            'id' => $lp->learnPath_id,
+            'name' => $lp->name,
+            'summary' => $lp->comment,
+            'order' => $lp->rank,
         ];
         $course_code = course_id_to_code($lp->course_id);
         $sco_id = get_scorm_sco_id($course_code, $lp->learnPath_id);
@@ -53,16 +64,25 @@ function api_method($access) {
             $lp_data['sco_id'] = $sco_id;
         }
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode($lp_data, JSON_UNESCAPED_UNICODE);
         exit();
     }
     if (isset($_GET['course_id'])) {
         $course_id = $_GET['course_id'];
-        $course = Database::get()->querySingle('SELECT id, code, visible FROM course
+        $course = Database::get()->querySingle(
+            'SELECT id, code, visible FROM course
             WHERE code = ?s AND visible <> ?d',
-            $course_id, COURSE_INACTIVE);
+            $course_id,
+            COURSE_INACTIVE
+        );
         if (!$course) {
             Access::error(3, "Course with id '$course_id' not found");
+        }
+
+        // Check if course belongs to allowed departments
+        if (!Access::checkCourseDepartmentAccess($course->id, $access->allowedDepartments)) {
+            Access::error(403, 'Error: course is not in an allowed department', 403);
         }
     } else {
         $course = null;
@@ -70,25 +90,38 @@ function api_method($access) {
     $section = null;
     if (isset($_GET['section_id'])) {
         if ($course) {
-            $section = Database::get()->querySingle('SELECT id FROM course_units
+            $section = Database::get()->querySingle(
+                'SELECT id FROM course_units
               WHERE course_id = ?d AND id = ?d',
-              $course->id, $_GET['section_id']);
+                $course->id,
+                $_GET['section_id']
+            );
             if (!$section) {
                 Access::error(3, "Section with id '$_GET[section_id]' not found for course '{$course->id}'");
             }
-            $course_code = $course_code;
+            $course_code = $course->code;
         } else {
-            $section = Database::get()->querySingle('SELECT id, course_id FROM course_units WHERE id = ?d',
-                $_GET['section_id']);
+            $section = Database::get()->querySingle(
+                'SELECT id, course_id FROM course_units WHERE id = ?d',
+                $_GET['section_id']
+            );
             if (!$section) {
                 Access::error(3, "Section with id '$_GET[section_id]' not found");
             }
+
+            // Check if section's course belongs to allowed departments
+            if (!Access::checkCourseDepartmentAccess($section->course_id, $access->allowedDepartments)) {
+                Access::error(403, 'Error: course is not in an allowed department', 403);
+            }
+
             $course_id = $section->course_id;
             $course_code = course_id_to_code($course_id);
         }
-        $lps = Database::get()->queryArray("SELECT title, comments, res_id, `order`
+        $lps = Database::get()->queryArray(
+            "SELECT title, comments, res_id, `order`
             FROM unit_resources WHERE unit_id = ?d AND type = 'lp' ORDER BY `order`",
-            $section->id);
+            $section->id
+        );
         $lp_data = array_filter(array_map(function ($lp) use ($course_code) {
             $sco_id = get_scorm_sco_id($course_code, $lp->res_id);
             if ($sco_id) {
@@ -126,9 +159,11 @@ function api_method($access) {
         }, $lps));
     }
     header('Content-Type: application/json');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($lp_data, JSON_UNESCAPED_UNICODE);
     exit();
 }
+
 
 chdir('..');
 require_once 'apiCall.php';

@@ -2,18 +2,18 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
 
             @include('layouts.partials.show_alert')
 
             @if (Session::has('login_error'))
-                <div class='modal show' id='warning-modal' tabindex='-1'>
+                <div class='modal show' id='warning-modal' tabindex='0'>
                     <div class='modal-dialog modal-dialog-centered'>
                         <div class='modal-content border-0 p-0'>
                             <div class='modal-header d-flex justify-content-between align-items-center'>
-                                <div class='modal-title'>{{ trans('langError') }}</div>
-                                <button aria-label="{{ trans('langClose') }}" type='button' class='close' data-bs-dismiss='modal'></button>
+                                <h2 tabindex="0" class='modal-title' id='modal-title-id'>{{ trans('langError') }}</h2>
+                                <button aria-label="{{ trans('langClose') }}" type='button' class='close' data-bs-dismiss='modal' id="closeBtn"></button>
                             </div>
                             <div class='modal-body'>
                                 <div class='alert alert-warning'>
@@ -25,13 +25,20 @@
                     </div>
                 </div>
                 @push('bottom_scripts')
-                    <script>
-                        var warningModal = new bootstrap.Modal(document.getElementById('warning-modal'), {});
-                        warningModal.toggle();
-                        document.body.addEventListener('keydown', function(e) {
-                          if (e.key == "Escape") {
-                            warningModal.hide();
-                          }
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            var warningModalElement = document.getElementById('warning-modal');
+                            var warningModal = new bootstrap.Modal(warningModalElement, {});
+                            var focusTarget = document.getElementById('modal-title-id');
+                            warningModal.show();
+                            warningModalElement.addEventListener('shown.bs.modal', function () {
+                                focusTarget.focus();
+                            });
+                            document.body.addEventListener('keydown', function(e) {
+                                if (e.key === "Escape") {
+                                    warningModal.hide();
+                                }
+                            });
                         });
                     </script>
                 @endpush
@@ -73,7 +80,7 @@
                                                                             <div class='modal-dialog'>
                                                                                 <div class='modal-content'>
                                                                                     <div class='modal-header'>
-                                                                                        <div class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</div>
+                                                                                        <h2 class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</h2>
                                                                                         <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                                                                     </div>
                                                                                     <div class='modal-body'>
@@ -111,7 +118,7 @@
                                                                                 <div class='modal-dialog'>
                                                                                     <div class='modal-content'>
                                                                                         <div class='modal-header'>
-                                                                                            <div class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</div>
+                                                                                            <h2 class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</h2>
                                                                                             <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                                                                         </div>
                                                                                         <div class='modal-body'>
@@ -161,9 +168,9 @@
                                                                                     <div class='modal-dialog'>
                                                                                         <div class='modal-content'>
                                                                                             <div class='modal-header'>
-                                                                                                <div class='modal-title' id='LoginFormAnotherOptionLabel-{{ $loop->index }}'>
+                                                                                                <h2 class='modal-title' id='LoginFormAnotherOptionLabel-{{ $loop->index }}'>
                                                                                                     {{ $authLink[count($authLink)-1][2] }}
-                                                                                                </div>
+                                                                                                </h2>
                                                                                                 <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                                                                             </div>
                                                                                             <div class='modal-body d-flex justify-content-center align-items-center'>
@@ -216,7 +223,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
 <script type='text/javascript'>
     $(document).ready(function() {
@@ -225,6 +232,12 @@
         }).mouseup(function () {
             $('#password_id').attr('type', 'password');
         })
+        $('#revealPass').keydown(function(e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                $('#password_id').attr('type', 'text');
+            }
+        });
     });
 </script>
 

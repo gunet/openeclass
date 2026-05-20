@@ -36,7 +36,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -123,9 +123,9 @@
 
 
                                         <div class='form-group mt-4'>
-                                            <label for='homepage_intro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}} - {{$langName}}</label>
+                                            <label for='homepage_intro_{{$langCode}}' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}} - {{$langName}}</label>
                                             <div class='col-sm-12'>
-                                                {!! rich_text_editor('homepage_intro_'.$langCode, 5, 20, get_config('homepage_intro_'.$langCode)) !!}
+                                                {!! rich_text_editor('homepage_intro_'.$langCode, 5, 20, get_config('homepage_intro_'.$langCode), options: array('id' => 'homepage_intro_'.$langCode)) !!}
                                                 <p class='help-block mt-1'>{{ trans('langHomePageIntroTextHelp') }}</p>
                                             </div>
                                         </div>
@@ -241,7 +241,7 @@
                                     @php $urlEdit = ''; @endphp
                                     <div class='card panelCard card-default px-lg-4 py-lg-3 p-3 mb-4' data-id='{{ $p->id }}'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center p-0 gap-3 flex-wrap'>
-                                            <h3 class='mb-0'>
+                                            <h2 class='text-heading-h3 mb-0'>
                                                 @if($p->title == 'announcements')
                                                     {{ trans('langAnnouncements')}}
                                                     @php $urlEdit = $urlServer . 'modules/admin/adminannouncements.php'; @endphp
@@ -267,7 +267,7 @@
                                                     {{ trans('langOpenCourses')}}
                                                     @php $urlEdit = $urlServer . 'modules/admin/eclassconf.php'; @endphp
                                                 @endif
-                                            </h3>
+                                            </h2>
 
                                             @php ($p->visible==1 ? $vis=0 : $vis=1); @endphp
 
@@ -299,7 +299,7 @@
         </div>
     </div>
 
-</div>
+</main>
 <script type="text/javascript">
     $(document).ready(function() {
 

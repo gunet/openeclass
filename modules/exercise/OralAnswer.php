@@ -319,7 +319,7 @@ $html_content .= "</div>
 
                     bootbox.confirm({
                         message: '$langFileUploadingOkReplaceWithNew',
-                        title: '<div class=\'modal-title-default text-center mb-0\'>$langAnalyticsConfirm</div>',
+                        title: '<h2 class=\'modal-title-default text-center mb-0\'>$langAnalyticsConfirm</h2>',
                         buttons: {
                             cancel: {
                                 label: '$langCancel',

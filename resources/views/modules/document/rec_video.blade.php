@@ -2,18 +2,18 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }}  @if($course_code) module-container py-lg-0 @else main-container @endif'>
-            <div class="@if($course_code) course-wrapper d-lg-flex align-items-lg-strech w-100 @else row m-auto @endif">
+@if($course_code)
+<div class="{{ $container }} module-container py-lg-0">
+<div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+<aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+<main id="main" class="col-12 main-maincontent col_maincontent_active">
+@else
+<main id="main" class="col-12 main-section">
+<div class="{{ $container }} main-container">
+<div class="row m-auto">
+<div class="col-12">
+@endif
 
-                        @if($course_code)
-                            @include('layouts.partials.left_menu')
-                        @endif
-                        @if($course_code)
-                            <div class="col_maincontent_active">
-                        @else
-                            <div class="col-12">
-                        @endif
 
                                 <div class="row">
                                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -54,11 +54,11 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-            </div>
-        </div>
-    </div>
+@if($course_code)
+</main></div></div>
+@else
+</div></div></div></main>
+@endif
 
     <script src='{{ $urlAppend }}js/recordrtc/RecordRTC.min.js'></script>
     <script type='text/javascript'>
@@ -132,6 +132,16 @@
 
                 bootbox.prompt({
                     title: '{{ js_escape(trans('langEnterFile')) }}',
+                    buttons: {
+                        confirm: {
+                            label: '{{ trans('langConfirm') }}',
+                            className: 'btn submitAdminBtn'
+                        },
+                        cancel: {
+                            label: '{{ trans('langCancel') }}',
+                            className: 'btn cancelAdminBtn'
+                        }
+                    },
                     callback: function(result) {
                         this.disabled = true;
                         if(!recorder || !recorder.getBlob()) return;

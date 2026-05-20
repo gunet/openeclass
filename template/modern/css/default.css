@@ -712,6 +712,22 @@ span{
   font-style: normal;
   margin-bottom: 0px;
 }
+strong p,
+strong span {
+  font-weight: 700;
+}
+em p,
+em span {
+  font-style: italic;
+}
+
+.ss-content .ss-list .ss-optgroup .ss-optgroup-label .ss-optgroup-actions .ss-selectall span{
+  font-size: 13px !important;
+}
+
+.active-course{
+  font-size: 14px;
+}
 
 
 /************************* ABOUT LINKS ***************************/
@@ -2398,6 +2414,10 @@ input[type="submit"].warningAdminBtn:hover {
   letter-spacing: 0px;
   line-height: 16px;
 }
+.delete.confirmAction,
+.delete.delete_btn{
+  height: auto;
+}
 .btn.btn-danger:hover,
 .delete.confirmAction:hover,
 .delete.delete_btn:hover{
@@ -2586,6 +2606,32 @@ body .form-action-button-mydropdowns{
   margin-top: 1px;
 }
 
+
+.contextual-menu-action-button .list-group-item{
+  border-radius: 0px !important;
+}
+.contextual-menu-action-button .list-group-item.disabled{
+  opacity: 0.5;
+}
+
+.col_maincontent_active.action-button-on,
+.col_maincontent_active.action-bar-on{
+  z-index: auto;
+}
+.col_maincontent_active.action-button-on .contextual-menu-action-button.show,
+.col_maincontent_active.action-bar-on .contextual-menu-action-bar.show { 
+  z-index: 1001; 
+}
+@media(min-width: 701px) {
+  .contextual-menu-action-button.show{
+    transform: translate(-40px, 0px) !important;
+  }
+}
+@media(max-width: 700px) {
+  .btn-group.btn-group-default.dropstart {
+    display: block !important;
+  }
+}
 
 
 
@@ -3590,7 +3636,13 @@ body .form-action-button-popover{
   background-color: #B4BED1;
 } */
 
-
+.table-responsive.no-overflow {
+  overflow-x: visible !important;
+}
+.dt-scroll-head.no-overflow,
+.dt-scroll-body.no-overflow {
+  overflow: visible !important;
+}
 
 
 
@@ -3872,6 +3924,13 @@ body .delThemeBtn{
 .btn-portfolio-notifications:hover{
   opacity: 0.7;
   cursor:  url(../images/pointer.png), auto;
+}
+
+.portfolio-course-links i::before,
+.portfolio-course-links span::before{
+  display: block !important;
+  width: 24px !important;
+  height: 24px !important;
 }
 
 
@@ -4429,6 +4488,12 @@ body .delThemeBtn{
   .panelCard .card-body{
     overflow: auto !important;
   }
+  .panelCard .card-body-unit{
+    overflow: visible !important;
+  }
+  .panelCard .card-body-unit .card-body{
+    overflow: visible !important;
+  }
 }
 .panelCard .card-footer,
 .card .card-footer{
@@ -4716,6 +4781,15 @@ body .delThemeBtn{
 /**********************************************************************************************************************/
 /*************************************************** EXERCISE *********************************************************/
 /**********************************************************************************************************************/
+
+.displayExerciseTable .table-default tbody tr td:first-child:nth-last-child(3) {
+    width: 1%;
+}
+
+.displayExerciseTable  .table-default tbody tr td:last-child:not([colspan]):not(:only-child) {
+    text-align: right;
+}
+
 
 .table-exercise td, .table-exercise th{
   background-color: #ffffff;
@@ -5016,6 +5090,15 @@ body .delThemeBtn{
 .tree-units details[open] > summary::before,
 .tree-sessions details[open] > summary::before{
   background-position : calc(-2 * var(--radius)) 0;
+}
+
+.tree-units .disable-branch {
+    cursor: auto;
+}
+
+.tree-units .disable-branch::after,
+.tree-sessions .disable-branch::after {
+    display: none;
 }
 
 /**********************************************************************************************************************/
@@ -5391,19 +5474,19 @@ body .delThemeBtn{
 }
 
 @media(min-width:992px) and (max-width:1199px){
-  .main-section:has(.course-wrapper) .form-image-modules{
+  body:has(.course-wrapper) .form-image-modules{
     max-width:220px;
     float:right;
   }
 }
 @media(min-width:1200px) and (max-width:1399px){
-  .main-section:has(.course-wrapper) .form-image-modules{
+  body:has(.course-wrapper) .form-image-modules{
     max-width:270px;
     float:right;
   }
 }
 @media(min-width:1400px){
-  .main-section:has(.course-wrapper) .form-image-modules{
+  body:has(.course-wrapper) .form-image-modules{
     max-width: 300px;
     float:right;
   }
@@ -5644,12 +5727,12 @@ select:focus-visible,
 textarea:focus-visible{
   outline: 0 !important;
   box-shadow: none !important;
-  border: solid 1px #0073E6 !important;
+  border: solid 2px #0073E6 !important;
 }
 .input-group:focus-within .input-group-text{
   outline: 0 !important;
   box-shadow: none !important;
-  border: solid 1px #0073E6 !important;
+  border: solid 2px #0073E6 !important;
   border-left: 0px !important;
 }
 
@@ -5695,6 +5778,7 @@ textarea:focus-visible{
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -5999,6 +6083,7 @@ th.grade-col a{
 #unitResources_3 .unit-divider {
   background-color: #000;
   height: 1px;
+  margin-bottom: 30px;
 }
 
 #unitResources .fileURL,
@@ -6228,4 +6313,928 @@ th.grade-col a{
 
 .body-learningPath {
  padding: 20px !important;
+}
+
+/****** exercise ******/
+.question-container span.fa-regular {
+    font-size: 18px;
+}
+
+.correct_div {
+    border-left: 5px solid #28a745;
+}
+
+.correct_answer {
+    background-color: #28a74515!important;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.wrong_div {
+    border-left: 5px solid #dc3545;
+}
+
+.wrong_answer {
+    background-color: #dc354515!important;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.partial_div {
+    border-left: 5px solid #ffc107;
+}
+
+.partial_answer {
+    background-color: #ffc10720;
+}
+.questionName p {
+    font-size: 16px;
+}
+.questionDescription p {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.correct_answer.selected {
+    border: 1px dashed #28a745;
+}
+
+.wrong_answer.selected {
+    border: 1px dashed #dc3545;
+}
+
+/*Gauge Meter*/
+
+.gauge-container {
+    padding: 2.5rem 1rem;
+    text-align: center;
+}
+
+.gauge-wrap {
+    position: relative;
+    width: 220px;
+    height: 120px;
+    margin: 0 auto;
+}
+
+.gauge-clip {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.gauge-arc {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: conic-gradient(
+            from 270deg,
+            #ef4444 0deg 40deg,
+            transparent 40deg 46deg,
+            #f59e0b 46deg 86deg,
+            transparent 86deg 92deg,
+            #facc15 92deg 132deg,
+            transparent 132deg 138deg,
+            #22c55e 138deg 180deg,
+            #e2e8f0 180deg 360deg
+    );
+}
+
+.gauge-mask {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+.gauge-needle-group {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    width: 0;
+    height: 0;
+    transform-origin: bottom center;
+    transform: translateX(-50%) rotate(0deg);
+    transition: transform 600ms cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 3;
+}
+
+.gauge-needle {
+    position: absolute;
+    left: -1px;
+    bottom: 0;
+    width: 2px;
+    height: 80px;
+    background: #0f172a;
+    border-radius: 5px 5px 0 0;
+}
+
+.gauge-center {
+    position: absolute;
+    left: 50%;
+    bottom: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #0f172a;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.needle-value {
+    position: absolute;
+    left: 0;
+    bottom: 80px;
+    transform: translate(-50%, -8px);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0f172a;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 4;
+    transition: opacity 200ms ease;
+}
+
+.gauge-needle-group:hover .needle-value {
+    opacity: 1;
+}
+
+
+.gauge-extreme {
+    position: absolute;
+    bottom: -6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0f172a;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.gauge-extreme.left {
+    left: 0;
+    transform: translateX(-10%);
+}
+
+.gauge-extreme.right {
+    right: 0;
+    transform: translateX(10%);
+}
+
+.gauge-corner-label {
+    position: absolute;
+    left: 0;
+    bottom: -26px;
+    font-size: 0.75rem;
+    color: #64748b;
+    text-align: center;
+    transform: translateX(-50%);
+}
+
+.gauge-corner-label.right {
+    left: auto;
+    right: 0;
+    text-align: center;
+    transform: translateX(50%);
+}
+
+.gauge-marker {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    width: 0;
+    height: 0;
+    transform-origin: bottom center;
+    z-index: 1;
+}
+
+.marker-line {
+    position: absolute;
+    left: -1px;
+    bottom: 100px;
+    width: 2px;
+    height: 12px;
+    background: #0f172a;
+}
+
+.marker-label {
+    position: absolute;
+    left: 0;
+    bottom: 115px;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.page-item.active .page-link {
+  z-index: 1 !important;
+}
+
+/******************************** poll results ************************************/
+
+.card-poll-results{
+ border-radius: 10px;
+}
+
+.poll-border-left {
+  border-left: solid 4px #0073E6 !important;
+}
+.pollTotalAnswers{
+  display: none;
+}
+/*  */
+
+/******************************** Progress Module *******************************/
+
+/* TAB NAVIGATION */
+.progress-module .progress-nav-container {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    margin: 0 0 30px 0;
+    padding: 0;
+}
+
+.progress-module .progress-nav-tabs {
+    display: flex;
+    gap: 0;
+    position: relative;
+    padding-left: 0;
+    margin-left: 0;
+    flex-wrap: wrap;
+}
+
+.progress-module .progress-nav-tab {
+    padding: 16px 24px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: #6b7280;
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    position: relative;
+}
+
+@media (max-width: 575.98px) {
+    .progress-module .progress-nav-tab {
+        flex: 1 1 auto;
+        text-align: center;
+        padding: 11px 8px;
+        font-size: 13px;
+    }
+}
+
+.progress-module .progress-nav-tab:hover {
+    color: #374151;
+    background: #f9fafb;
+}
+
+.progress-module .progress-nav-tab.active {
+    color: #2563eb;
+    border-bottom-color: #2563eb;
+}
+
+/* CARD CONTAINERS */
+.progress-module .progress-card,
+.progress-module .panel,
+.progress-module .panel-default,
+.progress-module .panel-success,
+.progress-module .panel-info,
+.progress-module .panel-body-progress,
+.progress-module .card,
+.progress-module .card-default,
+.progress-module .panelCard,
+.progress-module .panelCard.border-card-left-default,
+.progress-module div[class*='panel'],
+.progress-module > div > .panel,
+.progress-module .row > div > .panel {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    margin-bottom: 25px !important;
+}
+
+/* CARD HEADERS */
+.progress-module .panel-heading,
+.progress-module .card-header,
+.progress-module h3.panel-title {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 20px 24px !important;
+    margin: 0 !important;
+}
+
+.progress-module .progress-card-header h4,
+.progress-module .panel-heading h4,
+.progress-module .panel-heading h3,
+.progress-module .panel-title,
+.progress-module h3.panel-title {
+    font-weight: 700 !important;
+    color: #1f2937 !important;
+    margin: 0 !important;
+    font-size: 16px !important;
+}
+
+.progress-module .progress-card-header i,
+.progress-module .panel-heading h4 i,
+.progress-module .panel-heading h3 i {
+    margin-right: 10px;
+    color: #3b82f6;
+}
+
+/* CARD BODY */
+.progress-module .panel-body,
+.progress-module .card-body,
+.progress-module .panel-body-progress {
+    padding: 24px !important;
+    background: transparent !important;
+}
+
+/* TABLES IN PROGRESS MODULE (except pg-info-table) */
+.progress-module table:not(.pg-info-table) {
+    margin-bottom: 0 !important;
+    background: transparent !important;
+}
+
+.progress-module table:not(.pg-info-table) thead {
+    background: #f9fafb !important;
+    border-bottom: 2px solid #e5e7eb !important;
+}
+
+.progress-module table:not(.pg-info-table) th {
+    font-weight: 600 !important;
+    color: #374151 !important;
+    padding: 14px 16px !important;
+    font-size: 13px !important;
+    border: none !important;
+}
+
+.progress-module table:not(.pg-info-table) td {
+    padding: 16px !important;
+    color: #4b5563 !important;
+    vertical-align: middle !important;
+    border: none !important;
+}
+
+.progress-module table:not(.pg-info-table) tbody tr {
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s ease;
+}
+
+.progress-module table:not(.pg-info-table) tbody tr:last-child {
+    border-bottom: none;
+}
+
+.progress-module table:not(.pg-info-table) tbody tr:hover {
+    background-color: #f9fafb !important;
+}
+
+/* FORM GROUPS */
+.progress-module .form-group {
+    margin-bottom: 15px;
+}
+
+.progress-module .form-group label {
+    font-weight: 600;
+    color: #374151;
+}
+
+/* LEADERBOARD ACCORDION */
+.progress-module .leaderboard-accordion-header {
+    background: #fff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 20px 24px !important;
+    min-height: 74px !important;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    margin-top: 40px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+
+.progress-module .leaderboard-accordion-header:hover {
+    background: #f9fafb !important;
+}
+
+.progress-module .leaderboard-accordion-header h4 {
+    margin: 0 !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #1f2937 !important;
+}
+
+.progress-module .leaderboard-accordion-header h4 i {
+    margin-right: 12px;
+    color: #3b82f6;
+}
+
+.progress-module .leaderboard-accordion-icon {
+    transition: transform 0.3s ease;
+    color: #6b7280;
+    font-size: 16px;
+}
+
+.progress-module .leaderboard-accordion-icon.open {
+    transform: rotate(180deg);
+}
+
+.progress-module .leaderboard-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    border: 1px solid #e5e7eb !important;
+    border-top: none !important;
+    border-radius: 0 0 12px 12px !important;
+    background: #fff !important;
+    margin-bottom: 25px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+
+.progress-module .leaderboard-accordion-content.open {
+    max-height: 3000px;
+    overflow: visible;
+}
+
+.progress-module .leaderboard-accordion-body {
+    padding: 24px !important;
+    background: #fff !important;
+}
+
+/* Accordion header buttons: hidden when closed, visible when open */
+.progress-module .accordion-header-btn {
+    display: none;
+}
+
+.progress-module .leaderboard-accordion-header:has(+ .leaderboard-accordion-content.open) .accordion-header-btn {
+    display: block;
+}
+
+/* LEADERBOARD TABLE */
+.progress-module .leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0 !important;
+    background: transparent !important;
+}
+
+.progress-module .leaderboard-table thead {
+    background: #f9fafb !important;
+    border-bottom: 2px solid #e5e7eb !important;
+}
+
+.progress-module .leaderboard-table th {
+    padding: 14px 16px !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    font-size: 13px !important;
+    text-align: left !important;
+    border: none !important;
+}
+
+.progress-module .leaderboard-table th.text-center,
+.progress-module .leaderboard-table td.text-center {
+    text-align: center !important;
+}
+
+.progress-module .leaderboard-table tbody tr {
+    background-color: transparent;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background-color 0.2s ease;
+}
+
+.progress-module .leaderboard-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.progress-module .leaderboard-table tbody tr:hover {
+    background-color: #f9fafb !important;
+}
+
+.progress-module .leaderboard-table td {
+    padding: 16px !important;
+    color: #4b5563 !important;
+    vertical-align: middle !important;
+    border: none !important;
+}
+
+.progress-module .leaderboard-table tr.current-user-student {
+    background: transparent !important;
+    border-left: 3px solid #3b82f6 !important;
+}
+
+.progress-module .leaderboard-table tr.current-user-student td {
+    color: #1f2937 !important;
+    font-weight: 600 !important;
+}
+
+/* LEADERBOARD ELEMENTS */
+.progress-module .rank-number {
+    font-weight: 700;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.progress-module .level-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.progress-module .user-name {
+    font-weight: 500;
+    color: #1f2937;
+}
+
+/* Star icon with level number inside (leaderboard level column) */
+.lb-star-wrap {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.lb-star-icon {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #a855f7, #60a5fa);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z%27 fill=%27none%27 stroke=%27black%27 stroke-width=%271.5%27/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z%27 fill=%27none%27 stroke=%27black%27 stroke-width=%271.5%27/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+.lb-star-num {
+    position: absolute;
+    font-size: 8px;
+    font-weight: 700;
+    color: #7c3aed;
+    text-align: center;
+    line-height: 1;
+    max-width: 22px;
+    word-break: break-word;
+}
+
+.progress-module .leaderboard-table .progress {
+    height: 8px;
+    margin-bottom: 6px;
+    background-color: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-module .leaderboard-table .progress-bar {
+    background-color: #3b82f6;
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.progress-module .leaderboard-table .progress-text {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* PROGRESS BARS IN CARDS */
+.progress-module .card .progress {
+    height: 8px !important;
+    margin-bottom: 6px !important;
+    background-color: #e5e7eb !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+}
+
+.progress-module .card .progress-bar {
+    background-color: #3b82f6 !important;
+    height: 100% !important;
+    transition: width 0.3s ease !important;
+}
+
+/* ACTIVITY TABLES - even column distribution */
+.progress-module .activity-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.progress-module .activity-table th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.progress-module .bootstrap-table .fixed-table-container,
+.progress-module .bootstrap-table .fixed-table-body {
+    overflow: visible !important;
+}
+
+/* POINT GAME - BASIC INFO: status pills (active / inactive) */
+.badge-status-green,
+.badge-status-red {
+    display: inline-block;
+    min-width: 85px;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 1px 4px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+}
+
+.badge-status-green {
+    background-color: #f0fdf4;
+    color: #22c55e;
+    border: 1px solid #bbf7d0;
+}
+
+.badge-status-red {
+    background-color: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+}
+
+/* POINT GAME - BASIC INFO: small levels table */
+.progress-module .table-sm th,
+.progress-module .table-sm td {
+    padding: 0.5rem;
+}
+
+/* https://github.com/wenzhixin/bootstrap-table/issues/899 */
+.fixed-table-container thead th .th-inner {
+    white-space: normal !important;
+}
+
+/******************************** Progress Module - Table Pagination *******************************/
+
+.progress-module .fixed-table-pagination {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-top: 1px solid #e5e7eb;
+    background: white;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+/* Remove clearfix — using flexbox instead */
+.progress-module .fixed-table-pagination::after {
+    display: none !important;
+}
+
+/* Override Bootstrap Table float layout */
+.progress-module .fixed-table-pagination > div {
+    float: none !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Hide info text and page-size dropdown — only show nav buttons */
+.progress-module .fixed-table-pagination .pagination-detail {
+    display: none !important;
+}
+
+/* Force pagination nav visible even when Bootstrap Table JS hides it (1 page case) */
+.progress-module .fixed-table-pagination div.pagination {
+    display: flex !important;
+    align-items: center;
+}
+
+.progress-module .fixed-table-pagination ul.pagination {
+    display: flex !important;
+    align-items: center;
+    gap: 2px;
+    list-style: none;
+    margin: 0 !important;
+    padding: 0;
+}
+
+.progress-module .fixed-table-pagination .page-item .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+.progress-module .fixed-table-pagination .page-item .page-link:hover {
+    color: #374151;
+    background: #f3f4f6;
+}
+
+.progress-module .fixed-table-pagination .page-item.active .page-link {
+    color: #2563eb;
+    font-weight: 700;
+    background: transparent;
+}
+
+.progress-module .fixed-table-pagination .page-item.disabled .page-link {
+    color: #d1d5db;
+    cursor: not-allowed;
+    pointer-events: none;
+    background: transparent;
+}
+
+
+/* The circular progress header seen in image_002223.png */
+.completion-header-card {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    padding: 30px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.progress-circle-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+/* Container for the activities grid */
+.activities-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+/* Individual Activity Card */
+.activity-card-item {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 140px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.activity-card-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-color: #3b82f6;
+}
+
+/* Icon box inside the card */
+.activity-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+    margin-right: 15px;
+}
+
+/* Specific Activity Colors */
+.bg-assignment { background-color: #3b82f6; }
+.bg-exercise { background-color: #3b82f6; }
+.bg-blog { background-color: #22c55e; }
+.bg-poll { background-color: #f97316; }
+
+.status-label {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    width: fit-content;
+    margin-top: 15px;
+    border: 1px solid;
+}
+
+.status-label-pending {
+    background: #fff7ed;
+    color: #c2410c;
+    border-color: #ffedd5;
+}
+
+.status-label-success {
+    background: #f0fdf4;
+    color: #15803d;
+    border-color: #dcfce7;
+}
+
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+/*********************************************** SIDEBAR AND MAIN-CONTENT AS CARDS *******************************************************/
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+@media(max-width: 991px) {
+  /* without cards */
+  body:not(:has(.sidebar-card)) .main-maincontent {
+    margin-top: 56px;
+  }
+  body:has(.sidebar-card) .main-maincontent {
+    margin-top: 56px;
+  }
+
+}
+@media(min-width: 992px) {
+  /* without cards */
+  body:not(:has(.sidebar-card)) .aside-sidebar,
+  body:not(:has(.sidebar-card)) .main-maincontent {
+    margin-top: 80px;
+  }
+
+
+  /* with cards */
+  body:has(.sidebar-card) .aside-sidebar {
+    margin-top: 80px;
+  }
+  .sidebar-card {
+    padding: 25px 0px 25px 25px;
+  }
+  .sidebar-card .ContentLeftNav {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 0px;
+  }
+  body:has(.active-cont) .ContentLeftNav {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+  body:has(.active-cont) .menu-items {
+    opacity: 0;
+  }
+  body:has(.sidebar-card) .main-maincontent {
+    margin-top: 105px;
+    margin-bottom: 25px;
+    margin-right: 15px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 10px;
+  }
+  body:has(.active-cont) .main-maincontent {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+
+
+ /* announcement top fixed */
+  body:has(.notification-top-bar) .aside-sidebar{
+    margin-top: 140px;
+  }
+  body:has(.notification-top-bar) .main-maincontent{
+    margin-top: 165px;
+  }
+
+}
+
+/* SuppressedWords */
+.censored-blur {
+    filter: blur(5px);
+    background-color: #eee;
+    transition: filter 0.3s;
+    border-radius: 3px;
+    padding: 0 2px;
 }

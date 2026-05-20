@@ -42,8 +42,11 @@ ModalBoxHelper::loadModalBox();
 $toolName = $langForums;
 
 load_js('tools.js');
+load_js('suppressedWords/suppressedWords.js');
+$head_content .= "<script>var urlAppend = '$urlAppend';$(function() { initSuppressedWordsBlur('.card-body, .panelCard'); });</script>";
 $head_content .= "
     <script type='text/javascript'>
+    
         function highlight(selector) {
             $(selector).removeClass('panel-default').removeClass('panel-primary').addClass('panel-success').css('border-color','green').css('border', '2px solid');
         }
@@ -69,7 +72,7 @@ if ($is_editor) { // delete post confirmation
             e.preventDefault();
             bootbox.confirm({
                 closeButton: false,
-                title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
+                title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h2 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h2>',
                 message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
                 buttons: {
                     cancel: {
@@ -796,9 +799,18 @@ function pdf_forum_output($content_m,$topic_id,$forum_id) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // for old courses
+    if ($image_height_header > 50) {
+        $image_height_header = 20;
+    }
+    if ($image_height_footer > 50) {
+        $image_height_footer = 15;
+    }
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => $image_height_header + 20,     // mm
+        'margin_bottom' => $image_height_footer + 10,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

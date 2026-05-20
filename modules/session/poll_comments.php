@@ -28,6 +28,7 @@ $require_login = true;
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'functions.php';
@@ -182,7 +183,7 @@ if (isset($_GET['add']) or isset($_GET['modify'])) {
 
     // add comment
     if (!isset($_GET['modify'])) {
-        $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, '');
+        $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, '', options: array('id' => 'comments'));
         $data['participants'] = $participants = Database::get()->queryArray("SELECT user.givenname,user.surname,mod_session_users.participants FROM mod_session_users
                                                                              LEFT JOIN user ON mod_session_users.participants=user.id
                                                                              WHERE mod_session_users.session_id = ?d
@@ -191,7 +192,7 @@ if (isset($_GET['add']) or isset($_GET['modify'])) {
         if (isset($_GET['comment'])) {
             $comment = Database::get()->querySingle("SELECT * FROM session_poll_comments WHERE id = ?d", $_GET['comment']);
             if ($comment) {
-                $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, $comment->comments);
+                $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, $comment->comments, options: array('id' => 'comments'));
                 $data['comment_id'] = $comment->id;
                 $data['title'] = $comment->title;
                 $data['user_u'] = $comment->user_id;
@@ -219,7 +220,7 @@ if (isset($_GET['view_comment'])) {
             <div class='col-12'>
                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3> " . q($info_comment->title) . "</h3>
+                        <h2 class='text-heading-h3'> " . q($info_comment->title) . "</h2>
                     </div>
                     <div class='card-body'>
                         <p>" . purify($info_comment->comments) . "</p>
@@ -317,9 +318,18 @@ function pdf_comment_output($sid,$content_m) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // for old courses
+    if ($image_height_header > 50) {
+        $image_height_header = 20;
+    }
+    if ($image_height_footer > 50) {
+        $image_height_footer = 15;
+    }
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 63,     // approx 200px
-        'margin_bottom' => 63,  // approx 200px
+        'margin_top' => $image_height_header + 20,     // mm
+        'margin_bottom' => $image_height_footer + 10,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

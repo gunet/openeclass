@@ -56,6 +56,14 @@ $pageName = "$langEditUser: " . uid_to_name($u);
 $u_submitted = $_POST['u_submitted'] ?? '';
 
 if ($u) {
+    $is_saek_admin  = $is_departmentmanage_user && !$is_admin;
+    if ($is_saek_admin) {
+        if (!getTenantUserIfBelongs($u)) {
+            Session::flash('message', $langForbidden);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page('modules/admin/');
+        }
+    }
     if (isDepartmentAdmin())
         validateUserNodes(intval($u), true);
 
@@ -73,7 +81,7 @@ if ($u) {
         checkSecondFactorChallenge();
         $auth = intval($_POST['auth']);
         $oldauth = array_search($info->password, $auth_ids);
-        $extra_msg = '' ;
+        $extra_msg = '';
         if ($auth == 1 and $oldauth != 1) {
             $extra_msg = " <a href='password.php?userid=" . intval($u) . "'>$langEditAuthSetPass</a>";
             $newpass = '.';
@@ -83,7 +91,7 @@ if ($u) {
 
         Database::get()->query("UPDATE user SET password = ?s WHERE id = ?s", $newpass, $u);
         $info->password = $newpass;
-        Session::flash('message',$langQuotaSuccess.$extra_msg);
+        Session::flash('message', $langQuotaSuccess . $extra_msg);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/edituser.php');
     }
@@ -91,9 +99,12 @@ if ($u) {
     if (isset($_POST['delete_ext_uid'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         checkSecondFactorChallenge();
-        Database::get()->query('DELETE FROM user_ext_uid WHERE user_id = ?d AND auth_id = ?d',
-            $u, $_POST['delete_ext_uid']);
-        Session::flash('message',$langSuccessfulUpdate);
+        Database::get()->query(
+            'DELETE FROM user_ext_uid WHERE user_id = ?d AND auth_id = ?d',
+            $u,
+            $_POST['delete_ext_uid']
+        );
+        Session::flash('message', $langSuccessfulUpdate);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
     }
@@ -103,7 +114,7 @@ if ($u) {
         $data['current_auth'] = 1;
         $data['auth_names'][1] = get_auth_info(1);
         foreach (get_auth_active_methods() as $auth) {
-            if($auth < 8) {
+            if ($auth < 8) {
                 $data['auth_names'][$auth] = get_auth_info($auth);
                 if ($info->password == $auth_ids[$auth]) {
                     $data['current_auth'] = $auth;
@@ -117,31 +128,41 @@ if ($u) {
         // Display Actions Toolbar
         $ind_u = intval($u);
         $data['action_bar'] = action_bar(array(
-            array('title' => $langUserMerge,
+            array(
+                'title' => $langUserMerge,
                 'url' => "mergeuser.php?u=$u",
                 'icon' => 'fa-share-alt',
                 'level' => 'primary-label',
-                'show' => ($u != 1 and get_admin_rights($u) < 0)),
-            array('title' => $langChangePass,
+                'show' => ($u != 1 and get_admin_rights($u) < 0)
+            ),
+            array(
+                'title' => $langChangePass,
                 'url' => "password.php?userid=$ind_u",
                 'icon' => 'fa-key',
                 'level' => 'primary-label',
-                'show' => !(in_array($info->password, $auth_ids))),
-            array('title' => $langChangeUserAs . ' ' . q($info->username),
+                'show' => !(in_array($info->password, $auth_ids))
+            ),
+            array(
+                'title' => $langChangeUserAs . ' ' . q($info->username),
                 'url' => $urlAppend . 'modules/admin/change_user.php?username=' . urlencode($info->username),
                 'icon' => 'fa-sign-in',
                 'level' => 'primary',
                 'button-class' => 'btn-default change-user-link',
-                'show' => $is_admin),
-            array('title' => $langEditAuth,
+                'show' => $is_admin
+            ),
+            array(
+                'title' => $langEditAuth,
                 'url' => "$_SERVER[SCRIPT_NAME]?u=$u&amp;edit=auth",
                 'icon' => 'fa-key',
-                'level' => 'primary-label'),
-            array('title' => $langDelUser,
+                'level' => 'primary-label'
+            ),
+            array(
+                'title' => $langDelUser,
                 'url' => "deluser.php?u=$u",
                 'icon' => 'fa-xmark',
                 'level' => 'primary-label',
-                'show' => $u > 1)
+                'show' => $u > 1
+            )
 
         ));
 
@@ -175,7 +196,7 @@ if ($u) {
 
         $data['html'] = $html;
         $data['reg_date'] = $reg_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
-        $reg_date_format = $reg_date? $reg_date->format("d-m-Y H:i"): '-';
+        $reg_date_format = $reg_date ? $reg_date->format("d-m-Y H:i") : '-';
         $data['exp_date'] = DateTime::createFromFormat("Y-m-d H:i:s", $info->expires_at);
 
         $last_login = Database::get()->querySingle('SELECT `when` FROM loginout
@@ -214,8 +235,8 @@ if ($u) {
         $newstatus = $_POST['newstatus'] ?? 'NULL';
         $registered_at = $_POST['registered_at'] ?? '';
         if (isset($_POST['user_date_expires_at'])) {
-            if ( empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at']) ) {
-                Session::flash('message',$langUserExpiresFieldEmpty);
+            if (empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at'])) {
+                Session::flash('message', $langUserExpiresFieldEmpty);
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
             }
@@ -250,23 +271,23 @@ if ($u) {
 
         // check if there are empty fields
         if (empty($fname) or empty($lname) or empty($username) or cpf_validate_required_edituser() === false) {
-            Session::flash('message',$langFieldsMissing);
+            Session::flash('message', $langFieldsMissing);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         } elseif (isset($user_exist) and $user_exist == true) {
-            Session::flash('message',$langUserFree);
+            Session::flash('message', $langUserFree);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         } elseif ($cpf_check[0] === false) {
             unset($cpf_check[0]);
             $cpf_error_str = implode('', $cpf_check);
-            Session::flash('message',"$cpf_error_str<br><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a>");
+            Session::flash('message', "$cpf_error_str<br><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a>");
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         }
 
         if ($registered_at > $user_expires_at) {
-            Session::flash('message',$langExpireBeforeRegister);
+            Session::flash('message', $langExpireBeforeRegister);
             Session::flash('alert-class', 'alert-warning');
         }
 
@@ -295,7 +316,8 @@ if ($u) {
         checkSecondFactorChallenge();
         $user->refresh(intval($u), $departments);
         user_hook($u);
-        $qry = Database::get()->query("UPDATE user SET surname = ?s,
+        $qry = Database::get()->query(
+            "UPDATE user SET surname = ?s,
                                 givenname = ?s,
                                 username = ?s,
                                 email = ?s,
@@ -309,14 +331,28 @@ if ($u) {
                                 disable_course_registration = ?d,
                                 options = ?s
                           WHERE id = ?d",
-                $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $user_language, $am, $verified_mail, $user_upload_whitelist, $disable_course_registration, $options, $u);
-            //update custom profile fields
-            $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
-            if ($qry->affectedRows > 0 || $cpf_updated === true) {
-                Session::flash('message',$langSuccessfulUpdate);
-                Session::flash('alert-class', 'alert-info');
+            $lname,
+            $fname,
+            $username,
+            $email,
+            $newstatus,
+            $phone,
+            $user_expires_at,
+            $user_language,
+            $am,
+            $verified_mail,
+            $user_upload_whitelist,
+            $disable_course_registration,
+            $options,
+            $u
+        );
+        //update custom profile fields
+        $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
+        if ($qry->affectedRows > 0 || $cpf_updated === true) {
+            Session::flash('message', $langSuccessfulUpdate);
+            Session::flash('alert-class', 'alert-info');
         } else {
-            Session::flash('message',$langUpdateNoChange);
+            Session::flash('message', $langUpdateNoChange);
             Session::flash('alert-class', 'alert-warning');
         }
         redirect_to_home_page('modules/admin/edituser.php?u=' . $u);

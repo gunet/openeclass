@@ -222,7 +222,7 @@ function details($qid, $eurid) {
     $content = '';
     if ($qid) {
         $sql2 = Database::get()->queryArray("SELECT question_id, SUM(weight) AS weight FROM exercise_answer_record
-                                WHERE eurid = ?d AND question_id = ?d 
+                                WHERE eurid = ?d AND question_id = ?d
                                 GROUP BY question_id", $eurid, $qid);
         foreach ($sql2 as $user_question) {
             $content = question_answer_details($eurid, $user_question->question_id); // question answer
@@ -289,7 +289,6 @@ function question_answer_details($eurid, $qid) {
                         $correctAnswer = $definedAnswers[$data->answer_id-1];
                     } else {
                         $correctAnswer = $objAnswerTmp->get_correct_calculated_answer($data->question_id);
-                        
                     }
                     $temp_array_content[] = "[" . $data->answer . "|" . $correctAnswer . "]";
                     $temp_content = implode(' -- ', $temp_array_content);
@@ -342,7 +341,7 @@ function question_answer_details($eurid, $qid) {
                         $fileName = "recording-file-$data->question_id-$eurid";
                         $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
                         $content .= $hyperLink;
-                    } 
+                    }
                 break;
             }
     }

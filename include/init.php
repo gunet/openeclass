@@ -174,17 +174,42 @@ if (file_exists($extra_messages)) {
 } else {
     $extra_messages = false;
 }
+
 require "$webDir/lang/$language/messages.inc.php";
-if (file_exists('config/config.php')) {
-    if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
-        require "$webDir/lang/$language/messages_collaboration.inc.php";
-    }
+if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
+    require "$webDir/lang/$language/common_collaboration.inc.php";
+    require "$webDir/lang/$language/messages.inc.php";
+    require "$webDir/lang/$language/messages_collaboration.inc.php";
 }
+
 if ($extra_messages) {
     include $extra_messages;
 }
 
+// Check if user connected to a tenant URL
+$main_host = parse_url($urlServer, PHP_URL_HOST);
+$http_host = isset($_SERVER['HTTP_HOST'])? $_SERVER['HTTP_HOST']: $main_host;
 
+// localhost is used for tenant domain validity check by web server
+if ($http_host != $main_host and $http_host != 'localhost') {
+    if (defined('UPGRADE')) {
+        $tenant = null;
+    } else {
+        $tenant = Database::get()->querySingle('
+            SELECT tenant.*, hierarchy.lft, hierarchy.rgt
+            FROM tenant
+            JOIN hierarchy ON hierarchy.id = tenant.department_id
+            WHERE url REGEXP ?s', "/$http_host(/|$)"
+        );
+    }
+
+    if ($tenant) {
+        $urlServer = $tenant->url;
+        $_SESSION['current_user_tenant'] = $tenant;
+    } else {
+        redirect_to_home_page();
+    }
+}
 
 if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = generate_csrf_token();
@@ -203,6 +228,16 @@ if (($upgrade_begin = get_config('upgrade_begin'))) {
 // SSO transition
 if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
     redirect_to_home_page('modules/auth/transition/auth_transition.php');
+}
+
+// mobile view
+if (isset($_GET['view']) and $_GET['view'] == 'mobile') {
+    $_SESSION['mobile'] = true;
+}
+
+// Safe Exam Browser view
+if (str_contains($_SERVER['HTTP_USER_AGENT'] ?? '', 'Open-eClass-Exam')) { // User is NOT using SEB
+    $_SESSION['safe_exam_browser_view'] = true;
 }
 
 // check if we are admin or power user or manageuser_user
@@ -397,8 +432,8 @@ if (isset($_SESSION['CurrentReferenceSessionId']) && $_SESSION['CurrentReference
     unset($_SESSION['userId__reference_uploader']);
 }
 
-// If $require_current_course is true, initialise course settings
-// Read properties of current course
+// If $require_current_course is true, initialize course settings
+// Read properties of the current course
 $is_editor = false;
 $is_course_reviewer = false;
 $is_coordinator = false;
@@ -443,6 +478,12 @@ if (isset($require_current_course) and $require_current_course) {
                 }
             },
             $dbname);
+
+        // if course is collaborative include collaborative messages
+        if (isset($is_collaborative_course) and $is_collaborative_course) {
+            require "$webDir/lang/$language/common_collaboration.inc.php";
+        }
+        require "$webDir/lang/$language/messages.inc.php";
 
         if (!isset($course_code) or empty($course_code)) {
             Session::flash('alert-class', 'alert-danger');
@@ -523,6 +564,18 @@ if (isset($require_current_course) and $require_current_course) {
             }
         }
         $_SESSION['courses'][$course_code] = $courses[$course_code] = $status;
+        // Clear session data about polls in course or session mode
+        if (!isset($_GET['pid']) && !isset($_GET['from_poll'])) {
+            unset($_SESSION['current_page']);
+            unset($_SESSION['data_answers']);
+            unset($_SESSION['data_file_answer']);
+            unset($_SESSION['question_ids']);
+            unset($_SESSION['q_row_columns']);
+            unset($_SESSION['loop_init_answers']);
+            unset($_SESSION['loop_init_answers_session']);
+            unset($_SESSION['emptyQuestions']);
+            unset($_SESSION['onBehalfOfUserId']);
+        }
     }
 
     # force a specific interface language
@@ -539,6 +592,9 @@ if (isset($require_current_course) and $require_current_course) {
                 include $extra_messages;
             } else {
                 $extra_messages = false;
+            }
+            if (isset($is_collaborative_course) and $is_collaborative_course) {
+                include "lang/$language/common_collaboration.inc.php";
             }
             include "lang/$language/messages.inc.php";
             if (file_exists('config/config.php')) {
@@ -574,7 +630,6 @@ require_once "license_info.php";
 // Course modules array
 // user modules
 // ----------------------------------------
-
 if(isset($is_collaborative_course) and $is_collaborative_course){
     $modules = $modules_collaborations = array(
         MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
@@ -590,6 +645,7 @@ if(isset($is_collaborative_course) and $is_collaborative_course){
         MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-quote-left'),
         MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
         MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
+        MODULE_ID_STICKY_NOTES => array('title' => $langStickyNotes, 'link' => 'sticky_notes', 'image' => 'fa-regular fa-note-sticky'),
         MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'fa-solid fa-upload'),
         MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-solid fa-a'),
         MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-solid fa-clipboard-user'),
@@ -621,6 +677,7 @@ if(isset($is_collaborative_course) and $is_collaborative_course){
         MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
         MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-solid fa-arrow-trend-up'),
         MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
+        MODULE_ID_STICKY_NOTES => array('title' => $langStickyNotes, 'link' => 'sticky_notes', 'image' => 'fa-regular fa-note-sticky'),
         MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-solid fa-arrow-pointer')
 
     );
@@ -647,6 +704,7 @@ $icons_map = array(
         MODULE_ID_ATTENDANCE => 'fa-solid fa-clipboard-user',
         MODULE_ID_GRADEBOOK => 'fa-solid fa-a',
         MODULE_ID_SESSION => 'fa-solid fa-handshake',
+        MODULE_ID_STICKY_NOTES => 'fa-regular fa-note-sticky',
     ),
 );
 
@@ -721,7 +779,7 @@ $static_modules = array(
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info'),
     MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets'),
     MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools'),
-    MODULE_ID_UNITS => array('title' => $langUnits, 'link' => 'units'),
+    MODULE_ID_UNITS => array('title' => $langCourseUnits, 'link' => 'units'),
     MODULE_ID_SEARCH => array('title' => $langSearch, 'link' => 'search'),
     MODULE_ID_CONTACT => array('title' => $langContact, 'link' => 'contact'),
     MODULE_ID_COMMENTS => array('title' => $langComments, 'link' => 'comments'),
@@ -920,7 +978,49 @@ get_tinymce_color_text();
 
 // Theme initialization only if not running via cli
 if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
-    $theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
+    $tenant = defined('UPGRADE')? null: getCurrentTenant();
+
+    if (isset($_SESSION['theme_options_id'])) {
+        $theme_id = $_SESSION['theme_options_id'];
+    } elseif (isset($_SESSION['current_user_tenant']) && $_SESSION['current_user_tenant']->theme_id) {
+        $theme_id = $_SESSION['current_user_tenant']->theme_id;
+    } else {
+        $theme_id = get_config('theme_options_id');
+    }
+
+    // User theme override: Check for preview (session) or saved selection (cookie)
+    // Must happen BEFORE theme_initialization() to ensure correct CSS generation
+    $user_selected_theme_id = 0;
+    $user_theme_customization_enabled = get_config('enable_user_theme_customization', 0);
+
+    if ($user_theme_customization_enabled) {
+        if (isset($_SESSION['user_theme_preview_id'])) {
+            $user_selected_theme_id = intval($_SESSION['user_theme_preview_id']);
+        } elseif (isset($_COOKIE['user_theme_selection'])) {
+            $cookie_theme_id = intval($_COOKIE['user_theme_selection']);
+
+            // Verify theme is in admin's allowed list
+            $user_selectable_themes_str = get_config('user_selectable_themes', '');
+            $allowed = true;
+            if ($cookie_theme_id > 0 && !empty($user_selectable_themes_str)) {
+                $allowed_theme_ids = array_map('intval', explode(',', $user_selectable_themes_str));
+                $allowed_theme_ids = array_filter($allowed_theme_ids);
+                if (!empty($allowed_theme_ids) && !in_array($cookie_theme_id, $allowed_theme_ids)) {
+                    $allowed = false;
+                }
+            }
+
+            if ($allowed) {
+                $user_selected_theme_id = $cookie_theme_id;
+            }
+        }
+    }
+
+    // Apply user theme if set, otherwise use admin default theme
+    if ($user_selected_theme_id > 0) {
+        $theme_id = $user_selected_theme_id;
+    }
+
     $theme_css = "courses/theme_data/{$theme_id}/style_str.css";
     theme_initialization();
 }

@@ -7,7 +7,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='container module-container py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
@@ -338,7 +338,7 @@
                                     </tr>
                                     <tr>
                                         <td align="center"><br><input class="btn submitAdminBtn" type="button"
-                                                                      value="{{ trans('langOk') }}"
+                                                                      value="{{ trans('langSubmit') }}"
                                                                       onClick="calcScore()"></td>
                                     </tr>
                                 </table>
@@ -349,7 +349,7 @@
             </div>
 
         </div>
-    </div>
+    </main>
 
 @endsection
 

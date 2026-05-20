@@ -260,7 +260,7 @@ if ($is_editor) {
                                 <div class='form-group mt-4'>
                                     <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
                                     <div class='col-sm-12'>
-                                    <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
+                                        <textarea class='form-control' name='newComment' id='newComment' rows='3' placeholder='$langDescription'></textarea>
                                     </div>
                                 </div>
 
@@ -303,26 +303,28 @@ load_js('sortable/Sortable.min.js');
 $head_content .= "
     <script>
         $(document).ready(function(){
-            Sortable.create(tosort,{
-                handle: '.fa-arrows',
-                animation: 150,
-                onEnd: function (evt) {
-
-                var itemEl = $(evt.item);
-
-                var idReorder = itemEl.attr('data-id');
-                var prevIdReorder = itemEl.prev().attr('data-id');
-
-                $.ajax({
-                  type: 'post',
-                  dataType: 'text',
-                  data: {
-                          toReorder: idReorder,
-                          prevReorder: prevIdReorder,
-                        }
-                    });
-                }
-            });
+            if ($('#tosort').length > 0) {
+                Sortable.create(tosort,{
+                    handle: '.fa-arrows',
+                    animation: 150,
+                    onEnd: function (evt) {
+    
+                    var itemEl = $(evt.item);
+    
+                    var idReorder = itemEl.attr('data-id');
+                    var prevIdReorder = itemEl.prev().attr('data-id');
+    
+                    $.ajax({
+                      type: 'post',
+                      dataType: 'text',
+                      data: {
+                              toReorder: idReorder,
+                              prevReorder: prevIdReorder,
+                            }
+                        });
+                    }
+                });
+            }            
 
             let confirmLpCleanAttemptHref;
 
@@ -360,7 +362,8 @@ if ($is_editor) {
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
                         'level' => 'primary-label',
-                        'button-class' => 'btn-success'),
+                        'button-class' => 'btn-success',
+                        'text-class' => 'uploadBTN'),
                     array('title' => $langCreate,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=create",
                         'icon' => 'fa-plus-circle',
@@ -396,6 +399,113 @@ if ($is_editor) {
     $tool_content .= $action_bar;
 }
 
+$head_content .= "<link href='" . $urlAppend . "js/bundle/uppy.min.css' rel='stylesheet' />";
+$tool_content .= "
+    <script>
+        let isUppyLoaded = false;
+
+        async function loadUppy() {
+            try {
+                const { Uppy, Dashboard, XHRUpload, English, French, German, Italian, Spanish, Greek } = await import('" . $urlAppend . "js/bundle/uppy.js');
+
+                const locale_map = {
+                  'de': German,
+                  'el': Greek,
+                  'en': English,
+                  'es': Spanish,
+                  'fr': French,
+                  'it': Italian,
+                }
+
+                const uppy = new Uppy({
+                    autoProceed: false,
+                    restrictions: {
+                        maxFileSize: " . parseSize(ini_get('upload_max_filesize')) . ",
+                        maxTotalFileSize: " . fileUploadMaxSize() . ",
+                        allowedFileTypes: ['.zip'],
+                        maxNumberOfFiles: 1
+                    }
+                })
+
+                uppy.use(Dashboard, {
+                    target: '#uppy',
+                    inline: true,
+                    showProgressDetails: true,
+                    proudlyDisplayPoweredByUppy: false,
+                    height: 500,
+                    thumbnailWidth: 100,
+                    locale: locale_map['" . $language . "'] || English,
+                })
+
+                let uploadPath = '" . $urlAppend . "modules/learnPath/importLearningPath.php?course=" . $course_code . "';
+
+                let replaceIdInput = document.querySelector('input[name=\"replace_id\"]');
+                let replaceId = replaceIdInput ? replaceIdInput.value : '';
+
+                uppy.setMeta({
+                    uploadPath: uploadPath,
+                    token: '" . $_SESSION['csrf_token'] . "',
+                    replace_id: replaceId 
+                });
+
+                uppy.use(XHRUpload, {
+                    endpoint: '" . $urlAppend . "modules/learnPath/importLearningPath.php?course=" . $course_code . "',
+                    formData: true,
+                    fieldName: 'uploadedPackage', 
+                    method: 'POST',
+                    headers: {
+
+                    },
+                    allowedMetaFields: [
+                        'XHRUpload',
+                        'uploadPath',
+                        'token',
+                        'replace_id' 
+                    ],
+                    shouldRetry: () => false,
+                    getResponseData: (responseText, response) => {
+                        return { url: '' }; 
+                    }
+                })
+
+                uppy.setMeta({
+                    uploadPath: '" . $urlAppend . "modules/learnPath/importLearningPath.php?course=" . $course_code . "',
+                    XHRUpload: true,
+                });
+
+                uppy.on('file-added', (file) => {
+                  //  console.log('File added:', file)
+                })
+
+                uppy.on('complete', (result) => {
+                    window.location.href = '" . documentBackLink('') . "';
+                })
+                
+                isUppyLoaded = true;
+                
+            } catch (error) {
+                console.log(error);
+                isUppyLoaded = false;
+            }
+        }
+
+        $(document).ready(function(){
+            loadUppy();
+
+            $('.uploadBTN').on('click', function(event) {
+                event.preventDefault();
+                if (!isUppyLoaded) {
+                    console.log('Uppy not loaded');
+                } else {
+                    $('.drag_and_drop_container').toggleClass('d-none');
+                }
+            });
+        });
+    </script>
+";
+
+$tool_content .= "<div class='col-12 drag_and_drop_container d-none mb-3'><div id='uppy'></div></div>";
+
 // check if there are learning paths available
 $l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->count;
 if ($l == 0) {
@@ -407,12 +517,14 @@ if ($l == 0) {
     exit();
 }
 
+
 $tool_content .= "
 <div class='table-responsive'>
     <table class='table-default'>
     <thead class='list-header'>
     <tr>
-      <th>$langLearningPaths</th>";
+      <th>$langLearningPaths</th>
+      <th>$langType</th>";
 
 if ($is_editor) {
     // Titles for teachers
@@ -420,7 +532,8 @@ if ($is_editor) {
 } elseif ($uid) {
     // display progression only if user is not teacher && not anonymous
     $tool_content .= "<th>$langTotalTimeSpent</th>
-                      <th>$langProgress</></th>";
+                      <th>$langProgress</></th>
+                      <th>$langScore</></th>";
 }
 // close title line
 $tool_content .= "</tr></thead><tbody id='tosort'>";
@@ -483,7 +596,7 @@ foreach ($result as $list) { // while ... learning path list
     //Display current learning path name
     if (!$is_blocked) {
         // locate 1st module of current learning path
-        $modulessql = "SELECT M.`module_id`
+        $modulessql = "SELECT M.`module_id`, M.`contentType`
                 FROM (`lp_module` AS M,
                       `lp_rel_learnPath_module` AS LPM)
                 WHERE M.`module_id` = LPM.`module_id`
@@ -521,7 +634,8 @@ foreach ($result as $list) { // while ... learning path list
         $tool_content .= "
                     </div>
                 <div class='mt-2'><p>" . q($list->lp_comment) . "<p></div>
-            </td>";
+            </td><td>" . (((count($resultmodules) > 0) && $resultmodules[0]->contentType === "SCORM") ? $langAltScorm : $langLearnPath) . "</td>";
+
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -643,16 +757,17 @@ foreach ($result as $list) { // while ... learning path list
                             </div>
                         </td>";
     } elseif ($uid) {
-        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($list->learnPath_id, $uid);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore, $lpScoreMax) = get_learnPath_progress_details($list->learnPath_id, $uid);
         $total_lpProgress += $lpProgress;
         // time
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
-        // % progress
-        $prog = get_learnPath_combined_progress($list->learnPath_id, $uid);
-        $tool_content .= "<td style='width: 15%;'>$lpTotalTime</td>";
-        $tool_content .= "<td style='width: 15%;'>" . disp_progress_bar($prog, 1) . "</td>";
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore, $lpScoreMax);
+
+        $tool_content .= "<td style='width: 15%;'>" . $lpDisplay['time'] . "</td>";
+        $tool_content .= "<td style='width: 15%;'>" . $lpDisplay['progress_html'] . "</td>";
+        $tool_content .= "<td>" . $lpDisplay['score'] . "</td>";
     }
 
     $tool_content .= "</tr>";
@@ -669,8 +784,10 @@ if (!$is_editor && $iterator != 1 && $uid) {
     $tool_content .= "
     <tr>
       <td class='text-start'><strong>$langTotal</strong>:</td>
+      <td></td>
       <td class='text-start'><strong>$globaltime</strong:</td>
-      <td>" . disp_progress_bar($total, 1) . "</td>
+      <td>" . (($total <= 0) ? "-" : disp_progress_bar($total, 1)) . "</td>
+      <td></td>
     </tr>";
 }
 $tool_content .= "</tbody></table></div>";

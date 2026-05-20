@@ -21,8 +21,11 @@
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-$require_admin = true;
+$require_departmentmanage_user = true;
+$require_login = true;
+
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'modules/usage/usage.lib.php';
 require_once 'include/lib/hierarchy.class.php';
 
@@ -114,9 +117,18 @@ function export_monthly_data($report_data, $format): void
         $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
         $fontData = $defaultFontConfig['fontdata'];
 
+        $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+        $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+        // for old courses
+        if ($image_height_header > 50) {
+            $image_height_header = 20;
+        }
+        if ($image_height_footer > 50) {
+            $image_height_footer = 10;
+        }
         $mpdf = new Mpdf\Mpdf([
-            'margin_top' => 53,     // approx 200px
-            'margin_bottom' => 53,  // approx 200px
+            'margin_top' => $image_height_header + 20,     // mm
+            'margin_bottom' => $image_height_footer + 15,  // mm
             'tempDir' => _MPDF_TEMP_PATH,
             'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
             'fontdata' => $fontData + [

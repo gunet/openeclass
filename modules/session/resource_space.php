@@ -300,10 +300,10 @@ if($file){
         $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
             "<input type='hidden' value='$download_url'>" : '';
         $file_obj = MediaResourceFactory::initFromDocument($file);
-        $file_obj->setAccessURL(file_url($file->path, $file->filename));
+        $file_obj->setAccessURL(file_url($file->path, $file->filename, extra_path: $file->extra_path));
         $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
         $link = MultimediaHelper::chooseMediaAhref($file_obj);
-    }else{// These files are regarded with session documents
+    } else {// These files are regarded with session documents
         $image = choose_image('.' . $file->format);
         $download_url = "{$urlServer}modules/session/session_space.php?course=$course_code&amp;session=$sessionID&amp;download=" . getInDirectReference($file->path);
         $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
@@ -342,14 +342,16 @@ $data['resources'] = $resources;
 // An consultant can create a session
 $total_deliverables = 0;
 if($is_coordinator or $is_consultant){
-    $sql = "AND id IN (SELECT res_id FROM session_resources WHERE doc_id = $file_id AND from_user > 0)";
+    $sql = "AND id IN (SELECT res_id FROM session_resources WHERE doc_id = ?d AND from_user > 0)";
+    $sql_args = [$file_id];
     $total_info = Database::get()->querySingle("SELECT COUNT(*) as total FROM session_resources
                                                 WHERE session_id = ?d AND doc_id = ?d AND from_user > 0",$sessionID,$file_id);
     if($total_info){
         $total_deliverables = $total_info->total;
     }
 }else{// is simple user
-    $sql = "AND lock_user_id = $uid AND id IN (SELECT res_id FROM session_resources WHERE doc_id = $file_id)";
+    $sql = "AND lock_user_id = ?d AND id IN (SELECT res_id FROM session_resources WHERE doc_id = ?d)";
+    $sql_args = [$uid,$file_id];
 }
 $data['total_deliverables'] = $total_deliverables;
 
@@ -357,7 +359,7 @@ $docs = Database::get()->queryArray("SELECT * FROM document
                                             WHERE course_id = ?d
                                             AND subsystem = ?d
                                             AND subsystem_id = ?d
-                                            $sql", $course_id, MYSESSIONS, $sessionID);
+                                            $sql", $course_id, MYSESSIONS, $sessionID, $sql_args);
 
 if(count($docs) > 0){
     $badge_id = 0;
@@ -416,7 +418,7 @@ if(count($docs) > 0){
 }
 $data['docs'] = $docs;
 
-$data['comments_text'] = rich_text_editor('comments', 5, 40, '');
+$data['comments_text'] = rich_text_editor('comments', 5, 40, '', options: array('id' => 'comments'));
 
 $data['users_participants'] = session_participants_ids($sessionID);
 

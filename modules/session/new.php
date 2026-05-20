@@ -42,7 +42,7 @@ $pageName = $langAddSession;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 
 load_js('tools.js');
-load_js('select2');
+load_js('slimselect');
 load_js('bootstrap-datetimepicker');
 
 if(isset($_POST['submit'])){
@@ -82,7 +82,25 @@ if(isset($_POST['submit'])){
       Session::flash('alert-class', 'alert-danger');
       redirect_to_home_page("modules/session/new.php?course=".$course_code);
     }
+
+    // By default the duration has to be at least 45 min
+    $startSessionDate = date('d-m-Y H:i:s', strtotime($_POST['start_session']));
+    $endSessionDate = date('d-m-Y H:i:s', strtotime($_POST['end_session']));
+    $duration_text = '+45 minutes';
+    $endSessionDateDefaultDuration = date('d-m-Y H:i:s', strtotime($startSessionDate . $duration_text));
+    if ($endSessionDate < $endSessionDateDefaultDuration) {
+      Session::flash('message', 'Η συνεδρία δεν δημιουργήθηκε. Η διάρκεια της πρέπει να είναι τουλάχιστον 45 λεπτά.');
+      Session::flash('alert-class', 'alert-warning');
+      redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
+
     $creator = isset($_POST['creators']) ? $_POST['creators'] : 0;
+    // Not allow consultant creates a session for other user ids
+    if ($is_consultant && !$is_coordinator && $creator != $uid) {
+      Session::flash('message', $langForbidden);
+      Session::flash('alert-class', 'alert-warning');
+      redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
     $title = isset($_POST['title']) ? q($_POST['title']) : '';
     $comments = isset($_POST['comments']) ? purify($_POST['comments']) : null;
     $type_session = $_POST['session_type'];
@@ -282,7 +300,7 @@ if($is_coordinator){// is the tutor course
   $data['creators'] = Database::get()->queryArray("SELECT id,givenname,surname FROM user WHERE id = ?d",$uid);
 }
 
-$data['comments'] = rich_text_editor('comments', 5, 40, '' );
+$data['comments'] = rich_text_editor('comments', 5, 40, '', options: array('id' => 'comments'));
 
 
 $sql = "";

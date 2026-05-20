@@ -19,12 +19,30 @@
  */
 
 load_js('bootstrap-slider');
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 
-$head_content .= "
-<script>
+$head_content .= "<script>
 $(function() {
-    $('#questionCat').select2();
+    const textarea = $('#questionName');
+    if (textarea.length) {
+        const adjustHeight = function() {
+            $(this).css('height', 'auto').css('height', this.scrollHeight + 'px');
+        };
+        textarea.on('input', adjustHeight);
+        setTimeout(() => {
+            textarea.trigger('input');
+        }, 100);
+    }
+
+
+    slimSelectFun (
+        '#questionCat', 
+        '" . js_escape(trans('langSearch')) . "', 
+        '" . js_escape(trans('langWelcomeSelect')) . "', 
+        '" . js_escape(trans('langSelectAll')) . "', 
+        '" . js_escape(trans('langListChoices')) . "'
+    );
     var diffArray = ['$langQuestionNotDefined','$langQuestionVeryEasy', '$langQuestionEasy', '$langQuestionModerate', '$langQuestionDifficult', '$langQuestionVeryDifficult']
     $('#questionDifficulty').slider({
         tooltip: 'hide',
@@ -147,7 +165,7 @@ if (isset($_POST['submitQuestion'])) {
         }
         $objQuestion->updateTitle($questionName);
 
-        // If the current question is calculated type 
+        // If the current question is calculated type
         if ($answerType == CALCULATED) {
             $des = Database::get()->querySingle("SELECT `description` FROM exercise_question WHERE id = ?d", $objQuestion->selectId());
             $arr_des = unserialize($des->description);
@@ -308,7 +326,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             <div class='row form-group " . (Session::getError('questionName') ? "has-error" : "") . "'>
                 <label for='questionName' class='col-12 control-label-notes mb-1'>$langQuestion <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='col-12'>
-                      <input name='questionName' type='text' class='form-control' id='questionName' placeholder='$langQuestion' value='" . q($questionName) . "'>
+                    <textarea name='questionName' class='form-control auto-expand' id='questionName' rows='1' placeholder='$langQuestion' style='resize: none; overflow: hidden; min-height: 38px;'>" . q($questionName) . "</textarea>
                       <span class='help-block Accent-200-cl'>" . Session::getError('questionName') . "</span>
                 </div>
             </div>";
@@ -385,13 +403,13 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                     <label for='questionDescription' class='col-12 control-label-notes mb-1'>$langQuestionDescription</label>
                     <div class='col-12'>
 
-                      ". rich_text_editor('questionDescription', 4, 50, $questionDescription) ."
+                      ". rich_text_editor('questionDescription', 4, 50, $questionDescription, options: array('id' => 'questionDescription')) ."
                     </div>
                 </div>
                 <div class='row form-group mt-4'>
                     <label for='questionCat' class='col-12 control-label-notes mb-1'>$langQuestionCat</label>
                     <div class='col-12'>
-                        <select name='category' id='questionCat' class='form-select'>
+                        <select name='category' id='questionCat' class='form-control'>
                             $options
                         </select>
                     </div>
@@ -410,7 +428,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 <div class='row form-group mt-4'>
                     <label for='questionFeedback' class='col-12 control-label-notes mb-1'>$langQuestionFeedback</label>
                     <div class='col-12'>
-                      ". rich_text_editor('questionFeedback', 4, 50, $questionFeedback) ."
+                      ". rich_text_editor('questionFeedback', 4, 50, $questionFeedback, options: array('id' => 'questionFeedback')) ."
                     </div>
                 </div>
                 <div class='row'>

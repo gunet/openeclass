@@ -1,15 +1,8 @@
 <?php
 
 // Message file for language it
-// Generated 2025-12-02 16:31:18
+// Generated 2026-03-31 11:43:44
 
-$langOfConsultant = "Consultant";
-$langConsultants = "Consultants";
-$langOfConsultants = "Consultants";
-$langsConsultant = "consultant";
-$langsOfConsultant = "consultant";
-$langsConsultants = "consultants";
-$langsOfConsultants = "consultants";
 $langTeacherStudentTutorials = "Useful Guides $langsOfTeacher - $langsOfStudent";
 $langAdminTutorials = "Useful Guides Administrator";
 $lang_email_required = "$langOfUserS email must be required";
@@ -128,14 +121,14 @@ $langUserHasNotAcceptedSession = "The session registration was NOT accepted by t
 $langProcessCompleted = "You have successfully completed the process.";
 $langAnnouncedExistingSession = "Selected users will be notified by mail to register for the session.";
 $langNotExistUsers = "There are no users";
-$langWithConsent = "User consent for session registration?";
+$langWithConsent = "User consent for session Participation?";
 $langInfoWithConsent = "The user will be automatically logged into the session if user consent is not selected.";
-$langContinueToRegistrationSession = "You have chosen to subscribe to this session. Do you want to proceed?";
-$langCompleteRegistration = "Your registration has been completed successfully! You have entered your session area.";
-$langInProgressRegistration = "Pending user registration...";
-$langSubmitRegistration = "User registration";
+$langContinueToRegistrationSession = "You have chosen to participate to this session. Do you want to proceed?";
+$langCompleteRegistration = "Your participation has been completed successfully! You have entered your session area.";
+$langInProgressRegistration = "Pending user Participation...";
+$langSubmitRegistration = "User Participation";
 $langNoSubmitRegistration = "Unsubscribe";
-$langCancelSessionRegistration = "User registration is about to be cancelled. The user will be able to rejoin the session.
+$langCancelSessionRegistration = "User Participation is about to be cancelled. The user will be able to rejoin the session.
  The process of completing the session by that user will not be removed.
  To delete it permanently including its progress on completing the session, you can go to edit the session.</br></br>
  Do you want to continue?";
@@ -165,7 +158,7 @@ $langCompletedSessionMeeting = "Completion by live meeting";
 $langInfoForbiddenAddPrereq = "The operation you attempted cannot be completed as the current session is logged out by all users.";
 $langAllCompletedResources = "The session resources have been executed successfully by the user.";
 $langShowReportUserTable = "User session reports";
-$langShowReportUserCurrentSession = "Current session user report";
+$langShowReportUserCurrentSession = "Current session user attendance";
 $langCompletionResources = "Completion resources";
 $langCompletedResources = "Completed resources";
 $langResourceAsActivity = "Session completion resources";
@@ -191,57 +184,19 @@ $langInfoIfTcExists = "The live mode option has been disabled as there is a vide
 $langInfoIfMeetingExists = "The remote type option has been disabled as the live meeting completion criterion is active.";
 $infoPrereqSession = "The session you select as a prerequisite must have at least one completion criterion.</br>
  Otherwise the system will ignore the session prerequisite calculation process.";
-$langEclass = "Platform for Cooperation on Climate Change and Cultural Heritage";
-$langTeacher = "Coordinator";
-$langOfTeacher = "Coordinator";
-$langTeachers = "Coordinators";
-$langOfTeachers = "Coordinators";
-$langsTeacher = "coordinator";
-$langsOfTeacher = "coordinator";
-$langsTeachers = "coordinators";
-$langsOfTeachers = "coordinators";
-$langCTeacher = "COORDINATOR";
-$langConsultant = "Consultant";
-$langCourseAdminTeacher = "Admin - Coordinator";
-$langOfCourseAdminTeacher = "Admin - Coordinator";
-$langCourseAdminTeachers = "Administrators - Coordinators";
-$langOfCourseAdminTeachers = "Administrators - Coordinators";
 $langsCourseAdminTeacher = "admin - coordinator";
 $langsOfCourseAdminTeacher = "admin - coordinator";
 $langsCourseAdminTeachers = "administrators - coordinators";
 $langsOfCourseAdminTeachers = "administrators - coordinators";
-$langEditor = "Assistant coordinator";
-$langOfEditor = "Assistant coordinator";
-$langsEditor = "assistant coordinator";
-$langsOfEditor = "assistant coordinator";
-$langStudent = "Member";
-$langOfStudent = "Member";
-$langStudents = "Members";
-$langOfStudents = "Members";
-$langCStudent = "MEMBER";
-$langCStudent2 = "MEMBER";
 $langsStudent = "member";
-$langsOfStudent = "member";
-$langsStudents = "members";
-$langsOfStudents = "members";
-$langsOfStudentss = "members";
 $langsstudent_acc = "member";
 $langCourse = "Collaboration";
-$langCourses = "Collaborations";
-$langOfCourses = "Collaborations";
-$langOfCourse = "Collaboration";
 $langsCourse = "collaboration";
 $langsCourses = "collaborations";
 $langsOfCourse = "collaboration";
 $langsOfCourses = "collaborations";
-$langCourseS = $langsCourse;
 $langMyCourses = "My Collaborations";
-$langInfoAbout = "The $siteName platform is a complete Electronic Collaboration Management System. It follows the philosophy of open source software and supports the Asynchronous Distance Learning service without limitations and commitments. Access to the service is done using a simple web browser without requiring specialized technical knowledge.";
-$langSiteUrl = "URL of collaboration platform";
-$langInstall = "Installation of collaboration platform";
 $langLocale = 'el_GR.UTF-8';
-$langIntro = "The <strong>$siteName</strong> platform is an integrated $langOfCourses Electronic Management System and supports the Asynchronous Distance Learning Service at <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution< /a>.";
-$langTotalCourses = "Number of $langsOfCourses";
 $langInCourses = "in $langsCourse";
 $langInCoursesL = "in $langsCourse";
 $langUserWithRights = "User with rights to create collaborations";
@@ -323,8 +278,6 @@ $langStatsCourse = "Statistics $langOfCourse";
 $langCourseEditSuccess = "$langsOfCourse details changed successfully!";
 $langCourseInfoEdit = "Change $langsOfCourse elements";
 $langBackCourse = "Return to the $langsOfCourse home page";
-$langCourseFormat = "Format $langsOfCourse";
-$langWithCourseUnits = "$langCourse with modules (weekly, thematic)";
 $langsCourseSharing = "$langsOfCourse sharing on social networks";
 $langsCourseRating = "$langsOfCourse assessment";
 $langCourseComment = "$langsOfCourse annotation";
@@ -381,7 +334,7 @@ $langReqRegUser = "$langsOfStudent registration request";
 $langCourseSettings = "$langsOfCourses settings";
 $langCourseOfflineSettings = "Download $langsOfCourse";
 $langCourseOfflineLegend = "$langsStudents can download $langsCourse to their computer.";
-$langUserConsent = "About user consent";
+$langUserConsent = "User consent";
 $langUnsubscribeCourse = "Disable collaboration opt-out";
 $langClassInfoTitle = "Cooperation details";
 $langStuNum = "Number of Members";
@@ -790,7 +743,6 @@ $searchuser = "Search Moderators / Users";
 $langAsProf = "as $langsTeacher";
 $langCourseVisits = "Collaboration Visits";
 $langDurationVisitsPerCourse = "Duration of participation per $langsCourse";
-$langStudentCannotRegister = "To register as a user with $langsOfStudent rights, contact the platform administrators.";
 $langTeacherCannotRegister = "To register as a $langsOfTeacher user, please contact the platform administrators.";
 $langUserAccount = "Account $langOfStudent";
 $langProfAccount = "Account $langOfTeacher";
@@ -933,8 +885,6 @@ $langRequestStudent = "$langsOfStudent's application is closed!";
 $langAddToCourseHome = "Display on its main page $langsOfCourse";
 $langSeenToCourseHome = "It appears on its main page $langsOfCourse";
 $langRemoveFromCourseHome = "Hide from its main page $langsOfCourse";
-$langStudentViewEnable = "View page as $langsStudent";
-$langStudentViewDisable = "View page as $langsTeacher";
 $langMailNotVerified = "Your email is not confirmed. You will not be able to receive emails from $langsCourses until you confirm this.
 To confirm it click";
 $langEventcourse = "Facts $langsOfCourses";
@@ -1013,7 +963,7 @@ Choose one of the available forms of partnerships. </br></br>
 Specify, optionally, the distribution license of your collaboration.</br></br>
 Specify the type of access to your collaboration. </br></br>
 To complete the process of creating the collaboration, press the button with the indicator «Creating a Partnership».";
-$langMonthlyReportInfo = "Aggregates (partnerships, users) of the last 24 months are presented.";
+$langMonthlyReportInfo = "Aggregates (partnerships, users) of the last 12 months are presented.";
 $langAddingDirectoryIndex = 'Add index.html files to collaboration subdirectories';
 $langAdministratorGroup = 'Management of User Groups';
 $m['WorkToAllUsers'] = "In all the $langsOfStudentss";
@@ -1084,31 +1034,18 @@ $langCourseInvitationUsersExcelInfo = "You can send a spreadsheet file (eg xls, 
  The second and third columns can optionally contain the last name and first name of each user.
  Note that users who are already on the platform with the e-mail will be immediately added to the partnership without receiving an invitation and without further notification.";
 $langSendReminder = "Send a reminder";
-$langNoLongerValid = 'The link you followed is no longer valid.';
-$langInvitationAlreadyUsed = 'You have already registered on the platform through
- link you followed. You can now log in with your username
- your e-mail address and the password you had chosen.';
 $langRegisterAsVisitor = 'Register as a guest';
 $langCourseInvitation = 'Invitation to register for the partnership';
 $langPreviewCollaboration = ' collaboration';
 $langUnregCollaboration = 'Unregister from collaboration';
-$langDisableCollaborationModulesHelp = 'You can select which modules will be disabled for all collaborations platform-wide.';
-$langDefaultModulesCollaborationHelp = 'The following modules are enabled by default in all collaborations created on the platform.';
 $langCourseMetadata = "Metadata $langsOfCourse";
-$langInfoAboutCollabRegistration = "The partnership you selected is closed. To register, you must
- to complete the following application, which will be recorded and sent to the administrators of the collaboration.";
-$langLabelCollabUserRequest = "Application for collaboration registration";
-$langRequestReasonsCollab = "State the reasons you wish to register for the collaboration.";
-$m['password_collab'] = "Password for collaboration";
-$lang_openCourse_inModal = "Should the collaboration information be displayed in Modal (Frame) in the open collaborations?</br>
- If you do not select this option, the information of the partnership will be displayed in a new page of your browser.";
-$langGroupWorkIntro = '
-	Assignments available in this collaboration are displayed below. Please select
-	the assignment you wish to submit on behalf of your group and
-	add any comments you want to be read by the collaboration consultant or coordinator. Please note that, when a submission has already been made by you or another member of your group, and you submit a new file for the same assignment, this file will replace the old file in the system (the old file will be deleted).
-	Furthermore, no new submissions are allowed when the assignment has
-	been graded.';
 $langResourceExists = "The resource already exists.";
 $langUsedCertRes = "The activity has already been used by a user.";
 $langUseOfAppInfo = "Choose which collaborations the app will be used in";
 $langUseOfServiceInfo = "Choose in which partnerships the service will be used";
+$langSubmissionOnBehalfOfUser = "Submission on behalf of user";
+$langChooseAUser = "You did not select a user. Please try again.";
+$langProcessForFiliInTool = "You are in the process of completing the tool regarding the selected user.";
+$langConfirmParticipation = "Confirmation";
+$langReportAttendances = "Reports - Attendance records";
+$langUpdatePercentage = "Update session percentage of users";

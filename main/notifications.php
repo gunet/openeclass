@@ -25,6 +25,7 @@ require_once 'portfolio_functions.php';
 require_once 'main/notifications/notifications.inc.php';
 
 header('Content-Type: application/json; charset=UTF-8');
+header('X-Content-Type-Options: nosniff');
 
 $json_obj = array(
     'messages' => getSidebarMessages(),

@@ -31,13 +31,22 @@ $coursePath = $webDir . '/courses/';
 $toolName = $langChat;
 $display = TRUE;
 
+define('COLMOOC_JSON_HEAD', "Content-Type: application/json\r\n");
+$colmoocapp = ExtAppManager::getApp(strtolower(ColmoocApp::NAME));
+
 load_js('tools.js');
 load_js('validation.js');
-load_js('select2');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
-        $('#select-chatusers').select2();
+        slimSelectFun (
+            '#select-chatusers', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             var stringVal = [];
@@ -73,7 +82,7 @@ if ($is_editor) {
         $pageName = $langAdd;
         $navigation[] = ['url' => "{$urlServer}modules/chat/index.php?course=$course_code", 'name' => $langChat];
 
-        $textarea = rich_text_editor('description', 4, 20, '');
+        $textarea = rich_text_editor('description', 4, 20, '', options: array('id' => 'description'));
 
         $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
@@ -101,7 +110,7 @@ if ($is_editor) {
                 </div>
             </div>
         </div>";
-        if ($colmoocapp->isEnabled()) {
+        if ($colmoocapp && $colmoocapp->isEnabled()) {
             $tool_content .= "<div class='form-group mt-4'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
@@ -119,7 +128,7 @@ if ($is_editor) {
             <div class='form-group mt-4'>
                 <div class='col-sm-12'>
                     <label for='select-chatusers' class='col-12 control-label-notes'>$langChatToSpecUsers</label>
-                    <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
+                    <select name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
             $chat_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.username
                                                         FROM course_user cu
                                                             JOIN user u ON cu.user_id=u.id
@@ -131,7 +140,6 @@ if ($is_editor) {
                 $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->username) . ")</option>";
             }
             $tool_content .= "</select>
-                    <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                 </div>
             </div>";
 
@@ -243,7 +251,7 @@ if ($is_editor) {
         $conf_id = $_GET['edit_conference'];
 
         $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id);
-        $textarea = rich_text_editor('description', 4, 20, $conf->conf_description);
+        $textarea = rich_text_editor('description', 4, 20, $conf->conf_description, options: array('id' => 'description'));
 
         $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
                             <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
@@ -267,7 +275,7 @@ if ($is_editor) {
         <div class='form-group mt-4'>
             <div class='col-sm-12'>
                 <label for='select-chatusers' class='col-12 control-label-notes'>$langChatToSpecUsers</label>
-                <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
+                <select name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
 
         if ($conf->user_id > 0) { // existing chat users (if exist)
             $existing_chat_users = explode(',', $conf->user_id);
@@ -300,7 +308,6 @@ if ($is_editor) {
             $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->username) . ")</option>";
         }
         $tool_content .= "</select>
-                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>";
 
@@ -317,7 +324,7 @@ if ($is_editor) {
             </div>
         </div>";
 
-        if ($colmoocapp->isEnabled()) {
+        if ($colmoocapp && $colmoocapp->isEnabled()) {
             $activity_status = ($conf->chat_activity == true) ? 'checked' : '';
             $tool_content .= "<div class='form-group mt-4'>
                 <div class='col-sm-10 col-sm-offset-2'>

@@ -42,7 +42,8 @@ if (isset($_REQUEST['t'])) {
         case 'pcs':
         case 'ul':
         case 'ols':
-            $require_admin = true;
+            $require_departmentmanage_user = true;
+            $require_login = true;
         break;
         case 'ucp':
         case 'uc':

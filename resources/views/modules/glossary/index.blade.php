@@ -2,13 +2,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                         <div class="row">
 
@@ -61,9 +58,9 @@
                                                     <div class="card panelCard card-default px-lg-4 py-lg-3 h-100">
                                                         <div class="card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap">
 
-                                                                <a class='ViewGroup TextBold' href='{{ $base_url."&id=" . $glossary_term->id }}'>
+                                                                <h2 class='text-heading-h3'><a class='ViewGroup TextBold' href='{{ $base_url."&id=" . $glossary_term->id }}'>
                                                                     {{ $glossary_term->term }}
-                                                                </a>
+                                                                </a></h2>
 
                                                             @if($is_editor)
                                                                 <div>
@@ -106,7 +103,7 @@
                                                                 <p class='mb-0 TextBold'>URL</p>
                                                                 <p class='small-text'>
                                                                     @if ($glossary_term->url)
-                                                                        <a href='{{ $glossary_term->url }}' target='_black'>
+                                                                        <a class="text-decoration-underline" href='{{ $glossary_term->url }}' target='_black'>
                                                                             {{ $glossary_term->url }}
                                                                         </a>
                                                                     @else
@@ -138,8 +135,8 @@
                                     <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoGlossary') }}</span></div></div>
                                 @endif
                         </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
+
 @endsection

@@ -67,9 +67,9 @@ class CalculatedAnswer extends \QuestionType
         if ($q_data) {
             $des_arr = unserialize($q_data->description);
             $question_description = $des_arr['question_description'];
-            $html_content .= "<div class='col-12 my-3'>$question_description</div>";
+            $html_content .= "<div tabindex='0' class='col-12 my-3'>$question_description</div>";
             $arithmetic_expression_str = $this->answer_object->replaceItemsBracesWithWildCards($des_arr['arithmetic_expression'], $this->question_id);
-            $html_content .= "<div class='col-12 my-3'>$arithmetic_expression_str</div>";
+            $html_content .= "<div tabindex='0' class='col-12 my-3'>$arithmetic_expression_str</div>";
         }
 
         $html_content .= "<input type='hidden' name='choice[{$this->question_id}]' value=''>";
@@ -95,8 +95,8 @@ class CalculatedAnswer extends \QuestionType
             if (count($answer_object_ids) > 1) { // multiple answers with radios buttons
                 $html_content .= "
                     <div class='radio mb-1'>
-                        <label>
-                            <input type='radio' name='choice[$this->question_id]' value='{$answerVal}|{$answerId}' $checked onClick='updateQuestionNavButton(" . $question_number . ");'>                        
+                        <label for='AccessibilityCalculatedCheck_{$this->question_id}_{$answerId}'>
+                            <input id='AccessibilityCalculatedCheck_{$this->question_id}_{$answerId}' type='radio' name='choice[$this->question_id]' value='{$answerVal}|{$answerId}' $checked onClick='updateQuestionNavButton(" . $question_number . ");'>                        
                             " . standard_text_escape($answerVal) . "
                         </label>
                     </div>";

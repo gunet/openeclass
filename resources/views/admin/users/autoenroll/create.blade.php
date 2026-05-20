@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -75,7 +75,7 @@
                                         <div class='modal-dialog'>
                                             <div class='modal-content'>
                                                 <div class='modal-header'>
-                                                    <div class='modal-title' id='treeCourseModalLabel'>{{ trans('langNodeAdd') }}</div>
+                                                    <h2 class='modal-title' id='treeCourseModalLabel'>{{ trans('langNodeAdd') }}</h2>
                                                     <button type='button' class='close treeCourseModalClose' aria-label="{{ trans('langClose') }}">
                                                     </button>
 
@@ -118,5 +118,5 @@
                 </div>
         </div>
     </div>
-</div>
+</main>
 @endsection

@@ -41,13 +41,25 @@ if (isset($_SESSION['fc_memo'])) {
     $fc = $_SESSION['fc_memo'];
 }
 
+if (isset($_GET['fc'])) { // fetch specific department
+    $fc = intval($_GET['fc']);
+    $_SESSION['fc_memo'] = $fc; // needed in case the user decides to switch language.
+} elseif (isset($_SESSION['uid'])) { // fetch user department (default) if user logged in
+    $fc = getfcfromuid($_SESSION['uid']);
+    if (!$fc) { // if user does not belong to department
+        list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
+        $fc = intval($roots[0]->id);
+    }
+    $_SESSION['fc_memo'] = $fc; // needed in case the user decides to switch language.
+}
+
 if (isset($_SESSION['uid'])) {
     if ($is_power_user) {
         $unlock_all_courses = true;
     } elseif ($is_departmentmanage_user) {
         $user = new User();
         $subtrees = $tree->buildSubtrees($user->getAdminDepartmentIds($uid));
-        $unlock_all_courses = in_array($facid, $subtrees);
+        $unlock_all_courses = in_array($fc, $subtrees);
     }
 
     $restrictedCourses = array();
@@ -112,19 +124,6 @@ $userdeps = $user->getDepartmentIds($uid);
 $subs = $tree->buildSubtreesFull($userdeps);
 foreach ($subs as $node) {
     $user_faculty_ids[] = $node->id;
-}
-
-
-if (isset($_GET['fc'])) { // fetch specific department
-    $fc = intval($_GET['fc']);
-    $_SESSION['fc_memo'] = $fc; // needed in case the user decides to switch language.
-} else if (isset($_SESSION['uid'])) { // fetch user department (default) if user logged in
-    $fc = getfcfromuid($_SESSION['uid']);
-    if (!$fc) { // if user does not belong to department
-        list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
-        $fc = intval($roots[0]->id);
-    }
-    $_SESSION['fc_memo'] = $fc; // needed in case the user decides to switch language.
 }
 
 $fac = Database::get()->querySingle("SELECT id, name, visible FROM hierarchy WHERE id = ?d", $fc);

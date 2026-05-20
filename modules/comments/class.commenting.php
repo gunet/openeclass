@@ -83,26 +83,26 @@ Class Commenting {
         if (!$always_open) {
             $comments_title = "<i class='fa-regular fa-comment-dots'></i>
                                 &nbsp;|&nbsp;
-                                <a class='course_commenting vsmall-text text-decoration-underline' data-bs-toggle='modal' data-bs-target='#commentArea-$this->rid'>
+                                <a class='course_commenting vsmall-text text-decoration-underline' data-bs-toggle='modal' href='#commentArea-$this->rid' role='button'>
                                     $langComments
                                     <span id='commentsNum-$this->rid'>($commentsNum)</span> 
                                     
                                 </a>";
             $out = "$comments_title
-                    <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog'>
+                    <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog' tabindex='-1'>
                       <div class='modal-dialog modal-lg'>
                         <div class='modal-content'>
                           <div class='modal-header'>
                             <div class='modal-title'>
                                 <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                                <div class='modal-title-default text-center mb-0'>$langComments</div>
+                                <h2 class='modal-title-default text-center mb-0' tabindex='0'>$langComments</h2>
                             </div>
                            
                               
                           </div>
                           <div class='modal-body px-lg-5 px-0' id='comments-$this->rid'>";
         } else {
-            $comments_title = "<h3 id='comments_title'>$langComments (<span class='fs-5' id='commentsNum-$this->rid'>$commentsNum</span>)</h3>";
+            $comments_title = "<h2 id='comments_title' class='text-heading-h3'>$langComments (<span class='fs-5' id='commentsNum-$this->rid'>$commentsNum</span>)</h2>";
             $out = "<div class='commenting pt-3 pb-3 mt-3'>
                         $comments_title
                     <div class='commentArea' id='commentArea-$this->rid'>
@@ -116,9 +116,9 @@ Class Commenting {
                 if (is_null($courseCode)) { //for the case of personal blog posts comments
                     if (isset($_SESSION['uid']) && ($isEditor || ($comment->getAuthor() == $uid))) { //$isEditor corresponds to blog editor
                         $post_actions = '<div class="d-flex gap-3">';
-                        $post_actions .= '<a aria-label="'.$langModify.'" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
+                        $post_actions .= '<a role="button" aria-label="'.$langModify.'" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></i></a>';
-                        $post_actions .= '<a aria-label="'.$langDelete.'" class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                        $post_actions .= '<a role="button" aria-label="'.$langDelete.'" class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-xmark" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></i></a>';
                         $post_actions .='</div>';
                     } else {
@@ -134,9 +134,9 @@ Class Commenting {
                         }
 
 
-                        $post_actions .= '<a aria-label="'.$langModify.'" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
+                        $post_actions .= '<a role="button" aria-label="'.$langModify.'" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></i></a>';
-                        $post_actions .= '<a aria-label="'.$langDelete.'" class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                        $post_actions .= '<a role="button" aria-label="'.$langDelete.'" class="link-delete" href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                         $post_actions .= '<i class="fa-solid fa-xmark" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></i></a>';
 
                         $post_actions .='</div>';

@@ -2,13 +2,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
-        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -25,108 +22,10 @@
 
                     @include('layouts.partials.legend_view')
 
-                    @if ($is_editor and $q->flipped_flag != 2)
-
-                                {!! action_bar(array(
-                                    array('title' => trans('langEditUnitSection'),
-                                        'url' => $editUrl,
-                                        'icon' => 'fa fa-edit',
-                                        'level' => 'primary-label',
-                                        'button-class' => 'btn-success'),
-                                    array('title' => trans('langUnitCompletion'),
-                                        'url' => $manageUrl,
-                                        'icon' => 'fa fa-gear',
-                                        'button-class' => 'btn-success'),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertText'),
-                                        'url' => $insertBaseUrl . 'text',
-                                        'icon' => 'fa fa-file-lines',
-                                        'level' => 'secondary'),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertDivider'),
-                                        'url' => $insertBaseUrl . 'divider',
-                                        'icon' => 'fa fa-grip-lines',
-                                        'level' => 'secondary'),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
-                                        'url' => $insertBaseUrl . 'exercise',
-                                        'icon' => 'fa fa-file-pen',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_EXERCISE)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertDoc'),
-                                        'url' => $insertBaseUrl . 'doc',
-                                        'icon' => 'fa fa-folder',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_DOCS)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertLink'),
-                                        'url' => $insertBaseUrl . 'link',
-                                        'icon' => 'fa fa-link',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_LINKS)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langLearningPath1'),
-                                        'url' => $insertBaseUrl . 'lp',
-                                        'icon' => 'fa fa-timeline',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_LP)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertVideo'),
-                                        'url' => $insertBaseUrl . 'video',
-                                        'icon' => 'fa fa-film',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_VIDEO)),
-                                    array('title' => trans('langAdd') .' '. trans('langOfH5p'),
-                                        'url' => $insertBaseUrl . 'h5p',
-                                        'icon' => 'fa fa-tablet',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_H5P)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertExternalRepo'),
-                                        'url' => $insertBaseUrl . 'extrepo',
-                                        'icon' => 'fa fa-globe',
-                                        'level' => 'secondary',
-                                        'show' => $hasExternalRepos ?? false),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertForum'),
-                                        'url' => $insertBaseUrl . 'forum',
-                                        'icon' => 'fa-regular fa-comment',
-                                        'level' => 'secondary'),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertEBook'),
-                                        'url' => $insertBaseUrl . 'ebook',
-                                        'icon' => 'fa fa-book-atlas',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_EBOOK)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertWork'),
-                                        'url' => $insertBaseUrl . 'work',
-                                        'icon' => 'fa fa-upload',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_ASSIGN)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertPoll'),
-                                        'url' => $insertBaseUrl . 'poll',
-                                        'icon' => 'fa fa-question',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_QUESTIONNAIRE)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertWiki'),
-                                        'url' => $insertBaseUrl . 'wiki',
-                                        'icon' => 'fa fa-w',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_WIKI)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertChat'),
-                                        'url' => $insertBaseUrl . 'chat',
-                                        'icon' => 'fa-regular fa-comment-dots',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_CHAT)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
-                                        'url' => $insertBaseUrl . 'tc',
-                                        'icon' => 'fa fa-exchange',
-                                        'level' => 'secondary',
-                                        'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id)))
-                                    ))
-                                !!}
-
-                    @endif
-                    @if ($is_editor and $q->flipped_flag == 2)
-                        {!! action_bar(array(
-                            array('title' => trans('langEdit'),
-                                'url' => $editUrl,
-                                'icon' => 'fa fa-edit',
-                                'level' => 'primary-label',
-                                'button-class' => 'btn-success')
-                        )) !!}
-
+                    @if(isset($action_bar))
+                        {!! $action_bar !!}
+                    @else
+                        <div class='mt-4'></div>
                     @endif
 
                     @include('layouts.partials.show_alert')
@@ -138,12 +37,14 @@
                                     <ul class="tree-units">
                                         <li>
                                             <details>
-                                                <summary><h3 class='mb-0'>{{ trans('langUnits')}}</h3></summary>
+                                                <summary><h2 class='text-heading-h3 mb-0'>{{ trans('langDisplayAllUnits')}}</h2></summary>
                                                 <ul>
                                                     @foreach ($units as $cu)
-                                                        <li {{ $cu->id == $id ? "class=active-unit" : "" }}>
-                                                            <a class='TextBold{{ $cu->id != $id ? "" : " Success-200-cl" }}' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
-                                                                {{ $cu->title }}
+                                                        <li @class([
+                                                            'active-unit' => $cu->id == $id,
+                                                            'disable-branch' => $cu->visible >= 2
+                                                        ])>
+                                                            <a class="TextBold{{ $cu->id == $id ? ' Success-200-cl' : '' }}{{ $cu->visible >= 2 ? ' disabled' : '' }}" @if($cu->visible < 2) href="{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}" @endif @if($cu->id == $id) aria-current="{{ $cu->title }}" @endif @if($cu->visible >= 2) style="pointer-events: none; cursor: default; opacity: 0.6;" @endif>                                                                {{ $cu->title }}
                                                             </a>
                                                             <br>
                                                             @if (!is_null($cu->start_week))
@@ -168,7 +69,7 @@
                     <div class='col-12 mt-4'>
                         <div class="card panelCard card-default px-lg-4 py-lg-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3>{{ $pageName }}</h3>
+                                <h2 class='text-heading-h3'>{{ $unit_title }}</h2>
                                 @if ($is_editor and $q->flipped_flag == 2)
                                 <a aria-label="{{ trans('langActivities') }}" href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}"
                                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langActivities') }}">
@@ -186,13 +87,13 @@
                                 @if ($previousLink or $nextLink)
                                     <div class='col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap mb-4 @if($comments) border-bottom-default pb-4 @endif'>
                                         @if ($previousLink)
-                                            <a class='TextBold' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
+                                            <a class='TextBold' title='{{ $previousTitle }}' href='{{ $previousLink}}' aria-label="{{ trans('langPrevUnit') }}{{ $previousTitle }}">
                                                 <i class='fa fa-arrow-left space-after-icon'></i>
                                                 {{ ellipsize($previousTitle, 30) }}
                                             </a>
                                         @endif
                                         @if ($nextLink)
-                                            <a class='TextBold ms-auto' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
+                                            <a class='TextBold ms-auto' title='{{ $nextTitle }}' href='{{ $nextLink}}' aria-label="{{ trans('langNextUnit') }}{{ $nextTitle }}">
                                                 {{ ellipsize($nextTitle, 30) }}
                                                 <i class='fa fa-arrow-right space-before-icon'></i>
                                             </a>
@@ -228,7 +129,7 @@
                                         <label class='control-label-notes' for='id' style="min-width: 130px;"></span>&nbsp;{{ trans('langGoTo') }}:</label>
                                         <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
                                             @foreach ($units as $unit)
-                                                <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
+                                                <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }} {{ $unit->visible >= 2 ? 'disabled' : '' }}>
                                                     {{ ellipsize($unit->title, 50) }}
                                                 </option>
                                             @endforeach
@@ -514,7 +415,7 @@
                           <div class="modal-dialog modal-lg modal-dialog-centered">\
                             <div class="modal-content">\
                               <div class="modal-header">\
-                                <h5 class="modal-title"></h5>\
+                                <h2 class="modal-title"></h2>\
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>\
                               </div>\
                               <div class="modal-body"></div>\
@@ -583,9 +484,8 @@
 
                 </script>
 
-            </div>
+            </main>
         </div>
     </div>
-</div>
 
 @endsection

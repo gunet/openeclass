@@ -25,12 +25,25 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 $require_current_course = true;
 $require_course_reviewer = true;
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'modules/questionnaire/functions.php';
+require_once 'modules/session/functions.php';
 
 if (!isset($_GET['pid'])) {
     redirect_to_home_page();
 } else {
     $pid = intval($_GET['pid']);
+}
+
+// Check if uid is the coordinator or the consultant of the current session.
+if (isset($_GET['session'])) {
+    $check = Database::get()->querySingle("SELECT user_id FROM course_user 
+        WHERE user_id = ?d AND course_id = ?d AND status = ?d AND tutor = ?d", $uid, $course_id, USER_STUDENT, 1);
+    if ($check && !is_session_consultant($_GET['session'],$course_id)) {
+        Session::flash('message', $langForbidden);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
 }
 
 $full = isset($_GET['full']) && $_GET['full'];
@@ -59,8 +72,22 @@ $data[] = [ $poll_title ];
 $data[] = [];
 
 $sqlSession = '';
+$args_s = [];
 if (isset($_GET['dumppoll_session'])) {
-    $sqlSession = "AND b.session_id = $_GET[session]";
+    $sqlSession = "AND b.session_id =?d";
+    $args_s = [$_GET['session']];
+}
+
+$res_per_user = '';
+$sql_per_user = '';
+$sql_per_user_2 = '';
+$args_u = [];
+if (isset($_GET['res_per_u'])) {
+    $u = intval($_GET['res_per_u']);
+    $res_per_user = "AND uid = ?d";
+    $sql_per_user = "AND b.uid = ?d";
+    $sql_per_user_2 = "AND a.uid = ?d";
+    $args_u = [$u];
 }
 
 if ($full) { // user questions results
@@ -70,17 +97,18 @@ if ($full) { // user questions results
         $heading = array($langSurname, $langName, $langAm, $langUsername, $langEmail);
     }
     $heading[] = $langDate;
-    $questions = Database::get()->queryArray('SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position', $pid);
+    $questions = Database::get()->queryArray('SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d AND has_sub_question != ?d ORDER BY q_position', $pid, 0, -1);
     $users = Database::get()->queryArray("SELECT uid AS user_identifier
                                             FROM poll_user_record
                                                 WHERE pid = ?d
+                                                $res_per_user
                                                 AND uid != 0
                                             UNION
                                                 SELECT email AS user_identifier
                                                 FROM poll_user_record
                                                 WHERE pid = ?d
                                                 AND email_verification = 1",
-                                        $pid, $pid);
+                                        $pid, $args_u, $pid);
 
     $q_counter = 0;
     foreach ($questions as $q) {
@@ -118,16 +146,58 @@ if ($full) { // user questions results
                 $qlist[$user->user_identifier][$q->pqid] = '-';
             }
         } elseif ($q->qtype == QTYPE_SINGLE or $q->qtype == QTYPE_MULTIPLE) {
-            $answers = Database::get()->queryArray("SELECT c.answer_text, a.aid, b.uid, b.email, a.submit_date
+            $answers = Database::get()->queryArray("SELECT c.answer_text, a.aid, b.uid, b.email, a.poll_user_record_id, a.submit_date
                                 FROM poll_user_record b, poll_answer_record a
                                 LEFT JOIN poll_question_answer c
                                 ON a.aid = c.pqaid
                                 WHERE a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
                                 AND a.qid = ?d
-                                $sqlSession", $q->pqid);
+                                $sql_per_user
+                                $sqlSession", $q->pqid, $args_u, $args_s);
+
             foreach ($answers as $a) {
-                $answer_text = ($a->aid < 0)? $langPollUnknown: $a->answer_text;
+
+                // Get user answers from sub-question
+                if ($q->qtype == QTYPE_SINGLE && $q->has_sub_question == 1) {
+                    $sub_question_id = 0;
+                    $check_sub_q = Database::get()->querySingle("SELECT sub_qid FROM poll_question_answer WHERE pqaid = ?d", $a->aid)->sub_qid;
+                    if ($check_sub_q > 0) {
+                        $sub_question_id = $check_sub_q;
+                        $sub_question_type = Database::get()->querySingle("SELECT qtype FROM poll_question WHERE pqid = ?d", $sub_question_id)->qtype;
+                        if ($sub_question_type == QTYPE_SINGLE) {
+                            $res = Database::get()->querySingle("SELECT poll_question_answer.answer_text FROM poll_question_answer
+                                                                 LEFT JOIN poll_answer_record ON poll_question_answer.pqaid=poll_answer_record.aid
+                                                                 WHERE poll_answer_record.poll_user_record_id = ?d
+                                                                 AND poll_answer_record.qid = ?d", $a->poll_user_record_id, $sub_question_id)->answer_text;
+                            $a->sub_q_answers = $res;
+                        } elseif ($sub_question_type == QTYPE_MULTIPLE) {
+                            $res = Database::get()->queryArray("SELECT poll_question_answer.answer_text FROM poll_question_answer
+                                                                LEFT JOIN poll_answer_record ON poll_question_answer.pqaid=poll_answer_record.aid
+                                                                WHERE poll_answer_record.poll_user_record_id = ?d
+                                                                AND poll_answer_record.qid = ?d", $a->poll_user_record_id, $sub_question_id);
+                            if (count($res) > 0) {
+                                $resArr = [];
+                                foreach ($res as $r) {
+                                    $resArr[] = $r->answer_text;
+                                }
+                                $a->sub_q_answers = implode(',', $resArr);
+                            }
+                        } elseif ($sub_question_type == QTYPE_FILL) {
+                            $res = Database::get()->querySingle("SELECT answer_text FROM poll_answer_record
+                                                                 WHERE poll_user_record_id = ?d
+                                                                 AND qid = ?d", $a->poll_user_record_id, $sub_question_id)->answer_text;
+                            $a->sub_q_answers = $res;
+                        }
+                    }
+                }
+
+                $sub_answer_text = '';
+                if (isset($a->sub_q_answers)) {
+                    $sub_answer_text = "[" . $a->sub_q_answers . "]";
+                }
+
+                $answer_text = ($a->aid < 0)? $langPollUnknown: $a->answer_text . $sub_answer_text;
                 $user_identifier = $a->uid ?: $a->email;
                 if (isset($qlist[$user_identifier][$q->pqid])) {
                     $qlist[$user_identifier][$q->pqid] .= ', ' . $answer_text;
@@ -145,8 +215,9 @@ if ($full) { // user questions results
                                                     AND a.sub_qid = ?d
                                                     AND a.poll_user_record_id = b.id
                                                     AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                                                    $sql_per_user
                                                     $sqlSession
-                                                    ORDER BY uid", $q->pqid, $q->sub_question);
+                                                    ORDER BY uid", $q->pqid, $q->sub_question, $args_u, $args_s);
 
             foreach ($answers as $a) {
                 $answer_text = $a->answer_text;
@@ -167,11 +238,17 @@ if ($full) { // user questions results
                                 WHERE qid = ?d
                                 AND a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                                $sql_per_user
                                 $sqlSession
-                                ORDER BY uid", $q->pqid);
+                                ORDER BY uid", $q->pqid, $args_u, $args_s);
             foreach ($answers as $a) {
                 $user_identifier = $a->uid ?: $a->email;
-                $qlist[$user_identifier][$q->pqid] = $a->answer_text;
+                $u_answer_text = $a->answer_text;
+                if ($q->qtype == QTYPE_FILE) {
+                    $arrFile = unserialize($a->answer_text);
+                    $u_answer_text = $arrFile['filename'];
+                }
+                $qlist[$user_identifier][$q->pqid] = $u_answer_text;
                 if (!isset($submit_date[$user_identifier])) {
                     $submit_date[$user_identifier] = format_locale_date(strtotime($a->submit_date), 'short');
                 }
@@ -183,8 +260,10 @@ if ($full) { // user questions results
     $session_participants = [];
     if (isset($_GET['dumppoll_session'])) {
         $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users
-                                                             WHERE session_id = $_GET[session] AND is_accepted = 1
-                                                             AND participants IN (SELECT uid FROM poll_user_record WHERE pid = $pid AND session_id = $_GET[session])");
+                                                     WHERE session_id = ?d 
+                                                     AND is_accepted = 1
+                                                     AND participants IN (SELECT uid FROM poll_user_record WHERE pid = ?d AND session_id = ?d)", $_GET['session'], $pid, $_GET['session']);
+        
         if (count($participants) > 0) {
             foreach ($participants as $p) {
                 $session_participants[] = $p->participants;
@@ -225,7 +304,7 @@ if ($full) { // user questions results
     }
 
 } else { // percentage results
-    $questions = Database::get()->queryArray('SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position', $p->pid);
+    $questions = Database::get()->queryArray('SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d AND has_sub_question != ?d ORDER BY q_position', $p->pid, 0, -1);
     foreach ($questions as $q) {
         if ($q->qtype == QTYPE_LABEL) {
             $questions_text = strip_tags($q->question_text);
@@ -240,15 +319,17 @@ if ($full) { // user questions results
                                     ON b.aid = c.pqaid
                                     WHERE b.qid = ?d
                                     AND b.poll_user_record_id = a.id
+                                    $sql_per_user_2
                                     AND (a.email_verification = 1 OR a.email_verification IS NULL)
-                                    GROUP BY b.aid, c.answer_text", $q->pqid);
+                                    GROUP BY b.aid, c.answer_text", $q->pqid, $args_u);
             } else {
                 $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text
                                                         FROM poll_answer_record a, poll_user_record b
                                                         WHERE a.qid = ?d
                                                         AND a.poll_user_record_id = b.id
+                                                        $sql_per_user
                                                         AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                                                        GROUP BY a.answer_text", $q->pqid);
+                                                        GROUP BY a.answer_text", $q->pqid, $args_u);
             }
             $answer_counts = array();
             $answer_text = array();
@@ -263,7 +344,7 @@ if ($full) { // user questions results
                         $answer_text[] = $a->answer;
                     }
                 } else {
-                    $answer_text[] = $a->answer_text;
+                    $answer_text[] = get_default_scale_answer_text($a->answer_text);
                 }
             }
             $data[] = [ '', $langResults, $langResults . ' (%)' ];
@@ -359,7 +440,7 @@ function create_pdf($data) {
         </head>
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-         <h3>" . q($langResults) . "</h3>
+         <h2 class='text-heading-h3'>" . q($langResults) . "</h2>
          <p></p>";
 
     $pdf_content .= $content;
@@ -370,9 +451,18 @@ function create_pdf($data) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // for old courses
+    if ($image_height_header > 50) {
+        $image_height_header = 20;
+    }
+    if ($image_height_footer > 50) {
+        $image_height_footer = 15;
+    }
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => $image_height_header + 20,     // mm
+        'margin_bottom' => $image_height_footer + 10,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [

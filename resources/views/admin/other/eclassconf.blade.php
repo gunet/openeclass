@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
 
             <div class="row m-auto">
@@ -36,23 +36,22 @@
                     <div class="sticky-top" style="z-index: 1;top:5rem;">
                         <div id="navbar-card-affixed" class="card card-affixed flex-column align-items-stretch p-3 " style="z-index:0;">
                             <nav class="nav nav-pills flex-column flex-xs-row flex-sm-row flex-md-row">
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl active" data-menuID="one" href="#">{{ trans('langBasicCfgSetting') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="two" href="#">{{ trans('langUpgReg') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="three" href="#">{{ trans('langSupportedLanguages') }}</a>
-
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="five" href="#">{{ trans('langEmailSettings') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="six" href="#">{{ trans('langCourseSettings') }}</a>
-                                @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="seven" href="#">{{ trans('langMetaCommentary') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100 active" data-menuID="one" href="#">{{ trans('langBasicCfgSetting') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="two" href="#">{{ trans('langUpgReg') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="three" href="#">{{ trans('langSupportedLanguages') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="five" href="#">{{ trans('langEmailSettings') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="six" href="#">{{ trans('langCourseSettings') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="eight" href="#">{{ trans('langOtherOptions') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="nine" href="#">{{ trans('langDocumentSettings') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="ten" href="#">{{ trans('langDefaultQuota') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="eleven" href="#">{{ trans('langUploadWhitelist') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="twelve" href="#">{{ trans('langLogActions') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="thirteen" href="#">{{ trans('langLoginFailCheck') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="fourteen" href="#">{{ trans('langTenantSettings') }}</a>
+                                @if ((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="seven" href="#">{{ trans('langMetaCommentary') }}</a>
                                 @endif
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="eight" href="#">{{ trans('langOtherOptions') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="nine" href="#">{{ trans('langDocumentSettings') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="ten" href="#">{{ trans('langDefaultQuota') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="eleven" href="#">{{ trans('langUploadWhitelist') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="twelve" href="#">{{ trans('langLogActions') }}</a>
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="thirteen" href="#">{{ trans('langLoginFailCheck') }}</a>
-
-                                <a class="nav-link nav-link-adminTools Neutral-900-cl" data-menuID="fourteen" href="#">{{ trans('langMaintenance') }}</a>
+                                <a class="nav-link nav-link-adminTools Neutral-900-cl w-100" data-menuID="fifteen" href="#">{{ trans('langMaintenance') }}</a>
                             </nav>
 
                         </div>
@@ -66,7 +65,7 @@
                         <div data-bs-spy="scroll" data-bs-target="#navbar-card-affixed" data-bs-offset="0" tabindex="0">
                             <div class='card panelCard card-default px-lg-4 py-lg-3' data-id="one" id='one'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langBasicCfgSetting') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langBasicCfgSetting') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -126,7 +125,7 @@
 
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="two" id='two'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langUpgReg') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langUpgReg') }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <fieldset>
@@ -329,7 +328,7 @@
 
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="three" id='three'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langSupportedLanguages') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langSupportedLanguages') }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <fieldset>
@@ -361,7 +360,7 @@
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="five" id='five'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langEmailSettings') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langEmailSettings') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -462,7 +461,7 @@
 
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="six" id='six'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langCourseSettings') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langCourseSettings') }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <fieldset>
@@ -499,6 +498,13 @@
                                                 </div>
                                                 <div class='checkbox'>
                                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='allow_teacher_import_course' value='1' {{ $cbox_allow_teacher_import_course }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('lang_allow_teacher_import_course') }}
+                                                    </label>
+                                                </div>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                         <input type='checkbox' name='allow_teacher_clone_course' value='1' {{ $cbox_allow_teacher_clone_course }}>
                                                         <span class='checkmark'></span>
                                                         {{ trans('lang_allow_teacher_clone_course') }}
@@ -508,7 +514,7 @@
                                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                         <input type='checkbox' name='offline_course' value='1' {{ $cbox_offline_course }}>
                                                         <span class='checkmark'></span>
-                                                        {{ trans('langCourseOfflineSettings') }}
+                                                        {{ trans('langDownloadCourse') }}
                                                     </label>
                                                 </div>
                                                 <div class='checkbox'>
@@ -568,57 +574,45 @@
                                                         </select>
                                                     </div>
                                                 </div>
+
+                                                <div class='form-group mt-4'>
+                                                    <h5>{{ trans('langUserNotifications') }}</h5>
+                                                    <div class='form-group'>
+                                                        <div class='radio mb-2'>
+                                                            <label>
+                                                                <input type='radio' name='user_notifications' value='0' {!! $user_notifications0 !!}>
+                                                                {{ trans('langDisableUserNotifications') }}
+                                                            </label>
+                                                        </div>
+                                                        <div class='radio mb-2'>
+                                                            <label>
+                                                                <input type='radio' name='user_notifications' value='1' {!! $user_notifications1 !!}>
+                                                                {{ trans('langEnableUserNotifications') }}
+                                                            </label>
+                                                        </div>
+                                                        <div class='radio mb-0'>
+                                                            <label>
+                                                                <input type='radio' id='user_notifications_interval' name='user_notifications' value='2' {!! $user_notifications2 !!}>
+                                                                {{ trans('langCustomEnableUserNotifications') }} ...
+                                                            </label>
+                                                        </div>
+                                                        <div class='col-sm-3 col-sm-offset-2' id='notifications_interval'>
+                                                            <label class='mb-0' for='notifications_interval_id' aria-label='{{ trans('langCustomEnableUserNotifications') }}'></label>
+                                                            {!! $user_notifications_interval !!}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </fieldset>
                                 </div>
                             </div>
 
-                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
-                                <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="seven" id='seven'>
-
-                                    <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-
-                                        <h3>{{ trans('langMetaCommentary') }}</h3>
-
-                                    </div>
-                                    <div class='card-body'>
-                                        <fieldset>
-                                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
-                                            <div class='form-group'>
-                                                <div class='col-sm-12'>
-                                                    <div class='checkbox'>
-                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                            <input type='checkbox' name='insert_xml_metadata' value='1' {{ $cbox_insert_xml_metadata }}>
-                                                            <span class='checkmark'></span>
-                                                            {{ trans('lang_insert_xml_metadata') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='checkbox'>
-                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                            <input type='checkbox' id='course_metadata' name='course_metadata' value='1' {{ $cbox_course_metadata }}>
-                                                            <span class='checkmark'></span>
-                                                            {{ trans('lang_course_metadata') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='checkbox'>
-                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                            <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' {{ $cbox_opencourses_enable }}>
-                                                            <span class='checkmark'></span>
-                                                            {{ trans('lang_opencourses_enable') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                            @endif
-
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="eight" id='eight'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langOtherOptions') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langOtherOptions') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -756,6 +750,13 @@
                                                 </div>
                                                 <div class='checkbox'>
                                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='third_party_cookies' value='1' {{ $cbox_third_party_cookies }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langThirdPartyCookies') }}
+                                                    </label>
+                                                </div>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                         <input id='individual_group_bookings' type='checkbox' name='individual_group_bookings' value='1' {{ $cbox_individual_group_bookings }}>
                                                         <span class='checkmark'></span>
                                                         {{ trans('langIndividualGroupBookings') }}
@@ -768,38 +769,25 @@
                                                         {{ trans('langEnableQuickNote') }}
                                                     </label>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <hr>
-
-                                        <div class='form-group mt-4'>
-                                            <h5>{{ trans('langUserNotifications') }}</h5>
-                                            <div class='form-group'>
-                                                <div class='radio mb-2'>
-                                                    <label>
-                                                        <input type='radio' name='user_notifications' value='0' {!! $user_notifications0 !!}>
-                                                        {{ trans('langDisableUserNotifications') }}
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input id='enable_idle_detection' type='checkbox' name='enable_idle_detection' value='1' {{ $cbox_idle_detection }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langIdleDetection') }}
                                                     </label>
                                                 </div>
-                                                <div class='radio mb-2'>
-                                                    <label>
-                                                        <input type='radio' name='user_notifications' value='1' {!! $user_notifications1 !!}>
-                                                        {{ trans('langEnableUserNotifications') }}
-                                                    </label>
-                                                </div>
-                                                <div class='radio mb-0'>
-                                                    <label>
-                                                        <input type='radio' id='user_notifications_interval' name='user_notifications' value='2' {!! $user_notifications2 !!}>
-                                                        {{ trans('langCustomEnableUserNotifications') }}
-                                                    </label>
-                                                </div>
-                                                <div class='col-sm-3 col-sm-offset-2' id='notifications_interval'>
-                                                    <label class='mb-0' for='notifications_interval_id' aria-label='{{ trans('langCustomEnableUserNotifications') }}'></label>
-                                                    {!! $user_notifications_interval !!}
+                                                <div id="idle-detection-settings" class="d-none mt-3">
+                                                    <div class="form-group">
+                                                        <label for="idle_warning_time">{{trans('langIdleWarningTime')}}:</label>
+                                                        <input type="number" class="form-control" id="idle_warning_time" name="idle_warning_time" min="1" value="{{ get_config('idle_warning_time') ? (get_config('idle_warning_time') / 1000 / 60) : '' }}">
+                                                    </div>
+                                                    <div class="form-group mt-2">
+                                                        <label for="idle_logout_time">{{trans('langIdleLogoutTime')}}:</label>
+                                                        <input type="number" class="form-control" id="idle_logout_time" name="idle_logout_time" min="1" value="{{ get_config('idle_logout_time') ? (get_config('idle_logout_time') / 1000 / 60) : '' }}">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-
 
                                         <hr>
                                         <div class='form-group mt-4'>
@@ -817,8 +805,6 @@
                                             </div>
                                         </div>
 
-
-
                                         <div class='form-group mt-4'>
                                             <label for='actions_expire_interval_id' class='col-sm-12 control-label-notes'>{{ trans('langActionsExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
                                             <div class='col-sm-12'>
@@ -833,7 +819,7 @@
 
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langDocumentSettings') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langDocumentSettings') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -911,7 +897,7 @@
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="ten" id='ten'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langDefaultQuota') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langDefaultQuota') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -949,7 +935,7 @@
 
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langUploadWhitelist') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langUploadWhitelist') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -978,7 +964,7 @@
 
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langLogActions') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langLogActions') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -1034,7 +1020,7 @@
 
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                    <h3>{{ trans('langLoginFailCheck') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langLoginFailCheck') }}</h2>
 
                                 </div>
                                 <div class='card-body'>
@@ -1083,9 +1069,85 @@
                             </div>
 
                             <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="fourteen" id='fourteen'>
+                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                                    <h2 class='text-heading-h3'>{{ trans('langTenantSettings') }}</h2>
+                                </div>
+                                <div class='card-body'>
+                                    <fieldset>
+                                        <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
+                                        <div class='form-group'>
+                                            <div class='col-sm-12'>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='enable_tenant' value='1' {{ $cbox_enable_tenant }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langTenantEnable') }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class='form-group'>
+                                            <div class='col-sm-12'>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='enable_white_label' value='1' {{ $cbox_enable_white_label }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langWhiteLabelEnable') }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+                            </div>
+
+                            @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                                <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="seven" id='seven'>
+
+                                    <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+
+                                        <h2 class='text-heading-h3'>{{ trans('langMetaCommentary') }}</h2>
+
+                                    </div>
+                                    <div class='card-body'>
+                                        <fieldset>
+                                            <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
+                                            <div class='form-group'>
+                                                <div class='col-sm-12'>
+                                                    <div class='checkbox'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                            <input type='checkbox' name='insert_xml_metadata' value='1' {{ $cbox_insert_xml_metadata }}>
+                                                            <span class='checkmark'></span>
+                                                            {{ trans('lang_insert_xml_metadata') }}
+                                                        </label>
+                                                    </div>
+                                                    <div class='checkbox'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                            <input type='checkbox' id='course_metadata' name='course_metadata' value='1' {{ $cbox_course_metadata }}>
+                                                            <span class='checkmark'></span>
+                                                            {{ trans('lang_course_metadata') }}
+                                                        </label>
+                                                    </div>
+                                                    <div class='checkbox'>
+                                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                            <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' {{ $cbox_opencourses_enable }}>
+                                                            <span class='checkmark'></span>
+                                                            {{ trans('lang_opencourses_enable') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div class='card panelCard card-default px-lg-4 py-lg-3 d-none' data-id="fifteen" id='fifteen'>
 
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{{ trans('langMaintenance') }}</h3>
+                                    <h2 class='text-heading-h3'>{{ trans('langMaintenance') }}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <fieldset>
@@ -1107,7 +1169,7 @@
                                             <div class='form-group mt-4'>
                                                 <label for='maintenance_text_{{ $langCode }}' class='col-sm-12 control-label-notes'>{{ trans('langText') }}:({{ $langName }})</label>
                                                 <div class='col-sm-12'>
-                                                    {!! rich_text_editor('maintenance_text_'.$langCode, 5, 20, $maintenance_text) !!}
+                                                    {!! rich_text_editor('maintenance_text_'.$langCode, 5, 20, $maintenance_text, options: array('id' => 'maintenance_text_'.$langCode)) !!}
                                                 </div>
                                             </div>
                                         @endforeach
@@ -1196,7 +1258,7 @@
 
             </div>
         </div>
-    </div>
+    </main>
 
 
 
@@ -1225,6 +1287,12 @@
     @endif
 
     <script>
+
+        $('#enable_idle_detection').change(function() {
+            const isChecked = this.checked;
+            $('#idle-detection-settings').toggleClass('d-none', !isChecked);
+            $('#idle_warning_time, #idle_logout_time').prop('required', isChecked);
+        }).change();
 
         function loginFailPanel(e) {
             duration = null;
@@ -1435,6 +1503,12 @@
                 $(this).addClass('active');
             });
 
+            // Deep-link via #<menuID> hash (e.g. eclassconf.php#eight)
+            var deepLinkHash = window.location.hash.replace('#', '');
+            if (deepLinkHash && $('[data-menuID="' + deepLinkHash + '"]').length) {
+                $('[data-menuID="' + deepLinkHash + '"]').trigger('click');
+            }
+
             $('input[name=user_notifications]').change(function () {
                 if ($('#user_notifications_interval').is(":checked")) {
                     $('#notifications_interval').show();
@@ -1442,6 +1516,10 @@
                     $('#notifications_interval').hide();
                 }
             }).change();
+
+            $('input[name="enable_tenant"]').on('change', function() {
+                $('input[name="enable_white_label"]').prop('disabled', !this.checked);
+            }).trigger('change');
 
         });
 

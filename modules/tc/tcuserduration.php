@@ -49,6 +49,7 @@ $require_help = true;
 $helpTopic = 'tc';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 
 if (isset($_GET['per_user'])) {
     $toolName = $langUserDuration;
@@ -90,7 +91,18 @@ if (isset($_GET['id'])) {
             $xls_url = "tcuserduration.php?course=$course_code&xls=true";
             $back_url = "index.php?course=$course_code";
         }
+
+        if (isset($_GET['u'])) {
+            $back_link = "tcuserduration.php?course=$course_code&per_user=true";
+            $navigation[] = array('url' => $back_link, 'name' => $langUserDuration);
+        } else {
+            $back_link = "index.php?course=$course_code";
+        }
         $action_bar = action_bar(array(
+            array('title' => $langBack,
+                'url' => "$back_link",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $langDumpPDF,
                 'url' => "$url",
                 'icon' => 'fa-file-pdf',
@@ -101,7 +113,7 @@ if (isset($_GET['id'])) {
                 'icon' => 'fa-file-excel',
                 'level' => 'primary-label',
                 'show' => $is_course_reviewer)
-        ));
+            ));
         $tool_content .= $action_bar;
     }
 }
@@ -115,8 +127,10 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all-users participation 
         if (!$is_course_reviewer and $_GET['u'] != $_SESSION['uid']) { // security check
             redirect_to_home_page();
         }
+
         $u = $_GET['u'];
         $bbb_name = uid_to_name($u, 'username');
+
 
         if (isset($_GET['xls'])) {
             $data[] = [ get_config('site_name') . " - " . q($currentCourseName) ];
@@ -325,7 +339,7 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
         </head>
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-         <h3>" . q($langStatsReport) . "</h3>
+         <h2 class='text-heading-h3'>" . q($langStatsReport) . "</h2>
          <p></p>";
 
     $pdf_content .= $tool_content;
@@ -336,9 +350,18 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // for old courses
+    if ($image_height_header > 50) {
+        $image_height_header = 20;
+    }
+    if ($image_height_footer > 50) {
+        $image_height_footer = 15;
+    }
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => $image_height_header + 20,     // mm
+        'margin_bottom' => $image_height_footer + 10,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -355,7 +378,7 @@ if (isset($_GET['pdf']) and $is_course_reviewer) {
             ]
     ]);
 
-   
+
     $mpdf->SetHTMLHeader(get_platform_logo());
     $footerHtml = '
     <div>

@@ -41,6 +41,7 @@ function appendToolsDom($dom, $domRoot, $toolsArr, $profileToolsArr) {
     appendToolArray($toolsArr, 'tools', $dom, $domRoot);
     appendToolArray($profileToolsArr, 'profiletools', $dom, $domRoot);
 
+    appendUserDetails($domRoot, $dom);
     $dom->formatOutput = true;
     $ret = $dom->saveXML();
     return $ret;
@@ -63,6 +64,15 @@ function appendToolElement($root, $dom, $tool) {
     $t->appendChild(new DOMAttr('redirect', $tool->redirect));
     $t->appendChild(new DOMAttr('type', $tool->type));
     $t->appendChild(new DOMAttr('active', $tool->active));
+}
+
+function appendUserDetails ($root, $dom) {
+    global $uid;
+
+    $t = $root->appendChild($dom->createElement('user'));
+    $t->appendChild(new DOMAttr('givenname', q(uid_to_name($uid, 'givenname'))));
+    $t->appendChild(new DOMAttr('surname', q(uid_to_name($uid, 'surname'))));
+
 }
 
 function populateTools($baseurl) {

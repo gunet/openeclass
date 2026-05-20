@@ -53,6 +53,7 @@ $auth_ids = [
     13 => 'linkedin',
     14 => 'lti_publish',
     15 => 'oauth2',
+    16 => 'keycloak',
 ];
 
 $authFullName = [
@@ -63,9 +64,10 @@ $authFullName = [
     12 => 'Yahoo!',
     13 => 'LinkedIn',
     15 => 'OAuth 2.0',
+    16 => 'Keycloak (OIDC)',
 ];
 
-$extAuthMethods = ['cas', 'shibboleth', 'oauth2'];
+$extAuthMethods = ['cas', 'shibboleth', 'oauth2', 'keycloak'];
 $hybridAuthMethods = ['facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin'];
 
 
@@ -188,7 +190,11 @@ function get_auth_info($auth)
             break;
             case '13': $m = $GLOBALS['langViaLinkedIn'];
             break;
+            case '14': $m = $GLOBALS['langViaLTI'];
+            break;
             case '15': $m = $GLOBALS['langViaOAuth2'];
+            break;
+            case '16': $m = $GLOBALS['langViaKeycloak'];
             break;
             default: $m = 0;
             break;
@@ -212,7 +218,7 @@ function get_auth_settings($auth) {
     $auth = intval($auth);
     $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_id = ?d", $auth);
     if (!$result) {
-        return 0;
+        return [];
     }
 
     $settings['auth_id'] = $result->auth_id;
@@ -611,7 +617,7 @@ function get_cas_attrs($phpCASattrs, $settings) {
 function process_login() {
     global $warning, $session, $langInvalidId, $langAccountInactive1, $langInvalidAuth,
         $langAccountInactive2, $langNoCookies, $langEnterPlatform, $urlServer,
-        $langHere, $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
+        $langHere, $auth_ids, $inactive_uid, $langTooManyFails;
 
     if (isset($_POST['uname'])) {
         $posted_uname = canonicalize_whitespace($_POST['uname']);
@@ -643,9 +649,55 @@ function process_login() {
             } else {
                 $sqlLogin = "COLLATE utf8mb4_bin = ?s";
             }
-            $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
-                                    username, status, email, lang, verified_mail, am, options
-                                FROM user WHERE username $sqlLogin", $posted_uname);
+
+            if (isset($_SESSION['current_user_tenant'])) {
+                // We are at a tenant's custom domain - allow only users from that tenant
+                $node = Database::get()->querySingle(
+                    'SELECT lft, rgt FROM hierarchy WHERE id = ?d',
+                    $_SESSION['current_user_tenant']->department_id
+                );
+
+                $myrow = Database::get()->querySingle(
+                    "SELECT user.id, surname, givenname, password,
+                            username, status, email, lang, verified_mail, am, options 
+                        FROM user, user_department, hierarchy
+                        WHERE username $sqlLogin AND
+                              user.id = user_department.user AND
+                              user_department.department = hierarchy.id AND
+                              hierarchy.lft BETWEEN ?d AND ?d",
+                    $posted_uname,
+                    $node->lft,
+                    $node->rgt
+                );
+
+
+                if (!$myrow) {
+                    $myrow = Database::get()->querySingle(
+                        "SELECT user.id, surname, givenname, password,
+                            username, status, email, lang, verified_mail, am, options 
+                        FROM user, user_department, hierarchy
+                        WHERE email = ?s AND
+                            user.id = user_department.user AND
+                            user_department.department = hierarchy.id AND
+                            hierarchy.lft BETWEEN ?d AND ?d",
+                        $posted_uname,
+                        $node->lft,
+                        $node->rgt
+                    );
+                    $posted_uname = $myrow ? $myrow->username : '';
+                }
+            } else {
+                $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
+                                                        username, status, email, lang, verified_mail, am, options 
+                                                    FROM user WHERE username $sqlLogin", $posted_uname);
+                if (!$myrow) {
+                    $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
+                                                                username, status, email, lang, verified_mail, am, options 
+                                                            FROM user WHERE email = ?s", $posted_uname);
+                    $posted_uname = $myrow ? $myrow->username : '';
+                }
+            }
+
             $guest_user = get_config('course_guest') != 'off' && $myrow && $myrow->status == USER_GUEST;
 
             // cas might have alternative authentication defined
@@ -678,7 +730,7 @@ function process_login() {
             }
         }
 
-        $invalidIdMessage = sprintf($langInvalidId, $urlAppend . 'modules/auth/registration.php');
+        $invalidIdMessage = $langInvalidId;
         if (!isset($_SESSION['uid'])) {
             switch ($auth_allow) {
                 case 1:
@@ -729,6 +781,14 @@ function process_login() {
                     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')", $_SESSION['uid'], $ip);
             $session->setLoginTimestamp();
 
+            $next = '';
+            if (get_config('email_verification_required') and
+                get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
+                $_SESSION['mail_verification_required'] = 1;
+                $next = 'modules/auth/mail_verify_change.php';
+            } elseif (isset($_REQUEST['next'])) {
+                $next = $_REQUEST['next'];
+            }
             if (!is_null($myrow->options)) {
                 $options = json_decode($myrow->options, true);
                 $option_force_password_change = $options['force_password_change'];
@@ -736,14 +796,6 @@ function process_login() {
                     $_SESSION['force_password_change'] = 1;
                     $next = 'modules/auth/password_change.php';
                 }
-            } elseif (get_config('email_verification_required') and
-                    get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
-                $_SESSION['mail_verification_required'] = 1;
-                $next = 'modules/auth/mail_verify_change.php';
-            } elseif (isset($_POST['next'])) {
-                $next = $_POST['next'];
-            } else {
-                $next = '';
             }
             resetLoginFailure();
             redirect_to_home_page($next);
@@ -902,7 +954,7 @@ function hybridauth_login() {
             if (in_array($auth_id, $auth_methods)) {
                 $auth_allow = login($myrow, null, null, $provider, $user_data);
             } else {
-                Session::flash('message',$langInvalidAuth);
+                Session::flash('message', $langInvalidAuth);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page();
             }
@@ -1054,7 +1106,7 @@ function hybridauth_login() {
  * @return int
  */
 function login($user_info_object, $posted_uname, $pass, $provider=null, $user_data=null) {
-    global $session, $auth_ids;
+    global $session, $auth_ids, $urlServer;
 
     $_SESSION['canChangePassword'] = false;
     $_SESSION['provider'] = $provider;
@@ -1147,6 +1199,20 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
             user_hook($user_info_object->id);
             $session->setLoginTimestamp();
             $session->setLoginMethod('eclass');
+
+            $tenant = getCurrentTenant();
+
+            // Check whether user belongs to a tenant with custom URL
+            if (!isset($_SESSION['current_user_tenant'])) {
+                $GLOBALS['uid'] = $_SESSION['uid'];
+                $tenant = getUserTenant($_SESSION['uid']);
+
+                if ($tenant and $tenant->url and $tenant->url_active and $tenant->url != $urlServer) {
+                    header("HTTP/1.1 303 See Other");
+                    header("Location: {$tenant->url}modules/auth/redirect.php?token=" . session_id());
+                    exit;
+                }
+            }
         } else {
             $auth_allow = 3;
             $GLOBALS['inactive_uid'] = $user_info_object->id;
@@ -1188,6 +1254,20 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
             $user_info_object->password = $auth_method_settings['auth_name'];
         } else {
             return 7; // Redirect to CAS login
+        }
+    }
+
+    // keycloak
+    if ($auth == 16) {
+        $keycloak_settings = get_auth_settings($auth);
+        $altauth = intval($keycloak_settings['altauth']);
+        if ($altauth > 0 && check_auth_configured($altauth)) {
+            $auth = $altauth;
+            // fetch settings of alt auth
+            $auth_method_settings = get_auth_settings($auth);
+            $user_info_object->password = $auth_method_settings['auth_name'];
+        } else {
+            return 16; // Redirect to Keycloak
         }
     }
 
@@ -1289,8 +1369,8 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 }
 
 /**
- * @brief Authenticate user via Shibboleth, CAS or OAuth 2.0
- * @param $type is 'shibboleth', 'cas' or 'oauth2'
+ * @brief Authenticate user via Shibboleth, CAS, OAuth 2.0 or Keycloak
+ * @param $type is 'shibboleth', 'cas', 'oauth2' or 'keycloak'
  */
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
@@ -1310,27 +1390,38 @@ function shib_cas_login($type) {
             $_SESSION['shib_auth_test'] = true;
             redirect_to_home_page('modules/admin/auth_test.php?auth=7');
         }
-        $givenname = $shib['givenname'];
-        $surname = $shib['surname'];
-        $email = $shib['email'];
-        $am = $shib['studentid'];
+        $givenname = $shib['givenname'] ?? '';
+        $surname = $shib['surname'] ?? '';
+        $email = $shib['email'] ?? '';
+        $am = $shib['studentid'] ?? '';
     } elseif ($type == 'cas') {
-        $uname = $surname = $givenname = '';
-        $uname = $_SESSION['cas_uname'];
-        $surname = $_SESSION['cas_surname'];
-        $givenname = $_SESSION['cas_givenname'];
-        $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
-        $am = isset($_SESSION['cas_userstudentid']) ? $_SESSION['cas_userstudentid'] : '';
+        $uname = $_SESSION['cas_uname'] ?? '';
+        $surname = $_SESSION['cas_surname'] ?? '';
+        $givenname = $_SESSION['cas_givenname'] ?? '';
+        $email = $_SESSION['cas_email'] ?? '';
+        $am = $_SESSION['cas_userstudentid'] ?? '';
     } elseif ($type == 'oauth2') {
         $uname = $_SESSION['auth_id'] ?? '';
         $surname = $_SESSION['auth_surname'] ?? '';
         $givenname = $_SESSION['auth_givenname'] ?? '';
         $email = $_SESSION['auth_email'] ?? '';
         $am = $_SESSION['auth_studentid'] ?? '';
+    } elseif ($type == 'keycloak') {
+        $uname = $_SESSION['keycloak_uname'] ?? '';
+        $surname = $_SESSION['auth_surname'] ?? '';
+        $givenname = $_SESSION['auth_givenname'] ?? '';
+        $email = $_SESSION['auth_email'] ?? '';
+        $am = $_SESSION['auth_studentid'] ?? '';
+        // get mail verification status from provider
+        $auth_verified_mail = $_SESSION['auth_verified_mail'];
     }
     if ($email) {
         // Email is considered verified if it came from CAS or Shibboleth
         $verified_mail = EMAIL_VERIFIED;
+    }
+
+    if (isset($auth_verified_mail) && empty($auth_verified_mail)) {
+        $verified_mail = EMAIL_UNVERIFIED;
     }
 
     // Attributes passed to login_hook()
@@ -1786,7 +1877,7 @@ function gunet_idp_hook($options) {
             }
         }
         if ($new_departments) {
-            if ($status == USER_STUDENT) {
+            if ($options['status'] == USER_STUDENT) {
                 $options['departments'] = $new_departments;
             } else {
                 $options['departments'] = array_unique(array_merge($options['departments'], $new_departments));

@@ -116,8 +116,8 @@ if (isset($_GET['group_as'])) {
                 <thead>
                 <tr class='list-header'>
                   <th style='width:45%;'>$langTitle</th>
-                  <th>$m[subm]</th>
-                  <th>$m[nogr]</th>
+                  <th>$langSubmShort</th>
+                  <th>$langNogrShort</th>
                   <th>$langGroupWorkDeadline_of_Submission</th>
                 </tr></thead>";
         foreach ($result as $row) {
@@ -240,7 +240,7 @@ if (isset($_GET['group_as'])) {
                 <div class='col-xl-7 col-lg-6 col-12'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>" . q($group_name) . "</h3>
+                            <h2 class='text-heading-h3'>" . q($group_name) . "</h2>
                         </div>
                         <div class='card-body'>
                                 <p class='form-label'>$langGroupTutor</p>";
@@ -268,7 +268,7 @@ if (isset($_GET['group_as'])) {
                 <div class='col-xl-5 col-lg-6 d-none d-lg-block'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langTools</h3>
+                            <h2 class='text-heading-h3'>$langTools</h2>
                         </div>
                         <div class='card-body'>
                             <ul class='list-group list-group-flush list-group-groups'>";
@@ -367,7 +367,7 @@ if (isset($_GET['group_as'])) {
                         <div class='col-12 mt-4'>
                             <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>$langGroupMembersInfo</h3>
+                                <h2 class='text-heading-h3'>$langGroupMembersInfo</h2>
                             </div>
                             <div class='card-body'>
                           <ul class='list-group list-group-flush'>

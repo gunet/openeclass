@@ -9,13 +9,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -37,7 +34,7 @@
                     <div class='col-12'>
                         <div class="card panelCard card-default px-lg-4 py-lg-3 mt-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>{{ trans('langActivateCourseTools') }}</h3>
+                                <h2 class='text-heading-h3'>{{ trans('langActivateCourseTools') }}</h2>
                             </div>
                             <div class='card-body'>
                                 <form name="courseTools" action="{{ $post_url }}" method="post" enctype="multipart/form-data">
@@ -85,9 +82,9 @@
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                <h3>
-                                    {{ trans('langOperations') }}
-                                </h3>
+                                <h2 class='text-heading-h3'>
+                                    {{ trans('langExternalLinks') }}
+                                </h2>
                                 <div>
                                     <a class='btn submitAdminBtn' href='{{ $post_url }}&amp;add=link'><span class='fa fa-plus-circle'></span> <span class='hidden-xs hidden-lg ps-2'>{{ trans('langAddExtLink') }}</span></a>
                                 </div>
@@ -126,9 +123,9 @@
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     {{ trans('langLtiConsumer') }}
-                                </h3>
+                                </h2>
 
                                 <div>
                                     <a class='btn submitAdminBtn' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
@@ -205,9 +202,9 @@
                         <div class='card panelCard card-default px-lg-4 py-lg-3'>
                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     {{ trans('langLtiPublishTool') }}
-                                </h3>
+                                </h2>
 
                                 <div>
                                     <a class='btn submitAdminBtn' href='editpublish.php?course={{ $course_code }}'>
@@ -277,11 +274,8 @@
 
                     @endif
                 </div>
-            </div>
-
+            </main>
         </div>
-
-  </div>
-</div>
+    </div>
 
 @endsection

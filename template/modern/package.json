@@ -18,22 +18,22 @@
     "bootstrap-sass": "^3.4.3"
   },
   "devDependencies": {
-    "browser-sync": "^3.0.2",
+    "browser-sync": "^3.0.4",
     "del": "^3.0.0",
-    "gulp": "^5.0.0",
+    "gulp": "^5.0.1",
     "gulp-autoprefixer": "^8.0.0",
     "gulp-scss-lint": "^1.0.0",
     "gulp-clean-css": "3.9.4",
     "gulp-concat": "^2.6.1",
     "gulp-html-replace": "^1.6.2",
-    "gulp-rename": "^1.2.2",
+    "gulp-rename": "^1.4.0",
     "gulp-sass": "^5.1.0",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-postcss": "^9.0.1",
-    "gulp-uglify": "^3.0.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-postcss": "^9.1.0",
+    "gulp-uglify": "^3.0.2",
     "merge-stream": "^1.0.1",
-    "gulp-load-plugins": "^2.0.4",
+    "gulp-load-plugins": "^2.0.8",
     "postcss-inline-svg": "^5.0.0",
-    "postcss-pxtorem": "^6.0.0"
+    "postcss-pxtorem": "^6.1.0"
   }
 }

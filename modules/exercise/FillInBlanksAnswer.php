@@ -72,7 +72,7 @@ class FillInBlanksAnswer extends QuestionType
         $answer_object_ids = range(1, $nbrAnswers);
 
         foreach ($answer_object_ids as $answerId) {
-            $answerTitle = standard_text_escape($this->answer_object->getTitle($answerId));
+            $answerTitle = $this->answer_object->getTitle($answerId);
             list($answer, $answerWeighting) = Question::blanksSplitAnswer($answerTitle);
             // splits weightings that are joined with a comma
             $answerWeighting = explode(',', $answerWeighting);

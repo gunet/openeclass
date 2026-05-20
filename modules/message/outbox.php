@@ -54,6 +54,7 @@ if (isset($_GET['mid'])) {
                                   'url' => "outbox.php".$urlstr,
                                   'icon' => 'fa-reply',
                                   'button-class' => 'back_index btn-secondary',
+                                  'link-attrs' => "aria-label='$langBack' role='button'",
                                   'level' => 'primary'),
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
@@ -75,7 +76,7 @@ if (isset($_GET['mid'])) {
                                     <div class='col'>
                                         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                <h3>$langMessageInfo</h3>
+                                                <h2 class='text-heading-h3'>$langMessageInfo</h2>
                                             </div>
                                             <div class='card-body'>
                                                 <ul class='list-group list-group-flush'>
@@ -141,7 +142,7 @@ if (isset($_GET['mid'])) {
                                     <div class='col'>
                                         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                 <h3>$langMessageContent</h3>
+                                                 <h2 class='text-heading-h3'>$langMessageContent</h2>
                                             </div>
                                             <div class='card-body'>
                                                             <div class='d-flex justify-content-start align-items-center flex-wrap gap-2 mb-4'>
@@ -258,7 +259,7 @@ if (isset($_GET['mid'])) {
     }
     $out .= "      <th>$langRecipients</th>
                    <th style='width:15%;'>$langDate</th>
-                   <th style='width:10%;' aria-label='$langDelete'><i class='fa fa-cogs'></i></th>
+                   <th style='width:10%;' aria-label='$langDelete'><span class='visually-hidden'>$langDelete</span></th>
                  </tr>
                </thead>
                <tbody>

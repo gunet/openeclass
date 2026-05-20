@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
 
             <div class="row m-auto">
@@ -34,9 +34,9 @@
 
                                     <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                            <h3>
+                                            <h2 class='text-heading-h3'>
                                                 {{ trans('langThemeSettings') }}
-                                            </h3>
+                                            </h2>
                                         </div>
                                         <div class='card-body'>
                                             <fieldset>
@@ -85,7 +85,7 @@
                     <div class='modal-dialog modal-fullscreen' style='margin-top:0px;'>
                         <div class='modal-content'>
                             <div class='modal-header'>
-                                <div class='modal-title' id='view_themes_screensLabel'>{{ trans('langAvailableThemes') }}</div>
+                                <h2 class='modal-title' id='view_themes_screensLabel'>{{ trans('langAvailableThemes') }}</h2>
                                 <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langClose') }}'></button>
                             </div>
                             <div class='modal-body'>
@@ -99,7 +99,7 @@
 
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
         $(function () {

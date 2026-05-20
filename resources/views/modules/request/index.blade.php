@@ -3,13 +3,10 @@
 @section('content')
 
 
-<div class="col-12 main-section">
 <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -63,11 +60,10 @@
                     </div>
 
                 </div>
-            </div>
+            </main>
 
         </div>
 
-</div>
 </div>
 
 
@@ -137,12 +133,10 @@
             paginationType: 'full_numbers',
             language: {
                 lengthMenu: '{{ trans('langDisplay') . ' _MENU_ ' . trans('langResults2') }}',
-                zeroRecords: '{{ trans('langNoResult') }}',
-                info: '{{ trans('langDisplayed') . ' _START_ ' . trans('langTill') .
-                            ' _END_ ' . trans('langFrom2') . ' _TOTAL_ ' . trans('langTotalResults') }}',
-                infoEmpty: '{{ trans('langDisplayed') . ' 0 ' . trans('langTill') . ' 0 ' .
-                                trans('langFrom2') . ' 0 ' . trans('langResults2') }}',
-                infoFiltered: '',
+                info: '{{ trans('langDisplayed') . ' _START_ ' . trans('langTill') .' _END_ ' . trans('langFrom2') . ' _TOTAL_ ' . trans('langTotalResults') }}',
+                infoEmpty: '',
+                infoFiltered: '{{ trans('langDisplayed') . ' _START_ ' . trans('langTill') .' _END_ ' . trans('langFrom2') . ' _TOTAL_ ' . trans('langTotalResults') }}',
+                emptyTable: '{{ trans('langNoResult') }}',
                 infoPostFix: '',
                 search: '{{ trans('langSearch') . ': ' }}',
                 searchPlaceholder: '{{ trans('langTitle') . ', ' . trans('langUser') }}',
@@ -172,7 +166,7 @@
             var row_id = this.id;
             bootbox.confirm({
                 closeButton: false,
-                title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><div class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</div>",
+                title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><h2 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</h2>",
                 message: "<p class='text-center'>{{ js_escape(trans('langConfirmDelete')) }}</p>",
                 buttons: {
                     cancel: {

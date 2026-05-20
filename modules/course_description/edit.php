@@ -63,12 +63,12 @@ foreach ($types as $type) {
 }
 $data['titleError'] = Session::getError('editTitle') ? " has-error" : "";
 
-$data['text_area_comments'] = rich_text_editor('editComments', 4, 20, $comments);
+$data['text_area_comments'] = rich_text_editor('editComments', 4, 20, $comments, options: array('id' => 'editComments'));
 
 $data['form_buttons'] = form_buttons(array(
             array(
                 'class' => 'submitAdminBtn',
-                'text'  =>  $langSave,
+                'text'  =>  $langSubmit,
                 'name'  =>  'saveCourseDescription',
                 'value' =>  $langAdd
             ),

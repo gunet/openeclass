@@ -178,15 +178,19 @@ function handle_unit_info_edit() {
         $successmsg = $langCourseUnitModified;
     } else { // add new course unit
         $order = units_get_maxorder()+1;
+        $visible = 1;
+        if (isset($_REQUEST['divider'])) {
+            $visible = 2;
+        }
         $q = Database::get()->query("INSERT INTO course_units SET
                                   title = ?s,
                                   comments = ?s,
                                   start_week = ?s,
                                   finish_week = ?s,
-                                  visible = 1,
+                                  visible = ?d,
                                   assign_to_specific = ?d,
                                  `order` = ?d, course_id = ?d",
-            $title, $descr, $unitdurationfrom, $unitdurationto, $assign_to_specific, $order, $course_id);
+            $title, $descr, $unitdurationfrom, $unitdurationto, $visible, $assign_to_specific, $order, $course_id);
 
         $unit_id = $q->lastInsertID;
         // course unit assigned info (if any)
@@ -196,6 +200,7 @@ function handle_unit_info_edit() {
             Database::get()->query("UPDATE course SET view_units = 1 WHERE id = ?d", $course_id);
         }
         $successmsg = $langCourseUnitAdded;
+
         // tags
         if (isset($_POST['tags'])) {
             $moduleTag = new ModuleElement($unit_id);
@@ -214,7 +219,12 @@ function handle_unit_info_edit() {
 
     Session::flash('message',$successmsg);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
+    if (isset($_REQUEST['divider'])) {
+        redirect_to_home_page("modules/units/index.php?course=$course_code");
+    } else {
+        redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
+    }
+
 }
 
 
@@ -269,7 +279,8 @@ function show_resources($unit_id)
 {
     global $max_resource_id, $is_editor,
            $head_content, $langDownload, $langPrint, $langCancel,
-           $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, $course_code;
+           $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, 
+           $course_code;
 
     $html = '';
 
@@ -754,6 +765,7 @@ function show_resource($info) {
         case 'doc':
             $html .= show_doc($info->title, $info->comments, $info->id, $info->res_id, $info->activity_title);
             break;
+        case 'dvdr':
         case 'text':
             $html .= show_text($info->comments, $info->id, $info->visible, $info->activity_title);
             break;
@@ -952,7 +964,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
            $langLearningPathCleanAttempt, $langLearnPath;
 
     $title = q($title);
-    $comment_box = $res_prereq_icon = $lp_results = $lp_results_button = '';
+    $comment_box = $res_prereq_icon = $lp_results = $lp_results_button = $lp_bar = '';
     $lp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
     if (!$lp) { // check if lp was deleted
         if (!$is_editor) {
@@ -980,7 +992,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         if ($suspend_data) {
             $lp_susp_button = "
                 <span class='pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathCleanAttempt'>
-                    <a data-href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id&amp;cleanattempt=on' data-toggle='modal' data-target='#confirmLpCleanAttemptDialog'>
+                    <a data-href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id&amp;cleanattempt=on' data-bs-toggle='modal' data-bs-target='#confirmLpCleanAttemptDialog'>
                         <span class='fa fa-repeat' style='font-size:15px;'></span>
                     </a>
                 </span>";
@@ -994,11 +1006,12 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
                 </a>
             </span>";
         } else {
+                $lp_details_url = $urlAppend . "modules/units/view.php?course=$course_code&amp;res_type=lp_details&amp;path_id=$lp_id&amp;unit=$id";
                 list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($lp_id, $uid);
-                $lp_results = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>
-                               <span style='margin-top:10px !important;' data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
+                $lp_results = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>";
+                $lp_bar = "<span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
                 $lp_results_button = "<span class='pull-right' data-bs-toggle='tooltip' data-bs-placement='top' title='$langDetails'>
-                    <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
+                    <a href='$lp_details_url'>
                     <span class='fa fa-line-chart'></span>
                     </a>
                 </span>";
@@ -1014,10 +1027,19 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</a></div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
-          <div class='text-start'>
+          <div class='text-start w-100'>
             <div class='module-name'>$langLearnPath</div>
-                 <span class='pull-right d-flex justify-content-start align-items-center gap-3'>$link $res_prereq_icon $lp_susp_button $lp_results_button $lp_results</span>
-                 <div class='content'>$comment_box</div>
+            <div class='row m-0 flex-column flex-lg-row'>
+                <div class='col-lg-9 p-0 m-0 d-flex flex-column'>
+                    <div>$link</div>
+                    <div class='content'>$comment_box</div>
+                </div>
+                <div class='col-lg-3 p-0 m-0 d-flex flex-column align-items-lg-end'>
+                    <div class='mt-2'>$lp_bar</div>
+                    <div class='d-flex gap-2'>$res_prereq_icon $lp_susp_button $lp_results_button $lp_results</div>
+                </div>
+            </div>
+
             </div>" .
 
             actions('lp', $resource_id, $status) . "</div>";
@@ -1186,6 +1208,9 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
                                 )", $course_id, $work_id, $uid);
     }
 
+    $hasparticipated_grade = '';
+    $assign_to_users_message = '';
+    $status = '';
     if (!$work) { // check if it was deleted
         if (!$is_editor) {
             return '';
@@ -1198,7 +1223,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         if (!$is_editor and !$status) {
             return '';
         }
-        $assign_to_users_message = '';
+
         if ($is_editor) {
             if ($work->assign_to_specific == 1) {
                 $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
@@ -1231,16 +1256,12 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         //show participation and grade
         $submissions = find_submissions(is_group_assignment($work_id), $uid, $work_id, user_group_info($uid, $course_id));
 
-        $hasparticipated_grade = '';
-
         if ($submissions) {
-            $hasparticipated_grade = "(";
-            $hasparticipated_grade .= "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
+            $hasparticipated_grade = "<span class='fa-solid fa-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
             $item = is_array($submissions) ? reset($submissions) : $submissions;
             if (is_object($item) && isset($item->grade)) {
                 $hasparticipated_grade .= "<span style='margin-left: 5px;'>" . $langGradebookGrade . ": " . submission_grade($item->id) . "</span>";
             }
-            $hasparticipated_grade .= ")";
         }
 
     }
@@ -1255,7 +1276,18 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
-          <div class='text-start'><div class='module-name'>$langWorks</div> $exlink $hasparticipated_grade $res_prereq_icon $comment_box $assign_to_users_message</div>" .
+          <div class='text-start w-100'>
+              <div class='module-name'>$langWorks</div>
+              <div class='row m-0 flex-column flex-lg-row gap-2 gap-lg-0'>
+                <div class='col-lg-9 p-0 m-0 d-flex flex-column'>
+                    <div>$exlink</div>
+                    <div class='content'>$comment_box</div>
+                </div>
+                <div class='col-lg-3 gap-2 gap-lg-0 p-0 m-0 d-flex flex-row flex-lg-column align-items-center justify-content-start align-items-lg-end justify-content-lg-end'>
+                    $hasparticipated_grade $res_prereq_icon $assign_to_users_message
+                </div>
+              </div>
+          </div>" .
             actions('lp', $resource_id, $visibility) . '
         </div>';
 }
@@ -1353,7 +1385,7 @@ function submission_grade($subid) {
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
         $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq, $langExercises,
-        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated, $langShowResults;
+        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup, $langHasParticipated, $langResults;
 
     $title = q($title);
     $link_class = $exclamation_icon = $res_prereq_icon = '';
@@ -1445,18 +1477,18 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         $hasresults_label = null;
         $hasresults = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE uid = ?d AND eid = ?d AND attempt_status = ?d", $uid, $exercise_id, ATTEMPT_COMPLETED);
         if ($hasresults) {
-            $hasresults_label = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;unit=$id&amp;res_type=exercise_results_list&amp;exerciseId=".getIndirectReference($exercise_id)."'><span class='fa-solid fa-square-poll-horizontal' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langShowResults'></span></a>";
+            $hasresults_label = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;unit=$id&amp;res_type=exercise_results_list&amp;exerciseId=".getIndirectReference($exercise_id)."'>$langResults</a>";
         }
 
 
         if ($pending_class) {
             enable_password_bootbox();
-            $link = "<a class='ex_settings $pending_class $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
+            $link = "<div class='row m-0 flex-column flex-lg-row gap-2 gap-lg-0'><div class='col-lg-9 p-0 m-0 d-flex flex-column'><a class='ex_settings $pending_class $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;eurId=$eurid&amp;unit=$id'>";
         } else {
-            $link = "<a class='ex_settings $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
+            $link = "<div class='row m-0 flex-column flex-lg-row gap-2 gap-lg-0'><div class='col-lg-9 p-0 m-0 d-flex flex-column'><a class='ex_settings $link_class TextBold' href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
-        $exlink = $link . "$title</a> $hasparticipated_label $hasresults_label $exclamation_icon $assign_to_users_message $pending_label";
-        $imagelink = $link . "</a>" . icon('fa-solid fa-file-pen'). "";
+        $exlink = $link . "$title</a></div> <div class='col-lg-3 gap-2 gap-lg-0 p-0 m-0 d-flex flex-row flex-lg-column align-items-center justify-content-start align-items-lg-end justify-content-lg-end'>$hasparticipated_label $hasresults_label $exclamation_icon $assign_to_users_message $pending_label</div></div>";
+        $imagelink = $link . "</a></div></div>" . icon('fa-solid fa-file-pen'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
 
@@ -1470,7 +1502,10 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='3'>$imagelink</div>
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
-          <div class='text-start'><div class='module-name'>$langExercises</div> $exlink $res_prereq_icon $comment_box</div>" . actions('lp', $resource_id, $visibility) . "
+          <div class='text-start w-100'>
+          <div class='module-name'>$langExercises</div>
+            $exlink $res_prereq_icon $comment_box
+          </div>" . actions('lp', $resource_id, $visibility) . "
         </div>";
 }
 
@@ -1545,9 +1580,9 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
 
     global $course_id, $course_code, $is_editor, $urlServer, $id,
            $uid, $langWasDeleted, $langResourceBelongsToUnitPrereq,
-           $m, $langQuestionnaire, $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
+           $langQuestionnaire, $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
 
-    $res_prereq_icon = '';
+    $res_prereq_icon = $assign_to_users_message = '';
 
     $title = q($title);
     if ($is_editor) {
@@ -1568,10 +1603,6 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
                     )";
         $poll = Database::get()->querySingle($query, $course_id, $poll_id, $uid);
     }
-    $status = $poll->active;
-    if (!$is_editor and !$status) {
-        return '';
-    }
     if (!$poll) { // check if it was deleted
         if (!$is_editor) {
             return '';
@@ -1580,7 +1611,6 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
             $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $assign_to_users_message = '';
         if ($is_editor) {
             if ($poll->assign_to_specific == 1) {
                 $assign_to_users_message = "<small class='help-block'>$langWorkAssignTo: $langWorkToUser</small>";
@@ -1601,7 +1631,8 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
     } else {
         $comment_box = '';
     }
-    $class_vis = ($status == 0 ) ? ' class="not_visible"' : ' ';
+    $class_vis = (!$poll or !$poll->active) ? ' class="not_visible"' : ' ';
+
     return "
         <div$class_vis data-id='$resource_id'>
           <div class='unitIcon' width='1'>$imagelink</div>
@@ -2488,7 +2519,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_editor, $langEditChange, $langDelete,
     $langAddToCourseHome, $langConfirmDelete, $course_code,
     $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed,
-    $langNeverBrowsed, $langAddToUnitCompletion;
+    $langNeverBrowsed, $langAddToUnitCompletion, $langCompleted;
 
     $res_types_units_completion = ['exercise', 'work', 'lp', 'doc', 'topic', 'video', 'ebook', 'poll', 'wiki'];
     if (in_array($res_type, $res_types_units_completion)) {
@@ -2501,12 +2532,12 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
             $activity_result = unit_resource_completion($_GET['id'], $resource_id);
             switch ($activity_result) {
                 case 1: $content = "<div class='' style='padding: 10px 0; width: 85px;'>
-                                    <span class='fa fa-check-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
+                                    <span class='fa fa-check-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langCompleted'></span>
                                     </div>";
                     break;
                 case 0:
                     $content = "<div class='' style='padding: 10px 0; width: 85px;'>
-                                <span class='fa fa-hourglass-2' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNeverBrowsed'></span>
+                                <span class='fa fa-hourglass-2' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
                                 </div>";
                     break;
                 default:
@@ -2571,7 +2602,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @return string
  */
 function edit_res($resource_id) {
-    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langSubmit, $course_code, $urlAppend, $langImgFormsDes;
+    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langSubmit, $course_code, $langImgFormsDes, $langCancel;
 
     $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM unit_resources WHERE id = ?d", $resource_id);
     $restitle = " value='" . htmlspecialchars($ru->title, ENT_QUOTES) . "'";
@@ -2592,19 +2623,21 @@ function edit_res($resource_id) {
     } else {
         $message = $langContents;
     }
+
     $content .= "
                 <div class='form-group mt-4'>
                     <label for='rescomments' class='col-sm-6 control-label-notes'>$message</label>
-                    <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
+                    <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments, options: array('id' => 'rescomments')) . "</div>
                 </div>
-                <div class='col-12 mt-5 d-flex justify-content-end'>
+                <div class='col-12 d-flex justify-content-end align-items-center gap-2 mt-5'>
                     <input class='btn submitAdminBtn' type='submit' name='edit_res_submit' value='$langSubmit'>
-
+                    <a class='btn cancelAdminBtn ms-2' href='index.php?course=$course_code&id=$id'>$langCancel</a>
                 </div>
             </form></div>
-        </div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-    </div>
+        </div>
+            <div class='d-none d-lg-block'>
+                <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+        </div>
     </div>";
     return $content;
 }

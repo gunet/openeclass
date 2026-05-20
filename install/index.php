@@ -41,12 +41,12 @@ $viewsDir = 'resources/views/install';
 $cacheDir = 'storage/views/';
 if (!is_dir($cacheDir)) {
     $tempDir = $cacheDir;
-    $cacheDir = null;
     if (mkdir($tempDir, 0755, true)) {
         $cacheDir = $tempDir;
     }
 }
-if (!is_writable($cacheDir) or !$cacheDir) {
+
+if (!is_writable($cacheDir)) {
     $cacheDir = sys_get_temp_dir() . '/storage';
     if (!(is_dir($cacheDir) or mkdir($cacheDir, 0755, true))) {
         die("Error: Unable to find a writable storage directory - tried '$cacheDir'.");
@@ -352,9 +352,9 @@ if (isset($_POST['install1'])) { // step 1 requirements
                   <div class='col-lg-8 col-md-10 m-auto py-4'>
                       <div class='card panelCard card-default h-100'>
                           <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h3>
+                                <h2 class='text-heading-h3'>
                                     " . strtok($image, '.') . "
-                                </h3>
+                                </h2>
                           </div>
                           <div class='card-body'>
                               <img style='width:100%; height:auto; object-fit:cover; object-position:50% 50%;' class='card-img-top' src='../template/modern/images/screenshots/$image' alt='Image for current theme'/>

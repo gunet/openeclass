@@ -152,7 +152,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
         $enableEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : ($BBBEndDate ? 1 : 0);
 
-        $textarea = rich_text_editor('desc', 4, 20, $row->description);
+        $textarea = rich_text_editor('desc', 4, 20, $row->description, options: array('id' => 'desc'));
         $value_title = q($row->title);
         $value_session_users = $row->sessionUsers;
         $external_users = trim($row->external_users ?? '');
@@ -194,7 +194,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $start_session = $start_date->format('d-m-Y H:i');
         $end_date = new DateTime;
         $BBBEndDate = $end_date->format('d-m-Y H:i');
-        $textarea = rich_text_editor('desc', 4, 20, '');
+        $textarea = rich_text_editor('desc', 4, 20, '', options: array('id' => 'desc'));
         $value_title = '';
         $init_external_users = '';
         if ($tc_type == 'jitsi') {
@@ -430,7 +430,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $tool_content .= "<div class='form-group mt-4'>
                 <label for='select-groups' class='col-sm-12 control-label-notes'>$langParticipants</label>
                 <div class='col-sm-12'>
-                <select name='groups[]' multiple='multiple' class='form-select' id='select-groups'>";
+                <select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
 
         if (empty($r_group) or (count($r_group)>=1 and in_array("0", $r_group))) {
             $tool_content .= "<option value='0' selected><h2>$langAllUsers</h2></option>";
@@ -473,7 +473,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             }
         }
 
-        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+        $tool_content .= "</select>
                 </div>
             </div>";
 
@@ -1297,7 +1297,7 @@ function tc_session_details() {
 
     global $course_id, $tool_content, $is_editor, $course_code, $uid,
         $langParticipants,$langConfirmDelete, $langHasExpiredS,
-        $langNote, $langBBBNoteEnableJoin, $langTitle,
+        $langNote, $langBBBNoteEnableJoin, $langTitle, $langWillEnd,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
         $langNoBBBSesssions, $langBBBNotServerAvailableStudent,
         $langBBBNotServerAvailableTeacher, $langWillStart,
@@ -1385,7 +1385,7 @@ function tc_session_details() {
                 $timeLabel = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;';
             }
             if ($timeLeft > 0 and date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < 0) {
-                $timeLabel .= "<br><span><small class='label label-warning'>$langWillStart " .
+                $timeLabel .= "<br><span><small class='label label-warning'>$langWillEnd " .
                     format_time_duration($timeLeft * 60) .
                     "</small></span>";
             } elseif (isset($end_date) and ($timeLeft < 0)) {
@@ -2191,9 +2191,6 @@ function get_enabled_tc_services() {
     if (get_config('ext_microsoftteams_enabled')) {
         $tc_services[] = 'microsoftteams';
     }
-    /* if (get_config('ext_openmeetings_enabled')) {
-        $tc_services = 'om';
-    } */
     return $tc_services;
 }
 

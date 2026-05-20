@@ -28,43 +28,116 @@ $require_login = true;
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'modules/progress/process_functions.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
+
+if ($is_simple_user) {
+    Session::flash('message', $langForbidden);
+    Session::flash('alert-class', 'alert-warning');
+    redirect_to_home_page("modules/session/index.php?course=$course_code");
+}
 
 $pageName = $langTableCompletedConsulting;
 
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSession);
 
+if ($is_coordinator) {
+    $head_content .= "
+        <script>
+            function choose_user_option() {
+                const option = document.getElementById('choose_user_or_consultant');
+                if (option.value == '1') { // users
+                    $('.search-consultant-container').removeClass('d-block').addClass('d-none');
+                    $('.search-user-container').removeClass('d-none').addClass('d-block');
+                } else if (option.value == '2') { // consultants
+                    $('.search-consultant-container').removeClass('d-none').addClass('d-block');
+                    $('.search-user-container').removeClass('d-block').addClass('d-none');
+                } else if (option.value == '0') { // Neither users nor consultants
+                    $('.search-consultant-container').removeClass('d-block').addClass('d-none');
+                    $('.search-user-container').removeClass('d-block').addClass('d-none');
+                }
+            }
+            $(function() {
+                choose_user_option();
+            });
+        </script>
+    ";
+}
 $head_content .= "
     <script>
-        function choose_user_option() {
-            const option = document.getElementById('choose_user_or_consultant');
-            if (option.value == '1') { // users
-                $('.search-consultant-container').removeClass('d-block').addClass('d-none');
-                $('.search-user-container').removeClass('d-none').addClass('d-block');
-            } else if (option.value == '2') { // consultants
-                $('.search-consultant-container').removeClass('d-none').addClass('d-block');
-                $('.search-user-container').removeClass('d-block').addClass('d-none');
-            } else if (option.value == '0') { // Neither users nor consultants
-                $('.search-consultant-container').removeClass('d-block').addClass('d-none');
-                $('.search-user-container').removeClass('d-block').addClass('d-none');
-            }
-        }
         $(function() {
-            choose_user_option();        
+            $('.link-Update-Percentage').on('click', function () {
+                $('.show-calculation-message').removeClass('d-none').addClass('d-block');
+            });
         });
     </script>
 ";
 
+// Update percentage completion of a session before moving on.
+$show_exported_btns = false;
+if (isset($_GET['update_percentage'])) {
+
+    if ($is_coordinator) {
+        $individuals_group_sessions = Database::get()->queryArray("SELECT * FROM mod_session
+                                                                    WHERE course_id = ?d
+                                                                    ORDER BY `start` DESC", $course_id);
+    } elseif ($is_consultant) {
+        $individuals_group_sessions = Database::get()->queryArray("SELECT * FROM mod_session
+                                                                    WHERE course_id = ?d
+                                                                    AND creator = ?d
+                                                                    ORDER BY `start` DESC", $course_id, $uid);
+    }
+
+    if (count($individuals_group_sessions) > 0) {
+        foreach ($individuals_group_sessions as $s) {
+            // Calculate sessions copletion
+            $all_participants_ids = session_participants_ids($s->id);
+            $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $s->id);
+            foreach ($all_participants_ids as $p){
+                if (!$s->type_remote) {
+                    // This refers to session completion with completed meeting.
+                    check_session_completion_by_meeting_completed($s->id, $p);
+                } elseif($s->type_remote) {
+                    // This refers to session completion with completed tc.
+                    check_session_completion_by_tc_completed($s->id, $p);
+                }
+
+                // This refers to session completion for other activities.
+                check_session_progress($s->id, $p);  // check session completion - call to Game.php
+                check_session_completion_without_activities($s->id);
+                check_session_completion_with_expired_time($s->id);
+
+                $per = 0;
+                if($badge){
+                    $per = get_cert_percentage_completion_by_user('badge', $badge->id, $p);
+                }
+                Database::get()->query("UPDATE mod_session_users SET `percentage` = ?d 
+                                        WHERE session_id = ?d AND participants = ?d AND is_accepted = ?d", $per, $s->id, $p, 1);
+            } 
+        }
+    }
+
+    $show_exported_btns = true; 
+}
+
+if (isset($_GET['show_export_buttons'])) {
+    $show_exported_btns = true; 
+}
+
+
 $users_actions = [];
 $sql_consultant = "";
 if($is_consultant && !$is_coordinator){
-    $sql_consultant = "AND creator = $uid";
+    //$sql_consultant = "AND creator = ?d";
+    $sql_consultant = "AND s.creator = ?d";
+    $sql_consultant_args = [$uid];
 }
 
 if ($is_coordinator) {
@@ -74,20 +147,25 @@ if ($is_coordinator) {
 }
 
 $forUser = "";
+$forUserArgs = "";
+$forUserIn = 0;
 $data['action_bar'] = "";
 $user_pdf = "";
 $user_selected = 0;
-$sqlSelectConsultant = '';
+$sqlSelectConsultant = "";
 $consultant_selected = 0;
 $choose_user_or_consultant = 0;
 
 if(isset($_GET['user_rep'])) {
     $user_pdf = "&amp;session=$_GET[session]&amp;user_rep=$_GET[user_rep]";
-    $forUser = "AND user_id = " . $_GET['user_rep'];
+    $forUser = "AND user_id = ?d";
+    $forUserArgs = [$_GET['user_rep']];
     $user_selected = $_GET['user_rep'];
 
     if ($is_coordinator && isset($_GET['user_consultant_report'])) {
-        $sqlSelectConsultant = "AND creator = $_GET[user_rep]";
+        //$sqlSelectConsultant = "AND creator = ?d";
+        $sqlSelectConsultant = "AND s.creator = ?d";
+        $sqlSelectConsultantArgs = [$_GET['user_rep']];
         $consultant_selected = $_GET['user_rep'];
         $arr = [];
         $p = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE is_accepted = ?d
@@ -98,6 +176,8 @@ if(isset($_GET['user_rep'])) {
         }
         $str_arr = implode(',', $arr);
         $forUser = "AND user_id IN ($str_arr)";
+        $forUserArgs = "";
+        $forUserIn = 1;
     }
 
     $data['action_bar'] = action_bar([
@@ -112,7 +192,8 @@ if(isset($_GET['user_rep'])) {
 // consultant mode
 if($is_consultant && !$is_coordinator && isset($_POST['form_user_report']) && $_POST['form_user_report'] > 0) {
     $user_pdf = "&amp;user_rep=$_POST[form_user_report]";
-    $forUser = "AND user_id = " . $_POST['form_user_report'];
+    $forUser = "AND user_id = ?d";
+    $forUserArgs = [$_POST['form_user_report']];
     $user_selected = $_POST['form_user_report'];
 }
 
@@ -125,7 +206,9 @@ if ($is_coordinator && isset($_POST['choose_user_or_consultant']) && $_POST['cho
         unset($_POST['form_user_report']);
     }
     if (isset($_POST['form_consultant_report']) && $_POST['form_consultant_report'] > 0) {
-        $sqlSelectConsultant = "AND creator = $_POST[form_consultant_report]";
+        //$sqlSelectConsultant = "AND creator = ?d";
+        $sqlSelectConsultant = "AND s.creator = ?d";
+        $sqlSelectConsultantArgs = [$_POST['form_consultant_report']];
         $consultant_selected = $_POST['form_consultant_report'];
         $arrU = [];
         $p = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE is_accepted = ?d
@@ -136,10 +219,13 @@ if ($is_coordinator && isset($_POST['choose_user_or_consultant']) && $_POST['cho
         }
         $str_arrU = implode(',', $arrU);
         $forUser = "AND user_id IN ($str_arrU)";
+        $forUserArgs = "";
+        $forUserIn = 1;
         $user_pdf = "&amp;user_rep=$_POST[form_consultant_report]&amp;user_consultant_report=true";
     } elseif (isset($_POST['form_user_report']) && $_POST['form_user_report'] > 0) {
         $user_pdf = "&amp;user_rep=$_POST[form_user_report]";
-        $forUser = "AND user_id = " . $_POST['form_user_report'];
+        $forUser = "AND user_id = ?d";
+        $forUserArgs = [$_POST['form_user_report']];
         $user_selected = $_POST['form_user_report'];
     }
 }
@@ -148,13 +234,24 @@ if(isset($_GET['user_docs'])){
     $userid = $_GET['user_docs'];
     if($userid > 0){
         $user_pdf = "&amp;user_rep=$_GET[user_docs]";
-        $forUser = "AND user_id = " . $_GET['user_docs'];
+        $forUser = "AND user_id = ?d";
+        $forUserArgs = [$_GET['user_docs']];
         $user_selected = $_GET['user_docs'];
-        $sessions_user = Database::get()->queryArray("SELECT id,title FROM mod_session
-                                                        WHERE course_id = ?d
+        if (!empty($sql_consultant)) {
+            $query_vars = [$course_id, $sql_consultant_args, $userid, 1];
+        } else {
+            $query_vars = [$course_id, $userid, 1];
+        }
+        // $sessions_user = Database::get()->queryArray("SELECT id,title FROM mod_session
+        //                                                 WHERE course_id = ?d
+        //                                                 $sql_consultant
+        //                                                 AND id IN (SELECT session_id FROM mod_session_users
+        //                                                             WHERE participants = ?d AND is_accepted = ?d)", $query_vars);
+        $sessions_user = Database::get()->queryArray("SELECT s.id,s.title FROM mod_session s
+                                                        WHERE s.course_id = ?d
                                                         $sql_consultant
-                                                        AND id IN (SELECT session_id FROM mod_session_users
-                                                                    WHERE participants = ?d AND is_accepted = ?d)",$course_id,$userid,1);
+                                                        AND s.id IN (SELECT su.session_id FROM mod_session_users su
+                                                                    WHERE su.participants = ?d AND su.is_accepted = ?d)", $query_vars);
 
         if(count($sessions_user) > 0){
             $dload_filename = $webDir . '/courses/temp/' . safe_filename('zip');
@@ -208,14 +305,14 @@ if(isset($_GET['user_docs'])){
             }else{
                 Session::flash('message',$langNotExistFilesForUser);
                 Session::flash('alert-class', 'alert-warning');
-                redirect_to_home_page('modules/session/consulting_completion.php?course=' . $course_code);
+                redirect_to_home_page('modules/session/consulting_completion.php?course=' . $course_code . '&show_export_buttons=true');
             }
 
         }
     }else{
         Session::flash('message',$langChooseUser);
         Session::flash('alert-class', 'alert-warning');
-        redirect_to_home_page('modules/session/consulting_completion.php?course=' . $course_code);
+        redirect_to_home_page('modules/session/consulting_completion.php?course=' . $course_code . '&show_export_buttons=true');
     }
 }
 
@@ -224,8 +321,14 @@ if($is_consultant && !$is_coordinator){
   $consultant_as_tutor_group = Database::get()->queryArray("SELECT * FROM group_members WHERE user_id = ?d AND is_tutor = ?d", $uid, 1);
   if(count($consultant_as_tutor_group) > 0){
     $sql_users = "AND user_id IN (SELECT user_id FROM group_members
-                                    WHERE group_id IN (SELECT group_id FROM group_members WHERE user_id = $uid AND is_tutor = 1))";
+                                    WHERE group_id IN (SELECT group_id FROM group_members WHERE user_id = ?d AND is_tutor = 1))";
+    $sql_users_args = [$uid];
   }
+}
+if (!empty($sql_users)) {
+    $query_vars = [$course_id,USER_STUDENT,0,0,0, $sql_users_args];
+} else {
+    $query_vars = [$course_id,USER_STUDENT,0,0,0];
 }
 $course_users = Database::get()->queryArray("SELECT user_id FROM course_user
                                                 WHERE course_id = ?d
@@ -234,7 +337,13 @@ $course_users = Database::get()->queryArray("SELECT user_id FROM course_user
                                                 AND editor = ?d
                                                 AND course_reviewer = ?d
                                                 AND user_id IN (SELECT participants FROM mod_session_users WHERE is_accepted = 1)
-                                                $sql_users",$course_id,USER_STUDENT,0,0,0);
+                                                $sql_users", $query_vars);
+
+if (!empty($forUser) && $forUserIn != 1) {
+    $q_vars = [$course_id, USER_STUDENT, 0, 0, 0, $forUserArgs];
+} else {
+    $q_vars = [$course_id, USER_STUDENT, 0, 0, 0];
+}
 
 $res = Database::get()->queryFunc("SELECT user_id FROM course_user 
                                    WHERE course_id = ?d 
@@ -242,30 +351,65 @@ $res = Database::get()->queryFunc("SELECT user_id FROM course_user
                                    AND tutor = ?d 
                                    AND editor = ?d 
                                    AND course_reviewer = ?d
-                                   $forUser", function($result) use(&$course_id, &$users_actions, &$langSessionCondition, &$langUserHasCompletedCriteria, &$langUserHasNotCompletedCriteria, &$langPercentageSessionCompletion, &$sql_consultant, &$langAllCompletedResources, &$sqlSelectConsultant)  {
+                                   $forUser", function($result) use(&$course_id, &$users_actions, &$langSessionCondition, &$langUserHasCompletedCriteria, &$langUserHasNotCompletedCriteria, &$langPercentageSessionCompletion, &$sql_consultant, &$langAllCompletedResources, &$sqlSelectConsultant, &$sqlSelectConsultantArgs, &$sql_consultant_args)  {
 
                                         $userID = $result->user_id;
                                         if(isset($_GET['user_rep']) && !isset($_GET['user_consultant_report'])){
                                             $userID = $_GET['user_rep'];
                                         }
 
-                                        $user_badge_sessions = Database::get()->queryArray("SELECT id,title,start,finish,creator FROM mod_session 
-                                                                                     WHERE course_id = ?d $sqlSelectConsultant AND visible = ?d
-                                                                                     AND id IN (SELECT session_id FROM mod_session_users
-                                                                                                    WHERE participants = ?d 
-                                                                                                    AND is_accepted = ?d)
-                                                                                     AND id IN (SELECT session_id FROM badge WHERE course_id = ?d AND session_id > 0)
-                                                                                     $sql_consultant", $course_id, 1, $userID, 1, $course_id);
-                                        if(count($user_badge_sessions)){
+                                        if (!empty($sqlSelectConsultant) && !empty($sql_consultant)) {
+                                            //$query_vars = [$course_id, $sqlSelectConsultantArgs, 1, $userID, 1, $course_id, $sql_consultant_args];
+                                            $query_vars = [$userID, 1, $course_id, $course_id, $sqlSelectConsultantArgs, 1, $sql_consultant_args];
+                                        } elseif (!empty($sqlSelectConsultant) && empty($sql_consultant)) {
+                                            //$query_vars = [$course_id, $sqlSelectConsultantArgs, 1, $userID, 1, $course_id];
+                                            $query_vars = [$userID, 1, $course_id, $course_id, $sqlSelectConsultantArgs, 1];
+                                        } elseif (empty($sqlSelectConsultant) && !empty($sql_consultant)) {
+                                            //$query_vars = [$course_id, 1, $userID, 1, $course_id, $sql_consultant_args];
+                                            $query_vars = [$userID, 1, $course_id, $course_id, 1, $sql_consultant_args];
+                                        } else {
+                                            //$query_vars = [$course_id, 1, $userID, 1, $course_id];
+                                            $query_vars = [$userID, 1, $course_id, $course_id, 1];
+                                        }
+
+                                        // $user_badge_sessions = Database::get()->queryArray("SELECT id,title,start,finish,creator FROM mod_session 
+                                        //                                              WHERE course_id = ?d $sqlSelectConsultant AND visible = ?d
+                                        //                                              AND id IN (SELECT session_id FROM mod_session_users
+                                        //                                                             WHERE participants = ?d 
+                                        //                                                             AND is_accepted = ?d)
+                                        //                                              AND id IN (SELECT session_id FROM badge WHERE course_id = ?d AND session_id > 0)
+                                        //                                              $sql_consultant", $query_vars);
+
+                                        $user_badge_sessions = Database::get()->queryArray("
+                                            SELECT DISTINCT
+                                                s.id,
+                                                s.title,
+                                                s.start,
+                                                s.finish,
+                                                s.creator
+                                            FROM mod_session s
+                                            INNER JOIN mod_session_users su
+                                                ON su.session_id = s.id
+                                                AND su.participants = ?d
+                                                AND su.is_accepted = ?d
+                                            INNER JOIN badge b
+                                                ON b.session_id = s.id
+                                                AND b.course_id = ?d
+                                                AND b.session_id > 0
+                                            WHERE s.course_id = ?d
+                                            $sqlSelectConsultant
+                                            AND s.visible = ?d
+                                            $sql_consultant
+                                        ", $query_vars);
+
+                                        if(count($user_badge_sessions) > 0){
                                             $users_actions[$result->user_id] = $user_badge_sessions;
                                             if(count($users_actions) > 0){
                                                 foreach($users_actions as $key => $val){
-                                                    $per = 0;
                                                     foreach($val as $v){
-                                                        $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $v->id);
-                                                        if($badge){
-                                                            $per = get_cert_percentage_completion_by_user('badge',$badge->id,$key);
-                                                        }
+                                                        $per = Database::get()->querySingle("SELECT `percentage` FROM mod_session_users 
+                                                                                             WHERE session_id = ?d AND participants = ?d 
+                                                                                             AND is_accepted = ?d", $v->id, $key, 1)->percentage;
                                                         if($per < 100){
                                                             $icon_badge = " 
                                                                             <strong>
@@ -292,8 +436,8 @@ $res = Database::get()->queryFunc("SELECT user_id FROM course_user
                                                 }
                                             }
                                         }
-                                 }, $course_id, USER_STUDENT, 0, 0, 0);
-
+                                 }, $q_vars);
+ 
 // Display users reports in a table
 $tool_content .= "
     <div class='col-12'>";
@@ -301,19 +445,54 @@ $tool_content .= "
  $tool_content .= " <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                             <h3 class='title_reports mb-0'>$langUserReferences</h3>
-                            <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
-                                <a class='btn successAdminBtn export-pdf-btn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf' target='_blank' aria-label='$langOpenNewTab'>$langDumpPDF</a>
-                                <a class='btn submitAdminBtn docs-pdf-btn gap-1' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;user_docs=$user_selected'>
-                                    <i class='fa-solid fa-download'></i>
-                                    $langDocsUser
-                                </a>
-                            </div>
                         </div>
                         <div class='card-body'>
+                            <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
+                                if (!$show_exported_btns or isset($_GET['percentage_calculation'])) {
+              $tool_content .= "<div>
+                                    <a class='btn submitAdminBtnDefault link-Update-Percentage gap-1 mb-3' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;update_percentage=true'>
+                                        <i class='fa-solid fa-arrow-rotate-right'></i>
+                                        $langUpdatePercentage
+                                    </a>
+
+                                    <div class='d-flex align-items-start gap-2 show-calculation-message d-none mb-3'>
+                                        <div class='spinner-border text-warning' role='status' style='width:20px; height:20px;'>
+                                            <span class='visually-hidden'></span>
+                                        </div>
+                                        $langPlsWait
+                                    </div>
+                                    
+                                </div>";
+                                }
+                               if ($show_exported_btns) {
+                                $showCalculatedPercentagelink = $urlAppend . "modules/session/consulting_completion.php?course=" . $course_code . "&percentage_calculation=true";
+            $tool_content .= "  <div>
+                                    <div class='alert alert-success'>
+                                        <i class='fa-solid fa-circle-check fa-lg'></i>
+                                        <span>$langBBBUpdateSuccessful</span>
+                                    </div>
+                                    <a class='btn submitAdminBtn export-pdf-btn gap-1 mb-3' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf$user_pdf' target='_blank' aria-label='$langOpenNewTab'>
+                                        <i class='fa-solid fa-file-pdf'></i>
+                                        $langDumpPDF
+                                    </a>
+                                    <a class='btn submitAdminBtn docs-pdf-btn gap-1 mb-3' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;user_docs=$user_selected'>
+                                        <i class='fa-solid fa-download'></i>
+                                        $langDocsUser
+                                    </a>
+                                </div>
+                                <div>
+                                    <a class='btn submitAdminBtn link-Update-Percentage gap-1 mb-3' href='$showCalculatedPercentagelink'>
+                                        <i class='fa-solid fa-angle-left'></i>
+                                        $langBack
+                                    </a>
+                                </div>";
+                                }
+         $tool_content .= " </div>
                             <p class='info_completion' style='margin-bottom:25px;'>$langShowOnlySessionWithCompletionEnable</p>";
                             if(count($course_users) > 0 && !isset($_GET['user_rep'])){
+                              $showCalculatedPercentageBtn = !$show_exported_btns ? '&percentage_calculation=true' : '&show_export_buttons=true';
                               $tool_content .= "<div class='col-12 mb-4'>
-                                                    <form class='form-user-report' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                                                    <form class='form-user-report' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code$showCalculatedPercentageBtn'>
                                                         <div class='d-flex justify-content-start align-items-center gap-2'>";
 
                                             if ($is_coordinator) {
@@ -326,11 +505,11 @@ $tool_content .= "
                                             }
 
                                             $show_search_user_container = ($is_consultant && !$is_coordinator) ? 'd-block' : 'd-none';
-                                            if ($is_consultant && !$is_coordinator) {
+                                            // if ($is_consultant && !$is_coordinator) {
 
-                                            } elseif ($is_coordinator) {
+                                            // } elseif ($is_coordinator) {
 
-                                            }
+                                            // }
 
                                          $tool_content .= " <div class='search-user-container $show_search_user_container'>
                                                                 <label for='form_id_user_report' class='control-label-notes mb-1'>$langSearchUser</label>
@@ -384,12 +563,12 @@ $tool_content .= "
                                 $tool_content .= "  <tr style='border:0px !important;'>
                                                         <td style='vertical-align:top; border:0px !important; background-color: transparent;'>
                                                             <strong>{$v->title}</br>
-                                                                " . format_locale_date(strtotime($v->start), 'short', false) . "&nbsp;<small>" . date('H:i', strtotime($v->start)) . "&nbsp; - &nbsp;" . date('H:i', strtotime($v->finish)) . "</small>
+                                                                " . format_locale_date(strtotime($v->start), 'short', false) . "<br><small>$langStartSession&nbsp;" . date('H:i', strtotime($v->start)) . "<br>$langFinishSession&nbsp;" . date('H:i', strtotime($v->finish)) . "</small>
                                                             </strong>
                                                         </td>
                                                         <td style='vertical-align:top; border:0px !important; background-color: transparent;'>" . participant_name($v->creator) . "</td>
                                                         <td style='vertical-align:top; border:0px !important; background-color: transparent;'>
-                                                            " . session_completed_resources_by_user($v->id,$course_id,$key) ."
+                                                            <div> " . session_completed_resources_by_user($v->id, $course_id, $key) . " </div>
                                                             <div>{$v->completion}</div>
                                                         </td>
                                                     </tr>";
@@ -412,7 +591,12 @@ $tool_content .= " </div>
 
 
 if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
-    pdf_reports_output();
+    if (isset($_GET['user_rep'])) {
+        $uId = intval($_GET['user_rep']);
+    } else {
+        $uId = 0;
+    }
+    pdf_reports_output($uId);
 }else{
     $data['tool_content'] = $tool_content;
     view('modules.session.consulting_completion', $data);
@@ -425,11 +609,13 @@ if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
  * @return void
  * @throws \Mpdf\MpdfException
  */
-function pdf_reports_output() {
+function pdf_reports_output($uId) {
     global $tool_content, $langUserDuration, $currentCourseName,
            $webDir, $course_id, $course_code, $langHasParticipatedInTool, $langHasNotParticipatedInTool;
 
-    $pdf_content = "
+    $pdfTitle = ($uId > 0) ? '(Summary sessions) ' . uid_to_name($uId) : '(Summary sessions) all_users_reports';
+
+    $htmlHeader = "
         <!DOCTYPE html>
         <html lang='el'>
         <head>
@@ -470,7 +656,9 @@ function pdf_reports_output() {
             .user-icon-filename,
             .info_completion,
             .title_reports,
-            .card-img-top {
+            .card-img-top,
+            .link-Update-Percentage,
+            .show-calculation-message {
                 display: none;
             }
             .resource_item {
@@ -481,22 +669,29 @@ function pdf_reports_output() {
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
 
-    // Array containing icons
+    // Array contains icons
     $searchVal = array('&#10004;', '&#x2718;');
-    // Array containing replace icons with strings
+    // Array replaces icons with strings
     $replaceVal = array('<strong class="text-success">' . $langHasParticipatedInTool . '</strong>', '<strong class="text-danger">' . $langHasNotParticipatedInTool . '</strong>');
     $output = str_replace($searchVal, $replaceVal, $tool_content);
-    $pdf_content .= $output;
-    $pdf_content .= "</body></html>";
 
     $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
     $fontDirs = $defaultConfig['fontDir'];
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // for old courses
+    if ($image_height_header > 50) {
+        $image_height_header = 20;
+    }
+    if ($image_height_footer > 50) {
+        $image_height_footer = 15;
+    }
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 63,     // approx 200px
-        'margin_bottom' => 63,  // approx 200px
+        'margin_top' => $image_height_header + 20,     // mm
+        'margin_bottom' => $image_height_footer + 10,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -513,7 +708,14 @@ function pdf_reports_output() {
             ]
     ]);
 
-    
+    // Performance options
+    $mpdf->simpleTables = true;
+    $mpdf->packTableData = true;
+    $mpdf->shrink_tables_to_fit = 0;
+
+    // Write CSS/header ONCE
+    $mpdf->WriteHTML($htmlHeader, \Mpdf\HTMLParserMode::HEADER_CSS);
+    // Header/Footer
     $mpdf->SetHTMLHeader(get_platform_logo());
     $footerHtml = '
     <div>
@@ -528,7 +730,39 @@ function pdf_reports_output() {
     $mpdf->SetHTMLFooter($footerHtml);
     $mpdf->SetCreator(course_id_to_prof($course_id));
     $mpdf->SetAuthor(course_id_to_prof($course_id));
-    $mpdf->WriteHTML($pdf_content);
-    $mpdf->Output("$course_code users_reports.pdf", 'I'); // 'D' or 'I' for download / inline display
+
+    // Parse HTML safely
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    $html = mb_convert_encoding(
+        $output,
+        'HTML-ENTITIES',
+        'UTF-8'
+    );
+    $dom->loadHTML($html);
+    $xpath = new DOMXPath($dom);
+
+    // Find all cards
+    $cards = $xpath->query("
+        //div[contains(concat(' ', normalize-space(@class), ' '), ' cardReports ')]
+    ");
+    if ($cards->length === 0) {
+        $mpdf->WriteHTML($output, \Mpdf\HTMLParserMode::HTML_BODY);
+    } else {
+        foreach ($cards as $card) {
+            $cardHtml = $dom->saveHTML($card);
+            $mpdf->WriteHTML(
+                $cardHtml,
+                \Mpdf\HTMLParserMode::HTML_BODY
+            );
+            $mpdf->WriteHTML('<pagebreak />');
+        }
+    }
+
+    // Close HTML
+    $mpdf->WriteHTML("</body></html>");
+
+    // Output
+    $mpdf->Output("$course_code $pdfTitle.pdf", 'I');
     exit;
 }

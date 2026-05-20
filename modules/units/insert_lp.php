@@ -24,7 +24,7 @@
 function list_lps() {
     global $id, $course_id, $tool_content, $urlServer,
     $langAddModulesButton, $langChoice, $langNoLearningPath,
-    $langLearningPaths, $course_code, $langSelect;
+    $langLearningPaths, $course_code, $langSelect, $langCancel;
 
     $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE course_id = ?d ORDER BY name", $course_id);
     $lpinfo = array();
@@ -59,19 +59,21 @@ function list_lps() {
                                                 $entry['id'], $entry['id']);
             if (($m_id) and $m_id->module_id > 0) {
                 if (!empty($entry['comment'])) {
-                    $comment_text = "<div>" . $entry['comment'] . "</div>";
+                    $comment_text = "<div>" . q($entry['comment']) . "</div>";
                 } else {
                     $comment_text = '';
                 }
                 $tool_content .= "<tr class='$vis'>";
                 $tool_content .= "<td><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
-                $tool_content .= "<td><a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>"
-                 . $comment_text . "</td>";
+                $tool_content .= "<td><a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comment_text . "</td>";
                 $tool_content .= "</tr>";
             }
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_lp' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<div class='d-flex justify-content-end mt-4 gap-2'>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_lp' value='$langAddModulesButton'>                
+                            <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel'></a>
+                        </div>";
+        $tool_content .= "</form>";
     }
 }

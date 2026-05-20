@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
@@ -61,6 +61,9 @@
                             @case(15)
                                 @include('admin.users.auth.methods.oauth2')
                             @break
+                            @case(16)
+                                @include('admin.users.auth.methods.keycloak')
+                            @break
                         @endswitch
                         {!! showSecondFactorChallenge() !!}
 
@@ -79,5 +82,5 @@
                 </div>
             </div>
     </div>
-</div>
+</main>
 @endsection

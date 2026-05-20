@@ -4,7 +4,7 @@
  *  * Open eClass
  *  * E-learning and Course Management System
  *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
+ *  * Copyright 2003-2026, Greek Universities Network - GUnet
  *  *
  *  * Open eClass is an open platform distributed in the hope that it will
  *  * be useful (without any warranty), under the terms of the GNU (General
@@ -25,8 +25,6 @@
  * Defines standard functions and validates variables
  */
 
-define('ECLASS_VERSION', '4.3-dev');
-
 // mPDF library temporary file path and font path
 if (isset($webDir)) { // needed for avoiding 'notices' in some files
     define("_MPDF_TEMP_PATH", $webDir . '/courses/temp/pdf/');
@@ -36,6 +34,8 @@ require_once 'constants.php';
 require_once 'log.class.php';
 require_once 'lib/session.class.php';
 require_once 'lib/file_cache.class.php';
+require_once 'lib/hierarchy.class.php';
+require_once 'modules/admin/tenant_functions.php';
 
 // ----------------------------------------------------------------------
 // for safety reasons use the functions below
@@ -156,11 +156,18 @@ function load_js($file, $init='') {
             $head_content .= js_link('waypoints/jquery.waypoints.min.js');
             $file = 'waypoints/shortcuts/infinite.min.js';
         } elseif ($file == 'select2') {
-            $head_content .= css_link('select2-4.0.3/css/select2.min.css') .
-            css_link('select2-4.0.3/css/select2-bootstrap.min.css') .
-            css_link('select2-4.0.3/css/override_select2_design.css?v=4.0-dev') .
-            js_link('select2-4.0.3/js/select2.full.min.js');
-            $file = "select2-4.0.3/js/i18n/$language.js";
+            // $head_content .= css_link('select2-4.0.3/css/select2.min.css') .
+            // css_link('select2-4.0.3/css/select2-bootstrap.min.css') .
+            // css_link('select2-4.0.3/css/override_select2_design.css?v=4.0-dev') .
+            // js_link('select2-4.0.3/js/select2.full.min.js');
+            // $file = "select2-4.0.3/js/i18n/$language.js";
+            $head_content .= css_link('select2-4.0.13/dist/css/select2.min.css') .
+            css_link('select2-4.0.13/dist/css/override_select2_design.css?v=4.0-dev') .
+            js_link('select2-4.0.13/dist/js/select2.full.min.js');
+            $file = "select2-4.0.13/dist/js/i18n/$language.js";
+        } elseif ($file == 'slimselect') {
+            $head_content .= css_link('slim-select/slimselect.css');
+            $file = 'slim-select/slimselect.js';
         } elseif ($file == 'bootstrap-calendar') {
             $file = 'bootstrap-calendar-master/js/calendar.js';
             if ($language != 'en') {
@@ -205,6 +212,20 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-combobox') {
             $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
             $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
+        } elseif ($file == 'bootstrap-table') {
+            $head_content .= css_link('bootstrap-table/bootstrap-table.min.css');
+            if ($language != 'en') {
+                switch ($language) {
+                    case 'el': $file = 'bootstrap-table/locale/bootstrap-table-el-GR.min.js'; break;
+                    case 'fr': $file = 'bootstrap-table/locale/bootstrap-table-fr-FR.min.js'; break;
+                    case 'de': $file = 'bootstrap-table/locale/bootstrap-table-de-DE.min.js'; break;
+                    case 'it': $file = 'bootstrap-table/locale/bootstrap-table-it-IT.min.js'; break;
+                    case 'es': $file = 'bootstrap-table/locale/bootstrap-table-es-ES.min.js'; break;
+                    default: break;
+                }
+            }
+            $head_content .= js_link('bootstrap-table/bootstrap-table.min.js');
+            $head_content .= js_link('bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js');
         } elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
@@ -658,12 +679,12 @@ function selection3($entries, $name, $default = '') {
  * @return boolean
  */
 function check_guest($id = null) {
-    if ($id) {
+    if (!is_null($id)) {
         $uid = $id;
     } else {
-        $uid = $GLOBALS['uid'];
+        $uid = $GLOBALS['uid'] ?? null;
     }
-    if (isset($uid) and $uid) {
+    if ($uid) {
         $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
         if ($status && $status->status == USER_GUEST) {
             return true;
@@ -875,14 +896,17 @@ function user_app_exists($login) {
  * @return type
  */
 function html2text($string) {
-    //$trans_tbl = get_html_translation_table(HTML_ENTITIES);
-    //$trans_tbl = array_flip($trans_tbl);
-    $string = html_entity_decode(strip_tags($string));
-    $text = preg_replace('/<(div|p|pre|br)[^>]*>/i', "\n", $string);
-    return canonicalize_whitespace(strip_tags($text));
-    // return strtr (strip_tags($string), $trans_tbl);
+    $text = preg_replace("/<(\/div|\/p|\/pre|br)[^>]*>\s*\n?/i", "\n", $string);
+    return html_entity_decode(strip_tags($text));
 }
 
+function base64url_encode($data) {
+    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function base64url_decode($data) {
+    return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+}
 
 /**
  * @brie   completes url contained in the text with "<a href ...".
@@ -1163,7 +1187,7 @@ function display_activation_link($module_id) {
     global $modules;
 
     $script = preg_replace('|.*/|', '', $_SERVER['SCRIPT_NAME']);
-    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and count($_GET) == 1 and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
+    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and (count($_GET) == 1 or ($module_id == MODULE_ID_PROGRESS and count($_GET) == 2 and isset($_GET['tab']))) and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
         return true;
     } else {
         return false;
@@ -1186,9 +1210,13 @@ function visible_module($module_id, $course_id = null): bool
 
     $v = Database::get()->querySingle("SELECT visible FROM course_module
                                 WHERE module_id = ?d AND
-                                course_id = ?d", $module_id, $course_id)->visible;
-    if ($v == 1) {
-        return true;
+                                course_id = ?d", $module_id, $course_id);
+    if ($v) {
+        if ($v->visible == 1) {
+            return true;
+        } else {
+            return false;
+        }
     } else {
         return false;
     }
@@ -1536,20 +1564,20 @@ function course_access_icon($visibility) {
 
     switch ($visibility) {
         case COURSE_OPEN: {
-            $access_icon = "<span class='fa fa-lock-open fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen'></span>";
+            $access_icon = "<span tabindex='0' class='fa fa-lock-open fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen' aria-label='$langTypeOpen'></span>";
             break;
         }
         case COURSE_REGISTRATION: {
-            $access_icon = "<div class='d-inline-flex align-items-center'><span class='fa fa-lock fa-lg fa-fw access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration'></span>
-            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration' style='margin-left:-5px;'></span></div>";
+            $access_icon = "<div tabindex='0' class='d-inline-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration' aria-label='$langTypeRegistration'><span class='fa fa-lock fa-lg fa-fw access'></span>
+            <span class='fa fa-pencil text-danger fa-custom-lock mt-0' style='margin-left:-5px;'></span></div>";
             break;
         }
         case COURSE_CLOSED: {
-            $access_icon = "<span class='fa fa-lock fa-lg fa-fw fa-access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeClosed'></span>";
+            $access_icon = "<span tabindex='0' class='fa fa-lock fa-lg fa-fw fa-access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeClosed' aria-label='$langTypeClosed'></span>";
             break;
         }
         case COURSE_INACTIVE: {
-            $access_icon = "<span class='fa fa-ban fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive'></span>";
+            $access_icon = "<span tabindex='0' class='fa fa-ban fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeInactive' aria-label='$langTypeInactive'></span>";
             break;
         }
     }
@@ -1594,7 +1622,7 @@ function format_time_duration($sec, $hourLimit = 24, $display_days = true) {
         return append_units($sec, $langsecond, $langseconds);
     }
     $min = floor($sec / 60);
-    $sec = $sec % 60;
+    $sec = intval($sec) % 60;
     if ($min < 2) {
         return append_units($min, $langminute, $langminutes) .
                 (($sec == 0) ? '' : (' ' . append_units($sec, $langsecond, $langseconds)));
@@ -1774,7 +1802,7 @@ function findUserVisibleUnits($uid, $all_units, $course_id = null) {
                                                           INNER JOIN user_badge ub ON (b.id = ub.badge)
                                                           WHERE ub.user = ?d
                                                           AND cu.course_id = ?d
-                                                          AND cu.visible = 1
+                                                          AND (cu.visible = 1 OR cu.visible = 2)
                                                           AND cu.public = 1
                                                           AND cu.order >= 0", $uid, $course_id);
     if ( isset($userInBadges) and $userInBadges ) {
@@ -1931,6 +1959,13 @@ function delete_course($cid): void
     Database::get()->query("DELETE d FROM user_certificate d,certificate s WHERE d.certificate=s.id AND s.course_id = ?d", $cid);
     Database::get()->query("DELETE FROM certificate WHERE course_id = ?d", $cid);
 
+    Database::get()->query("DELETE d FROM user_points_game_criterion d, points_game_criterion c, points_game s WHERE d.points_game_criterion = c.id
+        AND c.points_game = s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM user_points_game_points d, points_game s WHERE d.points_game = s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM points_game_criterion d , points_game s WHERE d.points_game = s.id AND s.course_id = ?d", $cid);
+    Database::get()->query("DELETE d FROM points_game_levels d, points_game s WHERE d.points_game = s.id AND s.course_id = ?d ", $cid);
+    Database::get()->query("DELETE FROM points_game WHERE course_id = ?d", $cid);
+
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM document WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE d FROM ebook_subsection d,ebook_section s,ebook s2 WHERE d.section_id=s.id AND s.ebook_id = s2.id AND s2.course_id = ?d", $cid);
@@ -2038,6 +2073,8 @@ function delete_course($cid): void
     Database::get()->query("DELETE FROM attendance WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM tc_session WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_external_server WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM seb_courses WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM course_import WHERE course_id = ?d", $cid);
 
     removeDir("$webDir/courses/$course_code");
     removeDir("$webDir/video/$course_code");
@@ -2105,13 +2142,17 @@ function deleteUser($id, $log) {
             if (count($assignment_data) > 0) { // if assignments found
                 foreach ($assignment_data as $data) {
                     $courseid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = $data->assignment_id")->course_id;
-                    unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    if (isset($data->file_path)) {
+                        unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    }
                 }
             }
             Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_badge WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM user_points_game_criterion WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM user_points_game_points WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM gradebook_users WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM gradebook_book WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM attendance_users WHERE uid = ?d", $u);
@@ -2273,7 +2314,10 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @return type
  */
 function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options = []) {
-    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore, $tinymce_color_text, $langInputTextEditor;
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore, $tinymce_color_text, $langInputTextEditor,
+        $langLatexDialogTitle, $langLatexInput, $langLatexPreview, $langInsert, $langCancel,
+        $langLatexCatGreekLetters, $langLatexCatOperators, $langLatexCatRelations, $langLatexCatArrows, $langLatexCatDelimiters,
+        $langLatexCatAccents, $langLatexCatFunctions, $langLatexCatMathStructures, $langLatexCatMiscellaneous, $langLatexCatChemicalSymbols;
     static $init_done = false;
     if (!$init_done) {
         $init_done = true;
@@ -2285,7 +2329,24 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
         $append_forum = (isset($_REQUEST['forum'])) ? "&originating_forum=" . q($_REQUEST['forum']) : '';
 
         if (isset($course_code) && $course_code) {
-            $filebrowser = "file_browser_callback : openDocsPicker,";
+
+            $url = $urlAppend . "modules/" . $activemodule . "?course=" . $course_code . "&embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
+
+            $filebrowser = "file_picker_callback: function (callback, value, meta) {
+                        var url = '" . $url . "' + meta.filetype;
+                        tinymce.activeEditor.windowManager.openUrl({
+                            title: '" . js_escape($langResourceBrowser) . "',
+                            url: url,
+                            width: 800,
+                            height: 600,
+                            onMessage: function (api, data) {
+                                if (data.mceAction === 'fileSelected') {
+                                    callback(data.url, { title: data.title || '' });
+                                    api.close();
+                                }
+                            }
+                        });
+                    },";
             if (!$is_editor) {
                 $cid = course_code_to_id($course_code);
                 $module = Database::get()->querySingle("SELECT * FROM course_module
@@ -2313,14 +2374,31 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
             }
             $url = $urlAppend . "modules/" . $activemodule . "?course=" . $course_code . "&embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
         } elseif ($is_admin) { /* special case for admin announcements */
-            $filebrowser = "file_browser_callback : openDocsPicker,";
+            $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
+            $filebrowser = "file_picker_callback: function (callback, value, meta) {
+                        var url = '" . $url . "' + meta.filetype;
+                        tinymce.activeEditor.windowManager.openUrl({
+                            title: '" . js_escape($langResourceBrowser) . "',
+                            url: url,
+                            width: 800,
+                            height: 600,
+                            onMessage: function (api, data) {
+                                if (data.mceAction === 'fileSelected') {
+                                    callback(data.url, { title: data.title || '' });
+                                    api.close();
+                                }
+                            }
+                        });
+                    },";
             $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
         }
         $focus_init = ",
                 init_instance_callback: function(editor) {
+                    var rows = $(editor.getElement()).attr('rows') || 6;
+                    editor.getContainer().style.height = ((rows * 30) + 100) + 'px';
                     var parent = $(editor.contentAreaContainer.parentElement);
                     (editorToggleSecondToolbar(editor))();
-                    parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:0px');
+                    parent.find('tox-toolbar-grp, tox-statusbar').attr('style','border:0px');
                     if (typeof tinyMceCallback !== 'undefined') {
                         tinyMceCallback(editor);
 
@@ -2357,7 +2435,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
 
                     }";
         if ($onFocus) {
-            $focus_init .= "parent.find('.mce-toolbar-grp').hide();";
+            $focus_init .= "parent.find('tox-toolbar-grp').hide();";
         }
         $focus_init .= "},";
         if ($onFocus) {
@@ -2365,7 +2443,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
                 statusbar: false,
                 setup: function (editor) {
                     var toolbarGrp;
-                    editorAddButtonToggle(editor);
+                    // editorAddButtonToggle(editor);
                     editor.on('focus', function () {
                         toolbarGrp.show();
                     });
@@ -2373,13 +2451,13 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
                         toolbarGrp.hide();
                     });
                     editor.on('init', function() {
-                        toolbarGrp = $(editor.contentAreaContainer.parentElement).find('.mce-toolbar-grp');
+                        toolbarGrp = $(editor.contentAreaContainer.parentElement).find('tox-toolbar-grp');
                     });
                 }";
         } else {
             $focus_init .= "
                 setup: function (editor) {
-                    editorAddButtonToggle(editor);
+                    // editorAddButtonToggle(editor);
                 },
                 ";
         }
@@ -2399,12 +2477,40 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options
             $copy_paste = '| pastetext cut copy paste ';
             $paste_plugin = $paste_preprocess = '';
         }
+        $latex_helper_categories = array(
+            'Greek Letters' => $langLatexCatGreekLetters,
+            'Operators' => $langLatexCatOperators,
+            'Relations' => $langLatexCatRelations,
+            'Arrows' => $langLatexCatArrows,
+            'Delimiters' => $langLatexCatDelimiters,
+            'Accents' => $langLatexCatAccents,
+            'Functions' => $langLatexCatFunctions,
+            'Math Structures' => $langLatexCatMathStructures,
+            'Miscellaneous' => $langLatexCatMiscellaneous,
+            'Chemical Symbols' => $langLatexCatChemicalSymbols
+        );
         $head_content .= "
+<style>
+    body.tox-fullscreen {overflow: hidden !important;}
+    body.tox-fullscreen header {z-index: 0 !important;}
+    body.tox-fullscreen main {z-index: 99999 !important;position: relative !important;}
+    .tox.tox-tinymce.tox-fullscreen {z-index: 100000 !important;}
+    .tox-tinymce-aux, .tox-dialog-wrap {z-index: 100001 !important;}
+    .tox-tinymce-aux div[id^='aria-controls_'] {position: relative;z-index: 100001;}
+</style>
 <script type='text/javascript'>
+window.latexHelperLang = {
+    title: '" . js_escape($langLatexDialogTitle) . "',
+    latexInput: '" . js_escape($langLatexInput) . "',
+    preview: '" . js_escape($langLatexPreview) . "',
+    insert: '" . js_escape($langInsert) . "',
+    cancel: '" . js_escape($langCancel) . "',
+    categories: " . json_encode($latex_helper_categories, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . "
+};
 
 function editorToggleSecondToolbar(editor) {
     return function() {
-        var toolbar = $(editor.contentAreaContainer.parentElement).find('.mce-toolbar-grp .mce-toolbar').eq(1);
+        var toolbar = $(editor.contentAreaContainer.parentElement).find('tox-toolbar-grp tox-toolbar').eq(1);
         toolbar.toggle();
     }
 }
@@ -2413,8 +2519,8 @@ function editorAddButtonToggle (editor) {
     editor.addButton('toggle', {
         title: '".js_escape($langMore)."',
         classes: 'toggle',
-        image: '{$urlAppend}js/tinymce/skins/light/img/toggle.png',
-        onclick: editorToggleSecondToolbar(editor),
+        // image: '{$urlAppend}js/tinymce/skins/light/img/toggle.png',
+        // onclick: editorToggleSecondToolbar(editor),
     });
 }
 
@@ -2437,7 +2543,8 @@ function openDocsPicker(field_name, url, type, win) {
 }
 
 tinymce.init({
-    // General options
+    
+    license_key: 'gpl',
     selector: 'textarea.mceEditor',
     content_css: [
         '{$urlAppend}template/modern/css/bootstrap.min.css',
@@ -2445,14 +2552,14 @@ tinymce.init({
         '{$urlAppend}template/modern/css/default.css',
     ],
     content_style: 'body { margin: 8px; background: none !important; color: $tinymce_color_text;  }',
+    font_size_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt 24pt 30pt 36pt 42pt',
     extended_valid_elements: 'span[*]',
     noneditable_noneditable_class: 'fa',
+    fullscreen_native: true,
     language: '$language',
     cache_suffix: '?v=" . CACHE_SUFFIX . "',
-    theme: 'modern',
-    skin: 'light',
     branding: false,
-    font_formats:
+    font_family_formats:
     'Open Sans=open sans; Roboto=roboto; Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
     image_advtab: true,
     image_class_list: [
@@ -2470,7 +2577,9 @@ tinymce.init({
         {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
         {title: 'None', value: ' '}
     ],
-    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking wordcount emoticons preview searchreplace table code textcolor colorpicker lists advlist charmap fontawesome autosave$paste_plugin',
+//    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking wordcount emoticons preview searchreplace table code textcolor colorpicker lists advlist charmap fontawesome latexhelper autosave$paste_plugin',
+//    plugins: 'fullscreen pagebreak save image link media code lists eclmedia fontawesome latexhelper advlist charmap wordcount emoticons preview searchreplace visualchars nonbreaking autosave$paste_plugin',
+    plugins: 'fullscreen pagebreak save image link media code lists advlist charmap wordcount emoticons preview searchreplace visualchars nonbreaking autosave eclmedia fontawesome latexhelper table',
     $paste_preprocess
     entity_encoding: 'raw',
     relative_urls: false,
@@ -2483,18 +2592,24 @@ tinymce.init({
     menu: true,
     menubar: false,
     // Toolbar options
-    toolbar1: 'toggle bold italic underline | forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | fullscreen preview restoredraft',
-    toolbar2: 'formatselect | fontselect fontsizeselect | outdent indent | emoticons fontawesome strikethrough superscript subscript table $copy_paste| removeformat | searchreplace undo redo | code'
+    toolbar_mode: 'sliding',
+    toolbar: ' bold italic underline alignleft aligncenter alignright alignjustify bullist numlist outdent indent table | link image media eclmedia | blocks fontfamily fontsize | strikethrough removeformat forecolor backcolor | emoticons fontawesome | superscript subscript latexhelper | $copy_paste  | undo redo searchreplace code preview restoredraft fullscreen'
     $focus_init
 });
 </script>";
     }
+
+    $textarea_id = '';
+    if (isset($options['id'])) {
+        $textarea_id = "id=" . $options['id'];
+    }
+    
     if (!is_null($text)) {
         $textarea_text = q(str_replace('{', '&#123;', $text));
     } else {
         $textarea_text = '';
     }
-    return "<textarea class='mceEditor' name='$name' rows='$rows' cols='$cols' aria-label='$langInputTextEditor'>" . $textarea_text . "</textarea>\n";
+    return "<textarea $textarea_id class='mceEditor' name='$name' rows='$rows' cols='$cols'>" . $textarea_text . "</textarea>\n";
 }
 
 // Display a simple textarea with name $name
@@ -2792,6 +2907,9 @@ function redirect_to_home_page($path='', $absolute=false) {
 
 // Translate Greek characters to Latin
 function greek_to_latin($string) {
+    if (is_null($string)) {
+        return '';
+    }
     return str_replace(
             array(
         'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π',
@@ -2809,6 +2927,9 @@ function greek_to_latin($string) {
 // Convert to uppercase and remove accent marks
 // Limited coverage for now
 function remove_accents($string) {
+    if (is_null($string)) {
+        return '';
+    }
     return strtr(mb_strtoupper($string, 'UTF-8'),
         ['Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
          'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
@@ -2858,21 +2979,21 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Produce HTML source for an icon
-function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false, $sr_only = false) {
+function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false, $sr_only = false, $pressed = false) {
 
     if (isset($title)) {
         $title = q($title);
-        $extra = "title data-bs-original-title='$title' data-bs-toggle='tooltip' data-bs-placement='bottom'";
+        $extra = "title data-bs-original-title='$title' data-bs-toggle='tooltip' data-bs-placement='bottom' aria-label='$title'";
     } else {
         $extra = '';
     }
     if (isset($title) && $with_title) {
-        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='sr-only'>$title</span>" : "<span class='fa $name' $extra></span> $title";
+        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='visually-hidden'>$title</span>" : "<span class='fa $name' $extra></span> $title";
     } else {
         $img = "<span class='fa $name' $extra></span>";
     }
     if (isset($link)) {
-        return "<a href='$link'$link_attrs aria-label='$title' role='button'>$img</a>";
+        return "<a href='$link' $link_attrs aria-label='$title' aria-pressed='$pressed' role='button'>$img</a>";
     } else {
         return $img;
     }
@@ -2887,7 +3008,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
  */
 
 function profile_image($user_id, $size, $class=null) {
-    global $urlServer, $themeimg, $uid, $course_id, $is_editor, $langUser;
+    global $urlServer, $themeimg, $uid, $course_id, $is_editor, $langProfileImage;
 
     if (isset($_SESSION['profile_image_cache_buster'])) {
         $suffix = '?v=' . $_SESSION['profile_image_cache_buster'];
@@ -2923,7 +3044,7 @@ function profile_image($user_id, $size, $class=null) {
     if (!$imageurl) {
         $imageurl = "$themeimg/default_$size.png";
     }
-    return "<img src='$imageurl$suffix' $class_attr alt='$langUser:$username' $size_width>";
+    return "<img src='$imageurl$suffix' $class_attr alt='$langProfileImage:$username' $size_width>";
 }
 
 /**
@@ -3185,7 +3306,6 @@ function active_subdirs($base, $filename) {
  * @param  - $dirPath (String) - the path of the directory to delete
  * @return - boolean - true if the delete succeed, false otherwise.
  */
-
 function removeDir($dirPath) {
     global $webDir;
 
@@ -3196,7 +3316,7 @@ function removeDir($dirPath) {
     }
 
     // Try to remove the directory recursively if it exists
-    if (!file_exists($dirPath)) {
+    if (!(file_exists($dirPath) or is_dir($dirPath))) {
         return true;
     } else {
         $files = new RecursiveIteratorIterator(
@@ -3428,11 +3548,11 @@ function copyright_info($id, $noImg = 1, $type = 'course'): string
             } else {
                 $link_suffix = '';
             }
-            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' aria-label='$langOpenNewTab'>
+            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' aria-label='" . q($license[$lic]['title']) . "'>
                         <span class='" . $license[$lic]['image'] . "'></span>
                     </a>";
         } else if ($lic == 10) {
-            $link = "<span data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' class='" . $license[$lic]['image'] . "'></span>";
+            $link = "<span data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' class='" . $license[$lic]['image'] . "' aria-label='" . q($license[$lic]['title']) . "'></span>";
         }
     }
     return $link;
@@ -3576,11 +3696,6 @@ function generate_csrf_token_link_parameter()
 function csrf_token_error() {
    redirect_to_home_page();
 }
-
-
-
-
-
 
 /**
  * Indirect Reference to Direct Reference Map
@@ -3895,7 +4010,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 
         if (count($options) > 1 && !(isset($option['options']) && ($level == 'primary' or $level == 'primary-label'))) {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $modal_class $confirm_modal_class $temporary_button_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $modal_class $confirm_modal_class $temporary_button_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3' " . $href .
                 " $link_attrs>" .
                 "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
         }
@@ -3911,13 +4026,13 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-gear";
 
     if (count($out_secondary) > 0) {
-        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
+        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn action-bar-dropdown' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langListChoices'>
                                 <span class='fa $secondary_icon'></span>
                                 <span class='fa-solid fa-chevron-down ps-2'></span>
                                 <span class='hidden-xs TextBold'>$secondary_title</span>
                                 <span class='caret'></span><span class='hidden'></span>
                             </button>";
-        $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='toolDropdown'>
+        $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-bar' aria-labelledby='toolDropdown'>
                                 <ul class='list-group list-group-flush'>
                                     ".implode('', $out_secondary)."
                                 </ul>
@@ -3983,40 +4098,32 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
  *
  */
 function action_button($options, $secondary_menu_options = array(), $fc=false) {
-    global $langConfirmDelete, $langCancel, $langDelete, $langListChoices;
+    global $langConfirmDelete, $langCancel, $langDelete, $langConfig;
     $out_primary = $out_secondary = array();
     $primary_form_begin = $primary_form_end = $primary_icon_class = '';
 
+    static $counter = 1;
+
     foreach (array_reverse($options) as $option) {
         $level = $option['level'] ?? 'secondary';
-        // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
         }
-        if (isset($option['class'])) {
-            $class = ' ' . $option['class'];
-        } else {
-            $class = '';
-        }
-        if (isset($option['btn_class'])) {
-            $btn_class = ' ' . $option['btn_class'];
-        } else {
-            $btn_class = ' submitAdminBtn';
-        }
-        if (isset($option['link-attrs'])) {
-            $link_attrs = ' ' . $option['link-attrs'];
-        } else {
-            $link_attrs = '';
-        }
-        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
-        $icon_class = "class='list-group-item $class$disabled";
+        $class = isset($option['class']) ? ' ' . $option['class'] : '';
+        $btn_class = isset($option['btn_class']) ? ' ' . $option['btn_class'] : ' submitAdminBtn';
+        $link_attrs = isset($option['link-attrs']) ? ' ' . $option['link-attrs'] : '';
+
+        $disabled = (isset($option['disabled']) && $option['disabled']) ? ' disabled' : '';
+
+        $icon_class = "class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3$class$disabled";
         if (isset($option['icon-class'])) {
             $icon_class .= " " . $option['icon-class'];
         }
+
         if (isset($option['confirm'])) {
             $title = q($option['confirm_title'] ?? $langConfirmDelete);
             $accept = $option['confirm_button'] ?? $langDelete;
-            $form_begin = "<form class='form-action-button-popover list-group-item-action list-group-item' method=post action='$option[url]'>";
+            $form_begin = "<form class='form-action-button-mydropdowns mb-0' method=post action='$option[url]'>";
             $form_end = '</form>';
             if ($level == 'primary-label' or $level == 'primary') {
                 $primary_form_begin = $form_begin;
@@ -4033,8 +4140,9 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         } else {
             $icon_class .= "'";
             $confirm_extra = $form_begin = $form_end = '';
-            $url = isset($option['url'])? $option['url']: '#';
+            $url = isset($option['url']) ? $option['url'] : '#';
         }
+
         if (isset($option['icon-extra'])) {
             $icon_class .= ' ' . $option['icon-extra'];
         }
@@ -4044,13 +4152,15 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         } elseif ($level == 'primary') {
             array_unshift($out_primary, "<a aria-label='" . q($option['title']) . "' data-bs-placement='bottom' data-bs-toggle='tooltip' title data-bs-original-title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span><span class='hidden'></span></a>");
         } else {
-            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
+            array_unshift($out_secondary, '<li>' . $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end . '</li>');
         }
     }
+
     $primary_buttons = "";
     if (count($out_primary)) {
         $primary_buttons = implode('', $out_primary);
     }
+
     $action_button = "";
     $secondary_title = $secondary_menu_options['secondary_title'] ?? "<span class='hidden'></span>";
 
@@ -4060,23 +4170,26 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         $secondary_icon = $secondary_menu_options['secondary_icon'] ?? "fa-solid fa-gear";
     }
     $secondary_btn_class = $secondary_menu_options['secondary_btn_class'] ?? "submitAdminBtn";
-    if (count($out_secondary)) {
-        $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
-        if(!empty($secondary_title)){
-            $tmp_class_title = "<span class='hidden-xs'>$secondary_title</span>";
-        }else{
-            $tmp_class_title = "";
-        }
-        $action_button = "
-                <a tabindex='0' role='button' class='menu-popover btn $secondary_btn_class d-flex justify-content-center align-items-center' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list' aria-label='$langListChoices'>
-                    <span class='fa $secondary_icon'></span>
-                    $tmp_class_title
 
-                </a>";
+    // Instead of a popover menu, display list items directly
+    if (count($out_secondary)) {
+        $list_items = implode('', $out_secondary);
+        $tmp_class_title = !empty($secondary_title) ? "<span class='hidden-xs'>$secondary_title</span>" : "";
+        $action_button = "
+            <button style='border-radius: 4px;' class='btn $secondary_btn_class action-button-dropdown' type='button' id='actionDropdown_$counter' data-bs-toggle='dropdown' aria-expanded='false' aria-label='$langConfig'>
+                <span class='fa $secondary_icon'></span>
+                $tmp_class_title
+            </button>
+            <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border contextual-menu-action-button' aria-labelledby='actionDropdown_$counter'>
+                <ul class='list-group list-group-flush'>
+                    $list_items
+                </ul>
+            </div>";
     }
+    $counter++;
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm btn-group-default gap-2' role='group' aria-label='...'>
+         "<div class='btn-group btn-group-sm btn-group-default dropstart gap-2' role='group' aria-label='...'>
                 $primary_buttons
                 $action_button
           </div>" . $primary_form_end;
@@ -4743,7 +4856,7 @@ function showSecondFactorChallenge(){
  */
 function checkSecondFactorChallenge(){
     $connector = secondfaApp::getsecondfa();
-    if($connector->isEnabled() == true ){
+    if ($connector->isEnabled()) {
         return secondfaApp::checkChallenge($_SESSION['uid']);
     } else {
         return "";
@@ -4836,38 +4949,40 @@ function trans($var_name, $var_array = []) {
 }
 
 function get_platform_logo($size = 'normal', $position = 'header') {
-    global $themeimg, $urlAppend, $course_id;
+    global $themeimg, $urlAppend, $course_id, $bg_color;
 
     require_once 'include/course_settings.php';
 
     if ($position == 'footer') {
-        $footer_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_FOOTER, $course_id);
+        $footer_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_FOOTER, $course_id);
         if (!$footer_path) {
             return '';
         }
         $logo_img = imageToBase64($footer_path);
-        $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
+        $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id);
         $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-        $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-        $bg_color = '#ffffff';
+        $image_height = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+        // for old courses
+        if ($image_height > 50) {
+            $image_height = 15;
+        }
     } else {
-        $header_path = setting_get_print_image_disk_path(SETTING_COUSE_IMAGE_PRINT_HEADER, $course_id);
+        $header_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
+        $image_height = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+        // for old courses
+        if ($image_height > 50) {
+            $image_height = 20;
+        }
+        $image_align = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
+        $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
         if ($header_path) {
             $logo_img = imageToBase64($header_path);
-            $image_align = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id);
-            $image_align = ($image_align == 0) ? 'left' : (($image_align == 1) ? 'center' : 'right');
-            $image_width = setting_get(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-            $bg_color = '#ffffff';
         } else {
             $logo_img = $themeimg . '/eclass-new-logo.svg';
-            $image_width = 200;
-            $image_align = 'left';
-            $bg_color = '#ffffff';
             $theme_id = get_config('theme_options_id');
             if ($theme_id) {
                 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
                 $theme_options_styles = unserialize($theme_options->styles);
-                $bg_color = $theme_options_styles['leftNavBgColor'];
                 $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
                 if ($size == 'small' && isset($theme_options_styles['imageUploadSmall'])) {
                     $logo_img = "$urlThemeData/{$theme_options_styles['imageUploadSmall']}";
@@ -4878,8 +4993,8 @@ function get_platform_logo($size = 'normal', $position = 'header') {
         }
     }
 
-    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem;'>
-                <img style='width: {$image_width}px;' src='$logo_img'>
+    $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
+                <img style='height: {$image_height}mm;' src='$logo_img'>
             </div>";
 
     return $logo;
@@ -5062,6 +5177,51 @@ function get_tinymce_color_text() {
 }
 
 
+/**
+ * Formats bytes into human-readable string (B, KB, MB, GB, TB).
+ *
+ * @param int $bytes Bytes to format
+ * @param int $precision [optional] Decimal places (default: 2)
+ * @return string Formatted size (e.g. "1.23 MB")
+ */
+function formatBytes(int $bytes, int $precision = 2): string {
+    if ($bytes == 0) {
+        return '0 B';
+    }
+
+    $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    $bytes = abs($bytes);
+    $exp = (int) (log($bytes) / log(1024));
+    $size = $bytes / pow(1024, $exp);
+
+    return round($size, $precision) . ' ' . $units[$exp];
+}
+
+
+/**
+ * @brief check if Safe Exam Browser is enabled for course
+ * @return bool
+ */
+function CourseHasSafeExamBrowserEnabled(): bool
+{
+    global $course_id;
+
+    if (get_config('ext_seb_enabled') == 1) {
+        $q = Database::get()->queryArray("SELECT * FROM seb_courses");
+        if (count($q) > 0) {
+            $q1 = Database::get()->querySingle("SELECT * FROM seb_courses WHERE course_id = ?d", $course_id);
+            if ($q1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    } else {
+        return false;
+    }
+}
 
 /**
  * @brief get user courses
@@ -5154,6 +5314,32 @@ function module_path($path) {
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
 
+/**
+ * Replace placeholders in a message with corresponding values.
+ *
+ * This function takes a message string containing placeholders in the format {name}
+ * and replaces them with corresponding values provided in the substitution array.
+ *
+ * @param string $message The original message containing placeholders.
+ * @param array $subst An associative array of substitutions, where keys are placeholder names
+ *                     (without curly braces) and values are their replacements.
+ * @return string The message with all placeholders replaced by their corresponding values.
+ *
+ * @example
+ * $message = "Hello, {name}! You are {age} years old.";
+ * $subst = ['name' => 'John', 'age' => 30];
+ * $result = varmsg($message, $subst);
+ * // Result: "Hello, John! You are 30 years old."
+ */
+function varmsg($message, $subst)
+{
+    $keys = $values = [];
+    foreach ($subst as $key => $value) {
+        $keys[] = '{' . $key . '}';
+        $values[] = q($value);
+    }
+    return str_replace($keys, $values, $message);
+}
 
 /**
  * @brief Theme initialization
@@ -5173,11 +5359,32 @@ function theme_initialization() {
     $PositionFormLogin = 0;
     $eclass_banner_value = 1;
     $container = 'container';
-    $forms_image = 'form-image-modules';
-    $logo_img = $themeimg.'/eclass-new-logo.svg';
-    $logo_img_small = $themeimg.'/eclass-new-logo.svg';
+
+    $tenant = defined('UPGRADE')? null: getCurrentTenant();
+
+    if (isset($_SESSION['current_user_tenant'])) {
+        $tenant = $_SESSION['current_user_tenant'];
+    }
+
+    $tenantLogo = $tenantLogoSmall = $tenantFavicon = null;
+
+    if ($tenant) {
+        $options = unserialize($tenant->options);
+
+        $tenantLogo = getTenantOption($options, 'imageUpload');
+        $tenantLogoSmall = getTenantOption($options, 'imageUploadSmall');
+        $tenantFavicon = getTenantOption($options, 'faviconUpload');
+
+        $logo_img = $urlAppend . $tenantLogo;
+        $logo_img_small = $urlAppend. $tenantLogoSmall;
+        $favicon_img = $urlAppend . $tenantFavicon;
+    } else {
+        $logo_img = $themeimg.'/eclass-new-logo.svg';
+        $logo_img_small = $themeimg.'/eclass-new-logo.svg';
+        $favicon_img = $urlAppend . 'resources/favicon/openeclass_128x128.png';
+    }
+
     $loginIMG = $themeimg.'/loginIMG.png';
-    $favicon_img = $urlAppend . 'resources/favicon/openeclass_128x128.png';
     $VideoUploadedInJumbotron = 0;
     $enable_box_logo = 0;
 
@@ -5483,7 +5690,7 @@ function theme_initialization() {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if (isset($theme_options_styles['faviconUpload'])){
+        if (isset($theme_options_styles['faviconUpload']) && !$tenantFavicon){
             $favicon_img =  "$urlThemeData/$theme_options_styles[faviconUpload]";
         }
 
@@ -6825,7 +7032,7 @@ function theme_initialization() {
 
                 .btn-exercise-nav[type=submit]:hover,
                 .btn-exercise-nav[type=submit]:focus{
-                    border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
+                    border: solid 2px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
                 }
 
                 .dt-paging .dt-paging-button .page-link:hover,
@@ -7050,6 +7257,11 @@ function theme_initialization() {
                     background-color: $theme_options_styles[buttonBgColor] !important;
                 }
 
+                .ss-main .ss-values .ss-value{
+                    border-color: $theme_options_styles[buttonBgColor] !important;
+                    background-color: $theme_options_styles[buttonBgColor] !important;
+                }
+
             ";
 
             $colorChevronLeftRight = "$theme_options_styles[buttonBgColor]";
@@ -7079,7 +7291,7 @@ function theme_initialization() {
                     z-index: 1;
                 }
 
-                .mce-btn{
+                tox-btn{
                     background-color: $theme_options_styles[buttonBgColor] !important;
                 }
 
@@ -7169,8 +7381,8 @@ function theme_initialization() {
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
 
-                .mce-btn:hover,
-                .mce-btn:focus{
+                tox-btn:hover,
+                tox-btn:focus{
                     background-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
@@ -7215,12 +7427,17 @@ function theme_initialization() {
                     background-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
+                .ss-main .ss-values .ss-value{
+                    border-color: $theme_options_styles[buttonHoverBgColor] !important;
+                    background-color: $theme_options_styles[buttonHoverBgColor] !important;
+                }
+
             ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////// TEXT COLOR OF COLORFUL BUTTON //////////////////////////////
+        //////////////////////// TEXT COLOR OF PRIMARY BUTTON //////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -7335,8 +7552,8 @@ function theme_initialization() {
                     color:$theme_options_styles[buttonTextColor];
                 }
 
-                .mce-btn,
-                .mce-btn i{
+                tox-btn,
+                tox-btn i{
                     color: $theme_options_styles[buttonTextColor] !important;
                 }
 
@@ -7381,6 +7598,14 @@ function theme_initialization() {
                 .dt-paging .dt-paging-button.active .page-link:hover,
                 .dt-paging .dt-paging-button.active .page-link:focus{
                     color:$theme_options_styles[buttonTextColor] !important;
+                }
+
+                .ss-main .ss-values .ss-value .ss-value-text{
+                    color:$theme_options_styles[buttonTextColor] !important;
+                }
+
+                .ss-main .ss-values .ss-value .ss-value-delete svg path{
+                    stroke: $theme_options_styles[buttonTextColor] !important;
                 }
 
             ";
@@ -8482,7 +8707,7 @@ function theme_initialization() {
                     border: 1px solid $theme_options_styles[clBorderSelect];
                 }
 
-                .mce-floatpanel {
+                tox-floatpanel {
                     border: 1px solid $theme_options_styles[clBorderSelect] !important;;
                 }
 
@@ -8557,16 +8782,25 @@ function theme_initialization() {
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
-                .mce-menu-item{
+                tox-menu-item{
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
-                .mce-menu-item .mce-text {
+                tox-menu-item tox-text {
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
 
                 .select2-container--default .select2-selection--single .select2-selection__rendered{
                     color: $theme_options_styles[clOptionSelect] !important;
+                }
+
+                .ss-content .ss-list .ss-option,
+                .ss-main .ss-values .ss-placeholder,
+                .ss-content .ss-list .ss-optgroup .ss-optgroup-label .ss-optgroup-label-text{
+                    color: $theme_options_styles[clOptionSelect] !important;
+                }
+                .ss-main .ss-arrow path{
+                   stroke: $theme_options_styles[clOptionSelect] !important;
                 }
 
             ";
@@ -8597,10 +8831,13 @@ function theme_initialization() {
                     background-color: $theme_options_styles[bgHoveredSelectOption] !important;
                 }
 
-                .mce-menu-item:hover{
+                tox-menu-item:hover{
                     background-color: $theme_options_styles[bgHoveredSelectOption] !important;
                 }
 
+                .ss-content .ss-list .ss-option:hover:not(.ss-disabled){
+                    background-color: $theme_options_styles[bgHoveredSelectOption] !important;
+                }
 
 
             ";
@@ -8627,15 +8864,19 @@ function theme_initialization() {
                     color: $theme_options_styles[clHoveredSelectOption] !important;
                 }
 
-                .mce-menu-item:hover{
+                tox-menu-item:hover{
                     color: $theme_options_styles[clHoveredSelectOption] !important;
                 }
 
-                .mce-menu-item-normal.mce-active:hover .mce-text {
+                tox-menu-item-normaltox-active:hover tox-text {
                     color: $theme_options_styles[clHoveredSelectOption] !important;
                 }
 
-                .mce-menu-item:hover .mce-text {
+                tox-menu-item:hover tox-text {
+                    color: $theme_options_styles[clHoveredSelectOption] !important;
+                }
+
+                .ss-content .ss-list .ss-option:hover:not(.ss-disabled){
                     color: $theme_options_styles[clHoveredSelectOption] !important;
                 }
 
@@ -8664,18 +8905,22 @@ function theme_initialization() {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
 
-                .mce-menu-item-normal.mce-active {
+                tox-menu-item-normaltox-active {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
 
-                .mce-menu-item:hover,
-                .mce-menu-item.mce-selected,
-                .mce-menu-item:focus {
+                tox-menu-item:hover,
+                tox-menu-itemtox-selected,
+                tox-menu-item:focus {
                     background-color: $theme_options_styles[bgOptionSelected] !important;
                 }
 
                 .dropdown-item.active,
                 .dropdown-item:active {
+                    background-color:  $theme_options_styles[bgOptionSelected] !important;
+                }
+
+                .ss-content .ss-list .ss-option.ss-highlighted, .ss-content .ss-list .ss-option:not(.ss-disabled).ss-selected{
                     background-color:  $theme_options_styles[bgOptionSelected] !important;
                 }
 
@@ -8704,27 +8949,31 @@ function theme_initialization() {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .mce-menu-item-normal.mce-active {
+                tox-menu-item-normaltox-active {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .mce-menu-item:hover,
-                .mce-menu-item.mce-selected,
-                .mce-menu-item:focus {
+                tox-menu-item:hover,
+                tox-menu-itemtox-selected,
+                tox-menu-item:focus {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .mce-menu-item-normal.mce-active .mce-text {
+                tox-menu-item-normaltox-active tox-text {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
-                .mce-menu-item:hover .mce-text,
-                .mce-menu-item.mce-selected .mce-text {
+                tox-menu-item:hover tox-text,
+                tox-menu-itemtox-selected tox-text {
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
                 .dropdown-item.active,
                 .dropdown-item:active {
+                    color: $theme_options_styles[clOptionSelected] !important;
+                }
+
+                .ss-content .ss-list .ss-option.ss-highlighted, .ss-content .ss-list .ss-option:not(.ss-disabled).ss-selected{
                     color: $theme_options_styles[clOptionSelected] !important;
                 }
 
@@ -8799,7 +9048,7 @@ function theme_initialization() {
             $FormWidth = $MainContentWidth ."px";
             $styles_str .= "
                 @media(min-width:992px){
-                    .main-section:has(.course-wrapper) .form-image-modules{
+                    body:has(.course-wrapper) .form-image-modules{
                         width: $FormWidth;
                         float:right;
                         padding-bottom: 0px;
@@ -10146,25 +10395,28 @@ function theme_initialization() {
 
         if(!empty($theme_options_styles['BgTextEditor'])){
             $styles_str .= "
-                .mce-container,
-                .mce-widget,
-                .mce-widget *,
-                .mce-reset {
+                tox-container {
                     background: $theme_options_styles[BgTextEditor] !important;
                 }
-                .mce-window .mce-container-body {
+                tox-widget {
+                    background: $theme_options_styles[BgTextEditor] !important;
+                }
+                tox-reset {
+                    background: $theme_options_styles[BgTextEditor] !important;
+                }
+                tox-window tox-container-body {
                     background:  $theme_options_styles[BgTextEditor] !important;
                   }
-                  .mce-tab.mce-active {
+                  tox-tabtox-active {
                     background: $theme_options_styles[BgTextEditor] !important;
                   }
-                  .mce-tab {
+                  tox-tab {
                     background:  $theme_options_styles[BgTextEditor] !important;
                   }
-                  .mce-textbox {
+                  tox-textbox {
                     background:  $theme_options_styles[BgTextEditor] !important;
                   }
-                  i.mce-i-checkbox {
+                  itox-i-checkbox {
                     background-image: -webkit-linear-gradient(top,#fff,$theme_options_styles[BgTextEditor]) !important;
                   }
             ";
@@ -10178,7 +10430,7 @@ function theme_initialization() {
 
         if(!empty($theme_options_styles['BgBorderTextEditor'])){
             $styles_str .= "
-                .mce-panel {
+                tox-panel {
                     border: solid 1px $theme_options_styles[BgBorderTextEditor] !important;
                 }
             ";
@@ -10195,26 +10447,26 @@ function theme_initialization() {
             $SVGtools2 = 'transparent url("data:image/svg+xml,%3C' . $SVGtools .'%3E") center / 1em auto no-repeat';
             $styles_str .= "
 
-                .mce-toolbar .mce-btn i {
+                tox-toolbar tox-btn i {
                     color: $theme_options_styles[ClTextEditor] !important;
                 }
 
-                .mce-menubtn span {
+                tox-menubtn span {
                     color: $theme_options_styles[ClTextEditor] !important;
                 }
-                .mce-btn i {
+                tox-btn i {
                     text-shadow: 0px 0px $theme_options_styles[ClTextEditor] !important;
                 }
 
-                .mce-container, .mce-container *, .mce-widget, .mce-widget *, .mce-reset {
+                tox-container, tox-container *, tox-widget, tox-widget *, tox-reset {
                     color: $theme_options_styles[ClTextEditor] !important;
                 }
 
-                .mce-caret {
+                tox-caret {
                     border-top: 4px solid $theme_options_styles[ClTextEditor] !important;
                 }
 
-                .mce-toolbar .mce-btn i.mce-i-none{
+                tox-toolbar tox-btn itox-i-none{
                     background: $SVGtools2 !important;
                 }
 
@@ -10491,6 +10743,9 @@ function theme_initialization() {
                     white-space: nowrap;
                     background-color: $theme_options_styles[BgColorProgressBarAndText];
                 }
+                .poll-border-left {
+                    border-left: solid 4px $theme_options_styles[BgColorProgressBarAndText] !important;
+                }
             ";
         }
 
@@ -10505,7 +10760,9 @@ function theme_initialization() {
             $styles_str .= "
                 .tooltip.fade.show *{
                     background-color: $theme_options_styles[bgColorTooltip];
-
+                }
+                tox-tooltip *{
+                    background-color: $theme_options_styles[bgColorTooltip] !important;
                 }
             ";
         }
@@ -10521,7 +10778,9 @@ function theme_initialization() {
             $styles_str .= "
                 .tooltip.fade.show *{
                     color: $theme_options_styles[TextColorTooltip];
-
+                }
+                tox-tooltip *{
+                    color: $theme_options_styles[TextColorTooltip] !important;
                 }
             ";
         }
@@ -11063,17 +11322,35 @@ function theme_initialization() {
             ";
         }
 
+        if(!empty($theme_options_styles['enable_aside_main_cards'])){
+            $head_content .= "
+            <script type='text/javascript'>
+                $(document).ready(function () {
+                    setNewCookieSlider('asideBarOn','true',30);
+                });
+            </script>";
+        } else {
+            $head_content .= "
+            <script type='text/javascript'>
+                $(document).ready(function () {
+                    setNewCookieSlider('asideBarOn','true',0);
+                });
+            </script>";
+        }
+
+
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////// UPLOAD LOGO ////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if (isset($theme_options_styles['imageUpload'])){
+        if (isset($theme_options_styles['imageUpload']) && !$tenantLogo){
             $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
         }
 
-        if (isset($theme_options_styles['imageUploadSmall'])){
+        if (isset($theme_options_styles['imageUploadSmall']) && !$tenantLogoSmall){
             $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
         }
 
@@ -11737,6 +12014,11 @@ function theme_initialization() {
                 .card-transparent .panel-footer{
                    box-shadow: none !important;
                 }
+
+                .ContentLeftNav, 
+                .main-maincontent {
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels] !important;
+                }
             ";
         }
 
@@ -12318,14 +12600,47 @@ function theme_initialization() {
                 textarea:focus-visible{
                     outline: 0 !important;
                     box-shadow: none !important;
-                    border: solid 1px $theme_options_styles[ColorFocus] !important;
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
                 }
 
                 .input-group:focus-within .input-group-text{
                     outline: 0 !important;
                     box-shadow: none !important;
-                    border: solid 1px $theme_options_styles[ColorFocus] !important;
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
                     border-left: 0px !important;
+                }
+
+                .dt-container.dt-bootstrap5 select:focus{
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
+                }
+
+                .dt-container.dt-bootstrap5 input[type='text']:focus,
+                .dt-container.dt-bootstrap5 input[type='number']:focus,
+                .dt-container.dt-bootstrap5 input[type='email']:focus, 
+                .dt-container.dt-bootstrap5 input[type='url']:focus, 
+                .dt-container.dt-bootstrap5 input[type='search']:focus, 
+                .dt-container.dt-bootstrap5 .form-control:focus, 
+                .dt-container.dt-bootstrap5 .uneditable-input:focus{
+                    border: solid 2px $theme_options_styles[ColorFocus] !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// BREADCRUMBS BG COLOR  ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgColorBreadcrumb'])){
+            $styles_str .= "
+                .breadcrumbs-init {
+                    background-color: $theme_options_styles[bgColorBreadcrumb];
+                    border-radius: 10px;
+                }
+                .breadcrumbs-init {
+                    padding-top: 0.25rem !important;
+                    padding: 10px 15px 5px 15px;
                 }
             ";
         }
@@ -12436,4 +12751,57 @@ function form_popovers($type, $message): string {
 
     return $html;
 
+}
+
+/**
+ * Retrieve a specific style value from the theme options.
+ *
+ * This function fetches the theme options from the database for the current theme
+ * and retrieves the value of a specific style based on the provided style name.
+ *
+ * @param string $style_name The name of the style to retrieve.
+ *
+ * @global int $theme_id The ID of the current theme.
+ *
+ * @return mixed|null The value of the requested style if it exists, or null if not found.
+ */
+function get_style($style_name) {
+    global $theme_id;
+
+    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+
+    if ($theme_options) {
+        $theme_options_styles = unserialize($theme_options->styles);
+    }
+
+    return $theme_options_styles[$style_name] ?? null;
+
+}
+
+
+function get_suppressed_words_data($action = 'words') {
+    if ($action === 'version') {
+        $sql = "SELECT MAX(created_at) AS last_update FROM suppressed_words";
+        $result = Database::get()->querySingle($sql);
+
+        if ($result && $result->last_update) {
+            return $result->last_update;
+        }
+        return '2000-01-01 00:00:00';
+    }
+
+    if ($action === 'words') {
+        $sql = "SELECT word FROM suppressed_words";
+        $results = Database::get()->queryArray($sql);
+
+        $words = [];
+        if ($results) {
+            foreach ($results as $row) {
+                $words[] = $row->word;
+            }
+        }
+        return $words;
+    }
+
+    return false;
 }

@@ -83,4 +83,5 @@ if ($courselist) {
 }
 
 header('Content-Type: application/json; charset=UTF-8');
+header('X-Content-Type-Options: nosniff');
 echo json_encode(['results' => $courses, 'pagination' => ['more' => $more]], JSON_UNESCAPED_UNICODE);

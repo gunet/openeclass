@@ -57,6 +57,31 @@ $helpTopic = 'documents';
 doc_init();
 $searchEngine = SearchEngineFactory::create();
 
+if ($subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')) {
+    $head_content .=
+    '<script>
+        $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
+            e.preventDefault();
+
+            const href = $(this).attr(\'href\');
+            const url = new URL(href, window.location.origin);
+            const rid = url.searchParams.get(\'rid\');
+
+            const modalId = `modal_doc_${rid}`;
+            const modalElement = document.getElementById(modalId);
+
+            if (modalElement) {
+                const Modal = new bootstrap.Modal(modalElement);
+                Modal.show();
+
+                const formSelector = `#vis_form_doc_${rid}`;
+                $(formSelector).attr(\'action\', href);
+            } else {
+                console.warn(\'Modal with ID\', modalId, \'not found\');
+            }
+        });
+    </script>';
+}
 
 if ($is_editor) {
 
@@ -139,8 +164,11 @@ if ($is_editor) {
                             // remove from index if relevant (except non-main sysbsystems and metadata)
                             Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
                                                 AND format <> '.meta' AND path LIKE ?s",
-                                function ($r2, $searchEngine) {
-                                    $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
+                                function ($r2) {
+                                    global $searchEngine;
+                                    if ($searchEngine) {
+                                        $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_DOCUMENT, $r2->id);
+                                    }
                                     if (resource_belongs_to_progress_data(MODULE_ID_DOCS, $r2->id)) {
                                         Session::Messages(trans('langResourceBelongsToCert'), 'alert-warning');
                                     }
@@ -240,6 +268,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     /* save video recorded data */
     if (isset($_FILES['video-blob'])) {
         $title = $_POST['userFile'];
+        validateUploadedFile($_FILES['video-blob']['name']);
         $file_path = '/' . safe_filename('webm');
         if (!move_uploaded_file($_FILES['video-blob']['tmp_name'], $basedir . $file_path)) {
             Session::flash('message', $langGeneralError);
@@ -250,30 +279,30 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $file_date = date('Y-m-d G:i:s');
             $file_format = 'webm';
             Database::get()->query("INSERT INTO document SET
-            course_id = ?d,
-            subsystem = ?d,
-            subsystem_id = ?d,
-            path = ?s,
-            extra_path = '',
-            filename = ?s,
-            visible = 1,
-            comment = '',
-            category = 0,
-            title = ?s,
-            creator = ?s,
-            date = ?s,
-            date_modified = ?s,
-            subject = '',
-            description = '',
-            author = ?s,
-            format = ?s,
-            copyrighted = 0,
-            editable = 0,
-            lock_user_id = ?d",
-                $course_id, $subsystem, $subsystem_id, $file_path,
-                $filename, $title, $file_creator,
-                $file_date, $file_date, $file_creator, $file_format,
-                $language, $uid);
+                course_id = ?d,
+                subsystem = ?d,
+                subsystem_id = ?d,
+                path = ?s,
+                extra_path = '',
+                filename = ?s,
+                visible = 1,
+                comment = '',
+                category = 0,
+                title = ?s,
+                creator = ?s,
+                date = ?s,
+                date_modified = ?s,
+                subject = '',
+                description = '',
+                author = ?s,
+                format = ?s,
+                copyrighted = 0,
+                editable = 0,
+                lock_user_id = ?d",
+                    $course_id, $subsystem, $subsystem_id, $file_path,
+                    $filename, $title, $file_creator,
+                    $file_date, $file_date, $file_creator, $file_format,
+                    $language, $uid);
             Session::Messages($langDownloadEnd, 'alert-success');
             exit();
         }
@@ -281,6 +310,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     /* save audio recorded data */
     if (isset($_FILES['audio-blob'])) {
         $title = $_POST['userFile'];
+        validateUploadedFile($_FILES['audio-blob']['name']);
         $file_path = '/' . safe_filename('mka');
         if (!move_uploaded_file($_FILES['audio-blob']['tmp_name'], $basedir . $file_path)) {
             Session::flash('message', $langGeneralError);
@@ -326,6 +356,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 $diskUsed = dir_total_space($basedir);
 
 $user_upload = $uid && $subsystem == MAIN && get_config('enable_docs_public_write') && setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE);
+
 $uploading_as_user = !$can_upload && $user_upload;
 
 if (defined('COMMON_DOCUMENTS')) {
@@ -334,6 +365,9 @@ if (defined('COMMON_DOCUMENTS')) {
     $toolName = $langCommonDocs;
     $diskQuotaDocument = $diskUsed + parseSize(ini_get('upload_max_filesize'));
 } elseif (defined('MY_DOCUMENTS')) {
+    if ($session->status == USER_GUEST) {
+        redirect_to_home_page();
+    }
     if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
         redirect_to_home_page();
     }
@@ -393,9 +427,9 @@ $dialogData = [
 if (isset($_GET['mindmap'])) {
     $mindmap = $_GET['mindmap'];
     $title = $_GET['mindtitle'];
-
     $file_path = '/' . safe_filename('jm');
-    if (!file_put_contents($basedir . $file_path, $_GET['mindmap'])) {
+    validateUploadedFile($file_path);
+    if (!file_put_contents($basedir . $file_path, $mindmap)) {
         Session::flash('message', $langGeneralError);
         Session::flash('alert-class', 'alert-danger');
     } else {
@@ -1073,21 +1107,36 @@ if ($can_upload or $user_upload) {
         // check if file exists
         $res = Database::get()->querySingle("SELECT * FROM document
                                              WHERE $group_sql AND
-                                                   path=?s", $commentPath);
+                                                   path = ?s", $commentPath);
         if ($res and (!$uploading_as_user or $res->lock_user_id == $uid)) {
             if ($res->format == '.dir') {
                 Database::get()->query("UPDATE document SET comment = ?s
                      WHERE $group_sql AND path = ?s", $_POST['file_comment'], $commentPath);
             } else {
+                if (isset($_POST['external_url'])) {
+                    $ext_url_sql = ', extra_path = ?s';
+                    $ext_url_arg = $_POST['external_url'];
+                    if (!preg_match('/^https?:\/\//i', $ext_url_arg)) {
+                        Session::Messages($langUnwantedFiletype . ': ' . q($ext_url_arg), 'alert-warning');
+                        Session::flashPost();
+                        http_response_code(303);
+                        $base_url = html_entity_decode($base_url);
+                        header("Location: {$base_url}comment=" . getIndirectReference($commentPath));
+                        exit;
+                    }
+                } else {
+                    $ext_url_sql = '';
+                    $ext_url_arg = [];
+                }
                 Database::get()->query("UPDATE document SET
                                                 comment = ?s,
                                                 title = ?s,
                                                 date_modified = " . DBHelper::timeAfter() . ",
-                                                copyrighted = ?d
+                                                copyrighted = ?d $ext_url_sql
                                         WHERE $group_sql AND
                                               path = ?s"
                     , $_POST['file_comment'], $_POST['file_title']
-                    , $_POST['file_copyrighted'], $commentPath);
+                    , $_POST['file_copyrighted'], $ext_url_arg, $commentPath);
             $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $res->id);
             Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
                 'filename' => $res->filename,
@@ -1243,6 +1292,11 @@ if ($can_upload or $user_upload) {
                 'selected_license_title' => $row->copyrighted,
                 'license_title' => $license_title
             );
+            if ($row->extra_path and preg_match('/^https?:\/\//i', $row->extra_path)) {
+                $dialogData['external_url'] = $row->extra_path;
+            } else {
+                $dialogData['external_url'] = false;
+            }
             view('modules.document.comment', $dialogData);
         } else {
             Session::Messages($langFileNotFound, 'alert-danger');
@@ -1468,9 +1522,44 @@ foreach ($result as $row) {
 
     $downloadMessage = $row->format == '.dir' ? $langDownloadDir : $langSave;
     $info['action_button'] = '';
+    $info['eportfolio_modal'] = '';
     if (!$is_in_tinymce) {
         $cmdDirName = getIndirectReference($row->path);
         if ($can_upload) {
+
+            if (!$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')) {
+                $info['eportfolio_modal'] = '<div class="modal fade" id="modal_doc_'.$row->id.'" tabindex="-1" aria-labelledby="docModalLabel_'.$row->id.'" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="docModalLabel_'.$row->id.'">'.$langAddResePortfolio.' - '.$row->filename.'</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                    </div>
+
+                    <div class="modal-body">
+                    <form id="vis_form_doc_'.$row->id.'" name="vis_form_doc_'.$row->id.'" action="" method="post">
+                        <div class="mb-3">
+                            <label for="vis_form_doc_'.$row->id.'_select" class="form-label">'.$langePortfolioFieldsVisibilitySettings.'</label>
+                            <select class="form-select" name="visibility" id="vis_form_doc_'.$row->id.'_select">
+                            <option value="'.EPF_VISIBLE_PUBLIC.'">'.$langPublicePortfolioField.'</option>
+                            <option value="'.EPF_VISIBLE_USERS.'">'.$langOpenToRegisteredUsers.'</option>
+                            <option value="'.EPF_VISIBLE_PRIVATE.'">'.$langProfileInfoPrivate.'</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vis_form_doc_'.$row->id.'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
+                            <textarea class="form-control" name="reflection_comments" id="vis_form_doc_'.$row->id.'_textarea"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
+                    </form>
+                    </div>
+
+                </div>
+                </div>
+            </div>';
+            }
+
             $xmlCmdDirName = ($row->format == ".meta" && get_file_extension($row->path) == 'xml') ? substr($row->path, 0, -4) : $row->path;
             $info['action_button'] = action_button(array(
                 array('title' => $langFileUnzipping,
@@ -1517,9 +1606,14 @@ foreach ($result as $row) {
                       'url' => $download_url,
                       'icon' => 'fa-download'),
                 array('title' => $langAddResePortfolio,
-                      'url' => "{$urlAppend}main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=mydocs&amp;rid=".$row->id,
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?action=add&amp;type=mydocs&amp;rid=".$row->id,
                       'icon' => 'fa-star',
                       'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
+                array('title' => $langAddResePortfolioExternalAchievements,
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?action=add&amp;type=external_achievements&amp;rid=".$row->id,
+                      'icon' => 'fa-star',
+                      'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
+                
                 array('title' => $langDelete,
                       'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1&amp;" . generate_csrf_token_link_parameter() ,
                       'class' => 'delete',
@@ -1541,7 +1635,7 @@ foreach ($result as $row) {
         $dirs[] = (object) $info;
     } else {
         $info['icon'] = choose_image('.' . $row->format);
-        $info['url'] = file_url($row->path, $row->filename);
+        $info['url'] = file_url($row->path, $row->filename, extra_path: $row->extra_path);
         $dObj = MediaResourceFactory::initFromDocument($row);
         $dObj->setAccessURL($info['url']);
         if ($is_in_tinymce && !$compatiblePlugin) {
@@ -1586,6 +1680,7 @@ $data['diskQuotaDocument'] = $diskQuotaDocument = $diskQuotaDocument * 1024 / 10
 $data['diskUsed'] = $diskUsed;
 
 if (($can_upload or $user_upload) and !$is_in_tinymce) {
+
     // available actions
     if (isset($_GET['rename'])) {
         $pageName = $langRename;
@@ -1621,7 +1716,8 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
             'level' => 'primary'),
         array('title' => $langBulkProcessing,
             'class' => 'bulk-processing',
-            'icon' => 'fa-hat-wizard'),
+            'icon' => 'fa-hat-wizard',
+            'show' => $is_editor),
         array('title' => $langUploadRecAudio,
             'url' => "rec_audio.php?course=$course_code",
             'icon' => 'fa-microphone',
@@ -1635,10 +1731,12 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'icon' => 'fa-file'),
         array('title' => $langExternalFile,
               'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
-              'icon' => 'fa-link'),
+              'icon' => 'fa-link',
+              'show' => !defined('EBOOK_DOCUMENTS')),
         array('title' => $langMindmap,
               'url' => "../mindmap/index.php?course=$course_code",
-              'icon' => 'fa-solid fa-sitemap'),
+              'icon' => 'fa-solid fa-sitemap',
+              'show' => !(defined('MY_DOCUMENTS') || defined('COMMON_DOCUMENTS'))),
         array('title' => $langCommonDocs,
               'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
               'icon' => 'fa-share-alt',
@@ -1646,7 +1744,6 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
         array('title' => $langQuotaBar,
               'url' => "{$base_url}showQuota=true",
               'icon' => 'fa-pie-chart')
-
         ), false);
 } else {
     $data['action_bar'] = $data['dialogBox'] = '';
@@ -1678,6 +1775,7 @@ $data['course_id'] = $course_id;
 $data['course_code'] = $course_code;
 $data['is_editor'] = $is_editor;
 $data['can_upload'] = $can_upload;
+$data['user_upload'] = $user_upload;
 view('modules.document.index', $data);
 
 function select_proper_filters($requestDocsFilter) {
@@ -1758,7 +1856,7 @@ function make_clickable_path($path) {
         } else {
             $cur .= rawurlencode("/$component");
             $row = Database::get()->querySingle("SELECT filename FROM document
-                                        WHERE path LIKE '%/$component' AND $group_sql");
+                                        WHERE path LIKE ?s AND $group_sql", "%/$component");
             $dirname = $row->filename;
             $out .= " <span class='fa-solid fa-chevron-right px-2 small-text'></span> <a href='{$base_url}openDir=$cur'>".q($dirname)."</a>";
         }

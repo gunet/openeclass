@@ -55,9 +55,9 @@ foreach ($q as $l) {
                                           <label for='password_id' class='form-label'>$langPassword&nbsp;(password)</label>
                                           <div class='input-group flex-nowrap'>
                                             <input id='password_id' class='login-input border-end-0 w-100 mt-0' placeholder='&#xf084;' type='password' name='pass' autocomplete='on' aria-label='reveal Password'>
-                                            <span id='revealPass' class='input-group-text login-input-password-reveal border-start-0 bg-input-default input-border-color'>
+                                             <button tabindex='0' type='button' id='revealPass' data-bs-toggle='tooltip' title='$langRevealPass' class='input-group-text login-input-password-reveal border-start-0 bg-input-default input-border-color' aria-label='reveal Password'>
                                                 <i class='fa-solid fa-eye fa-md'></i>
-                                            </span>
+                                            </button>
                                           </div>
                                         </div>
                                         <input class='btn w-100 login-form-submit mt-5 mb-2' type='submit' name='submit' value='$langEnter'>
@@ -70,7 +70,26 @@ foreach ($q as $l) {
             $authTitle,
             $authInstructions);
     } else if (in_array($l->auth_name, $extAuthMethods)) { // defined auth methods
-        $authUrl = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');
+        switch ($l->auth_name) {
+            case 'cas':
+                $path = 'modules/auth/cas.php';
+                break;
+            /* XXX: bilias: I believe this is also missing
+            case 'oauth2':
+                $path = 'modules/auth/oauth2.php';
+                break;
+            */
+            case 'keycloak':
+                $path = 'modules/auth/keycloak.php';
+                break;
+            default:
+                $path = 'secure/';
+                break;
+        }
+
+        //$authUrl = $urlServer . ($l->auth_name == 'cas' ? 'modules/auth/cas.php': 'secure/');
+        $authUrl = $urlServer . $path;
+
         if (isset($_GET['next'])) {
             $authUrl .= '?next=' . urlencode($_GET['next']);
         }

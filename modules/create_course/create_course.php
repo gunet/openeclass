@@ -48,6 +48,8 @@ $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
 
+load_js('bootstrap-datepicker');
+
 /**
  * Save structured syllabus sections to course_description table
  *
@@ -161,10 +163,11 @@ if (!isset($_POST['create_course'])) {
         $data['icon_course_registration'] = course_access_icon(COURSE_REGISTRATION);
         $data['icon_course_closed'] = course_access_icon(COURSE_CLOSED);
         $data['icon_course_inactive'] = course_access_icon(COURSE_INACTIVE);
-        $data['lang_select_options'] = lang_select_options('localize', "class='form-control' id='lang_selected'");
-        $data['rich_text_editor'] = rich_text_editor('description', 4, 20, $description);
+        $data['lang_select_options'] = lang_select_options('localize', "id='lang_selected'");
+        $data['rich_text_editor'] = rich_text_editor('description', 4, 20, $description, options: array('id' => 'description'));
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-select" id="course_license_id"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
+        $data['courseEndDate'] = $data['course_enableEndDate'] = '';
         generate_csrf_token_form_field();
 
         // course image
@@ -199,6 +202,8 @@ if (!isset($_POST['create_course'])) {
             error_log("AI availability check failed: " . $e->getMessage());
         }
 
+        $data['enable_activity'] = Database::get()->querySingle('SELECT id FROM activity_content LIMIT 1');
+
         view('modules.create_course.index', $data);
 
 } else if ($_POST['view_type'] == "flippedclassroom") {
@@ -225,7 +230,6 @@ if (!isset($_POST['create_course'])) {
     redirect_to_home_page('modules/create_course/flipped_classroom.php');
 
 } else  { // create the course and the course database
-
     // validation in case it skipped JS validation
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $v = new Valitron\Validator($_POST);
@@ -239,24 +243,6 @@ if (!isset($_POST['create_course'])) {
         // create new course code: uppercase, no spaces allowed
         $code = strtoupper(new_code($departments[0]));
         $code = str_replace(' ', '', $code);
-        // include_messages
-        include "lang/$language/common.inc.php";
-        $extra_messages = "config/{$language_codes[$language]}.inc.php";
-        if (file_exists($extra_messages)) {
-            include $extra_messages;
-        } else {
-            $extra_messages = false;
-        }
-        include "lang/$language/messages.inc.php";
-        if (file_exists('config/config.php')) {
-            if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
-                include "lang/$language/messages_collaboration.inc.php";
-            }
-        }
-        if ($extra_messages) {
-            include $extra_messages;
-        }
-
         // create course directories
         if (!create_course_dirs($code)) {
             Session::flash('message', $langGeneralError);
@@ -343,6 +329,13 @@ if (!isset($_POST['create_course'])) {
             }
         }
 
+        if (isset($_POST['course_enableEndDate']) && $_POST['courseEndDate'] !== '') {
+            $courseEndDate = DateTime::createFromFormat('d-m-Y', $_POST['courseEndDate']);
+            $end_date = $courseEndDate->format('Y-m-d');
+        } else {
+            $end_date = null;
+        }
+
         $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,
                         lang = ?s,
@@ -359,6 +352,7 @@ if (!isset($_POST['create_course'])) {
                         flipped_flag = ?s,
                         view_type = ?s,
                         start_date = " . DBHelper::timeAfter() . ",
+                        end_date = ?s,
                         keywords = '',
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
@@ -370,7 +364,7 @@ if (!isset($_POST['create_course'])) {
             $code, $language, $title, $_POST['formvisible'],
             $course_license, $_POST['prof_names'], $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $typeCourse, $description, $course_image);
+            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $end_date, $typeCourse, $description, $course_image);
         $new_course_id = $result->lastInsertID;
         if (!$new_course_id) {
             Session::flash('message', $langGeneralError);
@@ -418,13 +412,6 @@ if (!isset($_POST['create_course'])) {
 
         $_SESSION['courses'][$code] = USER_TEACHER;
 
-        $data['action_bar'] = action_bar(array(
-            array('title' => $langEnter,
-                'url' => $urlAppend . "courses/$code/",
-                'icon' => 'fa-arrow-right',
-                'level' => 'primary',
-                'button-class' => 'btn-success')));
-
         // logging
         Log::record(0, 0, LOG_CREATE_COURSE, array('id' => $new_course_id,
             'code' => $code,
@@ -436,5 +423,7 @@ if (!isset($_POST['create_course'])) {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page('modules/create_course/create_course.php');
     }
-    view('modules.create_course.create_course', $data);
+    Session::flash('message', $langCourseCreated . "<div class='smaller'>$langEnterMetadata</div>");
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page("courses/" . $code . "/index.php");
 } // end of submit

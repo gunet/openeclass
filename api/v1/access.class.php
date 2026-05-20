@@ -24,12 +24,110 @@ class Access {
     public $allCourses = true;
     public $courseIDs = null;
     public $courseCodes = null;
+    public $allowedDepartments = null;
     public $token;
+
+
+    /**
+     * Get all descendant department IDs
+     * @param int|null $departmentId
+     * @return array|null
+     */
+    public static function getDepartmentDescendants($departmentId) {
+        if ($departmentId === null) {
+            return null;
+        }
+        
+        // Get the lft and rgt values of the parent department
+        $parent = Database::get()->querySingle("SELECT lft, rgt FROM hierarchy WHERE id = ?d", $departmentId);
+        
+        if (!$parent) {
+            return [];
+        }
+        
+        // Get all descendants where their lft is between parent's lft and rgt
+        $descendants = Database::get()->queryArray("
+            SELECT id 
+            FROM hierarchy 
+            WHERE lft BETWEEN ?d AND ?d
+        ", $parent->lft, $parent->rgt);
+        
+        return array_map(function($dept) {
+            return $dept->id;
+        }, $descendants);
+    }
+
+
+    /**
+     * Check if a user belongs to allowed departments
+     * @param int $user_id
+     * @param array|null $allowedDepartments
+     * @return bool
+     */
+    public static function checkUserDepartmentAccess($user_id, $allowedDepartments) {
+        if ($allowedDepartments === null) {
+            return true;
+        }
+        
+        $placeholders = implode(',', array_fill(0, count($allowedDepartments), '?d'));
+        $allowed = Database::get()->querySingle("
+            SELECT COUNT(*) as count
+            FROM user_department 
+            WHERE user = ?d 
+            AND department IN ($placeholders)
+        ", $user_id, ...$allowedDepartments);
+        
+        return $allowed && $allowed->count > 0;
+    }
+
+
+    /**
+     * Check if a course belongs to allowed departments
+     * @param int $course_id
+     * @param array|null $allowedDepartments
+     * @return bool
+     */
+    public static function checkCourseDepartmentAccess($course_id, $allowedDepartments) {
+        if ($allowedDepartments === null) {
+            return true;
+        }
+        
+        $placeholders = implode(',', array_fill(0, count($allowedDepartments), '?d'));
+        $allowed = Database::get()->querySingle("
+            SELECT COUNT(*) as count
+            FROM course_department 
+            WHERE course = ?d 
+            AND department IN ($placeholders)
+        ", $course_id, ...$allowedDepartments);
+        
+        return $allowed && $allowed->count > 0;
+    }
+
+
+    /**
+     * Build user department filter clause and parameters for SQL queries
+     * @param array|null $allowedDepartments
+     * @return array [filter_clause, parameters_array]
+     */
+    public static function buildUserDepartmentFilter($allowedDepartments) {
+        if ($allowedDepartments === null) {
+            return ['', []];
+        }
+        
+        $placeholders = implode(',', array_fill(0, count($allowedDepartments), '?d'));
+        $filter = " AND EXISTS (
+            SELECT 1 FROM user_department ud 
+            WHERE ud.user = user.id 
+            AND ud.department IN ($placeholders)
+        )";
+        
+        return [$filter, $allowedDepartments];
+    }
+
 
     /**
      * Try to determine if a token was set in the request and if so return it
-     * @param string $token
-     * @return string|null;
+     * @return string|null
      */
     public static function getToken() {
 
@@ -58,7 +156,7 @@ class Access {
     /**
      * Check a token for validity and return the corresponding Access object
      * @param string $token
-     * @return Access;
+     * @return Access
      */
     public static function fromToken($token) {
         $access = new Access();
@@ -73,6 +171,11 @@ class Access {
                 and (!$result->ip
                      or match_ip_to_ip_or_cidr($ip, explode(' ', canonicalize_whitespace($result->ip))))) {
             $access->isValid = true;
+
+            if ($result->department_id !== null) {
+                $access->allowedDepartments = self::getDepartmentDescendants($result->department_id);
+            }
+
             if ($result->all_courses) {
                 $access->allCourses = true;
             } else {
@@ -100,6 +203,7 @@ class Access {
     public static function error($code, $message, $http_response = 400) {
         http_response_code($http_response);
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         echo json_encode([
             'errorcode' => $code,
             'errormessage' => $message,

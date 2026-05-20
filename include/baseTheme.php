@@ -27,6 +27,7 @@
  *
  *
  */
+
 use Jenssegers\Blade\Blade;
 
 $navigation = array();
@@ -36,8 +37,65 @@ $pageName = '';
 $toolName = '';
 require_once 'init.php';
 
+// User theme override: Apply user-selected theme images and styles
+// Priority: Session (preview) > Cookie (saved) > Default
+$user_selected_theme_id = 0;
+$user_theme_customization_enabled = get_config('enable_user_theme_customization', 0);
+
+if ($user_theme_customization_enabled) {
+    if (isset($_SESSION['user_theme_preview_id'])) {
+        $user_selected_theme_id = intval($_SESSION['user_theme_preview_id']);
+    } elseif (isset($_COOKIE['user_theme_selection'])) {
+        $cookie_theme_id = intval($_COOKIE['user_theme_selection']);
+
+        // Verify theme is in admin's allowed list
+        $user_selectable_themes_str = get_config('user_selectable_themes', '');
+        $allowed = true;
+        if ($cookie_theme_id > 0 && !empty($user_selectable_themes_str)) {
+            $allowed_theme_ids = array_map('intval', explode(',', $user_selectable_themes_str));
+            $allowed_theme_ids = array_filter($allowed_theme_ids);
+            if (!empty($allowed_theme_ids) && !in_array($cookie_theme_id, $allowed_theme_ids)) {
+                $allowed = false;
+            }
+        }
+
+        if ($allowed) {
+            $user_selected_theme_id = $cookie_theme_id;
+        }
+    }
+}
+
+// Override theme images and styles if user has selected a custom theme
+if ($user_selected_theme_id > 0) {
+    $user_theme_data = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $user_selected_theme_id);
+
+    if ($user_theme_data) {
+        $theme_id = $user_selected_theme_id;
+        $theme_options_styles = unserialize($user_theme_data->styles);
+
+        // Override image paths for user-selected theme
+        $theme_path = $urlAppend . "courses/theme_data/" . $theme_id . "/";
+
+        if (!empty($theme_options_styles['imageUpload'])) {
+            $logo_img = $theme_path . basename($theme_options_styles['imageUpload']);
+        }
+        if (!empty($theme_options_styles['imageUploadSmall'])) {
+            $logo_img_small = $theme_path . basename($theme_options_styles['imageUploadSmall']);
+        }
+        if (!empty($theme_options_styles['faviconUpload'])) {
+            $favicon_img = $theme_path . basename($theme_options_styles['faviconUpload']);
+        }
+        if (!empty($theme_options_styles['imageUploadFooter'])) {
+            $image_footer = $theme_path . basename($theme_options_styles['imageUploadFooter']);
+        }
+        if (!empty($theme_options_styles['loginImg'])) {
+            $loginIMG = $theme_path . basename($theme_options_styles['loginImg']);
+        }
+    }
+}
+
 if (isset($toolContent_ErrorExists)) {
-    Session::flash('message',$toolContent_ErrorExists);
+    Session::flash('message', $toolContent_ErrorExists);
     Session::flash('alert-class', 'alert-warning');
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI'] ?? '');
@@ -57,18 +115,19 @@ require_once 'tools.php';
  * @param $view_file
  * @param array $view_data
  */
-function view($view_file, $view_data = array()) {
+function view($view_file, $view_data = array())
+{
     global $webDir, $is_editor, $is_course_reviewer, $course_code, $course_id, $language, $siteName,
-            $urlAppend, $urlServer, $theme, $pageName, $currentCourseName, $uid, $session,
-            $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
-            $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
-            $require_editor, $langHomePage, $is_in_tinymce, $action_bar,
-            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
-            $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce_id, $pinned_announce_title, $pinned_announce_body,
-            $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course,
-            $is_consultant, $require_consultant, $is_coordinator, $is_simple_user,
-            $container, $logo_img, $logo_img_small, $eclass_banner_value, $PositionFormLogin,  $image_footer,
-            $favicon_img, $theme_css, $theme_id, $langClose, $VideoUploadedInJumbotron, $enable_box_logo;
+        $urlAppend, $urlServer, $theme, $pageName, $currentCourseName, $uid, $session,
+        $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
+        $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
+        $require_editor, $langHomePage, $is_in_tinymce, $action_bar,
+        $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
+        $courseLicense, $loginIMG, $authCase, $authNameEnabled, $pinned_announce, $max_pinned_announce_id,
+        $collaboration_platform, $collaboration_value, $is_enabled_collaboration, $is_collaborative_course,
+        $is_consultant, $require_consultant, $is_coordinator, $is_simple_user,
+        $container, $logo_img, $logo_img_small, $eclass_banner_value, $PositionFormLogin,  $image_footer,
+        $favicon_img, $theme_css, $theme_id, $langClose, $VideoUploadedInJumbotron, $enable_box_logo;
 
     if (!isset($course_id) or !$course_id or $course_id < 1) {
         $course_id = $course_code = null;
@@ -77,8 +136,16 @@ function view($view_file, $view_data = array()) {
     if (!isset($_SESSION['provider'])) {
         $_SESSION['provider'] = null;
     }
+
     $pageTitle = $siteName;
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
+
+    if (isset($_SESSION['current_user_tenant'])) {
+        $tenant = $_SESSION['current_user_tenant'];
+        $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+        $tenant_platform_title = getTenantOption($tenantOptions, 'platform_title');
+        $pageTitle = $tenant_platform_title;
+    }
 
     $toolArr = [];
     if (isset($course_id) and !$is_mobile) {
@@ -221,7 +288,7 @@ function view($view_file, $view_data = array()) {
                             message: data,
                             buttons: {
                                 ok: {
-                                    label: '". js_escape($langClose). "',
+                                    label: '" . js_escape($langClose) . "',
                                     className: 'submitAdminBtnDefault'
                                 }
                             }
@@ -236,27 +303,73 @@ function view($view_file, $view_data = array()) {
     //Check if auth refers to cas or shibboleth and others available auth_ids are disabled.
     $authCase = 0;
     $authNameEnabled = '';
-    $aC = database::get()->queryArray("SELECT * FROM auth WHERE auth_default > ?d",0);
-    if(count($aC) == 1){
-        foreach($aC as $a){
-            if($a->auth_name == 'shibboleth' or $a->auth_name == 'cas'){
+    $aC = database::get()->queryArray("SELECT * FROM auth WHERE auth_default > ?d", 0);
+    if (count($aC) == 1) {
+        foreach ($aC as $a) {
+            if ($a->auth_name == 'shibboleth' or $a->auth_name == 'cas') {
                 $authCase = 1;
                 $authNameEnabled = $a->auth_name;
             }
         }
     }
 
-    // Get important admin announcement
+    // Get important admin announcement if not closed by user
+    // If many pinned announcements exist for different languages, closing one of them
+    // will close all of them by setting CookieNotification to the max id of
+    // all the current pinned announcements
+    $max_pinned_announce_id = $pinned_announce = null;
     if (!defined('UPGRADE')) {
-        $pinned_announce_id = 0;
-        $pinned_announce_title = '';
-        $pinned_announce_body = '';
-        $important_announce = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE important = ?d AND visible = ?d",1,1);
-        if (count($important_announce) > 0) {
-            foreach ($important_announce as $an) {
-                $pinned_announce_id = $an->id;
-                $pinned_announce_title = $an->title;
-                $pinned_announce_body = $an->body;
+        if ($is_departmentmanage_user && !$is_admin) {
+            $tenant = getCurrentTenant();;
+            if ($tenant) {
+                $important_announcements = Database::get()->queryArray("SELECT * FROM admin_announcement
+                    WHERE important = 1
+                    AND visible = 1
+                    AND (
+                        tenant_id = ?d
+                        OR tenant_id IS NULL
+                    )
+                    AND (begin IS NULL OR begin > NOW())
+                    AND (end IS NULL OR end < NOW())
+                    ORDER BY id DESC", $tenant->id);
+            } else {
+                $important_announcements = Database::get()->queryArray("SELECT * FROM admin_announcement
+                    WHERE important = 1
+                    AND visible = 1
+                    AND tenant_id IS NULL
+                    AND (begin IS NULL OR begin > NOW())
+                    AND (end IS NULL OR end < NOW())
+                    ORDER BY id DESC");
+            }
+        } else {
+            $important_announcements = Database::get()->queryArray("SELECT * FROM admin_announcement
+                WHERE important = 1
+                AND visible = 1
+                AND (begin IS NULL OR begin > NOW())
+                AND (end IS NULL OR end < NOW())
+                ORDER BY id DESC");
+        }
+        $announce_per_lang = [];
+        $max_pinned_announce_id = null;
+        foreach ($important_announcements as $an) {
+            if (!$max_pinned_announce_id or $an->id > $max_pinned_announce_id) {
+                $max_pinned_announce_id = $an->id;
+            }
+            if (!isset($announce_per_lang[$an->lang])) {
+                $announce_per_lang[$an->lang] = $an;
+            }
+        }
+        // Upgrade old pinned announce cookie format
+        if (($_COOKIE['CookieNotification'] ?? null) == 'true') {
+            setcookie('CookieNotification', $max_pinned_announce_id, time() + 60 * 60 * 24 * 30, $urlAppend);
+        }
+        if (!(isset($_COOKIE['CookieNotification']) and $_COOKIE['CookieNotification'] >= $max_pinned_announce_id)) {
+            if (isset($announce_per_lang[$language])) {
+                $pinned_announce = $announce_per_lang[$language];
+            } elseif (isset($announce_per_lang['en'])) {
+                $pinned_announce = $announce_per_lang['en'];
+            } elseif (isset($announce_per_lang['el'])) {
+                $pinned_announce = $announce_per_lang['el'];
             }
         }
     }
@@ -267,9 +380,9 @@ function view($view_file, $view_data = array()) {
         ORDER BY reg_date DESC", $uid);
 
     $show_toggle_student_view = isset($require_current_course) &&
-                                ($is_editor || isset($saved_is_editor) && $saved_is_editor) &&
-                                !(isset($require_course_admin) && $require_course_admin) &&
-                                !(isset($require_editor) && $require_editor);
+        ($is_editor || isset($saved_is_editor) && $saved_is_editor) &&
+        !(isset($require_course_admin) && $require_course_admin) &&
+        !(isset($require_editor) && $require_editor);
 
     if (!isset($module_id)) {
         $module_id = null;
@@ -293,10 +406,8 @@ function view($view_file, $view_data = array()) {
 
     $views = $webDir . '/resources/views/';
     $cacheDir = $webDir . '/storage/views/';
-
     if (!is_dir($cacheDir)) {
         $tempDir = $cacheDir;
-        $cacheDir = null;
         if (mkdir($tempDir, 0755, true)) {
             $cacheDir = $tempDir;
         }
@@ -312,20 +423,81 @@ function view($view_file, $view_data = array()) {
 
     $cache_suffix = CACHE_SUFFIX;
 
-    $global_data = compact('is_editor', 'is_course_reviewer', 'course_code', 'course_id', 'language', 'cache_suffix',
-            'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
-            'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam', 'action_bar',
-            'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
-            'module_visibility', 'professor', 'pageName',
-            'logo_img', 'logo_img_small', 'breadcrumbs', 'is_mobile', 'current_module_dir', 'require_current_course',
-            'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
-            'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
-            'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin',
-            'courseLicense', 'loginIMG', 'image_footer', 'authCase', 'authNameEnabled', 'pinned_announce_id',
-            'pinned_announce_title', 'pinned_announce_body','favicon_img','collaboration_platform', 'collaboration_value',
-            'is_enabled_collaboration', 'is_collaborative_course', 'is_consultant', 'require_consultant', 'is_coordinator',
-            'is_simple_user', 'theme_css', 'theme_id', 'VideoUploadedInJumbotron', 'enable_box_logo');
+    $global_data = compact(
+        'is_editor',
+        'is_course_reviewer',
+        'course_code',
+        'course_id',
+        'language',
+        'cache_suffix',
+        'pageTitle',
+        'urlAppend',
+        'urlServer',
+        'eclass_version',
+        'template_base',
+        'toolName',
+        'container',
+        'uid',
+        'uname',
+        'is_embedonce',
+        'session',
+        'nextParam',
+        'action_bar',
+        'require_help',
+        'helpTopic',
+        'helpSubTopic',
+        'head_content',
+        'toolArr',
+        'module_id',
+        'module_visibility',
+        'professor',
+        'pageName',
+        'logo_img',
+        'logo_img_small',
+        'breadcrumbs',
+        'is_mobile',
+        'current_module_dir',
+        'require_current_course',
+        'saved_is_editor',
+        'require_course_admin',
+        'is_course_admin',
+        'require_editor',
+        'sidebar_courses',
+        'show_toggle_student_view',
+        'themeimg',
+        'currentCourseName',
+        'default_open_group',
+        'is_admin',
+        'is_power_user',
+        'is_usermanage_user',
+        'is_departmentmanage_user',
+        'is_lti_enrol_user',
+        'logo_url_path',
+        'leftsideImg',
+        'eclass_banner_value',
+        'is_in_tinymce',
+        'PositionFormLogin',
+        'courseLicense',
+        'loginIMG',
+        'image_footer',
+        'authCase',
+        'authNameEnabled',
+        'pinned_announce',
+        'max_pinned_announce_id',
+        'favicon_img',
+        'collaboration_platform',
+        'collaboration_value',
+        'is_enabled_collaboration',
+        'is_collaborative_course',
+        'is_consultant',
+        'require_consultant',
+        'is_coordinator',
+        'is_simple_user',
+        'theme_css',
+        'theme_id',
+        'VideoUploadedInJumbotron',
+        'enable_box_logo'
+    );
     $data = array_merge($global_data, $view_data);
 
     echo $blade->make($view_file, $data)->render();
@@ -336,7 +508,8 @@ function view($view_file, $view_data = array()) {
  * @param array $view_data
  * @return mixed
  */
-function widget_view($view_file, $view_data = array()) {
+function widget_view($view_file, $view_data = array())
+{
     global $webDir;
 
     $views = $webDir . "/$view_data[widget_folder]/views/";
@@ -355,12 +528,14 @@ function widget_view($view_file, $view_data = array()) {
  * @param string $tool_css (optional) catalog name where a "tool.css" file exists
  * @param string $head_content (optional) code to be added to the HEAD of the UI
  */
-function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null) {
+function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null)
+{
     view('legacy.index', compact('tool_content'));
 }
 
 // Simplified draw for pop-ups
-function draw_popup($tool_content = '', $head_content = '') {
+function draw_popup($tool_content = '', $head_content = '')
+{
 
     $data['tool_content'] = $tool_content;
     $data['head_content'] = $head_content;
@@ -376,7 +551,8 @@ function draw_popup($tool_content = '', $head_content = '') {
  *
  * @param array $arr
  */
-function dumpArray($arr) {
+function dumpArray($arr)
+{
     echo "<pre>";
     print_r($arr);
     echo "</pre>";
@@ -390,7 +566,8 @@ function dumpArray($arr) {
  *
  * @param array $arr
  */
-function print_a($TheArray) {
+function print_a($TheArray)
+{
 
     echo "<table border=1>";
     if (is_object($TheArray)) {
@@ -403,12 +580,12 @@ function print_a($TheArray) {
         echo "<b>" . $OneKey . "</b>";
         echo "</td>";
         echo "<td bgcolor='#C4C2A6'>";
-        if (is_array($TheArray [$OneKey])) {
-            print_a($TheArray [$OneKey]);
-        } elseif (is_object($TheArray [$OneKey])) {
-            print_a((array)$TheArray [$OneKey]);
+        if (is_array($TheArray[$OneKey])) {
+            print_a($TheArray[$OneKey]);
+        } elseif (is_object($TheArray[$OneKey])) {
+            print_a((array)$TheArray[$OneKey]);
         } else {
-            echo $TheArray [$OneKey];
+            echo $TheArray[$OneKey];
         }
         echo "</td>";
         echo "</tr>";
@@ -426,7 +603,8 @@ function print_a($TheArray) {
  *
  * Returns string $str
  */
-function array2html($TheArray) {
+function array2html($TheArray)
+{
     $str = '';
     foreach ($TheArray as $key => $value) {
         if (is_array($value)) {
@@ -445,7 +623,8 @@ function array2html($TheArray) {
  * @brief displays lang selection box
  * @return string|void
  */
-function lang_selections_Desktop($idLanguage) {
+function lang_selections_Desktop($idLanguage)
+{
 
     global $session, $native_language_names_init, $langSelectedLang;
 
@@ -457,28 +636,28 @@ function lang_selections_Desktop($idLanguage) {
     }
     $Selected_Language = '';
     foreach ($session->active_ui_languages as $code) {
-        if($code == $session->language){
-           $Selected_Language = q($native_language_names_init[$code]);
+        if ($code == $session->language) {
+            $Selected_Language = q($native_language_names_init[$code]);
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
-                        <a class="d-flex justify-content-end align-items-center link-selection-language gap-2" href="#" id="'.$idLanguage.'" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="'.$langSelectedLang.'">
-                            <span class="d-none d-lg-block">'. $Selected_Language .'</span>
+                        <a class="d-flex justify-content-end align-items-center link-selection-language gap-2" href="#" id="' . $idLanguage . '" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="' . $langSelectedLang . '">
+                            <span class="d-none d-lg-block">' . $Selected_Language . '</span>
                             <span class="fa-solid fa-earth-europe d-block d-lg-none"></span>
                             <i class="fa-solid fa-chevron-down" role="presentation"></i>
                         </a>
-                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3" role="menu" aria-labelledby="'.$idLanguage.'">
+                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3" role="menu" aria-labelledby="' . $idLanguage . '">
                             <ul class="list-group list-group-flush">';
-                            foreach ($session->active_ui_languages as $code) {
-                                $class = ($code == $session->language)? ' class="active"': '';
-                                $lang_select .=
-                                    "<li role='presentation'$class>
-                                        <a class='list-group-item py-3' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                                            " .q($native_language_names_init[$code]) . "
+    foreach ($session->active_ui_languages as $code) {
+        $class = ($code == $session->language) ? ' class="active"' : '';
+        $lang_select .=
+            "<li role='presentation'$class>
+                                        <a class='list-group-item py-3' role='menuitem' tabindex='0' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
+                                            " . q($native_language_names_init[$code]) . "
                                         </a>
                                     </li>";
-                            }
-            $lang_select .= "</ul>
+    }
+    $lang_select .= "</ul>
                         </div>
                     </div>";
     return $lang_select;
@@ -491,7 +670,8 @@ function lang_selections_Desktop($idLanguage) {
  *
  */
 
-function lang_select_options($name, $onchange_js = '', $default_langcode = false) {
+function lang_select_options($name, $onchange_js = '', $default_langcode = false)
+{
     global $session;
 
     if ($default_langcode === false) {
@@ -501,7 +681,8 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
     return selection($session->native_language_names, $name, $default_langcode, $onchange_js);
 }
 
-function is_external_link($link) {
+function is_external_link($link)
+{
     global $urlServer;
     static $host, $phpMyAdminURL, $phpSysInfoURL;
 

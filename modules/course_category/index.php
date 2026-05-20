@@ -69,7 +69,7 @@ $tool_content .= "
 <div class='col-sm-12'>
 <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-        <h3>" . $langCourseCategoryActions . "</h3>
+        <h2 class='text-heading-h3'>" . $langCourseCategoryActions . "</h2>
     </div>
     <div class='card-body'>
     <form name='courseCategories' action='" . $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "' method='post' enctype='multipart/form-data'>

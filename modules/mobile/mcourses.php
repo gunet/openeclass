@@ -34,6 +34,8 @@ if ($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == USER_STUDENT) 
                course.visible,
                course.prof_names,
                course.public_code,
+               course.description,
+               course.course_image,
                course_user.status AS status,
                course_user.favorite favorite
           FROM course JOIN course_user 
@@ -56,7 +58,7 @@ if (!defined('M_NOTERMINATE')) {
 //////////////////////////////////////////////////////////////////////////////////////
 
 function createCoursesDom($coursesArr) {
-    global $langMyCoursesProf, $langMyCoursesUser;
+    global $langMyCoursesProf, $langMyCoursesUser, $langNoCourseDescription, $urlServer;
 
     $dom = new DomDocument('1.0', 'utf-8');
 
@@ -75,7 +77,6 @@ function createCoursesDom($coursesArr) {
         $this_status = 0;
 
         foreach ($coursesArr as $course) {
-
             $old_status = $this_status;
             $this_status = $course->status;
 
@@ -87,12 +88,20 @@ function createCoursesDom($coursesArr) {
 
             $c = $cg->appendChild($dom->createElement('course'));
 
-            $titleStr = ($course->code === $course->public_code) ? $course->title : $course->title . ' - ' . $course->public_code;
+            if (empty($course->description)) {
+                $descriptionStr = $langNoCourseDescription;
+            } else {
+                $descriptionStr = html2text($course->description);
+            }
 
-            $c->appendChild(new DOMAttr('code', $course->code));
-            $c->appendChild(new DOMAttr('title', $titleStr));
-            $c->appendChild(new DOMAttr('description', ""));
+            $course_image = (!is_null($course->course_image) && $course->course_image != '') ? "{$urlServer}courses/$course->code/image/$course->course_image" : "";
+            $codeStr = (!empty($course->public_code) && $course->code !== $course->public_code) ? $course->public_code: $course->code;
 
+            $c->appendChild(new DOMAttr('code', $codeStr));
+            $c->appendChild(new DOMAttr('title', $course->title));
+            $c->appendChild(new DOMAttr('teacher', trim($course->prof_names)));
+            $c->appendChild(new DOMAttr('description', $descriptionStr));
+            $c->appendChild(new DOMAttr('image', "$course_image"));
             $k++;
         }
     }

@@ -1503,18 +1503,18 @@ class Calendar_Events {
             $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center' style='min-height:39px;'>
                             <div id='cal-header' class='cal-header-course d-flex justify-content-center align-items-center w-100'>
                                 <div class='btn-group w-100' role='group'>
-                                    <button type='button' aria-label='$langPreviousMonth' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='prev'>
+                                    <button type='button' aria-label='$langPreviousMonth' class='btn btn-transparent d-flex justify-content-center align-items-center month-prev-btn' data-calendar-nav='prev'>
                                         <div class='btn-calendar-prev d-flex justify-content-start align-items-center'>
                                             <i class='fa-solid fa-chevron-left fa-lg'></i>
                                         </div>
-                                        <span class='d-none sr-only'>$langPreviousMonth</span>
+                                        <span class='visually-hidden'>$langPreviousMonth</span>
                                     </button>
-                                    <button id='current-month' type='button' class='btn btn-transparent pe-none' aria-label='$langCurrentMonth'></button>
-                                    <button type='button' aria-label='$langNextMonth' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='next'>
+                                    <button id='current-month' type='button' class='btn btn-transparent pe-none'></button>
+                                    <button type='button' aria-label='$langNextMonth' class='btn btn-transparent d-flex justify-content-center align-items-center month-next-btn' data-calendar-nav='next'>
                                         <div class='btn-calendar-next d-flex justify-content-end align-items-center'>
                                             <i class='fa-solid fa-chevron-right fa-lg'></i>
                                         </div>
-                                        <span class='d-none sr-only'>$langNextMonth</span>
+                                        <span class='visually-hidden'>$langNextMonth</span>
                                     </button>
                                 </div>
                             </div>
@@ -1523,18 +1523,18 @@ class Calendar_Events {
             $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center' style='min-height:39px;'>
                             <div id='cal-header' class='cal-header-Portfolio d-flex justify-content-center align-items-center w-100'>
                                 <div class='btn-group w-100' role='group'>
-                                    <button type='button' aria-label='$langPreviousMonth' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='prev'>
+                                    <button type='button' aria-label='$langPreviousMonth' class='btn btn-transparent d-flex justify-content-center align-items-center month-prev-btn' data-calendar-nav='prev'>
                                         <div class='btn-calendar-prev d-flex justify-content-start align-items-center'>
                                             <i class='fa-solid fa-chevron-left fa-lg'></i>
                                         </div>
-                                        <span class='d-none sr-only'>$langPreviousMonth</span>
+                                        <span class='visually-hidden'>$langPreviousMonth</span>
                                     </button>
-                                    <button id='current-month' type='button' class='btn btn-transparent pe-none' aria-label='$langCurrentMonth'></button>
-                                    <button type='button' aria-label='$langNextMonth' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='next'>
+                                    <button id='current-month' type='button' class='btn btn-transparent pe-none'></button>
+                                    <button type='button' aria-label='$langNextMonth' class='btn btn-transparent d-flex justify-content-center align-items-center month-next-btn' data-calendar-nav='next'>
                                         <div class='btn-calendar-next d-flex justify-content-end align-items-center'>
                                             <i class='fa-solid fa-chevron-right fa-lg'></i>
                                         </div>
-                                        <span class='d-none sr-only'>$langNextMonth</span>
+                                        <span class='visually-hidden'>$langNextMonth</span>
                                     </button>
                                 </div>
                             </div>

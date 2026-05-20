@@ -1,5 +1,6 @@
 <?php
 
+
 /*
  *  ========================================================================
  *  * Open eClass
@@ -18,8 +19,11 @@
  *
  */
 
-function api_method($access) {
+
+function api_method($access)
+{
     global $user_id, $course_id, $role_id;
+
 
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
@@ -36,19 +40,38 @@ function api_method($access) {
         if (!$user) {
             Access::error(3, "User with id '$user_id' not found");
         }
+
+        // Check if user belongs to allowed departments
+        if (!Access::checkUserDepartmentAccess($user->id, $access->allowedDepartments)) {
+            Access::error(403, 'Error: user is not in an allowed department', 403);
+        }
+
         $course = Database::get()->querySingle('SELECT id, code
             FROM course WHERE code = ?s', $_POST['course_id']);
         if (!$course) {
             Access::error(3, "Course with id '$course_id' not found");
         }
-        $response = Database::get()->query('DELETE FROM course_user
+
+        // Check if course belongs to allowed departments
+        if (!Access::checkCourseDepartmentAccess($course->id, $access->allowedDepartments)) {
+            Access::error(403, 'Error: course is not in an allowed department', 403);
+        }
+
+        $response = Database::get()->query(
+            'DELETE FROM course_user
                 WHERE course_id = ?d AND user_id = ?d',
-                $course->id, $user->id) &&
-            Database::get()->query('DELETE FROM group_members
+            $course->id,
+            $user->id
+        ) &&
+            Database::get()->query(
+                'DELETE FROM group_members
                 WHERE group_id IN (SELECT id FROM `group` WHERE course_id = ?d)
                       AND user_id = ?d',
-                $course->id, $user->id);
+                $course->id,
+                $user->id
+            );
         header('Content-Type: application/json');
+        header('X-Content-Type-Options: nosniff');
         if ($response) {
             echo json_encode(['status' => 'ok']);
         } else {
@@ -59,6 +82,7 @@ function api_method($access) {
         Access::error(2, 'Required POST parameters for user unenrolement missing: user_id, course_id');
     }
 }
+
 
 chdir('..');
 require_once 'apiCall.php';

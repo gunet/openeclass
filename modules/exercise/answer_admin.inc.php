@@ -28,7 +28,7 @@ if ($answerType == CALCULATED) {
     $des_array = unserialize($objQuestion->selectDescription());
     $questionDescription = $des_array['question_description'];
 }
-$okPicture = file_exists($picturePath . '/quiz-' . $questionId) ? true : false;
+$okPicture = file_exists($picturePath . '/quiz-' . $questionId);
 
 // Check if AI evaluation is available for FREE_TEXT questions
 $aiEvaluationAvailable = false;
@@ -43,6 +43,13 @@ if ($answerType == FREE_TEXT) {
 $newAnswer = $deleteAnswer = $modifyWildCards = false;
 
 $htopic = 0;
+
+$head_content .= "{
+    <style>
+        .accordion-button {font-size: 0.8rem;padding-left: 1rem !important;padding-right: 1rem !important;}
+    </style>
+}";
+
 if (isset($_GET['htopic'])) { //new question
     $htopic = $_GET['htopic'];
 }
@@ -690,7 +697,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 // Inserting the predefined answers for the current question in database.
                 $questionWeighting = $nbrGoodAnswers = 0;
                 for ($i = 1; $i <= count($_POST['calculated_answer']); $i++) {
-                    $cal_ans = []; 
+                    $cal_ans = [];
                     $finalResult = '';
                     $arExpression = '';
                     if ($wildCardOptions) {
@@ -711,8 +718,8 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                     $cal_ans[] = [
                         'expression' => $arExpression,
                         'result' => $finalResult
-                    ]; 
-                    $reponse[$i] = serialize($cal_ans);  
+                    ];
+                    $reponse[$i] = serialize($cal_ans);
                     $comment[$i] = '';
                     $weighting[$i] = fix_float($_POST['calculated_answer_grade'][$i]);
                     $goodAnswer = ((isset($_POST['calculated_answer_grade'][$i]) && $_POST['calculated_answer_grade'][$i] > 0) ? 1 : 0);
@@ -848,7 +855,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 'index' => $inde_x,
                 'value' => $_POST['ordering_answer'][$inde_x],
                 'grade' => fix_float($_POST['ordering_answer_grade'][$inde_x])
-            ]; 
+            ];
         }
         $choices_ordering_answer = '';
         if (count($choicesOrdArr) > 0) {
@@ -1294,9 +1301,9 @@ if (isset($_GET['modifyAnswers'])) {
 
     $tool_content .= "<div class='col-12'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3>$langQuestion &nbsp;" .
+                        <h2 class='text-heading-h3'>$langQuestion &nbsp;" .
                             icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."
-                        </h3>
+                        </h2>
                       </div>
                       <div class='card-body' style='overflow:auto;'>
                             <h5>$questionTypeWord<br>" . nl2br(q_math($questionName)) . "</h5>
@@ -1308,12 +1315,12 @@ if (isset($_GET['modifyAnswers'])) {
     if ($answerType != FREE_TEXT and $answerType != ORAL) {
         $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                             <h3>$langQuestionAnswers";
+                             <h2 class='text-heading-h3'>$langQuestionAnswers";
                              if ($answerType == MULTIPLE_ANSWER) {
                                  $tool_content .= "<br><small class='msmall-text'>$langNegativeScoreLegend</small>";
                              }
 
-        $tool_content .= "   </h3>
+        $tool_content .= "   </h2>
                            </div>
                        <div class='card-body'>";
 
@@ -1333,7 +1340,6 @@ if (isset($_GET['modifyAnswers'])) {
                           <th aria-label='$langTotal'></th>
                           <th>$langCorrect</th>
                           <th>$langAnswer</th>
-                          <th>$langComment</th>
                           <th>$langGradebookGrade</th>
                         </tr>";
 
@@ -1363,16 +1369,30 @@ if (isset($_GET['modifyAnswers'])) {
                     $thisWeighting = 0;
                 }
 
+                $tool_content .= "<td style='width:80%'>";
                 if (isset($_POST['reponse'][$i])) {
-                    $tool_content .= "<td style='width:42%'>" . rich_text_editor("reponse[$i]", 7, 40, $_POST['reponse'][$i], true) . "</td>";
+                    $tool_content .= rich_text_editor("reponse[$i]", 6, 40, $_POST['reponse'][$i], false);
                 } else {
-                    $tool_content .= "<td style='width:42%'>" . rich_text_editor("reponse[$i]", 7, 40, $reponse[$i], true) . "</td>";
+                    $tool_content .= rich_text_editor("reponse[$i]", 6, 40, $reponse[$i], false);
                 }
-                if (isset($_POST['comment'][$i])) {
-                    $tool_content .= "<td style='width:42%'>" . rich_text_editor("comment[$i]", 7, 40, $_POST['comment'][$i], true) . "</td>";
-                } else {
-                    $tool_content .= "<td style='width:42%'>" . rich_text_editor("comment[$i]", 7, 40, $comment[$i], true) . "</td>";
-                }
+
+                $comment_val = isset($_POST['comment'][$i]) ? $_POST['comment'][$i] : $comment[$i];
+                $tool_content .= "
+                    <div class='accordion mt-2' id='accordionComment$i'>
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header' id='headingComment$i'>
+                                <button class='accordion-button collapsed p-2' type='button' data-bs-toggle='collapse' data-bs-target='#collapseComment$i' aria-expanded='false' aria-controls='collapseComment$i'>
+                                    $langQuestionFeedback
+                                </button>
+                            </h2>
+                            <div id='collapseComment$i' class='accordion-collapse collapse' aria-labelledby='headingComment$i' data-bs-parent='#accordionComment$i'>
+                                <div class='accordion-body p-2'>
+                                    " . rich_text_editor("comment[$i]", 3, 40, $comment_val, false) . "
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
+                $tool_content .= "</td>";
                 $tool_content .= "<td><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
             }
             $tool_content .= "<tr>
@@ -1456,7 +1476,7 @@ if (isset($_GET['modifyAnswers'])) {
                      $tool_content .= "</table>";
                  }
              }
-        } elseif ($answerType == MATCHING) {
+    } elseif ($answerType == MATCHING) {
 
          if (!empty($msgErr)) {
              $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$msgErr</span></div>";
@@ -1469,7 +1489,7 @@ if (isset($_GET['modifyAnswers'])) {
              <input type='hidden' name='nbrMatches' value='$nbrMatches'>
              <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
              <table class='table table-default'>";
-         $optionsList = array();
+         $optionsList = $optionsWeight = array();
          // create an array with the option letters
          for ($i = 1, $j = 'A'; $i <= $nbrOptions; $i++, $j++) {
              $optionsList[$i] = $j;
@@ -1502,7 +1522,10 @@ if (isset($_GET['modifyAnswers'])) {
              } else {
                  $optionText = '';
              }
-             $optionWeight = isset($weighting[$i])? q($weighting[$i]): 1;
+
+             if (isset($_POST['sel'])) {
+                 $sel = $_POST['sel'];
+             }
 
              $tool_content .= "<tr>
                <td class='text-end'><strong>$j</strong></td>
@@ -1510,13 +1533,23 @@ if (isset($_GET['modifyAnswers'])) {
                <td><div class='text-end'><select class='form-select' name='sel[$i]'>";
              foreach ($optionsList as $key => $val) {
                  $tool_content .= "<option value='" . q($key) . "'";
-                 if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key) {
+                 if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || (isset($sel[$i]) && $sel[$i] == $key)) {
                      $tool_content .= " selected='selected'";
                  }
                  $tool_content .= ">" . q($val) . "</option>";
              }
              $tool_content .= "</select></div></td>
-               <td><input class='form-control' type='text' name='weighting[$i]' value='$optionWeight'></td>
+               <td>";
+
+             if (isset($_POST['weighting'][$i])) {
+                 $optionWeight = q(fix_float($_POST['weighting'][$i]));
+             } else if (isset($weighting[$i])) {
+                 $optionWeight = q($weighting[$i]);
+             } else {
+                 $optionWeight = 1;
+             }
+              $tool_content .= "<input class='form-control' type='text' name='weighting[$i]' value='$optionWeight'>";
+              $tool_content .= "</td>
              </tr>";
          }
 
@@ -1580,19 +1613,48 @@ if (isset($_GET['modifyAnswers'])) {
              <table class='table table-default'>
              <tr>
                <td style='width: 10%;' colspan='2'><strong>$langAnswer</strong></td>
-               <td><strong>$langComment</strong></td>
                <td style='width: 15%;'><strong>$langGradebookGrade</strong></td>
              </tr>
              <tr>
                <td style='width: 10%;'>$langTrue</td>
-               <td><input type='radio' value='1' name='correct'$setChecked[1]></td>
-               <td>"  . rich_text_editor('comment[1]', 4, 30, @$comment[1], true) . "</td>
+               <td>
+                    <input type='radio' value='1' name='correct'$setChecked[1]>
+                    <div class='accordion mt-2' id='accordionComment1'>
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header' id='headingComment1'>
+                                <button class='accordion-button collapsed p-2' type='button' data-bs-toggle='collapse' data-bs-target='#collapseComment1' aria-expanded='false' aria-controls='collapseComment1'>
+                                    $langComment
+                                </button>
+                            </h2>
+                            <div id='collapseComment1' class='accordion-collapse collapse' aria-labelledby='headingComment1' data-bs-parent='#accordionComment1'>
+                                <div class='accordion-body p-2'>
+                                    "  . rich_text_editor('comment[1]', 5, 30, @$comment[1], false) . "
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </td>
                <td style='width: 15%'><input class='form-control' type='text' name='weighting[1]' value='$setWeighting[1]'></td>
              </tr>
              <tr>
                <td>$langFalse</td>
-               <td><input type='radio' value='2' name='correct'$setChecked[2]></td>
-               <td>" . rich_text_editor("comment[2]", 4, 40, @$comment[2]) . "</td>
+               <td>
+                    <input type='radio' value='2' name='correct'$setChecked[2]>
+                    <div class='accordion mt-2' id='accordionComment2'>
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header' id='headingComment2'>
+                                <button class='accordion-button collapsed p-2' type='button' data-bs-toggle='collapse' data-bs-target='#collapseComment2' aria-expanded='false' aria-controls='collapseComment2'>
+                                    $langComment
+                                </button>
+                            </h2>
+                            <div id='collapseComment2' class='accordion-collapse collapse' aria-labelledby='headingComment2' data-bs-parent='#accordionComment2'>
+                                <div class='accordion-body p-2'>
+                                    " . rich_text_editor("comment[2]", 5, 40, @$comment[2]) . "
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </td>
                <td><input class='form-control' type='text' name='weighting[2]' size='5' value='$setWeighting[2]'></td>
              </tr>
            </table>";
@@ -2211,6 +2273,50 @@ if (isset($_GET['modifyAnswers'])) {
         if ($answerType == CALCULATED && !$modifyWildCards) {
             $hiddenClass = 'd-none';
         }
+        $tool_content .= "
+            <script>
+$(document).ready(function() {
+    function validateAllWeightings() {
+        var hasProblem = false;
+        var correctInputs = $('input[name^=\"correct\"]');
+
+        $('input[name^=\"weighting\"]').each(function(index) {
+            var weightInput = $(this);
+            var weightValue = parseFloat(weightInput.val());
+            
+            var isCorrectSelected = correctInputs.eq(index).is(':checked');
+
+            if (weightValue > 0 && !isCorrectSelected) {
+                weightInput.css('border', '2px solid orange');
+                hasProblem = true;
+            } else {
+                weightInput.css('border', '');
+            }
+        });
+
+        if (hasProblem) {
+            $('.negativeAnswer').removeClass('d-none');
+        } else {
+            $('.negativeAnswer').addClass('d-none');
+        }
+    }
+
+    $(document).on('input', 'input[name^=\"weighting\"]', function() {
+        validateAllWeightings();
+    });
+
+    $(document).on('change', 'input[name^=\"correct\"]', function() {
+        validateAllWeightings();
+    });
+    
+    validateAllWeightings();
+});
+</script>
+            
+            <div class='negativeAnswer col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap d-none' style='background-color: #fff3cd; color: #856404; padding: 15px; border: 1px solid #ffeeba; border-radius: 4px; margin-top: 10px;'>
+                $langNegativeGrading
+            </div>
+            ";
 
         $tool_content .= "
                         <div class='col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap $hiddenClass mt-4'>
@@ -2225,43 +2331,41 @@ if (isset($_GET['modifyAnswers'])) {
             </div>
         </div></div>";
     } else {
-        if ($answerType == FREE_TEXT) {
-            // FREE_TEXT questions - show AI evaluation configuration if available
-            if ($aiEvaluationAvailable) {
+        // display AI evaluation configuration if available in FREE TEXT questions.
+        if ($answerType == FREE_TEXT && $aiEvaluationAvailable) {
+            // Display success/error messages
+            if (!empty($aiConfigError)) {
+                $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$aiConfigError</span></div>";
+            }
+            if (!empty($msgSuccess)) {
+                $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$msgSuccess</span></div>";
+            }
 
-                // Display success/error messages
-                if (!empty($aiConfigError)) {
-                    $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$aiConfigError</span></div>";
-                }
-                if (!empty($msgSuccess)) {
-                    $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$msgSuccess</span></div>";
-                }
+            $aiEnabled = $aiConfig ? $aiConfig->enabled : 0;
+            $evaluationPrompt = $aiConfig ? $aiConfig->evaluation_prompt : '';
+            $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
+            $sampleResponses = '';
 
-                $aiEnabled = $aiConfig ? $aiConfig->enabled : 0;
-                $evaluationPrompt = $aiConfig ? $aiConfig->evaluation_prompt : '';
-                $maxPoints = $objQuestion->selectWeighting(); // Use question's weight as max points
-                $sampleResponses = '';
-
-                if ($aiConfig && $aiConfig->sample_responses) {
-                    $samples = json_decode($aiConfig->sample_responses, true);
-                    if ($samples && is_array($samples)) {
-                        $lines = [];
-                        foreach ($samples as $sample) {
-                            if (isset($sample['response']) && isset($sample['quality'])) {
-                                $lines[] = $sample['response'] . ' | ' . $sample['quality'];
-                            } else {
-                                $lines[] = $sample['response'];
-                            }
+            if ($aiConfig && $aiConfig->sample_responses) {
+                $samples = json_decode($aiConfig->sample_responses, true);
+                if ($samples && is_array($samples)) {
+                    $lines = [];
+                    foreach ($samples as $sample) {
+                        if (isset($sample['response']) && isset($sample['quality'])) {
+                            $lines[] = $sample['response'] . ' | ' . $sample['quality'];
+                        } else {
+                            $lines[] = $sample['response'];
                         }
-                        $sampleResponses = implode("\n", $lines);
                     }
+                    $sampleResponses = implode("\n", $lines);
                 }
+            }
 
-                $tool_content .= "
+           $tool_content .= "
                <div class='col-12 mt-4'>
                    <div class='card panelCard card-default px-lg-4 py-lg-3'>
                        <div class='card-header border-0'>
-                           <h3>$langAIEvaluation</h3>
+                           <h2 class='text-heading-h3'>$langAIEvaluation</h2>
                        </div>
                        <div class='card-body'>
                            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code" . ((isset($exerciseId)) ? "&amp;exerciseId=$exerciseId" : "") . "&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
@@ -2312,27 +2416,18 @@ if (isset($_GET['modifyAnswers'])) {
                    </div>
                </div>";
 
-                // Show info about existing AI evaluations if any
-                if ($aiEnabled && isset($exerciseId)) {
-                    $evaluationCount = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_ai_evaluation WHERE question_id = ?d", $questionId)->count;
-                    if ($evaluationCount > 0) {
-                        $tool_content .= "
-                       <div class='col-12 mt-3'>
-                           <div class='alert alert-info'>
-                               <i class='fa-solid fa-circle-info fa-lg'></i>
-                               <span>$langAIEvaluationsFound ($evaluationCount evaluations)</span>
-                           </div>
-                       </div>";
-                    }
-                }
-            } else {
-                $tool_content .= "
-                   <div class='col-12 mt-4'>
+            // Show info about existing AI evaluations, if any
+            if ($aiEnabled && isset($exerciseId)) {
+                $evaluationCount = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_ai_evaluation WHERE question_id = ?d", $questionId)->count;
+                if ($evaluationCount > 0) {
+                    $tool_content .= "
+                   <div class='col-12 mt-3'>
                        <div class='alert alert-info'>
                            <i class='fa-solid fa-circle-info fa-lg'></i>
-                           <span>$langFreeTextNoAnswerConfig</span>
+                           <span>$langAIEvaluationsFound ($evaluationCount evaluations)</span>
                        </div>
                    </div>";
+                }
             }
         }
     }

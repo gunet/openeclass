@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
 <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
@@ -38,14 +38,14 @@
                             @include('layouts.partials.show_alert') 
 
                             <div class="col-md-4 col-12">
-                                <h3 class="">{{ trans('langInstalledWidgets') }}</h3>
+                                <h2 class="text-heading-h3">{{ trans('langInstalledWidgets') }}</h2>
                                 <hr>
                                 @if (count($installed_widgets) > 0)
                                 <div id="widgets">
                                     @foreach ($installed_widgets as $key => $installed_widget)
                                             <div class="panel panel-success widget mt-3" data-widget-id="{{ $installed_widget->id }}">
                                                 <div class="panel-heading text-center Borders">
-                                                    <a data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" href="#widget_desc_{{ $key }}" class="text-white TextMedium widget_title">
+                                                    <a role="button" data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" href="#widget_desc_{{ $key }}" class="text-white TextMedium widget_title">
                                                         {{ $installed_widget->getName() }}
                                                         <span class="fa fa-arrow-down fs-6"></span>
                                                     </a>
@@ -102,7 +102,7 @@
         </div>
     
 </div>
-</div>
+</main>
 
 @endsection
 

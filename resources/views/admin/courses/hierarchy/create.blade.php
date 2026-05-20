@@ -20,7 +20,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -108,7 +108,7 @@
                             <div class='form-group mt-4'>
                                 <label for='description-{{ $langcode }}' class='col-sm-12 control-label-notes'>{{ trans('langNodeDescription') }}</label>
                                 <div class='col-sm-12'>
-                                    {!! rich_text_editor('description-' . $langcode, 8, 20, $descriptions[$langcode]) !!}
+                                    {!! rich_text_editor('description-' . $langcode, 8, 20, $descriptions[$langcode], options: array('id' => 'description-'.$langcode)) !!}
                                 </div>
                             </div>
                         @endforeach
@@ -230,7 +230,7 @@
                         <div class='modal-dialog modal-lg'>
                             <div class='modal-content'>
                                 <div class='modal-header'>
-                                    <div class='modal-title' id='FacultiesImagesModalLabel'>{{ trans('langFacultyImage') }}</div>
+                                    <h2 class='modal-title' id='FacultiesImagesModalLabel'>{{ trans('langFacultyImage') }}</h2>
                                     <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                 </div>
                                 <div class='modal-body'>
@@ -252,5 +252,5 @@
 
         </div>
     </div>
-</div>
+</main>
 @endsection

@@ -56,7 +56,7 @@ if(isset($_POST['submit'])){
 }
 
 
-$data['footer_intro'] = rich_text_editor('footer_intro', 5, 20, get_config('footer_intro'));
+$data['footer_intro'] = rich_text_editor('footer_intro', 5, 20, get_config('footer_intro'), options: array('id' => 'footer_intro'));
 $data['link_fb'] = get_config('link_fb') ?? '';
 $data['link_tw'] = get_config('link_tw') ?? '';
 $data['link_ln'] = get_config('link_ln') ?? '';

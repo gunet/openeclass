@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
@@ -19,7 +19,7 @@
                 @include('layouts.partials.show_alert')
 
                 <div class="col-12">
-                    <div class='table-responsive'>
+                    
                     <table id='search_results_table' class='table-default display'>
                         <thead class='list-header'>
                             <tr>
@@ -44,7 +44,7 @@
                         </tfoot>
                         <tbody>
                         </tbody>
-                    </table></div>
+                    </table>
                 </div>
                 <div class='col-12 mt-4'>
                     <!--Edit all function-->
@@ -63,5 +63,5 @@
                 </div>
             </div>
     </div>
-</div>
+</main>
 @endsection

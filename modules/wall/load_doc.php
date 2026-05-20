@@ -23,6 +23,7 @@ $require_current_course = TRUE;
 require_once '../../include/baseTheme.php';
 
 header('Content-Type: application/json');
+header('X-Content-Type-Options: nosniff');
 
 $data = array();
 

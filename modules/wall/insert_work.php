@@ -19,10 +19,15 @@
  */
 
 function list_assignments($id = NULL) {
-    global $course_id, $langTitle, $langChoice, $langGroupWorkDeadline_of_Submission, $langAddModulesButton, $langNoAssign, $langSettingSelect, $langSelect;
+    global $course_id, $is_editor, $langTitle, $langGroupWorkDeadline_of_Submission, $langNoAssign, $langSettingSelect, $langSelect;
 
     $ret_string = '';
-    $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY title", $course_id);
+    if ($is_editor) {
+        $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY title", $course_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d AND active = 1 ORDER BY title", $course_id);
+    }
+
     if (count($result) == 0) {
         $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
     } else {

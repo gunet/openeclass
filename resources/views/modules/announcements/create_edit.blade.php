@@ -46,7 +46,13 @@
             }
         });
 
-        $('#select-recipients').select2();
+        slimSelectFun (
+                    '#select-recipients', 
+                    '{{ js_escape(trans('langSearch')) }}', 
+                    '{{ js_escape(trans('langWelcomeSelect')) }}', 
+                    '{{ js_escape(trans('langSelectAll')) }}', 
+                    '{{ js_escape(trans('langListChoices')) }}'
+                );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             var stringVal = [];
@@ -78,14 +84,10 @@
     });
 </script>
 
-    <div class="col-12 main-section">
         <div class='{{ $container }} module-container py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
-
+                <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+                <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -102,10 +104,9 @@
                         @include('layouts.partials.legend_view')
 
                         <div class='d-lg-flex gap-4 mt-3'>
-                        <div class='flex-grow-1'>
-                            <div class='form-wrapper form-edit rounded'>
-                                <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
-
+                            <div class='flex-grow-1'>
+                                <div class='form-wrapper form-edit rounded'>
+                                    <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
                                         <div class="row form-group {{ $antitle_error }}">
                                             <label for="AnnTitle" class="col-12 control-label-notes">{{ trans('langAnnTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class="col-12">
@@ -114,21 +115,20 @@
                                             </div>
                                         </div>
 
-                                        <div class='row mt-4 form-groum'>
-                                            <label for='newContent' class='col-12 control-label-notes'>{{ trans('langAnnBody') }}</label>
+                                        <div class='row mt-4 form-group'>
+                                            <label for='newContentId' class='col-12 control-label-notes'>{{ trans('langAnnBody') }}</label>
                                             <div class='col-12'>{!! $contentToModify !!}</div>
                                         </div>
 
                                         <div id='recipients-form-group' class='row mt-4 form-group @if (!$checked_public) not_visible @endif'>
                                             <label for='select-recipients' class='col-12 control-label-notes'>{{ trans('langEmailOption') }}</label>
                                             <div class='col-12'>
-                                                <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
+                                                <select class='form-control' name='recipients[]' multiple='multiple' id='select-recipients'>
                                                     <option value='-1' selected>{{ trans('langAllUsers') }}</option>
                                                     @foreach ($course_users as $cu)
                                                         <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
                                                     @endforeach
                                                 </select>
-                                                <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
                                             </div>
                                         </div>
 
@@ -205,9 +205,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
 
 @endsection

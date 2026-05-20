@@ -72,7 +72,7 @@ $errorFound = false;
 function startElement($parser, $name, $attributes) {
     global $elementsPile, $itemsPile, $manifestData, $flagTag;
 
-    array_push($elementsPile, $name);
+    $elementsPile[] = $name;
 
     switch ($name) {
         case "MANIFEST" :
@@ -217,21 +217,10 @@ function endElement($parser, $name) {
  * @param $data "what is not a tag"
  */
 function elementData($parser, $data) {
-    global $elementsPile;
-    global $itemsPile;
-    global $manifestData;
-    global $flagTag;
-    global $iterator;
-    global $errorFound;
-    global $langErrorReadingXMLFile;
-    global $errorMsgs;
-    global $pathToManifest;
-    global $langErrorOpeningXMLFile;
 
-
-// -----------------------------------
-// when eclass is full utf 8 restore this
-// -----------------------------------------
+    global $elementsPile, $manifestData, $flagTag, $errorFound,
+           $langErrorReadingXMLFile, $errorMsgs, $pathToManifest,
+           $langErrorOpeningXMLFile;
 
     if (!isset($data)) {
         $data = "";
@@ -239,183 +228,178 @@ function elementData($parser, $data) {
         $data = trim($data);
     }
 
-    switch ($elementsPile[count($elementsPile) - 1]) {
-
-        case "RESOURCE" :
-            break;
-        case "TITLE" :
-            // $data == '' (empty string) means that title tag contains elements (<langstring> for an exemple), so it's not the title we need
-            if ($data != '') {
-                if ($flagTag['type'] == "item") { // item title check
-                    if (!isset($manifestData['items'][$flagTag['value']]['title'])) {
-                        $manifestData['items'][$flagTag['value']]['title'] = "";
-                    }
-                    $manifestData['items'][$flagTag['value']]['title'] .= $data;
-                }
-
-
-                // get title of package if it was not find in the manifest metadata in the default organization
-                if ($elementsPile[sizeof($elementsPile) - 2] == "ORGANIZATION" && $flagTag['type'] == "organization" && $flagTag['value'] == $manifestData['defaultOrganization']) {
-                    // if we do not find this title
-                    //  - the metadata title has been set as package title
-                    //  - if there was nor title for metadata nor for default organization set 'unamed path'
-                    // If we are here it means we have found the title in organization, this is the best to chose
-                    $manifestData['packageTitle'] = $data;
-                }
-            }
-            break;
-
-        case "ITEM" :
-            break;
-
-        case "ADLCP:DATAFROMLMS" :
-            $manifestData['items'][$flagTag['value']]['datafromlms'] = $data;
-            break;
-
-        // found a link to another XML file, parse it ...
-        case "ADLCP:LOCATION" :
-            $file = "imsmanifest.xml";
-            if (!($fp = @fopen($file, "r"))) {
-                $errorFound = true;
-                $errorMsgs[] = $langErrorOpeningManifest;
-            } else {
-                if (!$errorFound) {
-                    $xml_parser = xml_parser_create();
-                    xml_set_element_handler($xml_parser, "startElement", "endElement");
-                    xml_set_character_data_handler($xml_parser, "elementData");
-
-                    $file = rawurldecode($data); //url of secondary manifest files is relative to the position of the base imsmanifest.xml
-                    $zipFile = new ZipArchive();
-                    if ($zipFile->open($pathToManifest . $file) == TRUE) {
-                        if ($zipFile->extractTo($pathToManifest)) {
-                            $zipFile->close();
+    if (isset($elementsPile[count($elementsPile) - 1])) {
+        switch ($elementsPile[count($elementsPile) - 1]) {
+            case "TITLE" :
+                // $data == '' (empty string) means that title tag contains elements (<langstring> for an example), so it's not the title we need
+                if ($data != '') {
+                    if ($flagTag['type'] == "item") { // item title check
+                        if (!isset($manifestData['items'][$flagTag['value']]['title'])) {
+                            $manifestData['items'][$flagTag['value']]['title'] = "";
                         }
-                    } else {
-                        array_push($errorMsgs, $langErrorOpeningXMLFile . $pathToManifest . $file);
+                        $manifestData['items'][$flagTag['value']]['title'] .= $data;
                     }
 
+
+                    // get title of package if it was not find in the manifest metadata in the default organization
+                    if ($elementsPile[sizeof($elementsPile) - 2] == "ORGANIZATION" && $flagTag['type'] == "organization" && $flagTag['value'] == $manifestData['defaultOrganization']) {
+                        // if we do not find this title
+                        //  - the metadata title has been set as package title
+                        //  - if there was nor title for metadata nor for default organization, set 'unamed path'
+                        // If we are here it means we have found the title in organization; this is the best to chose
+                        $manifestData['packageTitle'] = $data;
+                    }
+                }
+                break;
+
+            case "ADLCP:DATAFROMLMS" :
+                $manifestData['items'][$flagTag['value']]['datafromlms'] = $data;
+                break;
+
+            // found a link to another XML file, parse it ...
+            case "ADLCP:LOCATION" :
+                $file = "imsmanifest.xml";
+                if (!($fp = @fopen($file, "r"))) {
+                    $errorFound = true;
+                    $errorMsgs[] = $langErrorOpeningManifest;
+                } else {
                     if (!$errorFound) {
-                        if (!isset($cache)) {
-                            $cache = "";
+                        $xml_parser = xml_parser_create();
+                        xml_set_element_handler($xml_parser, "startElement", "endElement");
+                        xml_set_character_data_handler($xml_parser, "elementData");
+
+                        $file = rawurldecode($data); //url of secondary manifest files is relative to the position of the base imsmanifest.xml
+                        $zipFile = new ZipArchive();
+                        if ($zipFile->open($pathToManifest . $file) == TRUE) {
+                            if ($zipFile->extractTo($pathToManifest)) {
+                                $zipFile->close();
+                            }
+                        } else {
+                            $errorMsgs[] = $langErrorOpeningXMLFile . $pathToManifest . $file;
                         }
-                        while ($readdata = str_replace("\n", "", fread($fp, 4096))) {
-                            // fix for fread breaking thing
-                            // msg from "ml at csite dot com" 02-Jul-2003 02:29 on http://www.php.net/xml
-                            // preg expression has been modified to match tag with inner attributes
-                            $readdata = $cache . $readdata;
-                            if (!feof($fp)) {
-                                if (preg_match_all("/<[^\>]*.>/", $readdata, $regs)) {
-                                    $lastTagname = $regs[0][count($regs[0]) - 1];
-                                    $split = false;
-                                    for ($i = strlen($readdata) - strlen($lastTagname); $i >= strlen($lastTagname); $i--) {
-                                        if ($lastTagname == substr($readdata, $i, strlen($lastTagname))) {
-                                            $cache = substr($readdata, $i, strlen($readdata));
-                                            $readdata = substr($readdata, 0, $i);
-                                            $split = true;
-                                            break;
+
+                        if (!$errorFound) {
+                            if (!isset($cache)) {
+                                $cache = "";
+                            }
+                            while ($readdata = str_replace("\n", "", fread($fp, 4096))) {
+                                // fix for fread breaking thing
+                                // msg from "ml at csite dot com" 02-Jul-2003 02:29 on http://www.php.net/xml
+                                // preg expression has been modified to match tag with inner attributes
+                                $readdata = $cache . $readdata;
+                                if (!feof($fp)) {
+                                    if (preg_match_all("/<[^\>]*.>/", $readdata, $regs)) {
+                                        $lastTagname = $regs[0][count($regs[0]) - 1];
+                                        $split = false;
+                                        for ($i = strlen($readdata) - strlen($lastTagname); $i >= strlen($lastTagname); $i--) {
+                                            if ($lastTagname == substr($readdata, $i, strlen($lastTagname))) {
+                                                $cache = substr($readdata, $i, strlen($readdata));
+                                                $readdata = substr($readdata, 0, $i);
+                                                $split = true;
+                                                break;
+                                            }
                                         }
                                     }
+                                    if (!$split) {
+                                        $cache = $readdata;
+                                    }
                                 }
-                                if (!$split) {
-                                    $cache = $readdata;
+                                // end of fix
+                                if (!xml_parse($xml_parser, $readdata, feof($fp))) {
+                                    // if reading of the xml file in not successfull :
+                                    // set errorFound, set error msg, break while statement
+                                    $errorFound = true;
+                                    $errorMsgs[] = $langErrorReadingXMLFile . $pathToManifest . $file;
+                                    break;
                                 }
-                            }
-                            // end of fix
-                            if (!xml_parse($xml_parser, $readdata, feof($fp))) {
-                                // if reading of the xml file in not successfull :
-                                // set errorFound, set error msg, break while statement
-                                $errorFound = true;
-                                array_push($errorMsgs, $langErrorReadingXMLFile . $pathToManifest . $file);
-                                break;
-                            }
-                        } // while $readdata
-                    }    //if fopen
-                    @fclose($fp); // close file
+                            } // while $readdata
+                        }    //if fopen
+                        @fclose($fp); // close file
+                    }
                 }
-            }
-            break;
+                break;
 
-        case "LANGSTRING" :
-            if (isset($flagTag['type'])) {
-                switch ($flagTag['type']) {
-                    case "item" :
-                        // DESCRIPTION
-                        // if the langstring tag is a children of a description tag
-                        if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                            if (!isset($manifestData['items'][$flagTag['value']]['description'])) {
-                                $manifestData['items'][$flagTag['value']]['description'] = "";
+            case "LANGSTRING" :
+                if (isset($flagTag['type'])) {
+                    switch ($flagTag['type']) {
+                        case "item" :
+                            // DESCRIPTION
+                            // if the langstring tag is a children of a description tag
+                            if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                                if (!isset($manifestData['items'][$flagTag['value']]['description'])) {
+                                    $manifestData['items'][$flagTag['value']]['description'] = "";
+                                }
+                                $manifestData['items'][$flagTag['value']]['description'] .= $data;
                             }
-                            $manifestData['items'][$flagTag['value']]['description'] .= $data;
-                        }
-                        // title found in metadata of an item (only if we haven't already one title for this sco)
-                        if ($manifestData['items'][$flagTag['value']]['title'] == '' || !isset($manifestData['items'][$flagTag['value']]['title'])) {
-                            if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                                $manifestData['items'][$flagTag['value']]['title'] .= $data;
-                            }
-                        }
-                        break;
-                    case "sco" :
-                        // DESCRIPTION
-                        // if the langstring tag is a children of a description tag
-                        if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                            if (isset($manifestData['scos'][$flagTag['value']]['description'])) {
-                                $manifestData['scos'][$flagTag['value']]['description'] .= $data;
-                            } else {
-                                $manifestData['scos'][$flagTag['value']]['description'] = $data;
-                            }
-                        }
-                        // title found in metadata of an item (only if we haven't already one title for this sco)
-                        if (!isset($manifestData['scos'][$flagTag['value']]['title']) || $manifestData['scos'][$flagTag['value']]['title'] == '') {
-                            if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                                $manifestData['scos'][$flagTag['value']]['title'] = $data;
-                            }
-                        }
-                        break;
-                    case "asset" :
-                        // DESCRIPTION
-                        // if the langstring tag is a children of a description tag
-                        if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                            if (isset($manifestData['assets'][$flagTag['value']]['description'])) {
-                                $manifestData['assets'][$flagTag['value']]['description'] .= $data;
-                            } else {
-                                $manifestData['assets'][$flagTag['value']]['description'] = $data;
-                            }
-                        }
-                        // title found in metadata of an item (only if we haven't already one title for this sco)
-                        if (!isset($manifestData['assets'][$flagTag['value']]['title']) || $manifestData['assets'][$flagTag['value']]['title'] == '') {
-                            if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
-                                if (isset($manifestData['assets'][$flagTag['value']]['title'])) {
-                                    $manifestData['assets'][$flagTag['value']]['title'] .= $data;
-                                } else {
-                                    $manifestData['assets'][$flagTag['value']]['title'] = $data;
+                            // title found in metadata of an item (only if we haven't already one title for this sco)
+                            if ($manifestData['items'][$flagTag['value']]['title'] == '' || !isset($manifestData['items'][$flagTag['value']]['title'])) {
+                                if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                                    $manifestData['items'][$flagTag['value']]['title'] .= $data;
                                 }
                             }
-                        }
-                        break;
-                    default :
-                        // DESCRIPTION
-                        $posPackageDesc = array("MANIFEST", "METADATA", "LOM", "GENERAL", "DESCRIPTION");
-                        if (compareArrays($posPackageDesc, $elementsPile)) {
-                            if (!isset($manifestData['packageDesc'])) {
-                                $manifestData['packageDesc'] = "";
+                            break;
+                        case "sco" :
+                            // DESCRIPTION
+                            // if the langstring tag is a children of a description tag
+                            if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                                if (isset($manifestData['scos'][$flagTag['value']]['description'])) {
+                                    $manifestData['scos'][$flagTag['value']]['description'] .= $data;
+                                } else {
+                                    $manifestData['scos'][$flagTag['value']]['description'] = $data;
+                                }
                             }
-                            $manifestData['packageDesc'] .= $data;
-                        }
-
-                        if (!isset($manifestData['packageTitle']) || $manifestData['packageTitle'] == '') {
-                            $posPackageTitle = array("MANIFEST", "METADATA", "LOM", "GENERAL", "TITLE");
-                            if (compareArrays($posPackageTitle, $elementsPile)) {
-                                $manifestData['packageTitle'] = $data;
+                            // title found in metadata of an item (only if we haven't already one title for this sco)
+                            if (!isset($manifestData['scos'][$flagTag['value']]['title']) || $manifestData['scos'][$flagTag['value']]['title'] == '') {
+                                if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                                    $manifestData['scos'][$flagTag['value']]['title'] = $data;
+                                }
                             }
-                        }
-                        break;
-                } // end switch ( $flagTag['type'] )
-            }
-            break;
+                            break;
+                        case "asset" :
+                            // DESCRIPTION
+                            // if the langstring tag is a children of a description tag
+                            if ($elementsPile[sizeof($elementsPile) - 2] == "DESCRIPTION" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                                if (isset($manifestData['assets'][$flagTag['value']]['description'])) {
+                                    $manifestData['assets'][$flagTag['value']]['description'] .= $data;
+                                } else {
+                                    $manifestData['assets'][$flagTag['value']]['description'] = $data;
+                                }
+                            }
+                            // title found in metadata of an item (only if we haven't already one title for this sco)
+                            if (!isset($manifestData['assets'][$flagTag['value']]['title']) || $manifestData['assets'][$flagTag['value']]['title'] == '') {
+                                if ($elementsPile[sizeof($elementsPile) - 2] == "TITLE" && $elementsPile[sizeof($elementsPile) - 3] == "GENERAL") {
+                                    if (isset($manifestData['assets'][$flagTag['value']]['title'])) {
+                                        $manifestData['assets'][$flagTag['value']]['title'] .= $data;
+                                    } else {
+                                        $manifestData['assets'][$flagTag['value']]['title'] = $data;
+                                    }
+                                }
+                            }
+                            break;
+                        default :
+                            // DESCRIPTION
+                            $posPackageDesc = array("MANIFEST", "METADATA", "LOM", "GENERAL", "DESCRIPTION");
+                            if (compareArrays($posPackageDesc, $elementsPile)) {
+                                if (!isset($manifestData['packageDesc'])) {
+                                    $manifestData['packageDesc'] = "";
+                                }
+                                $manifestData['packageDesc'] .= $data;
+                            }
 
-        default :
-            break;
-    } // end switch ($elementsPile[count($elementsPile)-1] )
+                            if (!isset($manifestData['packageTitle']) || $manifestData['packageTitle'] == '') {
+                                $posPackageTitle = array("MANIFEST", "METADATA", "LOM", "GENERAL", "TITLE");
+                                if (compareArrays($posPackageTitle, $elementsPile)) {
+                                    $manifestData['packageTitle'] = $data;
+                                }
+                            }
+                            break;
+                    } // end switch ( $flagTag['type'] )
+                }
+                break;
+            default :
+                break;
+        } // end switch ($elementsPile[count($elementsPile)-1] )
+    }
 }
 
 /**
@@ -437,43 +421,8 @@ function compareArrays($array1, $array2) {
 }
 
 /**
- * This function return true if $Str could be UTF-8, false otherwise
- *
- * function found @ http://www.php.net/manual/en/function.utf8-encode.php
+ * @return string
  */
-function seems_utf8($str) {
-    for ($i = 0; $i < strlen($str); $i++) {
-        if (ord($str[$i]) < 0x80) {
-            continue; // 0bbbbbbb
-        } else if ((ord($str[$i]) & 0xE0) == 0xC0) {
-            $n = 1; // 110bbbbb
-        } else if ((ord($str[$i]) & 0xF0) == 0xE0) {
-            $n = 2; // 1110bbbb
-        } else if ((ord($str[$i]) & 0xF8) == 0xF0) {
-            $n = 3; // 11110bbb
-        } else if ((ord($str[$i]) & 0xFC) == 0xF8) {
-            $n = 4; // 111110bb
-        } else if ((ord($str[$i]) & 0xFE) == 0xFC) {
-            $n = 5; // 1111110b
-        } else {
-            return false; // Does not match any model
-        }
-        for ($j = 0; $j < $n; $j++) { // n bytes matching 10bbbbbb follow ?
-            if (( ++$i == strlen($str)) || ((ord($str[$i]) & 0xC0) != 0x80)) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-/**
- *
- */
-function utf8_decode_if_is_utf8($str) {
-    return seems_utf8($str) ? utf8_decode($str) : $str;
-}
-
 function replaceIdHiddenInput() {
     global $webDir, $course_code;
     $replaceId = (isset($_GET['replace_id']) && intval($_GET['replace_id']) > 0) ? intval($_GET['replace_id']) : 0;
@@ -484,11 +433,8 @@ function replaceIdHiddenInput() {
     }
 }
 
-$okMsgs = array();
 $errorMsgs = array();
-$maxFilledSpace = 1.0e10; // Max filled space: 10 GB
 $baseWorkDir = 'courses/' . $course_code . '/scormPackages/';
-
 if (!is_dir($baseWorkDir)) {
     make_dir($baseWorkDir);
 }
@@ -547,24 +493,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
      */
     if (!isset($_FILES['uploadedPackage']) || !is_uploaded_file($_FILES['uploadedPackage']['tmp_name'])) {
         $errorFound = true;
-        array_push($errorMsgs, $langFileScormError);
-    }
-
-    /*
-     * Check the file size doesn't exceed
-     * the maximum file size authorized in the directory
-     */ elseif (!enough_size($_FILES['uploadedPackage']['size'], $baseWorkDir, $maxFilledSpace)) {
-        $errorFound = true;
-        array_push($errorMsgs, $langNoSpace);
+        $errorMsgs[] = $langFileScormError;
     }
 
     /*
      * Unzipping stage
      */
     elseif (preg_match("/.zip$/i", $_FILES['uploadedPackage']['name'])) {
-
-        array_push($okMsgs, $langOkFileReceived . basename($_FILES['uploadedPackage']['name']));
-
         $zipFile = new ZipArchive();
         $is_allowedToUnzip = true; // default initialisation
 
@@ -574,7 +509,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
         $zipname = $_FILES['uploadedPackage']['name'];
         $files_in_zip = array();
         if (move_uploaded_file($_FILES['uploadedPackage']['tmp_name'], "$webDir/$baseWorkDir/$zipname")) {
-            if ($zipFile->open("$webDir/$baseWorkDir/$zipname") == TRUE) {
+            if ($zipFile->open("$webDir/$baseWorkDir/$zipname")) {
                 for ($i = 0; $i < $zipFile->numFiles; $i++) {
                     $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                     $files_in_zip[$i] = $stat['name'];
@@ -585,17 +520,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                     $zipFile->close();
                 } else {
                     $errorFound = true;
-                    array_push($errorMsgs, $langZipError);
+                    $errorMsgs[] = $langZipError;
                 }
             } else {
                 $errorFound = true;
-                array_push($errorMsgs, $langErrorFileMustBeZip);
+                $errorMsgs[] = $langErrorFileMustBeZip;
             }
+        }
+        if ($errorFound) {
+            Session::Messages($errorMsgs, 'alert-warning');
+            redirect_to_home_page("modules/learnPath/index.php?course=$course_code");
         }
     }
 
     chdir($baseWorkDir);
-
     // find xmlmanifest (must be in root else ==> cancel operation, delete files)
     // parse xml manifest to find :
     // package name - learning path name
@@ -623,13 +561,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
 
         if (!($fp = @fopen($file, "r"))) {
             $errorFound = true;
-            array_push($errorMsgs, $langErrorOpeningManifest);
+            $errorMsgs[] = $langErrorOpeningManifest;
         } else {
             if (!isset($manifestPath)) {
                 $manifestPath = "";
             }
-
-            array_push($okMsgs, $langOkManifestFound . $manifestPath . "imsmanifest.xml");
 
             while ($data = str_replace("\n", "", fread($fp, 4096))) {
                 // fix for fread breaking thing
@@ -665,9 +601,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                 if (!xml_parse($xml_parser, $data, feof($fp))) {
                     // if reading of the xml file in not successfull :
                     // set errorFound, set error msg, break while statement
-
                     $errorFound = true;
-                    array_push($errorMsgs, $langErrorReadingManifest);
+                    $errorMsgs[] = $langErrorReadingManifest;
                     // Since manifest.xml cannot be parsed, test versus IMS CP 1.4.4 XSD (compatible with all SCORM packages as well)
                     require_once 'include/validateXML.php';
                     libxml_use_internal_errors(true);
@@ -677,8 +612,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
 
                     if (!$xml->schemaValidate($urlServer . 'modules/learnPath/export/imscp_v1p2.xsd')) {
                         $messages = libxml_display_errors();
-
-                        array_push($errorMsgs, $langErrorValidatingManifest . $messages);
+                        $errorMsgs[] = $langErrorValidatingManifest . $messages;
                     }
                     break;
                 }
@@ -689,12 +623,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
 
         // liberate parser ressources
         xml_parser_free($xml_parser);
-    } //if (!$errorFound)
-    // check if all starts assets files exist in the zip file
-    if (!$errorFound) {
 
-        array_push($okMsgs, $langOkManifestRead);
-        if (sizeof($manifestData['items']) > 0) {
+        if (sizeof($manifestData['items']) > 0) {  // check if all starts assets files exist in the zip file
             // if there is items in manifest we look for sco type resources referenced in idientifierref
             foreach ($manifestData['items'] as $item) {
                 if (!isset($item['identifierref']) || $item['identifierref'] == '') {
@@ -724,12 +654,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
 
                 if (!$scoPathFound) {
                     $errorFound = true;
-                    array_push($errorMsgs, $langErrorAssetNotFound . $manifestData['scos'][$item['identifierref']]['href']);
+                    $errorMsgs[] = $langErrorAssetNotFound . $manifestData['scos'][$item['identifierref']]['href'];
                     break;
                 }
             }
-        } //if (sizeof ...)
-        elseif (sizeof($manifestData['scos']) > 0) {
+        } elseif (sizeof($manifestData['scos']) > 0) {
             // if there ie no items in the manifest file
             // check for scos in resources
 
@@ -753,29 +682,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                 }
                 if (!$scoPathFound) {
                     $errorFound = true;
-                    array_push($errorMsgs, $langErrorAssetNotFound . $sco['href']);
+                    $errorMsgs[] = $langErrorAssetNotFound . $sco['href'];
                     break;
                 }
             }
-        } // if sizeof (...ΰ
-        else {
+        } else {
             $errorFound = true;
-            array_push($errorMsgs, $langErrorNoModuleInPackage);
+            $errorMsgs[] = $langErrorNoModuleInPackage;
         }
     }// if errorFound
-    // unzip all files
-    // &&
-    // insert corresponding entries in database
+    // unzip all files && insert corresponding entries in database
 
     if (!$errorFound) {
-        // insert informations in DB :
-        //        - 1 learning path ( already added because we needed its id to create the package directory )
+        // insert information in DB:
+        //        - 1 learning path (already added because we needed its id to create the package directory )
         //        - n modules
         //        - n asset as start asset of modules
 
         if (sizeof($manifestData['items']) == 0) {
             $errorFound = true;
-            array_push($errorMsgs, $langErrorNoModuleInPackage);
+            $errorMsgs[] = $langErrorNoModuleInPackage;
         } else {
             $i = 0;
             $insertedLPMid = array(); // array of learnPath_module_id && order of related group
@@ -802,11 +728,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                     $insertedModule_id[$i] = Database::get()->query("INSERT INTO `lp_module`
                             (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
                             VALUES (?d, ?s, '', ?s,'')", $course_id, $chapterTitle, CTLABEL_)->lastInsertID;
-                    if (!$insertedModule_id[$i]) {
-                        $errorFound = true;
-                        array_push($errorMsgs, $langErrorSql);
-                        break;
-                    }
+
                     // visibility
                     if (isset($item['isvisible']) && $item['isvisible'] != '') {
                         $visibility = ($item['isvisible'] == "true") ? 1 : 0;
@@ -814,27 +736,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                         $visibility = 1; // IMS consider that the default value of 'isvisible' is true
                     }
 
-                    // add title module in the learning path
-                    // finally : insert in learning path
+                    // add the title module in the learning path
+                    // finally: insert in a learning path
                     // get the inserted id of the learnPath_module rel to allow 'parent' link in next inserts
                     $insertedLPMid[$item['itemIdentifier']]['LPMid'] = Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                             (`learnPath_id`, `module_id`,`rank`, `visible`, `parent`, `specificComment`)
                             VALUES (?d, ?d, ?d, ?d, ?d, '')", $tempPathId, $insertedModule_id[$i], $rank, $visibility, $parent)->lastInsertID;
                     $insertedLPMid[$item['itemIdentifier']]['rank'] = 1;
 
-                    if (!$insertedLPMid[$item['itemIdentifier']]['LPMid']) {
-                        $errorFound = true;
-                        array_push($errorMsgs, $langErrorSql);
-                        break;
-                    }
-                    if (!$errorFound) {
-                        array_push($okMsgs, $langOkChapterHeadAdded . "<i>" . $chapterTitle . "</i>");
-                    }
                     $i++;
                     continue;
                 }
 
-                // use found title of module or use default title
+                // use the found title of the module or use the default title
                 if (!isset($item['title']) || $item['title'] == '') {
                     $moduleName = $langUnamedModule;
                 } else {
@@ -877,11 +791,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                         (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
                         VALUES (?d, ?s, ?s, ?s, ?s)", $course_id, $moduleName, $description, $contentType, $item['datafromlms'])->lastInsertID;
 
-                if (!$insertedModule_id[$i]) {
-                    $errorFound = true;
-                    array_push($errorMsgs, $langErrorSql);
-                    break;
-                }
                 // build asset path
                 // a $manifestData['scos'][$item['identifierref']] __SHOULD__ not exist if a $manifestData['assets'][$item['identifierref']] exists
                 // so according to IMS we can say that one is empty if the other is filled, so we concat them without more verification than if the var exists.
@@ -937,11 +846,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                         (`path` , `module_id` , `comment`)
                         VALUES (?s, ?d, '')", $assetPath, $insertedModule_id[$i])->lastInsertID;
 
-                if (!$insertedAsset_id[$i]) {
-                    $errorFound = true;
-                    array_push($errorMsgs, $langErrorSql);
-                    break;
-                }
                 // update of module with correct start asset id
                 Database::get()->query("UPDATE `lp_module`
                         SET `startAsset_id` = ?d
@@ -955,22 +859,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                     $visibility = 1; // IMS consider that the default value of 'isvisible' is true
                 }
 
-                // finally : insert in learning path
+                // finally: insert in a learning path
                 // get the inserted id of the learnPath_module rel to allow 'parent' link in next inserts
                 $insertedLPMid[$item['itemIdentifier']]['LPMid'] = Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `visible`, `lock`, `parent`)
                         VALUES (?d, ?d, ?s, ?d, ?d, 'OPEN', ?d)", $tempPathId, $insertedModule_id[$i], $langDefaultModuleAddedComment, $rank, $visibility, $parent)->lastInsertID;
                 $insertedLPMid[$item['itemIdentifier']]['rank'] = 1;
 
-                if (!$insertedLPMid[$item['itemIdentifier']]['LPMid']) {
-                    $errorFound = true;
-                    array_push($errorMsgs, $langErrorSql);
-                    break;
-                }
-
-                if (!$errorFound) {
-                    array_push($okMsgs, $langOkModuleAdded . "<i>" . $moduleName . "</i>");
-                }
                 $i++;
             }//foreach
         } // if sizeof($manifestData['items'] == 0 )
@@ -1017,14 +912,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
 
         if (isset($manifestData['packageTitle'])) {
             $lpName = $manifestData['packageTitle'];
-        } else {
-            array_push($okMsgs, $langOkDefaultTitleUsed);
         }
 
         if (isset($manifestData['packageDesc'])) {
             $lpComment = $manifestData['packageDesc'];
         } else {
-            array_push($okMsgs, $langOkDefaultCommentUsed);
             $lpComment = '';
         }
 
@@ -1040,26 +932,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
     /* --------------------------------------
       status messages
       -------------------------------------- */
-    foreach ($okMsgs as $msg) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>" . icon('fa-check', $langSuccessOk) . ' ' . $msg . '</span></div></div>';
-    }
-
     foreach ($errorMsgs as $msg) {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . icon('fa-xmark', $langError) . ' ' . $msg . '</span></div></div>';
     }
 
     // installation completed or not message
     if (!$errorFound) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $langInstalled . "</span></div></div>";
+        Session::Messages($langInstalled, 'alert-success');
+        redirect_to_home_page("modules/learnPath/index.php?course=$course_code");
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . $langNotInstalled . "</span></div></div>";
+        Session::Messages($errorMsgs, 'alert-warning');
+        redirect_to_home_page("modules/learnPath/index.php?course=$course_code");
     }
-
-    $tool_content .=  action_bar(array(
-            array('title' => $langBack,
-                'url' => "index.php?course=$course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary')),false) ;
 } else { // if method == 'post'
     // don't display the form if user already sent it
     /* --------------------------------------
@@ -1105,14 +989,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                                 </div>
                             </div>
                         </div>
-
-
-
-
                         <div class='form-group mt-5'>
                             <div class='col-12 d-flex justify-content-end'>
-
-
                                     ".form_buttons(array(
                                         array(
                                             'class' => 'submitAdminBtn',
@@ -1124,9 +1002,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                                             'href' => "index.php?course=$course_code",
                                         )
                                     ))."
-
-
-
                             </div>
                         </div>
                     </form>

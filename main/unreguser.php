@@ -54,10 +54,14 @@ if (!isset($_POST['doit'])) {
         $un = uid_to_name($uid, 'username');
         $n = uid_to_name($uid);
         deleteUser($uid, false);
+        $tenant = getCurrentTenant();
         // action logging
-        Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,
+        Log::record(0, 0, LOG_DELETE_USER, array(
+            'uid' => $uid,
             'username' => $un,
-            'name' => $n));
+            'name' => $n,
+            'tenant' => $tenant ? $tenant->id : 0
+        ));
 
         foreach (array_keys($_SESSION) as $key) {
             unset($_SESSION[$key]);

@@ -103,6 +103,7 @@ $head_content .= "<script type='text/javascript'>
     </script>";
 
 load_js('select2');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
@@ -111,7 +112,14 @@ $head_content .= "<script type='text/javascript'>
             return false;
         });
 
-        $('#select-groups').select2();
+        
+        slimSelectFun (
+            '#select-groups', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             var stringVal = [];
@@ -159,6 +167,12 @@ if ($is_editor) {
         } elseif ((isset($_GET['choice'])) and $_GET['choice'] == 'edit') {
             $pageName = $langModify;
         }
+        $action_bar = action_bar(array(
+            array('title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary')));
+        $tool_content .= $action_bar;
     } else {
         if (isset($_GET['id']) || isset($_GET['zoom_not_registered'])) {
              $action_bar = action_bar(array(
@@ -214,9 +228,9 @@ if ($is_editor) {
                   'icon' => 'fa-clock',
                   'level' => 'primary-label' ],
                 [ 'title' => $langUserDuration,
-                    'url' => "tcuserduration.php?course=$course_code&amp;per_user=true",
-                    'icon' => 'fa-clock',
-                    'level' => 'primary-label' ],
+                  'url' => "tcuserduration.php?course=$course_code&amp;per_user=true",
+                  'icon' => 'fa-user-clock',
+                  'level' => 'primary-label' ],
             ]);
             $tool_content .= $action_bar;
         }

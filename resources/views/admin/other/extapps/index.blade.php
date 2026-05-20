@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container extapps-container'>
         <div class="row m-auto">
 
@@ -94,7 +94,7 @@
                         <div class='modal-dialog' role='document'>
                             <div class='modal-content'>
                                 <div class='modal-header'>
-                                    <div class='modal-title' id='myModalLabel'>{{ trans('langNotConfigured') }}</div>
+                                    <h2 class='modal-title' id='myModalLabel'>{{ trans('langNotConfigured') }}</h2>
                                     <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
                                     </button>
                                     
@@ -108,7 +108,7 @@
                
         </div>
     </div>
-</div>
+</main>
 
 
 <script>

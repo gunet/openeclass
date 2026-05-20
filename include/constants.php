@@ -22,6 +22,9 @@
 @brief Enter only platform constants here.
 */
 
+/* version */
+define('ECLASS_VERSION', '4.4-dev');
+
 /* course status */
 define('COURSE_CLOSED', 0);
 define('COURSE_REGISTRATION', 1);
@@ -108,6 +111,7 @@ define('MODULE_ID_H5P', 52);
 define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_REQUEST', 100);
 define('MODULE_ID_SESSION', 101);
+define('MODULE_ID_STICKY_NOTES', 102);
 //user activities
 define('MODULE_ID_EBOOK_READ','FC1');
 define('MODULE_ID_VIDEO_WATCH','FC2');
@@ -156,13 +160,13 @@ define('SETTING_OFFLINE_COURSE', 23); /* enable downloading for offline use */
 define('SETTING_USERS_LIST_ACCESS', 24);
 define('SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION', 25);
 define('SETTING_FACULTY_USERS_REGISTRATION', 26); /* course registration is allowed only for faculty users */
-define('SETTING_COUSE_IMAGE_STYLE', 27); /* course image description object-fit css */
-define('SETTING_COUSE_IMAGE_PRINT_HEADER', 28); /* course image print header */
-define('SETTING_COUSE_IMAGE_PRINT_FOOTER', 29); /* course image print footer */
-define('SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT', 30); /* course image header alignment */
-define('SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT', 31); /* course image footer alignment */
-define('SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH', 32); /* course image header width */
-define('SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH', 33); /* course image footer width */
+define('SETTING_COURSE_IMAGE_STYLE', 27); /* course image description object-fit css */
+define('SETTING_COURSE_IMAGE_PRINT_HEADER', 28); /* course image print header */
+define('SETTING_COURSE_IMAGE_PRINT_FOOTER', 29); /* course image print footer */
+define('SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT', 30); /* course image header alignment */
+define('SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT', 31); /* course image footer alignment */
+define('SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH', 32); /* course image header width */
+define('SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH', 33); /* course image footer width */
 define('SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE', 34); /* course H5P users uploading enable */
 
 // Available user settings
@@ -195,6 +199,10 @@ define('ATTEMPT_PENDING', 2);
 define('ATTEMPT_PAUSED', 3);
 define('ATTEMPT_CANCELED', 4);
 
+// exercise grade method
+define('CALC_GRADE_METHOD_STANDARD', 1);
+define('CALC_GRADE_METHOD_CERTAINTY_BASED', 2);
+
 // Widget Areas
 define('HOME_PAGE_MAIN', 1);
 define('HOME_PAGE_SIDEBAR', 2);
@@ -223,6 +231,7 @@ define('POLL_COLLES', 1);
 define('POLL_ATTLS', 2);
 define('POLL_QUICK', 3);
 define('POLL_LIMESURVEY', 99);
+define('POLL_COURSE_EVALUATION', 100);
 
 //poll position
 define('QPOLL_HOME', 1);
@@ -232,6 +241,11 @@ define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
 define('GRADEBOOK_ACTIVITY_EXERCISE', 2);
 define('GRADEBOOK_ACTIVITY_LP', 3);
 define('GRADEBOOK_ACTIVITY_TC', 4);
+
+//eportfolio visibility levels
+define('EPF_VISIBLE_PUBLIC', 1);
+define('EPF_VISIBLE_USERS', 2);
+define('EPF_VISIBLE_PRIVATE', 3);
 
 // Subsystem types (used in documents)
 define('MAIN', 0);

@@ -21,7 +21,8 @@ $require_admin = true;
 $require_help = true;
 require_once '../../include/baseTheme.php';
 
-$helpTopic = 'users_administration';
+$helpTopic = 'course_administration';
+$helpSubTopic = 'courses_activities';
 
 $toolName = $langAdmin;
 $pageName = $langActivityCourse;
@@ -51,13 +52,14 @@ if (isset($_POST['toReorder'])) {
         $headings[$langcode] = isset($_POST['heading'][$langcode])?
             canonicalize_whitespace($_POST['heading'][$langcode]): '';
     }
+    $required = ($_POST['required'] ?? 0)? 1: 0;
     if (isset($id)) {
         Database::get()->query('UPDATE activity_heading SET required = ?d, heading = ?s WHERE id = ?d',
-            intval(!!$_POST['required']), serialize($headings), $id);
+            $required, serialize($headings), $id);
     } else {
         $maxOrder = Database::get()->querySingle('SELECT MAX(`order`) AS maxOrder FROM activity_heading')->maxOrder;
         Database::get()->query('INSERT INTO activity_heading SET required = ?d, heading = ?s, `order` = ?d',
-            intval(!!$_POST['required']), serialize($headings), $maxOrder + 1);
+            $required, serialize($headings), $maxOrder + 1);
     }
     Session::flash('message',$langFaqEditSuccess);
     Session::flash('alert-class', 'alert-success');
@@ -103,7 +105,7 @@ if (isset($_POST['toReorder'])) {
     }
 
     $tool_content .= "
-  
+
             <div class='form-group mt-4'>
               <div class='col-sm-9 col-sm-offset-3 checkbox'>
                 <label class='label-container' aria-label='$langSelect'>
@@ -114,7 +116,7 @@ if (isset($_POST['toReorder'])) {
               </div>
             </div>
 
-            
+
 
             <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
                 <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
@@ -208,16 +210,16 @@ $(function() {
             $tool_content .= "
               <div class='card panelCard card-default px-lg-4 py-lg-3 mt-3' data-id='$indirectId'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                             
-                    <h3>$heading</h3>
-                                
+
+                    <h2 class='text-heading-h3'>$heading</h2>
+
                     <div class='d-flex justify-content-end align-items-center'>$type " .
                         icon('fa-edit ps-2 pe-2', $langEdit, 'activity.php?edit=' . $indirectId) . "
                         <a class='confirm-delete pe-2' href='activity.php?delete=$indirectId' aria-label='$langDelete' title='$langDelete' data-bs-toggle='tooltip'>
                             <span class='fa-solid fa-xmark delete_btn text-danger'></span>
-                            <span class='sr-only'>$langDelete</span></a>
+                            <span class='visually-hidden'>$langDelete</span></a>
                             <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
-                    </div>                             
+                    </div>
                 </div>
                 <div class='card-body'>";
                     foreach ($headings as $lang => $msg) {

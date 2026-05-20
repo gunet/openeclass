@@ -19,10 +19,9 @@
  */
 
 
-include 'exercise.class.php';
-include 'question.class.php';
-include 'answer.class.php';
-
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 // Check if AI functionality is available
 require_once '../../include/lib/ai/services/AIQuestionBankService.php';
 
@@ -32,102 +31,14 @@ $require_help = true;
 $helpTopic = 'exercises';
 $helpSubTopic = 'question_bank';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'imsqtilib.php';
 
 // Initialize AI service
 $aiService = new AIQuestionBankService($course_id, $uid);
 
 load_js('datatables');
-
 $picturePath = "courses/$course_code/image";
-
-$head_content .= "
-    <script type='text/javascript'>
-        $(function() {
-            $('#questions_$course_code').DataTable ({
-                'stateSave': true,
-                'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
-                'sPaginationType': 'full_numbers',
-                'bAutoWidth': true,
-                'searchDelay': 1000,
-                'order' : [[1, 'desc']],
-                'lengthMenu': [10, 20, 30, -1],
-                'oLanguage': {
-                   'lengthLabels': {
-                   	    '-1': '$langAllOfThem'
-                   },
-                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                   'sZeroRecords':  '" . $langNoResult . "',
-                   'sEmptyTable':   '" . $langNoResult . "',
-                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '',
-                   'sInfoFiltered': '',
-                   'sInfoPostFix':  '',
-                   'sSearch':       '',
-                   'sUrl':          '',
-                   'oPaginate': {
-                       'sFirst':    '&laquo;',
-                       'sPrevious': '&lsaquo;',
-                       'sNext':     '&rsaquo;',
-                       'sLast':     '&raquo;'
-                   }
-               }
-            });
-
-            $('.dt-search input').attr({
-                class : 'form-control input-sm mb-3 me-3',
-                placeholder : '$langSearch...'
-            });
-            $('.dt-search label').attr('aria-label', '$langSearch'); 
-
-            $(document).on('click', '.warnLink', function(e){
-                var modifyAllLink = $(this).attr('href');
-                var modifyOneLink = modifyAllLink.concat('&clone=true');
-                $('a#modifyAll').attr('href', modifyAllLink);
-                $('a#modifyOne').attr('href', modifyOneLink);
-            });
-            $(document).on('click', '.previewQuestion', function(e) {
-                e.preventDefault();
-                var qid = $(this).data('qid'),
-                    nbr = $(this).data('nbr'),
-                    editUrl = $(this).data('editurl'),
-                    url = '" . js_escape($urlAppend) . "' + 'modules/exercise/question_preview.php?course=" . js_escape($course_code) . "&question=' + qid;
-                $.ajax({
-                    url: url,
-                    success: function(data) {
-                        var dialog = bootbox.dialog({
-                            message: data,
-                            title: '". js_escape($langQuestionPreview) . "',
-                            onEscape: true,
-                            backdrop: true,
-                            buttons: {
-                                edit: {
-                                    label: '" . js_escape($langEditChange) . "',
-                                    className: 'submitAdminBtn',
-                                    callback: function () {
-                                        if (nbr > 1) {
-                                            $('#modalWarning').modal('show');
-                                        } else {
-                                            window.location.href = editUrl;
-                                        }
-                                    }
-                                },
-                                success: {
-                                    label: '" . js_escape($langClose) . "',
-                                    className: 'cancelAdminBtn',
-                                },
-                            }
-                        });
-                        dialog.init(function() {
-                            typeof MathJax !== 'undefined' && MathJax.typeset();
-                        });
-                    }
-                });
-            });
-        });
-    </script>";
-
 $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b
                               WHERE a.course_id = b.id
                                   AND a.course_id != ?d
@@ -138,41 +49,8 @@ foreach ($my_courses as $row) {
     $courses_options .= "'<option value=\"$row->Course_id\">".js_escape($row->Title)."</option>'+";
 }
 
-$head_content .= "<script>
-            $(function() {
-                $('.warnDup').on('click', function(e) {
-                    e.preventDefault();
-                    bootbox.dialog({
-                        title: '" . js_escape($langCreateDuplicateIn) . "',
-                        message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_pool_form\">'+
-                                    '<select class=\"form-select\" id=\"course_id\" name=\"clone_pool_to_course_id\">'+
-                                        $courses_options
-                                    '</select>'+
-                                  '</form>',
-                        buttons: {
-                            cancel: {
-                                label: '" . js_escape($langCancel) . "',
-                                className: 'cancelAdminBtn'
-                            },
-                            success: {
-                                label: '" . js_escape($langCreateDuplicate) . "',
-                                className: 'submitAdminBtn',
-                                callback: function (d) {
-                                    $('#clone_pool_form').attr('action', '$_SERVER[SCRIPT_NAME]?course=$course_code&clone_pool=1');
-                                    $('#clone_pool_form').submit();
-                                }
-                            }
-                        }
-                    });
-                });
-            });
-    </script>";
-
-$tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExercises</div>";
-
 $toolName = $langQuestionPool;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
-
 
 if (isset($_GET['fromExercise'])) {
     $objExercise = new Exercise();
@@ -199,7 +77,7 @@ if (isset($_GET['answerType'])) {
     $answerType = -1;
 }
 
-// deletes a question from the data base and all exercises
+// deletes a question from the database and all exercises
 if (isset($_GET['delete'])) {
     $delete = intval($_GET['delete']);
     // construction of the Question object
@@ -264,10 +142,6 @@ if ($fromExercise) {
           'level' => 'primary-label',
           'modal-class' => 'warnDup',
           'button-class' => 'btn-success' ],
-        [ 'title' => $langDumpPDF,
-          'url' => $exportUrl . '&amp;format=pdf',
-          'icon' => 'fa-file-pdf',
-          'button-class' => 'btn-success' ],
         [ 'title' => $langQuestionPoolPurge,
           'url' => "question_pool.php?course=$course_code&amp;purge=yes",
           'icon' => 'fa-eraser',
@@ -283,6 +157,11 @@ if ($fromExercise) {
           'icon' => 'fa-download',
           'button-class' => 'btn-success'
         ],
+        [ 'title' => $langDumpPDF,
+            'url' => $exportUrl . '&amp;format=pdf',
+            'icon' => 'fa-file-pdf',
+            'button-class' => 'btn-success'
+        ],
         [ 'title' => $langExportQTI,
           'url' => "question_pool.php?". $_SERVER['QUERY_STRING'] . "&amp;exportIMSQTI=yes",
           'icon' => 'fa-upload',
@@ -296,9 +175,6 @@ if ($fromExercise) {
         ]
     ];
 }
-
-$action_bar = action_bar($action_bar_options);
-$tool_content .= action_bar($action_bar_options);
 
 if ($fromExercise) {
     $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d AND id <> ?d ORDER BY id", $course_id, $fromExercise);
@@ -318,59 +194,6 @@ $q_cat_options = "<option value='-1' ".(isset($categoryId) && $categoryId == -1 
 foreach ($q_cats as $q_cat) {
     $q_cat_options .= "<option value='" . $q_cat->question_cat_id . "' ".(isset($categoryId) && $categoryId == $q_cat->question_cat_id ? "selected":"").">$q_cat->question_cat_name</option>\n";
 }
-//Start of filtering Component
-$tool_content .= "<div class='form-wrapper mb-4'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'>
-                    <input type='hidden' name='course' value='$course_code'>
-                    ".($fromExercise? "<input type='hidden' name='fromExercise' value='$fromExercise'>" : "")."
-                    <div class='form-group'>
-                        <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-select'>
-                            $exercise_options
-                        </select>
-                    </div>
-                    <div class='form-group mt-3'>
-                        <select onChange = 'document.qfilter.submit();' name='categoryId' class='form-select'>
-                            $q_cat_options
-                        </select>
-                    </div>
-                    <div class='form-group mt-3'>
-                        <select onChange = 'document.qfilter.submit();' name='difficultyId' class='form-select'>
-                            <option value='-1' ".(isset($difficultyId) && $difficultyId == -1 ? "selected='selected'": "").">-- $langQuestionAllDiffs --</option>
-                            <option value='0' ".(isset($difficultyId) && $difficultyId == 0 ? "selected='selected'": "").">-- $langQuestionNotDefined --</option>
-                            <option value='1' ".(isset($difficultyId) && $difficultyId == 1 ? "selected='selected'": "").">$langQuestionVeryEasy</option>
-                            <option value='2' ".(isset($difficultyId) && $difficultyId == 2 ? "selected='selected'": "").">$langQuestionEasy</option>
-                            <option value='3' ".(isset($difficultyId) && $difficultyId == 3 ? "selected='selected'": "").">$langQuestionModerate</option>
-                            <option value='4' ".(isset($difficultyId) && $difficultyId == 4 ? "selected='selected'": "").">$langQuestionDifficult</option>
-                            <option value='5' ".(isset($difficultyId) && $difficultyId == 5 ? "selected='selected'": "").">$langQuestionVeryDifficult</option>
-                        </select>
-                    </div>";
-                    $tool_content .= "<div class='form-group mt-3'>";
-                    $tool_content .= selection([
-                                                '-1' => "-- $langQuestionAllTypes --",
-                                                UNIQUE_ANSWER => $langUniqueSelect,
-                                                MULTIPLE_ANSWER => $langMultipleSelect,
-                                                TRUE_FALSE => $langTrueFalse,
-                                                FILL_IN_BLANKS_TOLERANT => $langFillBlanks,
-                                                FILL_IN_FROM_PREDEFINED_ANSWERS => $langFillFromSelectedWords,
-                                                MATCHING => $langMatching,
-                                                ORDERING => $langOrdering,
-                                                DRAG_AND_DROP_TEXT => $langDragAndDropText,
-                                                DRAG_AND_DROP_MARKERS => $langDragAndDropMarkers,
-                                                CALCULATED => $langCalculated,
-                                                FREE_TEXT => $langFreeText,
-                                                ORAL => $langOral,
-                                            ],
-                                        'answerType', $answerType, "onChange = 'document.qfilter.submit();'class='form-select'");
-                    $tool_content .= "</div>";
-            $tool_content .= "
-                </form>
-            </div>";
-//End of filtering Component
-
-if ($fromExercise) {
-    $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
-}
-
-$tool_content .= "<div class='table-responsive'><table class='table-default' id='questions_$course_code'>";
 
 //START OF BUILDING QUERIES AND QUERY VARS
 if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercise
@@ -436,128 +259,123 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
     }
 }
 
-if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
+// export to IMS QTI xml format
+if (isset($_GET['exportIMSQTI'])) {
     $result = Database::get()->queryArray($result_query, $result_query_vars);
     header('Content-type: text/xml');
     header("Content-Disposition: attachment; filename=" . $course_code . "_questions.xml");
     exportIMSQTI($result);
     exit();
-
-} else {
-    $result = Database::get()->queryArray($result_query, $result_query_vars);
-    $tool_content .= "<thead>
-    <tr class='list-header'>
-      <th>$langQuesList</th>
-      <th aria-label='$langSettingSelect'></th>
-    </tr></thead><tbody>";
-    foreach ($result as $row) {
-        $question_temp = new Question();
-        $question_temp->read($row->id);
-        $questionWeight = $question_temp->selectWeighting();
-        $question_title = q_math($question_temp->selectTitle());
-        $question_difficulty_legend = $question_temp->selectDifficultyIcon($question_temp->selectDifficulty());
-        $question_category_legend = $question_temp->selectCategoryName($question_temp->selectCategory());
-        $question_type = $question_temp->selectType();
-        $question_type_legend = $question_temp->selectTypeLegend($question_type);
-        $exercise_ids = $question_temp->selectExerciseList();
-        $exercises_used_in = '';
-        foreach ($exercise_ids as $ex_id) {
-            $q = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $ex_id);
-            $exercises_used_in .= "<h6 class='fw-lighter'>" . q($q->title) . "</h6>";
-        }
-        if ($fromExercise or !is_object(@$objExercise) or !$objExercise->isInList($row->id)) {
-            $tool_content .= "<tr>";
-            $class = count($exercise_ids) > 0 ? 'previewQuestion warnLink': 'previewQuestion';
-            $nbr = $question_temp->selectNbrExercises();
-            $editUrl = "{$urlAppend}modules/exercise/admin.php?course=$course_code&amp;modifyAnswers={$row->id}";
-            // check if question has weight
-            if (!$questionWeight) {
-                $question_excl_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
-                    data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionWeight'></span>";
-            } else {
-                $question_excl_legend = '';
-            }
-            // check if question has answers
-            if ($question_type != FREE_TEXT and $question_type != ORAL and $question_type != MATCHING and (!$question_temp->hasAnswers())) {
-                $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
-                        data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
-            } else {
-                $question_excl_legend_2 = '';
-            }
-            $tool_content .= "
-                <td>
-                  <div class='float-end fw-lighter text-heading-h6'>No: {$row->id}</></div>
-                  <a class='$class' data-qid='{$row->id}' data-nbr='$nbr' data-editurl='$editUrl' href='admin.php?course=$course_code&amp;modifyAnswers={$row->id}&amp;fromExercise=$fromExercise'>$question_title</a>
-                  $question_excl_legend<br>
-                  <small>$question_type_legend $question_difficulty_legend $question_category_legend $question_excl_legend_2 $exercises_used_in</small>
-                </td>";
-            if ($question_temp->hasAnswered()) {
-                $warning_message = $langWarnAboutAnsweredQuestion;
-            } else {
-                $warning_message = $langConfirmYourChoice;
-            }
-            $tool_content .= "<td class='option-btn-cell text-end'>" .
-                action_button([
-                    [ 'title' => $langEditChange,
-                      'url' => "admin.php?course=$course_code&amp;modifyAnswers=" . $row->id,
-                      'icon-class' => 'warnLink',
-                      'icon-extra' => ((count($exercise_ids)>0)?
-                         " data-bs-toggle='modal' data-bs-target='#modalWarning' data-bs-remote='false'" : ''),
-                      'icon' => 'fa-edit',
-                      'show' => !$fromExercise ],
-                    [ 'title' => $langReuse,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;recup=$row->id&amp;fromExercise=$fromExercise" .
-                         "&amp;exerciseId=$exerciseId",
-                      'level' => 'primary',
-                      'icon' => 'fa-plus-square',
-                      'show' => $fromExercise ],
-                    [ 'title' => $langDelete,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;delete=$row->id",
-                      'icon' => 'fa-xmark',
-                      'class' => 'delete',
-                      'confirm' => $warning_message,
-                      'show' => !$fromExercise ],
-                 ]) . "</td></tr>";
-        }
-        unset($question_temp);
-    }
-    $tool_content .= "</tbody></table></div>";
 }
 
-$tool_content .= "
-<!-- Modal -->
-<div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-hidden='true'>
-  <div class='modal-dialog'>
-    <div class='modal-content'>
-      <div class='modal-header'>
-        <div class='modal-title'>$langNote</div>
-        <button type='button' class='close' data-bs-dismiss='modal'></button>
-        
-      </div>
-      <div class='modal-body'>
-        $langUsedInSeveralExercises
-      </div>
-      <div class='modal-footer'>
-        <a href='#' id='modifyAll' class='btn submitAdminBtn'>$langModifyInAllExercises</a>
-        <a href='#' id='modifyOne' class='btn submitAdminBtn ms-1'>$langModifyInQuestionPool</a>
-      </div>
-    </div>
-  </div>
-</div>
-";
+$tr_content = '';
 
-draw($tool_content, 2, null, $head_content);
+$result = Database::get()->queryArray($result_query, $result_query_vars);
+foreach ($result as $row) {
+    $question_temp = new Question();
+    $question_temp->read($row->id);
+    $questionWeight = $question_temp->selectWeighting();
+    $question_title = q_math($question_temp->selectTitle());
+    $question_difficulty_legend = $question_temp->selectDifficultyIcon($question_temp->selectDifficulty());
+    $question_category_legend = $question_temp->selectCategoryName($question_temp->selectCategory());
+    $question_type = $question_temp->selectType();
+    $question_type_legend = $question_temp->selectTypeLegend($question_type);
+    $exercise_ids = $question_temp->selectExerciseList();
+    $exercises_used_in = '';
+    foreach ($exercise_ids as $ex_id) {
+        $q = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $ex_id);
+        $exercises_used_in .= "<h6 class='fw-lighter'>" . q($q->title) . "</h6>";
+    }
+    if ($fromExercise or !is_object(@$objExercise) or !$objExercise->isInList($row->id)) {
+        $tr_content .= "<tr>";
+        $class = count($exercise_ids) > 0 ? 'previewQuestion warnLink': 'previewQuestion';
+        $nbr = $question_temp->selectNbrExercises();
+        $editUrl = "{$urlAppend}modules/exercise/admin.php?course=$course_code&amp;modifyAnswers={$row->id}";
+        // check if question has weight
+        if (!$questionWeight) {
+            $question_excl_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
+                data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionWeight'></span>";
+        } else {
+            $question_excl_legend = '';
+        }
+        // check if question has answers
+        if ($question_type != FREE_TEXT and $question_type != ORAL and $question_type != MATCHING and (!$question_temp->hasAnswers())) {
+            $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
+                    data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
+        } else {
+            $question_excl_legend_2 = '';
+        }
+        $tr_content .= "
+            <td>
+              <div class='float-end fw-lighter text-heading-h6'>No: {$row->id}</></div>
+              <a class='$class' data-qid='{$row->id}' data-nbr='$nbr' data-editurl='$editUrl' href='admin.php?course=$course_code&amp;modifyAnswers={$row->id}&amp;fromExercise=$fromExercise'>$question_title</a>
+              $question_excl_legend<br>
+              <small>$question_type_legend $question_difficulty_legend $question_category_legend $question_excl_legend_2 $exercises_used_in</small>
+            </td>";
+        if ($question_temp->hasAnswered()) {
+            $warning_message = $langWarnAboutAnsweredQuestion;
+        } else {
+            $warning_message = $langConfirmYourChoice;
+        }
+        $tr_content .= "<td class='option-btn-cell text-end'>" .
+            action_button([
+                [ 'title' => $langEditChange,
+                  'url' => "admin.php?course=$course_code&amp;modifyAnswers=" . $row->id,
+                  'icon-class' => 'warnLink',
+                  'icon-extra' => ((count($exercise_ids)>0)?
+                     " data-bs-toggle='modal' data-bs-target='#modalWarning' data-bs-remote='false'" : ''),
+                  'icon' => 'fa-edit',
+                  'show' => !$fromExercise ],
+                [ 'title' => $langReuse,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;recup=$row->id&amp;fromExercise=$fromExercise" .
+                     "&amp;exerciseId=$exerciseId",
+                  'level' => 'primary',
+                  'icon' => 'fa-plus-square',
+                  'show' => $fromExercise ],
+                [ 'title' => $langDelete,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;delete=$row->id",
+                  'icon' => 'fa-xmark',
+                  'class' => 'delete',
+                  'confirm' => $warning_message,
+                  'show' => !$fromExercise ],
+             ]) . "</td></tr>";
+    }
+    unset($question_temp);
+}
 
+$data['courses_options'] = $courses_options;
+$data['exercise_options'] = $exercise_options;
+$data['q_cat_options'] = $q_cat_options;
+$data['selection_question_types'] = selection([
+    '-1' => "-- $langQuestionAllTypes --",
+    UNIQUE_ANSWER => $langUniqueSelect,
+    MULTIPLE_ANSWER => $langMultipleSelect,
+    TRUE_FALSE => $langTrueFalse,
+    FILL_IN_BLANKS_TOLERANT => $langFillBlanks,
+    FILL_IN_FROM_PREDEFINED_ANSWERS => $langFillFromSelectedWords,
+    MATCHING => $langMatching,
+    ORDERING => $langOrdering,
+    DRAG_AND_DROP_TEXT => $langDragAndDropText,
+    DRAG_AND_DROP_MARKERS => $langDragAndDropMarkers,
+    CALCULATED => $langCalculated,
+    FREE_TEXT => $langFreeText,
+    ORAL => $langOral,
+], 'answerType', $answerType, "onChange = 'document.qfilter.submit();'class='form-select'");
+$data['action_bar'] = action_bar($action_bar_options);
+
+$data['tr_content'] = $tr_content;
+
+view('modules.exercise.question_pool', $data);
 
 /**
- * @brief clone question pool to new course
+ * @brief clone the question pool to a new course
  * @param $new_course_id
  */
-function clone_question_pool($clone_course_id)
+function clone_question_pool($clone_course_id): void
 {
     global $course_code, $course_id;
-    $cat = [];
 
+    $cat = [];
     $q = Database::get()->queryArray("SELECT question_cat_id, question_cat_name FROM exercise_question_cats
                                                 WHERE course_id = ?d", $course_id);
     if (count($q) > 0) {
@@ -599,11 +417,11 @@ function clone_question_pool($clone_course_id)
 
 
 /**
- * @brief purge orphan questions in question pool
+ * @brief purge orphan questions in the question pool
  * @param $course_id
  */
-function purge_question_pool($course_id) {
-
+function purge_question_pool($course_id): void
+{
     $orphan = Database::get()->queryArray("SELECT id FROM exercise_question
             WHERE exercise_question.course_id = ?d
             AND exercise_question.id NOT IN

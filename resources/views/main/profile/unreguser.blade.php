@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
@@ -20,7 +20,7 @@
 
                                 <div class='form-group'>
                                     <div class='col-12 control-label-notes mb-4'>
-                                        {{ trans('langConfirm') }}
+                                        {{ trans('langConfirmDelAccount') }}
                                     </div>
                                 </div>
 
@@ -52,6 +52,6 @@
 
             </div>
         </div>
-    </div>
+    </main>
 
 @endsection

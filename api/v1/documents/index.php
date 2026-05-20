@@ -1,5 +1,6 @@
 <?php
 
+
 /*
  *  ========================================================================
  *  * Open eClass
@@ -18,28 +19,38 @@
  *
  */
 
+
 require_once '../../../include/lib/course.class.php';
 require_once '../../../include/lib/fileManageLib.inc.php';
 require_once '../../../include/lib/fileDisplayLib.inc.php';
 require_once '../../../include/lib/forcedownload.php';
 require_once '../../../modules/document/doc_init.php';
 
+
 function api_method($access) {
     global $webDir, $course_code, $course_id;
+
 
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
     }
 
+
     if (isset($_GET['course_id'])) {
         $course_code = $_GET['course_id'];
         $course_id = course_code_to_id($course_code);
+
 
         if (!$course_id) {
             Access::error(404, "Error: course with code '$course_code' not found");
         } elseif (!$access->allCourses and !in_array($course_code, $access->courseCodes)) {
             Access::error(403, "Error: course with code '$course_code' is not accessible by this app");
         } else {
+            // Check if course belongs to allowed departments
+            if (!Access::checkCourseDepartmentAccess($course_id, $access->allowedDepartments)) {
+                Access::error(403, "Error: course with code '$course_code' is not in an allowed department", 403);
+            }
+            
             $_SERVER['SCRIPT_NAME'] = '';
             doc_init();
             if (($_GET['format'] ?? null) == 'zip') {
@@ -68,6 +79,8 @@ function api_method($access) {
                     FROM document WHERE course_id = ?d AND subsystem = 0
                     ORDER BY path',
                     $course_id));
+                header('Content-Type: application/json');
+                header('X-Content-Type-Options: nosniff');
                 echo json_encode($documents, JSON_UNESCAPED_UNICODE);
             }
             exit;
@@ -76,6 +89,7 @@ function api_method($access) {
         Access::error(400, 'Required parameter missing: course_id');
     }
 }
+
 
 chdir('..');
 require_once 'apiCall.php';

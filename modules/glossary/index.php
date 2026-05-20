@@ -330,7 +330,7 @@ if ($is_editor) {
                              </div>
                         </div>";
         }
-        $data['notes_rich'] = rich_text_editor('notes', 4, 60, $notes);
+        $data['notes_rich'] = rich_text_editor('notes', 4, 60, $notes, options: array('id' => 'notes'));
         $data['form_buttons'] =
 
             form_buttons(array(

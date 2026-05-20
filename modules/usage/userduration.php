@@ -34,6 +34,7 @@ $helpTopic = 'course_stats';
 $helpSubTopic = 'users_participation';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/usage/usage.lib.php';
 
@@ -286,7 +287,7 @@ if (isset($_GET['u'])) { //  stats per user
             $tool_content .= selection_course_modules();
             $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . which_module($module) . "</span></div></div>";
         } else {
-            $tool_content .= "<h3>" . which_module($module) . "</h3>";
+            $tool_content .= "<h2 class='text-heading-h3'>" . which_module($module) . "</h2>";
         }
         $tool_content .= "
         <div class='col-sm-12'>
@@ -582,9 +583,18 @@ function pdf_output() {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // for old courses
+    if ($image_height_header > 50) {
+        $image_height_header = 20;
+    }
+    if ($image_height_footer > 50) {
+        $image_height_footer = 15;
+    }
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => $image_height_header + 20,     // mm
+        'margin_bottom' => $image_height_footer + 15,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
@@ -600,7 +610,6 @@ function pdf_output() {
                 ]
             ]
     ]);
-
 
     $mpdf->SetHTMLHeader(get_platform_logo());
     $footerHtml = '

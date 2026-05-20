@@ -151,38 +151,8 @@ $data['sessionType'] = $sessionType;
 
 $for_consultant = 0;
 $sql_consultant = '';
+$sql_consultant_args = [];
 $data['all_consultants'] = [];
-if($is_coordinator){
-    if(isset($_POST['forConsultant']) && $_POST['forConsultant'] > 0){
-        $for_consultant = $_POST['forConsultant'];
-        $sql_consultant = "AND creator = $for_consultant";
-    }
-}
-$data['for_consultant'] = $for_consultant;
-
-// About searching users from coordinator view
-$data['chooseSelectionVal'] = 0;
-$sql_users = '';
-$searchUserId = 0;
-if (isset($_POST['chooseSelection']) or isset($_POST['showSelection'])) {
-    $data['chooseSelectionVal'] = $_POST['chooseSelection'] ?? '';
-    if ($data['chooseSelectionVal'] == 0) {
-        $sql_remote = '';
-        $sql_session = '';
-        $sql_consultant = '';
-        $sql_users = '';
-    } elseif ($data['chooseSelectionVal'] == 1) { // search specific consultant
-        $sql_users = '';
-    } elseif ($data['chooseSelectionVal'] == 2 or isset($_POST['showSelection'])) {  // search specific user
-        $sql_consultant = '';
-        $sql_users = "AND id IN (SELECT session_id FROM mod_session_users WHERE participants = $_POST[forUserSearch] AND is_accepted = 1)";
-        $searchUserId = $_POST['forUserSearch'] ?? 0;
-        if ($searchUserId == 0) {
-            $sql_users = '';
-        }
-    }
-}
-$data['searchUserId'] = $searchUserId;
 
 // Delete session from consultant or course tutor
 if(isset($_POST['delete_session'])){
@@ -191,10 +161,15 @@ if(isset($_POST['delete_session'])){
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/index.php?course=".$course_code);
 }
-
 // Delete all sessions from course tutor
 if(isset($_GET['delete_all_sessions'])){
-    $session_ids = Database::get()->queryArray("SELECT id FROM mod_session");
+    if (!$is_coordinator) {
+        Session::flash('message', $langForbidden);
+        Session::flash('alert-class', 'alert-warning');
+        redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
+
+    $session_ids = Database::get()->queryArray("SELECT id FROM mod_session WHERE course_id = ?d", $course_id);
     foreach($session_ids as $s){
         delete_session($s->id);
     }
@@ -202,7 +177,6 @@ if(isset($_GET['delete_all_sessions'])){
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/session/index.php?course=".$course_code);
 }
-
 // Leave session from simple
 if(isset($_POST['leave_session'])){
     Database::get()->query("DELETE FROM mod_session_users WHERE session_id = ?d AND participants = ?d AND is_accepted = ?d",$_POST['session_leave_id'],$uid,1);
@@ -211,214 +185,13 @@ if(isset($_POST['leave_session'])){
     redirect_to_home_page("modules/session/index.php?course=".$course_code);
 }
 
-// An consultant can create a session
-if($is_coordinator or $is_consultant){
-
-    $data['action_bar'] = action_bar([
-        [
-            'title' => $langAddSession,
-            'url' => 'new.php?course=' . $course_code,
-            'icon' => 'fa-plus-circle',
-            'button-class' => 'btn-success',
-            'level' => 'primary-label',
-            'show' => ($is_editor || !$is_course_reviewer)
-        ],
-        [
-            'title' => $langReportAttendances,
-            'url' => $urlAppend . "modules/session/consulting_completion.php?course=" . $course_code,
-            'icon' => 'fa-solid fa-users',
-            'button-class' => 'btn-success',
-            'level' => 'primary-label',
-            'show' => !$is_simple_user
-        ],
-        [
-            'title' => $langSummaryScheduledSessions,
-            'url' => 'session_scheduled.php?course=' . $course_code,
-            'icon' => 'fa-solid fa-list',
-            'button-class' => 'btn-success',
-            'level' => 'primary-label'
-        ],
-        [
-            'title' => $langPercentageCompletedConsultingByUser,
-            'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
-            'icon' => 'fa-solid fa-percent',
-            'button-class' => 'btn-success'
-        ],
-        [
-            'title' => $langDelAllSessions,
-            'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&delete_all_sessions=true',
-            'class' => "delete",
-            'confirm' => $langContinueToDelAllSessions,
-            'icon' => 'fa-xmark',
-            'show' => ($is_coordinator && $is_consultant)
-        ],
-    ], false);
-
-    if($is_coordinator){ // is tutor course
-        $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
-                                                                        WHERE course_id = ?d
-                                                                        $sql_remote
-                                                                        $sql_session
-                                                                        $sql_consultant
-                                                                        $sql_users
-                                                                        ORDER BY `start` DESC",$course_id);
-
-        $data['all_consultants'] = Database::get()->queryArray("SELECT DISTINCT user.id,user.givenname,user.surname,mod_session.creator FROM mod_session 
-                                                                LEFT JOIN user ON mod_session.creator=user.id
-                                                                WHERE mod_session.course_id = ?d", $course_id);
-
-        $data['usersInCoordinatorView'] = Database::get()->queryArray("SELECT DISTINCT mod_session_users.participants,user.id,user.givenname,user.surname FROM mod_session_users
-                                                                       LEFT JOIN user ON mod_session_users.participants=user.id
-                                                                       WHERE mod_session_users.is_accepted = ?d
-                                                                       AND mod_session_users.session_id IN (SELECT id FROM mod_session WHERE course_id = ?d)", 1, $course_id);
-
-    }elseif($is_consultant){// is consultant user
-        $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
-                                                                    WHERE course_id = ?d
-                                                                    AND creator = ?d
-                                                                    $sql_remote
-                                                                    $sql_session
-                                                                    $sql_users
-                                                                    ORDER BY `start` DESC",$course_id,$uid);
-
-        $data['usersInConsultantView'] = Database::get()->queryArray("SELECT DISTINCT mod_session_users.participants,user.id,user.givenname,user.surname FROM mod_session_users
-                                                                      LEFT JOIN user ON mod_session_users.participants=user.id
-                                                                      WHERE mod_session_users.is_accepted = ?d
-                                                                      AND mod_session_users.session_id IN (SELECT id FROM mod_session 
-                                                                                                           WHERE creator = ?d
-                                                                                                           AND course_id = ?d)", 1, $uid, $course_id);
-    }
-
-    if(count($data['individuals_group_sessions']) > 0){
-        $participants = array();
-        foreach ($data['individuals_group_sessions'] as $s) {
-
-            $all_participants_ids = session_participants_ids($s->id);
-            foreach($all_participants_ids as $p){
-                if(!$s->type_remote){
-                    // This refers to session completion with completed meeting.
-                    check_session_completion_by_meeting_completed($s->id,$p);
-                }elseif($s->type_remote){
-                    // This refers to session completion with completed tc.
-                    check_session_completion_by_tc_completed($s->id,$p);
-                }
-
-                // This refers to session completion for other activities.
-                check_session_progress($s->id,$p);  // check session completion - call to Game.php
-                check_session_completion_without_activities($s->id);
-                check_session_completion_with_expired_time($s->id);
-            }
-
-            $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $s->id);
-            $per = $has_badge = 0;
-            if ($sql_badge) {
-                $badge_id = $sql_badge->id;
-                $has_badge = $badge_id;
-                $participants = Database::get()->queryArray("SELECT participants FROM mod_session_users WHERE session_id = ?d AND is_accepted = ?d",$s->id,1);
-                if(count($participants) > 0){
-                    foreach($participants as $p){
-                        $per = $per + get_cert_percentage_completion_by_user('badge',$badge_id,$p->participants);
-                    }
-                }
-
-            }
-            $number_percentage = (count($participants) > 0) ? $per/count($participants) : $per;
-            $s->percentage = round($number_percentage);
-            $s->has_badge = $has_badge;
-            $s->consultant = participant_name($s->creator);
-            $s->user_participant = session_participants_ids($s->id);
-        }
-    }
-
-}else{// is simple user
-
-    $data['action_bar'] = action_bar([
-        [
-            'title' => $langPercentageCompletedConsulting,
-            'url' => $urlAppend . "modules/session/completion.php?course=" . $course_code . "&showCompletedConsulting=true",
-            'icon' => 'fa-solid fa-percent',
-            'level' => 'primary-label',
-            'button-class' => 'btn-success'
-        ],
-        [
-            'title' => $langSummaryScheduledSessions,
-            'url' => 'session_scheduled.php?course=' . $course_code,
-            'icon' => 'fa-solid fa-list',
-            'button-class' => 'btn-success',
-            'level' => 'primary-label'
-        ],
-    ], false);
-
-    $data['individuals_group_sessions'] = Database::get()->queryArray("SELECT * FROM mod_session
-                                            WHERE visible = ?d
-                                            AND course_id = ?d
-                                            $sql_remote
-                                            $sql_session
-                                            AND id IN (SELECT session_id FROM mod_session_users
-                                                        WHERE participants = ?d)
-                                            ORDER BY `start` DESC",1,$course_id,$uid);
-
-
-    foreach ($data['individuals_group_sessions'] as $s) {
-        if(!$s->type_remote){
-            // This refers to session completion with completed meeting.
-            check_session_completion_by_meeting_completed($s->id,$uid);
-        }elseif($s->type_remote){
-            // This refers to session completion with completed tc.
-            check_session_completion_by_tc_completed($s->id,$uid);
-        }
-
-        // This refers to session completion for other activities.
-        check_session_progress($s->id,$uid);  // check session completion - call to Game.php
-        check_session_completion_without_activities($s->id);
-        check_session_completion_with_expired_time($s->id);
-    }
-
-    $visible_sessions_id = [];
-    $visible_user_sessions = findUserVisibleSessions($uid, $data['individuals_group_sessions']);
-    foreach ($visible_user_sessions as $d) {
-        $visible_sessions_id[] = $d->id;
-    }
-
-    foreach($data['individuals_group_sessions'] as $cu){
-        $not_shown = false;
-        $vis = $cu->visible;
-        $per = 0;
-        $has_badge = 0;
-        if(participation_in_session($cu->id)){
-            if (!(is_null($cu->start)) and (date('Y-m-d H:i:s') < $cu->start)) {
-                $not_shown = true;
-                $icon = icon('fa-clock fa-md', $langSessionNotStarted);
-                $has_badge = -1;
-            } else if (!in_array($cu->id, $visible_sessions_id)) {
-                $not_shown = true;
-                $icon = icon('fa-minus-circle fa-md', $langSessionNotCompleted);
-                $has_badge = -2;
-            } else {
-                if (in_array($cu->id, $visible_sessions_id)) {
-                    $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND session_id = ?d", $course_id, $cu->id);
-                    if ($sql_badge) {
-                        $badge_id = $sql_badge->id;
-                        $has_badge = $badge_id;
-                        $per = get_cert_percentage_completion('badge', $badge_id);
-                        if ($per == 100) {
-                            $icon = icon('fa-check-circle fa-md', $langInstallEnd);
-                        } else {
-                            $icon = icon('fa-hourglass-2 fa-md', $per . "%");
-                        }
-                    }
-                }
-            }
-        }
-        $cu->display = ($vis == 0 or $not_shown) ? 'not_visible' : '';
-        $cu->icon = $icon ?? '';
-        $cu->percentage = round($per);
-        $cu->has_badge = $has_badge;
-        $cu->consultant = participant_name($cu->creator);
-        $cu->is_accepted_user = Database::get()->querySingle("SELECT is_accepted FROM mod_session_users WHERE session_id = ?d AND participants = ?d",$cu->id,$uid)->is_accepted;
-        $cu->user_participant = session_participants_ids($cu->id);
-    }
-
+// Users mode (coordinator, consultant, simple user)
+if ($is_coordinator) {
+    require_once 'modules/session/index_coordinator.php';
+} elseif ($is_consultant && !$is_coordinator) {
+    require_once 'modules/session/index_consultant.php';
+} else {
+    require_once 'modules/session/index_user.php';
 }
 
 // About the next session or session in progress.
@@ -428,10 +201,15 @@ $data['next_session'] = array();
 $data['current_sessions'] = array();
 
 if($is_consultant && !$is_coordinator){
-    $sql_session = "AND creator = $uid";
+    $sql_session = "AND creator = ?d";
 }elseif($is_simple_user){
     $sql_session = "AND id IN (SELECT session_id FROM mod_session_users 
-                                WHERE participants = $uid AND is_accepted = 1)";
+                                WHERE participants = ?d AND is_accepted = 1)";
+}
+if (!empty($sql_session)) {
+    $query_vars = [$course_id,$uid];
+} else {
+    $query_vars = [$course_id];
 }
 
 if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
@@ -440,7 +218,7 @@ if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
                                                             AND `start` > NOW() 
                                                             AND visible = 1
                                                             $sql_session
-                                                            ORDER BY `start` ASC $limit",$course_id);
+                                                            ORDER BY `start` ASC $limit", $query_vars);
 }elseif($is_coordinator){
     $minDate = Database::get()->querySingle("SELECT MIN(`start`) AS st FROM mod_session 
                                             WHERE course_id = ?d
@@ -454,10 +232,15 @@ if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
     }
 }
 
+if (!empty($sql_session)) {
+    $query_vars = [$course_id,1,$uid];
+} else {
+    $query_vars = [$course_id,1];
+}
 $data['current_sessions'] = $course_sessions = Database::get()->queryArray("SELECT * FROM mod_session
                                                                             WHERE course_id = ?d
                                                                             AND visible = ?d
                                                                             $sql_session
-                                                                            ORDER BY `start` ASC",$course_id,1);
+                                                                            ORDER BY `start` ASC", $query_vars);
                                                                             
 view('modules.session.index', $data);

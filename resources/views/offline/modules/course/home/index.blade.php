@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
 <div class='container module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
@@ -33,9 +33,9 @@
 
                                 <div class='card-body'>
                                     <div id='course-title-wrapper' class='course-info-title d-flex justify-content-between align-items-start'>
-                                        <h3>
+                                        <h2 class='text-heading-h3'>
                                             {{ trans('langDescription') }}
-                                        </h3>
+                                        </h2>
                                         <ul class='course-title-actions clearfix float-end list-inline'>
                                             <li class='access float-end'>
                                                 <a href='javascript:void(0);' style='color: #23527C;'>
@@ -106,9 +106,9 @@
                             <div class='card panelCard card-default px-lg-4 py-lg-3 mt-4'>
                                 <div class='card-body'>
                                     <div class='col-12 d-flex justify-content-between align-items-start'>
-                                        <h3>
+                                        <h2 class='text-heading-h3'>
                                             {{ $course_info->view_type == 'weekly' ? trans('langCourseWeeklyFormat') : trans('langCourseUnits') }}
-                                        </h3>
+                                        </h2>
                                         <a aria-label="{{ trans('langHelp') }}" class='text-start add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langHelp') }}'>
                                             <span class='fa fa-question-circle'></span>
                                         </a>
@@ -167,7 +167,7 @@
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>
-                                        <div class='modal-title' id='myModalLabel'>{{ trans('langCitation') }}</div>
+                                        <h2 class='modal-title' id='myModalLabel'>{{ trans('langCitation') }}</h2>
                                         <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
                                         
                                     </div>
@@ -187,5 +187,5 @@
         </div>
     
 </div>
-</div>
+</main>
 @endsection

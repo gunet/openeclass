@@ -1,7 +1,13 @@
 @push('head_scripts')
     <script type='text/javascript'>
         $(document).ready(function() {
-            $('#select-courses').select2();
+            slimSelectFun (
+                    '#select-courses', 
+                    '{{ js_escape(trans('langSearch')) }}', 
+                    '{{ js_escape(trans('langWelcomeSelect')) }}', 
+                    '{{ js_escape(trans('langSelectAll')) }}', 
+                    '{{ js_escape(trans('langListChoices')) }}'
+                );
             $('#selectAll').click(function(e) {
                 e.preventDefault();
                 var stringVal = [];
@@ -31,7 +37,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
 
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
@@ -126,10 +132,9 @@
                         <div class='form-group mt-4'>
                             <label for='select-courses' class='col-sm-12 control-label-notes'>{{ trans('langUseOfTc') }}</label>
                             <div class="col-sm-12">
-                                <select class='form-select' name='tc_courses[]' multiple class='form-control' id='select-courses'>
+                                <select class='form-control' name='tc_courses[]' multiple id='select-courses'>
                                     {!! $listcourses !!}
                                 </select>
-                                <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
                             </div>
                         </div>
                         @if (isset($server))
@@ -150,7 +155,7 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 
 <script type="text/javascript">
     var chkValidator  = new Validator("serverForm");

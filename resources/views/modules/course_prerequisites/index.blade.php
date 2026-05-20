@@ -9,7 +9,7 @@
 
                 bootbox.confirm({
                     closeButton: false,
-                    title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">{{ js_escape(trans('langConfirmDelete')) }}</div>",
+                    title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h2 class=\"modal-title-default text-center mb-0\">{{ js_escape(trans('langConfirmDelete')) }}</h2>",
                     message: "<p class=\"text-center\">{{ js_escape(trans('langDelWarnCoursePrerequisite')) }}</p>",
                     buttons: {
                         cancel: {
@@ -34,13 +34,10 @@
 @endpush
 
 @section('content')
-    <div class="col-12 main-section">
         <div class='{{ $container }} module-container py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+                <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+                <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                     <div class="row">
 
@@ -94,8 +91,7 @@
 
                     </div>
 
-                </div>
+                </main>
             </div>
         </div>
-    </div>
 @endsection

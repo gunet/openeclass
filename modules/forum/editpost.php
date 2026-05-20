@@ -40,7 +40,7 @@ $head_content .= "
 
                     bootbox.confirm({ 
                         closeButton: false,
-                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
+                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h2 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h2>',
                         message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
                         buttons: {
                             cancel: {
@@ -176,7 +176,7 @@ if (isset($_POST['submit'])) {
                 <div class='form-group mt-4'>
                     <label for='message' class='col-sm-12 control-label-notes'>$langBodyMessage</label>
                     <div class='col-sm-12'>
-                        " . rich_text_editor('message', 10, 50, $message) . "
+                        " . rich_text_editor('message', 10, 50, $message, options: array('id' => 'message')) . "
                     </div>
                 </div>
                 <div class='form-group mt-5'>

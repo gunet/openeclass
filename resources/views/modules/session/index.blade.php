@@ -72,7 +72,21 @@
                             "sNext":     '&rsaquo;',
                             "sLast":     '&raquo;'
                         }
-                }
+                },
+                'tabIndex': -1,
+                initComplete: function() {
+                    $('#session-indexes-tb .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                },
+            });
+
+            $('#session-indexes-tb').on('order.dt', function() {
+                $('#session-indexes-tb thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
 
             choose_user_consultant();
@@ -91,13 +105,10 @@
 @section('content')
 
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
+<div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -168,7 +179,7 @@
                                     <option value='one' {!! $sessionType=='one' ? 'selected' : '' !!}>{{ trans('langIndividualS') }}</option>
                                     <option value='group' {!! $sessionType=='group' ? 'selected' : '' !!}>{{ trans('langGroupS') }}</option>
                                 </select>
-                                <button class='w-75 mt-0 gap-1' type='submit'>{{ trans('langSearch') }}</button>
+                                <button class='w-75 mt-0 gap-1' type='submit' name='submit_search'>{{ trans('langSearch') }}</button>
                             </form>
                         </div>
                     </div>
@@ -367,12 +378,11 @@
                     </div>
 
                 </div>
-            </div>
+            </main>
 
         </div>
 
     </div>
-</div>
 
 <div class='modal fade' id='RegistrationInSession' tabindex='-1' aria-labelledby='RegistrationInSessionLabel' aria-hidden='true'>
     <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}">
@@ -381,7 +391,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-solid fa-comments fa-xl Neutral-500-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="RegistrationInSessionLabel">{!! trans('langParticipate') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="RegistrationInSessionLabel">{!! trans('langParticipate') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-start'>
@@ -407,7 +417,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="SessionDeleteLabel">{!! trans('langDelete') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="SessionDeleteLabel">{!! trans('langDelete') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-center'>
@@ -432,7 +442,7 @@
                 <div class='modal-header'>
                     <div class='modal-title'>
                         <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
-                        <div class="modal-title-default text-center mb-0 mt-2" id="SessionLeaveLabel">{!! trans('langLeaveSession') !!}</div>
+                        <h2 class="modal-title-default text-center mb-0 mt-2" id="SessionLeaveLabel">{!! trans('langLeaveSession') !!}</h2>
                     </div>
                 </div>
                 <div class='modal-body text-center'>

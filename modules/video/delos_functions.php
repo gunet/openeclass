@@ -31,14 +31,6 @@ define('DELOSTOKENEXPIRE', 60);
 
 $opendelosapp = ExtAppManager::getApp(strtolower(OpenDelosApp::NAME));
 
-function base64url_encode($data) {
-    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
-}
-
-function base64url_decode($data) {
-    return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
-}
-
 function getDelosExtEnabled() {
     global $opendelosapp;
     return $opendelosapp->isEnabled();
@@ -226,16 +218,6 @@ function getDelosSignedTokenForVideo($rid) {
     return $signedToken;
 }
 
-function isCASUser() {
-    global $uid;
-    $ret = false;
-    $q = Database::get()->querySingle("SELECT password FROM user WHERE id = ?d", $uid);
-    if ($q && $q->password == 'cas') {
-        $ret = true;
-    }
-    return $ret;
-}
-
 function requestDelosJSON() {
     global $course_code;
     $jsonPublicObj = null;
@@ -277,9 +259,10 @@ function requestDelosJSON() {
     return array($jsonPublicObj, $jsonPrivateObj, $checkAuth);
 }
 
-function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
+function storeResources($jsonPublicObj, $jsonPrivateObj, $submittedResources) {
+
     global $course_id;
-    $submittedResources = $_POST['delosResources'];
+
     $submittedCategory = $_POST['selectcategory'];
     $searchEngine = SearchEngineFactory::create();
 
@@ -358,13 +341,4 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
             }
         }
     }
-}
-
-function getCurrentVideoLinks() {
-    global $course_id;
-    $current = array();
-    Database::get()->queryFunc("SELECT url, date FROM videolink WHERE course_id = ?d", function($vl) use (&$current) {
-        $current[$vl->url] = $vl->date;
-    }, $course_id);
-    return $current;
 }

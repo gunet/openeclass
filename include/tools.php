@@ -56,6 +56,7 @@ function getToolsArray($cat) {
                                           " . MODULE_ID_ATTENDANCE . ",
                                           " . MODULE_ID_GRADEBOOK . ",
                                           " . MODULE_ID_REQUEST . ",
+                                          " . MODULE_ID_STICKY_NOTES . ",
                                           " . MODULE_ID_PROGRESS . ",
                                           " . MODULE_ID_LP . ",
                                           " . MODULE_ID_TC . ") AND
@@ -199,8 +200,8 @@ function lessonToolsMenu(bool $rich=true): array
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {
-                        $sideMenuText[] = '<b class=>' . q($modules[$mid]['title']) .
-                            " $mail_status<span class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_msgs</span></b>";
+                        $sideMenuText[] = '<b>' . q($modules[$mid]['title']) .
+                            " $mail_status<span tabindex='0' class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_msgs</span></b>";
 
                     } else {
                         $sideMenuText[] = q($modules[$mid]['title']) . ' ' . $mail_status;
@@ -209,8 +210,8 @@ function lessonToolsMenu(bool $rich=true): array
                     $sideMenuText[] = q($modules[$mid]['title']) . ' ' . $mail_status;
                 }
             } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
-                $sideMenuText[] = '<b class=>' . q($modules[$mid]['title']) .
-                    "<span class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_docs</span></b>";
+                $sideMenuText[] = '<b>' . q($modules[$mid]['title']) .
+                    "<span tabindex='0' class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_docs</span></b>";
             } else {
                 $sideMenuText[] = q($modules[$mid]['title']);
             }

@@ -81,7 +81,7 @@ $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend
 foreach ($app->getParams() as $param) {
 
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
-        $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
+        $checked = $param->value() == 1 ? "value='1' checked" : "value='0'";
         $boolean_field .= "<div class='form-group mb-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
         $boolean_field .= "<label class='label-container' aria-label='$langSelect'><input type='checkbox' name='" . $param->name() . "' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";

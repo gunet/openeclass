@@ -41,16 +41,21 @@ load_js('datatables');
 $sql = "";
 $data['current_time'] = $current_time = date('Y-m-d H:i:s', strtotime('now'));
 if($is_consultant && !$is_coordinator){
-    $sql = "AND creator = $uid";
+    $sql = "AND creator = ?d";
 }elseif($is_simple_user){
-    $sql = "AND id IN (SELECT session_id FROM mod_session_users WHERE participants = $uid AND is_accepted = 1)";
+    $sql = "AND id IN (SELECT session_id FROM mod_session_users WHERE participants = ?d AND is_accepted = 1)";
+}
+if (!empty($sql)) {
+    $query_vars = [$course_id, 1, $uid];
+} else {
+    $query_vars = [$course_id, 1];
 }
 
 $sessions = Database::get()->queryArray("SELECT * FROM mod_session 
                                     WHERE course_id = ?d
                                     AND visible = ?d
                                     $sql
-                                    ORDER BY start ASC", $course_id, 1);
+                                    ORDER BY start ASC", $query_vars);
 
 if($is_simple_user && count($sessions) > 0){
     $visible_sids = array();

@@ -1,13 +1,10 @@
 @extends('layouts.default')
 
 @section('content')
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+    <div class='{{ $container }} module-container py-lg-0'>
+        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                     <div class="row">
 
@@ -44,8 +41,9 @@
                                             </div>
                                         </div>
                                         <div class='form-group mt-4'>
-                                            <div class='col-12 d-flex justify-content-start align-items-start'>
+                                            <div class='col-12 d-flex justify-content-end align-items-start gap-2'>
                                                 <button class='btn submitAdminBtn' type='submit'>{{ trans('langUpload') }}</button>
+                                                <a class='btn cancelAdminBtn' href='index.php?course={{ $course_code }}'>{{ trans('langCancel') }}</a>
                                             </div>
                                         </div>
                                     </form>
@@ -57,10 +55,8 @@
 
                         </div>
                     </div>
-                </div>
-            </div>
-
+            </main>
         </div>
-
     </div>
+
 @endsection

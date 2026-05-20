@@ -60,13 +60,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
-        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -81,6 +78,13 @@
                         </div>
                     </div>
 
+                    {{--Divider title--}}
+                    @php
+                        if (isset($_GET['divider'])) {
+                            $toolName = $pageName = trans('langAdd') ." ". trans('langInsertDivider');
+                        }
+                    @endphp
+
                     @include('layouts.partials.legend_view')
 
                     @include('layouts.partials.show_alert')
@@ -94,6 +98,12 @@
                                         <input type='hidden' name='unit_id' value='{{ $unitId }}'>
                                     @endif
 
+                                        @php
+                                            if (isset($_GET['divider'])) {
+                                                echo "<input type='hidden' id='divider' name='divider' value='1'>";
+                                            }
+                                        @endphp
+
                                     <div class='row form-group'>
                                         <label for='unitTitle' class='col-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-12'>
@@ -101,14 +111,14 @@
                                         </div>
                                     </div>
 
-                                    <div class='row form-group mt-4'>
+                                    <div class='row form-group mt-4 @if(isset($_GET['divider'])) d-none @endif'>
                                         <label for='unitdescr' class='col-12 control-label-notes'>{{ trans('langUnitDescr') }}</label>
                                         <div class='col-12'>
                                             {!! $descriptionEditor !!}
                                         </div>
                                     </div>
 
-                                    <div class='row form-group mt-4'>
+                                    <div class='row form-group mt-4 @if(isset($_GET['divider'])) d-none @endif'>
                                         <div class='col-12 control-label-notes mb-1'>{{ trans('langDuration') }}
                                             <span class='help-block'>{{ trans('langOptional') }}:</span>
                                         </div>
@@ -131,7 +141,7 @@
                                         </div>
                                     </div>
 
-                                    <div class='row form-group mt-4'>
+                                    <div class='row form-group mt-4 @if(isset($_GET['divider'])) d-none @endif'>
                                         <div class='control-label-notes mb-1'>{{ trans('langWorkAssignTo') }}</div>
                                         <div class='col-12'>
                                             <div class='radio'>
@@ -154,7 +164,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class='row form-group mt-4'>
+                                    <div class='row form-group mt-4 @if(isset($_GET['divider'])) d-none @endif'>
                                         <div class='col-12'>
                                             <div class='table-responsive mt-0'>
                                                 <table id='assignees_tbl' class='table-default @if (!in_array($unitAssignToSpecific, [1, 2])) hide @endif'>
@@ -190,7 +200,9 @@
 
                                     <div class="mt-4"></div>
 
-                                    {!! $tagInput !!}
+                                    @if(!isset($_GET['divider']))
+                                        {!! $tagInput !!}
+                                    @endif
 
                                     <div class='form-group mt-5'>
                                         <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
@@ -207,9 +219,8 @@
                     </div>
 
                 </div>
-            </div>
+            </main>
         </div>
 
     </div>
-</div>
 @endsection

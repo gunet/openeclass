@@ -36,7 +36,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
 
-// Get success message from current course language
+// Get a success message from the current course language
 if (Session::has('course-modify-success')) {
     Session::flash('message', $langModifDone);
     Session::flash('alert-class', 'alert-success');
@@ -74,6 +74,17 @@ if ($is_power_user or $is_admin or ($is_departmentmanage_user and $atleastone)) 
     $allow_clone = true;
 }
 
+$tenant = getCurrentTenant();
+
+if ($tenant) {
+    $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+    $allow_clone = $allow_clone || getTenantOption(
+        $tenantOptions,
+        'allow_teacher_clone_course'
+    );
+} else {
+    $allow_clone = $allow_clone || get_config('allow_teacher_clone_course');
+}
 
 $toolName = $langCourseInfo;
 
@@ -228,8 +239,8 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['f_radio'])) {
                 setting_set(SETTING_COURSE_FORUM_NOTIFICATIONS, $_POST['f_radio'], $course_id);
             }
-            if (isset($_POST['enable_docs_public_write'])) {
-                setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['enable_docs_public_write'], $course_id);
+            if (isset($_POST['docs_public_write'])) {
+                setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['docs_public_write']? '1': '0', $course_id);
             }
             if (isset($_POST['enable_access_users_list'])) {
                 setting_set(SETTING_USERS_LIST_ACCESS, $_POST['enable_access_users_list'], $course_id);
@@ -243,22 +254,22 @@ if (isset($_POST['submit'])) {
                 setting_set(SETTING_FACULTY_USERS_REGISTRATION, 0, $course_id);
             }
             if (isset($_POST['choose_print_header_from_list'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_HEADER, $_POST['choose_print_header_from_list'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_HEADER, $_POST['choose_print_header_from_list'], $course_id);
             }
             if (isset($_POST['choose_print_footer_from_list'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER, $_POST['choose_print_footer_from_list'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_FOOTER, $_POST['choose_print_footer_from_list'], $course_id);
             }
             if (isset($_POST['header_image_alignment'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_HEADER_ALIGNMENT, $_POST['header_image_alignment'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $_POST['header_image_alignment'], $course_id);
             }
             if (isset($_POST['footer_image_alignment'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $_POST['footer_image_alignment'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $_POST['footer_image_alignment'], $course_id);
             }
             if (isset($_POST['header_image_width'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_HEADER_WIDTH, $_POST['header_image_width'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $_POST['header_image_width'], $course_id);
             }
             if (isset($_POST['footer_image_width'])) {
-                setting_set(SETTING_COUSE_IMAGE_PRINT_FOOTER_WIDTH, $_POST['footer_image_width'], $course_id);
+                setting_set(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $_POST['footer_image_width'], $course_id);
             }
 
             // Course settings modified, will get a success message after redirect in current course language
@@ -283,6 +294,16 @@ if (isset($_POST['submit'])) {
 
     warnCourseInvalidDepartment();
 
+    // check if the course has imported course material
+    $q_imp = Database::get()->querySingle("SELECT * from course_import WHERE course_id = ?d", $course_id);
+    if ($q_imp) {
+        $course_has_import = true;
+    } else {
+        $course_has_import = false;
+    }
+
+    $data['course_has_import'] = $course_has_import;
+
     $data['action_bar'] = action_bar([
         ['title' => $langSyllabus,
             'url' => "../course_description/index.php?course=$course_code&" . generate_csrf_token_link_parameter(),
@@ -296,14 +317,14 @@ if (isset($_POST['submit'])) {
         ['title' => $langCloneCourse,
             'url' => "clone_course.php?course=$course_code",
             'icon' => 'fa-archive',
-            'show' => get_config('allow_teacher_clone_course') || $allow_clone],
+            'show' => (get_config('allow_teacher_clone_course') || $allow_clone)],
         ['title' => $langImportCourse,
             'url' => "import_course.php?course=$course_code&fetch=yes",
             'icon' => 'fa-file-import',
             'level' => 'primary-label',
             'modal-class' => 'importCourse',
-            'button-class' => 'btn-success'
-        ],
+            'button-class' => 'btn-success',
+            'show' => ($is_admin || get_config('allow_teacher_import_course') == true)],        
         ['title' => $langCourseMetadata,
             'url' => "../course_metadata/index.php?course=$course_code",
             'icon' => 'fa-file-text',

@@ -30,7 +30,8 @@ if (!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c') { // course statistics
     $stats_type = 'course';
 } elseif(isset($_REQUEST['t'])) { // admin statistics
     if ($_REQUEST['t'] == 'a') {
-        $require_admin = true;
+        $require_departmentmanage_user = true;
+        $require_login = true;
         $stats_type = 'admin';
         $helpTopic = 'course_stats';
     } else if ($_REQUEST['t'] == 'u') { // user statistics
@@ -48,9 +49,9 @@ require_once 'modules/usage/usage.lib.php';
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.7.20/c3.css' />";
 load_js('d3/d3.min.js');
-load_js('c3-0.4.10/c3.min.js');
+load_js('c3-0.7.20/c3.min.js');
 load_js('bootstrap-datepicker');
 
 $head_content .= "
@@ -69,7 +70,7 @@ $head_content .= "
     var views = {plots:{class: 'fa fa-bar-chart', title: '" . js_escape($langCharts) . "'}, list:{class: 'fa fa-list', title: '" . js_escape($langDetails) . "'}};
     var langNoResult = '" . js_escape($langNoResult) . "';
     var langDisplay ='" . js_escape($langDisplay) . "';
-    var langResults = '" . js_escape($langResults2) . "';    
+    var langResults = '" . js_escape($langResults2) . "';
     var langTotalResults = '" . js_escape($langTotalResults) . "';
     var langDisplayed= '" . js_escape($langDisplayed) . "';
     var langTill = '" . js_escape($langTill) . "';
@@ -84,7 +85,7 @@ $head_content .= "
     var langFavouriteModule = '" . js_escape($langFavourite) . "';
     var langFavouriteCourse = '" . js_escape($langFavouriteCourse) . "';
     var langLoginUser = '" . js_escape($langLoginUser) . "';
-    var langHours = '" . js_escape($langHours) . "';    
+    var langHours = '" . js_escape($langHours) . "';
 </script>";
 load_js('datatables');
 load_js('statistics.js');
@@ -108,7 +109,7 @@ $toolName = $langPortfolio;
 $pageName = $langUsage;
 
 if (isset($_REQUEST['u'])) {
-    if (!$is_admin) { // security check
+    if (!$is_admin && !$is_departmentmanage_user) { // security check
         redirect_to_home_page();
     } else {
         $uid_stats = intval($_REQUEST['u']);
@@ -152,7 +153,7 @@ if (isset($_GET['per_course_dur'])) {
         } else {
             require_once 'modules/usage/course.php';
         }
-    } elseif($stats_type == 'admin' && $is_admin) { // admin statistics
+    } elseif($stats_type == 'admin' ) { // admin statistics
         $toolName = $langAdmin;
         if (isset($_REQUEST['g_stats'])) {
             $pageName = $langCharts;

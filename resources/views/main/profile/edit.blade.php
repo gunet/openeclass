@@ -13,7 +13,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -34,10 +34,10 @@
                                 <label for='givenname_form' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                 @if ($allow_name_change)
-                                    <input type='text' class='form-control' name='givenname_form' id='givenname_form' value='{{ $givenname_form }}'>
+                                    <input type='text' class='form-control' name='givenname_form' id='givenname_form' value='{{ $givenname_form }}' required>
                                 @else
                                     <p class='form-control-static'>{{ $givenname_form }}</p>
-                                    <input type='hidden' name='givenname_form' value='{{ $givenname_form }}' id='givenname_form'>
+                                    <input type='hidden' name='givenname_form' value='{{ $givenname_form }}' id='givenname_form' required>
                                 @endif
                                 </div>
                             </div>
@@ -46,10 +46,10 @@
                                 <label for='surname_form' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                 @if ($allow_name_change)
-                                    <input type='text' class='form-control' name='surname_form' id='surname_form' value='{{ $surname_form }}'>
+                                    <input type='text' class='form-control' name='surname_form' id='surname_form' value='{{ $surname_form }}' required>
                                 @else
                                     <p class='form-control-static'>{{ $surname_form }}</p>
-                                    <input type='hidden' name='surname_form' value='{{ $surname_form }}' id='surname_form'>
+                                    <input type='hidden' name='surname_form' value='{{ $surname_form }}' id='surname_form' required>
                                 @endif
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                                 <label for='username_form' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 <div class='col-sm-12'>
                                 @if ($allow_username_change)
-                                    <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}'>
+                                    <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}' required>
                                 @else
                                     <p class='form-control-static'>{{ $username_form }} <strong>[{{ $auth_text }}]</strong></p>
                                 @endif
@@ -106,15 +106,13 @@
                             <div class='form-group mt-4'>
                                 <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langEmailFromCourses') }}</div>
                                 <div class='col-sm-12'>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' name='subscribe' value='yes' {{ $selectedyes }}> {{ trans('langYes') }}
-                                        </label>
+                                    <div class='radio d-flex justify-content-start align-items-center'>
+                                        <input id='sub_yes' type='radio' name='subscribe' value='yes' {{ $selectedyes }}> 
+                                        <label class='mb-1' for='sub_yes'>{{ trans('langYes') }}</label>
                                     </div>
-                                    <div class='radio'>
-                                        <label>
-                                            <input type='radio' name='subscribe' value='no' {{ $selectedno }}> {{ trans('langNo') }}
-                                        </label>
+                                    <div class='radio d-flex justify-content-start align-items-center mt-1'>
+                                        <input id='sub_no' type='radio' name='subscribe' value='no' {{ $selectedno }}> 
+                                        <label class='mb-0' for='sub_no'>{{ trans('langNo') }}</label>
                                     </div>
                                 </div>
                             </div>
@@ -136,7 +134,7 @@
 
                             <div class='form-group mt-4'>
                                 <label for='selected_lang' class='col-sm-12 control-label-notes mb-2'>{{ trans('langLanguage') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
-                                <div class='col-sm-12'>{!! lang_select_options('userLanguage', "class='form-control' id='selected_lang'") !!}</div>
+                                {!! lang_select_options('userLanguage', "class='form-control' id='selected_lang'") !!}
                             </div>
 
                             <div class='form-group mt-4'>
@@ -152,7 +150,7 @@
 
                             <div class='form-group mt-4'>
                                 <label for='desc_form' class='col-sm-12 control-label-notes mb-2'>{{ trans('langProfileAboutMe') }}</label>
-                                <div class='col-sm-12'>{!! $info_text_area !!}</div>
+                                {!! $info_text_area !!}
                             </div>
 
                             <div class='form-group mt-4'>
@@ -162,22 +160,22 @@
                                 <div class='help-block mb-2'>(*) {{ trans('langShowSettingsInfo') }}</div>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
-                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                            <input type='checkbox' name='email_public' value='1' {!! $email_public_selected  !!}>
+                                        <label class='label-container' aria-label="{{ trans('langViewShow') }}{{ trans('langEmail') }}" for="email_public_id">
+                                            <input id="email_public_id" type='checkbox' name='email_public' value='1' {!! $email_public_selected  !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langEmail') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
-                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                            <input type='checkbox' name='phone_public' value='1' {!! $phone_public_selected !!}>
+                                        <label class='label-container' aria-label="{{ trans('langViewShow') }}{{ trans('langPhone') }}" for="phone_public_id">
+                                            <input id='phone_public_id' type='checkbox' name='phone_public' value='1' {!! $phone_public_selected !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langPhone') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
-                                        <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                            <input type='checkbox' name='pic_public' value='1' {!! $pic_public_selected !!}>
+                                        <label class='label-container' aria-label="{{ trans('langViewShow') }}{{ trans('langProfileImage') }}" for='pic_public_id'>
+                                            <input id='pic_public_id' type='checkbox' name='pic_public' value='1' {!! $pic_public_selected !!}>
                                             <span class='checkmark'></span>
                                             {{ trans('langProfileImage') }}
                                         </label>
@@ -227,5 +225,5 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 @endsection

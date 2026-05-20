@@ -1,34 +1,34 @@
 
 /****************************************** rich-text-editor bg-tools ******************************************/
 
-.mce-tinymce.mce-container.mce-panel{
+.tox-tinymce.tox-container.tox-panel{
     /* box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.13); */
     /* box-shadow: 0px 0px 3px 1px rgb(0 0 0 / 15%); */
     border: solid 1px #e8e8e8;
     margin-top: 5px;
 }
 
-.mce-toolbar-grp.mce-container.mce-panel.mce-last{
+.tox-toolbar-grp.tox-container.tox-panel.tox-last{
     border: 0px !important;
 }
-.mce-container-body.mce-stack-layout{
-    border: 0px !important;
-}
-
-.mce-container.mce-menubar.mce-toolbar.mce-first, .mce-toolbar-grp.mce-container.mce-panel.mce-last{
+.tox-container-body.tox-stack-layout{
     border: 0px !important;
 }
 
+.tox-container.tox-menubar.tox-toolbar.tox-first, .tox-toolbar-grp.tox-container.tox-panel.tox-last{
+    border: 0px !important;
+}
 
-.mce-edit-area.mce-container.mce-panel.mce-stack-layout-item{
+
+.tox-edit-area.tox-container.tox-panel.tox-stack-layout-item{
     border: 0px !important
 }
 
 
-.mce-statusbar.mce-container.mce-panel.mce-stack-layout-item.mce-last{
+.tox-statusbar.tox-container.tox-panel.tox-stack-layout-item.tox-last{
     border: 0px !important;
 }
 
-.mce-container, .mce-container *, .mce-widget, .mce-widget *, .mce-reset {
+.tox-container, .tox-container *, .tox-widget, .tox-widget *, .tox-reset {
     color: #333;
 }

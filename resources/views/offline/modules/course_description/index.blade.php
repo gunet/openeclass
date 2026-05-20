@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
 <div class='container module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
@@ -29,7 +29,7 @@
                         @foreach ($course_description as $data)
                             <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>{!! q($data->title) !!}</h3>
+                                    <h2 class='text-heading-h3'>{!! q($data->title) !!}</h2>
                                 </div>
                                 <div class='card-body'>
                                     {!! standard_text_escape($data->comments) !!}
@@ -44,6 +44,6 @@
         </div>
     
 </div>
-</div>
+</main>
 
 @endsection

@@ -62,16 +62,19 @@ if (isset($_GET['mid'])) {
                   'icon' => 'fa-reply',
                   'button-class' => 'back_index btn-secondary',
                   'temporary-button-class' => '',
+                  'link-attrs' => "aria-label='$langBack' role='button'",
                   'level' => 'primary'),
             array('title' => $langReply,
                   'icon' => 'fa-reply-all',
                   'button-class' => 'btn-reply btn-secondary',
                   'temporary-button-class' => 'btn-reply',
+                  'link-attrs' => "aria-label='$langReply' role='button'",
                   'level' => 'primary-label'),
             array('title' => $langForward,
                   'icon' => 'fa-forward',
                   'button-class' => 'btn-forward btn-secondary',
                   'temporary-button-class' => 'btn-forward',
+                  'link-attrs' => "aria-label='$langForward' role='button'",
                   'level' => 'primary-label'),
             array('title' => $langDelete,
                   'url' => 'javascript:void(0)',
@@ -93,7 +96,7 @@ if (isset($_GET['mid'])) {
                             <div class='col'>
                                 <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>$langMessageInfo</h3>
+                                        <h2 class='text-heading-h3'>$langMessageInfo</h2>
                                     </div>
                                     <div class='card-body'>
                                         <ul class='list-group list-group-flush'>
@@ -159,7 +162,7 @@ if (isset($_GET['mid'])) {
                             <div class='col'>
                                 <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>$langMessageContent</h3>
+                                        <h2 class='text-heading-h3'>$langMessageContent</h2>
                                     </div>
                                     <div class='card-body'>
                                         
@@ -224,7 +227,7 @@ if (isset($_GET['mid'])) {
                 $out .= generate_csrf_token_form_field() . "
                             <fieldset>
                                     <legend class='mb-0' aria-label='$langForm'></legend>
-                                    <div class='action-bar-title text-center'>$langReply</div>
+                                    <div class='text-heading-h3 action-bar-title text-center'>$langReply</div>
 
                                     <div class='form-group mt-4'>
                                         <label for='senderName' class='col-sm-12 control-label-notes'>$langSender</label>
@@ -238,14 +241,14 @@ if (isset($_GET['mid'])) {
                                     <div class='form-group mt-4'>
                                         <label for='select-recipients' class='col-sm-12 control-label-notes'>$langSendTo <span class='asterisk Accent-200-cl'>(*)</span></label>
                                         <div class='col-sm-12'>
-                                            <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
+                                            <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
 
                                         // mail sender
                                         $out .= "<option value='$msg->author_id' selected>". q(uid_to_name($msg->author_id)) . "</option>";
 
                                         addRecipientOptions();
 
-                                        $out .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                                        $out .= "</select>
                                         </div>
                                     </div>";
 
@@ -262,7 +265,7 @@ if (isset($_GET['mid'])) {
                                     <div class='form-group mt-4'>
                                         <label for='body' class='col-sm-12 control-label-notes'>$langMessage</label>
                                         <div class='col-sm-12'>
-                                            ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
+                                            ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>", options: array('id' => 'body'))."
                                         </div>
                                     </div>";
 
@@ -282,8 +285,8 @@ if (isset($_GET['mid'])) {
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-10 col-sm-offset-2'>
                                                 <div class='checkbox'>
-                                                    <label class='label-container' aria-label='$langSelect'>
-                                                        <input type='checkbox' name='mailing' value='1' checked>
+                                                    <label class='label-container' for='mailing_id'>
+                                                        <input id='mailing_id' type='checkbox' name='mailing' value='1' checked>
                                                         <span class='checkmark'></span>
                                                         " . q($langMailToUsers) . "
                                                     </label>
@@ -358,7 +361,7 @@ if (isset($_GET['mid'])) {
 
                     <fieldset>
                         <legend class='mb-0' aria-label='$langForm'></legend>
-                        <div class='action-bar-title text-center'>$langForward</div>
+                        <h2 class='text-heading-h3 action-bar-title text-center'>$langForward</h2>
 
                         <div class='form-group mt-4'>
                             <label for='forward_senderName' class='col-sm-12 control-label-notes'>$langSender</label>
@@ -370,11 +373,11 @@ if (isset($_GET['mid'])) {
                         <div class='form-group mt-4'>
                             <label for='select-recipients-forward' class='col-sm-12 control-label-notes'>$langSendTo</label>
                             <div class='col-sm-12'>
-                                <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients-forward'>";
+                                <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients-forward'>";
 
                         addRecipientOptions();
 
-                        $out .= "</select><a href='#' id='removeAllForward'>$langJQUncheckAll</a>
+                        $out .= "</select>
                             </div>
                         </div>
 
@@ -387,9 +390,9 @@ if (isset($_GET['mid'])) {
                         </div>
 
                         <div class='form-group mt-4'>
-                            <div class='col-sm-12 control-label-notes'>$langMessage</div>
+                            <label for='body' class='col-sm-12 control-label-notes'>$langMessage</label>
                             <div class='col-sm-12'>
-                                ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>")."
+                                ".rich_text_editor('body', 4, 20, $msg->body . "<hr align='left' width='70%'><br><br>", options: array('id' => 'body'))."
                             </div>
                         </div>";
 
@@ -426,8 +429,8 @@ if (isset($_GET['mid'])) {
                         <div class='form-group mt-4'>
                             <div class='col-sm-10 col-sm-offset-2'>
                                     <div class='checkbox'>
-                                        <label class='label-container' aria-label='$langSelect'>
-                                            <input type='checkbox' name='mailing' value='1' checked>
+                                        <label class='label-container' for='id_mailing'>
+                                            <input id='id_mailing' type='checkbox' name='mailing' value='1' checked>
                                             <span class='checkmark'></span>
                                             " . q($langMailToUsers) . "
                                         </label>
@@ -493,11 +496,13 @@ if (isset($_GET['mid'])) {
                             $('html, body').animate({
                                 scrollTop: $('#replyBox').offset().top
                             }, 500);
-                            $('#select-recipients').select2({
-                                placeholder: '".js_escape($langSearch)."',
-                                multiple: true,
-                                cache: true
-                            });
+                            slimSelectFun (
+                                '#select-recipients', 
+                                '" . js_escape(trans('langSearch')) . "', 
+                                '" . js_escape(trans('langWelcomeSelect')) . "', 
+                                '" . js_escape(trans('langSelectAll')) . "', 
+                                '" . js_escape(trans('langListChoices')) . "'
+                            );
                             return false;
                         });
                         $('.btn-forward').on('click', function(e) {
@@ -509,11 +514,13 @@ if (isset($_GET['mid'])) {
                             $('html, body').animate({
                                 scrollTop: $('#forwardBox').offset().top
                             }, 500);
-                            $('#select-recipients-forward').select2({
-                                placeholder: '".js_escape($langSearch)."',
-                                multiple: true,
-                                cache: true
-                            });
+                            slimSelectFun (
+                                '#select-recipients-forward', 
+                                '" . js_escape(trans('langSearch')) . "', 
+                                '" . js_escape(trans('langWelcomeSelect')) . "', 
+                                '" . js_escape(trans('langSelectAll')) . "', 
+                                '" . js_escape(trans('langListChoices')) . "'
+                            );
                             return false;
                         });
                         $('#cancelReply').on('click', function(e){
@@ -634,7 +641,7 @@ if (isset($_GET['mid'])) {
     }
     $out .= "         <th>$langSender</th>
                       <th style='width:15%;'>$langDate</th>
-                      <th style='width:10%;' class='option-btn-cell' aria-label='$langSettingSelect'><i class='fa fa-cogs'></i></th>
+                      <th style='width:10%;' class='option-btn-cell' aria-label='$langDelete'><span class='visually-hidden'>$langDelete</span></th>
                     </tr>
                 </thead>
                 <tbody>

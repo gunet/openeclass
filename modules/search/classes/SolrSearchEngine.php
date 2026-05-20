@@ -201,14 +201,28 @@ class SolrSearchEngine implements SearchEngineInterface {
             return [];
         }
 
-        list($core, $solrUrl) = $this->constructSolrCoreStatusUrl();
+        list($collectionName, $solrUrl) = $this->constructSolrCoreStatusUrl();
         list($response, $code) = CurlUtil::httpGetRequest($solrUrl);
         if ($code !== 200) {
             return [];
         }
 
         $resp = json_decode($response, true);
-        return $resp['status'][$core]['index'] ?? [];
+        $statuses = $resp['status'] ?? [];
+
+        // Solr standalone mode: core name is the same as the collection name, so we can return directly
+        if (isset($statuses[$collectionName]['index'])) {
+            return $statuses[$collectionName]['index'];
+        }
+
+        // Solr cloud mode: we have to find the core json node whose cloud.collection node matches and then return
+        foreach ($statuses as $core) {
+            if (($core['cloud']['collection'] ?? null) === $collectionName) {
+                return $core['index'] ?? [];
+            }
+        }
+
+        return [];
     }
 
     private function constructSolrUrl(string $action, array $params): string {
@@ -226,13 +240,10 @@ class SolrSearchEngine implements SearchEngineInterface {
             $solrUrl .= '/';
         }
         $parts = explode('/', trim($solrUrl, '/'));
-        $core = array_pop($parts);
+        $collectionName = array_pop($parts);
         $baseSolrUrl = implode('/', $parts) . '/';
-        $params = [
-            'action' => 'STATUS',
-            'core' => $core
-        ];
-        return [$core, $baseSolrUrl . 'admin/cores' . '?' . http_build_query($params)];
+        $params = ['action' => 'STATUS'];
+        return [$collectionName, $baseSolrUrl . 'admin/cores' . '?' . http_build_query($params)];
     }
 
 //    private function generateSampleDocuments(int $count = 10, int $courseId): array {

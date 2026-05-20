@@ -352,12 +352,12 @@ function new_edit_assignment($assignment_id = null) {
  * @brief display user assignment
  * @param type $id
  */
-function display_student_assignment($id, $on_behalf_of = false) {
+function display_student_assignment($id, $on_behalf_of = false): void
+{
 
     global $uid, $urlAppend, $langNoneWorkGroupNoSubmission,
            $course_id, $course_code, $unit, $langAssignmentWillBeActive, $langOnBehalfOf,
-           $langWrongPassword, $langIPHasNoAccess, $langNoPeerReview,
-           $langNoneWorkUserNoSubmission, $langGroupSpaceLink, $langPendingPeerSubmissions,
+           $langWrongPassword, $langIPHasNoAccess, $langNoneWorkUserNoSubmission, $langGroupSpaceLink,
            $is_editor, $langGroupAssignmentPublish, $langGroupAssignmentNoGroups,
            $langThisIsGroupAssignment;
 
@@ -370,6 +370,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $cdate = date('Y-m-d H:i:s');
     $is_group_assignment = is_group_assignment($id);
     $user_group_info = user_group_info($uid, $course_id);
+
     if (!empty($user_group_info)) {
         $gids_sql_ready = implode(',',array_keys($user_group_info));
     } else {
@@ -398,12 +399,12 @@ function display_student_assignment($id, $on_behalf_of = false) {
                                                                    WHERE group_id != 0 AND group_id IN ($gids_sql_ready)))",
             $course_id, $id, $uid);
     }
-    $data['count_of_assign'] = $count_of_assign = countSubmissions($id);
+    $data['count_of_assign'] = countSubmissions($id);
     $_SESSION['has_unlocked'][$id] = true;
 
     if ($row) {
         $grading_type = $row->grading_type;
-        $data['reviews_per_assignment'] = $reviews_per_assignment = $row->reviews_per_assignment;
+        $data['reviews_per_assignment'] = $row->reviews_per_assignment;
         if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock) and !$on_behalf_of) {
             $_SESSION['has_unlocked'][$id] = false;
             Session::flash('message',$langWrongPassword);
@@ -461,22 +462,33 @@ function display_student_assignment($id, $on_behalf_of = false) {
                 return;
             }
             if ($is_group_assignment) {
+                $user_group_assigned_info = [];
                 if (!$on_behalf_of) {
-                    if (count($user_group_info) == 1) {
-                        $gids = array_keys($user_group_info);
+                    if ($row->assign_to_specific == 2) { // is group assignment assigned to specific groups?
+                        foreach ($user_group_info as $gid => $group_name) {
+                            $q = Database::get()->querySingle("SELECT group_id FROM assignment_to_specific WHERE assignment_id = ?d AND group_id = ?d", $id, $gid);
+                            if ($q) {
+                                $user_group_assigned_info[$q->group_id] = $group_name;
+                            }
+                        }
+                    } else { // group assignment is assigned to all groups
+                        $user_group_assigned_info = $user_group_info;
+                    }
+                    if (count($user_group_assigned_info) == 1) {
+                        $gids = array_keys($user_group_assigned_info);
                         $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
-                    } elseif ($user_group_info) {
+                    } elseif ($user_group_assigned_info) {
                         $group_select_form = "
                         <div class='form-group mt-4'>
                             <label for='group_id' class='col-sm-12 control-label-notes'>$langGroupSpaceLink:</label>
                             <div class='col-sm-12'>
-                              " . selection($user_group_info, 'group_id') . "
+                              " . selection($user_group_assigned_info, 'group_id') . "
                             </div>
                         </div>";
                     } else {
                         $group_link = $urlAppend . 'modules/group/';
                         $GroupWorkWarning = "<span>$langThisIsGroupAssignment<br>" .
-                            sprintf(count($user_group_info) ?
+                            sprintf(count($user_group_assigned_info) ?
                                 $langGroupAssignmentPublish :
                                 $langGroupAssignmentNoGroups, $group_link) .
                             "</span>";
@@ -574,7 +586,7 @@ function display_student_assignment($id, $on_behalf_of = false) {
     $data['group_select_hidden_input'] = $group_select_hidden_input;
     $data['group_select_form'] = $group_select_form;
     $data['grade_field'] = $grade_field;
-    $data['rich_text_editor'] = rich_text_editor('submission_text', 10, 20, '');
+    $data['rich_text_editor'] = rich_text_editor('submission_text', 10, 20, '', options: array('id' => 'submission_text'));
     $data['id'] = $id;
     $data['on_behalf_of'] = $on_behalf_of;
     $data['submissions_exist'] = $submissions_exist;
@@ -696,6 +708,7 @@ function display_assignment_submissions($id) {
     $data = display_assignment_details($assign);
     $count_of_assignments = countSubmissions($id);
     $data['result'] = [];
+
     if ($count_of_assignments > 0) {
         $data['result'] = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                 assign.uid uid, assign.group_id group_id,
@@ -710,7 +723,7 @@ function display_assignment_submissions($id) {
                                                 assignment.grading_type
                                                FROM assignment_submit AS assign, user, assignment
                                                WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
-                                               ORDER BY surname", $id);
+                                               ORDER BY submission_date, surname, uid, id", $id);
 
         $data['rows_assignment_grading_review'] = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
     }
@@ -1204,7 +1217,15 @@ function display_submission_details($id) {
 
     $data['file_comments_link'] = $file_comments_link;
 
-    if ($assignment->submission_type == ASSIGNMENT_RUBRIC_GRADE) {    // multiple files
+    if ($assignment->assignment_type == ASSIGNMENT_TYPE_TURNITIN || $assignment->submission_type == ASSIGNMENT_STANDARD_GRADE) { // single file
+        if (isset($_GET['unit'])) {
+            $url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id";
+        } else {
+            $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$sub->id";
+        }
+        $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
+        $data['filelink'] = $filelink;
+    } elseif ($assignment->submission_type == ASSIGNMENT_RUBRIC_GRADE) {    // multiple files
         $links = implode('<br>',
             array_map(function ($item) {
                 global $course_code, $urlAppend;
@@ -1218,15 +1239,6 @@ function display_submission_details($id) {
                     WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d ORDER BY id',
                 $sub->assignment_id, $sub->uid, $sub->group_id)));
         $data['links'] = $links;
-    } elseif ($assignment->submission_type == ASSIGNMENT_STANDARD_GRADE) {
-        // single file
-        if (isset($_GET['unit'])) {
-            $url = "{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=assignment&amp;get=$sub->id";
-        } else {
-            $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$sub->id";
-        }
-        $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
-        $data['filelink'] = $filelink;
     }
 
     $data['preview_rubric'] = $preview_rubric;
@@ -1911,7 +1923,7 @@ function submit_work($id, $on_behalf_of = null) {
     if ($submit_ok) {
         $success_msgs = array();
         //Preparing variables
-        $user_id = isset($on_behalf_of) ? $on_behalf_of : $uid;
+        $user_id = $on_behalf_of ?? $uid;
         if ($row->group_submissions) {
             $group_id = isset($_POST['group_id']) ? intval($_POST['group_id']) : -1;
             $gids = user_group_info($on_behalf_of ? null : $user_id, $course_id);
@@ -1947,13 +1959,10 @@ function submit_work($id, $on_behalf_of = null) {
             $local_name = replace_dangerous_char($local_name);
             $local_name = work_secret($row->id) . '/' . $local_name;
 
-            $files_to_keep = [];
             $file_name = $filename = $submission_text = '';
-            $no_files = isset($on_behalf_of) && !isset($_FILES);
             $has_uploaded_files = isset($_FILES['userfile']) && !empty($_FILES['userfile']['name'][0]);
 
-            if (!$no_files && $has_uploaded_files) {
-
+            if ($has_uploaded_files) {
                 $files_list = [];
 
                 if (isset($_FILES['userfile']) && is_array($_FILES['userfile']['name'])) {
@@ -2038,6 +2047,11 @@ function submit_work($id, $on_behalf_of = null) {
                     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
                     exit();
                 }
+            } else {
+                Session::flash('message', $langNoFileUploaded);
+                Session::flash('alert-class', 'alert-danger');
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
+                exit();
             }
             $success_msgs[] = $langUploadSuccess;
         }

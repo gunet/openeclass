@@ -90,10 +90,12 @@ $data['startdate_error'] = Session::getError('startdate', "<span class='help-blo
 $data['enddate_error'] = Session::getError('enddate', "<span class='help-block Accent-200-cl'>:message</span>");
 
 load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 load_js('bootstrap-datetimepicker');
 
 $data['antitle_error'] = ($antitle_error ? " has-error" : "");
-$data['contentToModify'] = rich_text_editor('newContent', 4, 20, $contentToModify);
+$data['contentToModify'] = rich_text_editor('newContent', 4, 20, $contentToModify, options: array('id' => 'newContentId'));
 
 $data['course_users'] = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email
     FROM course_user cu

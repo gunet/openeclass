@@ -62,7 +62,7 @@ load_js('tools.js');
 if ($is_editor and isset($_GET['id']) and isset($_GET['disp_results'])) {
     require_once 'modules/usage/usage.lib.php';
     load_js('d3/d3.min.js');
-    load_js('c3-0.4.10/c3.min.js');
+    load_js('c3-0.7.20/c3.min.js');
 }
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
@@ -97,7 +97,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
     $data = [];
     if (isset($_POST['sid'])) {
-        $sid = $_POST['sid'];
+        $sid = getDirectReference($_POST['sid']);
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
     } elseif (isset($_POST['assign_g_type'])) {
         if ($_POST['assign_g_type'] == 2) {
@@ -305,7 +305,7 @@ if ($is_editor) {
     if (isset($_REQUEST['id'])) {
         $id = intval($_REQUEST['id']);
         $work_title_raw = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
-        $pageName = q($work_title_raw);
+        $pageName = $work_title_raw;
         $navigation[] = $works_url;
         display_assignment_submissions($id);
     } else {
@@ -324,14 +324,14 @@ if ($is_editor) {
             submit_work($id);
         } else if (isset($_POST['grade_comments_review'])) {  //call  submit_grade_reviews
             $work_title_raw = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
-            $pageName = q($work_title_raw);
+            $pageName = $work_title_raw;
             if (!isset($unit)) {
                 $navigation[] = $works_url;
             }
             submit_grade_reviews($_POST);
         } else {
             $work_title_raw = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
-            $pageName = q($work_title_raw);
+            $pageName = $work_title_raw;
             if (!isset($unit)) {
                 $navigation[] = $works_url;
             }

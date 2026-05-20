@@ -61,12 +61,14 @@ function lti_version_field_wraps() {
                     keysetUrlWrap.css('display', 'block');
                     initiateLoginUrlWrap.css('display', 'block');
                     redirectionUriWrap.css('display', 'block');
+                    $('#lti_url').val('https://lti.int.turnitin.com/launch/tfs');
                 } else {
                     keyWrap.css('display', 'block');
                     secretWrap.css('display', 'block');
                     keysetUrlWrap.css('display', 'none');
                     initiateLoginUrlWrap.css('display', 'none');
                     redirectionUriWrap.css('display', 'none');
+                    $('#lti_url').val('https://api.turnitin.com/api/lti/1p0/assignment');
                 }
             };
             
@@ -98,7 +100,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
 
     lti_version_field_wraps();
 
-    $textarea = rich_text_editor('desc', 4, 20, '');
+    $textarea = rich_text_editor('desc', 4, 20, '', options: array('id' => 'desc'));
   $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit border-0 px-0'>
@@ -204,7 +206,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                                             <label for='select-courses' class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
                                             <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>
                                             <div class='col-sm-12'>
-                                                <select id='select-courses' class='form-select' name='lti_courses[]' multiple>";
+                                                <select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
                                             $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                                     WHERE visible <> " . COURSE_INACTIVE . "
                                                                                     ORDER BY title");
@@ -213,7 +215,6 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                                                 $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
                                             }
                             $tool_content .= "</select>
-                                                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                                             </div>
                                         </div>";
                                     } else {
@@ -331,7 +332,7 @@ function edit_lti_app($session_id) {
 
     lti_version_field_wraps();
 
-    $textarea = rich_text_editor('desc', 4, 20, $row->description);
+    $textarea = rich_text_editor('desc', 4, 20, $row->description, options: array('id' => 'desc'));
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
                 <div class='form-wrapper form-edit border-0 px-0'>
@@ -445,7 +446,7 @@ function edit_lti_app($session_id) {
                             <div class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
                             <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></div>
                             <div class='col-sm-12'>
-                                <select class='form-select' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
+                                <select class='form-control' name='lti_courses[]' multiple id='select-courses'>";
                                 $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                     WHERE id NOT IN (SELECT course_id FROM course_lti_app WHERE lti_app = ?d)
                                                                     AND visible != " . COURSE_INACTIVE . "
@@ -466,7 +467,6 @@ function edit_lti_app($session_id) {
                                     $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
                                 }
                             $tool_content .= "</select>
-                                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                             </div>
                         </div>";
                     } else {

@@ -32,9 +32,11 @@ $require_current_course = TRUE;
 $require_editor = TRUE;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
+$toolName = $langTracking;
 
 if (empty($_REQUEST['path_id'])) { // path id can not be empty
     header("Location: ./index.php?course=$course_code");
@@ -52,15 +54,11 @@ $head_content .= "<script type='text/javascript'>
                 'bAutoWidth': true,
                 'searchDelay': 1000,
                 'order' : [[0, 'asc']],
-                'lengthMenu': [10, 20, 30, -1],
                 'oLanguage': {
-                   'lengthLabels': {
-                        '-1': '$langAllOfThem'
-                   },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
                    'sSearch':       '',
@@ -73,11 +71,11 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dt-search input').attr({
+            $('.dataTables_filter input').attr({
                 'class' : 'form-control input-sm ms-0 mb-3',
                 'placeholder' : '$langSearch...'
             });
-            $('.dt-search label').attr('aria-label', '$langSearch');  
+            $('.dataTables_filter label').attr('aria-label', '$langSearch');  
         });
         </script>";
 
@@ -85,15 +83,13 @@ $head_content .= "<script type='text/javascript'>
 $learnPathName = Database::get()->querySingle("SELECT `name` FROM `lp_learnPath` WHERE `learnPath_id` = ?d AND `course_id` = ?d", $path_id, $course_id);
 
 if ($learnPathName) {
-    $titleTab['subTitle'] = q($learnPathName->name);
-
-    $pageName = $langTracking . ": " .  q($learnPathName->name);
+    $pageName = q($learnPathName->name);
 
     if (isset($_GET['pdf'])) {
         $emailCol = "<th class='text-left'>$langEmail</th>";
     } else {
         $emailCol = '';
-        $action_bar .= action_bar(array(
+        $action_bar = action_bar(array(
             array('title' => $langBack,
                 'url' => "index.php",
                 'icon' => 'fa-reply',
@@ -110,7 +106,6 @@ if ($learnPathName) {
         ));
         $tool_content .= $action_bar;
     }
-
     $tool_content .= "<div class='table-responsive'>
                     <table id='lpu_progress' class='table-default table-lpu-progress'>
                     <thead>
@@ -123,6 +118,7 @@ if ($learnPathName) {
                             <th>$langTotalTimeSpent</th>
                             <th>$langLessonStatus</th>
                             <th>$langProgress</th>
+                            <th>$langScore</th>
                         </tr>
                     </thead>";
 
@@ -130,7 +126,7 @@ if ($learnPathName) {
     $data[] = [ $currentCourseName ];
     $data[] = [ $learnPathName->name ];
     $data[] = [];
-    $data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress ];
+    $data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress, $langScore ];
 
     $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`, U.`am`
                         FROM `user` AS U,
@@ -143,7 +139,8 @@ if ($learnPathName) {
 
     $tool_content .= "<tbody>";
     foreach ($usersList as $user) {
-        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($path_id, $user->id);
+        list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb, $lpScore, $lpScoreMax) = get_learnPath_progress_details($path_id, $user->id);
+        $lpDisplay = format_lp_progress_display($lpAttemptsNb, $lpTotalTime, $lpProgress, $lpScore, $lpScoreMax);
         $lpCombinedProgress = get_learnPath_combined_progress($path_id, $user->id);
         $tool_content .= "<tr>";
         if (!isset($_GET['pdf'])) {
@@ -164,12 +161,13 @@ if ($learnPathName) {
                             <td>" . $lp_total_accessed . "</td>
                             <td>" . q($lpTotalTime) . "</td>
                             <td>" . $lp_total_status . "</td>
-                            <td>" . disp_progress_bar($lpCombinedProgress, 1) . "</td>";
+                            <td>" . (($lpCombinedProgress <= 0) ? "-" : disp_progress_bar($lpCombinedProgress, 1)) . "</td>
+                            <td class='text-end'>" . $lpDisplay['score'] . "</td>";
 
         $tool_content .= "</tr>";
 
         $ug = user_groups($course_id, $user->id, 'csv');
-        $data[] = [ "$user->surname $user->givenname", $user->email, $user->am, $ug, $lpAttemptsNb, $lp_total_started, $lp_total_accessed, $lpTotalTime, $lp_total_status, $lpProgress . '%' ];
+        $data[] = [ "$user->surname $user->givenname", $user->email, $user->am, $ug, $lpAttemptsNb, $lp_total_started, $lp_total_accessed, $lpTotalTime, $lp_total_status, (($lpProgress <= 0) ? "-" : $lpProgress . '%'), $lpDisplay['score'] ];
     }
     $tool_content .= "</tbody></table></div>";
 }
@@ -177,15 +175,15 @@ if ($learnPathName) {
 if (isset($_GET['xls'])) {
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
-    $sheet->setTitle($langTracking);
+    $sheet->setTitle($langStatsOfLearnPath);
     $sheet->getDefaultColumnDimension()->setWidth(30);
     $filename = $course_code . " learning_path_results.xlsx";
 
-    $sheet->mergeCells("A1:J1");
-    $sheet->mergeCells("A2:J2");
+    $sheet->mergeCells("A1:K1");
+    $sheet->mergeCells("A2:K2");
     $sheet->getCell('A1')->getStyle()->getFont()->setBold(true);
     $sheet->getCell('A2')->getStyle()->getFont()->setItalic(true);
-    for ($i = 1; $i <= 10; $i++) {
+    for ($i = 1; $i <= 11; $i++) {
         $cells = [$i, 3];
         $sheet->getCell($cells)->getStyle()->getFont()->setBold(true);
     }
@@ -221,7 +219,7 @@ if (isset($_GET['xls'])) {
         <body>
         <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langStatsOfLearnPath) . "</h2>
-        <h3>" . disp_tool_title($titleTab) . "</h3>";
+        <h2 class='text-heading-h3'>" . disp_tool_title($titleTab) . "</h2>";
 
     $pdf_content .= $tool_content;
     $pdf_content .= "</body></html>";
@@ -231,9 +229,18 @@ if (isset($_GET['xls'])) {
     $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
     $fontData = $defaultFontConfig['fontdata'];
 
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // for old courses
+    if ($image_height_header > 50) {
+        $image_height_header = 20;
+    }
+    if ($image_height_footer > 50) {
+        $image_height_footer = 15;
+    }
     $mpdf = new Mpdf\Mpdf([
-        'margin_top' => 53,     // approx 200px
-        'margin_bottom' => 53,  // approx 200px
+        'margin_top' => $image_height_header + 20,     // mm
+        'margin_bottom' => $image_height_footer + 10,  // mm
         'tempDir' => _MPDF_TEMP_PATH,
         'fontDir' => array_merge($fontDirs, [$webDir . '/template/modern/fonts']),
         'fontdata' => $fontData + [
@@ -250,7 +257,7 @@ if (isset($_GET['xls'])) {
             ]
     ]);
 
-
+    
     $mpdf->SetHTMLHeader(get_platform_logo());
     $footerHtml = '
     <div>

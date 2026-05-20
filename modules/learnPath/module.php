@@ -189,7 +189,7 @@ $tool_content .=
                 'level' => 'primary')),false) . "
     <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
         <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-            <h3 class='mb-0'>$langLearningObjectData</h3>
+            <h2 class='text-heading-h3 mb-0'>$langLearningObjectData</h2>
         </div>
         <div class='card-body'>
         <ul class='list-group list-group-flush'>
@@ -319,7 +319,7 @@ if ($module->contentType != CTLABEL_) { //
                     <li class='list-group-item element'>
                         <div class='row row-cols-1 row-cols-md-2 g-1'>
                             <div class='col-md-3 col-12'>
-                                <div class='title-default'>$langLessonStatus</div>
+                                <div class='title-default'>$langLearningPathStatus</div>
                             </div>
                             <div class='col-md-9 col-12 title-default-line-height'>
                                 $statusToDisplay

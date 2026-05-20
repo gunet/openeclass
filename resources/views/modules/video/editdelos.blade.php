@@ -2,13 +2,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
-        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -72,8 +69,12 @@
                                                             @if (isset($currentVideoLinks[$url]) && strtotime($resource->videoLecture->date) > strtotime($currentVideoLinks[$url]))
                                                                 <span class='fa-solid fa-exclamation ps-2' style='color: red' title data-bs-original-title='{{ trans('langDelosNewFileVersion') }}' data-bs-toggle='tooltip' data-bs-placement='bottom'></span>
                                                             @endif
-                                                            <div class="help-block">{{ $resource->videoLecture->description }}</div>
-                                                            <div class="help-block mt-2">{{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }}</div>
+                                                            <div class="help-block">
+                                                                {{ $resource->videoLecture->description }}
+                                                            </div>
+                                                            <div class="help-block mt-2">
+                                                                {{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }} &mdash; {{ trans('langCourse') }}: {{ $resource->videoLecture->relation->course->title }}
+                                                            </div>
                                                         </td>
                                                         <td style='width:10%;'>{{ format_locale_date(strtotime($resource->videoLecture->date), 'short', false) }}</td>
                                                         <td style='width:5%;'>
@@ -99,8 +100,12 @@
                                                                 @if (isset($currentVideoLinks[$url]) && strtotime($resource->videoLecture->date) > strtotime($currentVideoLinks[$url]))
                                                                     <span class='fa-solid fa-exclamation ps-2' style='color: red' title data-bs-original-title='{{ trans('langDelosNewFileVersion') }}' data-bs-toggle='tooltip' data-bs-placement='bottom'></span>
                                                                 @endif
-                                                                <div class="help-block">{{ $resource->videoLecture->description }}</div>
-                                                                <div class="help-block mt-2">{{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }}</div>
+                                                                <div class="help-block">
+                                                                    {{ $resource->videoLecture->description }}
+                                                                </div>
+                                                                <div class="help-block mt-2">
+                                                                    {{ trans('langCreator') }}: {{ $resource->videoLecture->rights->creator->name }} &mdash; {{ trans('langCourse') }}: {{ $resource->videoLecture->relation->course->title }}
+                                                                </div>
                                                             </td>
                                                             <td>
                                                                 {{ format_locale_date(strtotime($resource->videoLecture->date), 'short', false) }}
@@ -142,10 +147,9 @@
                         </form>
                    @endif
                 </div>
-            </div>
+            </main>
         </div>
     </div>
-</div>
 
 <script type='text/javascript'>
     $(document).ready(function() {
@@ -164,7 +168,8 @@
                 'sLengthMenu': '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
                 'sZeroRecords': '{{ trans('langNoResult') }}',
                 'sInfo': '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
-                'sInfoEmpty': '',
+                'sInfoEmpty': '{{ trans('langNoResult') }}',
+                'sEmptyTable': '{{ trans('langNoResult') }}',
                 'sInfoFiltered': '',
                 'sInfoPostFix': '',
                 'sSearch': '',

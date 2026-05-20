@@ -68,6 +68,27 @@ class NetDevice
     private $_info = null;
 
     /**
+     * string with bridge
+     *
+     * @var string
+     */
+    private $_bridge = null;
+
+    /**
+     * transmitted bytes rate
+     *
+     * @var int
+     */
+    private $_txRate = null;
+
+    /**
+     * received bytes rate
+     *
+     * @var int
+     */
+    private $_rxRate = null;
+
+    /**
      * Returns $_drops.
      *
      * @see NetDevice::$_drops
@@ -221,5 +242,83 @@ class NetDevice
     public function setInfo($info)
     {
         $this->_info = $info;
+    }
+
+    /**
+     * Returns $_bridge.
+     *
+     * @see NetDevice::$_bridge
+     *
+     * @return String
+     */
+    public function getBridge()
+    {
+        return $this->_bridge;
+    }
+
+    /**
+     * Sets $_bridge.
+     *
+     * @param String $bridge bridge string
+     *
+     * @see NetDevice::$_bridge
+     *
+     * @return void
+     */
+    public function setBridge($bridge)
+    {
+        $this->_bridge = $bridge;
+    }
+
+    /**
+     * Returns $_rxRate.
+     *
+     * @see NetDevice::$_rxRate
+     *
+     * @return int
+     */
+    public function getRxRate()
+    {
+        return $this->_rxRate;
+    }
+
+    /**
+     * Sets $_rxRate.
+     *
+     * @param int $rxRate received bytes rate
+     *
+     * @see NetDevice::$_rxRate
+     *
+     * @return void
+     */
+    public function setRxRate($rxRate)
+    {
+        $this->_rxRate = $rxRate;
+    }
+
+    /**
+     * Returns $_txRate.
+     *
+     * @see NetDevice::$_txRate
+     *
+     * @return int
+     */
+    public function getTxRate()
+    {
+        return $this->_txRate;
+    }
+
+    /**
+     * Sets $_txRate.
+     *
+     * @param int $txRate transmitted bytes rate
+     *
+     * @see NetDevice::$_txRate
+     *
+     * @return void
+     */
+    public function setTxRate($txRate)
+    {
+        $this->_txRate = $txRate;
     }
 }

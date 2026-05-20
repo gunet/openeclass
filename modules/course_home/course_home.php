@@ -23,7 +23,6 @@ use Widgets\WidgetArea;
 $require_current_course = true;
 $guest_allowed = true;
 
-define('HIDE_TOOL_TITLE', 1);
 define('STATIC_MODULE', 1);
 
 require_once '../../include/baseTheme.php';
@@ -43,6 +42,7 @@ require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'modules/progress/process_functions.php';
+require_once 'modules/progress/game_points_widget.php';
 require_once 'modules/wall/wall_wrapper.php';
 require_once 'modules/session/functions.php';
 
@@ -55,6 +55,8 @@ $course_users_permission = $up->has_course_users_permission();
 $allow_clone = $up->has_course_clone_permission();
 $allow_course_backup = $up->has_course_backup_permission();
 $allow_course_tools = $up->has_course_modules_permission();
+
+$is_student_user = ($uid && !$is_editor && !$is_course_admin && $_SESSION['status'] == USER_STUDENT);
 
 $pageName = ''; // delete $pageName set in doc_init.php
 
@@ -272,7 +274,7 @@ if (count($res) > 0) {
                                         <div class='modal-header'>
                                         <div class='modal-title' id='myModalLabel_$key'>" . q($row->title) . "</div>
                                         <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'></button>
-                                      
+
                                     </div>
                                     <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
                                         standard_text_escape($row->comments)
@@ -431,34 +433,34 @@ $data['action_bar'] = action_bar([
     ]
 ]);
 
-if ($uid) {
-    $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion active?
-    if ($course_completion_id) {
-        if ($is_editor) {
-            $data['studentUsers'] = $student_users = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
-                                        WHERE status = " .USER_STUDENT . "
-                                            AND editor = 0
-                                            AND course_id = ?d", $course_id)->studentUsers;
-            $data['certified_users'] = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge
-                                                              JOIN course_user ON user_badge.user=course_user.user_id
-                                                                    AND status = " .USER_STUDENT . "
-                                                                    AND editor = 0
-                                                                    AND course_id = ?d
-                                                                    AND completed = 1
-                                                                    AND badge = ?d", $course_id, $course_completion_id)->t;
-            if ($student_users == 0) {
-                $data['percentage_t'] = $percentage_t = 0;
-                $data['angle'] = 0;
-            } else {
-                $data['percentage_t'] = $percentage_t = round($data['certified_users'] / $data['studentUsers'] * 100, 0);
-                $data['angle'] = $percentage_t * 100 / 360;
-            }
-        } else {
-            $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
-            $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id);
-        }
-    }
-}
+ if ($uid) {
+     $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion active?
+     if ($course_completion_id) {
+         if ($is_editor) {
+             $data['studentUsers'] = $student_users = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
+                                         WHERE status = " .USER_STUDENT . "
+                                             AND editor = 0
+                                             AND course_id = ?d", $course_id)->studentUsers;
+             $data['certified_users'] = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge
+                                                               JOIN course_user ON user_badge.user=course_user.user_id
+                                                                     AND status = " .USER_STUDENT . "
+                                                                     AND editor = 0
+                                                                     AND course_id = ?d
+                                                                     AND completed = 1
+                                                                     AND badge = ?d", $course_id, $course_completion_id)->t;
+             if ($student_users == 0) {
+                 $data['percentage_t'] = $percentage_t = 0;
+                 $data['angle'] = 0;
+             } else {
+                 $data['percentage_t'] = $percentage_t = round($data['certified_users'] / $data['studentUsers'] * 100, 0);
+                 $data['angle'] = $percentage_t * 100 / 360;
+             }
+         } else {
+             $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
+             $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id);
+         }
+     }
+ }
 
 
 // display open-courses level in bar
@@ -492,7 +494,7 @@ if ($is_editor) {
     warnCourseInvalidDepartment(true);
 }
 
-if ($is_editor or $is_course_reviewer) {
+if ($is_editor or $is_course_reviewer) { // teacher or course reviewer
     $data['last_id'] = $last_id = Database::get()->querySingle("SELECT id FROM course_units
                                                    WHERE course_id = ?d AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1", $course_id);
@@ -500,8 +502,8 @@ if ($is_editor or $is_course_reviewer) {
         $last_id = $last_id->id;
     }
     $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND `order` >= 0 ORDER BY `order`";
-} else {
-    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND visible = 1 AND `order` >= 0 ORDER BY `order`";
+} else { // student
+    $query = "SELECT id, title, start_week, finish_week, comments, visible, public, `order`, assign_to_specific FROM course_units WHERE course_id = ?d AND (visible = 1 OR visible = 2) AND `order` >= 0 ORDER BY `order`";
 }
 
 $data['all_units'] = $all_units = Database::get()->queryArray($query, $course_id);
@@ -519,7 +521,7 @@ if (!$is_editor && !$is_course_reviewer) {
 }
 
 /****************** CAROUSEL OR ROW UNITS PREFERENCE ******************/
-if ($is_editor){
+if ($is_editor) {
     if (isset($_GET['viewUnit'])){
         Database::get()->query("UPDATE course SET view_units = ?d  WHERE id = ?d", $_GET['viewUnit'], $course_id);
     }
@@ -564,9 +566,9 @@ if ($displayQuickPoll) {
 
         if ($show_results) {
             load_js('d3/d3.min.js');
-            load_js('c3-0.4.10/c3.min.js');
+            load_js('c3-0.7.20/c3.min.js');
             $default_answer = $displayQuickPoll->default_answer;
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.7.20/c3.css' />";
 
             $names_array = [];
             $all_answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theQuestion->pqid);
@@ -648,7 +650,7 @@ if ($displayQuickPoll) {
                                     <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>
                                     $checkMark
                                     ".q_math($theAnswer->answer_text)."
-                                   
+
                                 </label>
                             </div>
                         </div>
@@ -670,10 +672,10 @@ if ($total_cunits > 0) {
     $countUnits = count($all_units);
     $data['countUnits'] = $countUnits;
 
-    if($carousel_or_row == 0){
+    if($carousel_or_row == 0) {
         $cunits_content .= "<div class='card panelCard card-default px-lg-2 py-lg-2 h-100'><div class='card-body'><div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>";
 
-        //this is foreach for indicators carousel-units
+        //this is foreach for indicator carousel-units
         $counterIndicator = 0;
 
         $cunits_content .=  "<div class='carousel-indicators h-auto mb-1'>";
@@ -687,8 +689,13 @@ if ($total_cunits > 0) {
         }
         $cunits_content .=  "</div>";
 
-        $cunits_content .= "<div class='carousel-inner'>";
+        $cunits_content .= "<div class='carousel-inner' style='overflow: auto;'>";
         foreach ($all_units as $cu) {
+            $access = $cu->public;
+            $vis = $cu->visible;
+            if ($vis == 2) { // don't display divider
+                continue;
+            }
             $not_shown = false;
             $icon = '';
             if (!$is_editor && !$is_course_reviewer) {
@@ -716,11 +723,9 @@ if ($total_cunits > 0) {
                 }
             }
             // check visibility
-            if ($cu->visible == 1) {
+            if ($vis == 1) {
                 $count_index++;
             }
-            $access = $cu->public;
-            $vis = $cu->visible;
             $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
             $cu_indirect = getIndirectReference($cu->id);
 
@@ -733,13 +738,20 @@ if ($total_cunits > 0) {
             $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content mb-2'>
                     <div class='item-header clearfix'>
-                        <div class='item-title d-flex justify-content-between $class_vis gap-3'>";
+                        <div class='item-title d-flex justify-content-between gap-3'>";
 
-            $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
+            $cunits_content .= "<div class='item-title-container $class_vis d-flex flex-column justify-content-center'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
+                $unit_legend = '';
+                if ($is_editor) {
+                    $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
+                    if ($sql_badge) {
+                        $unit_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' data-bs-title='$langUnitCompletionLegend' data-bs-original-title='' title=''>";
+                    }
+                }
+                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>$unit_legend</div>";
             }
 
             $cunits_content .= "<p><small><span class='help-block'>";
@@ -787,9 +799,8 @@ if ($total_cunits > 0) {
             }
             $cunits_content .= "</div>";
 
-            $cunits_content .= "<div style='height:1px;' class='border-top-default mt-3 mb-3'></div>
-                        <div class='col-sm-12 bg-transparent'>
-
+            $cunits_content .= "
+                        <div class='col-12 bg-transparent d-flex justify-content-between align-items-center mt-3'>
                             <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev' aria-label='Carousel previous'>
                                 <i class='fa-solid fa-chevron-circle-left fa-xl'></i>
                             </button>";
@@ -849,21 +860,36 @@ if ($total_cunits > 0) {
             $class_vis = ($vis == 0 or $not_shown) ? 'not_visible' : '';
             $cu_indirect = getIndirectReference($cu->id);
             $legendViewContent = '';
-            if($counter_hr < $countUnits){
+            if ($counter_hr < $countUnits){
                 $legendViewContent = 'legendViewContent';
             }
-            $cunits_content .= "
-            <div id='unit_$cu_indirect' class='col-12 $legendViewContent my-3' data-id='$cu->id'>
-                <div class='card panelCard card-default px-lg-2 py-lg-2 h-100'><div class='card-body'>
-                    <div class='item-content'>
-                        <div class='item-header clearfix'>
-                            <div class='item-title d-flex justify-content-between $class_vis gap-3'>";
 
-            $cunits_content .= "<div class='item-title-container d-flex flex-column justify-content-center'>";
-            if ($not_shown) {
-                $cunits_content .= q($cu->title) ;
+            $cunits_content .= "<li id='unit_$cu_indirect' class='col-12 nav-item $legendViewContent my-3' data-id='$cu->id' aria-label='".q($cu->title)."'>";
+            if ($vis == 2) {
+                $cunits_content .= "<div class='px-lg-2 py-lg-2 h-100'><div class='card-body'>";
             } else {
-                $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a></div>";
+                $cunits_content .= "<div class='card panelCard card-default px-lg-2 py-lg-2 h-100'><div class='card-body'>";
+            }
+            $cunits_content .= "<div class='item-content'>
+                        <div class='item-header clearfix'>
+                            <div class='item-title d-flex justify-content-between gap-3'>";
+
+            $cunits_content .= "<div class='item-title-container $class_vis d-flex flex-column justify-content-center'>";
+            if ($not_shown) {
+                $cunits_content .= q($cu->title);
+            } else {
+                if ($vis == 2) {
+                    $cunits_content .= "<div class='line-height-default'><div class='TextBold fs-6' style='margin-left:-25px;'>" . q($cu->title) . "</div></div>";
+                } else {
+                    $unit_legend = '';
+                    if ($is_editor) {
+                        $sql_badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $cu->id);
+                        if ($sql_badge) {
+                            $unit_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' data-bs-title='$langUnitCompletionLegend' data-bs-original-title='' title=''>";
+                        }
+                    }
+                    $cunits_content .= "<div class='line-height-default'><a class='TextBold fs-6 $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>$unit_legend</div>";
+                }
             }
 
             if (!(is_null($cu->start_week)) || !(is_null($cu->finish_week))) {
@@ -887,11 +913,12 @@ if ($total_cunits > 0) {
 
                                         ".action_button(array(
                                                 array('title' => $langEditChange,
-                                                    'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
+                                                    'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id" . (($vis == 2) ? "&amp;divider=1" : ""),
                                                     'icon' => 'fa-edit'),
-                                                array('title' => $vis == 1? $langViewHide : $langViewShow,
+                                                array('title' => ($vis == 1)? $langViewHide : $langViewShow,
                                                     'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;vis=$cu_indirect",
-                                                    'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                                                    'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye',
+                                                    'show' => ($vis != 2)),
                                                 array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
                                                     'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;access=$cu_indirect",
                                                     'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
@@ -907,7 +934,6 @@ if ($total_cunits > 0) {
                     $cunits_content .= $icon;
                 $cunits_content .= "</span>";
             }
-
             $cunits_content .= "</div>";
             $cunits_content .= "</div>";
             if ($carousel_or_row == 1) {
@@ -915,16 +941,19 @@ if ($total_cunits > 0) {
                 $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
                 $cunits_content .= "</div>";
             }
+            $cunits_content .= "</div></div></div></li>";
 
-            $cunits_content .= "</div></div></div></div>";
+
         }
-
     }
-
 } else {
-    $cunits_content .= "<div class='not_visible text-center'> - $langNoUnits - </div>";
+    if ($is_editor) {
+        $cunits_content .= "<div class='col-12 text-center'>
+                                <div class='alert alert-warning'>" . $langNoUnits . "</div>
+                            </div>";
+    }
 }
-
+$data['carousel_or_row'] = $carousel_or_row;
 $data['cunits_content'] = $cunits_content;
 
 if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple')) {
@@ -961,6 +990,13 @@ foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key
     $data['course_home_sidebar_widgets'] .= $widget->run($key);
 }
 
+$head_content .= "
+<link rel='stylesheet' type='text/css' href='{$urlAppend}template/default/CSS/default.css' />
+";
+if (visible_module(MODULE_ID_PROGRESS,$course_id)) {
+	$data['points_game_widget'] = course_points_game_widget($uid, $course_id);
+}
+
 $data['registered'] = false;
 if ($uid) {
     $myCourses = [];
@@ -995,25 +1031,25 @@ if($course_info->view_type == 'sessions' && isset($_SESSION['uid'])){
     if($is_consultant && !$is_coordinator){
         $sql_session = "AND creator = $uid";
     }elseif($is_simple_user){
-        $sql_session = "AND id IN (SELECT session_id FROM mod_session_users 
+        $sql_session = "AND id IN (SELECT session_id FROM mod_session_users
                                     WHERE participants = $uid AND is_accepted = 1)";
     }
     if(($is_consultant && !$is_coordinator) or ($is_simple_user)){
-        $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
+        $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                 WHERE course_id = ?d
-                                                                AND start > NOW() 
+                                                                AND start > NOW()
                                                                 AND visible = 1
                                                                 $sql_session
                                                                 ORDER BY start ASC $limit",$course_id);
     }elseif($is_coordinator){
         // Get the minimum datetime from the current date
-        $minDate = Database::get()->querySingle("SELECT MIN(start) AS st FROM mod_session 
+        $minDate = Database::get()->querySingle("SELECT MIN(start) AS st FROM mod_session
                                                 WHERE course_id = ?d
                                                 AND start > NOW()
                                                 AND visible = 1", $course_id);
 
         if($minDate){
-            $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session 
+            $data['next_session'] = Database::get()->queryArray("SELECT * FROM mod_session
                                                                 WHERE course_id = ?d
                                                                 AND start = ?t", $course_id, $minDate->st);
         }

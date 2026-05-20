@@ -89,6 +89,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             '1' => "<small>".implode(', ', $user_roles)."</small>"
         );
     }
+    header('Content-Type: application/json; charset=utf-8');
+    header('X-Content-Type-Options: nosniff');
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
 }
@@ -137,11 +139,24 @@ $head_content .= "
                            'sNext':     '&rsaquo;',
                            'sLast':     '&raquo;'
                        }
-                   }
+                   },
+                'tabIndex': -1,
+                initComplete: function() {
+                    $('.dataTable .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                }
             });
             $('.dt-search input').attr({style: 'width:200px', class:'form-control input-sm ms-0 mb-3', placeholder: '$langName'});
             $('.dt-search label').attr('aria-label', '$langName');  
             $('.success').delay(3000).fadeOut(1500);
+        });
+        $('.dataTable').on('order.dt', function() {
+            $('.dataTable thead .dt-column-order').each(function() {
+                $(this).removeAttr('aria-label');
+                $(this).attr('aria-hidden', 'true');
+            });
         });
         </script>";
 

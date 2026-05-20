@@ -182,6 +182,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
     $data['recordsTotal'] = $all_users;
     $data['recordsFiltered'] = $filtered_users;
     $data['aaData'] = array();
+
+    $q = Database::get()->querySingle("SELECT view_type, is_collaborative FROM course WHERE id = ?d", $course_id);
+    $is_collaborative = $q->is_collaborative;
+    $view_type = $q->view_type;
+
     foreach ($result as $myrow) {
         $full_name = q(sanitize_utf8($myrow->givenname . " " . $myrow->surname));
         $am = trim(q(sanitize_utf8($myrow->am)));
@@ -245,7 +250,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
                 'title' => $langConsultant,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;" . (($myrow->status == USER_STUDENT && $myrow->tutor == '1' && $myrow->editor == '0') ? "remove" : "give") . "Consultant=" . getIndirectReference($myrow->id),
                 'icon' => ($myrow->status == USER_STUDENT && $myrow->tutor == '1' && $myrow->editor == '0') ? "fa-square-check" : "fa-square",
-                'show' => ($myrow->status != USER_GUEST && isset($is_collaborative_course) && $is_collaborative_course && !is_module_disable(MODULE_ID_SESSION)),
+                'show' => ($myrow->status != USER_GUEST && isset($is_collaborative_course) && $is_collaborative_course && $view_type == 'sessions' && !is_module_disable(MODULE_ID_SESSION)),
             ),
             array(
                 'title' => $langTeacher,
@@ -293,12 +298,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
             $user_roles = [$langCourseAdminTeacher];
         } elseif ($myrow->status == USER_GUEST) {
             $user_roles = [$langGuestName];
-        } elseif ($myrow->status == USER_STUDENT and $myrow->tutor == '1' and $myrow->editor == '0') {
-            $user_roles = [$langConsultant];
-        } else {
+        } elseif ($myrow->status == USER_STUDENT) {
             $user_roles = [$langStudent];
+            if ($is_collaborative && $view_type == 'sessions' && $myrow->tutor == '1') {
+                $user_roles = [$langConsultant];
+            }
         }
-
         if ($is_tutor) {
             $user_roles[] = $langGroupTutor;
         }
