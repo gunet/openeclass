@@ -9021,6 +9021,10 @@ function theme_initialization() {
                 .form-wrapper.form-edit {
                     background-color: $theme_options_styles[BgForms];
                 }
+
+                .rubrics-scales {
+                    background-color: $theme_options_styles[BgForms];
+                }
             ";
         }
 
@@ -9033,6 +9037,9 @@ function theme_initialization() {
         if(!empty($theme_options_styles['BgBorderForms'])){
             $styles_str .= "
                 .form-wrapper.form-edit {
+                    border: solid 1px $theme_options_styles[BgBorderForms] !important;
+                }
+                .rubrics-scales {
                     border: solid 1px $theme_options_styles[BgBorderForms] !important;
                 }
             ";
@@ -9049,6 +9056,9 @@ function theme_initialization() {
                 .form-wrapper.form-edit {
                     box-shadow: 0px 0 30px $theme_options_styles[FormsBoxShadow] !important;
                 }
+                .rubrics-scales {
+                    box-shadow: 0px 0 30px $theme_options_styles[FormsBoxShadow] !important;
+                }
             ";
         }
 
@@ -9061,6 +9071,9 @@ function theme_initialization() {
         if(!empty($theme_options_styles['AddPaddingFormWrapper'])){
             $styles_str .= "
                 .form-wrapper.form-edit{
+                    padding: 16px 24px 16px 24px !important;
+                }
+                .rubrics-scales {
                     padding: 16px 24px 16px 24px !important;
                 }
             ";
