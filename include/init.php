@@ -559,9 +559,12 @@ if (isset($require_current_course) and $require_current_course) {
                 Session::flash('message', $langLoginRequired);
                 Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
-            } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and $visible == COURSE_INACTIVE) {
+            } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and $visible == COURSE_INACTIVE) { // inactive course
                 $toolContent_ErrorExists = $langCheckProf;
+            } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and (course_has_expired($course_id) or !course_has_started($course_id))) { // expired course
+                $toolContent_ErrorExists = $langCourseHasExpired;
             }
+
         }
 
         // Check for prerequisites completion for students and redirect to registration page if not completed

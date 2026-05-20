@@ -41,7 +41,16 @@ if ($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == USER_STUDENT) 
           FROM course JOIN course_user 
             ON course.id = course_user.course_id 
             AND course_user.user_id = ?d 
-            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+            AND (
+                course_user.status = " . USER_TEACHER . " OR
+                course_user.course_reviewer = 1 OR
+                course_user.editor = 1 OR
+                 (
+                  course.visible != " . COURSE_INACTIVE . " AND
+                  (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") AND
+                  (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+                 )
+             )        
       ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 } else {
     echo RESPONSE_FAILED;

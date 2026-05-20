@@ -1754,6 +1754,7 @@ $langPrivateShort = "Περιορισμένη (με Λίστα Χρηστών)";
 $langAlertTitle = "Παρακαλώ συμπληρώστε τον τίτλο του $langsOfCourse!";
 $langAlertProf = "Παρακαλώ συμπληρώστε τον διδάσκοντα του $langsOfCourse!";
 $langFacultyUsersRegistrationLegend = "Η εγγραφή επιτρέπεται μόνο στους $langsOfStudentss της σχολής του $langsOfCourse.";
+$langCourseStartDateLegend = "Κάντε κλικ για να ορίσετε την ημερομηνία έναρξης του $langsOfCourse. Σημειώστε ότι πριν από την ημερομηνία έναρξης το μάθημα θα είναι 'ανενεργό'";
 $langCourseEndDateLegend = "Κάντε κλικ για να ορίσετε την ημερομηνία λήξης του $langsOfCourse. Σημειώστε ότι μετά από την ημερομηνία λήξης το μάθημα θα είναι 'ανενεργό'";
 
 // Admin mutiple course creation
@@ -4652,6 +4653,7 @@ $langLessonDoesNotExist = "
 	<strong>Το $langsCourse που προσπαθήσατε να προσπελάσετε δεν υπάρχει.</strong>
 	<br>Αυτό μπορεί να συμβαίνει γιατί εκτελέσατε μια μη επιτρεπτή ενέργεια ή λόγω τεχνικού προβλήματος
 	στην πλατφόρμα.</p>";
+$langCourseHasExpired = "<strong>Το $langsCourse που προσπαθήσατε να προσπελάσετε έχει λήξει ή δεν έχει ξεκινήσει ακόμα.</strong>";
 $langCheckAdmin = "
         <strong>Η ενέργεια που προσπαθήσατε να εκτελέσετε απαιτεί δικαιώματα διαχειριστή.</strong>
         <br>Η πλατφόρμα σάς ανακατεύθυνε αυτόματα στην αρχική σελίδα

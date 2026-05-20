@@ -864,11 +864,12 @@ function user_exists($login) {
 }
 
 /**
- * @brief check if course has expired
+ * @brief check if the course has expired
  * @param $cid
  * @return bool
  */
-function course_has_expired($cid) {
+function course_has_expired($cid): bool
+{
     $end_date = Database::get()->querySingle("SELECT end_date FROM course WHERE id = ?d", $cid)->end_date;
     if (!is_null($end_date)) {
         if (date("Y-m-d") > $end_date) {
@@ -878,6 +879,25 @@ function course_has_expired($cid) {
         }
     } else {
         return false;
+    }
+}
+
+/**
+ * @brief chekc if the course has started
+ * @param $cid
+ * @return bool
+ */
+function course_has_started($cid): bool
+{
+    $start_date = Database::get()->querySingle("SELECT start_date FROM course WHERE id = ?d", $cid)->start_date;
+    if (!is_null($start_date)) {
+        if (date("Y-m-d") > $start_date) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return true;
     }
 }
 
@@ -1224,7 +1244,6 @@ function display_activation_link($module_id) {
 
 /**
  * @brief checks if a module is visible
- * @global type $course_id
  * @param type $module_id
  * @return boolean
  */
@@ -1504,7 +1523,7 @@ function resource_belongs_to_progress_data($module, $resource_id) {
 
     global $course_id;
 
-    // check if module belongs to certificate
+    // check if the module belongs to a certificate
     $sql = Database::get()->querySingle("SELECT * FROM certificate_criterion JOIN certificate "
                                             . "ON certificate.id = certificate_criterion.certificate "
                                             . "WHERE course_id = ?d AND module = ?d AND resource = ?d",
@@ -1512,7 +1531,7 @@ function resource_belongs_to_progress_data($module, $resource_id) {
     if ($sql) {
         return true;
     }
-    // check if module belongs to badge
+    // check if the module belongs to the badge
     $sql2 = Database::get()->querySingle("SELECT * FROM badge_criterion JOIN badge "
                                             . "ON badge.id = badge_criterion.badge "
                                             . "WHERE course_id = ?d AND module = ?d AND resource = ?d",
@@ -3265,13 +3284,18 @@ function is_enabled_course_registration($uid) {
  * @param type $course_id
  * @return boolean
  */
-function get_user_email_notification($user_id, $course_id = null) {
+function get_user_email_notification($user_id, $course_id = null): bool
+{
     // check if user is active
-    if (Database::get()->querySingle('SELECT expires_at < NOW() AS expired FROM user WHERE id = ?d', $user_id)->expired) {
+    if (Database::get()->querySingle("SELECT expires_at < " . DBHelper::timeAfter() . " AS expired FROM user WHERE id = ?d", $user_id)->expired) {
         return false;
     }
     // check if course is active or not
     if (isset($course_id) and course_status($course_id) == COURSE_INACTIVE) {
+        return false;
+    }
+    // check if course has expired  or not started
+    if (isset($course_id) and (course_has_expired($course_id) or !course_has_started($course_id))) {
         return false;
     }
     // check if user's email address is verified
@@ -4435,7 +4459,7 @@ function define_rss_link() {
     global $urlAppend, $uid, $course_code, $course_id, $module_id, $modules;
 
     $course_status = course_status($course_id);
-    if ($course_status != COURSE_INACTIVE) { // No RSS feed for inactive courses
+    if ($course_status != COURSE_INACTIVE and course_has_started($course_id) and !course_has_expired($course_id)) { // No RSS feed for inactive courses
         $module_name = $modules[$module_id]['link'];
         $link = 'modules/' . $module_name . '/rss.php?c=' . $course_code;
         if ($course_status != COURSE_OPEN or $_SESSION['courses'][$course_code]) {
@@ -4485,6 +4509,8 @@ function rss_check_access() {
     }
     if ($course_status == COURSE_INACTIVE or
         !visible_module($module_id) or
+        course_has_expired($course_id) or
+        !course_has_started($course_id) or
         ($course_status != COURSE_OPEN and
          !(isset($_GET['token']) and isset($_GET['uid']) and
          rss_token_valid($_GET['token'], $_GET['uid'])))) {
@@ -5249,37 +5275,6 @@ function CourseHasSafeExamBrowserEnabled(): bool
     } else {
         return false;
     }
-}
-
-/**
- * @brief get user courses
- * @param $uid
- * @return array|DBResult|null
- */
-function getUidCourses($uid)
-{
-    global $uid;
-
-    $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                             course.code code,
-                             course.public_code,
-                             course.title title,
-                             course.prof_names professor,
-                             course.course_license course_license,
-                             course.lang,
-                             course.visible visible,
-                             course.description description,
-                             course.course_image course_image,
-                             course.popular_course popular_course,
-                             course_user.status status,
-                             course_user.favorite favorite
-                        FROM course JOIN course_user
-                            ON course.id = course_user.course_id
-                            AND course_user.user_id = ?d
-                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
-                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
-
-    return $myCourses;
 }
 
 /*

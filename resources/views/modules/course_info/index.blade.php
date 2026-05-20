@@ -64,33 +64,58 @@
                 }
             }).change();
 
-            if ($("#radio_collaborative_helper").length > 0) {
-                if (document.getElementById("radio_collaborative_helper").value == 0) {
-                    document.getElementById("radio_collaborative").style.display = "none";
+            const $helper = $("#radio_collaborative_helper");
+            if ($helper.length > 0) {
+                $("#radio_collaborative").toggle($helper.val() != 0);
+            }
+
+            function updateVisibility() {
+                const isChecked = $('#type_collab').is(":checked");
+                $("#radio_flippedclassroom, #radio_activity, #radio_wall").toggle(!isChecked);
+                $("#radio_collaborative").toggle(isChecked);
+            }
+
+            updateVisibility();
+            $('#type_collab').on('change', updateVisibility);
+
+
+            $('#courseEndDate').datepicker({
+                format: 'dd-mm-yyyy',
+                pickerPosition: 'bottom-right',
+                language: '{{ $language }}',
+                autoclose: true
+            });
+
+            $('#courseStartDate').datepicker({
+                format: 'dd-mm-yyyy',
+                pickerPosition: 'bottom-right',
+                language: '{{ $language }}',
+                autoclose: true
+            });
+
+            $('#course_enableEndDate').change(function() {
+                var dateType = $(this).prop('id').replace('_enable', '');
+                var $dateInput = $('input#' + dateType);
+
+                if($(this).prop('checked')) {
+                    $dateInput.prop('disabled', false);
+                    $('#courseEndDate').datepicker('show');
                 } else {
-                    document.getElementById("radio_collaborative").style.display = "block";
+                    $dateInput.prop('disabled', true);
+                    $('#courseEndDate').datepicker('hide');
                 }
-            }
-            if ($('#type_collab').is(":checked")) {
-                document.getElementById("radio_flippedclassroom").style.display = "none";
-                document.getElementById("radio_activity").style.display = "none";
-                document.getElementById("radio_wall").style.display = "none";
-            } else {
-                document.getElementById("radio_flippedclassroom").style.display = "block";
-                document.getElementById("radio_activity").style.display = "block";
-                document.getElementById("radio_wall").style.display = "block";
-            }
-            $('#type_collab').on('click', function () {
-                if ($('#type_collab').is(":checked")) {
-                    document.getElementById("radio_flippedclassroom").style.display = "none";
-                    document.getElementById("radio_activity").style.display = "none";
-                    document.getElementById("radio_wall").style.display = "none";
-                    document.getElementById("radio_collaborative").style.display = "block";
+            });
+
+            $('#course_enableStartDate').change(function() {
+                var dateType = $(this).prop('id').replace('_enable', '');
+                var $dateInput = $('input#' + dateType);
+
+                if($(this).prop('checked')) {
+                    $dateInput.prop('disabled', false);
+                    $('#courseStartDate').datepicker('show');
                 } else {
-                    document.getElementById("radio_flippedclassroom").style.display = "block";
-                    document.getElementById("radio_activity").style.display = "block";
-                    document.getElementById("radio_wall").style.display = "block";
-                    document.getElementById("radio_collaborative").style.display = "none";
+                    $dateInput.prop('disabled', true);
+                    $('#courseStartDate').datepicker('hide');
                 }
             });
 
@@ -284,7 +309,7 @@
                             <div class='flex-grow-1'>
                                 <div class='form-wrapper form-edit rounded'>
 
-                                    <form class='form-horizontal' role='form' method='post' action="{{ $form_url }}"
+                                    <form class='form-horizontal' role='form' method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course_code={{ $course_code }}"
                                           onsubmit='return validateNodePickerForm();'>
                                         <fieldset>
                                             <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
@@ -306,7 +331,6 @@
                                                 </div>
                                             </div>
 
-
                                             <div class='form-group mt-4'>
                                                 <label for='teacher_name'
                                                        class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}</label>
@@ -316,7 +340,6 @@
                                                 </div>
                                             </div>
 
-
                                             <div class='form-group mt-4'>
                                                 <label for='dialog-set-value'
                                                        class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
@@ -324,7 +347,6 @@
                                                     {!! $buildusernode !!}
                                                 </div>
                                             </div>
-
 
                                             <div class='form-group mt-4'>
                                                 <label for='course_keywords'
@@ -358,15 +380,13 @@
                                                 <div class='col-sm-12'>
                                                     <div class="radio mb-2">
                                                         <label>
-                                                            <input type='radio' name='view_type' value='simple'
-                                                                   id='simple' {{ $course_type_simple }}>
+                                                            <input type='radio' name='view_type' value='simple' id='simple' {{ $course_type_simple }}>
                                                             {{ trans('langCourseSimpleFormat') }}
                                                         </label>
                                                     </div>
                                                     <div class="radio mb-2">
                                                         <label>
-                                                            <input type='radio' name='view_type' value='units'
-                                                                   id='units' {{ $course_type_units }}>
+                                                            <input type='radio' name='view_type' value='units' id='units' {{ $course_type_units }}>
                                                             {{ trans('langWithCourseUnits') }}
                                                         </label>
                                                     </div>
@@ -374,25 +394,20 @@
                                                     <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif"
                                                          id="radio_activity">
                                                         <label>
-                                                            <input type='radio' name='view_type' value='activity'
-                                                                   id='activity' {{ $course_type_activity }}>
+                                                            <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
                                                             {{ trans('langCourseActivityFormat') }}
                                                         </label>
                                                     </div>
                                                     <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif"
                                                          id="radio_wall">
                                                         <label>
-                                                            <input type='radio' name='view_type' value='wall'
-                                                                   id='wall' {{ $course_type_wall }}>
+                                                            <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
                                                             {{ trans('langCourseWallFormat') }}
                                                         </label>
                                                     </div>
-                                                    <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif"
-                                                         id="radio_flippedclassroom">
+                                                    <div class="radio mb-2 @if(get_config('show_collaboration') and get_config('show_always_collaboration')) d-none @endif" id="radio_flippedclassroom">
                                                         <label>
-                                                            <input type='radio' name='view_type'
-                                                                   value='flippedclassroom'
-                                                                   id='flippedclassroom' {{ $course_type_flipped_classroom }}>
+                                                            <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom' {{ $course_type_flipped_classroom }}>
                                                             {{ trans('langFlippedClassroom') }}
                                                         </label>
                                                     </div>
@@ -410,53 +425,13 @@
                                                     </div>
                                                 </div>
                                                 @if(get_config('show_collaboration') and !get_config('show_always_collaboration'))
-                                                    <input type="hidden" id="radio_collaborative_helper"
-                                                           value="{{ $is_type_collaborative }}">
+                                                    <input type="hidden" id="radio_collaborative_helper" value="{{ $is_type_collaborative }}">
                                                 @endif
                                             </div>
 
                                             @if (isset($isOpenCourseCertified))
-                                                <input type='hidden' name='course_license'
-                                                       value='{{ getIndirectReference($course_license) }}'>
+                                                <input type='hidden' name='course_license' value='{{ getIndirectReference($course_license) }}'>
                                             @endif
-
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</div>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio mb-2'>
-                                                        <label>
-                                                            <input type='radio' name='l_radio' value='0'
-                                                                   {{ $license_checked0 }} $disabledVisibility>
-                                                            {{ trans('langLicenseUnset') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='radio mb-2'>
-                                                        <label>
-                                                            <input type='radio' name='l_radio' value='10'
-                                                                   {{ $license_checked10 }} $disabledVisibility>
-                                                            {{ trans('langCopyrightedNotFree') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input id='cc_license' type='radio' name='l_radio'
-                                                                   value='cc' {{ $cc_checked}} $disabledVisibility>
-                                                            {{ trans("langCMeta['course_license']") }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 col-sm-offset-2' id='cc'>
-                                                    <label class='mb-0' for='course_license_id'
-                                                           aria-label="{{ trans('langOpenCoursesLicense') }}"></label>
-                                                    {!! $license_selection !!}
-                                                </div>
-                                            </div>
-
 
                                             <div class='form-group mt-4'>
                                                 <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langConfidentiality') }}</div>
@@ -491,27 +466,27 @@
 
                                                     <div class='radio mb-3'>
                                                         <label>
-                                                            <input class='input-StatusCourse' id='courseclose'
-                                                                   type='radio' name='formvisible'
-                                                                   value='0' {{ $course_closed }} {!! $disable_visibility !!}>
-                                                            <label for="courseclose"
-                                                                   aria-label="{{ trans('langClosedCourse') }}">{!! course_access_icon(COURSE_CLOSED) !!}</label>
+                                                            <input class='input-StatusCourse' id='courseclose' type='radio' name='formvisible' value='0' {{ $course_closed }} {!! $disable_visibility !!}>
+                                                            <label for="courseclose" aria-label="{{ trans('langClosedCourse') }}">{!! course_access_icon(COURSE_CLOSED) !!}</label>
                                                             {{ trans('langClosedCourse') }}
                                                         </label>
-                                                        <div class='help-block'>{{ trans('langClosedCourseShort') }}</div>
+                                                        <div class='help-block'>
+                                                            {{ trans('langClosedCourseShort') }}
+                                                        </div>
                                                     </div>
 
 
                                                     <div class='radio'>
                                                         <label>
-                                                            <input class='input-StatusCourse' id='courseinactive'
-                                                                   type='radio' name='formvisible'
-                                                                   value='3' {{ $course_inactive }} {!! $disable_visibility !!}>
-                                                            <label for="courseinactive"
-                                                                   aria-label="{{ trans('langInactiveCourse') }}">{!! course_access_icon(COURSE_INACTIVE) !!}</label>
+                                                            <input class='input-StatusCourse' id='courseinactive' type='radio' name='formvisible' value='3' {{ $course_inactive }} {!! $disable_visibility !!}>
+                                                            <label for="courseinactive" aria-label="{{ trans('langInactiveCourse') }}">
+                                                                {!! course_access_icon(COURSE_INACTIVE) !!}
+                                                            </label>
                                                             {!! trans('langInactiveCourse') !!}
                                                         </label>
-                                                        <div class='help-block'>{{ trans('langCourseInactive') }}</div>
+                                                        <div class='help-block'>
+                                                            {{ trans('langCourseInactive') }}
+                                                        </div>
                                                     </div>
 
                                                 </div>
@@ -519,24 +494,19 @@
 
                                             <div class='form-group mt-3'>
                                                 <div class='checkbox mb-2 mt-4'>
-                                                    <label class='label-container'
-                                                           aria-label="{{ trans('langSelect') }}">
-                                                        <input type='checkbox' id='faculty_users_registration'
-                                                               name='faculty_users_registration' {!! $check_enable_faculty_users_registration !!}>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' id='faculty_users_registration' name='faculty_users_registration' @if (setting_get(SETTING_FACULTY_USERS_REGISTRATION, $course_id) == 1) checked @endif>
                                                         <span class='checkmark'></span>{{ trans('langFacultyUsersRegistrationLegend') }}
                                                     </label>
                                                 </div>
-                                                <label for='coursepassword'
-                                                       class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}</label>
+                                                <label for='coursepassword' class='col-sm-12 control-label-notes'>{{ trans('langOptPassword') }}</label>
                                                 <div class='col-sm-12'>
-                                                    <input class='form-control' id='coursepassword' type='text'
-                                                           name='password' value='{{ $password }}' autocomplete='off'>
+                                                    <input class='form-control' id='coursepassword' type='text' name='password' value='{{ $password }}' autocomplete='off'>
                                                 </div>
                                                 <div class='col-sm-12 text-center padding-thin'>
                                                     <span id='result'></span>
                                                 </div>
                                             </div>
-
 
                                             <div class='form-group mt-4'>
                                                 <label for='course_language_id'
@@ -546,266 +516,185 @@
                                                 </div>
                                             </div>
 
-
                                             <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langDownloadCourse') }}</div>
-                                                <div class="col-sm-12">
-                                                    <div class="radio mb-2">
-                                                        <label>
-                                                            <input type='radio' value='1'
-                                                                   name='enable_offline_course' {!! $log_offline_course_enable !!} {!! $log_offline_course_inactive !!}>
-                                                            {{ trans('langActivate') }}
-                                                        </label>
-                                                        <div class='help-block'>{{ trans('langCourseOfflineLegend') }}</div>
-                                                    </div>
-                                                    <div class="radio">
-                                                        <label>
-                                                            <input type='radio' value='0'
-                                                                   name='enable_offline_course' {!! $log_offline_course_disable !!} {!! $log_offline_course_inactive !!}>
-                                                            {{ trans('langDeactivate') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseUserRequests') }}</div>
+                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</div>
                                                 <div class='col-sm-12'>
                                                     <div class='radio mb-2'>
                                                         <label>
-                                                            <input type='radio' value='0'
-                                                                   name='disable_log_course_user_requests' {!! $log_course_user_requests_enable !!} {!! $log_course_user_requests_inactive !!}>
-                                                            {{ trans('langActivate') }}
-                                                        </label>
-                                                        <div class='help-block'>{{ $log_course_user_requests_dis }}</div>
-                                                    </div>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input type='radio' value='1'
-                                                                   name='disable_log_course_user_requests' {!! $log_course_user_requests_disable !!} {!! $log_course_user_requests_inactive !!}>
-                                                            {{ trans('langDeactivate') }}
+                                                            <input type='radio' name='l_radio' value='0'
+                                                                   {{ $license_checked0 }} $disabledVisibility>
+                                                            {{ trans('langLicenseUnset') }}
                                                         </label>
                                                     </div>
-                                                </div>
-                                            </div>
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langUsersListAccess') }}</div>
-                                                <div class='col-sm-12'>
                                                     <div class='radio mb-2'>
                                                         <label>
-                                                            <input type='radio' value='1'
-                                                                   name='enable_access_users_list' {!! $check_enable_access_users_list !!}>
-                                                            {{ trans('langActivate') }}
-                                                        </label>
-                                                        <div class='help-block'>{{ trans('langUsersListAccessInfo') }}</div>
-                                                    </div>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input type='radio' value='0'
-                                                                   name='enable_access_users_list' {!! $check_disable_access_users_list !!} >
-                                                            {{ trans('langDeactivate') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseSharing') }}</div>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio mb-2'>
-                                                        <label>
-                                                            <input type='radio' value='1'
-                                                                   name='s_radio' {{ $checkSharingEn }} {!! $sharing_radio_dis !!}>
-                                                            {{ trans('langSharingEn') }}
+                                                            <input type='radio' name='l_radio' value='10' {{ $license_checked10 }} $disabledVisibility>
+                                                            {{ trans('langCopyrightedNotFree') }}
                                                         </label>
                                                     </div>
                                                     <div class='radio'>
                                                         <label>
-                                                            <input type='radio' value='0'
-                                                                   name='s_radio' {{ $checkSharingDis }} {!! $sharing_radio_dis !!}>
-                                                            {{ trans('langSharingDis') }}
-
-                                                        </label>
-                                                        <div class='help-block'>{{ $sharing_dis_label }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langForum') }}</div>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio mb-2'>
-                                                        <label>
-                                                            <input type='radio' value='1'
-                                                                   name='f_radio' {!! $checkForumEn !!}>
-                                                            {{ trans('langDisableForumNotifications') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input type='radio' value='0'
-                                                                   name='f_radio' {!! $checkForumDis !!}>
-                                                            {{ trans('langActivateForumNotifications') }}
+                                                            <input id='cc_license' type='radio' name='l_radio' value='cc' {{ $cc_checked}} $disabledVisibility>
+                                                            {{ trans("langCMeta['course_license']") }}
                                                         </label>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseRating') }}
-                                                    :
-                                                </div>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio mb-2'>
-                                                        <label>
-                                                            <input type='radio' value='1'
-                                                                   name='r_radio' {!! $checkRatingEn !!}>
-                                                            {{ trans('langRatingEn') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input type='radio' value='0'
-                                                                   name='r_radio' {!! $checkRatingDis !!}>
-                                                            {{ trans('langRatingDis') }}
-                                                        </label>
-                                                    </div>
+                                                <div class='col-sm-12 col-sm-offset-2' id='cc'>
+                                                    <label class='mb-0' for='course_license_id'
+                                                           aria-label="{{ trans('langOpenCoursesLicense') }}"></label>
+                                                    {!! $license_selection !!}
                                                 </div>
                                             </div>
 
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseAnonymousRating') }}</div>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio mb-2'>
-                                                        <label>
-                                                            <input type='radio' value='1'
-                                                                   name='ran_radio' {!! $checkAnonRatingEn !!} {!! $anon_rating_radio_dis !!}>
-                                                            {{ trans('langRatingAnonEn') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input type='radio' value='0'
-                                                                   name='ran_radio' {!! $checkAnonRatingDis !!} {!! $anon_rating_radio_dis !!}>
-                                                            {{ trans('langRatingAnonDis') }}
-
-                                                        </label>
-                                                        <div class='help-block'>{{ $anon_rating_dis_label }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langCourseCommenting') }}</div>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio mb-2'>
-                                                        <label>
-                                                            <input type='radio' value='1'
-                                                                   name='c_radio' {!! $checkCommentEn !!}>
-                                                            {{ trans('langCommentsEn') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input type='radio' value='0'
-                                                                   name='c_radio' {!! $checkCommentDis !!}>
-                                                            {{ trans('langCommentsDis') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langH5PUploadingEnabled') }}</div>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio mb-2'>
-                                                        <label>
-                                                            <input type='radio' value='1'
-                                                                   name='h5p_radio' {!! $checkH5PEn !!}>
-                                                            {{ trans('langActivate') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input type='radio' value='0'
-                                                                   name='h5p_radio' {!! $checkH5PDis !!}>
-                                                            {{ trans('langDeactivate') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAbuseReport') }}</div>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio mb-2'>
-                                                        <label>
-                                                            <input type='radio' value='1'
-                                                                   name='ar_radio' {!! $checkAbuseReportEn !!}>
-                                                            {{ trans('langAbuseReportEn') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input type='radio' value='0'
-                                                                   name='ar_radio' {!! $checkAbuseReportDis !!}>
-                                                            {{ trans('langAbuseReportDis') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            @if (get_config('enable_docs_public_write'))
-                                                <div class='form-group mt-4'>
-                                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langEnableDocsPublicWrite') }}</div>
-                                                    <div class='col-sm-12'>
-                                                        <div class='radio'>
-                                                            <label>
-                                                                <input type='radio' value='1' name='docs_public_write'
-                                                                       @if (setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE)) checked @endif>
-                                                                {{ trans('langPublicDocumentManagementExplanation') }}
+                                            <div class='row input-append date form-group mt-4'>
+                                                <label for='courseStartDate' class='col-12 control-label-notes mb-1'>
+                                                    {{ trans('langStart') }} {{ trans('langsOfCourse') }}
+                                                </label>
+                                                <div class='col-12'>
+                                                    <div class='input-group'>
+                                                        <span class='input-group-addon'>
+                                                            <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                                 <input class='mt-0' type='checkbox' id='course_enableStartDate' name='course_enableStartDate' value='1' @if ($course_enableStartDate) checked @endif>
+                                                                 <span class='checkmark'></span>
                                                             </label>
-                                                        </div>
-                                                        <div class='radio'>
-                                                            <label>
-                                                                <input type='radio' value='0' name='docs_public_write'
-                                                                       @if (!setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE)) checked @endif>
-                                                                {{ trans('langDeactivate') }}
-                                                            </label>
-                                                        </div>
+                                                        </span>
+                                                        <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <input class='form-control mt-0 border-start-0' name='courseStartDate' id='courseStartDate' type='text' value='{{ $courseStartDate }}' @if (!$course_enableStartDate) disabled @endif>
                                                     </div>
+                                                    <span class='help-block'><i class='fa fa-share fa-rotate-270 p-2'></i>
+                                                        {{ trans('langCourseStartDateLegend') }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class='row input-append date form-group mt-4'>
+                                                <label for='courseEndDate' class='col-12 control-label-notes mb-1'>
+                                                    {{ trans('langFinish') }} {{ trans('langsOfCourse') }}
+                                                </label>
+                                                <div class='col-12'>
+                                                    <div class='input-group'>
+                                                        <span class='input-group-addon'>
+                                                            <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                                 <input class='mt-0' type='checkbox' id='course_enableEndDate' name='course_enableEndDate' value='1' @if ($course_enableEndDate) checked @endif>
+                                                                 <span class='checkmark'></span>
+                                                            </label>
+                                                        </span>
+                                                        <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <input class='form-control mt-0 border-start-0' name='courseEndDate' id='courseEndDate' type='text' value='{{ $courseEndDate }}' @if (!$course_enableEndDate) disabled @endif>
+                                                    </div>
+                                                    <span class='help-block'><i class='fa fa-share fa-rotate-270 p-2'></i>
+                                                        {{ trans('langCourseEndDateLegend') }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <h2 class='text-heading-h3 mt-4'>
+                                                {{ trans('langOtherOptions') }}
+                                            </h2>
+
+                                            @if (get_config('offline_course'))
+                                                <div class='checkbox mb-2 mt-2'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='enable_offline_course' @if (setting_get(SETTING_OFFLINE_COURSE, $course_id) == 1) checked @endif>
+                                                        <span class='checkmark'></span>{{ trans('langDownloadCourse') }}
+                                                        <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='right' title='{{ trans('langCourseOfflineLegend') }}' style='margin-top: 5px;'></span>
+                                                    </label>
                                                 </div>
                                             @endif
 
-                                            <div class='form-group mt-4'>
-                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langDisplayRightContentInCPage') }}</div>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input type='radio' value='1'
-                                                                   name='enable_agenda_announcement_widget_courseCompletion' {!! $check_enable_agenda_announcement_widget_courseCompletion !!}>
-                                                            {{ trans('langActivate') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='radio'>
-                                                        <label>
-                                                            <input type='radio' value='0'
-                                                                   name='enable_agenda_announcement_widget_courseCompletion' {!! $check_disable_agenda_announcement_widget_courseCompletion !!} >
-                                                            {{ trans('langDeactivate') }}
-                                                        </label>
-                                                    </div>
+                                            @if (course_status($course_id) == COURSE_CLOSED)
+                                                <div class='checkbox mb-2 mt-2'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='disable_log_course_user_requests' @unless (!setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) checked @endunless >
+                                                        <span class='checkmark'></span>{{ trans('langCourseUserRequests') }}
+                                                    </label>
                                                 </div>
+                                            @endif
+
+                                            <div class='checkbox mb-2 mt-2'>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                    <input type='checkbox' name='enable_access_users_list' @if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1) checked @endif >
+                                                    <span class='checkmark'></span>{{ trans('langUsersListAccess') }}
+                                                    <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='right' title='{{ trans('langUsersListAccessInfo') }}' style='margin-top: 5px;'></span>
+                                                </label>
                                             </div>
 
-                                            @php
-                                                $print_header_image_url = setting_get_print_image_url(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
-                                                $print_footer_image_url = setting_get_print_image_url(SETTING_COURSE_IMAGE_PRINT_FOOTER, $course_id);
-                                            @endphp
+                                            @if (is_sharing_allowed($course_id) && (course_status($course_id) == COURSE_OPEN))
+                                                <div class='checkbox mb-2 mt-2'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='s_radio' @if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) checked @endif >
+                                                        <span class='checkmark'></span>{{ trans('langCourseSharing') }}
+                                                    </label>
+                                                </div>
+                                            @endif
+
+                                            <div class='checkbox mb-2 mt-2'>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                    <input type='checkbox' name='f_radio' @if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS, $course_id) == 1) checked @endif >
+                                                    <span class='checkmark'></span>{{ trans('langActivateForumNotifications') }}
+                                                </label>
+                                            </div>
+
+                                            <div class='checkbox mb-2 mt-2'>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                    <input type='checkbox' name='r_radio' @if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) checked @endif >
+                                                    <span class='checkmark'></span>{{ trans('langCourseRating') }}
+                                                </label>
+                                            </div>
+
+                                            @if (course_status($course_id) == COURSE_OPEN)
+                                                <div class='checkbox mb-2 mt-2'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='ran_radio' @if (setting_get(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $course_id) == 1) checked @endif >
+                                                        <span class='checkmark'></span>{{ trans('langCourseAnonymousRating') }}
+                                                    </label>
+                                                </div>
+                                            @endif
+
+                                            <div class='checkbox mb-2 mt-2'>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                    <input type='checkbox' name='c_radio' @if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) checked @endif >
+                                                    <span class='checkmark'></span>{{ trans('langCourseCommenting') }}
+                                                </label>
+                                            </div>
+
+                                            <div class='checkbox mb-2 mt-2'>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                    <input type='checkbox' name='h5p_radio' @if (setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) checked @endif >
+                                                    <span class='checkmark'></span>{{ trans('langH5PUploadingEnabled') }}
+                                                </label>
+                                            </div>
+
+                                            <div class='checkbox mb-2 mt-2'>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                    <input type='checkbox' name='ar_radio' @if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id) == 1) checked @endif>
+                                                    <span class='checkmark'></span>{{ trans('langAbuseReport') }}
+                                                </label>
+                                            </div>
+
+                                            @if (get_config('enable_docs_public_write'))
+                                                <div class='checkbox mb-2 mt-2'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='docs_public_write' @if (setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE)) checked @endif>
+                                                        <span class='checkmark'></span>{{ trans('langPublicDocumentManagementExplanation') }}
+                                                    </label>
+                                                </div>
+                                            @endif
+
+                                            <div class='checkbox mb-2 mt-2'>
+                                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                    <input type='checkbox' name='enable_agenda_announcement_widget_courseCompletion' @if (setting_get(SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION, $course_id) == 1) checked @endif >
+                                                    <span class='checkmark'></span>{{ trans('langDisplayRightContentInCPage') }}
+                                                </label>
+                                            </div>
 
                                             <div class='form-group mt-4'>
-                                                <h2 class='text-heading-h3'>{{ trans('langCoursePrintSetting') }}</h2>
+                                                <h2 class='text-heading-h3'>
+                                                    {{ trans('langCoursePrintSetting') }}
+                                                </h2>
                                                 <div class='col-sm-12 control-label-notes mt-3'>
                                                     {{ trans('langCoursePrintHeaderImage') }}
                                                     <span class="ms-2"><small>{{ trans('langReportImageNotFound') }}</small></span>
@@ -829,19 +718,17 @@
                                                         </button>
                                                     </div>
                                                     <div class="d-flex gap-2 align-items-center mt-2">
-                                                        <label class="col-sm-2"
-                                                               for="header_image_alignment">{{ trans('langAlignment') }}</label>
-                                                        <select name="header_image_alignment"
-                                                                id="header_image_alignment" class="form-select">
+                                                        <label class="col-sm-2" for="header_image_alignment">{{ trans('langAlignment') }}</label>
+                                                        <select name="header_image_alignment" id="header_image_alignment" class="form-select">
                                                             <option value="0" {{ setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id) == '0' ? 'selected' : '' }}>{{ trans('langAlignLeft') }}</option>
                                                             <option value="1" {{ setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id) == '1' ? 'selected' : '' }}>{{ trans('langAlignCenter') }}</option>
                                                             <option value="2" {{ setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT, $course_id) == '2' ? 'selected' : '' }}>{{ trans('langAlignRight') }}</option>
                                                         </select>
                                                     </div>
                                                     <div class="d-flex gap-2 align-items-center mt-2">
-                                                        <label class="col-sm-2"
-                                                               for="header_image_width">{{ trans('langHeight') }}
-                                                            (mm)</label>
+                                                        <label class="col-sm-2" for="header_image_width">
+                                                            {{ trans('langHeight') }}(mm)
+                                                        </label>
                                                         <input type="number" name="header_image_width"
                                                                id="header_image_width"
                                                                value="{{ setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id) }}"
@@ -876,10 +763,10 @@
                                                         </button>
                                                     </div>
                                                     <div class="d-flex gap-2 align-items-center mt-2">
-                                                        <label class="col-sm-2"
-                                                               for="header_image_alignment">{{ trans('langAlignment') }}</label>
-                                                        <select name="footer_image_alignment"
-                                                                id="footer_image_alignment" class="form-select">
+                                                        <label class="col-sm-2" for="header_image_alignment">
+                                                            {{ trans('langAlignment') }}
+                                                        </label>
+                                                        <select name="footer_image_alignment" id="footer_image_alignment" class="form-select">
                                                             <option value="0" {{ setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id) == '0' ? 'selected' : '' }}>{{ trans('langAlignLeft') }}</option>
                                                             <option value="1" {{ setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id) == '1' ? 'selected' : '' }}>{{ trans('langAlignCenter') }}</option>
                                                             <option value="2" {{ setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT, $course_id) == '2' ? 'selected' : '' }}>{{ trans('langAlignRight') }}</option>
@@ -904,10 +791,8 @@
                                             {!! showSecondFactorChallenge() !!}
 
                                             <div class='form-group mt-5 mb-1 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
-                                                <input class='btn submitAdminBtn' type='submit' name='submit'
-                                                       value='{{ trans('langSubmit') }}'>
-                                                <a href='{{ $cancel_link }}'
-                                                   class='btn cancelAdminBtn text-nowrap'>{{ trans('langCancel') }}</a>
+                                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                                <a href='{{ $urlServer }}courses/{{ $course_code }}/' class='btn cancelAdminBtn text-nowrap'>{{ trans('langCancel') }}</a>
                                             </div>
                                         </fieldset>
                                         {!! generate_csrf_token_form_field() !!}
@@ -915,15 +800,12 @@
                                 </div>
                             </div>
                             <div class='d-none d-lg-block'>
-                                <img class='form-image-modules' src='{!! get_form_image() !!}'
-                                     alt="{{ trans('langImgFormsDes') }}">
+                                <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
                             </div>
                         </div>
-
                     </div>
                 </main>
             </div>
-
         </div>
 
     <!-- Print Images Modal -->

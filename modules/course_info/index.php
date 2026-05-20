@@ -42,6 +42,8 @@ if (Session::has('course-modify-success')) {
     Session::flash('alert-class', 'alert-success');
 }
 
+load_js('bootstrap-datepicker');
+
 $user = new User();
 $course = new Course();
 $tree = new Hierarchy();
@@ -93,6 +95,7 @@ $isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_cer
 $data['disable_visibility'] = $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 if (isset($_POST['submit'])) {
+
     $view_type = $_POST['view_type'];
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
@@ -107,6 +110,7 @@ if (isset($_POST['submit'])) {
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/course_info/index.php?course=$course_code");
     } else {
+        //print_a($_POST);die;
         // update course settings
         if (isset($_POST['formvisible']) and ( $_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
             $password = $_POST['password'];
@@ -179,6 +183,20 @@ if (isset($_POST['submit'])) {
             $course_language = $_POST['course_language'];
         }
 
+        if (isset($_POST['course_enableEndDate']) && $_POST['courseEndDate'] !== '') {
+            $courseEndDate = DateTime::createFromFormat('d-m-Y', $_POST['courseEndDate']);
+            $end_date = $courseEndDate->format('Y-m-d');
+        } else {
+            $end_date = null;
+        }
+
+        if (isset($_POST['course_enableStartDate']) && $_POST['courseStartDate'] !== '') {
+            $courseStartDate = DateTime::createFromFormat('d-m-Y', $_POST['courseStartDate']);
+            $start_date = $courseStartDate->format('Y-m-d');
+        } else {
+            $start_date = null;
+        }
+
         //=======================================================
         // Check if the teacher is allowed to create in the departments he chose
         if ($deps_changed and !$deps_valid) {
@@ -196,12 +214,14 @@ if (isset($_POST['submit'])) {
                                 lang = ?s,
                                 password = ?s,
                                 view_type = ?s,
+                                start_date = ?s,
+                                end_date = ?s,
                                 flipped_flag = ?s,
                                 is_collaborative = ?d
                             WHERE id = ?d",
                                 $_POST['title'], mb_substr($_POST['fcode'], 0, 100), $_POST['course_keywords'],
                                 $_POST['formvisible'], $course_license, $_POST['teacher_name'],
-                                $course_language, $password, $view_type, $flipped_flag, $typeCourse, $course_id);
+                                $course_language, $password, $view_type, $start_date, $end_date, $flipped_flag, $typeCourse, $course_id);
             $course->refresh($course_id, $departments);
 
             Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
@@ -213,40 +233,64 @@ if (isset($_POST['submit'])) {
 
             // update course settings
             if (isset($_POST['s_radio'])) {
-                setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
+                setting_set(SETTING_COURSE_SHARING_ENABLE, 1, $course_id);
+            } else {
+                setting_set(SETTING_COURSE_SHARING_ENABLE, 0, $course_id);
             }
             if (isset($_POST['r_radio'])) {
-                setting_set(SETTING_COURSE_RATING_ENABLE, $_POST['r_radio'], $course_id);
+                setting_set(SETTING_COURSE_RATING_ENABLE, 1, $course_id);
+            } else {
+                setting_set(SETTING_COURSE_RATING_ENABLE, 0, $course_id);
             }
             if (isset($_POST['ran_radio'])) {
-                setting_set(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $_POST['ran_radio'], $course_id);
+                setting_set(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, 1, $course_id);
+            } else {
+                setting_set(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, 0, $course_id);
             }
             if (isset($_POST['c_radio'])) {
-                setting_set(SETTING_COURSE_COMMENT_ENABLE, $_POST['c_radio'], $course_id);
+                setting_set(SETTING_COURSE_COMMENT_ENABLE, 1, $course_id);
+            } else {
+                setting_set(SETTING_COURSE_COMMENT_ENABLE, 0, $course_id);
             }
             if (isset($_POST['h5p_radio'])) {
-                setting_set(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $_POST['h5p_radio'], $course_id);
+                setting_set(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, 1, $course_id);
+            } else {
+                setting_set(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, 0, $course_id);
             }
             if (isset($_POST['ar_radio'])) {
-                setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
+                setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, 1, $course_id);
+            } else {
+                setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, 0, $course_id);
             }
             if (isset($_POST['enable_offline_course'])) {
-                setting_set(SETTING_OFFLINE_COURSE, $_POST['enable_offline_course'], $course_id);
+                setting_set(SETTING_OFFLINE_COURSE, 1, $course_id);
+            } else {
+                setting_set(SETTING_OFFLINE_COURSE, 0, $course_id);
             }
             if (isset($_POST['disable_log_course_user_requests'])) {
-                setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, $_POST['disable_log_course_user_requests'], $course_id);
+                setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, 1, $course_id);
+            } else {
+                setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, 0, $course_id);
             }
             if (isset($_POST['f_radio'])) {
-                setting_set(SETTING_COURSE_FORUM_NOTIFICATIONS, $_POST['f_radio'], $course_id);
+                setting_set(SETTING_COURSE_FORUM_NOTIFICATIONS, 1, $course_id);
+            } else {
+                setting_set(SETTING_COURSE_FORUM_NOTIFICATIONS, 0, $course_id);
             }
             if (isset($_POST['docs_public_write'])) {
-                setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['docs_public_write']? '1': '0', $course_id);
+                setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, 1, $course_id);
+            } else {
+                setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, 0, $course_id);
             }
             if (isset($_POST['enable_access_users_list'])) {
-                setting_set(SETTING_USERS_LIST_ACCESS, $_POST['enable_access_users_list'], $course_id);
+                setting_set(SETTING_USERS_LIST_ACCESS, 1, $course_id);
+            } else {
+                setting_set(SETTING_USERS_LIST_ACCESS, 0, $course_id);
             }
             if (isset($_POST['enable_agenda_announcement_widget_courseCompletion'])) {
-                setting_set(SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION, $_POST['enable_agenda_announcement_widget_courseCompletion'], $course_id);
+                setting_set(SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION, 1, $course_id);
+            } else {
+                setting_set(SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION, 0, $course_id);
             }
             if (isset($_POST['faculty_users_registration'])) {
                 setting_set(SETTING_FACULTY_USERS_REGISTRATION, 1, $course_id);
@@ -344,7 +388,7 @@ if (isset($_POST['submit'])) {
     ]);
 
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
-                	       course_license, password, id, view_type, flipped_flag, is_collaborative
+                	       course_license, password, id, view_type, start_date, start_date, end_date, flipped_flag, is_collaborative
                       FROM course WHERE code = ?s", $course_code);
     if ($depadmin_mode) {
         list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
@@ -396,7 +440,6 @@ if (isset($_POST['submit'])) {
         $data['is_type_collaborative'] = '';
     }
 
-
     $course_license = $c->course_license;
     if ($course_license > 0 and $course_license < 10) {
         $cc_checked = ' checked';
@@ -415,176 +458,26 @@ if (isset($_POST['submit'])) {
     $data['license_checked0'] = $license_checked[0];
     $data['license_checked10'] = $license_checked[10];
 
-    // options about logging course user requests
-    if (course_status($course_id) != COURSE_CLOSED) {
-        $log_course_user_requests_inactive = ' disabled';
-        $log_course_user_requests_dis = $langCourseUserRequestsDisabled;
+    // course start date
+    if (!is_null($c->start_date)) {
+        $data['course_enableStartDate'] = true;
+        $start_date = DateTime::createFromFormat('Y-m-d', $c->start_date);
+        $data['courseStartDate'] = $start_date->format('d-m-Y');
     } else {
-        $log_course_user_requests_inactive = '';
-        $log_course_user_requests_dis = '';
-    }
-    $data['log_course_user_requests_inactive'] = $log_course_user_requests_inactive;
-    $data['log_course_user_requests_dis'] = $log_course_user_requests_dis;
-
-    //Sharing options
-    if (!is_sharing_allowed($course_id)) {
-        $sharing_radio_dis = ' disabled';
-        if (!get_config('enable_social_sharing_links')) {
-            $sharing_dis_label = $langSharingDisAdmin;
-        }
-        if (course_status($course_id) != COURSE_OPEN) {
-            $sharing_dis_label = $langSharingDisCourse;
-        }
-    } else {
-        $sharing_radio_dis = '';
-        $sharing_dis_label = '';
-    }
-    $data['sharing_radio_dis'] = $sharing_radio_dis;
-    $data['sharing_dis_label'] = $sharing_dis_label;
-
-    if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1) {
-        $check_enable_access_users_list = 'checked';
-        $check_disable_access_users_list = '';
-    } else {
-        $check_enable_access_users_list = '';
-        $check_disable_access_users_list = 'checked';
-    }
-    $data['check_enable_access_users_list'] = $check_enable_access_users_list;
-    $data['check_disable_access_users_list'] = $check_disable_access_users_list;
-
-    if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS, $course_id) == 1) {
-        $checkForumDis = '';
-        $checkForumEn = 'checked';
-    } else {
-        $checkForumDis = 'checked';
-        $checkForumEn = '';
-    }
-    $data['checkForumDis'] = $checkForumDis;
-    $data['checkForumEn'] = $checkForumEn;
-
-    if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
-        $checkSharingDis = '';
-        $checkSharingEn = 'checked';
-    } else {
-        $checkSharingDis = 'checked';
-        $checkSharingEn = '';
-    }
-    $data['checkSharingDis'] = $checkSharingDis;
-    $data['checkSharingEn'] = $checkSharingEn;
-
-    if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
-        $checkRatingDis = '';
-        $checkRatingEn = 'checked';
-    } else {
-        $checkRatingDis = 'checked';
-        $checkRatingEn = '';
-    }
-    $data['checkRatingDis'] = $checkRatingDis;
-    $data['checkRatingEn'] = $checkRatingEn;
-
-    // Anonymous user rating
-    if (course_status($course_id) != COURSE_OPEN) {
-        $anon_rating_radio_dis = ' disabled';
-        $anon_rating_dis_label = $langRatingAnonDisCourse;
-    } else {
-        $anon_rating_radio_dis = '';
-        $anon_rating_dis_label = '';
-    }
-    $data['anon_rating_radio_dis'] = $anon_rating_radio_dis;
-    $data['anon_rating_dis_label'] = $anon_rating_dis_label;
-
-    if (setting_get(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $course_id) == 1) {
-        $checkAnonRatingDis = '';
-        $checkAnonRatingEn = 'checked ';
-    } else {
-        $checkAnonRatingDis = 'checked ';
-        $checkAnonRatingEn = '';
-    }
-    $data['checkAnonRatingDis'] = $checkAnonRatingDis;
-    $data['checkAnonRatingEn'] = $checkAnonRatingEn;
-
-    // User comments
-    if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
-        $checkCommentDis = '';
-        $checkCommentEn = 'checked ';
-    } else {
-        $checkCommentDis = 'checked ';
-        $checkCommentEn = '';
-    }
-    $data['checkCommentDis'] = $checkCommentDis;
-    $data['checkCommentEn'] = $checkCommentEn;
-
-    // H5P users uploading
-    if (setting_get(SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE, $course_id) == 1) {
-        $checkH5PDis = '';
-        $checkH5PEn = 'checked ';
-    } else {
-        $checkH5PDis = 'checked ';
-        $checkH5PEn = '';
-    }
-    $data['checkH5PDis'] = $checkH5PDis;
-    $data['checkH5PEn'] = $checkH5PEn;
-
-    // Abuse report
-    if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id) == 1) {
-        $checkAbuseReportDis = '';
-        $checkAbuseReportEn = 'checked ';
-    } else {
-        $checkAbuseReportDis = 'checked ';
-        $checkAbuseReportEn = '';
-    }
-    $data['checkAbuseReportDis'] = $checkAbuseReportDis;
-    $data['checkAbuseReportEn'] = $checkAbuseReportEn;
-
-    // offline course
-    if (!get_config('offline_course')) {
-        $log_offline_course_inactive = ' disabled';
-    } else {
-        $log_offline_course_inactive = '';
+        $data['course_enableStartDate'] = $data['courseStartDate'] = '';
     }
 
-    if (setting_get(SETTING_OFFLINE_COURSE, $course_id)) {
-        $log_offline_course_enable = 'checked';
-        $log_offline_course_disable = '';
+    // course end date
+    if (!is_null($c->end_date)) {
+        $data['course_enableEndDate'] = true;
+        $end_date = DateTime::createFromFormat('Y-m-d', $c->end_date);
+        $data['courseEndDate'] = $end_date->format('d-m-Y');
     } else {
-        $log_offline_course_enable = '';
-        $log_offline_course_disable = 'checked';
+        $data['course_enableEndDate'] = $data['courseEndDate'] = '';
     }
-    $data['log_offline_course_inactive'] = $log_offline_course_inactive;
-    $data['log_offline_course_enable'] = $log_offline_course_enable;
-    $data['log_offline_course_disable'] = $log_offline_course_disable;
 
-    // Log course user requests
-    if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
-        $log_course_user_requests_disable = ' checked';
-        $log_course_user_requests_enable = '';
-    } else {
-        $log_course_user_requests_disable = '';
-        $log_course_user_requests_enable = ' checked';
-    }
-    $data['log_course_user_requests_disable'] = $log_course_user_requests_disable;
-    $data['log_course_user_requests_enable'] = $log_course_user_requests_enable;
-
-    if (setting_get(SETTING_AGENDA_ANNOUNCEMENT_COURSE_COMPLETION, $course_id) == 1) {
-        $check_enable_agenda_announcement_widget_courseCompletion = ' checked';
-        $check_disable_agenda_announcement_widget_courseCompletion = '';
-    } else {
-        $check_enable_agenda_announcement_widget_courseCompletion = '';
-        $check_disable_agenda_announcement_widget_courseCompletion = ' checked';
-    }
-    $data['check_enable_agenda_announcement_widget_courseCompletion'] = $check_enable_agenda_announcement_widget_courseCompletion;
-    $data['check_disable_agenda_announcement_widget_courseCompletion'] = $check_disable_agenda_announcement_widget_courseCompletion;
-
-    if (setting_get(SETTING_FACULTY_USERS_REGISTRATION, $course_id) == 1) {
-        $check_enable_faculty_users_registration = ' checked';
-    } else {
-        $check_enable_faculty_users_registration = '';
-    }
-    $data['check_enable_faculty_users_registration'] = $check_enable_faculty_users_registration;
-
-    $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
-
-    $data['cancel_link'] = "{$urlServer}courses/$course_code/";
+    $data['print_header_image_url'] = setting_get_print_image_url(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
+    $data['print_footer_image_url'] = setting_get_print_image_url(SETTING_COURSE_IMAGE_PRINT_FOOTER, $course_id);
 
     view('modules.course_info.index', $data);
 }

@@ -51,7 +51,7 @@ if(isset($_GET['term'])){
   }
 
   //Get all courses which user has registered
-  if(empty($q)){
+  if (empty($q)) {
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                       course.code code,
                       course.public_code,
@@ -66,10 +66,19 @@ if(isset($_GET['term'])){
                 FROM course JOIN course_user
                       ON course.id = course_user.course_id 
                       AND course_user.user_id = ?d 
-                      AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+                      AND (
+                             course_user.status = " . USER_TEACHER . " OR
+                             course_user.course_reviewer = 1 OR
+                             course_user.editor = 1 OR
+                             (
+                              course.visible != " . COURSE_INACTIVE . " AND
+                              (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") AND
+                              (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+                             )
+                         )
                       AND is_collaborative = ?d
                   ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, $typeCourse);
-  }else{//Get all courses from search-component which user has registered
+  } else { //Get all courses from search-component which user has registered
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                    course.code code,
                    course.public_code,
@@ -85,7 +94,16 @@ if(isset($_GET['term'])){
                   ON course.id = course_user.course_id 
                   WHERE title LIKE ?s
                   AND course_user.user_id = ?d 
-                  AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+                  AND (
+                         course_user.status = " . USER_TEACHER . " OR
+                         course_user.course_reviewer = 1 OR
+                         course_user.editor = 1 OR
+                         (
+                          course.visible != " . COURSE_INACTIVE . " AND
+                          (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") AND
+                          (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+                         )
+                     )
                   AND is_collaborative = ?d
               ORDER BY favorite DESC, status ASC, visible ASC, title ASC","%$q%",  $uid, $typeCourse);
   }
