@@ -70,8 +70,20 @@ if (isset($_SESSION['keycloak_test'])) {
     $_SESSION['auth_user_info'] = (array) $userProfile;
     redirect_to_home_page('modules/admin/auth_test.php?auth=16');
 } else {
-    $_SESSION['auth_attributes'] = (array) $userProfile;
-    $_SESSION['keycloak_uname'] = $userProfile->displayName; // preferred_username
+    $profile_array = (array) $userProfile;
+    if (isset($profile_array['data']) && is_array($profile_array['data'])) {
+        $profile_array = array_merge($profile_array, $profile_array['data']);
+    }
+    $_SESSION['auth_attributes'] = $profile_array;
+
+    if ($auth_settings['uid_attr']) {
+        $_SESSION['keycloak_uname'] = $_SESSION['auth_attributes'][$auth_settings['uid_attr']];
+    } else {
+        $_SESSION['keycloak_uname'] = $userProfile->displayName; // preferred_username
+    }
+    if ($auth_settings['userstudentid']) {
+        $_SESSION['auth_studentid'] = $_SESSION['auth_attributes'][$auth_settings['userstudentid']];
+    }
     $_SESSION['auth_email'] = $userProfile->email;
     $_SESSION['auth_surname'] = $userProfile->lastName;
     $_SESSION['auth_givenname'] = $userProfile->firstName;

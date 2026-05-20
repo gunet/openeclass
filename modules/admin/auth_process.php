@@ -113,7 +113,7 @@ register_posted_variables([
     'apiBaseUrl' => true, 'authorizePath' => true, 'accessTokenPath' => true, 'profileMethod' => true,
     'apiID' => true, 'apiSecret' => true,
     // Keycloak options
-    'realm' => true, 'userstudentid' => true, 'altauth' => true, 'altauth_use' => true,
+    'realm' => true, 'userstudentid' => true, 'uid_attr' => true, 'uid_attr_is_username' => true, 'username_prefix' => true,
 ], 'all');
 
 if (empty($ldap_login_attr)) {
@@ -262,8 +262,9 @@ if (isset($_POST['submit'])) {
                 'id' => $apiID,
                 'secret' => $apiSecret,
                 'userstudentid' => $userstudentid,
-                'altauth' => $altauth,
-                'altauth_use' => $altauth_use,
+                'uid_attr' => $uid_attr,
+                'uid_attr_is_username' => !empty($uid_attr_is_username) ? 1 : 0,
+                'username_prefix' => $username_prefix,
             ];
             break;
         default:
@@ -359,6 +360,9 @@ if (isset($_POST['submit'])) {
                 $data['authHelp'] = $langHybridAuthSetup1 . $authName . $langHybridAuthSetup2 . $authName . $langHybridAuthSetup3 . $authHelpUrl . $langHybridAuthSetup4 . $langHybridAuthCallback . $callbackUri;
             } else {
                 $data['authHelp'] = "";
+            }
+            if (!isset($data['auth_data']['uid_attr_is_username'])) {
+                $data['auth_data']['uid_attr_is_username'] = 0;
             }
         }
 
