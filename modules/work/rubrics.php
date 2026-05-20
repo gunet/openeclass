@@ -214,9 +214,12 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                 }
                 $('#inserthere').before(
                     '<div id=\'critDiv'+ j +'\' class=\'card panelCard dashed-card px-lg-4 py-lg-3 p-3\' style=\'margin-top: 50px;\'>'+
-                        '<a class=\'btn deleteAdminBtn deleteCriteriaBtn\' href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa-regular fa-trash-can fs-6 pe-2\'></span>". js_escape($langDelCrit). "</a>'+
+                        '<div class=\'d-flex justify-content-between gap-3\'>'+
+                        '<p class=\'rubric-title\'>" . js_escape($langRubricCrit) . "</p>'+
+                        '    <a class=\'btn deleteAdminBtn deleteCriteriaBtn\' href=\'#\' id=\'remCrit'+j+'\' data-bs-toggle=\'tooltip\' data-bs-placement=\'top\' title=\'".js_escape($langDelCrit)."\'><span class=\'fa-regular fa-trash-can fs-6\'></span></a>'+
+                        '</div>'+
                         '<div class=\'form-group\'>'+
-                        '   <label for=\'title\' class=\'col-12 control-label-notes mb-1\'>". js_escape($langRubricCrit). "</label>'+
+                        '   <label for=\'title\' class=\'col-12 control-label-notes mb-1\'>". js_escape($langRubricCritTitle). "</label>'+
                         '    <div class=\'col-12\'>'+
                         '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+
                         '    </div>'+
@@ -312,15 +315,18 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                 $cardType = $crit == 0 ? 'primary-dashed-card' : 'dashed-card';
                 $tool_content .= "
                 <div id='critDiv$crit' class='card panelCard $cardType px-lg-4 py-lg-3 p-3' style='margin-top: 50px;'>";
+                $tool_content .= "<div class='d-flex justify-content-between gap-3'>";
+                $tool_content .= "<p class='rubric-title'>$langRubricCrit</p>";
                 if ($crit > 0) {
-                    $tool_content .= "<a href='#' class='btn deleteAdminBtn deleteCriteriaBtn removeCrit' id='remCrit$crit'>
-                                        <i class='fa-regular fa-trash-can fs-6 pe-2'></i>
-                                        $langDelCrit
+                    $tool_content .= "<a href='#' class='btn deleteAdminBtn deleteCriteriaBtn removeCrit' id='remCrit$crit'
+                                        data-bs-toggle='tooltip' data-bs-placement='top' title='$langDelCrit'>
+                                        <i class='fa-regular fa-trash-can fs-6'></i>
                                       </a>";
                 }
+                $tool_content .= "</div>";
  $tool_content .= "<div class='form-group'>
                     <div class='col-12 control-label-notes mb-1'>
-                        $langRubricCrit
+                        $langRubricCritTitle
                     </div>
                     <div class='col-12'>
                         <input type='text' name='title[$crit]' class='form-control' value='".q($title['title_name'])."' required>
@@ -394,9 +400,10 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
             if (isset($_GET['new_rubric']) or !is_rubric_used_in_grading($_GET['rubric_id'], $course_id)) {
                 @$tool_content .= "
 
-                <div id='critDiv0' class='card panelCard primary-dashed-card px-lg-4 py-lg-3 p-3 mt-4'>
+                <div id='critDiv0' class='card panelCard primary-dashed-card px-lg-4 py-lg-3 p-3 mt-5'>
+                    <div class='d-flex justify-content-between'><p class='rubric-title'>$langRubricCrit</p></div>
                     <div class='form-group" . (Session::getError('title') ? " has-error" : "") . "'>
-                        <label for='title' class='col-sm-12 control-label-notes'>$langRubricCrit</label>
+                        <label for='title' class='col-sm-12 control-label-notes'>$langRubricCritTitle</label>
                         <div class='col-sm-12'>
                           <input name='title[]' type='text' class='form-control' id='title' value='$title'>
                           " . (Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "") . "

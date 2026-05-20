@@ -5244,6 +5244,7 @@ $langNoGradeRubrics = 'Δεν έχουν καταχωρηθεί ρουμπρίκ
 $langTitleRubric = "Όνομα ρουμπρίκας";
 $langRubricDesc = "Περιγραφή ρουμπρίκας";
 $langRubricCrit = "Κριτήριο";
+$langRubricCritTitle = "Τίτλος κριτηρίου";
 $langDelCrit = "Διαγραφή κριτηρίου";
 $langAddScaleText = "Προσθήκη λεκτικού";
 $langCriteria = "Κριτήρια";

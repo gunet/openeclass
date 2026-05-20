@@ -4512,6 +4512,7 @@ $langNoGradeRubrics = 'No rubrics available.';
 $langTitleRubric = "Rubric name";
 $langRubricDesc = "Rubric description";
 $langRubricCrit = "Criterion";
+$langRubricCritTitle = "Criterion title";
 $langDelCrit = "Delelte criterion";
 $langAddScaleText = "Add scale option";
 $langAddRubricCriteria = "New criterion";

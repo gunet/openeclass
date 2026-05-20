@@ -11798,6 +11798,11 @@ function theme_initialization() {
                     background-color: $theme_options_styles[BgPanels] !important;
                 }
 
+                .primary-dashed-card .rubric-title,
+                .dashed-card .rubric-title{
+                    background-color: $theme_options_styles[BgPanels] !important;
+                }
+
             ";
         }
 

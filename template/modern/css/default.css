@@ -7241,17 +7241,36 @@ th.grade-col a{
 
 @media(min-width: 992px) {
   .deleteCriteriaBtn {
-    transform: translateY(-85%);
+    transform: translateY(-90%);
     max-width: 220px;
     border-radius: 24px;
   }
 }
 @media(max-width: 991px) {
   .deleteCriteriaBtn {
-    transform: translateY(-85%);
+    transform: translateY(-90%);
     max-width: 220px;
     border-radius: 24px;
   }
+}
+
+.primary-dashed-card .rubric-title {
+  padding: 10px 15px 10px 15px;
+  border:2px solid rgba(0, 115, 230, 0.25) !important;
+  border-radius:24px;
+  backdrop-filter:blur(10px);
+  transform: translateY(-85%);
+  font-weight: 700 !important;
+  background-color: white;
+}
+.dashed-card .rubric-title {
+  padding: 10px 15px 10px 15px;
+  border:2px solid rgba(255,0,0,.55) !important;
+  border-radius:24px;
+  backdrop-filter:blur(10px);
+  transform: translateY(-85%);
+  font-weight: 700 !important;
+  background-color: white;
 }
 
 .primary-dashed-card {
