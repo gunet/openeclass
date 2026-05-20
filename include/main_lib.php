@@ -816,6 +816,34 @@ function user_is_registered_to_course($uid, $course_id) {
 }
 
 /**
+ * @brief check if user has completed all prerequisites for a course
+ * @param $uid
+ * @param $course_id
+ * @return array
+ */
+function check_course_prerequisites($uid, $course_id) {
+    global $urlServer;
+    $missing_links = [];
+    $prereqs = Database::get()->queryArray("SELECT cp.prerequisite_course, c.title, c.code
+                             FROM course_prerequisite cp
+                             JOIN course c ON cp.prerequisite_course = c.id
+                             WHERE cp.course_id = ?d", $course_id);
+    if (count($prereqs) > 0) {
+        foreach ($prereqs as $prereq) {
+            $completed = Database::get()->querySingle("SELECT id
+                                  FROM user_badge
+                                  WHERE user = ?d
+                                  AND badge IN (SELECT id FROM badge WHERE course_id = ?d AND bundle = -1)
+                                  AND completed = 1", $uid, $prereq->prerequisite_course);
+            if (!$completed) {
+                $missing_links[] = "<a href='{$urlServer}courses/{$prereq->code}/'>" . q($prereq->title) . " (" . q($prereq->code) . ")</a>";
+            }
+        }
+    }
+    return $missing_links;
+}
+
+/**
  * @brief Check if a user with username $login already exists
  * @param type $login
  * @return boolean

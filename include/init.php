@@ -563,6 +563,19 @@ if (isset($require_current_course) and $require_current_course) {
                 $toolContent_ErrorExists = $langCheckProf;
             }
         }
+
+        // Check for prerequisites completion for students and redirect to registration page if not completed
+        if ($uid and $status != USER_TEACHER and !$is_editor and !$is_course_reviewer) {
+            $missing_prereqs = check_course_prerequisites($uid, $course_id);
+            if (!empty($missing_prereqs)) {
+                if (!str_contains($_SERVER['SCRIPT_NAME'], 'modules/course_home/register.php')) {
+                    $missing_list = implode(', ', $missing_prereqs);
+                    Session::flash('message', $langPrerequisitesNotComplete . ' (' . $missing_list . ')');
+                    Session::flash('alert-class', 'alert-danger');
+                    redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
+                }
+            }
+        }
         $_SESSION['courses'][$course_code] = $courses[$course_code] = $status;
         // Clear session data about polls in course or session mode
         if (!isset($_GET['pid']) && !isset($_GET['from_poll'])) {
