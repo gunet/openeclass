@@ -6607,6 +6607,7 @@ $langConcerngingCommentsPanels = "Αναφορικά με τα panels - σχόλ
 $langConcerngingQuestionnairePanels = "Αναφορικά με τα panels - ερωτηματολόγια";
 $langConcerngingExercisePanels = "Αναφορικά με τα panels - εμφάνιση ερωτήσεων στις ασκήσεις";
 $langConcerngingReportsPanels = "Αναφορικά με τα panels - αναφορές χρηστών στις συνεδρίες";
+$langConcerngingProgressActivitiesPanels = "Αναφορικά με τα panels - cards προόδου - δραστηριοτήτων";
 $langPanels = "Card";
 $langForms = "Φόρμες";
 $langBgForms = "Χρώμα φόντου";

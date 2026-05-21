@@ -6036,6 +6036,7 @@ $langConcerngingCommentsPanels = "Regarding the panels of both blog and course";
 $langConcerngingQuestionnairePanels = "Regarding the questionnaires panels";
 $langConcerngingExercisePanels = "Redarding the display of question in the exercise panel";
 $langConcerngingReportsPanels = "Regarding the user reports panels in a session";
+$langConcerngingProgressActivitiesPanels = "Regarding the progress activities panels in a course";
 $langPanels = "Card";
 $langForms = "Forms";
 $langBgForms = "Background color";

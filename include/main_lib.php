@@ -5984,10 +5984,28 @@ function theme_initialization() {
                 .action-bar-title,
                 .breadcrumb-item.active,
                 .list-group-item.list-group-item-action,
-                .list-group-item.element{
+                .list-group-item.element,
+                .reward-title-col,
+                .up-lb-rank,
+                .up-lb-bar-label,
+                .pg-list-title,
+                .pg-list-date,
+                .secondary-title,
+                .pg-lvl-name,
+                .lb-rank,
+                .lb-level-text,
+                .lb-progress-text-val,
+                .lb-progress-pct,
+                .progress-activity-type-label,
+                .progress-activity-name,
+                .progress-activity-criteria,
+                .progress-activity-criteria {
                     color:$theme_options_styles[ColorHyperTexts];
                 }
 
+                .progress-module table:not(.pg-info-table) th{
+                    color:$theme_options_styles[ColorHyperTexts] !important;
+                }
 
                 .dt-container.dt-bootstrap5 .dataTables_length,
                 .dt-container.dt-bootstrap5 .dt-search,
@@ -6042,6 +6060,16 @@ function theme_initialization() {
                 .border-left-danger{
                     border-left: 4px solid $theme_options_styles[ColorRedText] !important;
                 }
+                .badge-outline-danger{
+                    color:$theme_options_styles[ColorRedText];
+                    border:1.5px solid $theme_options_styles[ColorRedText];
+                }
+
+                .cc-pill-inactive {
+                     color:$theme_options_styles[ColorRedText];
+                    border:1.5px solid $theme_options_styles[ColorRedText];
+                }
+
             ";
         }
         if(!empty($theme_options_styles['ColorGreenText'])){
@@ -6059,6 +6087,15 @@ function theme_initialization() {
                 }
                 .contextual-menu-learningPath li div.list-group-item.active{
                     border-left: solid 2px $theme_options_styles[ColorGreenText] !important;
+                }
+                .badge-outline-success {
+                    color:$theme_options_styles[ColorGreenText];
+                    border:1.5px solid $theme_options_styles[ColorGreenText];
+                }
+
+                .cc-pill-active{
+                    color:$theme_options_styles[ColorGreenText];
+                    border:1.5px solid $theme_options_styles[ColorGreenText];
                 }
             ";
         }
@@ -6416,6 +6453,9 @@ function theme_initialization() {
                 .nav-tabs .nav-item .nav-link{
                     color: $theme_options_styles[clTabs];
                 }
+                .progress-module .progress-nav-tab {
+                    color: $theme_options_styles[clTabs];
+                }
             ";
         }
 
@@ -6429,6 +6469,11 @@ function theme_initialization() {
             $styles_str .= "
                 .nav-tabs .nav-item .nav-link:hover{
                     color: $theme_options_styles[clHoveredTabs];
+                }
+
+                .progress-module .progress-nav-tab:hover {
+                    color: $theme_options_styles[clHoveredTabs];
+                    background: transparent;
                 }
             ";
         }
@@ -6444,6 +6489,10 @@ function theme_initialization() {
                 .nav-tabs .nav-item .nav-link.active{
                     color: $theme_options_styles[clActiveTabs];
                     border-bottom: solid 2px $theme_options_styles[clActiveTabs];
+                }
+                .progress-module .progress-nav-tab.active {
+                    color: $theme_options_styles[clActiveTabs];
+                    border-bottom-color: $theme_options_styles[clActiveTabs];
                 }
             ";
         }
@@ -6533,6 +6582,10 @@ function theme_initialization() {
                     background-color: $theme_options_styles[bgLists];
                 }
 
+                .lb-row {
+                    background: $theme_options_styles[bgLists];
+                }
+
             ";
         }
 
@@ -6552,6 +6605,10 @@ function theme_initialization() {
 
                 .profile-pers-info-row{
                     border-bottom: solid 1px $theme_options_styles[clBorderBottomLists];
+                }
+
+                .lb-row {
+                    border: solid 1px $theme_options_styles[clBorderBottomLists];
                 }
 
             ";
@@ -6576,6 +6633,11 @@ function theme_initialization() {
                     color: $theme_options_styles[clLists];
                 }
 
+                .lb-username-link,
+                .lb-points-val {
+                    color: $theme_options_styles[clLists];
+                }
+
             ";
         }
 
@@ -6596,6 +6658,11 @@ function theme_initialization() {
                 .list-group-item.list-group-item-action a span:hover,
                 .list-group-item.element a span:hover{
                     color: $theme_options_styles[clHoveredLists];
+                }
+
+                .lb-username-link:hover,
+                .lb-points-val:hover {
+                    color: $theme_options_styles[clLists];
                 }
 
             ";
@@ -6704,6 +6771,10 @@ function theme_initialization() {
                     background-color:  $theme_options_styles[bgWhiteButtonColor] !important;
                 }
 
+                .lb-page-btn {
+                    background: $theme_options_styles[bgWhiteButtonColor] !important;
+                }
+
             ";
         }
 
@@ -6797,6 +6868,10 @@ function theme_initialization() {
                     color: $theme_options_styles[whiteButtonTextColor] !important;
                 }
 
+                .lb-page-btn {
+                    color: $theme_options_styles[whiteButtonTextColor] !important;;
+                }
+
             ";
         }
 
@@ -6868,6 +6943,10 @@ function theme_initialization() {
 
                 .dt-paging .dt-paging-button .page-link{
                     border: solid 1px $theme_options_styles[whiteButtonBorderTextColor] !important;
+                }
+
+                .lb-page-btn {
+                    border: 1px solid $theme_options_styles[whiteButtonBorderTextColor] !important;
                 }
 
             ";
@@ -6980,6 +7059,11 @@ function theme_initialization() {
                 .dt-paging .dt-paging-button .page-link:focus{
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
+
+                .lb-page-btn:hover,
+                .lb-page-btn:focus {
+                    color: $theme_options_styles[whiteButtonHoveredTextColor] !important;;
+                }
             ";
         }
 
@@ -7062,6 +7146,11 @@ function theme_initialization() {
                 .dt-paging .dt-paging-button .page-link:hover,
                 .dt-paging .dt-paging-button .page-link:focus{
                     border: solid 1px $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
+                }
+
+                .lb-page-btn:hover,
+                .lb-page-btn:focus {
+                    border: 1px solid $theme_options_styles[whiteButtonHoveredBorderTextColor] !important;
                 }
 
             ";
@@ -7150,6 +7239,11 @@ function theme_initialization() {
                 .dt-paging .dt-paging-button .page-link:hover,
                 .dt-paging .dt-paging-button .page-link:focus{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
+                }
+
+                .lb-page-btn:hover,
+                .lb-page-btn:focus {
+                    background:  $theme_options_styles[whiteButtonHoveredBgColor] !important;;
                 }
 
             ";
@@ -7284,6 +7378,11 @@ function theme_initialization() {
                 .ss-main .ss-values .ss-value{
                     border-color: $theme_options_styles[buttonBgColor] !important;
                     background-color: $theme_options_styles[buttonBgColor] !important;
+                }
+
+                .lb-page-btn.lb-page-active {
+                    background: $theme_options_styles[buttonBgColor] !important;
+                    border-color: $theme_options_styles[buttonBgColor] !important;
                 }
 
             ";
@@ -7454,6 +7553,12 @@ function theme_initialization() {
                 .ss-main .ss-values .ss-value{
                     border-color: $theme_options_styles[buttonHoverBgColor] !important;
                     background-color: $theme_options_styles[buttonHoverBgColor] !important;
+                }
+
+                .lb-page-btn.lb-page-active:hover,
+                .lb-page-btn.lb-page-active:focus{
+                    background: $theme_options_styles[buttonHoverBgColor] !important;
+                    border-color: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
             ";
@@ -7630,6 +7735,10 @@ function theme_initialization() {
 
                 .ss-main .ss-values .ss-value .ss-value-delete svg path{
                     stroke: $theme_options_styles[buttonTextColor] !important;
+                }
+
+                .lb-page-btn.lb-page-active{
+                    color: $theme_options_styles[buttonTextColor] !important;
                 }
 
             ";
@@ -10224,6 +10333,14 @@ function theme_initialization() {
                     background-color: $theme_options_styles[BgTables] !important;
                 }
 
+                .progress-module table:not(.pg-info-table) thead {
+                    background: $theme_options_styles[BgTables] !important;
+                }
+
+                .progress-module table:not(.pg-info-table) tbody tr:hover {
+                    background-color: $theme_options_styles[BgTables] !important;
+                }
+
             ";
         }
 
@@ -10253,6 +10370,10 @@ function theme_initialization() {
                 .table>:not(:last-child)>:last-child>* {
                     border-bottom-color: $theme_options_styles[BgBorderBottomRowTables] !important;
                 }
+
+                .progress-module table:not(.pg-info-table) thead {
+                    border-bottom: 2px solid $theme_options_styles[BgBorderBottomRowTables] !important;
+                }
             ";
         }
 
@@ -10277,6 +10398,10 @@ function theme_initialization() {
                 table.dataTable tfoot th, table.dataTable tfoot td {
                     box-shadow: 0px 0 30px $theme_options_styles[BoxShadowRowTables] !important;
                 }
+
+                .progress-module table:not(.pg-info-table) thead {
+                    box-shadow: 0px 0 30px $theme_options_styles[BoxShadowRowTables] !important;
+                }
             ";
         }
 
@@ -10299,6 +10424,10 @@ function theme_initialization() {
                 }
                 table.dataTable thead th,
                 table.dataTable thead td {
+                    border-bottom: 1px solid $theme_options_styles[BgBorderBottomHeadTables] !important;
+                }
+
+                .progress-module table:not(.pg-info-table) thead {
                     border-bottom: 1px solid $theme_options_styles[BgBorderBottomHeadTables] !important;
                 }
             ";
@@ -10766,7 +10895,13 @@ function theme_initialization() {
                 .progress-bar {
                     background-color: $theme_options_styles[BgColorProgressBarAndText];
                 }
+                .lb-progress-bar-inner {
+                    background: linear-gradient(90deg, $theme_options_styles[BgColorProgressBarAndText], $theme_options_styles[BgColorProgressBarAndText]);
+                }
 
+                .lb-progress-bar-outer {
+                    background: $theme_options_styles[BgProgressBar];
+                }
                 .progress-line{
                     background-color: $theme_options_styles[BgProgressBar];
                 }
@@ -10783,6 +10918,8 @@ function theme_initialization() {
                 .poll-border-left {
                     border-left: solid 4px $theme_options_styles[BgColorProgressBarAndText] !important;
                 }
+
+                
             ";
         }
 
@@ -11134,6 +11271,14 @@ function theme_initialization() {
                    color: $theme_options_styles[linkColor];
                 }
 
+                .up-lb-username-link {
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .pg-list-more {
+                    color: $theme_options_styles[linkColor];
+                }
+
             ";
         }
 
@@ -11168,6 +11313,14 @@ function theme_initialization() {
 
                 .appIcon:hover{
                     background-color: $theme_options_styles[linkHoverColor];
+                }
+
+                .up-lb-username-link:hover {
+                    color: $theme_options_styles[linkHoverColor];
+                }
+
+                .pg-list-more:hover {
+                    color: $theme_options_styles[linkHoverColor];
                 }
 
             ";
@@ -11804,6 +11957,35 @@ function theme_initialization() {
                     background-color: $theme_options_styles[BgPanels] !important;
                 }
 
+                .progress-module .progress-card,
+                .progress-module .panel,
+                .progress-module .panel-default,
+                .progress-module .panel-success,
+                .progress-module .panel-info,
+                .progress-module .panel-body-progress,
+                .progress-module .card,
+                .progress-module .card-default,
+                .progress-module .panelCard,
+                .progress-module .panelCard.border-card-left-default,
+                .progress-module div[class*='panel'],
+                .progress-module > div > .panel,
+                .progress-module .row > div > .panel {
+                    background: $theme_options_styles[BgPanels] !important;
+                }
+
+                .reward-list-card {
+                    background: $theme_options_styles[BgPanels];
+                }
+
+                .up-lb-row {
+                    background: $theme_options_styles[BgPanels];
+                }
+
+                .pg-list-card {
+                    background: $theme_options_styles[BgPanels];
+                }
+
+
             ";
         }
 
@@ -11883,6 +12065,34 @@ function theme_initialization() {
 
                 .card-affixed{
                     border: solid 1px $theme_options_styles[clBorderPanels];
+                }
+
+                .progress-module .progress-card,
+                .progress-module .panel,
+                .progress-module .panel-default,
+                .progress-module .panel-success,
+                .progress-module .panel-info,
+                .progress-module .panel-body-progress,
+                .progress-module .card,
+                .progress-module .card-default,
+                .progress-module .panelCard,
+                .progress-module .panelCard.border-card-left-default,
+                .progress-module div[class*='panel'],
+                .progress-module > div > .panel,
+                .progress-module .row > div > .panel {
+                    border: 1px solid $theme_options_styles[clBorderPanels] !important;
+                }
+
+                .reward-list-card {
+                    border: 1px solid $theme_options_styles[clBorderPanels] !important;
+                }
+
+                .up-lb-row {
+                    border: 1px solid $theme_options_styles[clBorderPanels];
+                }
+
+                .pg-list-card {
+                    border: 1px solid $theme_options_styles[clBorderPanels];
                 }
 
 
@@ -12061,6 +12271,35 @@ function theme_initialization() {
                 .main-maincontent {
                     box-shadow: 0px 0 30px $theme_options_styles[BoxShadowPanels] !important;
                 }
+
+                .progress-module .progress-card,
+                .progress-module .panel,
+                .progress-module .panel-default,
+                .progress-module .panel-success,
+                .progress-module .panel-info,
+                .progress-module .panel-body-progress,
+                .progress-module .card,
+                .progress-module .card-default,
+                .progress-module .panelCard,
+                .progress-module .panelCard.border-card-left-default,
+                .progress-module div[class*='panel'],
+                .progress-module > div > .panel,
+                .progress-module .row > div > .panel {
+                    box-shadow: 0 4px 6px -1px $theme_options_styles[BoxShadowPanels] !important;
+                }
+
+                .reward-list-card {
+                    box-shadow: 0 1px 4px $theme_options_styles[BoxShadowPanels];
+                }
+
+                .up-lb-row {
+                    box-shadow: 0 1px 3px $theme_options_styles[BoxShadowPanels];
+                }
+
+                .pg-list-card {
+                    box-shadow: 0 1px 3px $theme_options_styles[BoxShadowPanels];
+                }
+
             ";
         }
 
@@ -12166,6 +12405,36 @@ function theme_initialization() {
                 }
             ";
         }
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        /////////// BACKGROUND COLOR TO THE PROGRESS ACTIVE PANEL - ACTIVITITIES ///////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgProgressActivitiesPanels'])){
+            $styles_str .= "
+                .progress-activity-card{
+                    background: $theme_options_styles[BgProgressActivitiesPanels];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////// BORDER COLOR TO THE PROGRESS ACTIVE PANEL - ACTIVITITIES /////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clBorderProgressActivitiesPanels'])){
+            $styles_str .= "
+                .progress-activity-card{
+                    border: solid 1px $theme_options_styles[clBorderProgressActivitiesPanels];
+                }
+            ";
+        }
+
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////

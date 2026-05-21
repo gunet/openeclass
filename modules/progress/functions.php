@@ -81,8 +81,8 @@ function display_certificates(): void
             }
 
             $pill = $data->active
-                ? "<span style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;color:#16a34a;border:1.5px solid #16a34a;'>$langActive</span>"
-                : "<span style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;color:#dc2626;border:1.5px solid #dc2626;'>$langInactive</span>";
+                ? "<span class='badge-outline-success' style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;'>$langActive</span>"
+                : "<span class='badge-outline-danger' style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;'>$langInactive</span>";
 
             if (!$is_editor) {
                 $total = Database::get()->querySingle("SELECT COUNT(*) as cnt FROM certificate_criterion WHERE certificate = ?d", $data->id)->cnt;
@@ -108,7 +108,7 @@ function display_certificates(): void
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1' class='btn submitAdminBtn btn-sm'>
                             <i class='fa fa-pencil'></i>&nbsp;$langEditChange
                         </a>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" . ($data->active ? '0' : '1') . "' class='btn btn-outline-secondary btn-sm'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-danger btn-sm text-decoration-none' : 'btn btn-success btn-sm text-decoration-none') ."'>
                             $vis_label
                         </a>
                     </div>";
@@ -121,7 +121,7 @@ function display_certificates(): void
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                         <div class='reward-img-col'>$img_html</div>
                         <div class='reward-title-col'>
-                            <div style='font-size:16px;font-weight:700;color:#1f2937;margin-bottom:8px;'>" . q($data->title) . "</div>
+                            <div style='font-size:16px;font-weight:700;margin-bottom:8px;'>" . q($data->title) . "</div>
                             $pill
                         </div>
                         <div class='reward-bar-col d-flex align-items-center justify-content-end' onclick='event.stopPropagation();'>$right_html</div>
@@ -133,7 +133,7 @@ function display_certificates(): void
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                         <div class='reward-img-col'>$img_html</div>
                         <div class='reward-title-col'>
-                            <div style='font-size:16px;font-weight:700;color:#1f2937;margin-bottom:8px;'>" . q($data->title) . "</div>
+                            <div style='font-size:16px;font-weight:700;margin-bottom:8px;'>" . q($data->title) . "</div>
                             $pill
                         </div>
                         <div class='reward-bar-col d-flex align-items-center'>$right_html</div>
@@ -201,8 +201,8 @@ function display_badges(): void
             $icon_link     = $urlServer . BADGE_TEMPLATE_PATH . $badge_icon;
 
             $pill = $data->active
-                ? "<span style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;color:#16a34a;border:1.5px solid #16a34a;'>$langActive</span>"
-                : "<span style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;color:#dc2626;border:1.5px solid #dc2626;'>$langInactive</span>";
+                ? "<span class='badge-outline-success' style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;'>$langActive</span>"
+                : "<span class='badge-outline-danger' style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600;background:transparent;'>$langInactive</span>";
 
             if (!$is_editor) {
                 $total = Database::get()->querySingle("SELECT COUNT(*) as cnt FROM badge_criterion WHERE badge = ?d", $data->id)->cnt;
@@ -228,7 +228,7 @@ function display_badges(): void
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1' class='btn submitAdminBtn btn-sm'>
                             <i class='fa fa-pencil'></i>&nbsp;$langEditChange
                         </a>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" . ($data->active ? '0' : '1') . "' class='btn btn-outline-secondary btn-sm'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-danger btn-sm text-decoration-none' : 'btn btn-success btn-sm text-decoration-none') ."'>
                             $vis_label
                         </a>
                     </div>";
@@ -243,7 +243,7 @@ function display_badges(): void
                             <img src='$icon_link' style='width:64px;height:auto;'>
                         </div>
                         <div class='reward-title-col'>
-                            <div style='font-size:16px;font-weight:700;color:#1f2937;margin-bottom:8px;'>" . q($data->title) . "</div>
+                            <div style='font-size:16px;font-weight:700;margin-bottom:8px;'>" . q($data->title) . "</div>
                             $pill
                         </div>
                         <div class='reward-bar-col d-flex align-items-center justify-content-end' onclick='event.stopPropagation();'>$right_html</div>
@@ -257,7 +257,7 @@ function display_badges(): void
                             <img src='$icon_link' style='width:64px;height:auto;'>
                         </div>
                         <div class='reward-title-col'>
-                            <div style='font-size:16px;font-weight:700;color:#1f2937;margin-bottom:8px;'>" . q($data->title) . "</div>
+                            <div style='font-size:16px;font-weight:700;margin-bottom:8px;'>" . q($data->title) . "</div>
                             $pill
                         </div>
                         <div class='reward-bar-col d-flex align-items-center'>$right_html</div>
@@ -479,7 +479,7 @@ function display_course_completion(): void
     if (!$data) {
         $tool_content .= "
             <div class='col-12 mt-4'>
-                <div class='card border rounded-3'>
+                <div class='card rounded-3'>
                     <div class='card-body p-4 text-center py-5'>
                         <i class='fa fa-trophy fa-3x text-muted mb-3'></i>
                         <p class='text-muted'>$langCourseCompletionNotActivated</p>
@@ -514,7 +514,7 @@ function display_course_completion(): void
             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;edit=1' class='btn submitAdminBtn btn-sm'>
                 <i class='fa fa-pencil'></i>&nbsp;$langEditChange
             </a>
-            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;vis=" . ($data->active ? '0' : '1') . "' class='btn btn-outline-secondary btn-sm'>
+            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-danger btn-sm' : 'btn btn-success btn-sm text-decoration-none') ."'>
                 $vis_label
             </a>
         </div>" : '';
@@ -545,7 +545,7 @@ function display_course_completion(): void
     if ($is_editor) {
         $tool_content .= "
         <div class='col-12 mt-4'>
-            <div class='card border rounded-3'>
+            <div class='card rounded-3'>
                 <div class='card-body p-4'>
                     <div class='d-flex align-items-center justify-content-between gap-3 flex-wrap'>
                         $status_pill
@@ -557,7 +557,7 @@ function display_course_completion(): void
     } else {
         $tool_content .= "
         <div class='col-12 mt-4'>
-            <div class='card border rounded-3'>
+            <div class='card rounded-3'>
                 <div class='card-body p-4'>
                     <div class='d-flex justify-content-center align-items-center gap-4'>
                         <div class='cc-donut-wrap'>
@@ -578,10 +578,10 @@ function display_course_completion(): void
     // Activities card
     $tool_content .= "
         <div class='col-12 mt-4'>
-            <div class='card border rounded-3'>
+            <div class='card rounded-3'>
                 <div class='card-body p-4'>
                     <div class='d-flex justify-content-between align-items-center mb-3'>
-                        <h5 class='fw-bold mb-0' style='color:#1f2937;'>$langAttendanceActList</h5>
+                        <h2 class='text-heading-h3 mb-0'>$langAttendanceActList</h2>
                     </div>";
 
     if ($total > 0) {
@@ -921,10 +921,10 @@ function display_activities($element, $id, $unit_id = 0) {
             //recurrent activities
             $tool_content .= "
                 <div class='col-12 mt-4'>
-                    <div class='card border rounded-3'>
+                    <div class='card rounded-3'>
                         <div class='card-body p-4'>
                             <div class='d-flex justify-content-between align-items-center mb-3'>
-                                <h5 class='fw-bold mb-0' style='color:#1f2937;'>$langPointsGameRecActivities</h5>";
+                                <h2 class='text-heading-h3 mb-0'>$langPointsGameRecActivities</h2>";
                                 if ($is_editor) {
                                     $tool_content .= "<div>$addRecActivityBtn</div>";
                                 }
@@ -1002,10 +1002,10 @@ function display_activities($element, $id, $unit_id = 0) {
                 //onetime activities
                 $tool_content .= "
                 <div class='col-12 mt-4'>
-                    <div class='card border rounded-3'>
+                    <div class='card rounded-3'>
                         <div class='card-body p-4'>
                             <div class='d-flex justify-content-between align-items-center mb-3'>
-                                <h5 class='fw-bold mb-0' style='color:#1f2937;'>$langPointsGameOneTimeActivities</h5>";
+                                <h2 class='text-heading-h3 mb-0'>$langPointsGameOneTimeActivities</h2>";
                                 if ($is_editor) {
                                     $tool_content .= "<div>$addActivityBtn</div>";
                                 }
@@ -1084,10 +1084,11 @@ function display_activities($element, $id, $unit_id = 0) {
         } else {
             $tool_content .= "
                 <div class='col-12 mt-4'>
-                    <div class='card border rounded-3'>
+                    <div class='card rounded-3'>
                         <div class='card-body p-4'>
                             <div class='d-flex justify-content-between align-items-center mb-3'>
-                                <h5 class='fw-bold mb-0' style='color:#1f2937;'>$langAttendanceActList</h5>";                            if ($is_editor) {
+                                <h2 class='text-heading-h3 mb-0'>$langAttendanceActList</h2>";
+                            if ($is_editor) {
                                 $tool_content .= "<div>$addActivityBtn</div>";
                             }
             $tool_content .= "
@@ -1174,9 +1175,9 @@ function display_activities($element, $id, $unit_id = 0) {
 
         if (!$unit_id && $is_editor && $element != 'points_game') {
             $tool_content .= "
-            <div class='card border rounded-3 mt-4'>
+            <div class='card rounded-3 mt-4'>
                 <div class='card-body p-4'>
-                    <h5 class='fw-bold mb-3' style='color:#1f2937;'>$langUsers</h5>";
+                    <h2 class='text-heading-h3 mb-3'>$langUsers</h2>";
 
                     display_users_progress($element, $id);
 
@@ -3320,11 +3321,11 @@ function display_points_game_settings($element_id): void
     $enable_leaderboard = !empty($config['enable_leaderboard']);
     $anonymize_leaderboard = !empty($config['anonymize_leaderboard']);
     $lb_badge   = $enable_leaderboard
-        ? "<span style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:transparent;color:#16a34a;border:1.5px solid #16a34a;white-space:nowrap;'>$langIsActive</span>"
-        : "<span style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:transparent;color:#dc2626;border:1.5px solid #dc2626;white-space:nowrap;'>$langTypeInactive</span>";
+        ? "<span class='badge-outline-success' style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:transparent;white-space:nowrap;'>$langIsActive</span>"
+        : "<span class='badge-outline-danger' style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:transparent;white-space:nowrap;'>$langTypeInactive</span>";
     $anon_badge = $anonymize_leaderboard
-        ? "<span style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:transparent;color:#16a34a;border:1.5px solid #16a34a;white-space:nowrap;'>$langIsActive</span>"
-        : "<span style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:transparent;color:#dc2626;border:1.5px solid #dc2626;white-space:nowrap;'>$langTypeInactive</span>";
+        ? "<span class='badge-outline-success' style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:transparent;white-space:nowrap;'>$langIsActive</span>"
+        : "<span class='badge-outline-danger' style='display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:transparent;white-space:nowrap;'>$langTypeInactive</span>";
 
     $edit_btn = $is_editor ? "
         <div class='accordion-header-btn' onclick='event.stopPropagation()'>
@@ -3341,25 +3342,25 @@ function display_points_game_settings($element_id): void
         <div class='row g-3'>";
 
     // ---- CARD 1: Game Info ----
-    $desc_html = !empty($description) ? "<p style='color:#4b5563; font-size:14px; margin-bottom:16px;'>$description</p>" : '';
+    $desc_html = !empty($description) ? "<p class='secondary-title' style='font-size:14px; margin-bottom:16px;'>$description</p>" : '';
     $tool_content .= "
                         <div class='$card1_col'>
-                            <div class='card border rounded-3 h-100'>
+                            <div class='card rounded-3 h-100'>
                                 <div class='card-body p-4'>
                                     <div class='d-flex align-items-start gap-3 mb-3'>
                                         <div style='width:44px;height:44px;background:#3b82f6;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;flex-shrink:0;'>
                                             <i class='fa fa-puzzle-piece'></i>
                                         </div>
                                         <div>
-                                            <div class='fw-bold' style='font-size:17px;color:#1f2937;'>$title</div>
+                                            <div class='fw-bold text-heading-h3' style='font-size:17px;'>$title</div>
                                             <div class='text-muted' style='font-size:13px;'>$start_date &ndash; $end_date</div>
                                         </div>
                                     </div>
                                     $desc_html
                                     <div class='d-flex align-items-center gap-2 mt-2 flex-wrap'>
-                                        <span style='font-size:13px;color:#4b5563; font-weight: bold;'>$langLeaderboardActivation:</span>
+                                        <span class='secondary-title' style='font-size:13px; font-weight: bold;'>$langLeaderboardActivation:</span>
                                         $lb_badge
-                                        <span style='font-size:13px;color:#4b5563; font-weight: bold;'>$langLeaderboardAnonymization:</span>
+                                        <span class='secondary-title' style='font-size:13px; font-weight: bold;'>$langLeaderboardAnonymization:</span>
                                         $anon_badge
                                     </div>
                                 </div>
@@ -3426,7 +3427,7 @@ function display_points_game_settings($element_id): void
 
         $tool_content .= "
                         <div class='col-md-6'>
-                            <div class='card border rounded-3 h-100'>
+                            <div class='card rounded-3 h-100'>
                                 <div class='card-body p-4'>
                                     <div class='d-flex align-items-center gap-3 mb-4 flex-wrap'>
                                         <div class='pg-level-badge-icon'>
@@ -3470,9 +3471,9 @@ function display_points_game_settings($element_id): void
         $tool_content .= "
                     <div class='row mt-3'>
                         <div class='col-12'>
-                            <div class='card border rounded-3'>
+                            <div class='card rounded-3'>
                                 <div class='card-body p-4'>
-                                    <h5 class='fw-bold mb-3' style='color:#1f2937;'>$langPointsGameLevels</h5>
+                                    <h2 class='text-heading-h3 mb-3'>$langPointsGameLevels</h2>
                                     <div class='d-flex flex-wrap gap-3'>";
         $lc_idx = 0;
         foreach ($levels as $level) {
@@ -3561,8 +3562,8 @@ function display_settings($element, $element_id, $unit_id = 0): void
             $img_html = "<img src='{$thumbnail_filename}' style='width:65%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
         }
 
-        $desc_html   = !empty($description) ? "<div style='font-size:14px;color:#6b7280;margin-top:6px;'>" . q($description) . "</div>" : '';
-        $issuer_html = !empty($issuer)       ? "<div style='font-size:13px;color:#6b7280;margin-top:6px;'><span style='font-weight:600;'>$langpublisher:</span> " . q($issuer) . "</div>" : '';
+        $desc_html   = !empty($description) ? "<div style='font-size:14px;margin-top:6px;'>" . q($description) . "</div>" : '';
+        $issuer_html = !empty($issuer)       ? "<div style='font-size:13px;margin-top:6px;'><span style='font-weight:600;'>$langpublisher:</span> " . q($issuer) . "</div>" : '';
 
         $edit_btn = $is_editor ? "
             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn btn-sm gap-2' style='flex-shrink:0;'>
@@ -3572,11 +3573,11 @@ function display_settings($element, $element_id, $unit_id = 0): void
         if ($element == 'certificate') {
             $tool_content .= "
             <div class='col-12 mt-4'>
-                <div class='card border rounded-3'>
+                <div class='card rounded-3'>
                     <div class='card-body p-4'>
                         " . (!empty($img_html) ? "<div style='text-align:center;margin-bottom:20px;'>$img_html</div>" : '') . "
                         <div class='d-flex justify-content-between align-items-start gap-3'>
-                            <div style='font-size:18px;font-weight:700;color:#1f2937;'>$title</div>
+                            <div style='font-size:18px;font-weight:700;'>$title</div>
                             $edit_btn
                         </div>
                         $desc_html
@@ -3587,13 +3588,13 @@ function display_settings($element, $element_id, $unit_id = 0): void
         } else {
             $tool_content .= "
             <div class='col-12 mt-4'>
-                <div class='card border rounded-3'>
+                <div class='card rounded-3'>
                     <div class='card-body p-4'>
                         <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                             <div style='flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center;'>$img_html</div>
                             <div style='flex-grow:1;'>
                                 <div class='d-flex justify-content-between align-items-start gap-3'>
-                                    <div style='font-size:18px;font-weight:700;color:#1f2937;'>$title</div>
+                                    <div style='font-size:18px;font-weight:700;'>$title</div>
                                     $edit_btn
                                 </div>
                                 $desc_html
@@ -3732,21 +3733,28 @@ function points_game_settings($points_game_id = 0) {
                        </div>
                     </div>
                 </div>
-                <div class='form-group mt-4'>                    <div class='col-sm-12 mb-3'>
-                        <div class='form-check'>
-                            <input class='form-check-input' type='checkbox' id='enable_leaderboard' name='enable_leaderboard' value='1' $enable_checked>
-                            <label class='form-check-label' for='enable_leaderboard'>
+                <div class='form-group mt-4'>                    
+                    <div class='col-sm-12 mb-3'>
+
+                        <div class='checkbox'>
+                            <label class='label-container' for='enable_leaderboard'>
+                                <input type='checkbox' name='enable_leaderboard' id='enable_leaderboard' value='1' $enable_checked>
+                                <span class='checkmark'></span>
                                 $langLeaderboardActivation
                             </label>
                         </div>
+
                     </div>
                     <div class='col-sm-12 mb-3' id='anonymize_area' $display_anon>
-                        <div class='form-check'>
-                            <input class='form-check-input' type='checkbox' id='anonymize_leaderboard' name='anonymize_leaderboard' value='1' $anon_checked>
-                            <label class='form-check-label' for='anonymize_leaderboard'>
-                               $langLeaderboardAnonymization
+
+                        <div class='checkbox'>
+                            <label class='label-container' for='anonymize_leaderboard'>
+                                <input type='checkbox' name='anonymize_leaderboard' id='anonymize_leaderboard' value='1' $anon_checked>
+                                <span class='checkmark'></span>
+                                $langLeaderboardAnonymization
                             </label>
                         </div>
+
                     </div>
                 </div>
                 $points_game_hidden";
@@ -4508,9 +4516,9 @@ function display_leaderboard_accordion($points_game_id) {
     </style>";
 
     $tool_content .= "
-        <div class='card border rounded-3 mt-4'>
+        <div class='card rounded-3 mt-4'>
             <div class='card-body p-4'>
-                <h5 class='fw-bold mb-3' style='color:#1f2937;'>$langLeaderboard</h5>";
+                <h2 class='text-heading-h3 mb-3'>$langLeaderboard</h2>";
 
     if (count($sql) > 0) {
         $avatar_colors = ['#2563eb','#7c3aed','#db2777','#ea580c','#16a34a','#0891b2','#b45309','#0e7490','#6d28d9','#059669'];
@@ -5026,10 +5034,10 @@ function display_user_progress_details($element, $element_id, $user_id) {
         // Certificate: full-width preview image, then info below
         $tool_content .= "
         <div class='col-12 mt-4'>
-            <div class='card border rounded-3'>
+            <div class='card rounded-3'>
                 <div class='card-body p-4'>" .
                     (!empty($img_html) ? "<div style='text-align:center;margin-bottom:20px;'>$img_html</div>" : '') . "
-                    <div style='font-size:18px;font-weight:700;color:#1f2937;'>$element_title</div>
+                    <div style='font-size:18px;font-weight:700;'>$element_title</div>
                     $desc_html
                     $issuer_html
                     $cert_link_html
@@ -5040,12 +5048,12 @@ function display_user_progress_details($element, $element_id, $user_id) {
         // Badge: compact icon on the left
         $tool_content .= "
         <div class='col-12 mt-4'>
-            <div class='card border rounded-3'>
+            <div class='card rounded-3'>
                 <div class='card-body p-4'>
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                         <div style='flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center;'>$img_html</div>
                         <div>
-                            <div style='font-size:18px;font-weight:700;color:#1f2937;'>$element_title</div>
+                            <div style='font-size:18px;font-weight:700;'>$element_title</div>
                             $desc_html
                             $issuer_html
                             $cert_link_html                        </div>
@@ -5058,7 +5066,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
     // Card 2: Progress donut summary
     $tool_content .= "
         <div class='col-12 mt-3'>
-            <div class='card border rounded-3'>
+            <div class='card rounded-3'>
                 <div class='card-body p-4'>
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                         <div class='cc-donut-wrap'>$donut_svg<div class='cc-donut-pct'>{$pct}%</div></div>
@@ -5129,9 +5137,9 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
 	$tool_content .= "
         <div class='col-12 mt-3'>
-            <div class='card border rounded-3'>
+            <div class='card rounded-3'>
                 <div class='card-body p-4'>
-                    <h5 class='fw-bold mb-3' style='color:#1f2937;'>$langAttendanceActList</h5>
+                    <h2 class='text-heading-h3 mb-3'>$langAttendanceActList</h2>
                     <div class='row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3'>";
     // completed criteria
 	foreach ($sql as $user_criterion) {
@@ -5279,9 +5287,9 @@ function display_user_points_game_details($points_game_id, $user_id) {
         $cert_desc = get_cert_desc("points_game", $points_game_id);
         $tool_content .= "
             <div class='col-12'>
-                <div class='card border rounded-3 mb-3' style='background-color: #fdfdfd;'>
+                <div class='card rounded-3 mb-3' style='background-color: #fdfdfd;'>
                     <div class='card-body p-3'>
-                        <h5 class='fw-bold mb-3' style='color:#1f2937;'><i class='fa fa-info-circle me-2'></i>$element_title</h5>
+                        <h2 class='text-heading-h3 mb-3' style='color:#1f2937;'><i class='fa fa-info-circle me-2'></i>$element_title</h2>
                         <div class='d-flex justify-content-between align-items-center py-2'>
                             <div class='fw-bold' style='color: #4b5563;'><i class='fa-solid fa-star me-2' style='color: #2563eb;'></i>$langPoints</div>
                             <div style='color: #4b5563;'>".$user_progress['current_points']."</div>
