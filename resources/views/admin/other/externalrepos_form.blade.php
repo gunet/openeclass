@@ -115,6 +115,31 @@
                                 <small class='form-text text-muted'>{{ trans('langApiKeyHelp') }}</small>
                             </div>
 
+                            {{-- DSpace Metadata Profile (shown only for DSpace repositories) --}}
+                            @php
+                                $dspaceProfile = 'dublin_core';
+                                if (!empty($repository->config)) {
+                                    $cfgDecoded = json_decode($repository->config, true);
+                                    if (is_array($cfgDecoded) && !empty($cfgDecoded['metadata_profile'])) {
+                                        $dspaceProfile = $cfgDecoded['metadata_profile'];
+                                    }
+                                }
+                            @endphp
+                            <div class='form-group mb-4' id='dspace_settings_group' style='display: none;'>
+                                <label for='metadata_profile' class='form-label'>
+                                    {{ trans('langDSpaceMetadataProfile') }}
+                                </label>
+                                <select class='form-select' id='metadata_profile' name='metadata_profile'>
+                                    <option value='dublin_core' {{ $dspaceProfile === 'dublin_core' ? 'selected' : '' }}>
+                                        {{ trans('langDSpaceProfileDublinCore') }}
+                                    </option>
+                                    <option value='lom' {{ $dspaceProfile === 'lom' ? 'selected' : '' }}>
+                                        {{ trans('langDSpaceProfileLom') }}
+                                    </option>
+                                </select>
+                                <small class='form-text text-muted'>{{ trans('langDSpaceMetadataProfileHelp') }}</small>
+                            </div>
+
                             {{-- Additional Configuration (JSON) --}}
                             <div class='form-group mb-4'>
                                 <label for='additional_config' class='form-label'>
@@ -231,7 +256,16 @@ $(document).ready(function() {
             $('#api_key_group').slideUp();
         }
     }
-    
+
+    // Show the DSpace metadata-profile selector only for DSpace repositories
+    function toggleDSpaceSettings() {
+        if ($('#repo_type').val() === 'dspace') {
+            $('#dspace_settings_group').slideDown();
+        } else {
+            $('#dspace_settings_group').slideUp();
+        }
+    }
+
     // Handle base URL field for hardcoded endpoints
     function toggleBaseUrlField() {
         var selectedOption = $('#repo_type option:selected');
@@ -299,6 +333,7 @@ $(document).ready(function() {
         $('#base_url_hidden').val('');
         $('#api_key').val('');
         $('#additional_config').val('');
+        $('#metadata_profile').val('dublin_core');
         $('#enabled').prop('checked', true);
         
         // Auth type will be reset by updateAuthTypeOptions to first available
@@ -328,8 +363,9 @@ $(document).ready(function() {
         
         toggleApiKeyField();
         toggleBaseUrlField();
+        toggleDSpaceSettings();
     }
-    
+
     $('#auth_type').on('change', toggleApiKeyField);
     $('#repo_type').on('change', function() {
         resetFieldsOnTypeChange();

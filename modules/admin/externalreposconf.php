@@ -124,7 +124,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['additional_config'])) {
             $repoData['config'] = $_POST['additional_config'];
         }
-        
+
+        // DSpace: merge the metadata profile (set via its dropdown) into the config JSON.
+        if ($repoData['type'] === 'dspace') {
+            $configData = [];
+            if (!empty($repoData['config'])) {
+                $decoded = json_decode($repoData['config'], true);
+                if (is_array($decoded)) {
+                    $configData = $decoded;
+                }
+            }
+            $profile = $_POST['metadata_profile'] ?? 'dublin_core';
+            $configData['metadata_profile'] = in_array($profile, ['dublin_core', 'lom'], true)
+                ? $profile : 'dublin_core';
+            $repoData['config'] = json_encode($configData);
+        }
+
         $result = ExternalReposApp::saveRepository($repoData);
         
         if ($result) {

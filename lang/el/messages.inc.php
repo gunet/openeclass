@@ -8204,3 +8204,7 @@ $langIslandoraUrlPatternHelp = 'Πρότυπο για την κατασκευή 
 $langIslandoraDescriptionField = 'Πεδίο περιγραφής';
 $langIslandoraDescriptionFieldHelp = 'Προαιρετικό όνομα χαρακτηριστικού από την απόκριση JSON:API που θα εμφανίζεται ως περιγραφή του αντικειμένου (π.χ. field_abstract). Αφήστε κενό για παράλειψη.';
 $langIslandoraTokenHelp = 'Προαιρετικό Bearer/JWT token για πρόσβαση σε αντικείμενα με περιορισμό. Αφήστε κενό για ανώνυμη δημόσια πρόσβαση.';
+$langDSpaceMetadataProfile = "Προφίλ μεταδεδομένων";
+$langDSpaceMetadataProfileHelp = "Ποιο σχήμα μεταδεδομένων χρησιμοποιεί το αποθετήριο. Επιλέξτε Dublin Core για τα συνήθη αποθετήρια DSpace. Επιλέξτε LOM για αποθετήρια μαθησιακών αντικειμένων που αποθηκεύουν τίτλους, περιγραφές και τύπους με το σχήμα LOM (π.χ. Φωτόδεντρο).";
+$langDSpaceProfileDublinCore = "Dublin Core (προεπιλογή)";
+$langDSpaceProfileLom = "LOM (Μεταδεδομένα Μαθησιακών Αντικειμένων)";

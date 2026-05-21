@@ -7533,3 +7533,7 @@ $langIslandoraUrlPatternHelp = 'Template used to build item URLs. Available toke
 $langIslandoraDescriptionField = 'Description field';
 $langIslandoraDescriptionFieldHelp = 'Optional attribute name from the JSON:API response to display as the item description (e.g. field_abstract). Leave empty to omit descriptions.';
 $langIslandoraTokenHelp = 'Optional Bearer/JWT token for accessing restricted items. Leave empty for anonymous public access.';
+$langDSpaceMetadataProfile = "Metadata profile";
+$langDSpaceMetadataProfileHelp = "Which metadata schema the repository uses. Choose Dublin Core for conventional DSpace repositories. Choose LOM for Learning Object Repositories that store titles, descriptions and types under the LOM schema (e.g. Photodentro).";
+$langDSpaceProfileDublinCore = "Dublin Core (default)";
+$langDSpaceProfileLom = "LOM (Learning Object Metadata)";

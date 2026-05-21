@@ -28,9 +28,42 @@ require_once __DIR__ . '/AbstractExternalRepo.php';
  */
 class DSpaceRepository extends AbstractExternalRepo
 {
+    /** Default metadata profile when none is configured. */
+    const PROFILE_DEFAULT = 'dublin_core';
+
+    /**
+     * Per-profile metadata field map.
+     * Each logical field lists candidate metadata keys, tried in order;
+     * the first non-empty value wins.
+     *
+     * The 'dublin_core' profile reproduces the historical hardcoded
+     * behaviour exactly. The 'lom' profile is LOM-primary with Dublin
+     * Core fallbacks, for Learning Object Repositories (e.g. Photodentro).
+     */
+    private const FIELD_MAP = [
+        'dublin_core' => [
+            'title'       => ['dc.title'],
+            'description' => ['dc.description.abstract', 'dc.description'],
+            'type'        => ['dc.type'],
+            'authors'     => ['dc.contributor.author'],
+            'date'        => ['dc.date.issued'],
+            'url'         => ['dc.identifier.uri'],
+        ],
+        'lom' => [
+            'title'       => ['lom.general-title', 'dc.title'],
+            'description' => ['lom.general-description', 'dc.description.abstract'],
+            'type'        => ['lom.technical-format'],
+            'authors'     => ['lom.lifecycle-contribute-entity', 'lom.lifecycle-contribute-publisher'],
+            'date'        => ['dc.date.issued', 'lom.annotation-published-on-date'],
+            // Empty: LOM repos store a stale host in dc.identifier.uri,
+            // so fall through to the handle-based URL on the configured base.
+            'url'         => [],
+        ],
+    ];
+
     /**
      * Get repository type identifier
-     * 
+     *
      * @return string
      */
     public function getType(): string
@@ -63,7 +96,8 @@ class DSpaceRepository extends AbstractExternalRepo
                 'query' => $query,
                 'page' => $page - 1, // DSpace uses 0-based pagination
                 'size' => $perPage,
-                'sort' => 'score,DESC'
+                'sort' => 'score,DESC',
+                'embed' => 'thumbnail' // inline the thumbnail bitstream
             ];
 
             // Add filters if specified
@@ -103,7 +137,7 @@ class DSpaceRepository extends AbstractExternalRepo
         }
 
         try {
-            $response = $this->httpGet("/server/api/core/items/$itemId");
+            $response = $this->httpGet("/server/api/core/items/$itemId", ['embed' => 'thumbnail']);
 
             if (!$response['success'] || empty($response['data'])) {
                 return null;
@@ -197,21 +231,21 @@ class DSpaceRepository extends AbstractExternalRepo
             return null;
         }
 
-        // Extract metadata
         $metadata = $data['metadata'] ?? [];
-        $title = $this->getMetadataValue($metadata, 'dc.title') ?? 'Untitled';
-        $description = $this->getMetadataValue($metadata, 'dc.description.abstract') 
-                      ?? $this->getMetadataValue($metadata, 'dc.description');
-        $type = $this->getMetadataValue($metadata, 'dc.type') ?? 'document';
-        $authors = $this->getMetadataValues($metadata, 'dc.contributor.author');
-        $date = $this->getMetadataValue($metadata, 'dc.date.issued');
+        $profile = $this->metadataProfile();
+        $map = self::FIELD_MAP[$profile];
+
+        $title = $this->resolveField($metadata, $map['title']) ?? 'Untitled';
+        $description = $this->resolveField($metadata, $map['description']);
+        $rawType = $this->resolveField($metadata, $map['type']);
+        $authors = $this->resolveFieldMulti($metadata, $map['authors']);
+        $date = $this->resolveField($metadata, $map['date']);
 
         $handle = $data['handle'] ?? null;
 
-        // Build item URL - prefer dc.identifier.uri from metadata (canonical public URL)
-        $url = $this->getMetadataValue($metadata, 'dc.identifier.uri');
-
-        // Fallback: construct URL from handle or UUID if dc.identifier.uri not available
+        // Build item URL from the profile's url candidates; when none
+        // resolve, fall back to the handle (or UUID) on the configured base.
+        $url = $this->resolveField($metadata, $map['url']);
         if (!$url) {
             // Try to derive public URL by removing '-api' from baseUrl
             $publicUrl = preg_replace('/-api\./', '.', $this->baseUrl);
@@ -220,7 +254,11 @@ class DSpaceRepository extends AbstractExternalRepo
                 : $publicUrl . '/items/' . $id;
         }
 
-        // Get thumbnail URL
+        // DC profile maps a dc.type string; LOM maps a MIME type.
+        $resourceType = ($profile === 'lom')
+            ? $this->mapMimeType($rawType)
+            : $this->mapResourceType($rawType ?? 'document');
+
         $thumbnail = $this->getThumbnailUrl($data);
 
         return $this->buildResultItem(
@@ -228,15 +266,63 @@ class DSpaceRepository extends AbstractExternalRepo
             $title,
             $description,
             $url,
-            $this->mapResourceType($type),
+            $resourceType,
             $thumbnail,
             [
                 'authors' => $authors,
                 'date' => $date,
                 'handle' => $handle,
-                'dspace_type' => $type
+                'dspace_type' => $rawType,
+                'metadata_profile' => $profile
             ]
         );
+    }
+
+    /**
+     * Resolve the configured metadata profile, defaulting safely.
+     *
+     * @return string 'dublin_core' or 'lom'
+     */
+    private function metadataProfile(): string
+    {
+        $profile = $this->additionalConfig['metadata_profile'] ?? '';
+        return isset(self::FIELD_MAP[$profile]) ? $profile : self::PROFILE_DEFAULT;
+    }
+
+    /**
+     * Return the first non-empty metadata value among candidate keys.
+     *
+     * @param array $metadata Metadata array
+     * @param array $keys Ordered candidate metadata keys
+     * @return string|null
+     */
+    private function resolveField(array $metadata, array $keys): ?string
+    {
+        foreach ($keys as $key) {
+            $value = $this->getMetadataValue($metadata, $key);
+            if ($value !== null && $value !== '') {
+                return $value;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Return all values of the first candidate key that yields any.
+     *
+     * @param array $metadata Metadata array
+     * @param array $keys Ordered candidate metadata keys
+     * @return array
+     */
+    private function resolveFieldMulti(array $metadata, array $keys): array
+    {
+        foreach ($keys as $key) {
+            $values = $this->getMetadataValues($metadata, $key);
+            if (!empty($values)) {
+                return $values;
+            }
+        }
+        return [];
     }
 
     /**
@@ -275,43 +361,49 @@ class DSpaceRepository extends AbstractExternalRepo
     }
 
     /**
-     * Get thumbnail URL for an item
-     * 
+     * Get thumbnail URL for an item.
+     *
+     * Relies on the search/item request being made with ?embed=thumbnail,
+     * which inlines the thumbnail bitstream. The bitstream's content link
+     * is the actual image — the bare _links.thumbnail href only points at
+     * a JSON resource, so it is not used as an <img> source.
+     *
      * @param array $data Item data
      * @return string|null
      */
     private function getThumbnailUrl(array $data): ?string
     {
-        // DSpace 7+ provides thumbnail links
-        if (isset($data['_links']['thumbnail']['href'])) {
-            $thumbnailUrl = $data['_links']['thumbnail']['href'];
-            
-            // Convert relative URL to absolute if needed
-            if (!preg_match('/^https?:\/\//', $thumbnailUrl)) {
-                // If it's a relative URL, prepend the base URL
-                $thumbnailUrl = rtrim($this->baseUrl, '/') . '/' . ltrim($thumbnailUrl, '/');
-            }
-            
-            return $thumbnailUrl;
+        // DSpace 7/8: embedded thumbnail bitstream, content link = real image.
+        $contentHref = $data['_embedded']['thumbnail']['_links']['content']['href'] ?? null;
+        if (is_string($contentHref) && $contentHref !== '') {
+            return $this->absoluteThumbUrl($contentHref);
         }
-        
-        // Also check for bitstreams that might be thumbnails
+
+        // Fallback: scan embedded bitstreams for a thumbnail-bundle entry.
         if (isset($data['_embedded']['bitstreams'])) {
             foreach ($data['_embedded']['bitstreams'] as $bitstream) {
                 $bundleName = $bitstream['bundleName'] ?? '';
-                if (strtolower($bundleName) === 'thumbnail' || strpos(strtolower($bitstream['name'] ?? ''), 'thumb') !== false) {
+                if (strtolower($bundleName) === 'thumbnail'
+                    || strpos(strtolower($bitstream['name'] ?? ''), 'thumb') !== false) {
                     if (isset($bitstream['_links']['content']['href'])) {
-                        $thumbnailUrl = $bitstream['_links']['content']['href'];
-                        if (!preg_match('/^https?:\/\//', $thumbnailUrl)) {
-                            $thumbnailUrl = rtrim($this->baseUrl, '/') . '/' . ltrim($thumbnailUrl, '/');
-                        }
-                        return $thumbnailUrl;
+                        return $this->absoluteThumbUrl($bitstream['_links']['content']['href']);
                     }
                 }
             }
         }
-        
+
         return null;
+    }
+
+    /**
+     * Make a possibly-relative thumbnail URL absolute against the base URL.
+     */
+    private function absoluteThumbUrl(string $url): string
+    {
+        if (preg_match('/^https?:\/\//', $url)) {
+            return $url;
+        }
+        return rtrim($this->baseUrl, '/') . '/' . ltrim($url, '/');
     }
 
     /**
@@ -337,6 +429,30 @@ class DSpaceRepository extends AbstractExternalRepo
         ];
 
         return $typeMap[$type] ?? 'document';
+    }
+
+    /**
+     * Map a MIME type (LOM lom.technical-format) to a resource type.
+     *
+     * @param string|null $mime MIME type, e.g. "video/mp4"
+     * @return string Standardized type
+     */
+    private function mapMimeType(?string $mime): string
+    {
+        if (!$mime) {
+            return 'document';
+        }
+        $mime = strtolower(trim($mime));
+        if (strncmp($mime, 'video/', 6) === 0) {
+            return 'video';
+        }
+        if (strncmp($mime, 'audio/', 6) === 0) {
+            return 'audio';
+        }
+        if (strncmp($mime, 'image/', 6) === 0) {
+            return 'image';
+        }
+        return 'document';
     }
 }
 
