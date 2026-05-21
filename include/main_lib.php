@@ -6976,7 +6976,8 @@ function theme_initialization() {
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
 
-                .dt-paging .dt-paging-button .page-link{
+                .dt-paging .dt-paging-button .page-link:hover,
+                .dt-paging .dt-paging-button .page-link:focus{
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
             ";
