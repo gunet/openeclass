@@ -789,14 +789,12 @@ function process_login() {
             } elseif (isset($_REQUEST['next'])) {
                 $next = $_REQUEST['next'];
             }
-            if (!is_null($myrow->options)) {
-                $options = json_decode($myrow->options, true);
-                $option_force_password_change = $options['force_password_change'];
-                if ($option_force_password_change == 1) {
-                    $_SESSION['force_password_change'] = 1;
-                    $next = 'modules/auth/password_change.php';
-                }
+
+            if (get_user_option($_SESSION['uid'], 'force_password_change') == 1) {
+                $_SESSION['force_password_change'] = 1;
+                $next = 'modules/auth/password_change.php';
             }
+
             resetLoginFailure();
             redirect_to_home_page($next);
         }

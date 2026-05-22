@@ -178,12 +178,8 @@ if ($u) {
         $data['verified_mail_data'][2] = $langNo;
 
         $checked_force_password_change = '';
-        if (!is_null($info->options)) {
-            $options = json_decode($info->options, true);
-            $option_force_password_change = $options['force_password_change'];
-            if ($option_force_password_change == 1) {
-                $checked_force_password_change = 'checked';
-            }
+        if (get_user_option($u, 'force_password_change') == 1) {
+            $checked_force_password_change = 'checked';
         }
         $data['checked_force_password_change'] = $checked_force_password_change;
 
@@ -249,12 +245,6 @@ if ($u) {
             $disable_course_registration = 0;
         } else {
             $disable_course_registration = 1;
-        }
-
-        if (isset($_POST['force_password_change'])) {
-            $options = json_encode(['force_password_change' => 1]);
-        } else {
-            $options = json_encode(['force_password_change' => 0]);
         }
 
         $user_upload_whitelist = $_POST['user_upload_whitelist'] ?? '';
@@ -328,8 +318,7 @@ if ($u) {
                                 am = ?s,
                                 verified_mail = ?d,
                                 whitelist = ?s,
-                                disable_course_registration = ?d,
-                                options = ?s
+                                disable_course_registration = ?d            
                           WHERE id = ?d",
             $lname,
             $fname,
@@ -343,9 +332,14 @@ if ($u) {
             $verified_mail,
             $user_upload_whitelist,
             $disable_course_registration,
-            $options,
             $u
         );
+
+        if (isset($_POST['force_password_change'])) {
+            set_user_option($u, 'force_password_change', 1);
+        } else {
+            delete_user_option($u, 'force_password_change');
+        }
         //update custom profile fields
         $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
         if ($qry->affectedRows > 0 || $cpf_updated === true) {
