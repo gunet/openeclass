@@ -2350,6 +2350,73 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
     }
 }
 
+
+/**
+ * @brief set user option.
+ * @param $user_id
+ * @param $option
+ * @param $value
+ * @return void
+ */
+function set_user_option($user_id, $option, $value)
+{
+    $options = [];
+
+    $q = Database::get()->querySingle("SELECT options FROM user WHERE id = ?d", $user_id);
+    if (!is_null($q->options)) {
+        $options = json_decode($q->options, true);
+    }
+    if ($value) {
+        $options[$option] = $value;
+    } else {
+        unset($options[$option]);
+    }
+    $user_options = json_encode($options);
+    Database::get()->query("UPDATE user SET options = ?s WHERE id = ?d", $user_options, $user_id);
+}
+
+/**
+ * @brief get user option
+ * @param $user_id
+ * @param $option
+ * @return mixed|null
+ */
+function get_user_option($user_id, $option)
+{
+    $q = Database::get()->querySingle("SELECT options FROM user WHERE id = ?d", $user_id);
+    if (!is_null($q->options)) {
+        $options = json_decode($q->options, true);
+    }
+    if (isset($options[$option])) {
+        return $options[$option];
+    } else {
+        return null;
+    }
+}
+
+/**
+ * @brief delete user option
+ * @param $user_id
+ * @param $option
+ * @return void
+ */
+function delete_user_option($user_id, $option)
+{
+    $q = Database::get()->querySingle("SELECT options FROM user WHERE id = ?d", $user_id);
+    if (!is_null($q->options)) {
+        $options = json_decode($q->options, true);
+        if (isset($options[$option])) {
+            unset($options[$option]);
+            if (count($options) > 0) {
+                $user_options = json_encode($options);
+                Database::get()->query("UPDATE user SET options = ?s WHERE id = ?d", $user_options, $user_id);
+            } else {
+                Database::get()->query("UPDATE user SET options = null WHERE id = ?d",$user_id);
+            }
+        }
+    }
+}
+
 /**
  * Display a textarea with name $name using the rich text editor
  * Apply automatically various fixes for the text to be edited
