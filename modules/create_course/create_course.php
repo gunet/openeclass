@@ -199,6 +199,7 @@ if (!isset($_POST['create_course'])) {
             } else if (get_user_option($uid, 'coby_enable')) {
                 $data['is_coby_enabled'] = true;
             }
+            $data['coby_url'] = get_config('ext_coby_url');
         }
 
         // Check if AI service is available

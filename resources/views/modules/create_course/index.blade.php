@@ -588,9 +588,9 @@
                             <h2 class='text-heading-h3 mb-0'>
                                 <i class='fa-solid fa-robot me-2'></i>{{ trans('langUseOfCoby') }}
                             </h2>
-                            <button type='button' class='btn submitAdminBtnDefault'>
-                                {{ trans('langFinalize') }} <i class='fa-solid fa-chevron-down'></i>
-                            </button>
+                            <a class='btn submitAdminBtnDefault ms-2' href='{{ $coby_url }}' aria-label='{{ trans('langFinalize') }}'>
+                                {{ trans('langFinalize') }}
+                            </a>
                         </div>
                     </div>
                 </div>

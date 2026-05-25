@@ -6967,6 +6967,7 @@ $langSafeExamBrowserShortDescription = "Χρήση του Safe Exam Browser στ
 $langSafeExamBrowserLongDescription = "Χρήση του Safe Exam Browser στις 'Ασκήσεις' των $langsOfCourses.";
 $langCobyShortDescription = "Χρήση του Coby στα $langsCourses.";
 $langCobyLongDescription = "Χρήση του Coby στα $langsCourses.";
+$langCobyUrl = "URL του Coby";
 $langZoomShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langZoomLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langWebexShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Webex.";
