@@ -843,13 +843,13 @@ function ltiGetJwtClaimMapping(): array {
  * @param  stdClass     $ltiApp       The ltiApp object.
  * @param stdClass      $course       Course object.
  * @param  stdClass     $stat         The course_user object for access check.
- * @param  string       $nonce        The nonce value to use (applies to LTI 1.3 only).
- * @param  string       $messagetype  The request message type. Defaults to basic-lti-launch-request if empty.
  * @param  string|null  $resourceType The resource type.
  * @param  string|null  $resourceId   The resource type id.
+ * @param  string       $messagetype  The request message type. Defaults to basic-lti-launch-request if empty.
+ * @param  string       $nonce        The nonce value to use (applies to LTI 1.3 only).
  * @return array                      The endpoint URL and parameters (including the signature).
  */
-function ltiGetLaunchData(stdClass $ltiApp, stdClass $course, stdClass $stat, string $nonce = '', string $messagetype = 'basic-lti-launch-request', ?string $resourceType, ?string $resourceId): array {
+function ltiGetLaunchData(stdClass $ltiApp, stdClass $course, stdClass $stat, ?string $resourceType, ?string $resourceId, string $messagetype = 'basic-lti-launch-request', string $nonce = ''): array {
     global $urlServer, $uid;
 
     $ltiAppId = $ltiApp->id;
@@ -1360,6 +1360,9 @@ function ltiToolConfigurationFromContentItem(int $ltiAppId, string $messagetype,
             }
             if (isset($custom->default_feedbackreleasedate)) {
                 $config->feedbackdate = $custom->default_feedbackreleasedate;
+            }
+            if (isset($custom->tii_setting_workflow_feedback_release_date)) {
+                $config->feedbackdate = $custom->tii_setting_workflow_feedback_release_date;
             }
             if (isset($custom->tii_setting_workflow_description)) {
                 $config->description = $custom->tii_setting_workflow_description;
