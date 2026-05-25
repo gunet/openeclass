@@ -72,11 +72,31 @@
                 }
             }).change();
 
+            $('#courseStartDate').datepicker({
+                format: 'dd-mm-yyyy',
+                pickerPosition: 'bottom-right',
+                language: '{{ $language }}',
+                autoclose: true
+            });
+
             $('#courseEndDate').datepicker({
                 format: 'dd-mm-yyyy',
                 pickerPosition: 'bottom-right',
                 language: '{{ $language }}',
                 autoclose: true
+            });
+
+            $('#course_enableStartDate').change(function() {
+                var dateType = $(this).prop('id').replace('_enable', '');
+                var $dateInput = $('input#' + dateType);
+
+                if($(this).prop('checked')) {
+                    $dateInput.prop('disabled', false);
+                    $('#courseStartDate').datepicker('show');
+                } else {
+                    $dateInput.prop('disabled', true);
+                    $('#courseStartDate').datepicker('hide');
+                }
             });
 
             $('#course_enableEndDate').change(function() {
@@ -929,6 +949,27 @@
                         @if(get_config('show_collaboration') and !get_config('show_always_collaboration'))
                             <input type="hidden" id="radio_collaborative_helper" value="0">
                         @endif
+                    </div>
+
+                    <div class='row input-append date form-group mt-4'>
+                        <label for='courseStartDate' class='col-12 control-label-notes mb-1'>
+                            {{ trans('langStart') }} {{ trans('langsOfCourse') }}
+                        </label>
+                        <div class='col-12'>
+                            <div class='input-group'>
+                                <span class='input-group-addon'>
+                                    <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                         <input class='mt-0' type='checkbox' id='course_enableStartDate' name='course_enableStartDate' value='1' @if ($course_enableStartDate) checked @endif>
+                                         <span class='checkmark'></span>
+                                    </label>
+                                </span>
+                                <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0 border-start-0' name='courseStartDate' id='courseStartDate' type='text' value='{{ $courseStartDate }}' @if (!$course_enableStartDate) disabled @endif>
+                            </div>
+                            <span class='help-block'><i class='fa fa-share fa-rotate-270 p-2'></i>
+                                {{ trans('langCourseStartDateLegend') }}
+                            </span>
+                        </div>
                     </div>
 
                     <div class='row input-append date form-group mt-4'>
