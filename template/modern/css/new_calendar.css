@@ -142,6 +142,7 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  gap: 7px;
 }
 .cal-row-fluid.cal-row-head .cal-cell1{
   font-size: 14px;
