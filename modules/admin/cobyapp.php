@@ -15,6 +15,7 @@ load_js('tools.js');
 load_js('slimselect');
 
 if (isset($_POST['submit'])) {
+    //print_a($_POST);die;
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $result = $app->storeParams();
     if (isset($_POST['enabled'])) {
@@ -26,6 +27,9 @@ if (isset($_POST['submit'])) {
             foreach ($_POST['coby_users'] as $user_id) {
                 set_user_option($user_id, 'coby_enable', 1);
             }
+            set_config('ext_coby_enabled_all_users', 0);
+        } else {
+            set_config('ext_coby_enabled_all_users', 1);
         }
     }
     Session::flash('message', $langFileUpdatedSuccess);

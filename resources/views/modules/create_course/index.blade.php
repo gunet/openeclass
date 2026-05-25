@@ -581,6 +581,20 @@
                 </div>
              </div>
 
+            @if ($is_coby_enabled)
+                <div class='col-12 mb-4'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                            <h2 class='text-heading-h3 mb-0'>
+                                <i class='fa-solid fa-robot me-2'></i>{{ trans('langUseOfCoby') }}
+                            </h2>
+                            <button type='button' class='btn submitAdminBtnDefault'>
+                                {{ trans('langFinalize') }} <i class='fa-solid fa-chevron-down'></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endif
              @if($ai_available)
                  <div class='col-12 mb-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>

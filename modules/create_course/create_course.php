@@ -158,7 +158,6 @@ if (!isset($_POST['create_course'])) {
         }
         $data['license_0'] = $license[0]['title'];
         $data['license_10'] = $license[10]['title'];
-
         $data['icon_course_open'] = course_access_icon(COURSE_OPEN);
         $data['icon_course_registration'] = course_access_icon(COURSE_REGISTRATION);
         $data['icon_course_closed'] = course_access_icon(COURSE_CLOSED);
@@ -167,6 +166,7 @@ if (!isset($_POST['create_course'])) {
         $data['rich_text_editor'] = rich_text_editor('description', 4, 20, $description, options: array('id' => 'description'));
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-select" id="course_license_id"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
+        $data['is_coby_enabled'] = false;
         $data['courseEndDate'] = $data['course_enableEndDate'] = '';
         generate_csrf_token_form_field();
 
@@ -191,6 +191,15 @@ if (!isset($_POST['create_course'])) {
         }
         $data['image_content'] = $image_content;
         $data['default_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
+
+        // check if Coby service is enabled
+        if (get_config("ext_coby_enabled")) {
+            if (get_config('ext_coby_enabled_all_users', 1)) {
+                $data['is_coby_enabled'] = true;
+            } else if (get_user_option($uid, 'coby_enable')) {
+                $data['is_coby_enabled'] = true;
+            }
+        }
 
         // Check if AI service is available
         $data['ai_available'] = false;
