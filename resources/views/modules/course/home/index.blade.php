@@ -264,7 +264,7 @@
                                                 @if ($course_info->description)
                                                         {!! $course_info->description !!}
                                                 @else
-                                                    <p class='not_visible text-center'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
+                                                    <p class='not_visible text-center'> - {{ $is_collaborative_course ? trans('langThisCollabDescriptionIsEmpty') : trans('langThisCourseDescriptionIsEmpty') }} - </p>
                                                 @endif
                                             </div>
                                         </div>
@@ -274,7 +274,7 @@
                                                 @if ($course_info->description)
                                                     {!! $course_info->description !!}
                                                 @else
-                                                    <p class='not_visible text-center'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
+                                                    <p class='not_visible text-center'> - {{ $is_collaborative_course ? trans('langThisCollabDescriptionIsEmpty') : trans('langThisCourseDescriptionIsEmpty') }} - </p>
                                                 @endif
                                             </div>
                                         </div>
