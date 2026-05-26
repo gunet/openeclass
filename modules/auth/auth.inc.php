@@ -659,7 +659,7 @@ function process_login() {
 
                 $myrow = Database::get()->querySingle(
                     "SELECT user.id, surname, givenname, password,
-                            username, status, email, lang, verified_mail, am, options 
+                            username, status, email, lang, verified_mail, am, options
                         FROM user, user_department, hierarchy
                         WHERE username $sqlLogin AND
                               user.id = user_department.user AND
@@ -674,7 +674,7 @@ function process_login() {
                 if (!$myrow) {
                     $myrow = Database::get()->querySingle(
                         "SELECT user.id, surname, givenname, password,
-                            username, status, email, lang, verified_mail, am, options 
+                            username, status, email, lang, verified_mail, am, options
                         FROM user, user_department, hierarchy
                         WHERE email = ?s AND
                             user.id = user_department.user AND
@@ -688,11 +688,11 @@ function process_login() {
                 }
             } else {
                 $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
-                                                        username, status, email, lang, verified_mail, am, options 
+                                                        username, status, email, lang, verified_mail, am, options
                                                     FROM user WHERE username $sqlLogin", $posted_uname);
                 if (!$myrow) {
                     $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
-                                                                username, status, email, lang, verified_mail, am, options 
+                                                                username, status, email, lang, verified_mail, am, options
                                                             FROM user WHERE email = ?s", $posted_uname);
                     $posted_uname = $myrow ? $myrow->username : '';
                 }
@@ -789,14 +789,12 @@ function process_login() {
             } elseif (isset($_REQUEST['next'])) {
                 $next = $_REQUEST['next'];
             }
-            if (!is_null($myrow->options)) {
-                $options = json_decode($myrow->options, true);
-                $option_force_password_change = $options['force_password_change'];
-                if ($option_force_password_change == 1) {
-                    $_SESSION['force_password_change'] = 1;
-                    $next = 'modules/auth/password_change.php';
-                }
+
+            if (get_user_option($_SESSION['uid'], 'force_password_change') == 1) {
+                $_SESSION['force_password_change'] = 1;
+                $next = 'modules/auth/password_change.php';
             }
+
             resetLoginFailure();
             redirect_to_home_page($next);
         }
@@ -1259,16 +1257,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 
     // keycloak
     if ($auth == 16) {
-        $keycloak_settings = get_auth_settings($auth);
-        $altauth = intval($keycloak_settings['altauth']);
-        if ($altauth > 0 && check_auth_configured($altauth)) {
-            $auth = $altauth;
-            // fetch settings of alt auth
-            $auth_method_settings = get_auth_settings($auth);
-            $user_info_object->password = $auth_method_settings['auth_name'];
-        } else {
-            return 16; // Redirect to Keycloak
-        }
+        return 16; // Redirect to Keycloak
     }
 
     if ($auth == 6) {
@@ -1414,6 +1403,7 @@ function shib_cas_login($type) {
         $am = $_SESSION['auth_studentid'] ?? '';
         // get mail verification status from provider
         $auth_verified_mail = $_SESSION['auth_verified_mail'];
+        $auth_settings = get_auth_settings(16);
     }
     if ($email) {
         // Email is considered verified if it came from CAS or Shibboleth
@@ -1421,6 +1411,7 @@ function shib_cas_login($type) {
     }
 
     if (isset($auth_verified_mail) && empty($auth_verified_mail)) {
+        // Email verification status set by identity provider
         $verified_mail = EMAIL_UNVERIFIED;
     }
 
@@ -1449,17 +1440,31 @@ function shib_cas_login($type) {
     } else {
         $sqlLogin = "COLLATE utf8mb4_bin = ?s";
     }
-    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
+
+    $uid_attr_is_username = true;
+    // Keycloak auth may use username as external uid
+    if ($type == 'keycloak' and !$auth_settings['uid_attr_is_username']) {
+        $uid_attr_is_username = false;
+        $ext_uid = $uname;
+        $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
+                            status, email, lang, verified_mail, am
+                        FROM user WHERE id = (SELECT user_id FROM user_ext_uid
+                            WHERE auth_id = 16 AND uid = ?s)", $uname);
+        if ($info) {
+            $uname = $info->username;
+        }
+    } else {
+        $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
                             status, email, lang, verified_mail, am
                         FROM user WHERE username $sqlLogin", $uname);
+    }
 
     if ($info) {
         if (!is_active_account($info->id, false)) { // check if user is active
             unset_shib_cas_session();
             $message = "$langAccountInactive1 <a href='modules/auth/contactadmin.php?userid=$info->id&amp;h=" .
                             token_generate("userid=$info->id") . "'>$langAccountInactive2</a>";
-            Session::flash('message', $message);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($message, 'alert-warning');
             redirect_to_home_page();
         }
 
@@ -1468,8 +1473,7 @@ function shib_cas_login($type) {
             // has different auth method - redirect to home page
             unset_shib_cas_session();
             $message = $langUserAltAuth;
-            Session::flash('message', $langUserAltAuth);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($langUserAltAuth, 'alert-warning');
             redirect_to_home_page();
         } else {
             // don't force email address from CAS/Shibboleth.
@@ -1564,6 +1568,19 @@ function shib_cas_login($type) {
         }
 
         $status = $options['status'];
+
+        if (!$uid_attr_is_username) {
+            $last_user = Database::get()->querySingle('SELECT MAX(username) AS username
+                FROM user WHERE username REGEXP ?s',
+                '^' . preg_quote($auth_settings['username_prefix']) . '\d\d\d\d$');
+            if ($last_user && !is_null($last_user->username)) {
+                $user_num = intval(str_replace($auth_settings['username_prefix'], '', $last_user->username)) + 1;
+            } else {
+                $user_num = 1000;
+            }
+            $uname = $auth_settings['username_prefix'] . sprintf('%04d', $user_num);
+        }
+
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
                         username = ?s, email = ?s, status = ?d, lang = ?s,
@@ -1573,6 +1590,12 @@ function shib_cas_login($type) {
                         whitelist = ''",
                 $surname, $givenname, $type, $uname, $email, $status,
                 $language, $options['am'], $verified_mail)->lastInsertID;
+
+        if (!$uid_attr_is_username) {
+            Database::get()->query('INSERT INTO user_ext_uid
+                SET user_id = ?d, auth_id = ?d, uid = ?s',
+                $_SESSION['uid'], $auth_settings['auth_id'], $ext_uid);
+        }
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
         Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $_SESSION['uid']);

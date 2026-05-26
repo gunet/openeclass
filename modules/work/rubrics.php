@@ -170,15 +170,15 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     }
                     var rowCount = $('#scale_table tbody tr').length;
                     $('#scale_table'+par.attr('id').substr(8)+' tbody').append(
-                        '<tr>'+
-                        '<td class=\'form-group\'>'+
+                        '<tr class=\'bg-transparent\'>'+
+                        '<td class=\'bg-transparent form-group\'>'+
                         '<input aria-label=\'$langWording\' type=\'text\' name=\'scale_item_name['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' required>'+
                         '</td>'+
-                        '<td class=\'form-group\'>'+
+                        '<td class=\'bg-transparent form-group\'>'+
                         '<input aria-label=\'$langValue\' type=\'number\' name=\'scale_item_value['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
                         '</td>'+
-                        '<td class=\'text-center\'>'+
-                        '<a href=\'#\' aria-label=\'$langDelete\' class=\'removeScale\' id=\'remScale'+trc+'\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
+                        '<td class=\'bg-transparent text-center\' style=\'vertical-align: middle !important;\'>'+
+                        '<a href=\'#\' aria-label=\'$langDelete\' class=\'removeScale\' id=\'remScale'+trc+'\'><span class=\'fa-regular fa-trash-can fs-6 text-danger\'></span></a>'+
                         '</td>'+
                         '</tr>'
                     );
@@ -213,49 +213,52 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                    j++;
                 }
                 $('#inserthere').before(
-                        '<div id=\'critDiv'+ j +'\'>'+
-                        '<div class=\'row form-group mt-4\'>'+
-                    '   <label for=\'title\' class=\'col-12 control-label-notes mb-1\'>". js_escape($langRubricCrit). "</label>'+
-                    '    <div class=\'col-12\'>'+
-                    '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+
-                    '    </div>'+
-                        '<label for=\'weight\' class=\'col-12 control-label-notes mb-1 mt-4\'>" . js_escape($langGradebookWeight). " (%)</label>'+
-                    '    <div class=\'col-12 mt-0\'>'+
-                    '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+
-                    '    </div>'+
-                    '    <div class=\'col-12 d-flex justify-content-center align-items-center mt-4\'><a class=\'btn deleteAdminBtn\' href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa-solid fa-xmark\'></span></a></div>'+
-                    '</div>'+
-                    '<div class=\'row form-group mt-4\'>'+
-                    '    <label class=\'col-12 control-label-notes mb-1\'>" . js_escape($langScales). "</label>'+
-                    '    <div class=\'col-12\'>'+
-                    '        <div class=\'table-responsive mt-0\'>'+
-                    '            <table class=\'table-default\' id=\'scale_table'+ j +'\'>'+
-                    '                <thead class=\'list-header\'>'+
-                    '                    <tr>'+
-                    '                        <th style=\'width:47%\'>" . js_escape($langWording). "</th>'+
-                    '                        <th style=\'width:47%\'>" . js_escape($langValue). "</th>'+
-                    '                        <th class=\'text-end option-btn-cell\' style=\'width:5%\'><span class=\'fa fa-gears\'></span></th>'+
-                    '                    </tr>'+
-                    '                </thead>'+
-                    '                <tbody>'+
-                                        '<tr>'+
-                                        '<td class=\'form-group\'>'+
-                                        '<input type=\'text\' name=\'scale_item_name['+j+'][]\' class=\'form-control\' value=\'\' required>'+
-                                        '</td>'+
-                                        '<td class=\'form-group\'>'+
-                                        '<input type=\'number\' name=\'scale_item_value['+j+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
-                                        '</td>'+
-                                        '<td class=\'text-center\'>'+
-                                        '</td>'+
-                                        '</tr>'+
-                    '                </tbody>'+
-                    '            </table>'+
-                    '        </div>'+
-                    '    </div>'+
-                    '    <div class=\'col-12 mt-4 d-flex justify-content-center align-items-center\'>'+
-                    '         <a class=\'btn submitAdminBtn\' id=\'addScale'+ j +'\'>" . js_escape($langAdd) . "</a>'+
-                    '    </div>'+
-                    '	</div>'+
+                    '<div id=\'critDiv'+ j +'\' class=\'card panelCard dashed-card px-lg-4 py-lg-3 p-3\' style=\'margin-top: 50px;\'>'+
+                        '<div class=\'d-flex justify-content-between gap-3\'>'+
+                        '<p class=\'rubric-title\'>" . js_escape($langRubricCrit) . "</p>'+
+                        '    <a class=\'btn deleteAdminBtn deleteCriteriaBtn\' href=\'#\' id=\'remCrit'+j+'\' data-bs-toggle=\'tooltip\' data-bs-placement=\'top\' title=\'".js_escape($langDelCrit)."\'><span class=\'fa-regular fa-trash-can fs-6\'></span></a>'+
+                        '</div>'+
+                        '<div class=\'form-group\'>'+
+                        '   <label for=\'title\' class=\'col-12 control-label-notes mb-1\'>". js_escape($langRubricCritTitle). "</label>'+
+                        '    <div class=\'col-12\'>'+
+                        '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+
+                        '    </div>'+
+                        '    <label for=\'weight\' class=\'col-12 control-label-notes mb-1 mt-4\'>" . js_escape($langGradebookWeight). " (%)</label>'+
+                        '    <div class=\'col-12 mt-0\'>'+
+                        '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+
+                        '    </div>'+
+                        '</div>'+
+                        '<div class=\'form-group mt-4\'>'+
+                        '    <div class=\'col-12 rubrics-scales px-lg-4 py-lg-3 p-3\' style=\'border-radius: 5px;\'>'+
+                        '        <div class=\'w-100 d-flex justify-content-between align-items-start gap-2\'>'+
+                        '           <div class=\'control-label-notes text-nowrap mb-0\'><i class=\'fa-solid fa-sliders pe-2\'></i>" . js_escape($langScales) . "</div>'+
+                        '           <a class=\'link-color TextBold\' id=\'addScale'+ j +'\'><i class=\'fa-solid fa-circle-plus pe-1\'></i>" . js_escape($langAddScaleText) . "</a>'+
+                        '        </div>'+
+                        '        <div class=\'table-responsive mt-3\'>'+
+                        '            <table class=\'table-default\' id=\'scale_table'+ j +'\'>'+
+                        '                <thead class=\'list-header bg-transparent\'>'+
+                        '                    <tr class=\'bg-transparent\'>'+
+                        '                        <th class=\'bg-transparent\' style=\'width:80%\'>" . js_escape($langWording). "</th>'+
+                        '                        <th class=\'bg-transparent\' style=\'width:20%\'>" . js_escape($langValue). "</th>'+
+                        '                        <th class=\'bg-transparent text-end option-btn-cell\' style=\'width:5%\'><span class=\'fa fa-gears\'></span></th>'+
+                        '                    </tr>'+
+                        '                </thead>'+
+                        '                <tbody>'+
+                        '                   <tr class=\'bg-transparent\'>'+
+                        '                       <td class=\'form-group bg-transparent\'>'+
+                        '                           <input type=\'text\' name=\'scale_item_name['+j+'][]\' class=\'form-control\' value=\'\' required>'+
+                        '                       </td>'+
+                        '                       <td class=\'form-group bg-transparent\'>'+
+                        '                           <input type=\'number\' name=\'scale_item_value['+j+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
+                        '                       </td>'+
+                        '                       <td class=\'bg-transparent text-center\'>'+
+                        '                        </td>'+
+                        '                   </tr>'+
+                        '                </tbody>'+
+                        '            </table>'+
+                        '        </div>'+
+                        '    </div>'+
+                        '</div>'+
                     '</div>'
                 );
                 $('#remCrit'+ j +'').bind('click', function() {
@@ -309,35 +312,54 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
             $unserialized_criteria = unserialize($rubric_data->scales);
             $cc = -1;
             foreach ($unserialized_criteria as $crit => $title) {
+                $cardType = $crit == 0 ? 'primary-dashed-card' : 'dashed-card';
                 $tool_content .= "
-                <div id='critDiv$crit'>
-                <div class='form-group'>
-                    <div class='col-12 control-label-notes mb-1 mt-4'>
-                        $langRubricCrit:
+                <div id='critDiv$crit' class='card panelCard $cardType px-lg-4 py-lg-3 p-3' style='margin-top: 50px;'>";
+                $tool_content .= "<div class='d-flex justify-content-between gap-3'>";
+                $tool_content .= "<p class='rubric-title'>$langRubricCrit</p>";
+                if ($crit > 0) {
+                    $tool_content .= "<a href='#' class='btn deleteAdminBtn deleteCriteriaBtn removeCrit' id='remCrit$crit'
+                                        data-bs-toggle='tooltip' data-bs-placement='top' title='$langDelCrit'>
+                                        <i class='fa-regular fa-trash-can fs-6'></i>
+                                      </a>";
+                }
+                $tool_content .= "</div>";
+ $tool_content .= "<div class='form-group'>
+                    <div class='col-12 control-label-notes mb-1'>
+                        $langRubricCritTitle
                     </div>
                     <div class='col-12'>
                         <input type='text' name='title[$crit]' class='form-control' value='".q($title['title_name'])."' required>
                         <div class='col-12 control-label-notes mb-1 mt-4'>
-                            $langGradebookWeight (%):
+                            $langGradebookWeight (%)
                         </div>
-                        <div class='col-2 d-flex justify-content-start align-items-center gap-2'>
+                        <div class='col-12 d-flex justify-content-start align-items-center'>
                             <input name='weight[$crit]' class='form-control' id='weight' value='".q($title['crit_weight'])."' type='number'>";
-                            if ($crit > 0) {
-                                $tool_content .= "<a aria-label='$langDelete' href='#' class='removeCrit' id='remCrit$crit'><span class='fa fa-times' style='color:red'></span></a>";
-                            }
+                            // if ($crit > 0) {
+                            //     $tool_content .= "<a aria-label='$langDelete' href='#' class='removeCrit' id='remCrit$crit'><span class='fa fa-times' style='color:red'></span></a>";
+                            // }
                     $tool_content .= "</div></div>";
                 $tool_content .= "</div>";
                 $tool_content .= "
-                    <div class='row form-group mt-4'>
-                        <div class='col-12 control-label-notes mb-1'>$langScales:</div>
-                        <div class='col-12'>
-                            <div class='table-responsive mt-0'>
+                    <div class='form-group mt-4'>
+                        <div class='col-12 rubrics-scales px-lg-4 py-lg-3 p-3' style='border-radius: 5px;'>
+                            <div class='w-100 d-flex justify-content-between align-items-start gap-2'>
+                                <div class='control-label-notes text-nowrap mb-0'>
+                                    <i class='fa-solid fa-sliders pe-2'></i>
+                                    $langScales
+                                </div>
+                                <a class='link-color TextBold' id='addScale$crit'>
+                                    <i class='fa-solid fa-circle-plus'></i>
+                                    $langAddScaleText
+                                </a>
+                            </div>
+                            <div class='table-responsive mt-3'>
                                 <table class='table-default' id='scale_table$crit'>
-                                    <thead class='list-header'>
-                                        <tr>
-                                            <th style='width:47%'>$langWording</th>
-                                            <th style='width:47%'>$langValue</th>
-                                            <th aria-label='$langSettingSelect' class='text-center option-btn-cell' style='width:5%'>" . icon('fa-cogs') . "</th>
+                                    <thead class='list-header bg-transparent'>
+                                        <tr class='bg-transparent'>
+                                            <th class='bg-transparent' style='width:80%'>$langWording</th>
+                                            <th class='bg-transparent' style='width:20%'>$langValue</th>
+                                            <th aria-label='$langSettingSelect' class='text-center option-btn-cell bg-transparent' style='width:5%'>" . icon('fa-cogs') . "</th>
                                         </tr>
                                     </thead>
                                     <tbody>";
@@ -345,13 +367,13 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     $i = 0;
                     foreach ($title['crit_scales'] as $key => $scale) {
                         $cc++;
-                        $tool_content .= "<tr>
-                                        <td class='form-group'><input aria-label='$langWording' name='scale_item_name[$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required type='text'></td>
-                                        <td class='form-group'><input aria-label='$langValue' name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required type='number'></td>";
+                        $tool_content .= "<tr class='bg-transparent'>
+                                        <td class='form-group bg-transparent'><input aria-label='$langWording' name='scale_item_name[$crit][]' class='form-control' value='".q($scale['scale_item_name'])."' required type='text'></td>
+                                        <td class='form-group bg-transparent'><input aria-label='$langValue' name='scale_item_value[$crit][]' class='form-control' value='$scale[scale_item_value]' min='0' required type='number'></td>";
                         if ($i == 0) {
-                            $tool_content .= "<td class='text-center'></td>";
+                            $tool_content .= "<td class='text-center bg-transparent'></td>";
                         } else {
-                            $tool_content .= "<td class='text-center'><a aria-label='$langDelete' href='#' class='removeScale' id='remScale$cc$i'><span class='fa fa-times' style='color:red'></span></a></td>";
+                            $tool_content .= "<td class='text-center bg-transparent' style='vertical-align: middle !important;'><a aria-label='$langDelete' href='#' class='removeScale' id='remScale$cc$i'><span class='fa-regular fa-trash-can fs-6 text-danger'></span></a></td>";
                         }
                         $tool_content .= "</tr>";
                         $i++;
@@ -361,72 +383,78 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                                     </table>
                                 </div>
                             </div>
-                         <div class='col-12 d-flex justify-content-center mt-4'>
-                            <a class='btn submitAdminBtn margin-top-thin' id='addScale$crit'>$langAdd</a>
-                        </div>
                     </div>
                 </div>";
             }
-            $tool_content .= "<div id='inserthere' class=''>
-                        <div class='form-group mt-4'>
-                            <div class='col-12 d-flex justify-content-center'>
-                                <a class='btn submitAdminBtn' id='addCriteria'>$langAddRubricCriteria</a>
-                            </div>
-                        </div>
-                    </div>";
+            $tool_content .= "<div id='inserthere'>
+                                <div class='form-group mt-4'>
+                                    <div class='col-12 d-flex justify-content-center'>
+                                        <a class='btn btn-secondary w-50' id='addCriteria'>
+                                            <i class='fa-solid fa-circle-plus fs-6 pe-1'></i>
+                                            $langAddRubricCriteria
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>";
         } else {
             if (isset($_GET['new_rubric']) or !is_rubric_used_in_grading($_GET['rubric_id'], $course_id)) {
-                @$tool_content .= "<div id='critDiv0'>
-                    <div class='form-group mt-4" . (Session::getError('title') ? " has-error" : "") . "'>
-                        <label for='title' class='col-sm-12 control-label-notes'>$langRubricCrit:</label>
+                @$tool_content .= "
+
+                <div id='critDiv0' class='card panelCard primary-dashed-card px-lg-4 py-lg-3 p-3 mt-5'>
+                    <div class='d-flex justify-content-between'><p class='rubric-title'>$langRubricCrit</p></div>
+                    <div class='form-group" . (Session::getError('title') ? " has-error" : "") . "'>
+                        <label for='title' class='col-sm-12 control-label-notes'>$langRubricCritTitle</label>
                         <div class='col-sm-12'>
                           <input name='title[]' type='text' class='form-control' id='title' value='$title'>
                           " . (Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "") . "
                         </div>
-                        <label for='weight' class='col-sm-12 control-label-notes mt-4'>$langGradebookWeight (%):</label>
+                        <label for='weight' class='col-sm-12 control-label-notes mt-4'>$langGradebookWeight (%)</label>
                         <div class='col-sm-12'>
                             <input name='weight[]' class='form-control' id='weight' value='" . q($title['crit_weight']) . "' type='number'>
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <div class='col-sm-12 control-label-notes'>$langScales:</div>
-                        <div class='col-sm-12'>
-                            <div class='table-responsive mt-0'>
+                        <div class='col-sm-12 rubrics-scales px-lg-4 py-lg-3 p-3' style='border-radius: 5px;'>
+                            <div class='w-100 d-flex justify-content-between align-items-start gap-2'>
+                                <div class='control-label-notes text-nowrap mb-0'><i class='fa-solid fa-sliders pe-2'></i>$langScales</div>
+                                <a class='link-color TextBold' id='addScale0'><i class='fa-solid fa-circle-plus pe-1'></i>$langAddScaleText</a>
+                            </div>
+                            <div class='table-responsive mt-3'>
                                 <table class='table-default' id='scale_table0'>
-                                    <thead>
-                                        <tr>
-                                            <th style='width:47%'>$langWording</th>
-                                            <th style='width:47%'>$langValue</th>
-                                            <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                                    <thead class='bg-transparent'>
+                                        <tr class='bg-transparent'>
+                                            <th class='bg-transparent' style='width:80%'>$langWording</th>
+                                            <th class='bg-transparent' style='width:20%'>$langValue</th>
+                                            <th class='bg-transparent text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class='form-group'>
+                                        <tr class='bg-transparent'>
+                                            <td class='form-group bg-transparent'>
                                                 <input aria-label='$langWording' type='text' name='scale_item_name[0][]' class='form-control' value='' required>
                                             </td>
-                                            <td class='form-group'>
+                                            <td class='form-group bg-transparent'>
                                                 <input aria-label='$langValue' type='number' name='scale_item_value[0][]' class='form-control' value='' min='0' required>
                                             </td>
-                                            <td class='text-center'>
-                                            </td>
+                                            <td class='text-center bg-transparent'></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    <div class='col-12 mt-5 d-flex justify-content-center'>
-                             <a class='btn submitAdminBtn' id='addScale0'>$langAdd</a>
                     </div>
                 </div>";
-                $tool_content .= "</div>";
-                $tool_content .= "<div id='inserthere' class=''>
-                            <div class='form-group mt-4'>
-                                <div class='col-12 d-flex justify-content-center'>
-                                    <a class='btn submitAdminBtn' id='addCriteria'>$langAddRubricCriteria</a>
-                                </div>
-                            </div>
-                        </div>";
+
+                $tool_content .= "<div id='inserthere'>
+                                    <div class='form-group mt-4'>
+                                        <div class='col-12 d-flex justify-content-center'>
+                                            <a class='btn btn-secondary w-50' id='addCriteria'>
+                                                <i class='fa-solid fa-circle-plus fs-6 pe-1'></i>
+                                                $langAddRubricCriteria
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>";
         }
     }
 

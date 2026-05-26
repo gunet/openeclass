@@ -369,6 +369,7 @@ if ($userdata) {
 
                                 $visibility = (isset($_POST['visibility'])) ? intval($_POST['visibility']) : EPF_VISIBLE_PUBLIC;
                                 $reflection_comments = (!empty($_POST['reflection_comments'])) ? $_POST['reflection_comments'] : '';
+                                $data['description'] = (!empty($_POST['external_achievement_descr'])) ? $_POST['external_achievement_descr'] : '';
                                 Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data,visibility,reflection_comments)
                                         VALUES (?d,?d,?s,?d,?s,?s,?d,?s)", $uid, $rid, 'external_achievements', 0 ,'', serialize($data), $visibility,$reflection_comments);
 
@@ -989,6 +990,7 @@ if ($userdata) {
                                     <tr class='list-header'>
                                       <th>$langType</th>
                                       <th>$langName</th>
+                                      <th>$langDescription</th>
                                       $reflection_comment_th
                                       <th>$langDate</th>
                                       <th>$langSize</th>";
@@ -1064,6 +1066,7 @@ if ($userdata) {
                 $tool_content .= "<tr class='$row_class'>
                                     <td><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
                                     <td>".$file_link.$title_vis_icon.$vis_modal_form."</td>
+                                    <td>".q($data['description'])."</td>
                                     $reflection_comment_td
                                     <td>".format_locale_date(strtotime($data['date_modified']), 'short', false)."</td>
                                     <td>$filesize</td>

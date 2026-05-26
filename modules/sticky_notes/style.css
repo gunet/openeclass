@@ -258,7 +258,7 @@
   font-weight: 700;
   font-size: 0.9rem;
   color: #333;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
   letter-spacing: 0.5px;
 }
 

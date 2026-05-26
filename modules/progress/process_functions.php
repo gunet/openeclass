@@ -973,6 +973,7 @@ function get_certificate_templates() {
     foreach ($t as $data) {
         $templates[$data->id] = $data->name;
     }
+
     return $templates;
 }
 
@@ -1575,6 +1576,55 @@ function resource_usage($element, $element_resource_id) {
  * @param type $resource_id
  * @return type
  */
+function get_activity_url($activity_type, $resource_id, $course_code) {
+    switch ($activity_type) {
+        case ExerciseEvent::ACTIVITY:
+            return "modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$resource_id";
+        case AssignmentEvent::ACTIVITY:
+        case AssignmentSubmitEvent::ACTIVITY:
+            return "modules/work/index.php?course=$course_code&id=$resource_id";
+        case LearningPathEvent::ACTIVITY:
+        case LearningPathDurationEvent::ACTIVITY:
+            return "modules/learnPath/viewer.php?course=$course_code&path_id=$resource_id";
+        case ViewingEvent::DOCUMENT_ACTIVITY:
+            $doc = Database::get()->querySingle("SELECT path FROM document WHERE id = ?d", $resource_id);
+            if ($doc && $doc->path) {
+                $dir = dirname($doc->path);
+                $openDir = ($dir === '/' || $dir === '.') ? '' : '&openDir=' . rawurlencode($dir);
+                return "modules/document/index.php?course=$course_code$openDir";
+            }
+            return "modules/document/index.php?course=$course_code";
+        case ViewingEvent::VIDEO_ACTIVITY:
+            return "modules/video/index.php?course=$course_code";
+        case ViewingEvent::VIDEOLINK_ACTIVITY:
+            return "modules/video/index.php?course=$course_code";
+        case ViewingEvent::EBOOK_ACTIVITY:
+            return "modules/ebook/index.php?course=$course_code&open=$resource_id";
+        case ViewingEvent::QUESTIONNAIRE_ACTIVITY:
+            return "modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$resource_id";
+        case BlogEvent::ACTIVITY:
+        case CommentEvent::BLOG_ACTIVITY:
+            return "modules/blog/index.php?course=$course_code";
+        case ForumEvent::ACTIVITY:
+            return "modules/forum/viewforum.php?course=$course_code&forum=$resource_id";
+        case ForumTopicEvent::ACTIVITY:
+        case RatingEvent::FORUM_ACTIVITY:
+            $topic = Database::get()->querySingle("SELECT forum_id FROM forum_topic WHERE id = ?d", $resource_id);
+            if ($topic) {
+                return "modules/forum/viewtopic.php?course=$course_code&topic=$resource_id&forum={$topic->forum_id}";
+            }
+            return "modules/forum/index.php?course=$course_code";
+        case WikiEvent::ACTIVITY:
+            return "modules/wiki/index.php?course=$course_code&wikiId=$resource_id";
+        case GradebookEvent::ACTIVITY:
+            return "modules/gradebook/index.php?course=$course_code";
+        case AttendanceEvent::ACTIVITY:
+            return "modules/attendance/index.php?course=$course_code";
+        default:
+            return null;
+    }
+}
+
 function get_resource_details($element, $resource_id) {
 
     global $course_id, $langExercise, $langAssignment, $langLearnPath, $langNumOfForums,
@@ -1809,8 +1859,10 @@ function get_resource_details($element, $resource_id) {
             $title = $langAllActivities;
             break;
     }
-    $data['type'] = $type;
+    global $course_code;
+    $data['type']  = $type;
     $data['title'] = $title;
+    $data['url']   = get_activity_url($resource_type, $resource, $course_code);
 
     return $data;
 }
@@ -1840,10 +1892,8 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
 
         if (isset($_GET['newCertificates'])) {
             $newCertificates = true;
-            $cert_path = getFilepaths('newCertificatePath', $q->filename);
-            $tmp_cert_file = getFilenames('newCertificatePath', $q->filename, 'html');
-            $cert_file_arr = explode('/', $tmp_cert_file);
-            $cert_file = $cert_file_arr[count($cert_file_arr) - 1];
+            $cert_path = getFilepaths(true, $q->id, '.html');
+            $cert_file = getFilenames(true, $q->id, '.html');
         } else {
             $cert_file = $q->filename;
         }
@@ -2117,58 +2167,111 @@ function check_session_progress($session_id = 0, $forUser = 0) {
 
 /**
  * @brief get new certificates path
- * @param $certifatesStatus
+ * @param $certificatesStatus
  * @param $filePath
  * @return type
  */
-function getFilepaths($certifatesStatus, $filePath) {
+function getFilepaths($certificatesStatus = false, $fileId, $fileType) {
     global $webDir;
 
-    if ($certifatesStatus == 'newCertificatePath') {
+    $folderPath = $webDir . '/courses/user_progress_data/cert_templates';
+
+    $fileRow = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $fileId);
+
+    if (!$fileRow) {
+        return null;
+    }
+
+    $filePath = $fileRow->filename;
+
+    if ($certificatesStatus) {
         $tmpFilePath = explode('/', $filePath);
-        $filePath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0];
-        $files = scandir($filePath);
-        foreach ($files as $f) {
-            $certPath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0] . '/' . $f;
-            if (is_dir($certPath) && $f != '.' && $f != '..' && !str_contains('.zip', $f)) {
-                return $certPath;
-            }  
+
+        $rootFolder = $folderPath . '/' . $tmpFilePath[0];
+
+        if (!is_dir($rootFolder)) {
+            return null;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
+                $rootFolder,
+                FilesystemIterator::SKIP_DOTS
+            )
+        );
+
+        foreach ($iterator as $file) {
+
+            if ($file->isFile() && str_contains($file->getFilename(), $fileType)) {
+                $folderPath = dirname($file->getPathname());
+            }
         }
     }
 
-    return;
+    return $folderPath;
 }
 
 /**
  * @brief get new certificates name
- * @param $certifatesStatus
+ * @param $certificatesStatus
  * @param $filePath
  * @param $fileType
  * @return type
  */
-function getFilenames($certifatesStatus, $filePath, $fileType) {
+function getFilenames($certificatesStatus = false, $fileId, $fileType)
+{
     global $webDir, $urlServer;
+
+    $fileRow = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $fileId);
+
+    if (!$fileRow) {
+        return null;
+    }
+
+    $filePath = $fileRow->filename;
 
     // Old certificate path
     $theFile = $urlServer . "courses/user_progress_data/cert_templates/" . $filePath;
 
-    if ($certifatesStatus == 'newCertificatePath') {
+    if ($certificatesStatus) {
+
         $tmpFilePath = explode('/', $filePath);
-        $filePath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0];
-        $files = scandir($filePath);
-        foreach ($files as $f) {
-            $certPath = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0] . '/' . $f;
-            if (is_dir($certPath) && $f != '.' && $f != '..' && !str_contains('.zip', $f)) {
-                $cert_files = scandir($certPath);
-                foreach ($cert_files as $cf) {
-                    if (str_contains($cf, $fileType)) {
-                        $cert_image_path = $certPath . '/' . $cf;
-                        $theFile = $urlServer . "courses/user_progress_data/cert_templates/" . $tmpFilePath[0] . "/" . $f . "/" . $cf;  
-                    }
-                }
-            }  
+
+        $rootFolder = $webDir . '/courses/user_progress_data/cert_templates/' . $tmpFilePath[0];
+
+        if (!is_dir($rootFolder)) {
+            return null;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(
+                $rootFolder,
+                FilesystemIterator::SKIP_DOTS
+            )
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->isFile() && str_contains($file->getFilename(), $fileType)) {
+                $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/';
+                $theFile = $urlServer . str_replace($documentRoot, '', $file->getPathname());
+                break;
+            }
         }
     }
 
     return $theFile;
+}
+
+
+function certificate_thumbnails($cert_id) {
+    global $urlServer;
+
+    $filename = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $cert_id)->filename;
+    $arr = explode('/', $filename);
+    if (count($arr) < 2) {
+        return $urlServer . 'courses/user_progress_data/cert_templates/certificate' . $cert_id . '_thumbnail.png';
+    } else {
+        $thumbnail = getFilenames(true, $cert_id, 'thumbnail');
+        return $thumbnail;
+    }
 }

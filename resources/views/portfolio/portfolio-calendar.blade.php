@@ -5,6 +5,64 @@
 
     <script>
         var events = [];
+
+        function applyCalendarIcons() {
+            document.querySelectorAll('.events-list').forEach(function(eventsList) {
+                // κρατάμε ποιες κατηγορίες έχουν ήδη εμφανιστεί
+                let displayedCategories = new Set();
+                // όλα τα events της ημέρας
+                const events = eventsList.querySelectorAll('a.event');
+                events.forEach(function(event) {
+                    let icon = '';
+                    let category = '';
+                    if (event.classList.contains('event-info')) {
+                        icon = '{{ $urlAppend }}template/modern/images/course_event.png';
+                        category = 'event-info';
+                    }
+                    else if (event.classList.contains('event-important')) {
+                        icon = '{{ $urlAppend }}template/modern/images/deadline.png';
+                        category = 'event-important';
+                    }
+                    else if (event.classList.contains('event-special')) {
+                        icon = '{{ $urlAppend }}template/modern/images/personal_event.png';
+                        category = 'event-special';
+                    }
+                    else if (event.classList.contains('event-success')) {
+                        icon = '{{ $urlAppend }}template/modern/images/system_event.png';
+                        category = 'event-success';
+                    }
+                    // αν έχει ήδη εμφανιστεί category -> hide
+                    if (displayedCategories.has(category)) {
+                        event.style.display = 'none';
+                        return;
+                    }
+                    // mark category as displayed
+                    displayedCategories.add(category);
+                    // avoid duplicate icons
+                    if (event.dataset.iconApplied === '1') {
+                        return;
+                    }
+                    if (icon !== '') {
+                        // remove default dot styles
+                        event.style.background = 'transparent';
+                        event.style.border = '0';
+                        // create image
+                        const img = document.createElement('img');
+                        img.src = icon;
+                        img.className = 'calendar-event-icon-small';
+                        img.alt = '';
+                        img.setAttribute('aria-hidden', 'true');
+                        // clear old content
+                        event.innerHTML = '';
+                        // append image
+                        event.appendChild(img);
+                        // mark as applied
+                        event.dataset.iconApplied = '1';
+                    }
+                });
+            });
+        }
+
         $(function() {
             var calendar = $("#bootstrapcalendar").calendar({
                 tmpl_path: "{{ $urlAppend }}js/bootstrap-calendar-master/tmpls/",
@@ -17,7 +75,20 @@
                     $("#current-month").text(this.getTitle()).attr("aria-label", this.getTitle());
                     $(".btn-group button").removeClass("active");
                     $("button[data-calendar-view='" + view + "']").addClass("active");
+
+                    setTimeout(function() {
+                        applyCalendarIcons();
+                        // prevent event direct click
+                        $('#bootstrapcalendar .events-list a.event').off('click');
+                        $('#bootstrapcalendar .events-list a.event').on('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        });
+                        // hide default slide
+                    }, 200);
+
                 },
+
                 onBeforeEventsLoad: function(done) {
                     var url = "{{ $urlAppend }}main/calendar_data.php";
                     var params = {
@@ -31,6 +102,17 @@
                             }
                             done();
                             calendar._render();
+
+                            setTimeout(function() {
+                                applyCalendarIcons();
+                                // prevent event direct click
+                                $('#bootstrapcalendar .events-list a.event').off('click');
+                                $('#bootstrapcalendar .events-list a.event').on('click', function(e) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                });
+                            }, 300);
+
                         }).fail(function() {
                             events = [];
                             done();
@@ -107,19 +189,19 @@
 <div class='card bg-transparent card-transparent border-0'>
     <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
         <div class='d-flex align-items-center px-2 py-1'>
-            <span class='event event-important'></span>
+            <img class='calendar-event-icon calendar-event-important' src='{{ $urlAppend }}template/modern/images/deadline.png' alt="{{ trans('langAgendaDueDay') }}">
             <span class="agenda-comment" tabindex='0'> {{ trans('langAgendaDueDay') }}</span>
         </div>
         <div class='d-flex align-items-center px-2 py-1'>
-            <span class='event event-info'></span>
+            <img class='calendar-event-icon calendar-event-info' src='{{ $urlAppend }}template/modern/images/course_event.png' alt="{{ trans('langAgendaCourseEvent') }}">
             <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaCourseEvent') }}</span>
         </div>
         <div class='d-flex align-items-center px-2 py-1'>
-            <span class='event event-success'></span>
+            <img class='calendar-event-icon calendar-event-success' src='{{ $urlAppend }}template/modern/images/system_event.png' alt="{{ trans('langAgendaSystemEvent') }}">
             <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaSystemEvent') }}</span>
         </div>
         <div class='d-flex align-items-center px-2 py-1'>
-            <span class='event event-special'></span>
+            <img class='calendar-event-icon calendar-event-special' src='{{ $urlAppend }}template/modern/images/personal_event.png' alt="{{ trans('langAgendaPersonalEvent') }}">
             <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaPersonalEvent') }}</span>
         </div>
     </div>

@@ -72,6 +72,15 @@ if ($subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enab
 
             if (modalElement) {
                 const Modal = new bootstrap.Modal(modalElement);
+                
+                const divSelector = `#div_descr_doc_${rid}_textarea`;
+
+                if (url.searchParams.get(\'type\') === \'external_achievements\') {    
+                    $(divSelector).removeClass(\'d-none\');
+                } else {
+                    $(divSelector).addClass(\'d-none\');
+                }
+
                 Modal.show();
 
                 const formSelector = `#vis_form_doc_${rid}`;
@@ -1550,6 +1559,10 @@ foreach ($result as $row) {
                         <div class="mb-3">
                             <label for="vis_form_doc_'.$row->id.'_textarea" class="form-label">'.$langePortfolioPromptAddReflComments.'</label>
                             <textarea class="form-control" name="reflection_comments" id="vis_form_doc_'.$row->id.'_textarea"></textarea>
+                        </div>
+                        <div id="div_descr_doc_'.$row->id.'_textarea" class="mb-3 d-none">
+                            <label for="descr_doc_'.$row->id.'_textarea" class="form-label">'.$langDescription.'</label>
+                            <textarea class="form-control" name="external_achievement_descr" id="descr_doc_'.$row->id.'_textarea"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">'.$langSubmit.'</button>
                     </form>

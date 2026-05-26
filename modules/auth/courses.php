@@ -214,6 +214,8 @@ if ($runQuery) {
                            $queryExtraJoinWhere
                            AND course_department.department = ?d
                            AND course.visible != " . COURSE_INACTIVE . "
+                           AND (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") 
+                           AND (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
                            $queryCourseIds
                       ORDER BY course.title, course.prof_names", $fc);
 }

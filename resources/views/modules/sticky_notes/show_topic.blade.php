@@ -49,12 +49,10 @@
                                     @include('modules.sticky_notes.partials.post_card', ['kanban' => true])
                                     @endforeach
 
-                                    @if(count($cat->posts) === 0)
-                                    <div class="kanban-empty">
+                                    <div class="kanban-empty {{ count($cat->posts) > 0 ? 'd-none' : '' }}">
                                         <i class="fa fa-sticky-note-o"></i>
                                         <span>{{ trans('langNoStickyNotes') }}</span>
                                     </div>
-                                    @endif
                                 </div>
 
                             </div>
@@ -70,6 +68,10 @@
                                     @foreach($uncategorized as $post)
                                     @include('modules.sticky_notes.partials.post_card', ['kanban' => true])
                                     @endforeach
+                                    <div class="kanban-empty d-none">
+                                        <i class="fa fa-sticky-note-o"></i>
+                                        <span>{{ trans('langNoStickyNotes') }}</span>
+                                    </div>
                                 </div>
                             </div>
                             @endif

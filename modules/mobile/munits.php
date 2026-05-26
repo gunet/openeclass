@@ -41,7 +41,7 @@ if (!defined('M_NOTERMINATE')) {
  */
 function createCourseUnitsDom($course_units) {
 
-    global $urlServer, $course_code;
+    global $urlServer, $course_code, $urlAppend;
 
     $dom = new DomDocument('1.0', 'utf-8');
 
@@ -57,7 +57,7 @@ function createCourseUnitsDom($course_units) {
         if ($course_unit->visible == 2) {
             $course_unit_link = "";
         } else {
-            $course_unit_link = "{$urlServer}modules/mobile/mlogin.php?redirect=" . urlencode("/modules/units/index.php?course=$course_code&id=$course_unit->id");
+            $course_unit_link = "{$urlServer}modules/mobile/mlogin.php?redirect=" . urlencode("$urlAppend/modules/units/index.php?course=$course_code&id=$course_unit->id");
         }
         $u = $root->appendChild($dom->createElement('unit'));
         $course_unit_description = ellipsize(html2text($course_unit->comments), 80);

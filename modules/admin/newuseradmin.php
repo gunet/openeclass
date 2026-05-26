@@ -148,12 +148,6 @@ if (isset($_POST['submit'])) {
                 $disable_course_registration = 1;
             }
 
-            if (isset($_POST['force_password_change'])) {
-                $options = json_encode(['force_password_change' => 1]);
-            } else {
-                $options = json_encode(['force_password_change' => 0]);
-            }
-
             if (isset($_POST['user_date_expires_at']) && $_POST['user_date_expires_at'] !== "") {
                 $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
                 $user_expires_at = $expires_at->format("Y-m-d H:i");
@@ -164,11 +158,16 @@ if (isset($_POST['submit'])) {
             }
             $uid = Database::get()->query("INSERT INTO user
                     (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist, disable_course_registration, options)
-                    VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", ?t, ?s, '', ?s, '', ?d, ?s)",
+                    VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", ?t, ?s, '', ?s, '', ?d, null)",
                 $surname_form, $givenname_form, $uname_form,
                 $password_encrypted, $email_form,
                 $pstatus, $phone_form, $am_form,
-                $user_expires_at, $language_form, $verified_mail, $disable_course_registration, $options)->lastInsertID;
+                $user_expires_at, $language_form, $verified_mail, $disable_course_registration)->lastInsertID;
+
+            if (isset($_POST['force_password_change'])) {
+                set_user_option($uid, 'force_password_change', '1');
+            }
+
             // update personal calendar info table
             // we don't check if trigger exists since it requires `super` privilege
             Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $uid);
@@ -178,8 +177,7 @@ if (isset($_POST['submit'])) {
             process_profile_fields_data(array('uid' => $uid));
 
             // close request if needed
-            if ($rid) {
-                $rid = intval($rid);
+            if (isset($rid)) {
                 Database::get()->query("UPDATE user_request set state = 2, date_closed = NOW() WHERE id = ?d", $rid);
                 // copy Hybrid Auth external uid if available
                 Database::get()->query('INSERT INTO user_ext_uid (user_id, auth_id, uid)
@@ -237,7 +235,7 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    if ($rid) {
+    if (isset($rid)) {
         $req_type = Database::get()->querySingle('SELECT status FROM user_request WHERE id = ?d', $rid)->status;
         redirect_to_home_page('modules/admin/listreq.php' . ($req_type == USER_STUDENT? '?type=user': ''));
     } else {

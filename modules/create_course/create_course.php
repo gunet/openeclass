@@ -48,6 +48,8 @@ $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
 
+load_js('bootstrap-datepicker');
+
 /**
  * Save structured syllabus sections to course_description table
  *
@@ -156,15 +158,18 @@ if (!isset($_POST['create_course'])) {
         }
         $data['license_0'] = $license[0]['title'];
         $data['license_10'] = $license[10]['title'];
-
         $data['icon_course_open'] = course_access_icon(COURSE_OPEN);
         $data['icon_course_registration'] = course_access_icon(COURSE_REGISTRATION);
         $data['icon_course_closed'] = course_access_icon(COURSE_CLOSED);
         $data['icon_course_inactive'] = course_access_icon(COURSE_INACTIVE);
-        $data['lang_select_options'] = lang_select_options('localize', "class='form-control' id='lang_selected'");
+        $data['lang_select_options'] = lang_select_options('localize', "id='lang_selected'");
         $data['rich_text_editor'] = rich_text_editor('description', 4, 20, $description, options: array('id' => 'description'));
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-select" id="course_license_id"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
+        $data['is_coby_enabled'] = false;
+        $data['courseStartDate'] = date('d-m-Y');
+        $data['course_enableStartDate'] = 'checked';
+        $data['courseEndDate'] = $data['course_enableEndDate'] = '';
         generate_csrf_token_form_field();
 
         // course image
@@ -188,6 +193,16 @@ if (!isset($_POST['create_course'])) {
         }
         $data['image_content'] = $image_content;
         $data['default_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
+
+        // check if Coby service is enabled
+        if (get_config("ext_coby_enabled")) {
+            if (get_config('ext_coby_enabled_all_users', 1)) {
+                $data['is_coby_enabled'] = true;
+            } else if (get_user_option($uid, 'coby_enable')) {
+                $data['is_coby_enabled'] = true;
+            }
+            $data['coby_url'] = get_config('ext_coby_url');
+        }
 
         // Check if AI service is available
         $data['ai_available'] = false;
@@ -227,7 +242,6 @@ if (!isset($_POST['create_course'])) {
     redirect_to_home_page('modules/create_course/flipped_classroom.php');
 
 } else  { // create the course and the course database
-
     // validation in case it skipped JS validation
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $v = new Valitron\Validator($_POST);
@@ -327,6 +341,20 @@ if (!isset($_POST['create_course'])) {
             }
         }
 
+        if (isset($_POST['course_enableStartDate']) && $_POST['courseStartDate'] !== '') {
+            $courseStartDate = DateTime::createFromFormat('d-m-Y', $_POST['courseStartDate']);
+            $start_date = $courseStartDate->format('Y-m-d');
+        } else {
+            $start_date = date("Y-m-d");
+        }
+
+        if (isset($_POST['course_enableEndDate']) && $_POST['courseEndDate'] !== '') {
+            $courseEndDate = DateTime::createFromFormat('d-m-Y', $_POST['courseEndDate']);
+            $end_date = $courseEndDate->format('Y-m-d');
+        } else {
+            $end_date = null;
+        }
+
         $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,
                         lang = ?s,
@@ -342,7 +370,8 @@ if (!isset($_POST['create_course'])) {
                         password = ?s,
                         flipped_flag = ?s,
                         view_type = ?s,
-                        start_date = " . DBHelper::timeAfter() . ",
+                        start_date = ?s,
+                        end_date = ?s,
                         keywords = '',
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
@@ -354,7 +383,7 @@ if (!isset($_POST['create_course'])) {
             $code, $language, $title, $_POST['formvisible'],
             $course_license, $_POST['prof_names'], $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $typeCourse, $description, $course_image);
+            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $start_date, $end_date, $typeCourse, $description, $course_image);
         $new_course_id = $result->lastInsertID;
         if (!$new_course_id) {
             Session::flash('message', $langGeneralError);

@@ -1048,10 +1048,91 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 </div>
                             </div>
                         </div>'
-                . '<div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div>'
+                . '<div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div>
+                
+                <div class="card bg-transparent card-transparent border-0">
+                            <div class="d-flex justify-content-start align-items-center flex-wrap px-0 py-3">
+                                <div class="d-flex align-items-center px-2 py-1">
+                                    <img class="calendar-event-icon calendar-event-important" src="'. $urlAppend . 'template/modern/images/deadline.png" alt="'.$langAgendaDueDay.'">
+                                    <span class="agenda-comment" tabindex="0">' . $langAgendaDueDay . '</span>
+                                </div>
+                                <div class="d-flex align-items-center px-2 py-1">
+                                    <img class="calendar-event-icon calendar-event-info" src="' . $urlAppend . 'template/modern/images/course_event.png" alt="' . $langAgendaCourseEvent . '">
+                                    <span class="agenda-comment" tabindex="0">' . $langAgendaCourseEvent . '</span>
+                                </div>
+                                <div class="d-flex align-items-center px-2 py-1">
+                                    <img class="calendar-event-icon calendar-event-success" src="' . $urlAppend . 'template/modern/images/system_event.png" alt="' . $langAgendaSystemEvent . '">
+                                    <span class="agenda-comment" tabindex="0">' . $langAgendaSystemEvent . '</span>
+                                </div>
+                                <div class="d-flex align-items-center px-2 py-1">
+                                    <img class="calendar-event-icon calendar-event-special" src="' . $urlAppend . 'template/modern/images/personal_event.png" alt="' . $langAgendaPersonalEvent . '">
+                                    <span class="agenda-comment" tabindex="0">' . $langAgendaPersonalEvent . '</span>
+                                </div>
+                            </div>
+                        </div>
+                
+                
+                '
                 . '</div></div>' .
                 "<script type='text/javascript'>" .
-                '$(document).ready(function(){
+                '
+                
+
+                var events = [];
+
+                    function applyCalendarIcons() {
+                        document.querySelectorAll(".events-list").forEach(function(eventsList) {
+                            let displayedCategories = new Set();
+                            const events = eventsList.querySelectorAll("a.event");
+                            events.forEach(function(event) {
+                                let icon = "";
+                                let category = "";
+                                if (event.classList.contains("event-info")) {
+                                    icon = "' . $urlAppend . 'template/modern/images/course_event.png";
+                                    category = "event-info";
+                                }
+                                else if (event.classList.contains("event-important")) {
+                                    icon = "'. $urlAppend . 'template/modern/images/deadline.png";
+                                    category = "event-important";
+                                }
+                                else if (event.classList.contains("event-special")) {
+                                    icon = "'. $urlAppend . 'template/modern/images/personal_event.png";
+                                    category = "event-special";
+                                }
+                                else if (event.classList.contains("event-success")) {
+                                    icon = "'. $urlAppend . 'template/modern/images/system_event.png";
+                                    category = "event-success";
+                                }
+
+                                if (displayedCategories.has(category)) {
+                                    event.style.display = "none";
+                                    return;
+                                }
+
+                                displayedCategories.add(category);
+                                if (event.dataset.iconApplied === "1") {
+                                    return;
+                                }
+                                if (icon !== "") {
+
+                                    event.style.background = "transparent";
+                                    event.style.border = "0";
+                                    const img = document.createElement("img");
+                                    img.src = icon;
+                                    img.className = "calendar-event-icon-small";
+                                    img.alt = "";
+                                    img.setAttribute("aria-hidden", "true");
+                                    event.innerHTML = "";
+                                    event.appendChild(img);
+                                    event.dataset.iconApplied = "1";
+                                }
+                            });
+                        });
+                    }
+                
+                
+                
+                $(document).ready(function(){
 
         var calendar = $("#bootstrapcalendar").calendar(
                 {
@@ -1063,7 +1144,18 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 $(".btn-group button").removeClass("active");
                                 $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                                 $("button[data-calendar-nav=\'today\']").text(this.getTitle());
-                                }
+
+
+                                setTimeout(function() {
+                                    applyCalendarIcons();
+                                    $("#bootstrapcalendar .events-list a.event").off("click");
+                                    $("#bootstrapcalendar .events-list a.event").on("click", function(e) {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    });
+                                }, 200);
+
+                    }
                 }
             );
 

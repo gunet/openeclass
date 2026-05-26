@@ -1,4 +1,3 @@
-
 <div class="dropdown h-40px" style='z-index:2;'>
     <button class="btn submitAdminBtnDefault manageCourseBtn float-end d-flex justify-content-center align-items-center gap-2" aria-label="{{ trans('langModifyInfo') }}" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" data-bs-display='static' aria-expanded="false" aria-haspopup="true">
             <i class="fa-solid fa-gear"></i>

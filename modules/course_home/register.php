@@ -32,14 +32,17 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 
 if (isset($_SESSION['courses'][$course_code]) and $_SESSION['courses'][$course_code]) {
-    redirect_to_home_page("courses/$course_code/");
+    $missing_prereqs = check_course_prerequisites($uid, $course_id);
+    if (empty($missing_prereqs)) {
+        redirect_to_home_page("courses/$course_code/");
+    }
 }
 
 $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $course_id);
 $professor = $course->prof_names;
 $langUserPortfolio = q($course->title);
 
-if (!is_enabled_course_registration($uid)) {
+if (!is_enabled_course_registration($uid) || $course->visible == COURSE_INACTIVE || course_has_expired($course->id) || !course_has_started($course->id)) {
     redirect_to_home_page();
 }
 
@@ -57,29 +60,12 @@ if (isset($_POST['register'])) {
         }
 
         // check for prerequisites
-        $prereq1 = Database::get()->queryArray("SELECT cp.prerequisite_course
-                                 FROM course_prerequisite cp
-                                 WHERE cp.course_id = ?d", $course_id);
-        if (count($prereq1) > 0) {
-            $completion = true;
-
-            foreach ($prereq1 as $prereqCourseId) {
-                $prereq2 = Database::get()->queryArray("SELECT id
-                                  FROM user_badge
-                                  WHERE user = ?d
-                                  AND badge IN (SELECT id FROM badge WHERE course_id = ?d AND bundle = -1)
-                                  AND completed = 1", $uid, $prereqCourseId);
-                if (count($prereq2) <= 0) {
-                    $completion = false;
-                    break;
-                }
-            }
-
-            if (!$completion) {
-                Session::flash('message',$langPrerequisitesNotComplete);
-                Session::flash('alert-class', 'alert-danger');
-                redirect_to_home_page("courses/$course_code/");
-            }
+        $missing_prereqs = check_course_prerequisites($uid, $course_id);
+        if (!empty($missing_prereqs)) {
+            $missing_list = implode(', ', $missing_prereqs);
+            Session::flash('message', $langPrerequisitesNotComplete . ' (' . $missing_list . ')');
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/course_home/register.php?course=$course_code");
         }
 
         Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`, `document_timestamp`)
@@ -92,16 +78,17 @@ if (isset($_POST['register'])) {
 }
 
 if ($course->visible == COURSE_OPEN) {
-    redirect_to_home_page("courses/$course_code/");
-} elseif ($course->visible == COURSE_INACTIVE) {
-    redirect_to_home_page('main/portfolio.php');
+    $missing_prereqs = check_course_prerequisites($uid, $course_id);
+    if (empty($missing_prereqs)) {
+        redirect_to_home_page("courses/$course_code/");
+    }
 }
 
 $course_tenant = getCourseTenant($course_id);
 $user_tenant = getUserTenant($uid);
 
 // Restrict access if user tries to open a course that belongs to a different tenant.
-if ($course_tenant->id !== $user_tenant->id) {
+if (($course_tenant->id ?? 0) !== ($user_tenant->id ?? 0)) {
     redirect_to_home_page();
 }
 

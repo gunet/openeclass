@@ -25,7 +25,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 $defaults = array(
                 'rgba(255, 255, 255, 1)' => array('leftNavBgColor','leftNavBgColorSmallScreen','bgColor','buttonTextColor','textColorPortfolioButtons', 'bgColorContentPlatform', 'clAlertInfo', 'clAlertWarning', 'clAlertSuccess', 'clAlertDanger',
                                                     'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'BgColorContainerLogo', 'bgColorWrapperFooter', 'clLinkAlertInfo', 'clLinkAlertWarning', 'clLinkAlertSuccess', 'clLinkAlertDanger',
-                                                    'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgCommentsPanels', 'BgQuestionnairePanels', 'BgReportsPanels', 'BgExercisesPanels', 'BgForms', 'BgTables', 'bgLists' ,
+                                                    'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgCommentsPanels', 'BgQuestionnairePanels', 'BgReportsPanels', 'BgProgressActivitiesPanels', 'BgExercisesPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes',
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda',
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
@@ -43,7 +43,7 @@ $defaults = array(
                                                 'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement', 'ColorBlueText', 'ColorFocus'),
                 'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor','bgHoverColorPortfolioButtons', 'clHoveredLinkImportantAnnouncement'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
-                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderReportsPanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
+                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderReportsPanels', 'clBorderProgressActivitiesPanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
                                                     'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'BgBorderColorAgendaEvent',
                                                     'clBorderBottomMenuPopoverOption', 'BgHoveredMenuPopoverOption', 'AboutBorderChatContainer', 'AboutChatContainer', 'AboutBorderCourseInfoContainer', 'AboutBorderUnitsContainer'),
                 "rgba(35,82,124,1)" => array('linkHoverColor','clLinkHoveredAlertInfo','clLinkHoveredAlertWarning','clLinkHoveredAlertSuccess','clLinkHoveredAlertDanger'),
@@ -2478,6 +2478,25 @@ $tool_content .= "
                             </figure>
                         </div>
                     </div>
+
+
+                    <hr>
+                    <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
+                        <div>
+                            <h2 class='theme_options_legend text-decoration-underline mt-4 text-heading-h3'>$langConcerngingProgressActivitiesPanels</h2>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='BgProgressActivitiesPanels' class='control-label-notes mb-2 me-2'>$langBgPanels:</label>
+                                <input name='BgProgressActivitiesPanels' type='text' class='form-control colorpicker' id='BgProgressActivitiesPanels' value='$theme_options_styles[BgProgressActivitiesPanels]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='clBorderProgressActivitiesPanels' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
+                                <input name='clBorderProgressActivitiesPanels' type='text' class='form-control colorpicker' id='clBorderProgressActivitiesPanels' value='$theme_options_styles[clBorderProgressActivitiesPanels]'>
+                            </div>
+                        </div>
+                    </div>
+
+
+
                     <hr>
                     <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
                         <div>
