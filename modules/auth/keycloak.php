@@ -30,6 +30,7 @@ use Hybridauth\Provider\Keycloak;
 use Hybridauth\Exception;
 use Hybridauth\Exception\UnexpectedValueException;
 use Hybridauth\Exception\HttpRequestFailedException;
+use Hybridauth\Exception\UnexpectedApiResponseException;
 use Hybridauth\Data;
 use Hybridauth\User;
 
@@ -40,6 +41,39 @@ final class CustomProvider extends Keycloak
      */
     public $scope = 'openid profile email';
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserProfile()
+    {
+        $response = $this->apiRequest('userinfo');
+
+        $data = new Data\Collection($response);
+
+        if (!$data->exists('sub')) {
+            throw new UnexpectedApiResponseException('Provider API returned an unexpected response.');
+        }
+
+        $userProfile = new User\Profile();
+
+        $userProfile->identifier = $data->get('sub');
+        $userProfile->displayName = $data->get('preferred_username');
+        $userProfile->email = $data->get('email');
+        $userProfile->firstName = $data->get('given_name');
+        $userProfile->lastName = $data->get('family_name');
+        $userProfile->emailVerified = $data->get('email_verified');
+
+        // Store all Keycloak attributes in $userProfile->data
+        $userProfile->data = json_decode(json_encode($response), true);
+
+        // Collect organization claim if provided in the IDToken
+        if ($data->exists('organization')) {
+            $kc_orgs = array_keys((array) $data->get('organization'));
+            $userProfile->data['organization'] = array_shift($kc_orgs); //Get the first key
+        }
+
+        return $userProfile;
+    }
 }
 
 $auth_settings = get_auth_settings(16);
