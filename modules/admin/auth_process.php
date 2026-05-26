@@ -32,6 +32,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
+$data['callback_url'] = null;
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $data['auth'] = $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
     if ($auth == 7) {
@@ -363,6 +364,11 @@ if (isset($_POST['submit'])) {
             }
             if (!isset($data['auth_data']['uid_attr_is_username'])) {
                 $data['auth_data']['uid_attr_is_username'] = 0;
+            }
+            if ($auth == 15) {
+                $data['callback_url'] = $urlServer . 'modules/auth/oauth2.php';
+            } elseif ($auth == 16) {
+                $data['callback_url'] = $urlServer . 'modules/auth/keycloak.php';
             }
         }
 
