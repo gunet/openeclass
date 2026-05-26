@@ -3117,9 +3117,9 @@ body .form-action-button-popover{
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
 }
-.panel-admin-calendar .event{
+/* .panel-admin-calendar .event{
   margin-bottom: 0px;
-}
+} */
 
 .panel-primary,.panel-action-btn-primary{
   border-radius:4px;
@@ -7310,49 +7310,4 @@ th.grade-col a{
 
 .rubrics-scales {
   background-color: #f8f9fa;
-}
-
-/* Calendar Event Icons */
-.calendar-event-icon {
-    width: 35px;
-    height: 35px;
-    min-width: 35px;
-    min-height: 35px;
-    object-fit: contain;
-    display: inline-block;
-    vertical-align: middle;
-    background: transparent;
-    image-rendering: -webkit-optimize-contrast;
-    transition: transform 0.2s ease;
-    margin-right: 6px;
-}
-
-.calendar-event-icon:hover {
-    transform: scale(1.08);
-}
-
-.calendar-event-icon-small {
-  width: 30px !important;
-  height: 30px !important;
-  min-width: 30px !important;
-  min-height: 30px !important;
-  margin-top: -16px;
-  margin-left: -10px;
-}
-
-.events-list .event {
-  background-color: transparent !important;
-  box-shadow: none !important;
-}
-.events-list:has(.calendar-event-icon-small) {
-  height: 40px !important;
-}
-
-#bootstrapcalendar .cal-month-day:has(.events-list) .pull-right{
-  display: none !important;
-}
-
-.cal-month-day .events-list .event {
-    pointer-events: none;
-    cursor: default;
 }

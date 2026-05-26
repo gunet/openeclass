@@ -49,7 +49,7 @@
                         // create image
                         const img = document.createElement('img');
                         img.src = icon;
-                        img.className = 'calendar-event-icon calendar-event-icon-small';
+                        img.className = 'calendar-event-icon-small';
                         img.alt = '';
                         img.setAttribute('aria-hidden', 'true');
                         // clear old content
@@ -60,43 +60,6 @@
                         event.dataset.iconApplied = '1';
                     }
                 });
-            });
-        }
-
-        function applySlideBoxIcons() {
-            document.querySelectorAll('#cal-slide-content li').forEach(function(item) {
-                console.log(item);
-                const eventBadge = item.querySelector('.event');
-                if (!eventBadge) {
-                    return;
-                }
-                let icon = '';
-                if (eventBadge.classList.contains('event-info')) {
-                    icon = '{{ $urlAppend }}template/modern/images/course_event.png';
-                }
-                else if (eventBadge.classList.contains('event-important')) {
-                    icon = '{{ $urlAppend }}template/modern/images/deadline.png';
-                }
-                else if (eventBadge.classList.contains('event-special')) {
-                    icon = '{{ $urlAppend }}template/modern/images/personal_event.png';
-                }
-                else if (eventBadge.classList.contains('event-success')) {
-                    icon = '{{ $urlAppend }}template/modern/images/system_event.png';
-                }
-                if (icon !== '') {
-                    // καθαρισμός default dot
-                    eventBadge.innerHTML = '';
-                    eventBadge.style.background = 'transparent';
-                    eventBadge.style.border = '0';
-                    // δημιουργία img
-                    const img = document.createElement('img');
-                    img.src = icon;
-                    img.className ='calendar-event-icon calendar-event-icon-small';
-                    img.alt = '';
-                    img.setAttribute('aria-hidden', 'true');
-                    // append
-                    eventBadge.appendChild(img);
-                }
             });
         }
 
@@ -115,7 +78,6 @@
 
                     setTimeout(function() {
                         applyCalendarIcons();
-                        applySlideBoxIcons();
                         // prevent event direct click
                         $('#bootstrapcalendar .events-list a.event').off('click');
                         $('#bootstrapcalendar .events-list a.event').on('click', function(e) {
@@ -123,7 +85,6 @@
                             e.stopPropagation();
                         });
                         // hide default slide
-                        $('.cal-slide-box').hide();
                     }, 200);
 
                 },
@@ -144,14 +105,12 @@
 
                             setTimeout(function() {
                                 applyCalendarIcons();
-                                applySlideBoxIcons();
                                 // prevent event direct click
                                 $('#bootstrapcalendar .events-list a.event').off('click');
                                 $('#bootstrapcalendar .events-list a.event').on('click', function(e) {
                                     e.preventDefault();
                                     e.stopPropagation();
                                 });
-                                $('.cal-slide-box').hide();
                             }, 300);
 
                         }).fail(function() {

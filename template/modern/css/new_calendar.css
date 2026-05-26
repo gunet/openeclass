@@ -142,7 +142,15 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 7px;
+  gap: 3px;
+  padding: 0px;
+}
+.cal-month-day .events-list:hover{
+   cursor:  url(../images/pointer.png), auto;
+}
+.cal-month-day .events-list .event {
+  pointer-events: none;
+  cursor: default;
 }
 .cal-row-fluid.cal-row-head .cal-cell1{
   font-size: 14px;
@@ -673,3 +681,110 @@
   font-weight: 700; 
   color:#212D37;
  }
+
+
+
+/****************************************************************************************************/
+/************************************* CALENDARS WITH NEW EVENT ICONS *******************************/
+/****************************************************************************************************/
+
+/* Calendar Event Icons */
+.calendar-event-icon {
+  width: 35px;
+  height: 35px;
+  min-width: 35px;
+  min-height: 35px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  background: transparent;
+  image-rendering: -webkit-optimize-contrast;
+  transition: transform 0.2s ease;
+  margin-right: 6px;
+}
+
+.calendar-event-icon:hover {
+  transform: scale(1.08);
+}
+
+.calendar-event-icon-small {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  margin-left: -5px !important;
+}
+.myPersonalCalendar .calendar-event-icon-small{
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+}
+.myPersonalCalendar .cal-month-day .events-list {
+  gap: 10px;
+}
+
+.cal-month-day {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+}
+.events-list .event {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  width: 15px;
+  height: 15px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  margin-top: -10px;
+}
+.events-list:has(.calendar-event-icon-small) {
+  min-height: 100% !important;
+}
+
+#bootstrapcalendar .cal-month-day:has(.events-list) .pull-right{
+  display: none !important;
+}
+
+#cal-slide-content {
+  padding: 0px !important;
+}
+#cal-slide-content ul li {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  gap: 2px;
+}
+#cal-slide-content ul li .event-item{
+  margin-top: 3px !important;
+}
+#cal-slide-content .event {
+  margin-top: 0px !important;
+  width: 35px !important;
+  height: 35px !important;
+  min-width: 35px !important;
+  min-height: 35px !important;
+}
+#cal-slide-content .event {
+  display: inline-block;
+  border: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  vertical-align: middle;
+}
+#cal-slide-content .event.event-info {
+  background-image: url("../images/course_event.png");
+}
+#cal-slide-content .event.event-success {
+  background-image: url("../images/system_event.png");
+}
+#cal-slide-content .event.event-special {
+  background-image: url("../images/personal_event.png");
+}
+#cal-slide-content .event.event-important {
+  background-image: url("../images/deadline.png");
+}
