@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd" bootstrap="tests/bootstrap.php" 
+    colors="true" 
+    cacheDirectory="tests/phpunit/.cache"
+>
+  <testsuites>
+    <testsuite name="Unit">
+      <directory>tests/phpunit/Unit</directory>
+    </testsuite>
+    <testsuite name="Integration">
+      <directory>tests/phpunit/Integration</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <!-- Point at a separate test DB -->
+    <env name="DB_NAME" value="eclass_test"/>
+    <env name="DB_HOST" value="127.0.0.1"/>
+    <env name="APP_ENV" value="testing"/>
+  </php>
+  <source>
+    <include>
+      <directory suffix=".php">modules</directory>
+      <directory suffix=".php">include</directory>
+    </include>
+    <exclude>
+      <directory>vendor</directory>
+    </exclude>
+  </source>
+</phpunit>
