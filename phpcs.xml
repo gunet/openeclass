@@ -24,13 +24,7 @@
     <rule ref="PSR12"/>
 
     <!-- Configs -->
-	<config name="testVersion" value="7.4-" />
-
-    <!-- Useful extras -->
-    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
-    <rule ref="Generic.PHP.NoSilencedErrors"/>
-    <rule ref="Squiz.PHP.NonExecutableCode"/>
-    <rule ref="Squiz.Strings.DoubleQuoteUsage"/>
+	<config name="testVersion" value="8.2-" />
 
     <rule ref="Generic.Files.LineLength.TooLong">
         <exclude-pattern>*</exclude-pattern>

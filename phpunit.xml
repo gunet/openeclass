@@ -12,12 +12,16 @@
       <directory>tests/phpunit/Integration</directory>
     </testsuite>
   </testsuites>
+
+  <!-- Point at a separate test DB -->
+  <!-- 
   <php>
-    <!-- Point at a separate test DB -->
     <env name="DB_NAME" value="eclass_test"/>
     <env name="DB_HOST" value="127.0.0.1"/>
     <env name="APP_ENV" value="testing"/>
   </php>
+  -->
+
   <source>
     <include>
       <directory suffix=".php">modules</directory>
