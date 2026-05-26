@@ -42,7 +42,7 @@ $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $co
 $professor = $course->prof_names;
 $langUserPortfolio = q($course->title);
 
-if (!is_enabled_course_registration($uid)) {
+if (!is_enabled_course_registration($uid) || $course->visible == COURSE_INACTIVE || course_has_expired($course->id) || !course_has_started($course->id)) {
     redirect_to_home_page();
 }
 
@@ -82,8 +82,6 @@ if ($course->visible == COURSE_OPEN) {
     if (empty($missing_prereqs)) {
         redirect_to_home_page("courses/$course_code/");
     }
-} elseif ($course->visible == COURSE_INACTIVE) {
-    redirect_to_home_page('main/portfolio.php');
 }
 
 $course_tenant = getCourseTenant($course_id);
