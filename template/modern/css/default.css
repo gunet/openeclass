@@ -7178,6 +7178,10 @@ th.grade-col a{
 /*********************************************** SIDEBAR AND MAIN-CONTENT AS CARDS *******************************************************/
 /* ************************************************************************************************************************************* */
 /* ************************************************************************************************************************************* */
+.mobile .main-maincontent {
+  margin-top: 0px !important;
+}
+
 @media(max-width: 991px) {
   /* without cards */
   body:not(:has(.sidebar-card)) .main-maincontent {
@@ -7186,7 +7190,6 @@ th.grade-col a{
   body:has(.sidebar-card) .main-maincontent {
     margin-top: 56px;
   }
-
 }
 @media(min-width: 992px) {
   /* without cards */
