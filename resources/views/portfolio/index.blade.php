@@ -457,66 +457,79 @@
     @include('portfolio.privacy_policy_modal')
 @endif
 
-<section class="portfolio-profile-container" aria-label="{{ trans('langPortfolio') }}" style='padding-top: 80px;'>
+<section class="portfolio-profile-container" aria-label="{{ trans('langPortfolio') }}">
     <h1 class="visually-hidden">{{ trans('langPortfolio') }}</h1>
     <div class='{{ $container }} padding-default'>
-        <div class='row row-cols-xl-3 row-cols-md-2 row-cols-1'>
-            <div class='col-xl-4 col-md-6 d-flex col-12 justify-content-md-start justify-content-center align-items-center'>
-                <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
-                    <img class="user-detals-photo ms-auto me-auto" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ trans('langProfileImage') }}: {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+        <div class='card panelCard rounded-3 epf-panel-card epf-profile-card px-4 py-3'>
+            <div class='d-flex align-items-center gap-4 flex-wrap'>
+
+                {{-- Avatar + Name --}}
+                <div class='d-flex align-items-center gap-3 flex-shrink-0'>
+                    <div class='epf-avatar-circle'>
+                        <img src="{{ user_icon($uid, IMAGESIZE_LARGE) }}"
+                             alt="{{ trans('langProfileImage') }}: {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                    </div>
                     <div>
-                        <div class='mb-0 portofolio-text-intro portfolio-username TextBold normal-text'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </div>
-                        <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
-                            {!! $_SESSION['uname'] !!}
-                        </p>
+                        <div class='fw-bold epf-profile-name'>{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}</div>
+                        <div class='text-muted epf-profile-username'>{!! $_SESSION['uname'] !!}</div>
                     </div>
                 </div>
-            </div>
-            <div class='col-xl-3 col-md-6 col-12 d-flex justify-content-xl-center justify-content-md-end justify-content-center align-items-center mt-md-0 mt-4'>
-                <div>
+
+                {{-- Info items --}}
+                <div class='flex-shrink-0 ms-md-3'>
                     @if(!get_config('show_always_collaboration'))
-                    <div class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
-                        <div>{!! trans('langSumCoursesEnrolled') !!}: {{ $num_of_courses }} </div>
-                    </div>
+                        <div class='d-flex align-items-center gap-3 mb-2'>
+                            <div class='epf-info-icon-badge'>
+                                <i class='fa-solid fa-graduation-cap'></i>
+                            </div>
+                            <span class='epf-info-text'>{!! trans('langSumCoursesEnrolled') !!}: <strong>{{ $num_of_courses }}</strong></span>
+                        </div>
                     @endif
                     @if(get_config('show_collaboration'))
-                    <div class='d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0'>
-                        <div>{!! trans('langSumCollaborationEnrolled') !!}: {{ $num_of_collaborations }} </div>
-                    </div>
+                        <div class='d-flex align-items-center gap-3 mb-2'>
+                            <div class='epf-info-icon-badge'>
+                                <i class='fa-solid fa-people-group'></i>
+                            </div>
+                            <span class='epf-info-text'>{!! trans('langSumCollaborationEnrolled') !!}: <strong>{{ $num_of_collaborations }}</strong></span>
+                        </div>
                     @endif
-                    <p class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>
-                        {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<span class='TextBold small-text'>{{ format_locale_date(strtotime($last_login)) }}</span>
-                    </p>
+                    <div class='d-flex align-items-center gap-3'>
+                        <div class='epf-info-icon-badge'>
+                            <i class='fa-regular fa-calendar'></i>
+                        </div>
+                        <span class='epf-info-text'>{{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;<strong>{{ format_locale_date(strtotime($last_login)) }}</strong></span>
+                    </div>
                 </div>
-            </div>
-            <ul style='list-style-type: none;' class='col-xl-5 col-md-12 col-12 d-flex justify-content-xl-end justify-content-md-start justify-content-center align-items-center gap-2 flex-wrap mt-xl-0 mt-4' aria-label="{{ trans('langProfileLinks') }}">
-                <li class='nav-item' aria-label="{{ trans('langMyProfile') }}">
-                    <a class='btn myProfileBtn nav-link' href='{{ $urlAppend }}main/profile/display_profile.php'>
-                        {{ trans('langMyProfile') }}
+
+                <div class='flex-grow-1'></div>
+
+                {{-- Buttons --}}
+                <div class='d-flex gap-3 flex-wrap align-items-center flex-shrink-0' aria-label="{{ trans('langProfileLinks') }}">
+                    <a class='btn btn-primary d-inline-flex align-items-center gap-2'
+                       href='{{ $urlAppend }}main/profile/display_profile.php'>
+                        <i class='fa-solid fa-user'></i>{{ trans('langMyProfile') }}
                     </a>
-                </li>
-                <li class='nav-item' aria-label="{{ trans('langMyStats') }}">
-                    <a class='btn myProfileBtn nav-link' href='{{ $urlAppend }}modules/usage/index.php?t=u'>
-                        {{ trans('langMyStats') }}
+                    <a class='btn btn-outline-primary d-inline-flex align-items-center gap-2'
+                       href='{{ $urlAppend }}modules/usage/index.php?t=u'>
+                        <i class='fa-solid fa-chart-bar'></i>{{ trans('langMyStats') }}
                     </a>
-                </li>
-                @if ((isset($is_admin) and $is_admin) or
-                    (isset($is_power_user) and $is_power_user) or
-                    (isset($is_usermanage_user) and ($is_usermanage_user)) or
-                    (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                        <li class='nav-item' aria-label="{{ trans('langAdminTool') }}">
-                            <a class="btn myProfileBtn nav-link" href="{{ $urlAppend }}modules/admin/index.php">
-                                {{ trans('langAdminTool') }}
-                            </a>
-                        </li>
-                @elseif ($_SESSION['status'] == USER_STUDENT)
-                    <li class='nav-item' aria-label="{{ trans('langMyRequests') }}">
-                        <a class="btn myProfileBtn nav-link" href="{{ $urlAppend }}modules/auth/formuser.php">
-                            {{ trans('langMyRequests') }}
+                    @if ((isset($is_admin) and $is_admin) or
+                         (isset($is_power_user) and $is_power_user) or
+                         (isset($is_usermanage_user) and $is_usermanage_user) or
+                         (isset($is_departmentmanage_user) and $is_departmentmanage_user))
+                        <a class='btn btn-outline-primary d-inline-flex align-items-center gap-2'
+                           href='{{ $urlAppend }}modules/admin/index.php'>
+                            <i class='fa-solid fa-screwdriver-wrench'></i>{{ trans('langAdminTool') }}
                         </a>
-                    </li>
-                @endif
-            </ul>
+                    @elseif ($_SESSION['status'] == USER_STUDENT)
+                        <a class='btn btn-outline-primary d-inline-flex align-items-center gap-2'
+                           href='{{ $urlAppend }}modules/auth/formuser.php'>
+                            <i class='fa-regular fa-envelope'></i>{{ trans('langMyRequests') }}
+                        </a>
+                    @endif
+                </div>
+
+            </div>
         </div>
     </div>
 </section>

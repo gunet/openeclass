@@ -7314,3 +7314,104 @@ th.grade-col a{
 .rubrics-scales {
   background-color: #f8f9fa;
 }
+
+/* ===================== ePortfolio ===================== */
+.alert-success { background-color: #fff !important; border: 1px solid #198754 !important; color: #198754 !important; }
+.alert-success i, .alert-success span, .alert-success li, .alert-success p { color: #198754 !important; }
+.alert-warning { background-color: #fff !important; border: 1px solid #c08200 !important; color: #c08200 !important; }
+.alert-warning i, .alert-warning span, .alert-warning li, .alert-warning p { color: #c08200 !important; }
+.alert-danger  { background-color: #fff !important; border: 1px solid #dc3545 !important; color: #dc3545 !important; }
+.alert-danger i, .alert-danger span, .alert-danger li, .alert-danger p  { color: #dc3545 !important; }
+.alert-info    { background-color: #fff !important; border: 1px solid #0e8ea6 !important; color: #0e8ea6 !important; }
+.alert-info i, .alert-info span, .alert-info li, .alert-info p    { color: #0e8ea6 !important; }
+
+.epf-panel-card {
+    border: 1px solid #dee2e6 !important;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .07) !important;
+    scroll-margin-top: 70px !important;
+}
+
+.epf-cat-icon {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+.epf-cat-icon i {
+    color: #fff !important;
+    font-size: 1rem !important;
+}
+
+#navbar-exampleIndexPortfolio,
+#navbar-examplePortfolioEdit {
+    z-index: 0 !important;
+    top: 70px !important;
+    max-height: calc(100vh - 80px) !important;
+    overflow-y: auto !important;
+    background: #fff !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .07) !important;
+    padding: 8px !important;
+}
+#navbar-exampleIndexPortfolio .nav-link,
+#navbar-examplePortfolioEdit .nav-link {
+    background-color: transparent !important;
+    color: #495057 !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    margin-bottom: 2px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    text-decoration: none !important;
+    font-size: 1rem !important;
+}
+.epf-nav-icon {
+    width: 20px !important;
+    min-width: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+.epf-nav-icon i {
+    color: #6c757d !important;
+    font-size: 0.85rem !important;
+}
+#navbar-exampleIndexPortfolio .nav-link.active,
+#navbar-exampleIndexPortfolio .nav-pills .nav-link.active,
+#navbar-examplePortfolioEdit .nav-link.active,
+#navbar-examplePortfolioEdit .nav-pills .nav-link.active {
+    background-color: rgba(13, 110, 253, 0.08) !important;
+    color: #0d6efd !important;
+    text-decoration: none !important;
+}
+#navbar-exampleIndexPortfolio .nav-link.active .epf-nav-icon i,
+#navbar-examplePortfolioEdit .nav-link.active .epf-nav-icon i {
+    color: #0d6efd !important;
+}
+#navbar-exampleIndexPortfolio .nav-link:hover,
+#navbar-examplePortfolioEdit .nav-link:hover {
+    background-color: rgba(13, 110, 253, 0.04) !important;
+    color: #0d6efd !important;
+    text-decoration: none !important;
+}
+#navbar-exampleIndexPortfolio .nav-link:hover .epf-nav-icon i,
+#navbar-examplePortfolioEdit .nav-link:hover .epf-nav-icon i {
+    color: #0d6efd !important;
+}
+
+/* ===================== Portfolio profile bar ===================== */
+.portfolio-profile-container { padding-top: 80px; }
+.epf-profile-card { box-shadow: none !important; }
+.epf-avatar-circle { width: 80px; height: 80px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+.epf-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.epf-profile-name { font-size: 1.05rem; }
+.epf-profile-username { font-size: 0.875rem; }
+.epf-info-icon-badge { width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.epf-info-icon-badge i { color: #3b82f6; font-size: 1rem; }
+.epf-info-text { font-size: 0.875rem; }
