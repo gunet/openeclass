@@ -32,7 +32,7 @@ require_once 'main/eportfolio/eportfolio_functions.php';
 require_once 'modules/sharing/sharing.php';
 
 if (!get_config('eportfolio_enable')) {
-    $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
+    $tool_content = "<div class='alert alert-danger alert-dismissible'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
     if ($session->status == 0) {
         draw($tool_content, 0);
     } else {
@@ -91,20 +91,20 @@ if ($userdata) {
         }
 
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span></div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
         }
 
         if (isset($_GET['view']) && $_GET['view'] == 'public') {
             $view_str = "?view=public";
-            $preview_info_div = "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
-                    $langePortfolioPreviewAsGuest</span>
+            $preview_info_div = "<div class='col-12'><div class='alert alert-info alert-dismissible'><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                    $langePortfolioPreviewAsGuest</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div></div>";
         } elseif (isset($_GET['view']) && $_GET['view'] == 'registered') {
             $view_str = "?view=registered";
-            $preview_info_div = "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
-                    $langePortfolioPreviewAsRegistered</span>
+            $preview_info_div = "<div class='col-12'><div class='alert alert-info alert-dismissible'><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                    $langePortfolioPreviewAsRegistered</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div></div>";
         } else {
             $view_str = "";
@@ -147,19 +147,19 @@ if ($userdata) {
         $tool_content .= $action_bar;
 
         if (!file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioAddCVPrompt</span>
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                    $langePortfolioAddCVPrompt</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div>";
         }
 
         $eportfolio_completion = calculate_eportfolio_completion($id);
         if ($eportfolio_completion < 30) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioComplBelow30</span>
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                    $langePortfolioComplBelow30</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div>";
         } elseif ($eportfolio_completion < 60) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioComplBelow60</span>
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                    $langePortfolioComplBelow60</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div>";
         }
         
@@ -167,7 +167,7 @@ if ($userdata) {
 
     } else {
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span></div></div>";
+            $tool_content = "<div class='col-12'><div class='alert alert-danger alert-dismissible'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
             if ($session->status == 0) {
                 draw($tool_content, 0);
             } else {
@@ -243,7 +243,7 @@ if ($userdata) {
     if ($ret_str['panels'] == "") {
         $tool_content .= "
                     <div class='col-12'>
-                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoInfoAvailable.</span>
+                        <div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoInfoAvailable.</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                         </div>
                     </div>";
     } else {

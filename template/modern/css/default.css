@@ -7318,12 +7318,16 @@ th.grade-col a{
 /* ===================== ePortfolio ===================== */
 .alert-success { background-color: #fff !important; border: 1px solid #198754 !important; color: #198754 !important; }
 .alert-success i, .alert-success span, .alert-success li, .alert-success p { color: #198754 !important; }
+.alert-success .btn-close { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23198754'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 13.293 1.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z'/%3e%3c%2fsvg%3e") !important; }
 .alert-warning { background-color: #fff !important; border: 1px solid #c08200 !important; color: #c08200 !important; }
 .alert-warning i, .alert-warning span, .alert-warning li, .alert-warning p { color: #c08200 !important; }
+.alert-warning .btn-close { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23c08200'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 13.293 1.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z'/%3e%3c%2fsvg%3e") !important; }
 .alert-danger  { background-color: #fff !important; border: 1px solid #dc3545 !important; color: #dc3545 !important; }
 .alert-danger i, .alert-danger span, .alert-danger li, .alert-danger p  { color: #dc3545 !important; }
+.alert-danger .btn-close  { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23dc3545'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 13.293 1.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z'/%3e%3c%2fsvg%3e") !important; }
 .alert-info    { background-color: #fff !important; border: 1px solid #0e8ea6 !important; color: #0e8ea6 !important; }
 .alert-info i, .alert-info span, .alert-info li, .alert-info p    { color: #0e8ea6 !important; }
+.alert-info .btn-close    { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230e8ea6'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 13.293 1.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z'/%3e%3c%2fsvg%3e") !important; }
 
 .epf-panel-card {
     border: 1px solid #dee2e6 !important;
@@ -7403,6 +7407,23 @@ th.grade-col a{
 #navbar-exampleIndexPortfolio .nav-link:hover .epf-nav-icon i,
 #navbar-examplePortfolioEdit .nav-link:hover .epf-nav-icon i {
     color: #0d6efd !important;
+}
+
+/* ===================== Reward list cards (progress / ePortfolio resources) ===================== */
+.reward-list-card { display: block; border: 1px solid #e5e7eb; border-radius: 12px; padding: 22px 28px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.07); margin-bottom: 12px; transition: box-shadow .2s, transform .2s; text-decoration: none !important; color: inherit !important; }
+a.reward-list-card:hover, [onclick].reward-list-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.13); transform: translateY(-2px); }
+.reward-img-col { flex-shrink: 0; width: 88px; display: flex; align-items: center; justify-content: center; }
+.reward-img-col img { width: 80px; height: 80px; object-fit: contain; border-radius: 8px; }
+.reward-title-col { flex-shrink: 0; min-width: 180px; }
+.reward-item-title { font-size: 19px !important; font-weight: 700 !important; margin-bottom: 4px; }
+.reward-bar-col { flex-grow: 1; }
+.reward-bar-inner { width: 75%; }
+@media (max-width: 575.98px) {
+    .reward-list-card { padding: 16px 18px; }
+    .reward-img-col { width: 100%; justify-content: flex-start; }
+    .reward-title-col { width: 100%; min-width: 0; }
+    .reward-bar-col { width: 100%; }
+    .reward-bar-inner { width: 100%; }
 }
 
 /* ===================== Portfolio profile bar ===================== */

@@ -88,8 +88,8 @@ function render_eportfolio_fields_content($uid) {
         if (count($res) > 0) {
             $cat_return_string['panels'] .= '
             <div class="card panelCard card-default rounded-3 epf-panel-card" id="IndexPortfolio'.$c->id.'">
-                <div class="card-body px-3 py-0">
-                <div class="d-flex align-items-center gap-2 py-2">
+                <div class="card-body px-4 py-0">
+                <div class="d-flex align-items-center gap-3 py-3">
                     <div class="epf-cat-icon" style="background:'.$cat_color.';">
                         <i class="'.$cat_icon.'"></i>
                     </div>
@@ -410,8 +410,8 @@ function render_eportfolio_fields_form() {
             $form_cat_color = isset($form_category_colors[$c->name]) ? $form_category_colors[$c->name] : '#6c757d';
             $return_string['panels'] .= '
             <div class="card panelCard card-default rounded-3 mb-4 epf-panel-card" id="EditPortfolio'.$c->id.'">
-                <div class="card-body px-3 py-0">
-                    <div class="d-flex align-items-center gap-2 py-2">
+                <div class="card-body px-4 py-0">
+                    <div class="d-flex align-items-center gap-3 py-3">
                         <div class="epf-cat-icon" style="background:'.$form_cat_color.';">
                             <i class="'.$form_cat_icon.'"></i>
                         </div>
