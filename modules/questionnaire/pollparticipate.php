@@ -107,10 +107,17 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 'filename' => basename(trim($_POST['file_name'] ?? '')),
                 'filepath' => trim($_POST['file_path'] ?? '')
             ];
-            $_SESSION['data_answers'][$questionID] = serialize($docInfo);
-            $_SESSION['data_file_answer'][$questionID] = serialize($docInfo);
-            echo json_encode(['upload_success' => true]);
-            exit();
+            $checkObj = serialize($docInfo);
+            $arrFileObj = unserialize($checkObj, ['allowed_classes' => false]);
+            if (is_array($arrFileObj) && isset($arrFileObj['filename'], $arrFileObj['filepath']) 
+                && is_string($arrFileObj['filename']) && is_string($arrFileObj['filepath'])) {
+                $_SESSION['data_answers'][$questionID] = serialize($docInfo);
+                $_SESSION['data_file_answer'][$questionID] = serialize($docInfo);
+                echo json_encode(['upload_success' => true]);
+                exit();
+            } else {
+                exit();
+            }
         }
 
         // File has been removed from uppy
