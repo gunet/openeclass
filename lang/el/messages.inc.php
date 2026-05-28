@@ -1760,6 +1760,7 @@ $langFacultyUsersRegistrationLegend = "Η εγγραφή επιτρέπεται 
 $langCourseStartDateLegend = "Κάντε κλικ για να ορίσετε την ημερομηνία έναρξης του $langsOfCourse. Σημειώστε ότι πριν από την ημερομηνία έναρξης το μάθημα θα είναι 'ανενεργό'";
 $langCourseEndDateLegend = "Κάντε κλικ για να ορίσετε την ημερομηνία λήξης του $langsOfCourse. Σημειώστε ότι μετά από την ημερομηνία λήξης το μάθημα θα είναι 'ανενεργό'";
 $langUseOfCoby = "Χρήση της Υπηρεσίας Coby";
+$langUploadCadmosFile = 'Ανέβασμα αρχείου Cadmos (.cdm)';
 
 // Admin mutiple course creation
 $langMultiCourse = "Μαζική δημιουργία $langsOfCourses";

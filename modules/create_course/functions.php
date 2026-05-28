@@ -172,3 +172,90 @@ function default_modules_collaboration() {
     }
 
 }
+
+/**
+ * @brief Import CADMOS file (.cdm) into course
+ * @param string $code course code
+ * @param string $filename CADMOS file path
+ * @return boolean
+ */
+function import_cadmos_file($course_id, $course_code, $path) {
+    global $webDir;
+
+    $target = $webDir . "/courses/$course_code/cadmos";
+    mkdir($target, 0755);
+    $zip = new ZipArchive;
+    if ($zip->open($path)) {
+        $zip->extractTo($target);
+        $zip->close();
+        $cadmos = json_decode(file_get_contents("$target/source.json"));
+
+        $activities = [];
+        $FlowSub = $cadmos->data->Flow->FlowSub;
+        $FlowBase = $cadmos->data->Flow->FlowBase;
+        uasort($FlowSub, function ($a, $b) { return $a->top - $b->top; });
+
+        foreach ($FlowBase as $item) {
+            foreach ($item->Activities as $activity) {
+                $activity->ActorName = $item->ActorName;
+                $activities[] = $activity;
+            }
+        }
+        uasort($activities, function ($a, $b) { return $b->top - $a->top; });
+
+        for ($i = count($FlowSub) - 1; $i >= 0; $i--) {
+            $FlowSub[$i]->Activities = [];
+            for ($j = 0; $j < count($activities); $j++) {
+                if ($activities[$j] and $activities[$j]->top > $FlowSub[$i]->top) {
+                    $FlowSub[$i]->Activities[] = $activities[$j];
+                    $activities[$j] = null;
+                }
+            }
+        }
+
+        $widgets = [];
+        foreach ($cadmos->data->Conceptual->ConceptualBase as $item) {
+            $widgets[$item->id] = $item;
+        }
+
+        $order = 0;
+        foreach ($FlowSub as $item) {
+            $unit_id = Database::get()->query('INSERT INTO course_units
+                SET title = ?s, visible = 1, public = 1, `order` = ?d, course_id = ?d, comments = ?s',
+                q($item->text), $order++, $course_id,
+                "<p><span class='badge bg-primary'>{$item->phaseTime} Minutes</span></p>")->lastInsertID;
+            $act_order = 0;
+            foreach ($item->Activities as $activity) {
+                $widget = $widgets[$activity->id] ?? null;
+                if ($widget) {
+                    if (count($widget->ModalData->LearningGoal) == 1) {
+                        $learningGoal = q($widget->ModalData->LearningGoal[0]);
+                    } else {
+                        $learningGoal = '<ul>' . implode('',
+                            array_map(function ($item) { return '<li>' . q($item) . '</li>'; },
+                            $widget->ModalData->LearningGoal)) . '</ul>';
+                    }
+                    $desc = "
+                        <div>
+                            <span class='badge bg-success'>{$widget->ModalData->Type}</span>
+                            <span class='badge bg-info'>{$widget->ModalData->Actor}</span>
+                            <span class='badge bg-warning'>{$widget->ModalData->TimeLimit} m.</span></div>
+                            <h4>" . q($widget->ModalData->Title) . "</h4>
+                            <p>" . q($widget->ModalData->Description) . "</p>
+                            <hr>
+                            <p><strong>Learning Goal:</strong> $learningGoal</p>
+                        </div>";
+                    Database::get()->query('INSERT INTO unit_resources
+                        SET unit_id = ?d, title = ?s, comments = ?s, type = ?s,
+                            res_id = 0, visible = 1, `date` = NOW(), `order` = ?d',
+                        $unit_id, q($activity->title), $desc, 'text', $act_order++);
+                }
+            }
+        }
+    }
+    return true;
+}
+
+function applyMapping($value, $mapping) {
+    return isset($mapping[$value]) ? $mapping[$value] : $value;
+}

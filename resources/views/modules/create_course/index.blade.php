@@ -5,6 +5,9 @@
 @endpush
 
 @push('head_scripts')
+    @if ($is_coby_enabled)
+        <link href='{{ $urlAppend }}js/bundle/uppy.min.css' rel='stylesheet' />";
+    @endif
     <script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
     <script type='text/javascript' src='{{ $urlAppend }}js/pwstrength.js'></script>
     <script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
@@ -370,6 +373,14 @@
                 $('#extractBtn, #generateBtn').prop('disabled', false);
             }
 
+            $('input[name=view_type]').on('change', function () {
+                if ($('#units_cadmos').is(":checked")) {
+                    $('#cadmos_file_div').show();
+                } else {
+                    $('#cadmos_file_div').hide();
+                }
+            });
+
             function displayAIResults(data) {
                 let preview = '<div class="row">';
 
@@ -580,6 +591,96 @@
     </script>
 @endpush
 
+@push('bottom_scripts')
+  @if ($is_coby_enabled)
+    <script>
+      $(function () {
+        let isUppyLoaded = false;
+
+        async function loadUppy() {
+          try {
+            const { Uppy, Dashboard, XHRUpload, English, French, German, Italian, Spanish, Greek } = await import("{{ $urlAppend }}js/bundle/uppy.js");
+
+            const locale_map = {
+              'de': German,
+              'el': Greek,
+              'en': English,
+              'es': Spanish,
+              'fr': French,
+              'it': Italian,
+            }
+
+            const uppy = new Uppy({
+              autoProceed: false,
+              restrictions: {
+                maxFileSize: {{ parseSize(ini_get('upload_max_filesize')) }},
+                allowedFileTypes: ['.cdm'],
+                maxNumberOfFiles: 1,
+              }
+            })
+
+            uppy.use(Dashboard, {
+              target: '#uppy',
+              inline: true,
+              showProgressDetails: true,
+              proudlyDisplayPoweredByUppy: false,
+              height: 500,
+              thumbnailWidth: 100,
+              locale: locale_map['{{ $language }}'] || English,
+            })
+
+            let uploadPath = '{{ $urlAppend }}modules/create_course/create_course.php';
+            uppy.setMeta({
+              XHRUpload: true,
+              token: '{{ $_SESSION['csrf_token'] }}'
+            });
+
+            uppy.use(XHRUpload, {
+              endpoint: uploadPath,
+              fieldName: 'userFile',
+              method: 'POST',
+              headers: {
+
+              },
+              allowedMetaFields: [
+                'token'
+              ],
+              shouldRetry: () => false,
+              getResponseData: (responseText, response) => {
+                return { url: '' };
+              }
+            })
+
+            uppy.on('file-added', (file) => {
+              //  console.log('File added:', file)
+            })
+
+            uppy.on('complete', (result) => {
+              window.location.href = '{{ $urlAppnd }}';
+            })
+            isUppyLoaded = true;
+          } catch (error) {
+            isUppyLoaded = false;
+          }
+        }
+
+        loadUppy();
+
+        // Drag and drop
+        $('.uploadBtn').on('click', function(event) {
+          if (!isUppyLoaded) {
+            console.log('Uppy not loaded');
+          } else {
+            event.preventDefault();
+            $('.drag_and_drop_container').removeClass('d-none');
+            $('#cadmosUpload').removeClass('d-none').slideDown();
+          }
+        });
+      });
+    </script>
+  @endif
+@endpush
+
 @section('content')
 
 <main id="main" class="col-12 main-section">
@@ -604,13 +705,21 @@
             @if ($is_coby_enabled)
                 <div class='col-12 mb-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
-                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                        <div class='card-header border-0 d-flex align-items-center'>
                             <h2 class='text-heading-h3 mb-0'>
-                                <i class='fa-solid fa-robot me-2'></i>{{ trans('langUseOfCoby') }}
+                                <i class='fa-solid fa-robot me-auto'></i>{{ trans('langUseOfCoby') }}
                             </h2>
-                            <a class='btn submitAdminBtnDefault ms-2' href='{{ $coby_url }}' aria-label='{{ trans('langFinalize') }}'>
+                            <button class='btn submitAdminBtnDefault uploadBtn ms-auto me-2'>
+                                {{ trans('langUploadCadmosFile') }}
+                            </button>
+                            <a class='btn submitAdminBtnDefault' href='{{ $coby_url }}' aria-label='{{ trans('langFinalize') }}'>
                                 {{ trans('langFinalize') }}
                             </a>
+                        </div>
+                        <div class='card-body d-none' id='cadmosUpload'>
+                            <div class='col-12 drag_and_drop_container d-none mb-3'>
+                                <div id='uppy'></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -811,6 +920,17 @@
                             </div>
                         </div>
                     </div>
+                                @if (get_config('cadmos_course_creation'))
+                                <div class="radio mb-2" id="radio_cadmos">
+                                    <label>
+                                        <input type='radio' name='view_type' value='units' id='units_cadmos'>
+                                        {{ trans('langUploadCadmosFile') }}
+                                    </label>
+                                </div>
+                                <div class="mb-2" id="cadmos_file_div" style="display: none">
+                                    <input type="file" name="cadmos_file" class="form-control">
+                                </div>
+                                @endif
 
                     <div class='form-group mt-4'>
                         <label for='description' class='col-sm-12 control-label-notes'>

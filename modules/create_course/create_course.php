@@ -424,6 +424,10 @@ if (!isset($_POST['create_course'])) {
                             SET cat_title = ?s,
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
 
+        if (isset($_FILES['cadmos_file']) && is_uploaded_file($_FILES['cadmos_file']['tmp_name'])) {
+            import_cadmos_file($new_course_id, $code, $_FILES['cadmos_file']['tmp_name']);
+        }
+
         // set course option faculty_users_registration (if checked)
         if (isset($_POST['faculty_users_registration'])) {
             setting_set(SETTING_FACULTY_USERS_REGISTRATION, 1, $new_course_id);
