@@ -960,9 +960,16 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
                                     </td>" : "";
                                 $uAnswerText = q($answer->answer_text);
                                 if ($theQuestion->qtype == QTYPE_FILE) {
-                                    $arrFile = unserialize($answer->answer_text);
-                                    $filename = $arrFile['filename'];
-                                    $filepath = $arrFile['filepath'];
+                                    $arrFile = unserialize($answer->answer_text, ['allowed_classes' => false]);
+                                    if (is_array($arrFile) && isset($arrFile['filename'], $arrFile['filepath']) 
+                                        && is_string($arrFile['filename']) && is_string($arrFile['filepath'])) {
+                                        $filename = basename(trim($arrFile['filename']));
+                                        $filepath = trim($arrFile['filepath']);
+                                    } else {
+                                        $filename = '';
+                                        $filepath = '';
+                                    }
+                                    
                                     $userID = $uid;
                                     if ($is_editor or $is_consultant) {
                                         $userID = $answer->uid;

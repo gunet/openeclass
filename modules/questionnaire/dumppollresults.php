@@ -245,8 +245,12 @@ if ($full) { // user questions results
                 $user_identifier = $a->uid ?: $a->email;
                 $u_answer_text = $a->answer_text;
                 if ($q->qtype == QTYPE_FILE) {
-                    $arrFile = unserialize($a->answer_text);
-                    $u_answer_text = $arrFile['filename'];
+                    $arrFile = unserialize($a->answer_text, ['allowed_classes' => false]);
+                    if (is_array($arrFile) && isset($arrFile['filename']) && is_string($arrFile['filename'])) {
+                        $u_answer_text = basename(trim($arrFile['filename']));
+                    } else {
+                        $u_answer_text = '';
+                    }
                 }
                 $qlist[$user_identifier][$q->pqid] = $u_answer_text;
                 if (!isset($submit_date[$user_identifier])) {
