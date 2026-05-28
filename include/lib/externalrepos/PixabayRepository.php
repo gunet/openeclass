@@ -268,7 +268,7 @@ class PixabayRepository extends AbstractExternalRepo
     {
         return $this->buildResultItem(
             (string)$item['id'],
-            $item['tags'] ?? 'Untitled',
+            $this->titleFromUrl($item),
             null,
             $item['pageURL'],
             'image',
@@ -315,7 +315,7 @@ class PixabayRepository extends AbstractExternalRepo
 
         return $this->buildResultItem(
             (string)$item['id'],
-            $item['tags'] ?? 'Untitled',
+            $this->titleFromUrl($item),
             null,
             $item['pageURL'],
             'video',
@@ -335,6 +335,41 @@ class PixabayRepository extends AbstractExternalRepo
                 'license' => 'Pixabay License (Free for commercial use)'
             ]
         );
+    }
+
+    /**
+     * Build a readable, unique title for a Pixabay item.
+     *
+     * The Pixabay API has no title field. Its pageURL slug is
+     * "{tag-words}-{id}" (e.g. earth-space-sunlight-sun-rays-1756274);
+     * this turns that into "Earth space sunlight sun rays #1756274" —
+     * short, readable, and unique via the image id.
+     *
+     * @param array $item Raw Pixabay item
+     * @return string
+     */
+    private function titleFromUrl(array $item): string
+    {
+        $id = (string)($item['id'] ?? '');
+        $path = parse_url($item['pageURL'] ?? '', PHP_URL_PATH);
+        $slug = $path ? basename(rtrim($path, '/')) : '';
+
+        if ($slug === '') {
+            return $id !== '' ? 'Pixabay item #' . $id : 'Untitled';
+        }
+
+        // Strip the trailing "-{id}" so only the tag words remain.
+        $suffix = '-' . $id;
+        if ($id !== '' && str_ends_with($slug, $suffix)) {
+            $slug = substr($slug, 0, -strlen($suffix));
+        }
+
+        $words = ucfirst(trim(str_replace('-', ' ', $slug)));
+        if ($words === '') {
+            $words = 'Pixabay item';
+        }
+
+        return $id !== '' ? $words . ' #' . $id : $words;
     }
 
     /**
