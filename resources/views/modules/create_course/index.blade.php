@@ -5,6 +5,9 @@
 @endpush
 
 @push('head_scripts')
+    @if ($is_coby_enabled)
+        <link href='{{ $urlAppend }}js/bundle/uppy.min.css' rel='stylesheet' />";
+    @endif
     <script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
     <script type='text/javascript' src='{{ $urlAppend }}js/pwstrength.js'></script>
     <script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
@@ -72,11 +75,31 @@
                 }
             }).change();
 
+            $('#courseStartDate').datepicker({
+                format: 'dd-mm-yyyy',
+                pickerPosition: 'bottom-right',
+                language: '{{ $language }}',
+                autoclose: true
+            });
+
             $('#courseEndDate').datepicker({
                 format: 'dd-mm-yyyy',
                 pickerPosition: 'bottom-right',
                 language: '{{ $language }}',
                 autoclose: true
+            });
+
+            $('#course_enableStartDate').change(function() {
+                var dateType = $(this).prop('id').replace('_enable', '');
+                var $dateInput = $('input#' + dateType);
+
+                if($(this).prop('checked')) {
+                    $dateInput.prop('disabled', false);
+                    $('#courseStartDate').datepicker('show');
+                } else {
+                    $dateInput.prop('disabled', true);
+                    $('#courseStartDate').datepicker('hide');
+                }
             });
 
             $('#course_enableEndDate').change(function() {
@@ -350,6 +373,14 @@
                 $('#extractBtn, #generateBtn').prop('disabled', false);
             }
 
+            $('input[name=view_type]').on('change', function () {
+                if ($('#units_cadmos').is(":checked")) {
+                    $('#cadmos_file_div').show();
+                } else {
+                    $('#cadmos_file_div').hide();
+                }
+            });
+
             function displayAIResults(data) {
                 let preview = '<div class="row">';
 
@@ -560,6 +591,96 @@
     </script>
 @endpush
 
+@push('bottom_scripts')
+  @if ($is_coby_enabled)
+    <script>
+      $(function () {
+        let isUppyLoaded = false;
+
+        async function loadUppy() {
+          try {
+            const { Uppy, Dashboard, XHRUpload, English, French, German, Italian, Spanish, Greek } = await import("{{ $urlAppend }}js/bundle/uppy.js");
+
+            const locale_map = {
+              'de': German,
+              'el': Greek,
+              'en': English,
+              'es': Spanish,
+              'fr': French,
+              'it': Italian,
+            }
+
+            const uppy = new Uppy({
+              autoProceed: false,
+              restrictions: {
+                maxFileSize: {{ parseSize(ini_get('upload_max_filesize')) }},
+                allowedFileTypes: ['.cdm'],
+                maxNumberOfFiles: 1,
+              }
+            })
+
+            uppy.use(Dashboard, {
+              target: '#uppy',
+              inline: true,
+              showProgressDetails: true,
+              proudlyDisplayPoweredByUppy: false,
+              height: 500,
+              thumbnailWidth: 100,
+              locale: locale_map['{{ $language }}'] || English,
+            })
+
+            let uploadPath = '{{ $urlAppend }}modules/create_course/create_course.php';
+            uppy.setMeta({
+              XHRUpload: true,
+              token: '{{ $_SESSION['csrf_token'] }}'
+            });
+
+            uppy.use(XHRUpload, {
+              endpoint: uploadPath,
+              fieldName: 'cadmos_file',
+              method: 'POST',
+              headers: {
+
+              },
+              allowedMetaFields: [
+                'token'
+              ],
+              shouldRetry: () => false,
+              getResponseData: (responseText, response) => {
+                return { url: '' };
+              }
+            })
+
+            uppy.on('file-added', (file) => {
+              //  console.log('File added:', file)
+            })
+
+            uppy.on('complete', (result) => {
+              window.location.href = '{{ $urlAppnd }}';
+            })
+            isUppyLoaded = true;
+          } catch (error) {
+            isUppyLoaded = false;
+          }
+        }
+
+        loadUppy();
+
+        // Drag and drop
+        $('.uploadBtn').on('click', function(event) {
+          if (!isUppyLoaded) {
+            console.log('Uppy not loaded');
+          } else {
+            event.preventDefault();
+            $('.drag_and_drop_container').removeClass('d-none');
+            $('#cadmosUpload').removeClass('d-none').slideDown();
+          }
+        });
+      });
+    </script>
+  @endif
+@endpush
+
 @section('content')
 
 <main id="main" class="col-12 main-section">
@@ -581,6 +702,28 @@
                 </div>
              </div>
 
+            @if ($is_coby_enabled)
+                <div class='col-12 mb-4'>
+                    <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
+                        <div class='card-header border-0 d-flex align-items-center'>
+                            <h2 class='text-heading-h3 mb-0'>
+                                <i class='fa-solid fa-robot me-auto'></i>{{ trans('langUseOfCoby') }}
+                            </h2>
+                            <button class='btn submitAdminBtnDefault uploadBtn ms-auto me-2'>
+                                {{ trans('langUploadCadmosFile') }}
+                            </button>
+                            <a class='btn submitAdminBtnDefault' href='{{ $coby_url }}' aria-label='{{ trans('langFinalize') }}'>
+                                {{ trans('langFinalize') }}
+                            </a>
+                        </div>
+                        <div class='card-body d-none' id='cadmosUpload'>
+                            <div class='col-12 drag_and_drop_container d-none mb-3'>
+                                <div id='uppy'></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
              @if($ai_available)
                  <div class='col-12 mb-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
@@ -777,6 +920,17 @@
                             </div>
                         </div>
                     </div>
+                                @if (get_config('cadmos_course_creation'))
+                                <div class="radio mb-2" id="radio_cadmos">
+                                    <label>
+                                        <input type='radio' name='view_type' value='units' id='units_cadmos'>
+                                        {{ trans('langUploadCadmosFile') }}
+                                    </label>
+                                </div>
+                                <div class="mb-2" id="cadmos_file_div" style="display: none">
+                                    <input type="file" name="cadmos_file" class="form-control">
+                                </div>
+                                @endif
 
                     <div class='form-group mt-4'>
                         <label for='description' class='col-sm-12 control-label-notes'>
@@ -915,6 +1069,27 @@
                         @if(get_config('show_collaboration') and !get_config('show_always_collaboration'))
                             <input type="hidden" id="radio_collaborative_helper" value="0">
                         @endif
+                    </div>
+
+                    <div class='row input-append date form-group mt-4'>
+                        <label for='courseStartDate' class='col-12 control-label-notes mb-1'>
+                            {{ trans('langStart') }} {{ trans('langsOfCourse') }}
+                        </label>
+                        <div class='col-12'>
+                            <div class='input-group'>
+                                <span class='input-group-addon'>
+                                    <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                         <input class='mt-0' type='checkbox' id='course_enableStartDate' name='course_enableStartDate' value='1' @if ($course_enableStartDate) checked @endif>
+                                         <span class='checkmark'></span>
+                                    </label>
+                                </span>
+                                <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0 border-start-0' name='courseStartDate' id='courseStartDate' type='text' value='{{ $courseStartDate }}' @if (!$course_enableStartDate) disabled @endif>
+                            </div>
+                            <span class='help-block'><i class='fa fa-share fa-rotate-270 p-2'></i>
+                                {{ trans('langCourseStartDateLegend') }}
+                            </span>
+                        </div>
                     </div>
 
                     <div class='row input-append date form-group mt-4'>

@@ -940,7 +940,7 @@ function display_gradebook($gradebook) {
             $tool_content .= "</td>";
             $tool_content .= "<td>" . userGradebookTotalActivityStats($details, $gradebook) . "</td>";
             if ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
-                $preview_link = "{$urlServer}modules/exercise/results.php?course=$course_code&amp;exerciseId=$details->module_auto_id";
+                $preview_link = "{$urlServer}modules/exercise/results.php?course=$course_code&amp;exerciseId=" . getIndirectReference($details->module_auto_id);
             } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
                 $preview_link = "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$details->module_auto_id";
             } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_LP) {

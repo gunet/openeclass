@@ -147,7 +147,7 @@
 
 </head>
 
-<body>
+<body @if(isset($_SESSION['mobile'])) class='mobile' @endif>
     <div class="ContentEclass d-flex flex-column min-vh-100 @if ($pinned_announce) fixed-announcement @endif">
         @if ($pinned_announce)
             <div class="notification-top-bar d-flex justify-content-center align-items-center px-3">

@@ -75,15 +75,17 @@ if (get_config('eportfolio_enable')) {
 }
 
 $table_content = '';
-$courses = Database::get()->queryArray('SELECT course.id course_id, code, title
+$courses = Database::get()->queryArray("SELECT course.id course_id, code, title
                 FROM course, course_user, user, course_module
                     WHERE course.id = course_user.course_id
-                      AND course.visible <> ' . COURSE_INACTIVE . '
+                      AND course.visible <> " . COURSE_INACTIVE . "
+                      AND (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") 
+                      AND (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
                       AND course_module.course_id = course_user.course_id
-                      AND module_id = ' . MODULE_ID_PROGRESS . '
+                      AND module_id = " . MODULE_ID_PROGRESS . "
                       AND course_module.visible <> 0
                       AND course_user.user_id = ?d
-                      AND user.id = ?d', $uid, $uid);
+                      AND user.id = ?d", $uid, $uid);
 
 if (count($courses) > 0) {
     $table_content .= "<div class = 'table-responsive'>

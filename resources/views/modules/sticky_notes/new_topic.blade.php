@@ -118,8 +118,8 @@
                                             <div id='categoriesList' class='d-flex flex-column gap-2'>
                                                 @if($isEdit && $topic && $topic->has_categories)
                                                 @foreach($categories as $cat)
-                                                <div class='category-row d-flex align-items-center gap-2' draggable="true">
-                                                    <span class='drag-handle' style='cursor:grab; color:#aaa; padding: 0 4px;'>
+                                                <div class='category-row d-flex align-items-center gap-2' >
+                                                    <span class='drag-handle' style='cursor:grab; color:#aaa; padding: 0 4px;' draggable="true">
                                                         <i class='fa fa-bars'></i>
                                                     </span>
                                                     <input type='text' class='form-control' name='category_title[]'

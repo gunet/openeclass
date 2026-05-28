@@ -263,11 +263,6 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $mail_message = $password;
     }
 
-    if (isset($_POST['force_password_change'])) {
-        $options = json_encode(['force_password_change' => 1]);
-    } else {
-        $options = json_encode(['force_password_change' => 0]);
-    }
 
     $id = Database::get()->query("INSERT INTO user
                     (surname, givenname, username, password, email,
@@ -275,9 +270,14 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                      email_public, phone_public, am_public, description, verified_mail, whitelist, options)
                 VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . ",
                     DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
-                    ?s, ?s, ?s, ?d, ?d, ?d, '', " . EMAIL_VERIFIED . ", '', ?s)"
+                    ?s, ?s, ?s, ?d, ?d, ?d, '', " . EMAIL_VERIFIED . ", '', null)"
                 , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)),
-                  $status, $lang, $am, $phone, $email_public, $phone_public, $am_public, $options)->lastInsertID;
+                  $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
+
+    if (isset($_POST['force_password_change'])) {
+        set_user_option($id, 'force_password_change', '1');
+    }
+
     // update personal calendar info table
     // we don't check if trigger exists since it requires `super` privilege
     Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $id);

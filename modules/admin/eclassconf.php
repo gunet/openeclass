@@ -164,6 +164,7 @@ if (isset($_POST['submit'])) {
         'mydocs_student_enable' => true,
         'mydocs_teacher_enable' => true,
         'offline_course' => true,
+        'cadmos_course_creation' => true,
         'activate_privacy_policy_consent' => true,
         'maintenance' => true,
         'allow_rec_video' => true,
@@ -348,6 +349,7 @@ else {     // Display config.php edit form
     $data['cbox_disable_log_course_actions'] = get_config('disable_log_course_actions') ? 'checked' : '';
     $data['cbox_disable_log_system_actions'] = get_config('disable_log_system_actions') ? 'checked' : '';
     $data['cbox_offline_course'] = get_config('offline_course') ? 'checked' : '';
+    $data['cbox_cadmos_course_creation'] = get_config('cadmos_course_creation') ? 'checked' : '';
     $data['cbox_maintenance'] = get_config('maintenance') ? 'checked' : '';
     $data['cbox_allow_rec_video'] = get_config('allow_rec_video') ? 'checked' : '';
     $data['cbox_allow_rec_audio'] = get_config('allow_rec_audio') ? 'checked' : '';

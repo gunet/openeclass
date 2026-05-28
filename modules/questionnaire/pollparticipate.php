@@ -104,11 +104,21 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if (isset($_POST['file_uploaded'])) {
             header('Content-Type: application/json');
             $questionID = $_POST['question_id'];
-            $docInfo = ['filename' => $_POST['file_name'], 'filepath' => $_POST['file_path']];
-            $_SESSION['data_answers'][$questionID] = serialize($docInfo);
-            $_SESSION['data_file_answer'][$questionID] = serialize($docInfo);
-            echo json_encode(['upload_success' => true]);
-            exit();
+            $docInfo = [
+                'filename' => basename(trim($_POST['file_name'] ?? '')),
+                'filepath' => trim($_POST['file_path'] ?? '')
+            ];
+            $checkObj = serialize($docInfo);
+            $arrFileObj = unserialize($checkObj, ['allowed_classes' => false]);
+            if (is_array($arrFileObj) && isset($arrFileObj['filename'], $arrFileObj['filepath']) 
+                && is_string($arrFileObj['filename']) && is_string($arrFileObj['filepath'])) {
+                $_SESSION['data_answers'][$questionID] = serialize($docInfo);
+                $_SESSION['data_file_answer'][$questionID] = serialize($docInfo);
+                echo json_encode(['upload_success' => true]);
+                exit();
+            } else {
+                exit();
+            }
         }
 
         // File has been removed from uppy
@@ -1771,10 +1781,13 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     $del_file = '';
     $filename = '';
     $filepath = '';
-    if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
-        $arrFile = unserialize($_SESSION['data_answers'][$pqid]);
-        $filename = $arrFile['filename'];
-        $filepath = $arrFile['filepath'];
+    if (isset($_SESSION['data_answers']) && is_string($_SESSION['data_answers'][$pqid])) {
+        $arrFile = unserialize($_SESSION['data_answers'][$pqid], ['allowed_classes' => false]);
+        if (is_array($arrFile) && isset($arrFile['filename'], $arrFile['filepath']) 
+            && is_string($arrFile['filename']) && is_string($arrFile['filepath'])) {
+            $filename = basename(trim($arrFile['filename']));
+            $filepath = trim($arrFile['filepath']);
+        }
     }
 
     if (!empty($filename) && file_exists("$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid/$sessionID$filepath")) {

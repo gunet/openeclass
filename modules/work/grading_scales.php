@@ -72,15 +72,15 @@ if (isset($_GET['scale_id'])) {
             $('#addScale').on('click', function() {
                 var rowCount = $('#scale_table tbody tr').length;
                 $('#scale_table tbody').append(
-                    '<tr>'+
-                    '<td class=\'form-group\'>'+
+                    '<tr class=\'bg-transparent\'>'+
+                    '<td class=\'bg-transparent form-group\'>'+
                     '<input aria-label=\'$langWording\' type=\'text\' name=\'scale_item_name[' + rowCount +']\' class=\'form-control\' value=\'\' required>'+
                     '</td>'+
-                    '<td class=\'form-group\'>'+
+                    '<td class=\'bg-transparent form-group\'>'+
                     '<input aria-label=\'$langValue\' type=\'number\' name=\'scale_item_value[' + rowCount +']\' class=\'form-control\' value=\'\' min=\'0\' required>'+
                     '</td>'+
-                    '<td class=\'text-start\'>'+
-                    '<a href=\'#\' aria-label=\'$langDelete\' class=\'removeScale\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
+                    '<td class=\'bg-transparent text-start\' style=\'vertical-align: middle !important;\'>'+
+                    '<a href=\'#\' aria-label=\'$langDelete\' class=\'removeScale\'><span class=\'fa-regular fa-trash-can fs-6 text-danger\'></span></a>'+
                     '</td>'+
                     '</tr>'
                 );
@@ -112,15 +112,15 @@ if (isset($_GET['scale_id'])) {
         foreach ($unserialized_scales as $key => $scale) {
             $scale_rows .= "
                     <tr>
-                        <td class='form-group'>
+                        <td class='form-group bg-transparent'>
                             <input aria-label='$langWording' type='text' name='scale_item_name[$key]' class='form-control' value='".q($scale['scale_item_name'])."' required".($scale_used ? " disabled" : "").">
                         </td>
-                        <td class='form-group'>
+                        <td class='form-group bg-transparent'>
                             <input aria-label='$langValue' type='number' name='scale_item_value[$key]' class='form-control' value='$scale[scale_item_value]' min='0' required".($scale_used ? " disabled" : "").">
                         </td>";
             if (!$scale_used) {
-                    $scale_rows .= "<td>
-                                    <a href='#' aria-label='$langDelete' class='removeScale'><span class='fa-solid fa-xmark' style='color:red'></span></a>
+                    $scale_rows .= "<td class='bg-transparent' style='vertical-align: middle !important;'>
+                                    <a href='#' aria-label='$langDelete' class='removeScale'><span class='fa-regular fa-trash-can fs-6 text-danger'></span></a>
                                 </td>";
             }
             $scale_rows .= "</tr>";
@@ -141,7 +141,7 @@ if (isset($_GET['scale_id'])) {
                         <legend class='mb-0' aria-label='$langForm'></legend>
                         $hidden_input
                         
-                        <div class='row form-group".(Session::getError('title') ? " has-error" : "")."'>
+                        <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
                             <label for='title' class='col-12 control-label-notes mb-1'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>
                             <div class='col-12'>
                               <input name='title' type='text' class='form-control' id='title' value='$title'".($scale_used ? " disabled" : "").">
@@ -151,16 +151,27 @@ if (isset($_GET['scale_id'])) {
 
                        
 
-                        <div class='row form-group mt-4'>
-                            <div class='col-12 control-label-notes mb-1'>$langScales</div>
-                            <div class='col-12'>
-                                <div class='table-responsive mt-0'>
+                        <div class='form-group mt-4'>
+                            <div class='col-12 rubrics-scales px-lg-4 py-lg-3 p-3' style='border-radius: 5px;'>
+                                <div class='w-100 d-flex justify-content-between align-items-start gap-2'>
+                                    <div class='control-label-notes text-nowrap mb-0'>
+                                        <i class='fa-solid fa-sliders pe-2'></i>
+                                        $langScales
+                                    </div>";
+                                    if (!$scale_used) {
+                                    $tool_content .= "<a class='link-color TextBold' id='addScale'>
+                                        <i class='fa-solid fa-circle-plus'></i>
+                                        $langAddScaleText
+                                    </a>";
+                                    }
+              $tool_content .= "</div>
+                                <div class='table-responsive mt-3'>
                                     <table class='table-default' id='scale_table'>
-                                        <thead>
-                                            <tr class='list-header'>
-                                                <th style='width:47%'>$langWording</th>
-                                                <th style='width:47%'>$langValue</th>
-                                                ".(!$scale_used ? "<th class='text-end option-btn-cell' aria-label='$langSettingSelect' style='width:5%'>".icon('fa-gears')."</th>" : "")."
+                                        <thead class='bg-transparent'>
+                                            <tr class='list-header bg-transparent'>
+                                                <th class='bg-transparent' style='width:80%'>$langWording</th>
+                                                <th class='bg-transparent' style='width:20%'>$langValue</th>
+                                                ".(!$scale_used ? "<th class='bg-transparent text-end option-btn-cell' aria-label='$langSettingSelect' style='width:5%'>".icon('fa-gears')."</th>" : "")."
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -169,11 +180,6 @@ if (isset($_GET['scale_id'])) {
                                     </table>
                                 </div>
                             </div>";
-    if (!$scale_used) {
-        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-start'>
-                             <a class='btn submitAdminBtn' id='addScale'>$langAdd</a>
-                         </div>";
-    }
     $tool_content .= "</div>";
     if (!$scale_used) {
         $tool_content .= " 

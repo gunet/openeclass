@@ -41,7 +41,16 @@ if ($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == USER_STUDENT) 
           FROM course JOIN course_user 
             ON course.id = course_user.course_id 
             AND course_user.user_id = ?d 
-            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+            AND (
+                course_user.status = " . USER_TEACHER . " OR
+                course_user.course_reviewer = 1 OR
+                course_user.editor = 1 OR
+                 (
+                  course.visible != " . COURSE_INACTIVE . " AND
+                  (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") AND
+                  (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+                 )
+             )        
       ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 } else {
     echo RESPONSE_FAILED;
@@ -95,9 +104,9 @@ function createCoursesDom($coursesArr) {
             }
 
             $course_image = (!is_null($course->course_image) && $course->course_image != '') ? "{$urlServer}courses/$course->code/image/$course->course_image" : "";
-            $codeStr = (!empty($course->public_code) && $course->code !== $course->public_code) ? $course->public_code: $course->code;
 
-            $c->appendChild(new DOMAttr('code', $codeStr));
+            $c->appendChild(new DOMAttr('code', $course->code));
+            $c->appendChild(new DOMAttr('public_code', $course->public_code));
             $c->appendChild(new DOMAttr('title', $course->title));
             $c->appendChild(new DOMAttr('teacher', trim($course->prof_names)));
             $c->appendChild(new DOMAttr('description', $descriptionStr));

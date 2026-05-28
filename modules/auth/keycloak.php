@@ -30,6 +30,7 @@ use Hybridauth\Provider\Keycloak;
 use Hybridauth\Exception;
 use Hybridauth\Exception\UnexpectedValueException;
 use Hybridauth\Exception\HttpRequestFailedException;
+use Hybridauth\Exception\UnexpectedApiResponseException;
 use Hybridauth\Data;
 use Hybridauth\User;
 
@@ -40,6 +41,39 @@ final class CustomProvider extends Keycloak
      */
     public $scope = 'openid profile email';
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserProfile()
+    {
+        $response = $this->apiRequest('userinfo');
+
+        $data = new Data\Collection($response);
+
+        if (!$data->exists('sub')) {
+            throw new UnexpectedApiResponseException('Provider API returned an unexpected response.');
+        }
+
+        $userProfile = new User\Profile();
+
+        $userProfile->identifier = $data->get('sub');
+        $userProfile->displayName = $data->get('preferred_username');
+        $userProfile->email = $data->get('email');
+        $userProfile->firstName = $data->get('given_name');
+        $userProfile->lastName = $data->get('family_name');
+        $userProfile->emailVerified = $data->get('email_verified');
+
+        // Store all Keycloak attributes in $userProfile->data
+        $userProfile->data = json_decode(json_encode($response), true);
+
+        // Collect organization claim if provided in the IDToken
+        if ($data->exists('organization')) {
+            $kc_orgs = array_keys((array) $data->get('organization'));
+            $userProfile->data['organization'] = array_shift($kc_orgs); //Get the first key
+        }
+
+        return $userProfile;
+    }
 }
 
 $auth_settings = get_auth_settings(16);
@@ -70,8 +104,20 @@ if (isset($_SESSION['keycloak_test'])) {
     $_SESSION['auth_user_info'] = (array) $userProfile;
     redirect_to_home_page('modules/admin/auth_test.php?auth=16');
 } else {
-    $_SESSION['auth_attributes'] = (array) $userProfile;
-    $_SESSION['keycloak_uname'] = $userProfile->displayName; // preferred_username
+    $profile_array = (array) $userProfile;
+    if (isset($profile_array['data']) && is_array($profile_array['data'])) {
+        $profile_array = array_merge($profile_array, $profile_array['data']);
+    }
+    $_SESSION['auth_attributes'] = $profile_array;
+
+    if ($auth_settings['uid_attr']) {
+        $_SESSION['keycloak_uname'] = $_SESSION['auth_attributes'][$auth_settings['uid_attr']];
+    } else {
+        $_SESSION['keycloak_uname'] = $userProfile->displayName; // preferred_username
+    }
+    if ($auth_settings['userstudentid']) {
+        $_SESSION['auth_studentid'] = $_SESSION['auth_attributes'][$auth_settings['userstudentid']];
+    }
     $_SESSION['auth_email'] = $userProfile->email;
     $_SESSION['auth_surname'] = $userProfile->lastName;
     $_SESSION['auth_givenname'] = $userProfile->firstName;

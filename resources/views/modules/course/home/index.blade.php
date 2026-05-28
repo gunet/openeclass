@@ -1,6 +1,66 @@
 @extends('layouts.default')
 @push('head_scripts')
     <script type='text/javascript'>
+
+        var events = [];
+
+        function applyCalendarIcons() {
+            document.querySelectorAll('.events-list').forEach(function(eventsList) {
+                // κρατάμε ποιες κατηγορίες έχουν ήδη εμφανιστεί
+                let displayedCategories = new Set();
+                // όλα τα events της ημέρας
+                const events = eventsList.querySelectorAll('a.event');
+                events.forEach(function(event) {
+                    let icon = '';
+                    let category = '';
+                    if (event.classList.contains('event-info')) {
+                        icon = '{{ $urlAppend }}template/modern/images/course_event.png';
+                        category = 'event-info';
+                    }
+                    else if (event.classList.contains('event-important')) {
+                        icon = '{{ $urlAppend }}template/modern/images/deadline.png';
+                        category = 'event-important';
+                    }
+                    else if (event.classList.contains('event-special')) {
+                        icon = '{{ $urlAppend }}template/modern/images/personal_event.png';
+                        category = 'event-special';
+                    }
+                    else if (event.classList.contains('event-success')) {
+                        icon = '{{ $urlAppend }}template/modern/images/system_event.png';
+                        category = 'event-success';
+                    }
+                    // αν έχει ήδη εμφανιστεί category -> hide
+                    if (displayedCategories.has(category)) {
+                        event.style.display = 'none';
+                        return;
+                    }
+                    // mark category as displayed
+                    displayedCategories.add(category);
+                    // avoid duplicate icons
+                    if (event.dataset.iconApplied === '1') {
+                        return;
+                    }
+                    if (icon !== '') {
+                        // remove default dot styles
+                        event.style.background = 'transparent';
+                        event.style.border = '0';
+                        // create image
+                        const img = document.createElement('img');
+                        img.src = icon;
+                        img.className = 'calendar-event-icon-small';
+                        img.alt = '';
+                        img.setAttribute('aria-hidden', 'true');
+                        // clear old content
+                        event.innerHTML = '';
+                        // append image
+                        event.appendChild(img);
+                        // mark as applied
+                        event.dataset.iconApplied = '1';
+                    }
+                });
+            });
+        }
+
         $(document).ready(function() {
             $('#btn-syllabus').click(function () {
                 $(this).find('.fa-chevron-right').toggleClass('fa-rotate-90');
@@ -24,6 +84,17 @@
                     $("#current-month").text(this.getTitle()).attr("aria-label", this.getTitle());
                     $(".btn-group button").removeClass("active");
                     $("button[data-calendar-view=\'" + view + "\']").addClass("active");
+
+                    setTimeout(function() {
+                        applyCalendarIcons();
+                        // prevent event direct click
+                        $('#bootstrapcalendar .events-list a.event').off('click');
+                        $('#bootstrapcalendar .events-list a.event').on('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        });
+                        // hide default slide
+                    }, 200);
                 }
             });
 
@@ -291,9 +362,9 @@
                                         <div class='col-12 mt-1 mb-3 px-0'>
                                             <div class='course_info'>
                                                 @if ($course_info->description)
-                                                        {!! $course_info->description !!}
-                                                @else
-                                                    <p class='not_visible text-center'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
+                                                    {!! $course_info->description !!}
+                                                @else 
+                                                    <p class='not_visible text-center'> - {{ $is_collaborative_course ? trans('langThisCollabDescriptionIsEmpty') : trans('langThisCourseDescriptionIsEmpty') }} - </p>
                                                 @endif
                                             </div>
                                         </div>
@@ -303,7 +374,7 @@
                                                 @if ($course_info->description)
                                                     {!! $course_info->description !!}
                                                 @else
-                                                    <p class='not_visible text-center'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
+                                                    <p class='not_visible text-center'> - {{ $is_collaborative_course ? trans('langThisCollabDescriptionIsEmpty') : trans('langThisCourseDescriptionIsEmpty') }} - </p>
                                                 @endif
                                             </div>
                                         </div>
@@ -661,23 +732,24 @@
                         <div class="panel panel-admin panel-admin-calendar card-transparent p-0 border-0 sticky-column-course-home">
                             {!! $user_personal_calendar !!}
                         </div>
+
                         <div class='card bg-transparent card-transparent border-0 sticky-column-course-home'>
                             <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
                                 <div class='d-flex align-items-center px-2 py-1'>
-                                    <span class='event event-important'></span>
-                                    <span class='agenda-comment' tabindex='0'>{{ trans('langAgendaDueDay') }}</span>
+                                    <img class='calendar-event-icon calendar-event-important' src='{{ $urlAppend }}template/modern/images/deadline.png' alt="{{ trans('langAgendaDueDay') }}">
+                                    <span class="agenda-comment" tabindex='0'> {{ trans('langAgendaDueDay') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
-                                    <span class='event event-info'></span>
-                                    <span class='agenda-comment' tabindex='0'>{{ trans('langAgendaCourseEvent') }}</span>
+                                    <img class='calendar-event-icon calendar-event-info' src='{{ $urlAppend }}template/modern/images/course_event.png' alt="{{ trans('langAgendaCourseEvent') }}">
+                                    <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaCourseEvent') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
-                                    <span class='event event-success'></span>
-                                    <span class='agenda-comment' tabindex='0'>{{ trans('langAgendaSystemEvent') }}</span>
+                                    <img class='calendar-event-icon calendar-event-success' src='{{ $urlAppend }}template/modern/images/system_event.png' alt="{{ trans('langAgendaSystemEvent') }}">
+                                    <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaSystemEvent') }}</span>
                                 </div>
                                 <div class='d-flex align-items-center px-2 py-1'>
-                                    <span class='event event-special'></span>
-                                    <span class='agenda-comment' tabindex='0'>{{ trans('langAgendaPersonalEvent') }}</span>
+                                    <img class='calendar-event-icon calendar-event-special' src='{{ $urlAppend }}template/modern/images/personal_event.png' alt="{{ trans('langAgendaPersonalEvent') }}">
+                                    <span class="agenda-comment" tabindex='0'>{{ trans('langAgendaPersonalEvent') }}</span>
                                 </div>
                             </div>
                         </div>

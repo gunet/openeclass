@@ -860,35 +860,106 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         <div class="col-12 overflow-auto">
            <div id="calendar_wrapper" class="border-card rounded-3">
 
-                   <div class="calendar-header">
-
+                        <div class="calendar-header">
                            <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center">
-
-                                   <div class="btn-group">
-                                           <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev" aria-label="'.$langPrevious.'"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-nav="today">' . $langToday . '</button>
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-nav="next" aria-label="'.$langNext.'">' . '' . ' <span class="fa fa-caret-right"></span> </button>
-                                            </div>
-                                            <div class="btn-group">
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-view="year">' . $langYear . '</button>
-                                                    <button class="btn bg-transparent active text-agenda-title" data-calendar-view="month">' . $langMonth . '</button>
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-view="week">' . $langWeek . '</button>
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-view="day">' . $langDay . '</button>
-                                            </div>
-
-                                        
+                                <div class="btn-group">
+                                    <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev" aria-label="'.$langPrevious.'"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
+                                            <button class="btn bg-transparent text-agenda-title" data-calendar-nav="today">' . $langToday . '</button>
+                                            <button class="btn bg-transparent text-agenda-title" data-calendar-nav="next" aria-label="'.$langNext.'">' . '' . ' <span class="fa fa-caret-right"></span> </button>
                                     </div>
-
+                                    <div class="btn-group">
+                                            <button class="btn bg-transparent text-agenda-title" data-calendar-view="year">' . $langYear . '</button>
+                                            <button class="btn bg-transparent active text-agenda-title" data-calendar-view="month">' . $langMonth . '</button>
+                                            <button class="btn bg-transparent text-agenda-title" data-calendar-view="week">' . $langWeek . '</button>
+                                            <button class="btn bg-transparent text-agenda-title" data-calendar-view="day">' . $langDay . '</button>
+                                    </div>
+                                </div>
                             </div>'
                           . '
                                 <div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div>
                             '
                       . '
+
+                        <div class="card bg-transparent card-transparent border-0">
+                            <div class="d-flex justify-content-start align-items-center flex-wrap px-0 py-3">
+                                <div class="d-flex align-items-center px-2 py-1">
+                                    <img class="calendar-event-icon calendar-event-important" src="'. $urlAppend . 'template/modern/images/deadline.png" alt="'.$langAgendaDueDay.'">
+                                    <span class="agenda-comment" tabindex="0">' . $langAgendaDueDay . '</span>
+                                </div>
+                                <div class="d-flex align-items-center px-2 py-1">
+                                    <img class="calendar-event-icon calendar-event-info" src="' . $urlAppend . 'template/modern/images/course_event.png" alt="' . $langAgendaCourseEvent . '">
+                                    <span class="agenda-comment" tabindex="0">' . $langAgendaCourseEvent . '</span>
+                                </div>
+                                <div class="d-flex align-items-center px-2 py-1">
+                                    <img class="calendar-event-icon calendar-event-success" src="' . $urlAppend . 'template/modern/images/system_event.png" alt="' . $langAgendaSystemEvent . '">
+                                    <span class="agenda-comment" tabindex="0">' . $langAgendaSystemEvent . '</span>
+                                </div>
+                                <div class="d-flex align-items-center px-2 py-1">
+                                    <img class="calendar-event-icon calendar-event-special" src="' . $urlAppend . 'template/modern/images/personal_event.png" alt="' . $langAgendaPersonalEvent . '">
+                                    <span class="agenda-comment" tabindex="0">' . $langAgendaPersonalEvent . '</span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>';
 
     $tool_content .= "<script type='text/javascript'>" .
-        '$(document).ready(function(){
+        '
+        var events = [];
+
+        function applyCalendarIcons() {
+            document.querySelectorAll(".events-list").forEach(function(eventsList) {
+                let displayedCategories = new Set();
+                const events = eventsList.querySelectorAll("a.event");
+                events.forEach(function(event) {
+                    let icon = "";
+                    let category = "";
+                    if (event.classList.contains("event-info")) {
+                        icon = "' . $urlAppend . 'template/modern/images/course_event.png";
+                        category = "event-info";
+                    }
+                    else if (event.classList.contains("event-important")) {
+                        icon = "'. $urlAppend . 'template/modern/images/deadline.png";
+                        category = "event-important";
+                    }
+                    else if (event.classList.contains("event-special")) {
+                        icon = "'. $urlAppend . 'template/modern/images/personal_event.png";
+                        category = "event-special";
+                    }
+                    else if (event.classList.contains("event-success")) {
+                        icon = "'. $urlAppend . 'template/modern/images/system_event.png";
+                        category = "event-success";
+                    }
+
+                    if (displayedCategories.has(category)) {
+                        event.style.display = "none";
+                        return;
+                    }
+
+                    displayedCategories.add(category);
+                    if (event.dataset.iconApplied === "1") {
+                        return;
+                    }
+                    if (icon !== "") {
+
+                        event.style.background = "transparent";
+                        event.style.border = "0";
+                        const img = document.createElement("img");
+                        img.src = icon;
+                        img.className = "calendar-event-icon-small";
+                        img.alt = "";
+                        img.setAttribute("aria-hidden", "true");
+                        event.innerHTML = "";
+                        event.appendChild(img);
+                        event.dataset.iconApplied = "1";
+                    }
+                });
+            });
+        }
+        
+        
+        $(document).ready(function(){
             var calendar = $("#bootstrapcalendar").calendar(
             {
                 tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
@@ -899,7 +970,16 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                             $(".btn-group button").removeClass("active");
                             $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                             $("button[data-calendar-nav=\'today\']").text(this.getTitle());
-                            }
+
+                            setTimeout(function() {
+                                applyCalendarIcons();
+                                $("#bootstrapcalendar .events-list a.event").off("click");
+                                $("#bootstrapcalendar .events-list a.event").on("click", function(e) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                });
+                            }, 200);
+                }
             }
         );
         $(".btn-group button[data-calendar-nav]").each(function() {

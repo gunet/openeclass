@@ -92,17 +92,27 @@ document.addEventListener("DOMContentLoaded", function () {
       .querySelectorAll(".kanban-cards")
       .forEach((c) => c.classList.remove("drag-over"));
     draggedCard = null;
+    updateColumnCounts();
   }
 
   function onDragOver(e) {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
     this.classList.add("drag-over");
+    const empty = this.querySelector(".kanban-empty");
+    if (empty) {
+      empty.classList.add("d-none");
+    }
   }
 
   function onDragLeave(e) {
     if (!this.contains(e.relatedTarget)) {
       this.classList.remove("drag-over");
+      const empty = this.querySelector(".kanban-empty");
+      const count = this.querySelectorAll(".kanban-card").length;
+      if (empty && count === 0) {
+        empty.classList.remove("d-none");
+      }
     }
   }
 
@@ -125,8 +135,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function updateColumnCounts() {
     document.querySelectorAll(".kanban-column").forEach((col) => {
-      const count = col.querySelectorAll(".kanban-card").length;
+      const cardsContainer = col.querySelector(".kanban-cards");
+      const count = cardsContainer.querySelectorAll(".kanban-card").length;
       col.querySelector(".kanban-column-count").textContent = count;
+
+      const empty = cardsContainer.querySelector(".kanban-empty");
+      if (empty) {
+        if (count === 0) {
+          empty.classList.remove("d-none");
+        } else {
+          empty.classList.add("d-none");
+        }
+      }
     });
   }
 

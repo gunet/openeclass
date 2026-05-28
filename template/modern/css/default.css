@@ -3117,9 +3117,9 @@ body .form-action-button-popover{
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
 }
-.panel-admin-calendar .event{
+/* .panel-admin-calendar .event{
   margin-bottom: 0px;
-}
+} */
 
 .panel-primary,.panel-action-btn-primary{
   border-radius:4px;
@@ -6558,8 +6558,8 @@ th.grade-col a{
 
 /* TAB NAVIGATION */
 .progress-module .progress-nav-container {
-    background: white;
-    border-bottom: 1px solid #e5e7eb;
+    background: transparent;
+    /* border-bottom: 1px solid #e5e7eb; */
     margin: 0 0 30px 0;
     padding: 0;
 }
@@ -6709,10 +6709,10 @@ th.grade-col a{
     margin-bottom: 15px;
 }
 
-.progress-module .form-group label {
+/* .progress-module .form-group label {
     font-weight: 600;
     color: #374151;
-}
+} */
 
 /* LEADERBOARD ACCORDION */
 .progress-module .leaderboard-accordion-header {
@@ -7162,11 +7162,26 @@ th.grade-col a{
     border-color: #dcfce7;
 }
 
+.badge-outline-success {
+  color:#16a34a;border:1.5px solid #16a34a;
+}
+.badge-outline-danger {
+  color:#dc2626;border:1.5px solid #dc2626;
+}
+
+.secondary-title {
+  color:#4b5563;
+}
+
 /* ************************************************************************************************************************************* */
 /* ************************************************************************************************************************************* */
 /*********************************************** SIDEBAR AND MAIN-CONTENT AS CARDS *******************************************************/
 /* ************************************************************************************************************************************* */
 /* ************************************************************************************************************************************* */
+.mobile .main-maincontent {
+  margin-top: 0px !important;
+}
+
 @media(max-width: 991px) {
   /* without cards */
   body:not(:has(.sidebar-card)) .main-maincontent {
@@ -7175,7 +7190,6 @@ th.grade-col a{
   body:has(.sidebar-card) .main-maincontent {
     margin-top: 56px;
   }
-
 }
 @media(min-width: 992px) {
   /* without cards */
@@ -7237,4 +7251,66 @@ th.grade-col a{
     transition: filter 0.3s;
     border-radius: 3px;
     padding: 0 2px;
+}
+
+@media(min-width: 992px) {
+  .deleteCriteriaBtn {
+    transform: translateY(-90%);
+    max-width: 220px;
+    border-radius: 24px;
+  }
+}
+@media(max-width: 991px) {
+  .deleteCriteriaBtn {
+    transform: translateY(-90%);
+    max-width: 220px;
+    border-radius: 24px;
+  }
+}
+
+.primary-dashed-card .rubric-title {
+  padding: 10px 15px 10px 15px;
+  border:2px solid rgba(0, 115, 230, 0.25) !important;
+  border-radius:24px;
+  backdrop-filter:blur(10px);
+  transform: translateY(-85%);
+  font-weight: 700 !important;
+  background-color: white;
+}
+.dashed-card .rubric-title {
+  padding: 10px 15px 10px 15px;
+  border:2px solid rgba(255,0,0,.55) !important;
+  border-radius:24px;
+  backdrop-filter:blur(10px);
+  transform: translateY(-85%);
+  font-weight: 700 !important;
+  background-color: white;
+}
+
+.primary-dashed-card {
+  border:2px dashed rgba(0, 115, 230, 0.25) !important;
+   border-radius:24px;
+    backdrop-filter:blur(10px);
+    transition:.25s ease;
+}
+.primary-dashed-card:hover{
+    border-color:rgba(0, 115, 230, 0.55) !important;
+    transform:translateY(-2px);
+    box-shadow:0 10px 30px rgba(79,109,245,.08);
+}
+
+.dashed-card{
+    border:2px dashed rgba(255,0,0,.25) !important;
+    border-radius:24px;
+    backdrop-filter:blur(10px);
+    transition:.25s ease;
+}
+.dashed-card:hover{
+    border-color:rgba(255,0,0,.55) !important;
+    transform:translateY(-2px);
+    box-shadow:0 10px 30px rgba(79,109,245,.08);
+}
+
+.rubrics-scales {
+  background-color: #f8f9fa;
 }

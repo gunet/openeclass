@@ -45,11 +45,11 @@ function getUserCourseInfo($uid): string
            $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty,
            $mine_courses, $mine_collaborations, $langNotificationsExist, $langCourseImage, $langClose, $langNoFavorite;
 
-    if(!get_config('show_always_collaboration')){
+    if (!get_config('show_always_collaboration')){
         $myCourses = $mine_courses = getUserCourses($uid);
     }
 
-    if(get_config('show_collaboration')){
+    if (get_config('show_collaboration')){
         $myCollaborations = $mine_collaborations = getUserCollaborations($uid);
     }
 
@@ -69,7 +69,7 @@ function getUserCourseInfo($uid): string
                                         LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                         WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $data->course_id);
 
-                if ($data->visible == COURSE_INACTIVE) {
+                if ($data->visible == COURSE_INACTIVE || !course_has_started($data->course_id) || course_has_expired($data->course_id)) {
                     $visclass = "not_visible";
                 }
                 if (isset($data->favorite)) {
@@ -677,15 +677,23 @@ function getUserCourses($uid, $colaborative = 0)
                              course.course_image course_image,
                              course.popular_course popular_course,
                              course.is_collaborative,
+                             course.start_date start_date,
+                             course.end_date end_date,
                              course_user.status status,
                              course_user.favorite favorite
                         FROM course JOIN course_user
                             ON course.id = course_user.course_id
                             AND course_user.user_id = ?d
-                            AND (course.visible != " . COURSE_INACTIVE . " OR
+                            AND (
                                  course_user.status = " . USER_TEACHER . " OR
                                  course_user.course_reviewer = 1 OR
-                                 course_user.editor = 1)
+                                 course_user.editor = 1 OR
+                                 (
+                                  course.visible != " . COURSE_INACTIVE . " AND
+                                  (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") AND
+                                  (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+                                 )
+                             )
                             AND course.is_collaborative = ?d
                         ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, $colaborative);
 
@@ -732,14 +740,21 @@ function CountCourses($uid) {
                 FROM course JOIN course_user
                     ON course.id = course_user.course_id
             AND course_user.user_id = ?d
-            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . " OR course_user.editor = 1)
+            AND ( 
+                course_user.status = " . USER_TEACHER . " OR 
+                course_user.editor = 1 OR (
+                    course.visible != " . COURSE_INACTIVE . " AND
+                    (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") AND
+                    (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+                )
+            )
             AND course.is_collaborative = ?d", $uid, 0)->total;
 
     return $total;
 }
 
 /**
- * @brief count teacher courses
+ * @brief count teacher collaborations
  * @param $uid
  * @return mixed
  */
