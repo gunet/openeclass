@@ -7537,3 +7537,4 @@ $langDSpaceMetadataProfile = "Metadata profile";
 $langDSpaceMetadataProfileHelp = "Which metadata schema the repository uses. Choose Dublin Core for conventional DSpace repositories. Choose LOM for Learning Object Repositories that store titles, descriptions and types under the LOM schema (e.g. Photodentro).";
 $langDSpaceProfileDublinCore = "Dublin Core (default)";
 $langDSpaceProfileLom = "LOM (Learning Object Metadata)";
+$langExtRepoRichPreview = "Rich preview";

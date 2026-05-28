@@ -1774,10 +1774,13 @@ function show_extrepo($title, $comments, $resource_id, $ext_resource_id, $visibi
          FROM external_resource er 
          LEFT JOIN external_repository repo ON er.repository_id = repo.id 
          WHERE er.id = ?d AND er.course_id = ?d", 
-        $ext_resource_id, 
+        $ext_resource_id,
         $course_id
     );
-    
+
+    // Per-resource teacher choice: 1 = rich media preview, 0 = plain link preview.
+    $rich_preview = $ext_res && ((int)($ext_res->rich_preview ?? 0) === 1);
+
     if (!$ext_res) { // check if it was deleted
         if (!$is_editor) {
             return '';
@@ -1816,26 +1819,32 @@ function show_extrepo($title, $comments, $resource_id, $ext_resource_id, $visibi
         $link = "<a class='TextBold' href='" . q($ext_res->url) . "' target='_blank' aria-label='$langOpenNewTab'>";
         $exlink = $link . "$title</a>";
         
-        // Add repository badge
+        // Repository badge — inline for rich preview, on its own line under the title for link preview
         if (!empty($ext_res->repo_name)) {
-            $exlink .= " <span class='badge bg-secondary ms-1'>" . q($ext_res->repo_name) . "</span>";
+            if ($rich_preview) {
+                $exlink .= " <span class='badge bg-secondary ms-1'>" . q($ext_res->repo_name) . "</span>";
+            } else {
+                $exlink .= "<div class='mt-1'><span class='badge bg-secondary'>" . q($ext_res->repo_name) . "</span></div>";
+            }
         }
-        
+
         $imagelink = icon($icon_class);
     }
 
-    // Use comments from unit_resources or fallback to external_resource description
-    if (!empty($comments)) {
-        $comment_box = '<br />' . standard_text_escape($comments);
-    } elseif (!empty($ext_res->description)) {
-        $comment_box = '<br />' . standard_text_escape($ext_res->description);
-    } else {
-        $comment_box = '';
+    // Description/comments are shown only in rich preview; link preview is title + tag only.
+    $comment_box = '';
+    if ($rich_preview) {
+        if (!empty($comments)) {
+            $comment_box = '<br />' . standard_text_escape($comments);
+        } elseif (!empty($ext_res->description)) {
+            $comment_box = '<br />' . standard_text_escape($ext_res->description);
+        }
     }
-    
-    // Add media preview for YouTube videos and Pixabay images
+
+    // Rich media preview (per provider) — skipped entirely for link preview.
     $media_preview = '';
-    
+
+    if ($rich_preview) {
     // YouTube video preview
     if ($ext_res && $ext_res->repo_type === 'youtube' && $ext_res->resource_type === 'video') {
         $video_id = extract_youtube_video_id($ext_res->url);
@@ -2030,6 +2039,7 @@ function show_extrepo($title, $comments, $resource_id, $ext_resource_id, $visibi
                 </a>
             </div>";
     }
+    } // end if ($rich_preview)
 
     $module_name = $langExternalResource ?? 'External Resource';
 

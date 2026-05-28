@@ -3067,6 +3067,7 @@ $db->query("CREATE TABLE `external_resource` (
     `resource_type` varchar(50) DEFAULT NULL COMMENT 'video, article, image, document',
     `thumbnail_url` varchar(512) DEFAULT NULL,
     `metadata` text DEFAULT NULL COMMENT 'JSON for additional data',
+    `rich_preview` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 = rich media preview, 0 = plain link preview',
     `created` datetime DEFAULT NULL,
     PRIMARY KEY (`id`),
     INDEX `idx_course` (`course_id`),

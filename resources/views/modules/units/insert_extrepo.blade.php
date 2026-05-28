@@ -163,6 +163,10 @@
                 </div>
             </div>
             <div class='card-footer bg-transparent'>
+                <div class='form-check form-switch mb-2'>
+                    <input class='form-check-input rich-preview-toggle' type='checkbox' role='switch'>
+                    <label class='form-check-label small text-muted'>{{ trans('langExtRepoRichPreview') }}</label>
+                </div>
                 <div class='d-flex gap-2'>
                     <a href='#' target='_blank' class='btn btn-outline-primary btn-sm result-link'>
                         <i class='fa fa-external-link'></i>
@@ -416,7 +420,10 @@ $(document).ready(function() {
         if (!resource || selectedResources[resource.id]) {
             return;
         }
-        
+
+        // Capture this card's rich-preview toggle state
+        resource.rich_preview = $item.find('.rich-preview-toggle').is(':checked') ? 1 : 0;
+
         // Add to selected
         selectedResources[resource.id] = resource;
         
@@ -428,7 +435,24 @@ $(document).ready(function() {
         // Add to selected list
         addToSelectedList(resource);
     });
-    
+
+    // Rich-preview toggle on a result card
+    $('#results-grid').on('change', '.rich-preview-toggle', function() {
+        var $item = $(this).closest('.result-item');
+        var resource = $item.data('resource');
+        if (!resource) {
+            return;
+        }
+        resource.rich_preview = this.checked ? 1 : 0;
+        $item.data('resource', resource);
+        // If this resource is already selected, keep the queued data in sync
+        if (selectedResources[resource.id]) {
+            selectedResources[resource.id].rich_preview = resource.rich_preview;
+            $('#selected-list .selected-item[data-id="' + resource.id + '"] .selected-data')
+                .val(JSON.stringify(resource));
+        }
+    });
+
     // Add to selected list
     function addToSelectedList(resource) {
         var template = document.getElementById('selected-item-template');

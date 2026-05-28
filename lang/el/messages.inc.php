@@ -8208,3 +8208,4 @@ $langDSpaceMetadataProfile = "Προφίλ μεταδεδομένων";
 $langDSpaceMetadataProfileHelp = "Ποιο σχήμα μεταδεδομένων χρησιμοποιεί το αποθετήριο. Επιλέξτε Dublin Core για τα συνήθη αποθετήρια DSpace. Επιλέξτε LOM για αποθετήρια μαθησιακών αντικειμένων που αποθηκεύουν τίτλους, περιγραφές και τύπους με το σχήμα LOM (π.χ. Φωτόδεντρο).";
 $langDSpaceProfileDublinCore = "Dublin Core (προεπιλογή)";
 $langDSpaceProfileLom = "LOM (Μεταδεδομένα Μαθησιακών Αντικειμένων)";
+$langExtRepoRichPreview = "Πλούσια προεπισκόπηση";
