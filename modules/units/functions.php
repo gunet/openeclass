@@ -77,8 +77,13 @@ function process_actions() {
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_GET['del']);
         if (check_admin_unit_resource($res_id)) {
+            // 1:1 model: extrepo placements own their external_resource row.
+            $unitRow = Database::get()->querySingle("SELECT type, res_id FROM unit_resources WHERE id = ?d", $res_id);
             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", $res_id);
             Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
+            if ($unitRow && $unitRow->type === 'extrepo' && !empty($unitRow->res_id)) {
+                Database::get()->query("DELETE FROM external_resource WHERE id = ?d", $unitRow->res_id);
+            }
             $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
             $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
@@ -89,8 +94,18 @@ function process_actions() {
     } elseif (isset($_REQUEST['del_act'])) { // delete resource from course unit
         $res_id = intval($_GET['del_act']);
         $act_id = $_GET['actid'];
+        // 1:1 model: collect owned external_resource ids before unlinking.
+        $extrepoIds = Database::get()->queryArray(
+            "SELECT res_id FROM unit_resources WHERE activity_id = ?s AND type = 'extrepo'",
+            $act_id
+        );
         Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
         Database::get()->query("DELETE FROM unit_resources WHERE activity_id = ?s", $act_id);
+        foreach ($extrepoIds as $row) {
+            if (!empty($row->res_id)) {
+                Database::get()->query("DELETE FROM external_resource WHERE id = ?d", $row->res_id);
+            }
+        }
         //$searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
         //$searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         //CourseXMLElement::refreshCourse($course_id, $course_code);

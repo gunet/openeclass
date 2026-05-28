@@ -184,26 +184,14 @@ function insert_extrepo($unit_id) {
  * @return int|false Resource ID or false on failure
  */
 function save_external_resource(array $resource, int $course_id) {
-    // Check if this resource already exists for this course
-    $existing = Database::get()->querySingle(
-        "SELECT id FROM external_resource 
-         WHERE course_id = ?d 
-         AND repository_id = ?d 
-         AND external_id = ?s",
-        $course_id,
-        $resource['repository_id'] ?? 0,
-        $resource['id'] ?? ''
-    );
-    
-    if ($existing) {
-        return $existing->id;
-    }
-    
-    // Insert new external resource
+    // 1:1 model: every import creates a fresh external_resource row owned by
+    // exactly one unit_resources placement. Dedup intentionally removed so
+    // per-placement settings (rich_preview) and refreshed upstream metadata
+    // stay decoupled across placements.
     $result = Database::get()->query(
-        "INSERT INTO external_resource 
-         (course_id, repository_id, external_id, title, description, url, resource_type, thumbnail_url, metadata, created)
-         VALUES (?d, ?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?t)",
+        "INSERT INTO external_resource
+         (course_id, repository_id, external_id, title, description, url, resource_type, thumbnail_url, metadata, rich_preview, created)
+         VALUES (?d, ?d, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?t)",
         $course_id,
         $resource['repository_id'] ?? 0,
         $resource['id'] ?? '',
@@ -213,6 +201,7 @@ function save_external_resource(array $resource, int $course_id) {
         $resource['type'] ?? 'document',
         $resource['thumbnail'] ?? null,
         isset($resource['metadata']) ? json_encode($resource['metadata']) : null,
+        !empty($resource['rich_preview']) ? 1 : 0,
         date('Y-m-d H:i:s')
     );
     

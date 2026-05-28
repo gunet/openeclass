@@ -120,9 +120,19 @@ if ($is_editor) {
     if (isset($_REQUEST['del'])) { // delete course unit
         $id = intval(getDirectReference($_REQUEST['del']));
         if ($course_info->view_type == 'units') {
+            // 1:1 model: collect owned external_resource ids before wiping unit_resources.
+            $extrepoIds = Database::get()->queryArray(
+                "SELECT res_id FROM unit_resources WHERE unit_id = ?d AND type = 'extrepo'",
+                $id
+            );
             Database::get()->query('DELETE FROM course_units WHERE id = ?d', $id);
             Database::get()->query('DELETE FROM unit_resources WHERE unit_id = ?d', $id);
             Database::get()->query("DELETE FROM course_units_to_specific WHERE unit_id = ?d", $id);
+            foreach ($extrepoIds as $row) {
+                if (!empty($row->res_id)) {
+                    Database::get()->query("DELETE FROM external_resource WHERE id = ?d", $row->res_id);
+                }
+            }
             $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_UNIT, $id);
             $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVEBYUNIT, ConstantsUtil::RESOURCE_UNITRESOURCE, $id);
             $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
