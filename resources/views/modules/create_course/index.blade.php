@@ -637,7 +637,7 @@
 
             uppy.use(XHRUpload, {
               endpoint: uploadPath,
-              fieldName: 'userFile',
+              fieldName: 'cadmos_file',
               method: 'POST',
               headers: {
 
