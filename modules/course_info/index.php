@@ -95,29 +95,21 @@ $isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_cer
 $data['disable_visibility'] = $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 if (isset($_POST['submit'])) {
-
     $view_type = $_POST['view_type'];
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
-    if (!isset($_POST['start_date']) or !$_POST['start_date']) {
-        $_POST['start_date'] = null;
-    }
-    if (!isset($_POST['start_date']) or !$_POST['finish_date']) {
-        $_POST['finish_date'] = null;
-    }
     if (empty($_POST['title'])) {
         Session::flash('message',$langNoCourseTitle);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/course_info/index.php?course=$course_code");
     } else {
-        //print_a($_POST);die;
         // update course settings
-        if (isset($_POST['formvisible']) and ( $_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
+        if (isset($_POST['formvisible']) and ($_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
             $password = $_POST['password'];
         } else {
             $password = '';
         }
-        // if it is `open courses` certified keeep the current course_license
+        // if it is `open courses` certified keep the current course_license
         if (isset($_POST['course_license'])) {
             $course_license = getDirectReference($_POST['course_license']);
         }
@@ -197,6 +189,20 @@ if (isset($_POST['submit'])) {
             $start_date = null;
         }
 
+        if (isset($_POST['course_enableRegEndDate']) && $_POST['courseRegEndDate'] !== '') {
+            $courseRegEndDate = DateTime::createFromFormat('d-m-Y', $_POST['courseRegEndDate']);
+            $reg_end_date = $courseRegEndDate->format('Y-m-d');
+        } else {
+            $reg_end_date = null;
+        }
+
+        if (isset($_POST['course_enableRegStartDate']) && $_POST['courseRegStartDate'] !== '') {
+            $courseRegStartDate = DateTime::createFromFormat('d-m-Y', $_POST['courseRegStartDate']);
+            $reg_start_date = $courseRegStartDate->format('Y-m-d');
+        } else {
+            $reg_start_date = null;
+        }
+
         //=======================================================
         // Check if the teacher is allowed to create in the departments he chose
         if ($deps_changed and !$deps_valid) {
@@ -216,12 +222,15 @@ if (isset($_POST['submit'])) {
                                 view_type = ?s,
                                 start_date = ?s,
                                 end_date = ?s,
+                                reg_start_date = ?s,
+                                reg_end_date = ?s,
                                 flipped_flag = ?s,
                                 is_collaborative = ?d
                             WHERE id = ?d",
                                 $_POST['title'], mb_substr($_POST['fcode'], 0, 100), $_POST['course_keywords'],
                                 $_POST['formvisible'], $course_license, $_POST['teacher_name'],
-                                $course_language, $password, $view_type, $start_date, $end_date, $flipped_flag, $typeCourse, $course_id);
+                                $course_language, $password, $view_type, $start_date, $end_date, $reg_start_date, $reg_end_date,
+                                $flipped_flag, $typeCourse, $course_id);
             $course->refresh($course_id, $departments);
 
             Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
@@ -388,8 +397,10 @@ if (isset($_POST['submit'])) {
     ]);
 
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
-                	       course_license, password, id, view_type, start_date, start_date, end_date, flipped_flag, is_collaborative
-                      FROM course WHERE code = ?s", $course_code);
+                                                   course_license, password, id, view_type, 
+                                                   start_date, start_date, end_date, reg_start_date, reg_end_date,
+                                                   flipped_flag, is_collaborative
+                                              FROM course WHERE code = ?s", $course_code);
     if ($depadmin_mode) {
         list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
     } else {
@@ -454,7 +465,7 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    $data['license_selection'] = selection($cc_license, 'cc_use', $course_license, 'id="course_license_id" class="form-control"'.$disabledVisibility);
+    $data['license_selection'] = selection($cc_license, 'cc_use', $course_license, 'id="course_license_id"'.$disabledVisibility);
     $data['license_checked0'] = $license_checked[0];
     $data['license_checked10'] = $license_checked[10];
 
@@ -466,7 +477,6 @@ if (isset($_POST['submit'])) {
     } else {
         $data['course_enableStartDate'] = $data['courseStartDate'] = '';
     }
-
     // course end date
     if (!is_null($c->end_date)) {
         $data['course_enableEndDate'] = true;
@@ -474,6 +484,22 @@ if (isset($_POST['submit'])) {
         $data['courseEndDate'] = $end_date->format('d-m-Y');
     } else {
         $data['course_enableEndDate'] = $data['courseEndDate'] = '';
+    }
+    // course registration start date
+    if (!is_null($c->reg_start_date)) {
+        $data['course_enableRegStartDate'] = true;
+        $reg_start_date = DateTime::createFromFormat('Y-m-d', $c->reg_start_date);
+        $data['courseRegStartDate'] = $reg_start_date->format('d-m-Y');
+    } else {
+        $data['course_enableRegStartDate'] = $data['courseRegStartDate'] = '';
+    }
+    // course registration end date
+    if (!is_null($c->reg_end_date)) {
+        $data['course_enableRegEndDate'] = true;
+        $reg_end_date = DateTime::createFromFormat('Y-m-d', $c->reg_end_date);
+        $data['courseRegEndDate'] = $reg_end_date->format('d-m-Y');
+    } else {
+        $data['course_enableRegEndDate'] = $data['courseRegEndDate'] = '';
     }
 
     $data['print_header_image_url'] = setting_get_print_image_url(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
