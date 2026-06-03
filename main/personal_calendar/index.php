@@ -1050,27 +1050,6 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                         </div>'
                 . '<div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div>
                 
-                <div class="card bg-transparent card-transparent border-0">
-                            <div class="d-flex justify-content-start align-items-center flex-wrap px-0 py-3">
-                                <div class="d-flex align-items-center px-2 py-1">
-                                    <img class="calendar-event-icon calendar-event-important" src="'. $urlAppend . 'template/modern/images/deadline.png" alt="'.$langAgendaDueDay.'">
-                                    <span class="agenda-comment" tabindex="0">' . $langAgendaDueDay . '</span>
-                                </div>
-                                <div class="d-flex align-items-center px-2 py-1">
-                                    <img class="calendar-event-icon calendar-event-info" src="' . $urlAppend . 'template/modern/images/course_event.png" alt="' . $langAgendaCourseEvent . '">
-                                    <span class="agenda-comment" tabindex="0">' . $langAgendaCourseEvent . '</span>
-                                </div>
-                                <div class="d-flex align-items-center px-2 py-1">
-                                    <img class="calendar-event-icon calendar-event-success" src="' . $urlAppend . 'template/modern/images/system_event.png" alt="' . $langAgendaSystemEvent . '">
-                                    <span class="agenda-comment" tabindex="0">' . $langAgendaSystemEvent . '</span>
-                                </div>
-                                <div class="d-flex align-items-center px-2 py-1">
-                                    <img class="calendar-event-icon calendar-event-special" src="' . $urlAppend . 'template/modern/images/personal_event.png" alt="' . $langAgendaPersonalEvent . '">
-                                    <span class="agenda-comment" tabindex="0">' . $langAgendaPersonalEvent . '</span>
-                                </div>
-                            </div>
-                        </div>
-                
                 
                 '
                 . '</div></div>' .
@@ -1080,58 +1059,48 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
                 var events = [];
 
-                    function applyCalendarIcons() {
-                        document.querySelectorAll(".events-list").forEach(function(eventsList) {
-                            let displayedCategories = new Set();
-                            const events = eventsList.querySelectorAll("a.event");
-                            events.forEach(function(event) {
-                                let icon = "";
-                                let category = "";
-                                if (event.classList.contains("event-info")) {
-                                    icon = "' . $urlAppend . 'template/modern/images/course_event.png";
-                                    category = "event-info";
-                                }
-                                else if (event.classList.contains("event-important")) {
-                                    icon = "'. $urlAppend . 'template/modern/images/deadline.png";
-                                    category = "event-important";
-                                }
-                                else if (event.classList.contains("event-special")) {
-                                    icon = "'. $urlAppend . 'template/modern/images/personal_event.png";
-                                    category = "event-special";
-                                }
-                                else if (event.classList.contains("event-success")) {
-                                    icon = "'. $urlAppend . 'template/modern/images/system_event.png";
-                                    category = "event-success";
-                                }
-
-                                if (displayedCategories.has(category)) {
-                                    event.style.display = "none";
-                                    return;
-                                }
-
-                                displayedCategories.add(category);
-                                if (event.dataset.iconApplied === "1") {
-                                    return;
-                                }
-                                if (icon !== "") {
-
-                                    event.style.background = "transparent";
-                                    event.style.border = "0";
-                                    const img = document.createElement("img");
-                                    img.src = icon;
-                                    img.className = "calendar-event-icon-small";
-                                    img.alt = "";
-                                    img.setAttribute("aria-hidden", "true");
-                                    event.innerHTML = "";
-                                    event.appendChild(img);
-                                    event.dataset.iconApplied = "1";
-                                }
-                            });
+                function applyCalendarTooltips() {
+                    document.querySelectorAll("#cal-slide-content .event.event-info").forEach(function (event) {
+                        event.setAttribute("tabindex", "0");
+                        event.setAttribute("role","img");
+                        event.setAttribute("data-bs-toggle", "tooltip");
+                        event.setAttribute("data-bs-original-title", "' . $langAgendaCourseEvent . '");
+                        event.setAttribute("aria-label", "' . $langAgendaCourseEvent . '");
+                    });
+                    document.querySelectorAll("#cal-slide-content .event.event-important").forEach(function (event) {
+                        event.setAttribute("tabindex", "0");
+                        event.setAttribute("role","img");
+                        event.setAttribute("data-bs-toggle", "tooltip");
+                        event.setAttribute("data-bs-original-title", "' . $langAgendaDueDay . '");
+                        event.setAttribute("aria-label", "' . $langAgendaDueDay . '");
+                    });
+                    document.querySelectorAll("#cal-slide-content .event.event-success").forEach(function (event) {
+                        event.setAttribute("tabindex", "0");
+                        event.setAttribute("role","img");
+                        event.setAttribute("data-bs-toggle", "tooltip");
+                        event.setAttribute("data-bs-original-title", "' . $langAgendaSystemEvent . '");
+                        event.setAttribute("aria-label", "' . $langAgendaSystemEvent . '");
+                    });
+                    document.querySelectorAll("#cal-slide-content .event.event-special").forEach(function (event) {
+                        event.setAttribute("tabindex", "0");
+                        event.setAttribute("role","img");
+                        event.setAttribute("data-bs-toggle", "tooltip");
+                        event.setAttribute("data-bs-original-title", "' . $langAgendaPersonalEvent . '");
+                        event.setAttribute("aria-label", "' . $langAgendaPersonalEvent . '");
+                    });
+                    document.querySelectorAll("#cal-slide-content [data-bs-toggle=tooltip]").forEach(function(el){
+                        let oldTooltip = bootstrap.Tooltip.getInstance(el);
+                        if (oldTooltip) {
+                            oldTooltip.dispose();
+                        }
+                        new bootstrap.Tooltip(el, {
+                            container: "body",
+                            trigger: "hover focus"
                         });
-                    }
-                
-                
-                
+                    });
+                }
+
+
                 $(document).ready(function(){
 
         var calendar = $("#bootstrapcalendar").calendar(
@@ -1147,7 +1116,6 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
 
                                 setTimeout(function() {
-                                    applyCalendarIcons();
                                     $("#bootstrapcalendar .events-list a.event").off("click");
                                     $("#bootstrapcalendar .events-list a.event").on("click", function(e) {
                                         e.preventDefault();
@@ -1178,6 +1146,31 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             $("#iCalDescription").modal("show");
         });
 
+        const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType !== 1) {
+                            return;
+                        }
+                        if (
+                            node.id === "cal-slide-content" ||
+                            node.querySelector("#cal-slide-content")
+                        ) {
+                            setTimeout(function(){
+                                applyCalendarTooltips();
+                            }, 0);
+                        }
+                    });
+                });
+            });
+
+            observer.observe(
+            document.querySelector("#bootstrapcalendar"),
+                {
+                    childList: true,
+                    subtree: true
+                }
+            );
         });
 
         </script>' . "
