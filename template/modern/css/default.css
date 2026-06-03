@@ -7427,7 +7427,8 @@ a.reward-list-card:hover, [onclick].reward-list-card:hover { box-shadow: 0 8px 2
 }
 
 /* ===================== Portfolio profile bar ===================== */
-.portfolio-profile-container { padding-top: 80px; }
+.portfolio-profile-container { padding-top: 16px; padding-bottom: 8px; }
+.portfolio-profile-container .padding-default { padding-top: 16px; padding-bottom: 16px; }
 .epf-profile-card { box-shadow: none !important; }
 .epf-avatar-circle { width: 80px; height: 80px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
 .epf-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
