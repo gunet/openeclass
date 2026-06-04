@@ -140,6 +140,8 @@ if (isset($_POST['submit'])) {
         }
     }
 
+    $edit_profile = (isset($_REQUEST['edProfile']) && $_REQUEST['edProfile'] == 'true') ? 'main/profile/profile.php?edProfile=true' : 'main/profile/profile.php';
+
     // upload user picture
     if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
 
@@ -152,12 +154,12 @@ if (isset($_POST['submit'])) {
         if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $image_base . IMAGESIZE_LARGE . '.jpg')) {
             Session::flash('message',$langInvalidPicture);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("main/profile/profile.php");
+            redirect_to_home_page($edit_profile);
         }
         if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL, $image_base . IMAGESIZE_SMALL . '.jpg')) {
             Session::flash('message',$langInvalidPicture);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("main/profile/profile.php");
+            redirect_to_home_page($edit_profile);
         }
         Database::get()->query("UPDATE user SET has_icon = 1 WHERE id = ?d", $_SESSION['uid']);
         $_SESSION['profile_image_cache_buster'] = time();
@@ -171,14 +173,14 @@ if (isset($_POST['submit'])) {
     if (!empty($email_form) and !valid_email($email_form)) {
         Session::flash('message',$langEmailWrong);
         Session::flash('alert-class', 'alert-warning');
-        redirect_to_home_page("main/profile/profile.php");
+        redirect_to_home_page($edit_profile);
     }
 
     // check if there are empty fields
     if (!$all_ok) {
         Session::flash('message',$langFieldsMissing);
         Session::flash('alert-class', 'alert-warning');
-        redirect_to_home_page("main/profile/profile.php");
+        redirect_to_home_page($edit_profile);
     }
 
     if (!$allow_username_change) {
@@ -205,7 +207,7 @@ if (isset($_POST['submit'])) {
         if ($username_check) {
             Session::flash('message',$langUserFree);
             Session::flash('alert-class', 'alert-warning');
-            redirect_to_home_page("main/profile/profile.php");
+            redirect_to_home_page($edit_profile);
         }
     }
 
@@ -219,7 +221,7 @@ if (isset($_POST['submit'])) {
         }
         Session::flash('message',$cpf_error_str);
         Session::flash('alert-class', 'alert-warning');
-        redirect_to_home_page("main/profile/profile.php");
+        redirect_to_home_page($edit_profile);
     }
 
     $need_email_verification = false;
@@ -497,6 +499,9 @@ if ($myrow->pic_public) {
 }
 
 $data['sec'] = $urlServer . 'main/profile/profile.php';
+if (isset($_REQUEST['edProfile']) && $_REQUEST['edProfile'] == 'true') {
+    $data['sec'] .= '?edProfile=true';
+}
 $passurl = $urlServer . 'main/profile/password.php';
 
 if (get_user_email_notification_from_courses($uid)) {

@@ -333,6 +333,10 @@ img {
   font-style: normal;
 }
 
+.help-block p {
+  font-size: inherit;
+}
+
 .split-left{
   padding-left: 15px;
   border-left: solid 1px #e8e8e8 ;

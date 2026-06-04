@@ -108,15 +108,22 @@ function render_profile_fields_form($context, $valitron = false) {
                 $column = 'col-lg-6 col-12';
                 $padding = 'px-3';
                 // if case is editor then set column to equals 12.
-                if($f->datatype == 2 or isset($_GET['edProfile'])){
+                if($f->datatype == 2 or isset($_REQUEST['edProfile'])){
                     $column = 'col-12';
                     $padding = 'px-0';
-                    if($f->datatype == 2 and !isset($_GET['edProfile'])){
+                    if($f->datatype == 2 and !isset($_REQUEST['edProfile'])){
                         $padding = 'px-3';
                     }
                 }
+				
+                if ($f->required){
+                    $asterisk = " <span class='asterisk Accent-200-cl'>(*)</span>";
+                } else {
+                    $asterisk = "";
+                }
+				
                 $return_string .= '<div class="'.$column.' '.$padding.'"><div class="'.$form_class.'">';
-                $return_string .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
+                $return_string .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q($f->name).$asterisk.'</label>';
 
 
                 //get data to prefill fields
@@ -142,7 +149,6 @@ function render_profile_fields_form($context, $valitron = false) {
 
                 $val = '';
                 $placeholder = '';
-                $helpBlock = '';
 
                 switch ($f->datatype) {
                     case CPF_TEXTBOX:
@@ -151,15 +157,7 @@ function render_profile_fields_form($context, $valitron = false) {
                         } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
                             $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
-                        if ($f->required == 0) {
-                            //$placeholder = 'placeholder="'.$langOptional.'"';
-                            $helpBlock = '<em>'.$langOptional.'</em>';
-                        } else {
-                            //$placeholder = 'placeholder="'.$langCompulsory.'"';
-                            $helpBlock = '<em>'.$langCompulsory.'</em>';
-                        }
                         $return_string .= '<input id="'.$f->shortname.'" class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
-                        $return_string .= '<small>'.$helpBlock.'</small>';
                         break;
                     case CPF_TEXTAREA:
                         if (isset($fdata) && $fdata != '') {
@@ -180,16 +178,8 @@ function render_profile_fields_form($context, $valitron = false) {
                         } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
                             $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
-                        if ($f->required == 0) {
-                            //$placeholder = 'placeholder="'.$langOptional.'"';
-                            $helpBlock = '<em>'.$langOptional.'</em>';
-                        } else {
-                            //$placeholder = 'placeholder="'.$langCompulsory.'"';
-                            $helpBlock = '<em>'.$langCompulsory.'</em>';
-                        }
                         load_js('bootstrap-datepicker');
                         $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
-                        $return_string .= '<small>'.$helpBlock.'</small>';
                         break;
                     case CPF_MENU:
                         if (isset($fdata) && $fdata != '') {
@@ -204,11 +194,6 @@ function render_profile_fields_form($context, $valitron = false) {
                         $options[0] = "";
                         ksort($options);
                         $return_string .= selection($options, 'cpf_'.$f->shortname, $def_selection);
-                        if ($f->required == 0) {
-                            $req_label = $langOptional;
-                        } else {
-                            $req_label = $langCompulsory;
-                        }
                         break;
                     case CPF_LINK:
                         if (isset($fdata) && $fdata != '') {
@@ -216,25 +201,11 @@ function render_profile_fields_form($context, $valitron = false) {
                         } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
                             $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
-                        if ($f->required == 0) {
-                            //$placeholder = 'placeholder="'.$langOptional.'"';
-                            $helpBlock = '<em>'.$langOptional.'</em>';
-                        } else {
-                            //$placeholder = 'placeholder="'.$langCompulsory.'"';
-                            $helpBlock = '<em>'.$langCompulsory.'</em>';
-                        }
                         $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
-                        $return_string .= '<small>'.$helpBlock.'</small>';
                         break;
                 }
                 if (!empty($f->description)) {
-                    $return_string .= '<small><em">'.standard_text_escape($f->description);
-                    if (isset($req_label)) {
-                        $return_string .= $req_label;
-                    }
-                    $return_string .= '</em></small>';
-                } elseif (isset($req_label)) {
-                    $return_string .= '<small><em>'.$req_label.'</em></small>';
+                    $return_string .= "<span class='help-block'>".standard_text_escape($f->description)."</span>";
                 }
                 $return_string .= $help_block.'</div></div>';
                 unset($req_label);
