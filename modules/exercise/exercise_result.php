@@ -17,7 +17,6 @@
  *
  */
 
-
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
@@ -780,7 +779,7 @@ if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting
         exit;
     } else {
 
-             Session::flash('message',$langScoreDiffers .
+             Session::flash('message', $langScoreDiffers .
              "<form action='exercise_result.php?course=$course_code&eurId=$eurid' method='post'>
                  <button class='btn submitAdminBtn mt-3' type='submit' name='regrade' value='true'>$langRegrade</button>
               </form>");
@@ -814,9 +813,9 @@ if (isset($_GET['pdf'])) {
             h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
             h1 { font-size: 16pt; }
             h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
             th { text-align: left; border-bottom: 1px solid #999; }
-            td { text-align: left; padding: 10px 0px 10px 0px;}
+            td { text-align: left; }
             .text-danger{color: red;}
             .text-success{color: green;}
             .table-responsive{

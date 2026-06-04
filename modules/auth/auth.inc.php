@@ -1492,6 +1492,9 @@ function shib_cas_login($type) {
                 'departments' => $userObj->getDepartmentIds($info->id),
                 'am' => $am]);
 
+            if ($options['am'] !== '' and $options['am'] !== $am) {
+                $am = $options['am'];
+            }
             if ($type == 'cas') {
                 $cas_settings = @unserialize(get_auth_settings(7)['auth_settings']);
                 if ($cas_settings['cas_gunet'] ?? false) {

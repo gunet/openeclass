@@ -1381,7 +1381,7 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
         case ExerciseEvent::ACTIVITY:
             display_available_exercises($element, $element_id, $unit_id, $unit_resource_id);
             break;
-        case BlogEvent::ACTIVITY;
+        case BlogEvent::ACTIVITY:
             display_available_blogs($element, $element_id, $unit_id);
             break;
         case 'blogcomments':
@@ -1416,9 +1416,6 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
             if ($element != 'points_game') {
                 display_available_lps($element, $element_id, LearningPathLessonStatusEvent::ACTIVITY, $unit_id, $unit_resource_id);
             }
-            break;
-        case 'likesocial';
-        case 'likeforum';
             break;
         case 'document':
         case 'doc':
@@ -1468,7 +1465,7 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
  */
 function insert_rec_activity($points_game_id, $activity) {
     switch ($activity) {
-        case BlogEvent::ACTIVITY;
+        case BlogEvent::ACTIVITY:
             display_blog_rec_act_form($points_game_id);
             break;
         case 'blogcomments':

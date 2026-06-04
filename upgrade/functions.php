@@ -3997,6 +3997,14 @@ function upgrade_to_4_4($tbl_options) : void
        ) $tbl_options");
     }
 
+    if (!DBHelper::fieldExists('course', 'reg_start_date')) {
+        Database::get()->query("ALTER TABLE course ADD reg_start_date DATE DEFAULT NULL AFTER start_date");
+    }
+
+    if (!DBHelper::fieldExists('course', 'reg_end_date')) {
+        Database::get()->query("ALTER TABLE course ADD reg_end_date DATE DEFAULT NULL AFTER end_date");
+    }
+
     if (!DBHelper::tableExists('suppressed_words')) {
         Database::get()->query("CREATE TABLE `suppressed_words` (
             `id` INT NOT NULL AUTO_INCREMENT,

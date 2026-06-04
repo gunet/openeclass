@@ -170,6 +170,9 @@ if (!isset($_POST['create_course'])) {
         $data['courseStartDate'] = date('d-m-Y');
         $data['course_enableStartDate'] = 'checked';
         $data['courseEndDate'] = $data['course_enableEndDate'] = '';
+        $data['courseRegStartDate'] = $data['course_enableRegStartDate'] = '';
+        $data['courseRegEndDate'] = $data['course_enableRegEndDate'] = '';
+
         generate_csrf_token_form_field();
 
         // course image
@@ -355,6 +358,20 @@ if (!isset($_POST['create_course'])) {
             $end_date = null;
         }
 
+        if (isset($_POST['course_enableRegStartDate']) && $_POST['courseRegStartDate'] !== '') {
+            $courseRegStartDate = DateTime::createFromFormat('d-m-Y', $_POST['courseRegStartDate']);
+            $reg_start_date = $courseRegStartDate->format('Y-m-d');
+        } else {
+            $reg_start_date = null;
+        }
+
+        if (isset($_POST['course_enableRegEndDate']) && $_POST['courseRegEndDate'] !== '') {
+            $courseRegEndDate = DateTime::createFromFormat('d-m-Y', $_POST['courseRegEndDate']);
+            $reg_end_date = $courseRegEndDate->format('Y-m-d');
+        } else {
+            $reg_end_date = null;
+        }
+
         $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,
                         lang = ?s,
@@ -372,6 +389,8 @@ if (!isset($_POST['create_course'])) {
                         view_type = ?s,
                         start_date = ?s,
                         end_date = ?s,
+                        reg_start_date = ?s,
+                        reg_end_date = ?s,
                         keywords = '',
                         created = " . DBHelper::timeAfter() . ",
                         glossary_expand = 0,
@@ -383,7 +402,9 @@ if (!isset($_POST['create_course'])) {
             $code, $language, $title, $_POST['formvisible'],
             $course_license, $_POST['prof_names'], $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $start_date, $end_date, $typeCourse, $description, $course_image);
+            $dropbox_quota * 1024 * 1024, $password, 0, $view_type,
+            $start_date, $end_date, $reg_start_date, $reg_end_date,
+            $typeCourse, $description, $course_image);
         $new_course_id = $result->lastInsertID;
         if (!$new_course_id) {
             Session::flash('message', $langGeneralError);
@@ -423,6 +444,10 @@ if (!isset($_POST['create_course'])) {
         Database::get()->query("INSERT INTO forum_category
                             SET cat_title = ?s,
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
+
+        if (isset($_FILES['cadmos_file']) && is_uploaded_file($_FILES['cadmos_file']['tmp_name'])) {
+            import_cadmos_file($new_course_id, $code, $_FILES['cadmos_file']['tmp_name']);
+        }
 
         // set course option faculty_users_registration (if checked)
         if (isset($_POST['faculty_users_registration'])) {
