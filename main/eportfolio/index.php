@@ -146,21 +146,31 @@ if ($userdata) {
                                 ));
         $tool_content .= $action_bar;
 
+        $warning = '';
+
         if (!file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioAddCVPrompt</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                </div>";
+            $warning = $langePortfolioAddCVPrompt;
         }
 
         $eportfolio_completion = calculate_eportfolio_completion($id);
         if ($eportfolio_completion < 30) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioComplBelow30</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                </div>";
+            if (!empty($warning)) {
+                $warning .= "<br><br>".$langePortfolioComplBelow30;
+            } else {
+                $warning = $langePortfolioComplBelow30;
+            }
         } elseif ($eportfolio_completion < 60) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioComplBelow60</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                </div>";
+            if (!empty($warning)) {
+                $warning .= "<br><br>".$langePortfolioComplBelow60;
+            } else {
+                $warning = $langePortfolioComplBelow60;
+            }
+        }
+
+        if (!empty($warning)) {
+           $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                    $warning</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                </div>"; 
         }
         
         $tool_content .= $preview_info_div;
