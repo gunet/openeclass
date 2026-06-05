@@ -902,17 +902,19 @@ if ($userdata) {
                     $badge_img_attr = "";
                 }
 
+                $badge_link   = '';
                 // Resolve date/issuer/description per type
                 if ($mybadge->resource_type == 'my_badges') {
                     $badge_date   = format_locale_date(strtotime($data['assigned']), null, false);
                     $badge_issuer = q($data['issuer'] ?? '');
                     $badge_desc   = ellipsize($data['description'] ?? '', 100);
-                    $badge_link   = "{$urlServer}modules/progress/index.php?course=".course_id_to_code($mybadge->course_id)."&badge_id=".$data['badgeId']."&u=".$mybadge->user_id;
+                    if ($uid == $id) {
+                        $badge_link   = "{$urlServer}modules/progress/index.php?course=".course_id_to_code($mybadge->course_id)."&badge_id=".$data['badgeId']."&u=".$mybadge->user_id;
+                    }
                 } else {
                     $badge_date   = !empty($data['issued_on']) ? format_locale_date(strtotime($data['issued_on']), null, false) : '';
                     $badge_issuer = !empty($data['issuer']) ? q($data['issuer']) : q($langUnknownIssuer);
                     $badge_desc   = !empty($data['description']) ? ellipsize($data['description'], 100) : '';
-                    $badge_link   = '';
                 }
 
                 $title_html = $badge_link
