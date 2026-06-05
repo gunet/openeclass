@@ -507,7 +507,7 @@ if ($userdata) {
         $action_bar = action_bar(array(
                 array('title' => $langBio,
                       'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;token=$userdata->eportfolio_token",
-                      'icon' => 'fa-download',
+                      'icon' => 'fa-solid fa-book-open',
                       'level' => 'primary-label',
                       'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
                 array('title' => $langBack,
