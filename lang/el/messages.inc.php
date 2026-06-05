@@ -1763,6 +1763,8 @@ $langCourseRegStartDateLegend = "Κάντε κλικ για να ορίσετε 
 $langCourseRegEndDateLegend = "Κάντε κλικ για να ορίσετε την ημερομηνία λήξης εγγραφών στο $langsCourse.";
 $langCourseRegStartDate = "Έναρξη εγγραφών στο $langsCourse.";
 $langCourseRegEndDate = "Λήξη εγγραφών στο $langsCourse.";
+$langCourseRegPeriod = "Περίοδος εγγραφών στο $langsCourse";
+$langCourseRegPeriodHasNotStarted = "Η περίοδος εγγραφών στο $langsCourse δεν έχει ξεκινήσει ή έχει ολοκληρωθεί.";
 $langUseOfCoby = "Χρήση της Υπηρεσίας Coby";
 $langUploadCadmosFile = 'Ανέβασμα αρχείου Cadmos (.cdm)';
 

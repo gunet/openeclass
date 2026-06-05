@@ -97,7 +97,8 @@ $inIds = implode(",", $hitIds);
 $courses = Database::get()->queryArray("select c.*, cd.department "
         . " from course c left "
         . " join (select course, max(department) as department from course_department group by course) cd on (c.id = cd.course) "
-        . " where c.id in (" . $inIds . ") order by field(id," . $inIds . ")");
+        . " where c.id in (" . $inIds . ") 
+        order by field(id," . $inIds . ")");
 $data['count_courses'] = $count_courses = count($courses);
 
 $data['action_bar'] = action_bar(array(
@@ -110,6 +111,15 @@ $data['action_bar'] = action_bar(array(
 $search_result_content = '';
 
 foreach ($courses as $course) {
+    if ($course->visible == COURSE_INACTIVE) { //  inactive courses
+        continue;
+    }
+    if (!course_has_started($course->id) || course_has_expired($course->id)) { // course has not started or has expired
+        continue;
+    }
+    if (!course_reg_date_started($course->id) || course_reg_date_ended($course->id)) { // course registration period has not started or has ended
+        continue;
+    }
     $courseHref = "../../courses/" . q($course->code) . "/";
     $courseUrl = "<span id='cid" . $course->id . "'><a href='$courseHref'>" . q($course->title) . "</a></span> (" . q($course->public_code) . ")";
     $skipincourse = false;
@@ -148,11 +158,6 @@ foreach ($courses as $course) {
     // logged-in users have extended search options
     if (!$anonymous && !$skipincourse && isset($_POST['search_terms'])) {
         $courseUrl .= "<br/><small><em><a href='$courseHref?from_search=" . urlencode($_POST['search_terms']) . "'>$langSearchInCourse</a></em></small>";
-    }
-
-    //  inactive courses are hidden from anyone except admin
-    if ($course->visible == COURSE_INACTIVE && $uid != 1) {
-        continue;
     }
     // courses with password
     $requirepassword = '';

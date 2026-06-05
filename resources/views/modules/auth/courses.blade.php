@@ -80,6 +80,7 @@
                                                                @if ((($mycourse->visible == COURSE_REGISTRATION or $mycourse->visible == COURSE_OPEN)
                                                                         and setting_get(SETTING_FACULTY_USERS_REGISTRATION, $mycourse->id) == 1
                                                                         and !in_array($fc, $user_faculty_ids))
+                                                                    or ($mycourse->visible == COURSE_REGISTRATION && (!course_reg_date_started($mycourse->id) || course_reg_date_ended($mycourse->id)))
                                                                     or (!is_enabled_course_registration($_SESSION['uid']))
                                                                     or $mycourse->visible == COURSE_CLOSED)
                                                                    disabled
@@ -130,6 +131,21 @@
                                                                 <span class='badge Warning-200-bg'>{{ trans('langPassword') }}</span>
                                                                 <input class='form-control' type='password' name='pass{{ $mycourse->id }}' autocomplete='off' />
                                                             @endif
+                                                        @endif
+                                                        {{-- course has registration period --}}
+                                                        @if (!isset($myCourses[$mycourse->id]) && $mycourse->visible == COURSE_REGISTRATION && (!course_reg_date_started($mycourse->id) || course_reg_date_ended($mycourse->id)))
+                                                            <div class="mt-1">
+                                                                <small class="badge Warning-200-bg">{{ trans('langCourseRegPeriod') }}
+                                                                    @if (!is_null($mycourse->reg_start_date))
+                                                                        {{ trans('langFrom2') }}
+                                                                        {{ DateTime::createFromFormat('Y-m-d', $mycourse->reg_start_date)->format('d-m-Y') }}
+                                                                    @endif
+                                                                    @if (!is_null($mycourse->reg_end_date))
+                                                                        {{ trans('langTill') }}
+                                                                        {{ DateTime::createFromFormat('Y-m-d', $mycourse->reg_end_date)->format('d-m-Y') }}
+                                                                    @endif
+                                                                </small>
+                                                            </div>
                                                         @endif
                                                         {{-- course has prerequisites --}}
                                                         {!! getCoursePrerequisites($mycourse->id) !!}

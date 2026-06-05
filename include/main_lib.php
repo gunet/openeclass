@@ -873,7 +873,7 @@ function course_has_expired($cid): bool
 {
     $end_date = Database::get()->querySingle("SELECT end_date FROM course WHERE id = ?d", $cid)->end_date;
     if (!is_null($end_date)) {
-        if (date("Y-m-d") > $end_date) {
+        if (date("Y-m-d") >= $end_date) {
             return true;
         } else {
             return false;
@@ -884,7 +884,7 @@ function course_has_expired($cid): bool
 }
 
 /**
- * @brief chekc if the course has started
+ * @brief check if the course has started
  * @param $cid
  * @return bool
  */
@@ -892,13 +892,51 @@ function course_has_started($cid): bool
 {
     $start_date = Database::get()->querySingle("SELECT start_date FROM course WHERE id = ?d", $cid)->start_date;
     if (!is_null($start_date)) {
-        if (date("Y-m-d") > $start_date) {
+        if (date("Y-m-d") >= $start_date) {
             return true;
         } else {
             return false;
         }
     } else {
         return true;
+    }
+}
+
+/**
+ * @brief check if registration has started for a given course
+ * @param $cid
+ * @return bool
+ */
+function course_reg_date_started($cid): bool
+{
+    $reg_start_date = Database::get()->querySingle("SELECT reg_start_date FROM course WHERE id = ?d", $cid)->reg_start_date;
+    if (!is_null($reg_start_date)) {
+        if (date("Y-m-d") >= $reg_start_date) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+}
+
+/**
+ * @brief check if registration has ended for a given course
+ * @param $cid
+ * @return bool
+ */
+function course_reg_date_ended($cid): bool
+{
+    $reg_end_date = Database::get()->querySingle("SELECT reg_end_date FROM course WHERE id = ?d", $cid)->reg_end_date;
+    if (!is_null($reg_end_date)) {
+        if (date("Y-m-d") >= $reg_end_date) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
     }
 }
 
