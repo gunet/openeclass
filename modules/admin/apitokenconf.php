@@ -264,8 +264,9 @@ if (isset($_GET['edit'])) {
                         <label for='token_expires_at' class='col-12 control-label-notes'>$langExpirationDate:</label>
                         <div class='col-12'>
                             <div class='input-group'>
-                                <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
-                                <span class='input-group-text input-group-addon h-40px bg-input-default border-start-0 input-border-color'><i class='fa-regular fa-calendar'></i></span>
+                                <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
+                                
                             </div>
                         </div>
                     </div>
@@ -364,8 +365,9 @@ if (isset($_GET['edit'])) {
                             <div class='col-12 control-label-notes'>$langExpirationDate:</div>
                             <div class='col-12'>
                                 <div class='input-group'>
-                                    <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
-                                    <span class='input-group-text input-group-addon h-40px bg-input-default input-border-color'><i class='fa-regular fa-calendar'></i></span>
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
+                                    
                                 </div>
                             </div>
                         </div>

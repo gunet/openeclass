@@ -182,8 +182,8 @@ function new_gradebook() {
                             </div>
                             <div class='col-12'>
                                 <div class='input-group'>
-                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                    <input class='form-control mt-0 border-start-0' placeholder='$langStart' type='text' name='start_date' id='start_date' value='$start_date'>
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' placeholder='$langStart' type='text' name='start_date' id='start_date' value='$start_date'>
                                     
                                 </div>
                                 <span class='help-block Accent-200-cl'>$start_date_error</span>
@@ -197,8 +197,8 @@ function new_gradebook() {
                             </div>
                             <div class='col-12'>
                                 <div class='input-group'>
-                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                    <input class='form-control mt-0 border-start-0' placeholder='$langEnd' type='text' name='end_date' id='end_date' value='$end_date'>
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' placeholder='$langEnd' type='text' name='end_date' id='end_date' value='$end_date'>
                                     
                                 </div>
                                 <span class='help-block Accent-200-cl'>$end_date_error</span>
@@ -377,8 +377,8 @@ function gradebook_settings($gradebook_id) {
                                 </div>
                                 <div class='col-12'>
                                     <div class='input-group'>
-                                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                        <input class='form-control mt-0 border-start-0' type='text' name='start_date' id='start_date' value='$start_date'>
+                                        <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                        <input class='form-control mt-0' type='text' name='start_date' id='start_date' value='$start_date'>
                                         
                                     </div>
                                     <span class='help-block Accent-200-cl'>$start_date_error</span>
@@ -392,8 +392,8 @@ function gradebook_settings($gradebook_id) {
                                 </div>
                                 <div class='col-12'>
                                     <div class='input-group'>
-                                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                        <input class='form-control mt-0 border-start-0' type='text' name='end_date' id='end_date' value='$end_date'>
+                                        <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                        <input class='form-control mt-0' type='text' name='end_date' id='end_date' value='$end_date'>
                                         
                                     </div>
                                     <span class='help-block Accent-color-cl'>$end_date_error</span>
@@ -509,8 +509,8 @@ function user_gradebook_settings() {
                             <div class='input-append date form-group' id='startdatepicker'>
                                 <label for='UsersStart' class='col-sm-12 control-label-notes mb-2'>$langRegistrationDate $langFrom2</label>
                                 <div class='input-group'>
-                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                    <input class='form-control mt-0 border-start-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
                                     
                                 </div>
                             </div>
@@ -519,8 +519,8 @@ function user_gradebook_settings() {
                             <div class='input-append date form-group mt-md-0 mt-4' id='enddatepicker'>
                                 <label for='UsersEnd' class='col-sm-12 control-label-notes mb-2'>$langTill</label>
                                 <div class='input-group'>
-                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                    <input class='form-control mt-0 border-start-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
                                     
                                 </div>
                             </div>

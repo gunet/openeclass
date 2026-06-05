@@ -59,11 +59,11 @@ $defaults = array(
                 "rgba(0, 51, 153, 1)" => array('bgColorActiveDateTime'),
                 "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
                 "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal', 'clXmarkModal','BgBadgeAccent', 'bgAlertDanger', 'clRequiredFieldForm', 'ColorRedText'),
-                "rgba(183, 10, 10, 1)" => array('bgHoveredDeleteButtonColor'),
+                "rgba(183, 10, 10, 1)" => array('bgHoveredDeleteButtonColor', 'borderClAlertDanger'),
                 "rgba(225, 225, 225, 1)" => array('bgColorHoveredBodyAgenda'),
-                "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor','BgBadgeSuccess', 'bgAlertSuccess', 'ColorGreenText'),
-                "rgba(245, 118, 0, 1)" => array('BgBadgeWarning', 'bgAlertWarning', 'ColorOrangeText'),
-                "rgba(37, 70, 240, 1)" => array('BgBadgePrimary', 'bgAlertInfo'),
+                "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor','BgBadgeSuccess', 'bgAlertSuccess', 'ColorGreenText', 'borderClAlertSuccess'),
+                "rgba(245, 118, 0, 1)" => array('BgBadgeWarning', 'bgAlertWarning', 'ColorOrangeText', 'borderClAlertWarning'),
+                "rgba(37, 70, 240, 1)" => array('BgBadgePrimary', 'bgAlertInfo', 'borderClAlertInfo'),
                 "rgba(30, 126, 14, 0.81)" => array('bgHoveredSuccessButtonColor'),
                 "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
                 "rgba(255, 255, 255, 0)" => array('bgHoveredBoxShadowPanels', 'borderColorContentPlatformLeftRight'),
@@ -1687,6 +1687,10 @@ $tool_content .= "
                                 <input name='bgAlertInfo' type='text' class='form-control colorpicker' id='bgAlertInfo' value='$theme_options_styles[bgAlertInfo]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='borderClAlertInfo' class='control-label-notes mb-2 me-2'>$langBorderTextColor:</label>
+                                <input name='borderClAlertInfo' type='text' class='form-control colorpicker' id='borderClAlertInfo' value='$theme_options_styles[borderClAlertInfo]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='clAlertInfo' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                                 <input name='clAlertInfo' type='text' class='form-control colorpicker' id='clAlertInfo' value='$theme_options_styles[clAlertInfo]'>
                             </div>
@@ -1713,6 +1717,10 @@ $tool_content .= "
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='bgAlertWarning' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
                                 <input name='bgAlertWarning' type='text' class='form-control colorpicker' id='bgAlertWarning' value='$theme_options_styles[bgAlertWarning]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='borderClAlertWarning' class='control-label-notes mb-2 me-2'>$langBorderTextColor:</label>
+                                <input name='borderClAlertWarning' type='text' class='form-control colorpicker' id='borderClAlertWarning' value='$theme_options_styles[borderClAlertWarning]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='clAlertWarning' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
@@ -1743,6 +1751,10 @@ $tool_content .= "
                                 <input name='bgAlertSuccess' type='text' class='form-control colorpicker' id='bgAlertSuccess' value='$theme_options_styles[bgAlertSuccess]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='borderClAlertSuccess' class='control-label-notes mb-2 me-2'>$langBorderTextColor:</label>
+                                <input name='borderClAlertSuccess' type='text' class='form-control colorpicker' id='borderClAlertSuccess' value='$theme_options_styles[borderClAlertSuccess]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='clAlertSuccess' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                                 <input name='clAlertSuccess' type='text' class='form-control colorpicker' id='clAlertSuccess' value='$theme_options_styles[clAlertSuccess]'>
                             </div>
@@ -1769,6 +1781,10 @@ $tool_content .= "
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='bgAlertDanger' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
                                 <input name='bgAlertDanger' type='text' class='form-control colorpicker' id='bgAlertDanger' value='$theme_options_styles[bgAlertDanger]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='borderClAlertDanger' class='control-label-notes mb-2 me-2'>$langBorderTextColor:</label>
+                                <input name='borderClAlertDanger' type='text' class='form-control colorpicker' id='borderClAlertDanger' value='$theme_options_styles[borderClAlertDanger]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='clAlertDanger' class='control-label-notes mb-2 me-2'>$langTextColor:</label>

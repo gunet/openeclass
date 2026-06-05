@@ -3718,15 +3718,15 @@ function points_game_settings($points_game_id = 0) {
                     <label for='startdatepicker' class='col-sm-12 control-label-notes'>$langStartDate:</label>
                     <div class='col-sm-12'>
                        <div class='input-group'>
-                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                           <input class='form-control mt-0 border-start-0' name='startdatepicker' id='startdatepicker' type='text' value='$startdate'>
+                           <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                           <input class='form-control mt-0' name='startdatepicker' id='startdatepicker' type='text' value='$startdate'>
                        </div>
                     </div>
                     <label for='enddatepicker' class='col-sm-12 control-label-notes'>$langEndDate:</label>
                     <div class='col-sm-12'>
                        <div class='input-group'>
-                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                           <input class='form-control mt-0 border-start-0' name='enddatepicker' id='enddatepicker' type='text' value='$enddate'>
+                           <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                           <input class='form-control mt-0' name='enddatepicker' id='enddatepicker' type='text' value='$enddate'>
                        </div>
                     </div>
                 </div>
@@ -4093,8 +4093,8 @@ function certificate_settings($element, $element_id = 0) {
                                     <span class='checkmark'></span>
                                 </label>
                             </span>
-                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                           <input class='form-control mt-0 border-start-0' name='enddatepicker' id='enddatepicker' type='text' value='$certdeadline' $statuscertdeadline>
+                           <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                           <input class='form-control mt-0' name='enddatepicker' id='enddatepicker' type='text' value='$certdeadline' $statuscertdeadline>
                        </div>
                        <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langCertDeadlineHelp</span>
                     </div>

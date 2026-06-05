@@ -337,8 +337,8 @@ if ($is_editor) {
                                                             <label for='startdate' class='col-sm-12 control-label-notes'>$langDate :</label>
                                                             <div class='col-sm-12'>
                                                                 <div class='input-group'>
-                                                                    <div class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
-                                                                    <input class='form-control mt-0 border-start-0' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
+                                                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                    <input class='form-control mt-0' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
                                                                     
                                                                 </div>
                                                             </div>
@@ -348,9 +348,9 @@ if ($is_editor) {
                                                         <div class='input-append bootstrap-timepicker form-group mt-4'>
                                                             <label for='durationcal' class='col-sm-12 control-label-notes'>$langDuration <small>$langInHour</small></label>
                                                             <div class='col-sm-12'>
-                                                                <div class='input-group add-on'>
-                                                                    <div class='input-group-addon add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='fa-solid fa-clock'></span></div>
-                                                                    <input class='form-control mt-0 border-start-0' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
+                                                                <div class='input-group'>
+                                                                    <span class='add-on'><i class='fa-solid fa-clock'></i></span>
+                                                                    <input class='form-control mt-0' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
                                                                     
                                                                 </div>
                                                             </div>
@@ -395,8 +395,8 @@ if ($is_editor) {
                                                                 <label for='enddate' class='col-12 control-label-notes text-capitalize mb-1'>$langUntil</label>
                                                                     <div class='col-12'>
                                                                         <div class='input-group'>
-                                                                            <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                                            <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
+                                                                            <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                            <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
 
                                                                         </div>
                                                                     </div>
@@ -643,9 +643,9 @@ if ($is_editor) {
                             $tool_content .="<div class='input-append bootstrap-timepicker form-group mt-4'>
                                                     <label for='durationcalCreate' class='col-sm-12 control-label-notes'>$langDuration <small>$langInHour</small></label>
                                                     <div class='col-sm-12'>
-                                                        <div class='input-group add-on'>
-                                                            <div class='input-group-addon add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='fa-solid fa-clock'></span></div>
-                                                            <input class='form-control mt-0 border-start-0' name='duration' id='durationcalCreate' type='text' class='input-small' value='" . $duration . "'>
+                                                        <div class='input-group'>
+                                                            <span class='add-on'><i class='fa-solid fa-clock Neutral-600-cl'></i></span>
+                                                            <input class='form-control mt-0' name='duration' id='durationcalCreate' type='text' class='input-small' value='" . $duration . "'>
                                                             
                                                         </div>
                                                     </div>
@@ -686,8 +686,8 @@ if ($is_editor) {
                                             <label for='enddate' class='col-12 control-label-notes text-capitalize'>$langUntil</label>
                                                 <div class='col-12'>
                                                     <div class='input-group'>
-                                                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                        <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
+                                                        <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
 
                                                     </div>
                                                 </div>

@@ -144,8 +144,8 @@
                                                             <span class='checkmark'></span>
                                                         </label>
                                                     </span>
-                                                    <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                    <input class='form-control mt-0 border-start-0' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
+                                                    <span class='add-on1'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                    <input class='form-control mt-0' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
                                                 </div>
                                                 <span class='help-block'>{{ $startdate_error }}</span>
                                             </div>
@@ -162,8 +162,8 @@
                                                             <span class='checkmark'></span>
                                                         </label>
                                                     </span>
-                                                    <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                    <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
+                                                    <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                    <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
                                                 </div>
                                                 <span class='help-block'>{{ $enddate_error }}</span>
                                             </div>

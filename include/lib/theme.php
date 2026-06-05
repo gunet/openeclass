@@ -5768,6 +5768,44 @@ function theme_initialization() {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////// BORDER COLOR TO ALERT COMPONENT //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['borderClAlertDanger'])){
+            $styles_str .= "
+                .alert-danger {
+                    border: solid 1px $theme_options_styles[borderClAlertDanger] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['borderClAlertWarning'])){
+            $styles_str .= "
+                .alert-warning {
+                    border: solid 1px $theme_options_styles[borderClAlertWarning] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['borderClAlertInfo'])){
+            $styles_str .= "
+                .alert-info {
+                    border: solid 1px $theme_options_styles[borderClAlertInfo] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['borderClAlertSuccess'])){
+            $styles_str .= "
+                .alert-success {
+                    border: solid 1px $theme_options_styles[borderClAlertSuccess] !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////// LINKS COLOR OF PLATFORM ///////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////

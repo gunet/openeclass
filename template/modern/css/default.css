@@ -2104,6 +2104,44 @@ label:has(input[type="checkbox"]:disabled){
   opacity: 0.7;
 }
 
+/* calendar icons inside input fields */
+.input-group {
+  position: relative;
+}
+.input-group .add-on,
+.input-group .add-on1,
+.input-group .add-on2 {
+  position: absolute;
+  left: 55px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
+  pointer-events: none;
+}
+.input-group:not(:has(input[type=checkbox])) .add-on,
+.input-group:not(:has(input[type=checkbox])) .add-on1,
+.input-group:not(:has(input[type=checkbox])) .add-on2 {
+  left: 20px;
+}
+.input-group .add-on i,
+.input-group .add-on1 i,
+.input-group .add-on2 i {
+  font-size: 16px;
+}
+
+.input-group input.form-control {
+  padding-left: 50px !important;
+  background-position: 10px center;
+}
+
+.input-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
 /**********************************************************************************************************************/
 /*********************************************** SUBMITBUTTONS ********************************************************/
 /**********************************************************************************************************************/
