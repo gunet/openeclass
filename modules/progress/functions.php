@@ -4856,8 +4856,8 @@ function display_users_progress($element, $element_id) {
                     : '';
                 $progress_col = "
                     <div class='d-flex align-items-center gap-2'>
-                        <i class='fa fa-check-circle' style='color:#22c55e; font-size:20px;'></i>
-                        <span style='font-size:13px; color:#16a34a; font-weight:600;'>$langCompletion</span>
+                        <i class='fa fa-check-circle Success-200-cl' style='font-size:20px;'></i>
+                        <span class='Success-200-cl' style='font-size:13px; font-weight:600;'>$langCompletion</span>
                         " . ($date_text ? "<span style='font-size:12px; color:#6b7280;'>($date_text)</span>" : '') . "
                     </div>";
             } else {

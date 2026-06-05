@@ -6560,6 +6560,15 @@ function theme_initialization() {
                 }
 
             ";
+
+            if(!empty($theme_options_styles['enable_aside_main_cards'])){
+                $styles_str .= "
+                    .ContentLeftNav, 
+                    .main-maincontent {
+                        border: solid 1px $theme_options_styles[BorderLeftToRightColumnCourseBgColor] !important;
+                    }
+                ";
+            }
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -7609,6 +7618,24 @@ function theme_initialization() {
                 .dt-container.dt-bootstrap5 .uneditable-input:focus{
                     border: solid 2px $theme_options_styles[ColorFocus] !important;
                 }
+
+                .tox .tox-edit-area::before {
+                    border: 2px solid $theme_options_styles[ColorFocus] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['boxShadowInputSelect'])){
+            $styles_str .= "
+                .form-control:focus,
+                .form-select:focus{
+                    box-shadow:0 0 0 .25rem $theme_options_styles[boxShadowInputSelect] !important;
+                }
+
+                .tox .tox-edit-area::before {
+                    box-shadow:0 0 0 .25rem $theme_options_styles[boxShadowInputSelect] !important;
+                }
+
             ";
         }
 
@@ -7627,6 +7654,14 @@ function theme_initialization() {
                 .breadcrumbs-init {
                     padding-top: 0.25rem !important;
                     padding: 10px 15px 5px 15px;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['BorderColorBreadcrumb'])){
+            $styles_str .= "
+                .breadcrumbs-init {
+                    border: solid 1px $theme_options_styles[BorderColorBreadcrumb];
                 }
             ";
         }

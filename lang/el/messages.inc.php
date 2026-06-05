@@ -7668,6 +7668,7 @@ $langGreenText = "Κείμενο με πράσινο χρώμα";
 $langBlueText = "Κείμενο με μπλε χρώμα";
 $langOrangeText = "Κείμενο με πορτοκαλί χρώμα";
 $langColorFocus = "Χρώμα εστίασης (Focus) σε περιοχές κειμένων και κουμπιά";
+$langBoxShadowInputSelect = "Σκιά εστίασης (Focus) σε input, select πεδία";
 $langbgPanelEvents = "Χρώμα φόντου (Panel event)";
 $langMaxHeight = "Μέγιστο ύψος";
 $langPositionJumbotronText = "Στοίχηση κειμένου";

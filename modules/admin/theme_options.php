@@ -31,7 +31,7 @@ $defaults = array(
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
                                                     'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow',
-                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate', 'bgColorBreadcrumb'),
+                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate', 'bgColorBreadcrumb', 'BorderColorBreadcrumb', 'boxShadowInputSelect'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor', 'BriefProfilePortfolioBgColor_gr', 'loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'BgColorAnnouncementHomepage_gr', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'bgColorPortfolioButtons', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
@@ -3328,11 +3328,19 @@ $tool_content .= "
                         <label for='ColorFocus' class='control-label-notes mb-2 me-2'>$langColorFocus:</label>
                         <input name='ColorFocus' type='text' class='form-control colorpicker' id='ColorFocus' value='$theme_options_styles[ColorFocus]'>
                     </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='boxShadowInputSelect' class='control-label-notes mb-2 me-2'>$langBoxShadowInputSelect:</label>
+                        <input name='boxShadowInputSelect' type='text' class='form-control colorpicker' id='boxShadowInputSelect' value='$theme_options_styles[boxShadowInputSelect]'>
+                    </div>
                     <hr>
                     <h2 class='theme_options_legend text-decoration-underline mt-4 text-heading-h3'>Breadcrumbs</h2>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgColorBreadcrumb' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
                         <input name='bgColorBreadcrumb' type='text' class='form-control colorpicker' id='bgColorBreadcrumb' value='$theme_options_styles[bgColorBreadcrumb]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BorderColorBreadcrumb' class='control-label-notes mb-2 me-2'>$langBorderTextColor:</label>
+                        <input name='BorderColorBreadcrumb' type='text' class='form-control colorpicker' id='BorderColorBreadcrumb' value='$theme_options_styles[BorderColorBreadcrumb]'>
                     </div>
                     <hr>
                     <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
