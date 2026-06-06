@@ -63,11 +63,11 @@
                                         <div id='feedback-container'>
                                             @if (count($exerciseFeedback) > 0)
                                                 @foreach ($exerciseFeedback as $counter => $feedback)
-                                                    <div class='feedback-row d-flex align-items-center justify-content-between border-bottom mb-1'>
-                                                        <input type='text' name='feedback_text[{{ $counter }}]'
+                                                    <div class='feedback-row d-flex align-items-center justify-content-between border-bottom mb-1 gap-3'>
+                                                        <input class='form-control' type='text' name='feedback_text[{{ $counter }}]'
                                                                size='60' maxlength='200'
                                                                value="{{ $feedback['feedback_text'] }}">
-                                                        <input type='text' name='feedback_grade[{{ $counter }}]'
+                                                        <input class='form-control' type='text' name='feedback_grade[{{ $counter }}]'
                                                                size='4' maxlength='4' value="{{ $feedback['grade'] }}">
                                                         <a class='delete-feedback-btn'><span class='fa-solid fa-xmark'
                                                                                              style='color:red;'></span></a>
@@ -156,8 +156,7 @@
 
                                         <div class='row form-group mt-4'>
                                             <div class='col-12'>
-                                                <div class='row'>
-                                                    <div class='col-md-3'>
+                                                  
                                                         <label for='exerciseTimeConstraint'
                                                                class='col-12 control-label-notes mb-1'>
                                                             <strong id='legend_grade_pass'>
@@ -175,29 +174,28 @@
                                                         <input type='text' class='form-control' name='exerciseGradePass'
                                                                id='exerciseGradePass' value='{{ $exerciseGradePass }}'
                                                                size='4' maxlength='4'>
-                                                    </div>
-                                                </div>
+                                                   
                                             </div>
                                         </div>
 
                                         <div class='row input-append date form-group @if (Session::getError('exerciseStartDate')) has-error @endif mt-4'
                                              id='startdatepicker' data-date='{{ $exerciseStartDate }}'
                                              data-date-format='dd-mm-yyyy'>
-                                            <label for='exerciseStartDate'
-                                                   class='col-12 control-label-notes mb-1'>{{ trans('langStart') }}</label>
+                                            <label for='exerciseStartDate' class='col-12 control-label-notes mb-1'>{{ trans('langStart') }}</label>
                                             <div class='col-12'>
                                                 <div class='input-group'>
-                                            <span class='input-group-addon'>
-                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                    <input class='mt-0' type='checkbox' id='enableStartDate'
-                                                           name='enableStartDate' value='1'
-                                                           @if ($enableStartDate) checked @endif>
-                                                    <span class='checkmark'></span>
-                                                </label>
-                                            </span>
-                                                    <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i
-                                                                class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                    <input class='form-control mt-0 border-start-0'
+                                                    <span class='input-group-addon'>
+                                                        <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                            <input class='mt-0' type='checkbox' id='enableStartDate'
+                                                                name='enableStartDate' value='1'
+                                                                @if ($enableStartDate) checked @endif>
+                                                            <span class='checkmark'></span>
+                                                        </label>
+                                                    </span>
+                                                    <span class='add-on1'>
+                                                        <i class='fa-regular fa-calendar Neutral-600-cl'></i>
+                                                    </span>
+                                                    <input class='form-control mt-0'
                                                            name='exerciseStartDate' id='exerciseStartDate' type='text'
                                                            value='{{ $exerciseStartDate }}'
                                                            @if (!$enableStartDate) disabled @endif>
@@ -221,18 +219,18 @@
                                             </label>
                                             <div class='col-12'>
                                                 <div class='input-group'>
-                                                <span class='input-group-addon'>
-                                                    <label class='label-container'
-                                                           aria-label='{{ trans('langSelect') }}'>
-                                                         <input class='mt-0' type='checkbox' id='enableEndDate'
-                                                                name='enableEndDate' value='1'
-                                                                @if ($enableEndDate) checked @endif>
-                                                         <span class='checkmark'></span>
-                                                    </label>
-                                                </span>
-                                                    <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i
-                                                                class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                    <input class='form-control mt-0 border-start-0'
+                                                    <span class='input-group-addon'>
+                                                        <label class='label-container'
+                                                            aria-label='{{ trans('langSelect') }}'>
+                                                            <input class='mt-0' type='checkbox' id='enableEndDate'
+                                                                    name='enableEndDate' value='1'
+                                                                    @if ($enableEndDate) checked @endif>
+                                                            <span class='checkmark'></span>
+                                                        </label>
+                                                    </span>
+                                                    <span class='add-on2'>
+                                                        <i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                    <input class='form-control mt-0'
                                                            name='exerciseEndDate' id='exerciseEndDate' type='text'
                                                            value='{{ $exerciseEndDate }}'
                                                            @if (!$enableEndDate) disabled @endif>
@@ -690,9 +688,9 @@
                 e.preventDefault();
                 count++;
                 var feedbackRow = `
-                  <div class='feedback-row d-flex align-items-center justify-content-between border-bottom mb-1'>
-                        <input type='text' name='feedback_text[${count}]' size='60' maxlength='200' placeholder='{{ trans('langText') }}'>
-                        <input type='text' name='feedback_grade[${count}]' size='4' maxlength='4' placeholder='{{ trans('langGradebookGrade') }}'>
+                  <div class='feedback-row d-flex align-items-center justify-content-between border-bottom mb-1 gap-3'>
+                        <input class='form-control' type='text' name='feedback_text[${count}]' size='60' maxlength='200' placeholder='{{ trans('langText') }}'>
+                        <input class='form-control' type='text' name='feedback_grade[${count}]' size='4' maxlength='4' placeholder='{{ trans('langGradebookGrade') }}'>
                         <a class='delete-feedback-btn'><span class='fa-solid fa-xmark' style='color:red;'></span></a>
                   </div>`;
                 $('#feedback-container').append(feedbackRow);

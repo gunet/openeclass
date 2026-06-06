@@ -1040,8 +1040,8 @@
                                                  <span class='checkmark'></span>
                                             </label>
                                         </span>
-                                    <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                    <input class='form-control mt-0 border-start-0' name='courseRegStartDate' id='courseRegStartDate' type='text' value='{{ $courseRegStartDate }}' @if (!$course_enableRegStartDate) disabled @endif>
+                                    <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' name='courseRegStartDate' id='courseRegStartDate' type='text' value='{{ $courseRegStartDate }}' @if (!$course_enableRegStartDate) disabled @endif>
                                 </div>
                                 <span class='help-block'><i class='fa fa-share fa-rotate-270 p-2'></i>
                                     {{ trans('langCourseRegStartDateLegend') }}
@@ -1061,8 +1061,8 @@
                                              <span class='checkmark'></span>
                                         </label>
                                     </span>
-                                    <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                    <input class='form-control mt-0 border-start-0' name='courseRegEndDate' id='courseRegEndDate' type='text' value='{{ $courseRegEndDate }}' @if (!$course_enableRegEndDate) disabled @endif>
+                                    <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' name='courseRegEndDate' id='courseRegEndDate' type='text' value='{{ $courseRegEndDate }}' @if (!$course_enableRegEndDate) disabled @endif>
                                 </div>
                                 <span class='help-block'><i class='fa fa-share fa-rotate-270 p-2'></i>
                                     {{ trans('langCourseRegEndDateLegend') }}
@@ -1150,8 +1150,8 @@
                                          <span class='checkmark'></span>
                                     </label>
                                 </span>
-                                <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                <input class='form-control mt-0 border-start-0' name='courseStartDate' id='courseStartDate' type='text' value='{{ $courseStartDate }}' @if (!$course_enableStartDate) disabled @endif>
+                                <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0' name='courseStartDate' id='courseStartDate' type='text' value='{{ $courseStartDate }}' @if (!$course_enableStartDate) disabled @endif>
                             </div>
                             <span class='help-block'><i class='fa fa-share fa-rotate-270 p-2'></i>
                                 {{ trans('langCourseStartDateLegend') }}
@@ -1171,8 +1171,8 @@
                                          <span class='checkmark'></span>
                                     </label>
                                 </span>
-                                <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                <input class='form-control mt-0 border-start-0' name='courseEndDate' id='courseEndDate' type='text' value='{{ $courseEndDate }}' @if (!$course_enableEndDate) disabled @endif>
+                                <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0' name='courseEndDate' id='courseEndDate' type='text' value='{{ $courseEndDate }}' @if (!$course_enableEndDate) disabled @endif>
                             </div>
                             <span class='help-block'><i class='fa fa-share fa-rotate-270 p-2'></i>{{ trans('langCourseEndDateLegend') }}</span>
                         </div>

@@ -1117,10 +1117,10 @@ function printPollForm() {
                                     <div class='form-group margin-bottom-fat'>
                                         <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                             <div class='input-group'>
-                                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'>
+                                                <span class='add-on1'>
                                                     <i class='fa-regular fa-calendar Neutral-600-cl'></i>
                                                 </span>
-                                                <input id='dateTimeAnswer_$pqid' class='datetimeAnswer form-control mt-0 border-start-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
+                                                <input id='dateTimeAnswer_$pqid' class='datetimeAnswer form-control mt-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
                                             </div>
                                         </div>
                                     </div>";
@@ -1129,10 +1129,10 @@ function printPollForm() {
                                     <div class='form-group margin-bottom-fat'>
                                         <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                             <div class='input-group'>
-                                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'>
+                                                <span class='add-on1'>
                                                     <i class='fa-regular fa-calendar Neutral-600-cl'></i>
                                                 </span>
-                                                <input id='dateAnswer_$pqid' class='dateAnswer form-control mt-0 border-start-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
+                                                <input id='dateAnswer_$pqid' class='dateAnswer form-control mt-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
                                             </div>
                                         </div>
                                     </div>";

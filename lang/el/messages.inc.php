@@ -1763,6 +1763,8 @@ $langCourseRegStartDateLegend = "Κάντε κλικ για να ορίσετε 
 $langCourseRegEndDateLegend = "Κάντε κλικ για να ορίσετε την ημερομηνία λήξης εγγραφών στο $langsCourse.";
 $langCourseRegStartDate = "Έναρξη εγγραφών στο $langsCourse.";
 $langCourseRegEndDate = "Λήξη εγγραφών στο $langsCourse.";
+$langCourseRegPeriod = "Περίοδος εγγραφών στο $langsCourse";
+$langCourseRegPeriodHasNotStarted = "Η περίοδος εγγραφών στο $langsCourse δεν έχει ξεκινήσει ή έχει ολοκληρωθεί.";
 $langUseOfCoby = "Χρήση της Υπηρεσίας Coby";
 $langUploadCadmosFile = 'Ανέβασμα αρχείου Cadmos (.cdm)';
 
@@ -7666,6 +7668,7 @@ $langGreenText = "Κείμενο με πράσινο χρώμα";
 $langBlueText = "Κείμενο με μπλε χρώμα";
 $langOrangeText = "Κείμενο με πορτοκαλί χρώμα";
 $langColorFocus = "Χρώμα εστίασης (Focus) σε περιοχές κειμένων και κουμπιά";
+$langBoxShadowInputSelect = "Σκιά εστίασης (Focus) σε input, select πεδία";
 $langbgPanelEvents = "Χρώμα φόντου (Panel event)";
 $langMaxHeight = "Μέγιστο ύψος";
 $langPositionJumbotronText = "Στοίχηση κειμένου";

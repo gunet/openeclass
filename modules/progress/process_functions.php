@@ -2171,7 +2171,7 @@ function check_session_progress($session_id = 0, $forUser = 0) {
  * @param $filePath
  * @return type
  */
-function getFilepaths($certificatesStatus = false, $fileId, $fileType) {
+function getFilepaths($certificatesStatus, $fileId, $fileType) {
     global $webDir;
 
     $folderPath = $webDir . '/courses/user_progress_data/cert_templates';
@@ -2218,7 +2218,7 @@ function getFilepaths($certificatesStatus = false, $fileId, $fileType) {
  * @param $fileType
  * @return type
  */
-function getFilenames($certificatesStatus = false, $fileId, $fileType)
+function getFilenames($certificatesStatus, $fileId, $fileType)
 {
     global $webDir, $urlServer;
 

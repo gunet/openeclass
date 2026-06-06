@@ -56,8 +56,8 @@ $tool_content .= "
 <div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     <label for='user_date_start_t' class='col-sm-12 control-label-notes'>$langStartDate:</label>
     <div class='input-group'>   
-        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
-        <input class='form-control mt-0 border-start-0' id='user_date_start_t' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+        <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+        <input class='form-control mt-0' id='user_date_start_t' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
     
         
     </div>
@@ -66,8 +66,8 @@ $tool_content .= "
 <div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
     <label for='user_date_end_t' class='col-sm-12 control-label-notes'>$langEndDate:</label>
     <div class='input-group'>      
-        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>  
-        <input class='form-control mt-0 border-start-0' id='user_date_end_t' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+        <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+        <input class='form-control mt-0' id='user_date_end_t' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
         
         
     </div>

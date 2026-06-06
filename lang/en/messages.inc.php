@@ -6465,6 +6465,7 @@ $langGreenText = "Text in green";
 $langBlueText = "Text in blue";
 $langOrangeText = "Text in orange";
 $langColorFocus = "Focus color (Focus) in text areas and buttons";
+$langBoxShadowInputSelect = "Box shadow to input, select fields";
 $langbgPanelEvents = "Background color (Panel event)";
 $langMaxHeight = "Max height";
 $langPositionJumbotronText = "Text position";

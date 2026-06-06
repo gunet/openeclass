@@ -42,8 +42,14 @@ $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $co
 $professor = $course->prof_names;
 $langUserPortfolio = q($course->title);
 
+// expired course
 if (!is_enabled_course_registration($uid) || $course->visible == COURSE_INACTIVE || course_has_expired($course->id) || !course_has_started($course->id)) {
     redirect_to_home_page();
+}
+// course registration period
+if ($course->visible == COURSE_REGISTRATION && (!course_reg_date_started($course->id) || course_reg_date_ended($course->id))) {
+    Session::Messages($langCourseRegPeriodHasNotStarted, 'alert-warning');
+    redirect_to_home_page('main/portfolio.php');
 }
 
 if (isset($_POST['register'])) {

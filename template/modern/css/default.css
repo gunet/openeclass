@@ -333,6 +333,10 @@ img {
   font-style: normal;
 }
 
+.help-block p {
+  font-size: inherit;
+}
+
 .split-left{
   padding-left: 15px;
   border-left: solid 1px #e8e8e8 ;
@@ -1585,6 +1589,72 @@ b a {
   font-weight: 700;
 }
 
+
+
+.progress-module .alert-info,
+.progress-module .alert-info h1, .progress-module .alert-info h2,
+.progress-module .alert-info h3, .progress-module .alert-info h4,
+.progress-module .alert-info h5, .progress-module .alert-info h6,
+.progress-module .alert-info div, .progress-module .alert-info small,
+.progress-module .alert-info span, .progress-module .alert-info p,
+.progress-module .alert-info b, .progress-module .alert-info strong,
+.progress-module .alert-info li, .progress-module .alert-info label,
+.progress-module .alert-info i, .progress-module .alert-info svg {
+    color: #0073E6 !important;
+}
+.progress-module .alert-info {
+    background-color: #fff !important;
+    border: 1.5px solid #0073E6 !important;
+}
+
+.progress-module .alert-success,
+.progress-module .alert-success h1, .progress-module .alert-success h2,
+.progress-module .alert-success h3, .progress-module .alert-success h4,
+.progress-module .alert-success h5, .progress-module .alert-success h6,
+.progress-module .alert-success div, .progress-module .alert-success small,
+.progress-module .alert-success span, .progress-module .alert-success p,
+.progress-module .alert-success b, .progress-module .alert-success strong,
+.progress-module .alert-success li, .progress-module .alert-success label,
+.progress-module .alert-success i, .progress-module .alert-success svg {
+    color: #1E7E0E !important;
+}
+.progress-module .alert-success {
+    background-color: #fff !important;
+    border: 1.5px solid #1E7E0E !important;
+}
+
+.progress-module .alert-warning,
+.progress-module .alert-warning h1, .progress-module .alert-warning h2,
+.progress-module .alert-warning h3, .progress-module .alert-warning h4,
+.progress-module .alert-warning h5, .progress-module .alert-warning h6,
+.progress-module .alert-warning div, .progress-module .alert-warning small,
+.progress-module .alert-warning span, .progress-module .alert-warning p,
+.progress-module .alert-warning b, .progress-module .alert-warning strong,
+.progress-module .alert-warning li, .progress-module .alert-warning label,
+.progress-module .alert-warning i, .progress-module .alert-warning svg {
+    color: #F57600 !important;
+}
+.progress-module .alert-warning {
+    background-color: #fff !important;
+    border: 1.5px solid #F57600 !important;
+}
+
+.progress-module .alert-danger,
+.progress-module .alert-danger h1, .progress-module .alert-danger h2,
+.progress-module .alert-danger h3, .progress-module .alert-danger h4,
+.progress-module .alert-danger h5, .progress-module .alert-danger h6,
+.progress-module .alert-danger div, .progress-module .alert-danger small,
+.progress-module .alert-danger span, .progress-module .alert-danger p,
+.progress-module .alert-danger b, .progress-module .alert-danger strong,
+.progress-module .alert-danger li, .progress-module .alert-danger label,
+.progress-module .alert-danger i, .progress-module .alert-danger svg {
+    color: #C44601 !important;
+}
+.progress-module .alert-danger {
+    background-color: #fff !important;
+    border: 1.5px solid #C44601 !important;
+}
+
 /**********************************************************************************************************************/
 /****************************************************** TABS **********************************************************/
 /**********************************************************************************************************************/
@@ -2098,6 +2168,44 @@ select.form-select:disabled{
 
 label:has(input[type="checkbox"]:disabled){
   opacity: 0.7;
+}
+
+/* calendar icons inside input fields */
+.input-group {
+  position: relative;
+}
+.input-group .add-on,
+.input-group .add-on1,
+.input-group .add-on2 {
+  position: absolute;
+  left: 55px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: transparent !important;
+  border: none !important;
+  padding: 0;
+  pointer-events: none;
+}
+.input-group:not(:has(input[type=checkbox])) .add-on,
+.input-group:not(:has(input[type=checkbox])) .add-on1,
+.input-group:not(:has(input[type=checkbox])) .add-on2 {
+  left: 20px;
+}
+.input-group .add-on i,
+.input-group .add-on1 i,
+.input-group .add-on2 i {
+  font-size: 16px;
+}
+
+.input-group input.form-control {
+  padding-left: 50px !important;
+  background-position: 10px center;
+}
+
+.input-group>:not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
 
 /**********************************************************************************************************************/

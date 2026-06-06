@@ -207,6 +207,8 @@ if ($runQuery) {
                                course.popular_course p,
                                course.is_collaborative clb,
                                course.password password,
+                               course.reg_start_date reg_start_date,
+                               course.reg_end_date reg_end_date,
                                course.id id
                                $queryExtraSelect
                           FROM course, course_department $queryExtraJoin

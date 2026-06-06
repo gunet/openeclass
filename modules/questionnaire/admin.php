@@ -548,18 +548,17 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
                 <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='input-group'>
-                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                        <input class='form-control mt-0 border-start-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
-                        <span class='help-block Accent-200-cl'>".Session::getError('PollStart')."</span>
-
+                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <input class='form-control mt-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
                 </div>
+                <span class='help-block Accent-200-cl'>".Session::getError('PollStart')."</span>
             </div>
 
             <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
                 <label for='PollEnd' class='col-sm-12 control-label-notes mb-1'>$langPollEnd <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='input-group'>
-                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                    <input class='form-control mt-0 border-start-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
+                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <input class='form-control mt-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
                     <span class='help-block Accent-200-cl'>".Session::getError('PollEnd')."</span>
 
                 </div>
@@ -1260,8 +1259,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     if ($isEnabledGrade && !$isSubQuestion) {
             $tool_content .= "<input class='form-control mt-0' type='text' name='grades[$answer->pqaid]' value='$answer->weight' placeholder='$langScore'>";
                     }
-            $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
-                                " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+            $tool_content .= "<div class='form-control-static input-group-text h-40px bg-transparent input-border-color'>
+                                " . icon('fa-xmark Accent-200-cl fs-6', $langDelete, '#', ' class="del_btn"') . "
                               </div>
                 </div>";
               }
@@ -1272,8 +1271,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 if ($isEnabledGrade && !$isSubQuestion) {
             $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langScore'>";
                 }
-            $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
-                            " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+            $tool_content .= "<div class='form-control-static input-group-text h-40px bg-transparent input-border-color'>
+                            " . icon('fa-xmark Accent-200-cl fs-6', $langDelete, '#', ' class="del_btn"') . "
                               </div>
             </div>
             <div class='form-group input-group mt-3'>
@@ -1281,8 +1280,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 if ($isEnabledGrade && !$isSubQuestion) {
             $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langScore'>";
                     }
-        $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
-                        " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+        $tool_content .= "<div class='form-control-static input-group-text h-40px bg-transparent input-border-color'>
+                        " . icon('fa-xmark Accent-200-cl fs-6', $langDelete, '#', ' class="del_btn"') . "
                     </div>
                 </div>";
         }
