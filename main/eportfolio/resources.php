@@ -911,7 +911,7 @@ if ($userdata) {
                     if ($uid == $id) {
                         $badge_link   = "{$urlServer}modules/progress/index.php?course=".course_id_to_code($mybadge->course_id)."&badge_id=".$data['badgeId']."&u=".$mybadge->user_id;
                     }
-                } else {
+                } else { //external badges
                     $badge_date   = !empty($data['issued_on']) ? format_locale_date(strtotime($data['issued_on']), null, false) : '';
                     $badge_issuer = !empty($data['issuer']) ? q($data['issuer']) : q($langUnknownIssuer);
                     $badge_desc   = !empty($data['description']) ? ellipsize($data['description'], 100) : '';
@@ -929,7 +929,7 @@ if ($userdata) {
                         </div>
                         <div class='reward-title-col'>
                             <div style='margin-bottom:4px;line-height:1.3;'>{$title_html}{$ext_badge_str}{$title_vis_icon}</div>
-                            <div style='font-size:13px;color:#6b7280;'>{$badge_issuer}".($badge_date ? " &bull; {$badge_date}" : "")."</div>
+                            <div style='font-size:13px;color:#6b7280;'>{$badge_issuer}".($mybadge->resource_type == 'my_badges' ? " &bull; {$mybadge->course_title}" : "").($badge_date ? " &bull; {$badge_date}" : "")."</div>
                             ".($badge_desc ? "<div style='font-size:12px;color:#9ca3af;margin-top:2px;'>{$badge_desc}</div>" : "")."
                             ".($reflection_comments ? "<div style='font-size:12px;color:#9ca3af;font-style:italic;margin-top:4px;'>{$reflection_comments}</div>" : "")."
                         </div>
