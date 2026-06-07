@@ -62,7 +62,7 @@ function render_eportfolio_fields_content($uid) {
         $cat_return_string['panels'] = "";
         $cat_return_string['right_menu'] = "";
 
-        $cat_icon = isset($category_icons[$c->name]) ? $category_icons[$c->name] : 'fa-solid fa-circle-dot';
+        $cat_icon = isset($category_icons[getSerializedMessage($c->name)]) ? $category_icons[getSerializedMessage($c->name)] : 'fa-solid fa-circle-dot';
 
         $res = Database::get()->queryArray("SELECT id, shortname, name, datatype, data FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
 
@@ -72,7 +72,7 @@ function render_eportfolio_fields_content($uid) {
                 <div class="card-body px-3 py-0">
                 <div class="d-flex align-items-center gap-2 border-bottom py-3">
                     <i class="'.$cat_icon.' Primary-500-cl"></i>
-                    <h2 class="text-heading-h3 mb-0">'. q($c->name) .'</h2>
+                    <h2 class="text-heading-h3 mb-0">'. q(getSerializedMessage($c->name)) .'</h2>
                 </div>';
 
             if ($j == 0) {
@@ -83,7 +83,7 @@ function render_eportfolio_fields_content($uid) {
 
             $j++;
 
-            $cat_return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools Neutral-900-cl' href='#IndexPortfolio$c->id'>" . q($c->name) . "</a>";
+            $cat_return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools Neutral-900-cl' href='#IndexPortfolio$c->id'>" . q(getSerializedMessage($c->name)) . "</a>";
 
             foreach ($res as $f) {
 
@@ -120,7 +120,7 @@ function render_eportfolio_fields_content($uid) {
                     $showAll = true;
 
                     $row  = '<div class="d-flex align-items-start border-bottom py-3">';
-                    $row .= '<div class="col-4">'.q($f->name).'</div>';
+                    $row .= '<div class="col-4">'.q(getSerializedMessage($f->name)).'</div>';
                     $row .= '<div class="col-8">';
 
                     switch ($f->datatype) {
@@ -137,10 +137,15 @@ function render_eportfolio_fields_content($uid) {
                             break;
                         case EPF_MENU:
                             $options = unserialize($f->data);
-                            $options = array_combine(range(1, count($options)), array_values($options));
-                            $options[0] = "";
-                            ksort($options);
-                            $row .= q($options[$fdata_res->data]);
+                            if (isset($options[$_SESSION['langswitch']])) {
+                                $options_lang = $options[$_SESSION['langswitch']];
+                            } else {
+                                $options_lang = $options['en'];
+                            }
+                            $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
+                            $options_lang[0] = "";
+                            ksort($options_lang);
+                            $row .= q($options_lang[$fdata_res->data]);
                             break;
                         case EPF_LINK:
                             $row .= "<a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a>";
@@ -250,9 +255,14 @@ function render_eportfolio_profile_card($uid) {
                 break;
             case 'gender':
                 $options = unserialize($f->data);
-                $options = array_combine(range(1, count($options)), array_values($options));
-                if (!empty($options[$fdata_res->data])) {
-                    $demographics[] = q($options[$fdata_res->data]);
+                if (isset($options[$_SESSION['langswitch']])) {
+                    $options_lang = $options[$_SESSION['langswitch']];
+                } else {
+                    $options_lang = $options['en'];
+                }
+                $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
+                if (!empty($options_lang[$fdata_res->data])) {
+                    $demographics[] = q($options_lang[$fdata_res->data]);
                 }
                 break;
             case 'about_me':
@@ -278,10 +288,10 @@ function render_eportfolio_profile_card($uid) {
                         <input id='page-link-card' type='text'
                                class='form-control border-0 shadow-none px-0 bg-transparent'
                                style='font-size:0.85rem; padding-top:2px; padding-bottom:0; line-height:1;'
-                               value='" . q($public_url) . "' readonly>
+                               value='" . $public_url . "' readonly>
                     </div>
                     <button class='btn btn-light border rounded-2 flex-shrink-0 p-0' id='copy-btn-card'
-                            data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langCopy) . "'
+                            data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . $langCopy . "'
                             style='width:32px;height:32px;'>
                         <i class='fa-regular fa-copy Neutral-500-cl'></i>
                     </button>
@@ -310,7 +320,7 @@ function render_eportfolio_profile_card($uid) {
             <div class='card-body px-3 py-3'>
                 <div class='d-flex align-items-start gap-4'>
                     <img class='rounded-circle flex-shrink-0 ms-4 mt-2' style='width:120px;height:120px;object-fit:cover;'
-                         src='" . q($photo) . "' alt='" . $name . "'>
+                         src='" . $photo . "' alt='" . $name . "'>
                     <div class='flex-grow-1'>
                         <div class='fs-6 fw-bold'>$name</div>
                         $demographics_html
@@ -353,7 +363,7 @@ function render_eportfolio_fields_form() {
 
             <div class="card panelCard card-default px-lg-4 py-lg-3 mb-4" id="EditPortfolio'.$c->id.'">
                                        <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                                           <h2 class="text-heading-h3">' . q($c->name) .'</h2>
+                                           <h2 class="text-heading-h3">' . q(getSerializedMessage($c->name)) .'</h2>
                                        </div>
                                        <div class="card-body">
                                            <fieldset><legend class="mb-0" aria-label="'.$langForm.'"></legend>';
@@ -365,17 +375,17 @@ function render_eportfolio_fields_form() {
 
             $j++;
 
-            $return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools Neutral-900-cl' href='#EditPortfolio$c->id'>" . q($c->name) . "</a>";
+            $return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools Neutral-900-cl' href='#EditPortfolio$c->id'>" . q(getSerializedMessage($c->name)) . "</a>";
 
             // Photo upload field in personal info category
-            if ($c->name == $langPersInfo) {
+            if (getSerializedMessage($c->name) == $langPersInfo) {
                 $user_has_icon = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid)->has_icon;
                 $photo_url = user_icon($uid, IMAGESIZE_LARGE);
                 $pic_label = $user_has_icon ? $langReplacePicture : $langAddPicture;
                 $delete_display = $user_has_icon ? '' : ' style="display:none;"';
                 $return_string['panels'] .= '
                 <div class="form-group mb-4 d-flex align-items-center gap-3">
-                    <img id="profile-img-preview" class="rounded-circle flex-shrink-0" style="width:80px;height:80px;object-fit:cover;" src="' . q($photo_url) . '" alt="">
+                    <img id="profile-img-preview" class="rounded-circle flex-shrink-0" style="width:80px;height:80px;object-fit:cover;" src="' . $photo_url . '" alt="">
                     <div class="flex-grow-1">
                         <label class="pic-label control-label-notes mb-2">' . $pic_label . '</label>
                         <div class="d-flex align-items-center gap-2">
@@ -440,7 +450,7 @@ function render_eportfolio_fields_form() {
                 }
 
                 $return_string['panels'] .= '<div class="'.$form_class.'">';
-                $return_string['panels'] .= '<div class="d-flex align-items-center"><label class="mb-0 title-default" for="epf_'.$f->shortname.'">'.q($f->name).'</label><button type="button" id="visibility_epf_'.$f->shortname.'_button" class="btn p-0 ms-2" style="color:#adb5bd;" data-bs-toggle="modal" data-bs-target="#visibilityModal-epf_'.$f->shortname.'" title="'.$fa_icon_title.'">'.$visibility_fa_icon.'</button></div>';
+                $return_string['panels'] .= '<div class="d-flex align-items-center"><label class="mb-0 title-default" for="epf_'.$f->shortname.'">'.q(getSerializedMessage($f->name)).'</label><button type="button" id="visibility_epf_'.$f->shortname.'_button" class="btn p-0 ms-2" style="color:#adb5bd;" data-bs-toggle="modal" data-bs-target="#visibilityModal-epf_'.$f->shortname.'" title="'.$fa_icon_title.'">'.$visibility_fa_icon.'</button></div>';
                 $return_string['panels'] .= '<div class="col-sm-12">';
                 $return_string['panels'] .= $hidden_visibility_element;
 
@@ -497,11 +507,16 @@ function render_eportfolio_fields_form() {
                             $def_selection = 0;
                         }
                         $options = unserialize($f->data);
-                        $options = array_combine(range(1, count($options)), array_values($options));
-                        $options[0] = "";
-                        ksort($options);
+                        if (isset($options[$_SESSION['langswitch']])) {
+                            $options_lang = $options[$_SESSION['langswitch']];
+                        } else {
+                            $options_lang = $options['en'];
+                        }
+                        $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
+                        $options_lang[0] = "";
+                        ksort($options_lang);
                         $id_field = "id=epf_" . $f->shortname;
-                        $return_string['panels'] .= selection($options, 'epf_'.$f->shortname, $def_selection, $id_field);
+                        $return_string['panels'] .= selection($options_lang, 'epf_'.$f->shortname, $def_selection, $id_field);
                         if ($f->required == 0) {
                             $req_label = $langOptional;
                         } else {
@@ -523,7 +538,7 @@ function render_eportfolio_fields_form() {
                         break;
                 }
                 if (!empty($f->description)) {
-                    $return_string['panels'] .= '<small><em>'.standard_text_escape($f->description);
+                    $return_string['panels'] .= '<small><em>'.standard_text_escape(getSerializedMessage($f->description));
                     if (isset($req_label)) {
                         $return_string['panels'] .= $req_label;
                     }
@@ -538,7 +553,7 @@ function render_eportfolio_fields_form() {
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title">'.$langePortfolioFieldsVisibilitySettings.' — '.q($f->name).'</h5>
+                      <h5 class="modal-title">'.$langePortfolioFieldsVisibilitySettings.' — '.q(getSerializedMessage($f->name)).'</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
