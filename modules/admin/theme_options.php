@@ -66,7 +66,7 @@ $defaults = array(
                 "rgba(37, 70, 240, 1)" => array('BgBadgePrimary', 'bgAlertInfo', 'borderClAlertInfo'),
                 "rgba(30, 126, 14, 0.81)" => array('bgHoveredSuccessButtonColor'),
                 "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
-                "rgba(255, 255, 255, 0)" => array('bgHoveredBoxShadowPanels', 'borderColorContentPlatformLeftRight'),
+                "rgba(255, 255, 255, 0)" => array('bgHoveredBoxShadowPanels', 'borderColorContentPlatformLeftRight', 'bgColorSectionContainers'),
                 "rgba(232, 242, 231, 1)" => array('bgContainerImportantAnnouncement'),
                 "rgba(62, 73, 101, 1)" => array('clOptionSelect', 'ClTextEditor', 'clInputText', 'clTabs', 'clAccordions', 'clColorBodyAgenda'),
                 "rgba(0, 74, 148, 1)" => array('leftMenuSelectedLinkColor'),
@@ -159,6 +159,9 @@ if (isset($_GET['export'])) {
         }
         if (isset($styles['contactUpload'])) {
             $file_list[] = "courses/theme_data/$theme_id/$styles[contactUpload]";
+        }
+        if (isset($styles['imageUploadBriefProfilePortfolio'])) {
+            $file_list[] = "courses/theme_data/$theme_id/$styles[imageUploadBriefProfilePortfolio]";
         }
 
         $zipFile = new ZipArchive();
@@ -1091,6 +1094,16 @@ if (isset($_POST['optionsSave'])) {
        $contactUpload = "<label for='contactUpload' aria-label='$langContact'></label><input type='file' name='contactUpload' id='contactUpload'>";
     }
 
+    if (isset($theme_options_styles['imageUploadBriefProfilePortfolio'])) {
+        $logo_imageUploadBriefProfilePortfolio = "<img src='$urlThemeData/$theme_options_styles[imageUploadBriefProfilePortfolio]' style='max-height:100px;max-width:150px;' alt='Image upload for large screen'>";
+            if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
+                $logo_imageUploadBriefProfilePortfolio .= "&nbsp;&nbsp;<a class='btn deleteAdminBtn d-inline-flex' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadBriefProfilePortfolio'>$langDelete</a>";
+            }
+        $logo_imageUploadBriefProfilePortfolio .= "<input type='hidden' name='imageUploadBriefProfilePortfolio' value='$theme_options_styles[imageUploadBriefProfilePortfolio]'>";
+    } else {
+       $logo_imageUploadBriefProfilePortfolio = "<label for='imageUploadBriefProfilePortfolio' aria-label='$langLogo'></label><input type='file' name='imageUploadBriefProfilePortfolio' id='imageUploadBriefProfilePortfolio'>";
+    }
+
     $action_bar .= action_bar(array(
         array('title' => $langImport,
             'url' => "#",
@@ -1311,6 +1324,19 @@ $tool_content .= "
                                     <img src='$urlServer/template/modern/images/theme_settings/general_2.png' class='figure-img img-fluid rounded theme-img-settings' alt='...'>
                                     <figcaption class='figure-caption'>$langDisplayOptionsImg</figcaption>
                                 </figure>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <div class='checkbox'>
+                                    <label class='label-container'>
+                                        <input type='checkbox' name='enable_aside_main_cards' id='enable_aside_main_cards' value='1' ".((isset($theme_options_styles['enable_aside_main_cards']))? 'checked' : '').">
+                                        <span class='checkmark'></span>
+                                        $langDisplayPlatformAsCardLayout
+                                    </label>
+                                </div>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <label for='bgColorSectionContainers' class='control-label-notes mb-2 me-2'>Χρώμα φόντου στην μορφή των cards:</label>
+                                <input name='bgColorSectionContainers' type='text' class='form-control colorpicker' id='bgColorSectionContainers' value='$theme_options_styles[bgColorSectionContainers]'>
                             </div>
                         </div>
                     </fieldset>
@@ -2136,15 +2162,6 @@ $tool_content .= "
                                 <label for='leftMenuSelectedLinkColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkColorActive:</label>
                                 <input name='leftMenuSelectedLinkColor' type='text' class='form-control colorpicker' id='leftMenuSelectedLinkColor' value='$theme_options_styles[leftMenuSelectedLinkColor]'>
                             </div>
-                            <div class='form-group mt-4'>
-                                <div class='checkbox'>
-                                    <label class='label-container'>
-                                        <input type='checkbox' name='enable_aside_main_cards' id='enable_aside_main_cards' value='1' ".((isset($theme_options_styles['enable_aside_main_cards']))? 'checked' : '').">
-                                        <span class='checkmark'></span>
-                                        Εμφάνιση αριστερού και κύριου περιεχομένου σε card
-                                    </label>
-                                </div>
-                            </div>
                         </div>
                         <div class='d-flex justify-content-center align-items-start'>
                             <figure class='figure'>
@@ -2300,6 +2317,7 @@ $tool_content .= "
                     <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
                         <div>
                             <h2 class='theme_options_legend text-decoration-underline text-heading-h3'>$langPortFolioProfileContainer</h2>
+                            $logo_imageUploadBriefProfilePortfolio
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='BriefProfilePortfolioBgColor' class='control-label-notes mb-2 me-2'>$langPortFolioProfileContainer - radial gradient:</label>
                                 <input name='BriefProfilePortfolioBgColor' type='text' class='form-control colorpicker' id='BriefProfilePortfolioBgColor' value='$theme_options_styles[BriefProfilePortfolioBgColor]'>
@@ -3602,7 +3620,7 @@ function clone_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         make_dir("$webDir/courses/theme_data/$new_theme_id");
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload','contactUpload');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload','contactUpload', 'imageUploadBriefProfilePortfolio');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
@@ -3618,7 +3636,7 @@ function upload_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$theme_id")) {
         make_dir("$webDir/courses/theme_data/$theme_id", 0755);
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload','contactUpload');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload','contactUpload', 'imageUploadBriefProfilePortfolio');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
             $file_name = $_FILES[$image]['name'];

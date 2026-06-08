@@ -2,8 +2,8 @@
 
 @section('content')
 
-    <main id="main" class="col-12 main-section">
-        <div class='{{ $container }} main-container'>
+    <main id="main" class="col-12 main-section login-main-section">
+        <div class='{{ $container }} main-container main-container-login'>
 
             @include('layouts.partials.show_alert')
 
