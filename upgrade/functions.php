@@ -5132,3 +5132,108 @@ function update_minedu_deps()
         }
     }
 }
+
+/**
+ * Create external repositories tables for upgrade
+ * @return void
+ */
+function upgrade_external_repositories()
+{
+    global $langUpgExternalRepos;
+    
+    $tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_bin ENGINE=InnoDB';
+    
+    // Create external_repository table if it doesn't exist
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `external_repository` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `name` varchar(255) NOT NULL,
+        `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay','islandora') NOT NULL,
+        `base_url` varchar(512) DEFAULT NULL,
+        `api_key` varchar(255) DEFAULT NULL,
+        `auth_type` enum('none','api_key','oauth') NOT NULL DEFAULT 'none',
+        `enabled` tinyint(1) NOT NULL DEFAULT 1,
+        `config` text DEFAULT NULL COMMENT 'JSON configuration for additional settings',
+        `created` datetime DEFAULT NULL,
+        `updated` datetime DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `idx_type` (`type`),
+        INDEX `idx_enabled` (`enabled`)
+    ) $tbl_options");
+    
+    // Create external_resource table if it doesn't exist
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `external_resource` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `course_id` int(11) NOT NULL,
+        `repository_id` int(11) NOT NULL,
+        `external_id` varchar(255) DEFAULT NULL COMMENT 'ID in the external system',
+        `title` varchar(512) NOT NULL,
+        `description` text DEFAULT NULL,
+        `url` varchar(1024) NOT NULL,
+        `resource_type` varchar(50) DEFAULT NULL COMMENT 'video, article, image, document',
+        `thumbnail_url` varchar(512) DEFAULT NULL,
+        `metadata` text DEFAULT NULL COMMENT 'JSON for additional data',
+        `rich_preview` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 = rich media preview, 0 = plain link preview',
+        `created` datetime DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `idx_course` (`course_id`),
+        INDEX `idx_repository` (`repository_id`),
+        INDEX `idx_external_id` (`external_id`)
+    ) $tbl_options");
+
+    // Add external_resource.rich_preview on existing installs (idempotent).
+    $rpCol = Database::get()->querySingle("
+        SELECT COLUMN_NAME
+        FROM information_schema.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'external_resource'
+        AND COLUMN_NAME = 'rich_preview'
+    ");
+    if (!$rpCol) {
+        Database::get()->query("ALTER TABLE `external_resource`
+            ADD COLUMN `rich_preview` tinyint(1) NOT NULL DEFAULT 0
+            COMMENT '1 = rich media preview, 0 = plain link preview'");
+    }
+    
+    // Extend external_repository.type enum with new values on existing installs.
+    // Idempotent: only runs when the value is missing from the column definition.
+    $col = Database::get()->querySingle("
+        SELECT COLUMN_TYPE AS t
+        FROM information_schema.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'external_repository'
+        AND COLUMN_NAME = 'type'
+    ");
+    if ($col && isset($col->t) && strpos($col->t, "'islandora'") === false) {
+        Database::get()->query("ALTER TABLE `external_repository`
+            MODIFY COLUMN `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay','islandora') NOT NULL");
+    }
+
+    // Add foreign keys if they don't exist
+    $fk_exists = Database::get()->querySingle("
+        SELECT CONSTRAINT_NAME
+        FROM information_schema.TABLE_CONSTRAINTS
+        WHERE CONSTRAINT_TYPE = 'FOREIGN KEY'
+        AND TABLE_NAME = 'external_resource'
+        AND CONSTRAINT_NAME = 'external_resource_ibfk_1'
+    ");
+    
+    if (!$fk_exists) {
+        Database::get()->query("ALTER TABLE `external_resource` 
+            ADD CONSTRAINT `external_resource_ibfk_1` 
+            FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE");
+    }
+    
+    $fk_exists2 = Database::get()->querySingle("
+        SELECT CONSTRAINT_NAME 
+        FROM information_schema.TABLE_CONSTRAINTS 
+        WHERE CONSTRAINT_TYPE = 'FOREIGN KEY' 
+        AND TABLE_NAME = 'external_resource' 
+        AND CONSTRAINT_NAME = 'external_resource_ibfk_2'
+    ");
+    
+    if (!$fk_exists2) {
+        Database::get()->query("ALTER TABLE `external_resource` 
+            ADD CONSTRAINT `external_resource_ibfk_2` 
+            FOREIGN KEY (`repository_id`) REFERENCES `external_repository` (`id`) ON DELETE CASCADE");
+    }
+}
