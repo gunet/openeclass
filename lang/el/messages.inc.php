@@ -746,6 +746,7 @@ $langUnitsTitle = "Ενότητα";
 $langFinalSubmit = "Τελική Υποβολή";
 $langCont = "Περιεχόμενο";
 $langActivities = "Δραστηριότητες";
+$langsActivities = "δραστηριότητες";
 $langGroupActivities = "Ομαδικές Δραστηριότητες";
 $langEmptyGoal = "Θα πρέπει να ορίσετε ένα τουλάχιστον μαθησιακό στόχο";
 $langEmptyUnit = "Θα πρέπει να συμπληρώσετε μια τουλάχιστον ενότητα";
@@ -1686,6 +1687,7 @@ $langNoThumbnail = "Δεν υπάρχει εικονίδιο";
 $langIsActive = "Ενεργό";
 $langCourseCompletionNotActivated = "Η ολοκλήρωση μαθήματος δεν έχει ενεργοποιηθεί ακόμα.";
 $langActivateCourseCompletion = "Ενεργοποίηση Ολοκλήρωσης Μαθήματος";
+$langYouHaveCompleted = "Έχεις ολοκληρώσει";
 //------------------------------------
 
 

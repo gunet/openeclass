@@ -24,10 +24,9 @@
  */
 function display_certificates(): void
 {
-    global $course_id, $tool_content, $head_content, $course_code, $urlServer,
-           $langDelete, $langConfirmDelete, $is_editor, $uid,
+    global $course_id, $tool_content, $head_content, $course_code, $is_editor, $uid,
            $langNoCertificates, $langNoCertificatesStud, $langActive, $langInactive, $langNoThumbnail,
-           $langEditChange, $langNewCertificate, $langActivate, $langDeactivate, $langSee,
+           $langEditChange, $langNewCertificate, $langActivate, $langDeactivate,
            $webDir, $langTotalPercentCompleteness;
 
     if ($is_editor) {
@@ -153,7 +152,6 @@ function display_certificates(): void
 function display_badges(): void
 {
     global $course_id, $tool_content, $head_content, $course_code, $is_editor, $uid,
-           $langDelete, $langConfirmDelete,
            $langNoBadges, $langNoBadgesStud, $langEditChange,
            $langActivate, $langDeactivate, $langNewBadge,
            $langActive, $langInactive, $urlServer, $langTotalPercentCompleteness;
@@ -280,8 +278,8 @@ function display_points_games(): void
            $langNoPointsGames, $langNoPointsGamesStud, $langEditChange, $langPurge,
            $langActivate, $langDeactivate, $langNewPointsGame,
            $langActive, $langInactive, $langConfirmPurgePointsGame,
-           $langPoints, $langLevel, $langStart, $langReadMore, $langCompletion,
-           $uid;
+           $langPoints, $langLevel, $langReadMore,
+           $uid, $langTotalPercentCompleteness;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, starts, expires FROM points_game WHERE course_id = ?d ORDER BY starts DESC", $course_id);
@@ -368,7 +366,7 @@ function display_points_games(): void
 
                 $progress_html = "
                 <div class='mt-3'>
-                    <div class='pg-list-bar-label'>Συνολικό ποσοστό ολοκλήρωσης</div>
+                    <div class='pg-list-bar-label'>$langTotalPercentCompleteness</div>
                     <div class='d-flex align-items-center gap-2'>
                         <div class='pg-list-bar-outer'>
                             <div class='pg-list-bar-inner' style='width:{$pct}%'></div>
@@ -443,7 +441,8 @@ function display_course_completion(): void
     global $course_id, $tool_content, $head_content, $course_code, $is_editor, $uid, $urlServer,
            $langEditChange, $langCourseCompletionNotActivated, $langActivateCourseCompletion,
            $langAttendanceActList, $langCompleted, $langSurveyNotStarted, $langActive, $langInactive,
-           $langRubricCrit, $langNoActivCert, $langActivate, $langDeactivate;
+           $langRubricCrit, $langNoActivCert, $langActivate, $langDeactivate, $langTotalPercentCompleteness,
+           $langsActivities, $langYouHaveCompleted, $langFrom2;
 
     $head_content .= "<style>
         .progress-activity-card {
@@ -539,17 +538,19 @@ function display_course_completion(): void
 
     $sub_text = $is_editor
         ? "$total $langAttendanceActList"
-        : "Έχεις ολοκληρώσει $done από τις $total δραστηριότητες";
+        : "$langYouHaveCompleted $done $langFrom2 $total $langsActivities";
 
     // Summary card
     if ($is_editor) {
         $tool_content .= "
-        <div class='col-12 mt-4'>
-            <div class='card rounded-3'>
-                <div class='card-body p-4'>
-                    <div class='d-flex align-items-center justify-content-between gap-3 flex-wrap'>
-                        $status_pill
-                        $editor_btns
+        <div onclick=\"window.location.href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'\" style='cursor:pointer;'>
+            <div class='col-12 mt-4'>
+                <div class='card rounded-3'>
+                    <div class='card-body p-4'>
+                        <div class='d-flex align-items-center justify-content-between gap-3 flex-wrap'>
+                            $status_pill
+                            $editor_btns
+                        </div>
                     </div>
                 </div>
             </div>
@@ -565,7 +566,7 @@ function display_course_completion(): void
                             <div class='cc-donut-pct'>{$pct}%</div>
                         </div>
                         <div>
-                            <div style='font-size:17px;font-weight:700;color:#1f2937;margin-bottom:4px;'>Συνολικό ποσοστό ολοκλήρωσης</div>
+                            <div style='font-size:17px;font-weight:700;color:#1f2937;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
                             <div style='font-size:13px;color:#6b7280;margin-bottom:10px;'>$sub_text</div>
                             $status_pill
                         </div>
@@ -647,20 +648,21 @@ function display_course_completion(): void
  */
 function display_activities($element, $id, $unit_id = 0) {
 
-    global $tool_content, $course_code, $is_editor, $action_bar, $langActions,
-           $langNoActivCert, $langActivities, $langTitle, $langType,
+    global $tool_content, $course_code, $is_editor, $action_bar,
+           $langNoActivCert, $langTitle, $langType,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langNumInForum, $langOfBlogComments, $langConfirmDelete,
-           $langOfLearningPath, $langOfLearningPathDuration, $langOfLearningPathProgressMeasure, $langOfLearningPathLessonStatus,
+           $langOfLearningPath, $langOfLearningPathDuration, $langOfLearningPathProgressMeasure,
            $langDelete, $langEditChange, $langDocumentAsModuleLabel, $langCourseParticipation,
-           $langAdd, $langBack, $langUsers, $langOfGradebook,
+           $langAdd, $langBack, $langUsers, $langOfGradebook, $langOfLearningPathLessonStatus,
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
            $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance,
-           $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities, $langForumParticipation,
-           $langPointsGameNoOneTimeActivities, $langPoints, $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod,
-           $langRubricCrit, $head_content, $uid, $langCompleted, $langSurveyNotStarted, $urlServer, $langAttendanceActList;
+           $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities,
+           $langPointsGameNoOneTimeActivities, $langPoints, $langForumParticipation,
+           $langRubricCrit, $head_content, $uid, $langCompleted,
+           $langSurveyNotStarted, $urlServer, $langAttendanceActList;
 
     load_js('bootstrap-table');
     
@@ -3531,8 +3533,7 @@ function display_points_game_settings($element_id): void
  */
 function display_settings($element, $element_id, $unit_id = 0): void
 {
-    global $tool_content, $course_id, $course_code, $urlServer, $langTitle,
-           $langDescription, $langMessage, $langProgressBasicInfo, $langCourseCompletion,
+    global $tool_content, $course_id, $course_code, $urlServer,
            $langpublisher, $langEditChange, $is_editor;
 
     $field = ($element == 'certificate') ? 'template' : 'icon';
@@ -3611,8 +3612,9 @@ function display_settings($element, $element_id, $unit_id = 0): void
  * @param type $points_game_id
  */
 function points_game_settings($points_game_id = 0) {
-    global $tool_content, $head_content, $course_id, $course_code, $langAdd, $langPointsGameLevelName, $langPointsGameLevelRequiredPoints,
-        $language, $langTitle, $langDescription, $langSubmit, $langImgFormsDes, $langPointsGameLevels, $langSettingSelect,
+    global $tool_content, $head_content, $course_id, $course_code, $langAdd,
+        $langPointsGameLevelName, $langPointsGameLevelRequiredPoints,
+        $language, $langTitle, $langDescription, $langSubmit, $langPointsGameLevels, $langSettingSelect,
         $langInsert, $langStartDate, $langEndDate, $langLeaderboardActivation, $langLeaderboardAnonymization, $langDelete; 
 
     load_js('bootstrap-datetimepicker');
@@ -4155,7 +4157,7 @@ function student_view_progress() {
 
     global $uid, $course_id, $urlServer, $tool_content, $langNoCertBadge,
             $langBadges, $course_code, $langCertificates, $langPrintVers,
-           $langCourseCompletion, $head_content, $langDetail, $langPointsGames;
+           $langCourseCompletion, $head_content, $langPointsGames;
 
     require_once 'Game.php';
     require_once 'PointsGame.php';
@@ -4415,8 +4417,9 @@ function student_view_progress() {
  * Display leaderboard accordion for a points game
  */
 function display_leaderboard_accordion($points_game_id) {
-    global $tool_content, $head_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langAutoJudgeRank, $langLevel, $langProgress,
-        $langLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous, $langStart, $langForNextLevel, $langPoints, $urlAppend;
+    global $tool_content, $head_content, $course_code, $course_id, $langNoUserList, $langLevel,
+           $langLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous,
+           $langForNextLevel, $langPoints, $urlAppend;
 
     $anon = false;
     if (!$is_editor) {
@@ -4740,9 +4743,8 @@ function display_users_points_game_progress ($points_game_id) {
  */
 function display_users_progress($element, $element_id) {
 
-    global $tool_content, $head_content, $course_code, $course_id, $langNoCertificateUsers, $langSurnameName, $langUsersS,
-           $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults, $langCompletedIn,
-           $langCompletion, $urlAppend;
+    global $tool_content, $head_content, $course_id, $langNoCertificateUsers,  $langUsersS,
+           $langAmShort, $langProgress, $langUsersCertResults, $langCompletion, $urlAppend;
 
     if ($element == 'certificate') {
         $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user.am, user, completed, completed_criteria, total_criteria, assigned
@@ -4928,8 +4930,7 @@ function get_activity_style($activity_type) {
  */
 function display_user_progress_details($element, $element_id, $user_id) {
 
-    global $tool_content, $langNoUserActivity, $langAttendanceActList, $langAttendanceActivity, $langpublisher,
-           $langInstallEnd, $langTotalPercentCompleteness, $langTitle, $langDescription,
+    global $tool_content, $langNoUserActivity, $langAttendanceActList, $langpublisher, $langTotalPercentCompleteness,
            $langCertAddress, $langRubricCrit, $langCompleted, $langSurveyNotStarted, $head_content,
            $urlServer, $webDir;
 
@@ -5269,8 +5270,8 @@ function criteria_with_operators() {
 
 
 function display_user_points_game_details($points_game_id, $user_id) {
-    global $tool_content, $langNoUserActivity, $langPoints, $langDescription, $langLevel, $langAttendanceActivity, $langTitle, $langDate,
-        $langType, $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langRubricCrit, $head_content;
+    global $tool_content, $langNoUserActivity, $langPoints, $langDescription, $langLevel,
+           $langAttendanceActivity, $langRubricCrit, $head_content;
 
     $sql = Database::get()->queryArray("SELECT * FROM points_game_criterion AS pgc, user_points_game_criterion AS upgc
                                         WHERE upgc.points_game_criterion = pgc.id AND pgc.points_game = ?d AND upgc.user = ?d
@@ -5424,5 +5425,3 @@ function display_user_points_game_details($points_game_id, $user_id) {
         </div>";
     }
 }
-
-
