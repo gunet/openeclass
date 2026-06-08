@@ -439,10 +439,10 @@ function display_points_games(): void
 function display_course_completion(): void
 {
     global $course_id, $tool_content, $head_content, $course_code, $is_editor, $uid, $urlServer,
-           $langEditChange, $langCourseCompletionNotActivated, $langActivateCourseCompletion,
-           $langAttendanceActList, $langCompleted, $langSurveyNotStarted, $langActive, $langInactive,
+           $langDelete, $langCourseCompletionNotActivated, $langActivateCourseCompletion,
+           $langCriteria, $langCompleted, $langSurveyNotStarted, $langActive, $langInactive,
            $langRubricCrit, $langNoActivCert, $langActivate, $langDeactivate, $langTotalPercentCompleteness,
-           $langsActivities, $langYouHaveCompleted, $langFrom2;
+           $langsActivities, $langYouHaveCompleted, $langFrom2, $langCourseCompletion, $langConfirmDelete;
 
     $head_content .= "<style>
         .progress-activity-card {
@@ -483,7 +483,7 @@ function display_course_completion(): void
                         <i class='fa fa-trophy fa-3x text-muted mb-3'></i>
                         <p class='text-muted'>$langCourseCompletionNotActivated</p>
                         <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;newcc=1' class='btn submitAdminBtn'>
-                            <i class='fa fa-power-off'></i>&nbsp;&nbsp;$langActivateCourseCompletion                        </a>
+                            <i class='fa fa-power-off'></i>&nbsp;&nbsp;$langActivateCourseCompletion</a>
                     </div>
                 </div>
             </div>";
@@ -491,8 +491,7 @@ function display_course_completion(): void
     }
 
     // Fetch criteria
-    $all_criteria = Database::get()->queryArray(
-        "SELECT id, activity_type, threshold, operator FROM badge_criterion WHERE badge = ?d", $data->id);
+    $all_criteria = Database::get()->queryArray("SELECT id, activity_type, threshold, operator FROM badge_criterion WHERE badge = ?d", $data->id);
     $total = count($all_criteria);
 
     // Completed criteria for current user
@@ -508,15 +507,15 @@ function display_course_completion(): void
     }
 
     $vis_label = $data->active ? $langDeactivate : $langActivate;
-    $editor_btns = $is_editor ? "
+    $editor_btns = "
         <div class='d-flex gap-2'>
-            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;edit=1' class='btn submitAdminBtn btn-sm'>
-                <i class='fa fa-pencil'></i>&nbsp;$langEditChange
-            </a>
-            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-danger btn-sm' : 'btn btn-success btn-sm text-decoration-none') ."'>
+            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-default btn-sm' : 'btn btn-success btn-sm text-decoration-none') ."'>
                 $vis_label
             </a>
-        </div>" : '';
+            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id&amp;tab=course_completion' class='btn deleteAdminBtn btn-sm' onClick='return confirmation(\"$langConfirmDelete\");'>
+                <i class='fa fa-xmark'></i>&nbsp;$langDelete
+            </a>            
+        </div>";
 
     $done = count($done_ids);
     $pct  = $total > 0 ? round($done / $total * 100) : 0;
@@ -537,16 +536,17 @@ function display_course_completion(): void
         : "<span class='cc-pill-inactive'>$langInactive</span>";
 
     $sub_text = $is_editor
-        ? "$total $langAttendanceActList"
+        ? "$total $langCriteria"
         : "$langYouHaveCompleted $done $langFrom2 $total $langsActivities";
 
     // Summary card
     if ($is_editor) {
         $tool_content .= "
-        <div onclick=\"window.location.href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'\" style='cursor:pointer;'>
+        <div onclick=\"window.location.href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'\" style='cursor:pointer;'>        
             <div class='col-12 mt-4'>
-                <div class='card rounded-3'>
-                    <div class='card-body p-4'>
+                <div class='card rounded-3'>                
+                    <div class='card-body p-4'>                    
+                        <h4>$langCourseCompletion</h4>                    
                         <div class='d-flex align-items-center justify-content-between gap-3 flex-wrap'>
                             $status_pill
                             $editor_btns
@@ -567,8 +567,7 @@ function display_course_completion(): void
                         </div>
                         <div>
                             <div style='font-size:17px;font-weight:700;color:#1f2937;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
-                            <div style='font-size:13px;color:#6b7280;margin-bottom:10px;'>$sub_text</div>
-                            $status_pill
+                            <div style='font-size:13px;color:#6b7280;margin-bottom:10px;'>$sub_text</div>                            
                         </div>
                     </div>
                 </div>
@@ -576,46 +575,46 @@ function display_course_completion(): void
         </div>";
     }
 
-    // Activities card
-    $tool_content .= "
+    if (!$is_editor || isset($_GET['badge_id'])) { // Activities card
+        $tool_content .= "
         <div class='col-12 mt-4'>
             <div class='card rounded-3'>
                 <div class='card-body p-4'>
                     <div class='d-flex justify-content-between align-items-center mb-3'>
-                        <h2 class='text-heading-h3 mb-0'>$langAttendanceActList</h2>
+                        <h2 class='text-heading-h3 mb-0'>$langCriteria</h2>
                     </div>";
 
-    if ($total > 0) {
-        $tool_content .= "<div class='row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mt-1'>";
+        if ($total > 0) {
+            $tool_content .= "<div class='row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mt-1'>";
 
-        foreach ($all_criteria as $criterion) {
-            $resource_data = get_resource_details('badge', $criterion->id);
-            $activity_style = get_activity_style($criterion->activity_type);
-            $activity_title = q($resource_data['title']);
-            $activity_type_label = q($resource_data['type']);
+            foreach ($all_criteria as $criterion) {
+                $resource_data = get_resource_details('badge', $criterion->id);
+                $activity_style = get_activity_style($criterion->activity_type);
+                $activity_title = q($resource_data['title']);
+                $activity_type_label = q($resource_data['type']);
 
-            if (!empty($criterion->operator) && $criterion->threshold !== null) {
-                $op = get_operators();
-                $op_content = $op[$criterion->operator] ?? $criterion->operator;
-                $threshold = (int)$criterion->threshold == $criterion->threshold ? (int)$criterion->threshold : $criterion->threshold;
-                $criteria_html = "<div class='progress-activity-criteria'>$langRubricCrit: $op_content $threshold</div>";
-            } else {
-                $criteria_html = '';
-            }
+                if (!empty($criterion->operator) && $criterion->threshold !== null) {
+                    $op = get_operators();
+                    $op_content = $op[$criterion->operator] ?? $criterion->operator;
+                    $threshold = (int)$criterion->threshold == $criterion->threshold ? (int)$criterion->threshold : $criterion->threshold;
+                    $criteria_html = "<div class='progress-activity-criteria'>$langRubricCrit: $op_content $threshold</div>";
+                } else {
+                    $criteria_html = '';
+                }
 
-            $is_done = in_array($criterion->id, $done_ids);
-            if ($is_editor) {
-                $act_status_pill = '';
-            } elseif ($is_done) {
-                $act_status_pill = "<div style='display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-top:auto;align-self:flex-start;border:1.5px solid #16a34a;color:#16a34a;background:transparent;'><i class='fa fa-check-circle'></i> $langCompleted</div>";
-            } else {
-                $act_status_pill = "<div style='display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-top:auto;align-self:flex-start;border:1.5px solid #f97316;color:#ea580c;background:transparent;'><i class='fa fa-clock-o'></i> $langSurveyNotStarted</div>";
-            }
+                $is_done = in_array($criterion->id, $done_ids);
+                if ($is_editor) {
+                    $act_status_pill = '';
+                } elseif ($is_done) {
+                    $act_status_pill = "<div style='display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-top:auto;align-self:flex-start;border:1.5px solid #16a34a;color:#16a34a;background:transparent;'><i class='fa fa-check-circle'></i> $langCompleted</div>";
+                } else {
+                    $act_status_pill = "<div style='display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-top:auto;align-self:flex-start;border:1.5px solid #f97316;color:#ea580c;background:transparent;'><i class='fa fa-clock-o'></i> $langSurveyNotStarted</div>";
+                }
 
-            $act_url = $resource_data['url'] ?? null;
-            $act_link_open  = $act_url ? "<a class='progress-activity-card-link' href='{$urlServer}{$act_url}' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
-            $act_link_close = $act_url ? "</a>" : '';
-            $tool_content .= "
+                $act_url = $resource_data['url'] ?? null;
+                $act_link_open = $act_url ? "<a class='progress-activity-card-link' href='{$urlServer}{$act_url}' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
+                $act_link_close = $act_url ? "</a>" : '';
+                $tool_content .= "
                 <div class='col'>
                     {$act_link_open}<div class='progress-activity-card'>
                         <div class='d-flex align-items-center gap-3 mb-2'>
@@ -629,12 +628,12 @@ function display_course_completion(): void
                         $act_status_pill
                     </div>{$act_link_close}
                 </div>";
+            }
+            $tool_content .= "</div>";
+        } else {
+            $tool_content .= "<p class='text-center text-muted'>$langNoActivCert</p>";
         }
-        $tool_content .= "</div>";
-    } else {
-        $tool_content .= "<p class='text-center text-muted'>$langNoActivCert</p>";
     }
-
     $tool_content .= "
                 </div>
             </div>
@@ -649,7 +648,7 @@ function display_course_completion(): void
 function display_activities($element, $id, $unit_id = 0) {
 
     global $tool_content, $course_code, $is_editor, $action_bar,
-           $langNoActivCert, $langTitle, $langType,
+           $langNoActivCert, $langTitle, $langType, $langRefreshProgress,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langNumInForum, $langOfBlogComments, $langConfirmDelete,
@@ -661,8 +660,8 @@ function display_activities($element, $id, $unit_id = 0) {
            $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance,
            $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities,
            $langPointsGameNoOneTimeActivities, $langPoints, $langForumParticipation,
-           $langRubricCrit, $head_content, $uid, $langCompleted,
-           $langSurveyNotStarted, $urlServer, $langAttendanceActList;
+           $langRubricCrit, $head_content, $uid, $langCompleted, $langExport,
+           $langSurveyNotStarted, $urlServer, $langCriteria, $langRefreshProgressInfo;
 
     load_js('bootstrap-table');
     
@@ -722,10 +721,21 @@ function display_activities($element, $id, $unit_id = 0) {
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                     'icon' => 'fa-reply',
                     'level' => 'primary',
-                    'show'  =>  $unit_id ? false : true)
-            ),
-            false
-        );
+                    'show'  => !$unit_id),
+                array('title' => $langRefreshProgress,
+                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;refresh=true",
+                    'icon' => 'fa-refresh',
+                    'link-attrs' => "title='$langRefreshProgressInfo'",
+                    'level' => 'primary-label',
+                    'show' => $element != 'points_game'
+                ),
+                array('title' => "$langExport",
+                    'url' => "dumpcertificateresults.php?$link_id",
+                    'icon' => 'fa-file-excel',
+                    'level' => 'primary-label',
+                    'show' => $element != 'points_game'
+                )
+            ));
     $tool_content .= $action_bar;
     if ($unit_id) {
         // check if unit completion is enabled
@@ -1089,7 +1099,7 @@ function display_activities($element, $id, $unit_id = 0) {
                     <div class='card rounded-3'>
                         <div class='card-body p-4'>
                             <div class='d-flex justify-content-between align-items-center mb-3'>
-                                <h2 class='text-heading-h3 mb-0'>$langAttendanceActList</h2>";
+                                <h2 class='text-heading-h3 mb-0'>$langCriteria</h2>";
                             if ($is_editor) {
                                 $tool_content .= "<div>$addActivityBtn</div>";
                             }
@@ -1157,12 +1167,14 @@ function display_activities($element, $id, $unit_id = 0) {
                                                     <div class='progress-activity-icon' style='background:{$activity_style['color']};'>
                                                         <i class='fa {$activity_style['icon']}'></i>
                                                     </div>
-                                                    <span class='progress-activity-type-label'>$activity_type_label</span>
+                                                    <span class='progress-activity-type-label me-4'>$activity_type_label</span>
+                                                    $editor_btns
                                                 </div>
-                                                <div class='progress-activity-name'>$activity_title</div>
+                                                <div class='progress-activity-name'>
+                                                    $activity_title
+                                                </div>
                                                 $criteria_html
-                                                $status_pill
-                                                $editor_btns
+                                                $status_pill                                                
                                             </div>{$act_link_close}
                                         </div>";
                                 }
@@ -1337,6 +1349,7 @@ function display_activities($element, $id, $unit_id = 0) {
                 </div>
             </div>";
     }
+
 }
 
 /**
@@ -3302,7 +3315,7 @@ function display_available_attendances($element, $element_id, $unit_id = 0) {
 function display_points_game_settings($element_id): void
 {
     global $tool_content, $head_content, $course_id, $course_code, $langEditChange,
-           $langLeaderboardActivation, $langLeaderboardAnonymization,
+           $langLeaderboard, $langLeaderboardAnonymization,
            $is_editor, $langPointsGameLevels, $langPointsGameLevelRequiredPoints,
            $langIsActive, $langTypeInactive, $langPoints, $langLevel, $langForNextLevel, $langCompletion,
            $langStart, $uid;
@@ -3357,7 +3370,7 @@ function display_points_game_settings($element_id): void
                                     </div>
                                     $desc_html
                                     <div class='d-flex align-items-center gap-2 mt-2 flex-wrap'>
-                                        <span class='secondary-title' style='font-size:13px; font-weight: bold;'>$langLeaderboardActivation:</span>
+                                        <span class='secondary-title' style='font-size:13px; font-weight: bold;'>$langLeaderboard:</span>
                                         $lb_badge
                                         <span class='secondary-title' style='font-size:13px; font-weight: bold;'>$langLeaderboardAnonymization:</span>
                                         $anon_badge
@@ -3615,7 +3628,7 @@ function points_game_settings($points_game_id = 0) {
     global $tool_content, $head_content, $course_id, $course_code, $langAdd,
         $langPointsGameLevelName, $langPointsGameLevelRequiredPoints,
         $language, $langTitle, $langDescription, $langSubmit, $langPointsGameLevels, $langSettingSelect,
-        $langInsert, $langStartDate, $langEndDate, $langLeaderboardActivation, $langLeaderboardAnonymization, $langDelete; 
+        $langInsert, $langStartDate, $langEndDate, $langLeaderboard, $langLeaderboardAnonymization, $langDelete;
 
     load_js('bootstrap-datetimepicker');
 
@@ -3739,7 +3752,7 @@ function points_game_settings($points_game_id = 0) {
                             <label class='label-container' for='enable_leaderboard'>
                                 <input type='checkbox' name='enable_leaderboard' id='enable_leaderboard' value='1' $enable_checked>
                                 <span class='checkmark'></span>
-                                $langLeaderboardActivation
+                                $langLeaderboard
                             </label>
                         </div>
 
@@ -4416,7 +4429,8 @@ function student_view_progress() {
 /**
  * Display leaderboard accordion for a points game
  */
-function display_leaderboard_accordion($points_game_id) {
+function display_leaderboard_accordion($points_game_id): void
+{
     global $tool_content, $head_content, $course_code, $course_id, $langNoUserList, $langLevel,
            $langLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous,
            $langForNextLevel, $langPoints, $urlAppend;
@@ -4639,7 +4653,8 @@ function display_leaderboard_accordion($points_game_id) {
  * @brief display users points game progress
  * @param type $points_game_id
  */
-function display_users_points_game_progress ($points_game_id) {
+function display_users_points_game_progress ($points_game_id): void
+{
     global $tool_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langID, $langProgress, $is_editor, $uid, $langAnonymous;
 
     $anon = false;
@@ -4737,14 +4752,15 @@ function display_users_points_game_progress ($points_game_id) {
 }
 
 /**
- * @brief display users progress (teacher view)
+ * @brief display users' progress (teacher view)
  * @param type $element
  * @param type $element_id
  */
-function display_users_progress($element, $element_id) {
-
+function display_users_progress($element, $element_id): void
+{
     global $tool_content, $head_content, $course_id, $langNoCertificateUsers,  $langUsersS,
-           $langAmShort, $langProgress, $langUsersCertResults, $langCompletion, $urlAppend;
+           $langAmShort, $langProgress, $langUsersCertResults, $langCompletion,
+           $urlAppend, $course_code;
 
     if ($element == 'certificate') {
         $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user.am, user, completed, completed_criteria, total_criteria, assigned
@@ -4884,7 +4900,7 @@ function display_users_progress($element, $element_id) {
                     </div>
                 </div>
                 <div class='up-lb-progress-wrap'>
-                    $progress_col
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=$user_data->user'>$progress_col</a>
                 </div>
             </div>";
             $cnt++;
@@ -4928,9 +4944,10 @@ function get_activity_style($activity_type) {
  * @param type $element_id
  * @param type $user_id
  */
-function display_user_progress_details($element, $element_id, $user_id) {
+function display_user_progress_details($element, $element_id, $user_id): void
+{
 
-    global $tool_content, $langNoUserActivity, $langAttendanceActList, $langpublisher, $langTotalPercentCompleteness,
+    global $tool_content, $langNoUserActivity, $langCriteria, $langpublisher, $langTotalPercentCompleteness,
            $langCertAddress, $langRubricCrit, $langCompleted, $langSurveyNotStarted, $head_content,
            $urlServer, $webDir;
 
@@ -5070,7 +5087,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                         <div class='cc-donut-wrap'>$donut_svg<div class='cc-donut-pct'>{$pct}%</div></div>
                         <div>
                             <div style='font-size:17px;font-weight:700;color:#1f2937;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
-                            <div style='font-size:13px;color:#6b7280;'>$completed_num / $total_num $langAttendanceActList</div>
+                            <div style='font-size:13px;color:#6b7280;'>$completed_num / $total_num $langCriteria</div>
                         </div>
                     </div>
                 </div>
@@ -5137,7 +5154,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
         <div class='col-12 mt-3'>
             <div class='card rounded-3'>
                 <div class='card-body p-4'>
-                    <h2 class='text-heading-h3 mb-3'>$langAttendanceActList</h2>
+                    <h2 class='text-heading-h3 mb-3'>$langCriteria</h2>
                     <div class='row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3'>";
     // completed criteria
 	foreach ($sql as $user_criterion) {

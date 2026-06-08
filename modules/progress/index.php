@@ -46,7 +46,7 @@ require_once 'GradebookEvent.php';
 require_once 'CourseCompletionEvent.php';
 require_once 'AttendanceEvent.php';
 
-$toolName = $langProgress;
+$pageName = $langProgress;
 
 load_js('tools.js');
 
@@ -754,34 +754,9 @@ HTML;
 if (isset($display) and $display) {
     if ($is_course_reviewer) {
         if (isset($element_id)) {
-            $pageName = $element_title;
-            if ($is_editor && $element == 'badge') {
-                $bundle_check = Database::get()->querySingle("SELECT bundle FROM badge WHERE id = ?d", $element_id);
-                if ($bundle_check && $bundle_check->bundle == -1) {
-                    $pageName = '';
-                }
-            }
-            
-            /*$action_bar = action_bar(
-                array(
-                    array('title' => $langBack,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                        'icon' => 'fa-reply',
-                        'level' => 'primary',
-                        'show'  =>  $unit_id ? false : true),
-                    /*array('title' => $langUsers,
-                        'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
-                        'icon' => 'fa-users',
-                        'level' => 'secondary',
-                        'show'  =>  $show_users)
-                ),
-                false
-            );
-            $tool_content .= $action_bar;*/
-
+            $pageName = '';
             // display certificate settings and resources
             display_activities($element, $element_id);
-            
             // Add leaderboard accordion for points games
             if ($element == 'points_game') {
                 display_leaderboard_accordion($element_id);
