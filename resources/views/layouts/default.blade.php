@@ -473,5 +473,155 @@
             })();
         </script>
     @endif
+    {{-- Navigation to hierarchy tree using keyboard for accessibility --}}
+    <script type="text/javascript">
+        (function () {
+            $('#js-tree').on(
+                'keydown',
+                '.jstree-anchor',
+                function (event) {
+                    if (event.key !== 'Enter') {
+                        return;
+                    }
+                    const $anchor = $(this);
+                    const $li = $anchor.closest('li.jstree-node');
+
+                    if ($li.hasClass('jstree-leaf')) {
+                        return;
+                    }
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const tree = $('#js-tree').jstree(true);
+                    const nodeId = $li.attr('id');
+
+                    if (tree.is_open(nodeId)) {
+                        tree.close_node(nodeId);
+                    } else {
+                        tree.open_node(nodeId);
+                    }
+                }
+            );
+        })();
+    </script>
+    {{-- Navigation to blog tree using keyboard for accessibility --}}
+    <script>
+        (function () {
+            $('#blog_tree').on(
+                'keydown',
+                '.jstree-anchor',
+                function (event) {
+                    if (event.key !== 'Enter') {
+                        return;
+                    }
+
+                    const $anchor = $(this);
+                    const $li = $anchor.closest('li.jstree-node');
+
+                    if ($li.hasClass('jstree-leaf')) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const tree = $('#blog_tree').jstree(true);
+                    const nodeId = $li.attr('id');
+
+                    if (tree.is_open(nodeId)) {
+                        tree.close_node(nodeId);
+                    } else {
+                        tree.open_node(nodeId);
+                    }
+                }
+            );
+        })();
+        </script>
+        {{-- Add aria-label to the delete button of slimSelect item for accessibility --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                function fixSlimSelectAccessibility() {
+                    document.querySelectorAll('.ss-value-delete').forEach(function (element) {
+                        element.setAttribute('role', 'button');
+                        element.setAttribute(
+                            "aria-label",
+                            "{{ trans('langDelete') }}"
+                        );
+
+                        element.setAttribute(
+                            "title",
+                            "{{ trans('langDelete') }}"
+                        );
+
+                        let svg = element.querySelector('svg');
+
+                        if (svg) {
+                            svg.setAttribute(
+                                'aria-hidden',
+                                'true'
+                            );
+                        }
+                    });
+                }
+
+                fixSlimSelectAccessibility();
+                const observer = new MutationObserver(function () {
+                    fixSlimSelectAccessibility();
+                });
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        </script>
+        {{-- Navigation with prev-next buttons in the exercise using keyboard for accessibility --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.addEventListener('keydown', function (event) {
+
+                    const focusedButton = document.activeElement;
+                    if (!focusedButton.matches || !focusedButton.matches('input.btn-exercise-nav[type="submit"]')) {
+                        return;
+                    }
+
+                    const buttons = Array.from(
+                        document.querySelectorAll(
+                            'input.btn-exercise-nav[type="submit"]'
+                        )
+                    );
+
+                    if (buttons.length === 0) {
+                        return;
+                    }
+
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        focusedButton.click();
+                        return;
+                    }
+
+                    if (event.key === 'ArrowRight') {
+                        event.preventDefault();
+                        let index = buttons.indexOf(focusedButton);
+                        let next = index + 1;
+                        if (next >= buttons.length) {
+                            next = 0;
+                        }
+                        buttons[next].focus();
+                        return;
+                    }
+
+                    if (event.key === 'ArrowLeft') {
+                        event.preventDefault();
+                        let index = buttons.indexOf(focusedButton);
+                        let previous = index - 1;
+                        if (previous < 0) {
+                            previous = buttons.length - 1;
+                        }
+                        buttons[previous].focus();
+                    }
+                });
+            });
+        </script>
  </body>
 </html>
