@@ -3694,15 +3694,27 @@ function upgrade_to_4_3($tbl_options) : void {
 function upgrade_to_4_4($tbl_options) : void
 {
 
-    global $langResearchProfiles, $langGoogleScholarProfile, $langScopusID, $langOrcid,
-           $langGreek, $langEnglish, $langAlbanian, $langArabic, $langFrench, $langGerman, $langSpanish, $langItalian, $langChinese, $langRussian, $langTurkish,
-           $langOtherLanguages, $langePortfolioOtherLanguagesDescr, $langLangProfLevel, $langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1,
-           $langLangCEFRC2, $langSocialActivities, $langVolunteerActivities, $langVolontSocialAct,
-           $langAboutMeDescr, $langePortfolioPersonalWebsiteDescr, $langEducationDescr, $langePortfolioEmploymentDescr,
-           $langePortfolioCertificatesAwardsDescr, $langePortfolioPublicationsDescr, $langePortfolioPersonalGoalsDescr,
-           $langePortfolioAcademicGoalsDescr, $langePortfolioCareerGoalsDescr, $langePortfolioPersonalSkillsDescr,
-           $langePortfolioAcademicSkillsDescr, $langePortfolioCareerSkillsDesc, $langePortfolioSocialActivitiesDescr,
-           $langePortfolioVolunteerActivitiesDescr;
+    global $session;
+
+    $eportfolio_strings = array(
+        'langPersInfo', 'langEduEmpl', 'langAchievements', 'langGoalsSkills', 'langContactInfo', 'langResearchProfiles', 'langLangProfLevel',
+        'langVolontSocialAct', 'langMale', 'langFemale', 'langLangCEFRA1', 'langLangCEFRA2', 'langLangCEFRB1', 'langLangCEFRB2', 'langLangCEFRC1',
+        'langLangCEFRC2', 'langBirthDate', 'langBirthPlace', 'langGender', 'langAboutMe', 'langAboutMeDescr', 'langPersWebsite', 'langePortfolioPersonalWebsiteDescr',
+        'langEducation', 'langEducationDescr', 'langEmployment', 'langePortfolioEmploymentDescr', 'langCertAwards', 'langePortfolioCertificatesAwardsDescr',
+        'langPublications', 'langePortfolioPublicationsDescr', 'langPersGoals', 'langePortfolioPersonalGoalsDescr', 'langAcademicGoals', 'langePortfolioAcademicGoalsDescr',
+        'langCareerGoals', 'langePortfolioCareerGoalsDescr', 'langPersSkills', 'langePortfolioPersonalSkillsDescr', 'langAcademicSkills', 'langePortfolioAcademicSkillsDescr',
+        'langCareerSkills', 'langePortfolioCareerSkillsDesc', 'langEmail', 'langPhone', 'langAddress', 'langFBProfile', 'langTwitterAccount', 'langLinkedInProfile',
+        'langGoogleScholarProfile', 'langScopusID', 'langOrcid', 'langGreek', 'langEnglish', 'langAlbanian', 'langArabic', 'langFrench', 'langGerman', 'langItalian',
+        'langSpanish', 'langChinese', 'langRussian', 'langTurkish', 'langOtherLanguages', 'langePortfolioOtherLanguagesDescr', 'langSocialActivities',
+        'langePortfolioSocialActivitiesDescr', 'langVolunteerActivities', 'langePortfolioVolunteerActivitiesDescr'
+    );
+
+    $default_lang = get_config('default_language');
+    $active_langs = $session->active_ui_languages;
+    $eportfolio = array();
+    foreach ($session->active_ui_languages as $lang) {
+        $eportfolio[$lang] = load_lang_strings($lang, $eportfolio_strings);
+    }
 
     // E-portfolio
     if (!DBHelper::fieldExists('user', 'eportfolio_token')) {
@@ -3721,42 +3733,156 @@ function upgrade_to_4_4($tbl_options) : void
         $min_eportf_cat_order = 0;
     }
 
-    $RPfc = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s", $langResearchProfiles);
-    if ($RPfc->cnt == 0) {
-        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langResearchProfiles', $min_eportf_cat_order)")->lastInsertID;
+    $cats = Database::get()->queryArray("SELECT id, `name` FROM eportfolio_fields_category order by id asc");
+    $research_profiles_found = $lang_prof_level_found = $volont_social_act_found = false;
+    foreach ($cats as $cat) {
+        if (!preg_match('/^a:\d+:\{.*\}$/s', $cat->name)) { //check if stored value doesn't look like serialized array
+            if ($cat->name == $eportfolio[$default_lang]['langResearchProfiles']) {
+                $research_profiles_found = true;
+            } elseif ($cat->name == $eportfolio[$default_lang]['langLangProfLevel']) {
+                $lang_prof_level_found = true;
+            } elseif ($cat->name == $eportfolio[$default_lang]['langVolontSocialAct']) {
+                $volont_social_act_found = true;
+            }
+
+            $arr = array();
+            $key = array_search($cat->name, $eportfolio[$default_lang]);
+            if ($key !== false) { //category name has default value
+                foreach ($session->active_ui_languages as $lang) {
+                    $arr[$lang] = $eportfolio[$lang][$key];
+                }
+                Database::get()->query("UPDATE eportfolio_fields_category SET `name` = ?s WHERE id = ?d",
+                serialize($arr), $cat->id);
+            } else { //category name has been modified
+                Database::get()->query("UPDATE eportfolio_fields_category SET `name` = ?s WHERE id = ?d",
+                serialize([$default_lang => $cat->name]), $cat->id);
+            }
+        } else {
+            //check if new cats exist and are already serialized
+            $unserialized_cat = unserialize($cat->name, ["allowed_classes" => false]);
+            if (isset($unserialized_cat[$default_lang])) {
+                if ($unserialized_cat[$default_lang] == $eportfolio[$default_lang]['langResearchProfiles']) {
+                    $research_profiles_found = true;
+                } elseif ($unserialized_cat[$default_lang] == $eportfolio[$default_lang]['langLangProfLevel']) {
+                    $lang_prof_level_found = true;
+                } elseif ($unserialized_cat[$default_lang] == $eportfolio[$default_lang]['langVolontSocialAct']) {
+                    $volont_social_act_found = true;
+                }
+            }
+        }
+    }
+
+    if ($research_profiles_found === false) {
+        $arr_cat = array();
+        $arr_fields = array();
+        foreach ($session->active_ui_languages as $lang) {
+            $arr_cat[$lang] = $eportfolio[$lang]['langResearchProfiles'];
+            $arr_fields['langGoogleScholarProfile'][$lang] = $eportfolio[$lang]['langGoogleScholarProfile'];
+            $arr_fields['langScopusID'][$lang] = $eportfolio[$lang]['langScopusID'];
+            $arr_fields['langOrcid'][$lang] = $eportfolio[$lang]['langOrcid'];
+        }
+        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES (?s, ?d)", serialize($arr_cat), $min_eportf_cat_order)->lastInsertID;
         Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
-            ('gscholar', '$langGoogleScholarProfile', '', '5', $eportf_cat_id, 0, 0, ''),
-            ('scopus', '$langScopusID', '', '1', $eportf_cat_id, -1, 0, ''),
-            ('orcid', '$langOrcid', '', '5', $eportf_cat_id, -2, 0, '')");
+            ('gscholar', '".serialize($arr_fields['langGoogleScholarProfile'])."', '', '5', $eportf_cat_id, 0, 0, ''),
+            ('scopus', '".serialize($arr_fields['langScopusID'])."', '', '1', $eportf_cat_id, -1, 0, ''),
+            ('orcid', '".serialize($arr_fields['langOrcid'])."', '', '5', $eportf_cat_id, -2, 0, '')");
         $min_eportf_cat_order--;
     }
 
-    $RPlp = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s", $langLangProfLevel);
-    if ($RPlp->cnt == 0) {
-        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langLangProfLevel', $min_eportf_cat_order)")->lastInsertID;
-        $lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
+    if ($lang_prof_level_found === false) {
+        $arr_cat = array();
+        $arr_fields = array();
+        $lang_proficiency_levels = array();
+        foreach ($session->active_ui_languages as $lang) {
+            $arr_cat[$lang] = $eportfolio[$lang]['langLangProfLevel'];
+            $arr_fields['langGreek'][$lang] = $eportfolio[$lang]['langGreek'];
+            $arr_fields['langEnglish'][$lang] = $eportfolio[$lang]['langEnglish'];
+            $arr_fields['langAlbanian'][$lang] = $eportfolio[$lang]['langAlbanian'];
+            $arr_fields['langArabic'][$lang] = $eportfolio[$lang]['langArabic'];
+            $arr_fields['langFrench'][$lang] = $eportfolio[$lang]['langFrench'];
+            $arr_fields['langGerman'][$lang] = $eportfolio[$lang]['langGerman'];
+            $arr_fields['langItalian'][$lang] = $eportfolio[$lang]['langItalian'];
+            $arr_fields['langSpanish'][$lang] = $eportfolio[$lang]['langSpanish'];
+            $arr_fields['langChinese'][$lang] = $eportfolio[$lang]['langChinese'];
+            $arr_fields['langRussian'][$lang] = $eportfolio[$lang]['langRussian'];
+            $arr_fields['langTurkish'][$lang] = $eportfolio[$lang]['langTurkish'];
+            $arr_fields['langOtherLanguages'][$lang] = $eportfolio[$lang]['langOtherLanguages'];
+            $arr_fields['langePortfolioOtherLanguagesDescr'][$lang] = $eportfolio[$lang]['langePortfolioOtherLanguagesDescr'];
+            $lang_proficiency_levels[$lang] = [
+                $eportfolio[$lang]['langLangCEFRA1'],
+                $eportfolio[$lang]['langLangCEFRA2'],
+                $eportfolio[$lang]['langLangCEFRB1'],
+                $eportfolio[$lang]['langLangCEFRB2'],
+                $eportfolio[$lang]['langLangCEFRC1'],
+                $eportfolio[$lang]['langLangCEFRC2']
+            ];
+        }
+        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES (?s, ?d)", serialize($arr_cat), $min_eportf_cat_order)->lastInsertID;
         Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
-            ('el', '$langGreek', '', '4', $eportf_cat_id, 0, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('en', '$langEnglish', '', '4', $eportf_cat_id, -1, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('sq', '$langAlbanian', '', '4', $eportf_cat_id, -2, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('ar', '$langArabic', '', '4', $eportf_cat_id, -3, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('fr', '$langFrench', '', '4', $eportf_cat_id, -4, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('de', '$langGerman', '', '4', $eportf_cat_id, -5, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('it', '$langItalian', '', '4', $eportf_cat_id, -6, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('es', '$langSpanish', '', '4', $eportf_cat_id, -7, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('zh', '$langChinese', '', '4', $eportf_cat_id, -8, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('ru', '$langRussian', '', '4', $eportf_cat_id, -9, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('tr', '$langTurkish', '', '4', $eportf_cat_id, -10, 0, '" . serialize($lang_proficiency_levels) . "'),
-            ('other_languages', '$langOtherLanguages', '$langePortfolioOtherLanguagesDescr', '2', $eportf_cat_id, -11, 0, '')");
+            ('el', '".serialize($arr_fields['langGreek'])."', '', '4', $eportf_cat_id, 0, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('en', '".serialize($arr_fields['langEnglish'])."', '', '4', $eportf_cat_id, -1, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('sq', '".serialize($arr_fields['langAlbanian'])."', '', '4', $eportf_cat_id, -2, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('ar', '".serialize($arr_fields['langArabic'])."', '', '4', $eportf_cat_id, -3, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('fr', '".serialize($arr_fields['langFrench'])."', '', '4', $eportf_cat_id, -4, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('de', '".serialize($arr_fields['langGerman'])."', '', '4', $eportf_cat_id, -5, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('it', '".serialize($arr_fields['langItalian'])."', '', '4', $eportf_cat_id, -6, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('es', '".serialize($arr_fields['langSpanish'])."', '', '4', $eportf_cat_id, -7, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('zh', '".serialize($arr_fields['langChinese'])."', '', '4', $eportf_cat_id, -8, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('ru', '".serialize($arr_fields['langRussian'])."', '', '4', $eportf_cat_id, -9, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('tr', '".serialize($arr_fields['langTurkish'])."', '', '4', $eportf_cat_id, -10, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('other_languages', '".serialize($arr_fields['langOtherLanguages'])."', '".serialize($arr_fields['langePortfolioOtherLanguagesDescr'])."', '2', $eportf_cat_id, -11, 0, '')");
         $min_eportf_cat_order--;
     }
 
-    $RPvsa = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM eportfolio_fields_category WHERE name = ?s", $langVolontSocialAct);
-    if ($RPvsa->cnt == 0) {
-        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES ('$langVolontSocialAct', $min_eportf_cat_order)")->lastInsertID;
+    if ($volont_social_act_found === false) {
+        $arr_cat = array();
+        $arr_fields = array();
+        foreach ($session->active_ui_languages as $lang) {
+            $arr_cat[$lang] = $eportfolio[$lang]['langVolontSocialAct'];
+            $arr_fields['langSocialActivities'][$lang] = $eportfolio[$lang]['langSocialActivities'];
+            $arr_fields['langVolunteerActivities'][$lang] = $eportfolio[$lang]['langVolunteerActivities'];
+            $arr_fields['langePortfolioSocialActivitiesDescr'][$lang] = $eportfolio[$lang]['langePortfolioSocialActivitiesDescr'];
+            $arr_fields['langePortfolioVolunteerActivitiesDescr'][$lang] = $eportfolio[$lang]['langePortfolioVolunteerActivitiesDescr'];
+        }
+        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES (?s, ?d)", serialize($arr_cat), $min_eportf_cat_order)->lastInsertID;
         Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
-        ('social_activities', '$langSocialActivities', '', '2', $eportf_cat_id, 0, 0, ''),
-        ('volunteer_activities', '$langVolunteerActivities', '', '2', $eportf_cat_id, -1, 0, '')");
+        ('social_activities', '".serialize($arr_fields['langSocialActivities'])."', '".serialize($arr_fields['langePortfolioSocialActivitiesDescr'])."', '2', $eportf_cat_id, 0, 0, ''),
+        ('volunteer_activities', '".serialize($arr_fields['langVolunteerActivities'])."', '".serialize($arr_fields['langePortfolioSocialActivitiesDescr'])."', '2', $eportf_cat_id, -1, 0, '')");
+    }
+
+    $fields = Database::get()->queryArray("SELECT id, shortname, name, description, datatype, data FROM eportfolio_fields");
+    $field_shortnames = [
+        'about_me' => 'langAboutMeDescr', 
+        'personal_website' => 'langePortfolioPersonalWebsiteDescr', 
+        'education' => 'langEducationDescr', 
+        'employment' => 'langePortfolioEmploymentDescr', 
+        'certificates_awards' => 'langePortfolioCertificatesAwardsDescr', 
+        'publications' => 'langePortfolioPublicationsDescr', 
+        'personal_goals' => 'langePortfolioPersonalGoalsDescr', 
+        'academic_goals' => 'langePortfolioAcademicGoalsDescr', 
+        'career_goals' => 'langePortfolioCareerGoalsDescr', 
+        'personal_skills' => 'langePortfolioPersonalSkillsDescr',
+        'academic_skills' => 'langePortfolioAcademicSkillsDescr', 
+        'career_skills' => 'langePortfolioCareerSkillsDesc', 
+        'social_activities' => 'langePortfolioSocialActivitiesDescr', 
+        'volunteer_activities' => 'langePortfolioVolunteerActivitiesDescr'
+    ];
+    foreach ($fields as $field) {
+        if (!preg_match('/^a:\d+:\{.*\}$/s', $field->name)) { //if looks like being already serialized do nothing
+            if (!empty($field->description)) {
+                Database::get()->query("UPDATE eportfolio_fields SET name = ?s, description = ?s WHERE shortname = ?s", serialize([$default_lang => $field->name]),serialize([$default_lang => $field->description]), $field->shortname);
+            } else {
+                if (array_key_exists($field->shortname, $field_shortnames)) {
+                    Database::get()->query("UPDATE eportfolio_fields SET name = ?s, description = ?s WHERE shortname = ?s", serialize([$default_lang => $field->name]),serialize([$default_lang => $eportfolio[$default_lang][$field_shortnames[$field->shortname]]]), $field->shortname);
+                } else {
+                    Database::get()->query("UPDATE eportfolio_fields SET name = ?s WHERE shortname = ?s", serialize([$default_lang => $field->name]), $field->shortname);
+                }
+            }
+            if ($field->datatype == 4) {//select options
+                $data_arr = unserialize($field->data, ["allowed_classes" => false]);
+                Database::get()->query("UPDATE eportfolio_fields SET data = ?s WHERE shortname = ?s", serialize([$default_lang => $data_arr]), $field->shortname);
+            }
+        }
     }
 
     if (!DBHelper::indexExists('eportfolio_fields', 'shortname')) {
@@ -3770,21 +3896,6 @@ function upgrade_to_4_4($tbl_options) : void
     if (!DBHelper::fieldExists('eportfolio_resource', 'reflection_comments')) {
         Database::get()->query("ALTER TABLE eportfolio_resource ADD reflection_comments TEXT NULL");
     }
-
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langAboutMeDescr, 'about_me');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalWebsiteDescr, 'personal_website');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langEducationDescr, 'education');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioEmploymentDescr, 'employment');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCertificatesAwardsDescr, 'certificates_awards');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPublicationsDescr, 'publications');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalGoalsDescr, 'personal_goals');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioAcademicGoalsDescr, 'academic_goals');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCareerGoalsDescr, 'career_goals');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioPersonalSkillsDescr, 'personal_skills');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioAcademicSkillsDescr, 'academic_skills');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioCareerSkillsDesc, 'career_skills');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioSocialActivitiesDescr, 'social_activities');
-    Database::get()->query("UPDATE eportfolio_fields SET description = ?s WHERE shortname = ?s AND (description IS NULL OR description = '')", $langePortfolioVolunteerActivitiesDescr, 'volunteer_activities');
 
     // tenant table
     if (!DBHelper::tableExists('tenant')) {

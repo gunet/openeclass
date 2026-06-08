@@ -140,7 +140,7 @@ function render_eportfolio_fields_content($uid) {
                             if (isset($options[$_SESSION['langswitch']])) {
                                 $options_lang = $options[$_SESSION['langswitch']];
                             } else {
-                                $options_lang = $options['en'];
+                                $options_lang = $options[get_config('default_language')];
                             }
                             $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
                             $options_lang[0] = "";
@@ -258,7 +258,7 @@ function render_eportfolio_profile_card($uid) {
                 if (isset($options[$_SESSION['langswitch']])) {
                     $options_lang = $options[$_SESSION['langswitch']];
                 } else {
-                    $options_lang = $options['en'];
+                    $options_lang = $options[get_config('default_language')]; //use platform default language
                 }
                 $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
                 if (!empty($options_lang[$fdata_res->data])) {
@@ -510,7 +510,7 @@ function render_eportfolio_fields_form() {
                         if (isset($options[$_SESSION['langswitch']])) {
                             $options_lang = $options[$_SESSION['langswitch']];
                         } else {
-                            $options_lang = $options['en'];
+                            $options_lang = $options[get_config('default_language')];
                         }
                         $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
                         $options_lang[0] = "";

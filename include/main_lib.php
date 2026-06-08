@@ -5572,9 +5572,16 @@ function get_suppressed_words_data($action = 'words') {
  */
 function load_lang_strings(string $lang, array $strings) : array {
     global $language_codes;
+    //add global variables to suppress warnings for undefined variables in messages.inc.php files
+    global $siteName, $InstitutionUrl, $Institution ;
     $arr = array();
     
     if (isset($language_codes[$lang])) {
+        //add common.inc.php to prevent warnings for variables that are undefined in messages.inc.php
+        if (file_exists('lang/'.$lang.'/common.inc.php')) {
+            include 'lang/'.$lang.'/common.inc.php';
+        }
+
         if (file_exists('lang/'.$lang.'/messages.inc.php')) {
             include 'lang/'.$lang.'/messages.inc.php';
             

@@ -433,7 +433,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $form_data_array[$res->id] = array();
 
             $tool_content .= "<div id='cat_".getIndirectReference($res->id)."' class='table-responsive tile' style='margin-bottom:30px;'><table class='table-default'>";
-            $tool_content .= "<caption class='tile__name ps-1 pe-1'><strong>$langCategory :</strong> " . q($res->name) . "<div class='float-end'>";
+            $tool_content .= "<caption class='tile__name ps-1 pe-1'><strong>$langCategory :</strong> " . q(getSerializedMessage($res->name)) . "<div class='float-end'>";
 
             $dyntools = array(
                 array(
@@ -493,9 +493,9 @@ if (isset($_GET['add_cat'])) { //add a new category form
                     );
 
                     $tool_content .= "<tr id='field_" . getIndirectReference($f->id) . "'>";
-                    $tool_content .= "<td>".q($f->name)."</td>";
+                    $tool_content .= "<td>".q(getSerializedMessage($f->name))."</td>";
                     $tool_content .= "<td>".q($f->shortname)."</td>";
-                    $tool_content .= "<td>".standard_text_escape($f->description)."</td>";
+                    $tool_content .= "<td>".standard_text_escape(getSerializedMessage($f->description))."</td>";
                     $tool_content .= "<td>".$field_types[$f->datatype]."</td>";
                     $tool_content .= "<td>".$yes_no[$f->required]."</td>";
                     $tool_content .= "<td>".action_button($field_dyntools)."</td>";
