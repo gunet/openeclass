@@ -91,33 +91,29 @@ view('modules.user.muladduser', $data);
 
 function finduser($user, $field)
 {
-    global $is_power_user;
+    global $is_admin, $is_departmentmanage_user;
 
-    if ($is_power_user) {
-        $result = Database::get()->querySingle(
-            "SELECT id FROM user WHERE `$field` = ?s",
-            $user
-        );
-        return $result ? $result->id : false;
-    }
     $currentTenant = getCurrentTenant();
-
     $tenantDepartment = $currentTenant->hierarchy_id ?? null;
-    if (!$tenantDepartment) {
+
+    if ($is_departmentmanage_user && !$is_admin) {
+        $result = Database::get()->querySingle(
+            "SELECT u.id
+                         FROM user u
+                         JOIN user_department ud ON ud.user = u.id
+                         WHERE ud.department = ?d
+                           AND u.`$field` = ?s",
+                            $tenantDepartment,
+                            $user
+                        );
+    } else {
+        $result = Database::get()->querySingle("SELECT id FROM user WHERE `$field` = ?s", $user);
+    }
+    if ($result) {
+        return $result->id;
+    } else {
         return false;
     }
-
-    $result = Database::get()->querySingle(
-        "SELECT u.id
-         FROM user u
-         JOIN user_department ud ON ud.user = u.id
-         WHERE ud.department = ?d
-           AND u.`$field` = ?s",
-        $tenantDepartment,
-        $user
-    );
-
-    return $result ? $result->id : false;
 }
 /**
  * Add users
