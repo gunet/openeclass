@@ -35,6 +35,7 @@ require_once 'modules/search/classes/ConstantsUtil.php';
 require_once 'modules/search/classes/SearchEngineFactory.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'include/log.class.php';
+require_once 'insert_extrepo.php';
 
 ModalBoxHelper::loadModalBox(true);
 
@@ -107,6 +108,8 @@ if (isset($_POST['submit_doc'])) {
     insert_blog($id);
 } elseif (isset($_POST['submit_tc'])) {
     insert_tc($id);
+} elseif (isset($_POST['submit_extrepo'])) {
+    insert_extrepo($id);
 }
 switch ($_GET['type']) {
     case 'divider';
@@ -171,6 +174,10 @@ switch ($_GET['type']) {
     case 'h5p': $pageName = "$langAdd $langOfH5p";
         include "insert_h5p.php";
         list_h5p();
+        break;
+    case 'extrepo': 
+        $pageName = "$langAdd " . ($langInsertExternalRepo ?? 'External Resource');
+        display_extrepo_search();
         break;
     default: break;
 }

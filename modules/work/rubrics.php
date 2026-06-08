@@ -630,7 +630,7 @@ function show_rubric ($rubric_id): void
 {
 
     global $tool_content, $course_code, $course_id,
-        $langName, $langDescription, $langRubricCriteria,
+        $langName, $langDescription, $langCriteria,
         $langEdit,$langDelete,$langConfirmDelete, $langSettingSelect;
 
     $rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d", $course_id, $rubric_id);
@@ -651,7 +651,7 @@ function show_rubric ($rubric_id): void
             <thead class='list-header'>
                 <th>$langName</th>
                 <th>$langDescription</th>
-                <th>$langRubricCriteria</th>
+                <th>$langCriteria</th>
                 <th aria-label='$langSettingSelect' class='text-end' rowspan='2'>" . icon('fa-cogs') . "</th>
             </thead>
             <tr>
