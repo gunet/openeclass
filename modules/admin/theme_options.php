@@ -1952,6 +1952,16 @@ $tool_content .= "
                                     </div>
                                 </div>
 
+                                <div class='form-group mt-4'>
+                                    <div class='checkbox'>
+                                        <label class='label-container' aria-label='$langSettingSelect'>
+                                            <input type='checkbox' name='introTextCenterPos' value='1' ".((isset($theme_options_styles['introTextCenterPos']))? 'checked' : '').">
+                                            <span class='checkmark'></span>
+                                            $langIntroTextCenterPos
+                                        </label>
+                                    </div>
+                                </div>
+
 
 
                                 <div class='form-group mt-4'>

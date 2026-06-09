@@ -6809,6 +6809,7 @@ you will temporarily register the new start and end date of the session. </br></
 <strong>You can also change the duration of the current session by changing the size of the green slot</strong>';
 $langJumbotronWithVideo = 'The file you uploaded is of type .mp4 with full name "video.mp4"';
 $langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the height is set to half the height of the current screen.";
+$langIntroTextCenterPos = "Move the introductory text to the center position of the screen?";
 $langOfSubmitQuestionnaire = "By submitting a questionnaire";
 $langAddConsultantComments = "The consultant's comments were successfully added.";
 $langContinueToDelComment = "Do you want to proceed with deleting comments for the user?";

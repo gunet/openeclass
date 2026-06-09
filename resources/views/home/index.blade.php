@@ -54,7 +54,7 @@
                                             @if(get_config('enable_mobileapi') || $eclass_banner_value == 1)
                                                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
                                                     @if(get_config('enable_mobileapi'))
-                                                        <div class='d-flex gap-3 pe-3'>
+                                                        <div class='d-flex gap-3 pe-3 mobile-api-container'>
                                                             <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass3' target='_blank' aria-label='Google Play'>
                                                                 <img style='width:150px;' src='resources/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Get it on Google Play'>
                                                             </a>
@@ -97,7 +97,7 @@
                                             @if(get_config('enable_mobileapi') || $eclass_banner_value == 1)
                                                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-4">
                                                     @if(get_config('enable_mobileapi'))
-                                                        <div class='d-flex gap-3 pe-3'>
+                                                        <div class='d-flex gap-3 pe-3 mobile-api-container'>
                                                             <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass3' target='_blank' aria-label='Google Play'>
                                                                 <img style='width:150px;' src='resources/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Get it on Google Play'>
                                                             </a>

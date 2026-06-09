@@ -615,6 +615,19 @@ function theme_initialization() {
 
         }
 
+        if (isset($theme_options_styles['introTextCenterPos'])) {
+            $styles_str .= "
+                .jumbotron-intro-text {
+                    text-align: justify !important;
+                }
+                .jumbotron-intro-text,
+                .mobile-api-container {
+                    margin-left: auto !important;
+                    margin-right: auto !important;
+                }
+            ";
+        }
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////// POSITION OF LOGIN-FORM ////////////////////////////////
