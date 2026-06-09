@@ -6872,7 +6872,8 @@ function theme_initialization() {
 
             if(!empty($theme_options_styles['enable_aside_main_cards'])) { 
                 $styles_str .= "
-                    .main-section .main-container {
+                    .main-section .main-container,
+                    .portfolio-courses-container .padding-default {
                         border: 1px solid $theme_options_styles[clBorderPanels];
                     }
 
