@@ -77,8 +77,13 @@ function process_actions() {
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_GET['del']);
         if (check_admin_unit_resource($res_id)) {
+            // 1:1 model: extrepo placements own their external_resource row.
+            $unitRow = Database::get()->querySingle("SELECT type, res_id FROM unit_resources WHERE id = ?d", $res_id);
             Database::get()->query("DELETE FROM unit_resources WHERE id = ?d", $res_id);
             Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
+            if ($unitRow && $unitRow->type === 'extrepo' && !empty($unitRow->res_id)) {
+                Database::get()->query("DELETE FROM external_resource WHERE id = ?d", $unitRow->res_id);
+            }
             $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
             $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
@@ -89,8 +94,18 @@ function process_actions() {
     } elseif (isset($_REQUEST['del_act'])) { // delete resource from course unit
         $res_id = intval($_GET['del_act']);
         $act_id = $_GET['actid'];
+        // 1:1 model: collect owned external_resource ids before unlinking.
+        $extrepoIds = Database::get()->queryArray(
+            "SELECT res_id FROM unit_resources WHERE activity_id = ?s AND type = 'extrepo'",
+            $act_id
+        );
         Database::get()->query("DELETE FROM course_units_activities WHERE id = ?d", $res_id);
         Database::get()->query("DELETE FROM unit_resources WHERE activity_id = ?s", $act_id);
+        foreach ($extrepoIds as $row) {
+            if (!empty($row->res_id)) {
+                Database::get()->query("DELETE FROM external_resource WHERE id = ?d", $row->res_id);
+            }
+        }
         //$searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_UNITRESOURCE, $res_id);
         //$searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_COURSE, $course_id);
         //CourseXMLElement::refreshCourse($course_id, $course_code);
@@ -827,6 +842,9 @@ function show_resource($info) {
             break;
         case 'tc':
             $html .= show_tc($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
+            break;
+        case 'extrepo':
+            $html .= show_extrepo($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         default:
             $html .= $langUnknownResType;
@@ -1748,6 +1766,337 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
           " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
           <div><div class='module-name'>$langLinks</div> $exlink $comment_box</div>" . actions('link', $resource_id, $visibility) . "
         </div>";
+}
+
+/**
+ * @brief display external repository resource
+ * @param string $title Resource title
+ * @param string $comments Resource description
+ * @param int $resource_id Unit resource ID
+ * @param int $ext_resource_id External resource ID
+ * @param int $visibility Visibility status
+ * @param string $act_name Activity name
+ * @return string HTML output
+ */
+function show_extrepo($title, $comments, $resource_id, $ext_resource_id, $visibility, $act_name) {
+    global $is_editor, $langWasDeleted, $course_id, $langOpenNewTab, $langExternalResource;
+
+    $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
+    
+    // Get the external resource from database
+    $ext_res = Database::get()->querySingle(
+        "SELECT er.*, repo.name as repo_name, repo.type as repo_type 
+         FROM external_resource er 
+         LEFT JOIN external_repository repo ON er.repository_id = repo.id 
+         WHERE er.id = ?d AND er.course_id = ?d", 
+        $ext_resource_id,
+        $course_id
+    );
+
+    // Per-resource teacher choice: 1 = rich media preview, 0 = plain link preview.
+    $rich_preview = $ext_res && ((int)($ext_res->rich_preview ?? 0) === 1);
+
+    if (!$ext_res) { // check if it was deleted
+        if (!$is_editor) {
+            return '';
+        } else {
+            $imagelink = icon('fa-xmark link-delete');
+            $exlink = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
+        }
+    } else {
+        // Use title from unit_resources or fallback to external_resource title
+        if (empty($title)) {
+            $title = q($ext_res->title);
+        } else {
+            $title = q($title);
+        }
+        
+        // Determine icon based on resource type
+        $icon_class = 'fa-external-link';
+        switch ($ext_res->resource_type) {
+            case 'video':
+                $icon_class = 'fa-video';
+                break;
+            case 'image':
+                $icon_class = 'fa-image';
+                break;
+            case 'article':
+                $icon_class = 'fa-file-text';
+                break;
+            case 'document':
+                $icon_class = 'fa-file-alt';
+                break;
+            case 'audio':
+                $icon_class = 'fa-music';
+                break;
+        }
+        
+        $link = "<a class='TextBold' href='" . q($ext_res->url) . "' target='_blank' aria-label='$langOpenNewTab'>";
+        $exlink = $link . "$title</a>";
+        
+        // Repository badge — inline for rich preview, on its own line under the title for link preview
+        if (!empty($ext_res->repo_name)) {
+            if ($rich_preview) {
+                $exlink .= " <span class='badge bg-secondary ms-1'>" . q($ext_res->repo_name) . "</span>";
+            } else {
+                $exlink .= "<div class='mt-1'><span class='badge bg-secondary'>" . q($ext_res->repo_name) . "</span></div>";
+            }
+        }
+
+        $imagelink = icon($icon_class);
+    }
+
+    // Description/comments are shown only in rich preview; link preview is title + tag only.
+    $comment_box = '';
+    if ($rich_preview) {
+        if (!empty($comments)) {
+            $comment_box = '<br />' . standard_text_escape($comments);
+        } elseif (!empty($ext_res->description)) {
+            $comment_box = '<br />' . standard_text_escape($ext_res->description);
+        }
+    }
+
+    // Rich media preview (per provider) — skipped entirely for link preview.
+    $media_preview = '';
+
+    if ($rich_preview) {
+    // YouTube video preview
+    if ($ext_res && $ext_res->repo_type === 'youtube' && $ext_res->resource_type === 'video') {
+        $video_id = extract_youtube_video_id($ext_res->url);
+        if ($video_id) {
+            $media_preview = "
+                <div class='mt-2 mb-2'>
+                    <div class='ratio ratio-16x9' style='max-width: 640px;'>
+                        <iframe src='https://www.youtube.com/embed/{$video_id}' 
+                                title='" . q($title) . "' 
+                                frameborder='0' 
+                                allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>";
+        }
+    }
+    
+    // Pixabay image preview
+    if ($ext_res && $ext_res->repo_type === 'pixabay' && $ext_res->resource_type === 'image') {
+        // Pixabay's webformatURL and largeImageURL are temporary signed URLs that expire
+        // We need to use permanent URLs from cdn.pixabay.com or construct them from image ID
+        $image_url = null;
+        
+        // Parse metadata JSON
+        $metadata = [];
+        if (!empty($ext_res->metadata)) {
+            $decoded = json_decode($ext_res->metadata, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $metadata = $decoded;
+            }
+        }
+        
+        // Use permanent previewURL from cdn.pixabay.com (doesn't expire)
+        // Format: https://cdn.pixabay.com/photo/YYYY/MM/DD/HH/MM/image-id_640.jpg
+        if (!empty($metadata['previewURL'])) {
+            $image_url = $metadata['previewURL'];
+            // Convert 150px thumbnail to 640px if available
+            $image_url = str_replace('_150.jpg', '_640.jpg', $image_url);
+            $image_url = str_replace('_150.png', '_640.png', $image_url);
+        } elseif (!empty($ext_res->thumbnail_url)) {
+            // Use stored thumbnail and upgrade to 640px
+            $image_url = $ext_res->thumbnail_url;
+            $image_url = str_replace('_150.jpg', '_640.jpg', $image_url);
+            $image_url = str_replace('_150.png', '_640.png', $image_url);
+        } elseif (!empty($ext_res->external_id)) {
+            // Fallback: construct permanent URL from image ID
+            $image_url = "https://cdn.pixabay.com/photo/2020/01/01/00/00/image-{$ext_res->external_id}_640.jpg";
+        }
+        
+        // Display image if we found a URL
+        if ($image_url) {
+            // Clean up the URL in case it has escaped slashes
+            $image_url = str_replace('\\/', '/', $image_url);
+            
+            $media_preview = "
+                <div class='mt-2 mb-2'>
+                    <a href='" . q($ext_res->url) . "' target='_blank' rel='noopener noreferrer'>
+                        <img src='" . q($image_url) . "' 
+                             alt='" . q($title) . "' 
+                             class='img-fluid' 
+                             style='max-width: 640px; max-height: 480px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'
+                             loading='lazy'
+                             onerror=\"this.onerror=null; this.style.display='none'; console.log('Pixabay image failed to load: ' + this.src);\">
+                    </a>
+                </div>";
+        }
+    }
+    
+    // DSpace preview (thumbnail or PDF embed)
+    if ($ext_res && $ext_res->repo_type === 'dspace') {
+        // Parse metadata JSON
+        $metadata = [];
+        if (!empty($ext_res->metadata)) {
+            $decoded = json_decode($ext_res->metadata, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $metadata = $decoded;
+            }
+        }
+        
+        // Show thumbnail if available
+        if (!empty($ext_res->thumbnail_url)) {
+            $media_preview = "
+                <div class='mt-2 mb-2'>
+                    <a href='" . q($ext_res->url) . "' target='_blank' rel='noopener noreferrer'>
+                        <img src='" . q($ext_res->thumbnail_url) . "' 
+                             alt='" . q($title) . "' 
+                             class='img-fluid' 
+                             style='max-width: 400px; max-height: 300px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'
+                             loading='lazy'
+                             onerror=\"this.onerror=null; this.style.display='none';\">
+                    </a>
+                </div>";
+        }
+        
+        // If it's a PDF document, offer embedded preview option
+        if ($ext_res->resource_type === 'document' && !empty($metadata['handle'])) {
+            // Try to find PDF bitstream URL from metadata
+            if (!empty($metadata['bitstreams'])) {
+                foreach ($metadata['bitstreams'] as $bitstream) {
+                    if (isset($bitstream['format']) && strpos(strtolower($bitstream['format']), 'pdf') !== false) {
+                        $pdf_url = $bitstream['url'] ?? null;
+                        if ($pdf_url) {
+                            $media_preview .= "
+                                <div class='mt-2 mb-2'>
+                                    <button type='button' class='btn btn-sm btn-secondary' onclick='togglePdfPreview_{$resource_id}()'>
+                                        <i class='fa fa-file-pdf'></i> Toggle PDF Preview
+                                    </button>
+                                    <div id='pdf_preview_{$resource_id}' style='display:none;' class='mt-2'>
+                                        <iframe src='" . q($pdf_url) . "' 
+                                                style='width:100%; height:600px; border:1px solid #ddd;'
+                                                title='PDF Preview'>
+                                        </iframe>
+                                    </div>
+                                    <script>
+                                        function togglePdfPreview_{$resource_id}() {
+                                            var preview = document.getElementById('pdf_preview_{$resource_id}');
+                                            preview.style.display = (preview.style.display === 'none') ? 'block' : 'none';
+                                        }
+                                    </script>
+                                </div>";
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // ReasonableGraph preview (images and embeds)
+    if ($ext_res && $ext_res->repo_type === 'reasonable_graph') {
+        // Parse metadata JSON
+        $metadata = [];
+        if (!empty($ext_res->metadata)) {
+            $decoded = json_decode($ext_res->metadata, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $metadata = $decoded;
+            }
+        }
+        
+        // Show thumbnail or main image if available
+        $image_url = null;
+        if (!empty($ext_res->thumbnail_url)) {
+            $image_url = $ext_res->thumbnail_url;
+        } elseif (!empty($metadata['display']['thumbnail'])) {
+            $image_url = $metadata['display']['thumbnail'];
+        } elseif (!empty($metadata['display']['image'])) {
+            $image_url = $metadata['display']['image'];
+        }
+        
+        if ($image_url && $ext_res->resource_type === 'image') {
+            $media_preview = "
+                <div class='mt-2 mb-2'>
+                    <a href='" . q($ext_res->url) . "' target='_blank' rel='noopener noreferrer'>
+                        <img src='" . q($image_url) . "' 
+                             alt='" . q($title) . "' 
+                             class='img-fluid' 
+                             style='max-width: 640px; max-height: 480px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'
+                             loading='lazy'
+                             onerror=\"this.onerror=null; this.style.display='none'; console.log('ReasonableGraph image failed to load: ' + this.src);\">
+                    </a>
+                </div>";
+        }
+        
+        // Show embed URL if available (for multimedia content)
+        if (!empty($metadata['display']['embed_url']) && in_array($ext_res->resource_type, ['video', 'audio'])) {
+            $embed_url = $metadata['display']['embed_url'];
+            $media_preview = "
+                <div class='mt-2 mb-2'>
+                    <div class='ratio ratio-16x9' style='max-width: 640px;'>
+                        <iframe src='" . q($embed_url) . "' 
+                                title='" . q($title) . "' 
+                                frameborder='0' 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>";
+        }
+    }
+    
+    // Islandora preview (thumbnail-anchor; MVP, same pattern as DSpace)
+    if ($ext_res && $ext_res->repo_type === 'islandora' && !empty($ext_res->thumbnail_url)) {
+        $media_preview = "
+            <div class='mt-2 mb-2'>
+                <a href='" . q($ext_res->url) . "' target='_blank' rel='noopener noreferrer'>
+                    <img src='" . q($ext_res->thumbnail_url) . "'
+                         alt='" . q($title) . "'
+                         class='img-fluid'
+                         style='max-width: 400px; max-height: 300px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'
+                         loading='lazy'
+                         onerror=\"this.onerror=null; this.style.display='none';\">
+                </a>
+            </div>";
+    }
+    } // end if ($rich_preview)
+
+    $module_name = $langExternalResource ?? 'External Resource';
+
+    return "
+        <div$class_vis data-id='$resource_id'>
+          <div class='unitIcon' width='1'>$imagelink</div>
+          " . (!empty($act_name) ? "<div class='text-start act_label'>$act_name</div>" : "") . "
+          <div><div class='module-name'>$module_name</div> $exlink $comment_box $media_preview</div>" . actions('extrepo', $resource_id, $visibility) . "
+        </div>";
+}
+
+/**
+ * Extract YouTube video ID from various YouTube URL formats
+ * 
+ * @param string $url YouTube URL
+ * @return string|null Video ID or null if not found
+ */
+function extract_youtube_video_id($url) {
+    if (empty($url)) {
+        return null;
+    }
+    
+    // Handle various YouTube URL formats:
+    // - https://www.youtube.com/watch?v=VIDEO_ID
+    // - https://youtu.be/VIDEO_ID
+    // - https://www.youtube.com/embed/VIDEO_ID
+    // - https://www.youtube.com/v/VIDEO_ID
+    
+    $patterns = [
+        '/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/',
+        '/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/',
+        '/youtube\.com\/v\/([a-zA-Z0-9_-]+)/',
+        '/youtu\.be\/([a-zA-Z0-9_-]+)/',
+    ];
+    
+    foreach ($patterns as $pattern) {
+        if (preg_match($pattern, $url, $matches)) {
+            return $matches[1];
+        }
+    }
+    
+    return null;
 }
 
 /**

@@ -52,6 +52,17 @@ if (isset($_POST['submit_bulk'])) {
     redirect($_SERVER['SCRIPT_NAME']);
 }
 
+// Handle config save
+if (isset($_POST['submit_config'])) {
+    if (validate_csrf_token($_POST['token'])) {
+        set_config('suppressed_words_enabled', $_POST['suppressed_words_enabled'] ?? 0);
+        Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    } else {
+        Session::Messages($langNoAuthorization, 'alert-danger');
+    }
+    redirect($_SERVER['SCRIPT_NAME']);
+}
+
 // Handle AJAX request from DataTables
 if (isset($_GET['ajax'])) {
     $draw = intval($_POST['draw'] ?? 0);

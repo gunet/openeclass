@@ -23,7 +23,7 @@ require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 class ExtAppManager {
 
     public static $AppCategories = [
-        'general' => ['APITokenApp', 'H5PApp', 'aiapp', 'TurnitinApp', 'SebApp', 'CobyApp', 'LtiPublishApp', 'LimesurveyApp', 'PanoptoApp', 'SolrApp', 'OpenBadgesApp'],
+        'general' => ['APITokenApp', 'H5PApp', 'aiapp', 'TurnitinApp', 'SebApp', 'CobyApp', 'LtiPublishApp', 'LimesurveyApp', 'PanoptoApp', 'SolrApp', 'OpenBadgesApp', 'ExternalReposApp'],
         'teleconference' => ['BBBApp', 'ZoomApp', 'WebexApp','GoogleMeetApp', 'JitsiApp', 'MicrosoftTeamsApp', 'OpenDelosApp', 'UniFlixApp'],
         'cloud' => ['GoogleDriveApp', 'OneDriveApp', 'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp'],
         'other' => ['AnalyticsApp', 'AntivirusApp', 'secondfaApp', 'UserWayApp', 'AutojudgeApp'],

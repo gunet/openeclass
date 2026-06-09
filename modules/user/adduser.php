@@ -137,7 +137,7 @@ if (isset($_GET['add'])) {
     }
 
     $query = join(' AND ', $search);
-    if ($is_departmentmanage_user) {
+    if ($is_departmentmanage_user && !$is_admin) {
         // dynamic filters for tenant
         $tenantFilters = [
             'surname' => $_POST['search_surname'] ?? '',

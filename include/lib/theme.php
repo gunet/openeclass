@@ -85,6 +85,22 @@ function theme_initialization() {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ////////////// BACKGROUND IMAGE OF BRIEF PROFILE IN PORTOFOLIO  /////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(isset($theme_options_styles['imageUploadBriefProfilePortfolio'])){
+            $urlThData = $urlAppend . 'courses/theme_data/' . $theme_id;
+            $contact_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
+            $styles_str .= "
+                .portfolio-profile-container .padding-default {
+                    background-image: url($contact_image);
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         /////////////// BACKGROUND COLOR OF BRIEF PROFILE IN PORTOFOLIO /////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -94,8 +110,34 @@ function theme_initialization() {
             $styles_str .= "
                 .portfolio-profile-container{
                     background: $new_gradient_str_bpr;
-                  }
+                 }
             ";
+            if(isset($theme_options_styles['imageUploadBriefProfilePortfolio'])){
+                $urlThData = $urlAppend . 'courses/theme_data/' . $theme_id;
+                $contact_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
+                $styles_str .= "
+                    .portfolio-profile-container{
+                        background: transparent !important;
+                    }
+                    .portfolio-profile-container .padding-default {
+                        background-image: linear-gradient(
+                                            135deg,
+                                            $theme_options_styles[BriefProfilePortfolioBgColor],
+                                            $theme_options_styles[BriefProfilePortfolioBgColor_gr]
+                                        ), url($contact_image);
+
+                        background-size:
+                            100% 100%,
+                            100% 100% !important;
+                        background-position:
+                            center center,
+                            center center !important;
+                        background-repeat:
+                            no-repeat,
+                            no-repeat !important;
+                    }
+                ";
+            }
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -6187,23 +6229,6 @@ function theme_initialization() {
             ";
         }
 
-        if(!empty($theme_options_styles['enable_aside_main_cards'])){
-            $head_content .= "
-            <script type='text/javascript'>
-                $(document).ready(function () {
-                    setNewCookieSlider('asideBarOn','true',30);
-                });
-            </script>";
-        } else {
-            $head_content .= "
-            <script type='text/javascript'>
-                $(document).ready(function () {
-                    setNewCookieSlider('asideBarOn','true',0);
-                });
-            </script>";
-        }
-
-
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -7719,6 +7744,106 @@ function theme_initialization() {
             $styles_str .= "
                 .progress-circle-bar::before{
                     color: $theme_options_styles[BgColorProgressBarAndText];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////// PLATFORM VIEW AS CARD STYLE /////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['enable_aside_main_cards'])){
+            $head_content .= "
+            <script type='text/javascript'>
+                $(document).ready(function () {
+                    setNewCookieSlider('asideBarOn','true',30);
+                });
+            </script>";
+
+            $styles_str .= "
+                
+                .main-section .main-container {
+                    padding: 45px 45px !important;
+                    border-radius: 32px !important;
+                    margin-bottom: 35px !important;
+                    margin-top: 35px !important;
+                }
+
+                .module-container .col_maincontent_active {
+                    padding: 45px 45px !important;
+                }
+
+                .portfolio-profile-container .padding-default {
+                    position: relative !important;
+                    overflow: hidden !important;
+                    margin-top: 35px !important;
+                    margin-bottom: 35px !important;
+                    padding: 45px 55px !important;
+                    border-radius: 32px !important;
+                }
+
+                .portfolio-profile-container .padding-default::after {
+                    content:'' !important;
+                    position:absolute !important;
+                    right:-80px !important;
+                    bottom:-150px !important;
+                    width:350px !important;
+                    height:350px !important;
+                    filter: blur(60px) !important;
+                    z-index:0 !important;
+
+                }
+                    
+                .portfolio-profile-container .container.padding-default > * {
+                    position:relative !important;
+                    z-index:2 !important;
+                }
+
+                .portfolio-courses-container .padding-default {
+                    padding: 45px 55px !important;
+                    border-radius: 32px !important;
+                    margin-bottom: 35px !important;
+                } 
+
+
+                @media (min-width: 992px) {
+                    body:has(.sidebar-card) .main-maincontent {
+                        border-top-left-radius: 0px;
+                        border-top-right-radius: 32px;
+                        border-bottom-left-radius: 0px;
+                        border-bottom-right-radius: 32px;
+                    }
+
+                    .sidebar-card .ContentLeftNav {
+                        border-top-left-radius: 32px;
+                        border-top-right-radius: 0px;
+                        border-bottom-left-radius: 32px;
+                        border-bottom-right-radius: 0px;
+                    }
+                }
+
+            ";
+        } else {
+            $head_content .= "
+            <script type='text/javascript'>
+                $(document).ready(function () {
+                    setNewCookieSlider('asideBarOn','true',0);
+                });
+            </script>";
+        }
+
+        if(!empty($theme_options_styles['bgColorSectionContainers'])){
+            $styles_str .= "
+                .main-section .main-container{
+                    background-color: $theme_options_styles[bgColorSectionContainers] !important;
+                }
+                .portfolio-courses-container .padding-default{
+                    background-color: $theme_options_styles[bgColorSectionContainers] !important;
+                } 
+                .main-container.main-container-login {
+                    background-color: transparent !important;
                 }
             ";
         }

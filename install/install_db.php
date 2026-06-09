@@ -1007,58 +1007,96 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_category` (
         `name` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
         `sortorder`  INT NOT NULL DEFAULT 0) $tbl_options");
 
-$db->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`) VALUES
-        (1, '$langPersInfo', 0),
-        (2, '$langEduEmpl', -1),
-        (3, '$langAchievements', -2),
-        (4, '$langGoalsSkills', -3),
-        (5, '$langContactInfo', -4),
-        (6, '$langResearchProfiles', -5),
-        (7, '$langLangProfLevel', -6),
-        (8, '$langVolontSocialAct', -7)");
+$eportfolio_strings = array(
+    'langPersInfo', 'langEduEmpl', 'langAchievements', 'langGoalsSkills', 'langContactInfo', 'langResearchProfiles', 'langLangProfLevel',
+    'langVolontSocialAct', 'langMale', 'langFemale', 'langLangCEFRA1', 'langLangCEFRA2', 'langLangCEFRB1', 'langLangCEFRB2', 'langLangCEFRC1',
+    'langLangCEFRC2', 'langBirthDate', 'langBirthPlace', 'langGender', 'langAboutMe', 'langAboutMeDescr', 'langPersWebsite', 'langePortfolioPersonalWebsiteDescr',
+    'langEducation', 'langEducationDescr', 'langEmployment', 'langePortfolioEmploymentDescr', 'langCertAwards', 'langePortfolioCertificatesAwardsDescr',
+    'langPublications', 'langePortfolioPublicationsDescr', 'langPersGoals', 'langePortfolioPersonalGoalsDescr', 'langAcademicGoals', 'langePortfolioAcademicGoalsDescr',
+    'langCareerGoals', 'langePortfolioCareerGoalsDescr', 'langPersSkills', 'langePortfolioPersonalSkillsDescr', 'langAcademicSkills', 'langePortfolioAcademicSkillsDescr',
+    'langCareerSkills', 'langePortfolioCareerSkillsDesc', 'langEmail', 'langPhone', 'langAddress', 'langFBProfile', 'langTwitterAccount', 'langLinkedInProfile',
+    'langGoogleScholarProfile', 'langScopusID', 'langOrcid', 'langGreek', 'langEnglish', 'langAlbanian', 'langArabic', 'langFrench', 'langGerman', 'langItalian',
+    'langSpanish', 'langChinese', 'langRussian', 'langTurkish', 'langOtherLanguages', 'langePortfolioOtherLanguagesDescr', 'langSocialActivities',
+    'langePortfolioSocialActivitiesDescr', 'langVolunteerActivities', 'langePortfolioVolunteerActivitiesDescr'
+);
 
-$gender_options = [$langMale, $langFemale];
-$lang_proficiency_levels = [$langLangCEFRA1, $langLangCEFRA2, $langLangCEFRB1, $langLangCEFRB2, $langLangCEFRC1, $langLangCEFRC2];
+$eportfolio = [ 
+    'el' => load_lang_strings('el', $eportfolio_strings), 
+    'en' => load_lang_strings('en', $eportfolio_strings)
+];
+
+$db->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`) VALUES
+        (1, '".serialize(['el' => $eportfolio['el']['langPersInfo'], 'en' => $eportfolio['en']['langPersInfo']])."', 0),
+        (2, '".serialize(['el' => $eportfolio['el']['langEduEmpl'], 'en' => $eportfolio['en']['langEduEmpl']])."', -1),
+        (3, '".serialize(['el' => $eportfolio['el']['langAchievements'], 'en' => $eportfolio['en']['langAchievements']])."', -2),
+        (4, '".serialize(['el' => $eportfolio['el']['langGoalsSkills'], 'en' => $eportfolio['en']['langGoalsSkills']])."', -3),
+        (5, '".serialize(['el' => $eportfolio['el']['langContactInfo'], 'en' => $eportfolio['en']['langContactInfo']])."', -4),
+        (6, '".serialize(['el' => $eportfolio['el']['langResearchProfiles'], 'en' => $eportfolio['en']['langResearchProfiles']])."', -5),
+        (7, '".serialize(['el' => $eportfolio['el']['langLangProfLevel'], 'en' => $eportfolio['en']['langLangProfLevel']])."', -6),
+        (8, '".serialize(['el' => $eportfolio['el']['langVolontSocialAct'], 'en' => $eportfolio['en']['langVolontSocialAct']])."', -7)");
+
+$gender_options = [
+    'el' => [$eportfolio['el']['langMale'], $eportfolio['el']['langFemale']],
+    'en' => [$eportfolio['en']['langMale'], $eportfolio['en']['langFemale']]
+];
+$lang_proficiency_levels = [
+    'el' => [
+        $eportfolio['el']['langLangCEFRA1'], 
+        $eportfolio['el']['langLangCEFRA2'],
+        $eportfolio['el']['langLangCEFRB1'],
+        $eportfolio['el']['langLangCEFRB2'],
+        $eportfolio['el']['langLangCEFRC1'],
+        $eportfolio['el']['langLangCEFRC2']
+    ],
+    'en' => [
+        $eportfolio['en']['langLangCEFRA1'], 
+        $eportfolio['en']['langLangCEFRA2'],
+        $eportfolio['en']['langLangCEFRB1'],
+        $eportfolio['en']['langLangCEFRB2'],
+        $eportfolio['en']['langLangCEFRC1'],
+        $eportfolio['en']['langLangCEFRC2']
+    ]
+];
 
 $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
-        (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
-        (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
-        (3, 'gender', '$langGender', '', '4', 1, -2, 0, '".serialize($gender_options)."'),
-        (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
-        (5, 'personal_website', '$langPersWebsite', '$langePortfolioPersonalWebsiteDescr', '5', 1, -4, 0, ''),
-        (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
-        (7, 'employment', '$langEmployment', '$langePortfolioEmploymentDescr', '2', 2, -1, 0, ''),
-        (8, 'certificates_awards', '$langCertAwards', '$langePortfolioCertificatesAwardsDescr', '2', 3, 0, 0, ''),
-        (9, 'publications', '$langPublications', '$langePortfolioPublicationsDescr', '2', 3, -1, 0, ''),
-        (10, 'personal_goals', '$langPersGoals', '$langePortfolioPersonalGoalsDescr', '2', 4, 0, 0, ''),
-        (11, 'academic_goals', '$langAcademicGoals', '$langePortfolioAcademicGoalsDescr', '2', 4, -1, 0, ''),
-        (12, 'career_goals', '$langCareerGoals', '$langePortfolioCareerGoalsDescr', '2', 4, -2, 0, ''),
-        (13, 'personal_skills', '$langPersSkills', '$langePortfolioPersonalSkillsDescr', '2', 4, -3, 0, ''),
-        (14, 'academic_skills', '$langAcademicSkills', '$langePortfolioAcademicSkillsDescr', '2', 4, -4, 0, ''),
-        (15, 'career_skills', '$langCareerSkills', '$langePortfolioCareerSkillsDesc', '2', 4, -5, 0, ''),
-        (16, 'email', '$langEmail', '', '1', 5, 0, 0, ''),
-        (17, 'phone_number', '$langPhone', '', '1', 5, -1, 0, ''),
-        (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
-        (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
-        (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
-        (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, ''),
-        (22, 'gscholar', '$langGoogleScholarProfile', '', '5', 6, 0, 0, ''),
-        (23, 'scopus', '$langScopusID', '', '1', 6, -1, 0, ''),
-        (24, 'orcid', '$langOrcid', '', '5', 6, -2, 0, ''),
-        (25, 'el', '$langGreek', '', '4', 7, 0, 0, '".serialize($lang_proficiency_levels)."'),
-        (26, 'en', '$langEnglish', '', '4', 7, -1, 0, '".serialize($lang_proficiency_levels)."'),
-        (27, 'sq', '$langAlbanian', '', '4', 7, -2, 0, '".serialize($lang_proficiency_levels)."'),
-        (28, 'ar', '$langArabic', '', '4', 7, -3, 0, '".serialize($lang_proficiency_levels)."'),
-        (29, 'fr', '$langFrench', '', '4', 7, -4, 0, '".serialize($lang_proficiency_levels)."'),
-        (30, 'de', '$langGerman', '', '4', 7, -5, 0, '".serialize($lang_proficiency_levels)."'),
-        (31, 'it', '$langItalian', '', '4', 7, -6, 0, '".serialize($lang_proficiency_levels)."'),
-        (32, 'es', '$langSpanish', '', '4', 7, -7, 0, '".serialize($lang_proficiency_levels)."'),
-        (33, 'zh', '$langChinese', '', '4', 7, -8, 0, '".serialize($lang_proficiency_levels)."'),
-        (34, 'ru', '$langRussian', '', '4', 7, -9, 0, '".serialize($lang_proficiency_levels)."'),
-        (35, 'tr', '$langTurkish', '', '4', 7, -10, 0, '".serialize($lang_proficiency_levels)."'),
-        (36, 'other_languages', '$langOtherLanguages', '$langePortfolioOtherLanguagesDescr', '2', 7, -11, 0, ''),
-        (37, 'social_activities', '$langSocialActivities', '$langePortfolioSocialActivitiesDescr', '2', 8, 0, 0, ''),
-        (38, 'volunteer_activities', '$langVolunteerActivities', '$langePortfolioVolunteerActivitiesDescr', '2', 8, -1, 0, '')");
+        (1, 'birth_date', '".serialize(['el' => $eportfolio['el']['langBirthDate'], 'en' => $eportfolio['en']['langBirthDate']])."', '', '3', 1, 0, 0, ''),
+        (2, 'birth_place', '".serialize(['el' => $eportfolio['el']['langBirthPlace'], 'en' => $eportfolio['en']['langBirthPlace']])."', '', '1', 1, -1, 0, ''),
+        (3, 'gender', '".serialize(['el' => $eportfolio['el']['langGender'], 'en' => $eportfolio['en']['langGender']])."', '', '4', 1, -2, 0, '".serialize($gender_options)."'),
+        (4, 'about_me', '".serialize(['el' => $eportfolio['el']['langAboutMe'], 'en' => $eportfolio['en']['langAboutMe']])."', '".serialize(['el' => $eportfolio['el']['langAboutMeDescr'], 'en' => $eportfolio['en']['langAboutMeDescr']])."', '2', 1, -3, 0, ''),
+        (5, 'personal_website', '".serialize(['el' => $eportfolio['el']['langPersWebsite'], 'en' => $eportfolio['en']['langPersWebsite']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioPersonalWebsiteDescr'], 'en' => $eportfolio['en']['langePortfolioPersonalWebsiteDescr']])."', '5', 1, -4, 0, ''),
+        (6, 'education', '".serialize(['el' => $eportfolio['el']['langEducation'], 'en' => $eportfolio['en']['langEducation']])."', '".serialize(['el' => $eportfolio['el']['langEducationDescr'], 'en' => $eportfolio['en']['langEducationDescr']])."', '2', 2, 0, 0, ''),
+        (7, 'employment', '".serialize(['el' => $eportfolio['el']['langEmployment'], 'en' => $eportfolio['en']['langEmployment']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioEmploymentDescr'], 'en' => $eportfolio['en']['langePortfolioEmploymentDescr']])."', '2', 2, -1, 0, ''),
+        (8, 'certificates_awards', '".serialize(['el' => $eportfolio['el']['langCertAwards'], 'en' => $eportfolio['en']['langCertAwards']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioCertificatesAwardsDescr'], 'en' => $eportfolio['en']['langePortfolioCertificatesAwardsDescr']])."', '2', 3, 0, 0, ''),
+        (9, 'publications', '".serialize(['el' => $eportfolio['el']['langPublications'], 'en' => $eportfolio['en']['langPublications']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioPublicationsDescr'], 'en' => $eportfolio['en']['langePortfolioPublicationsDescr']])."', '2', 3, -1, 0, ''),
+        (10, 'personal_goals', '".serialize(['el' => $eportfolio['el']['langPersGoals'], 'en' => $eportfolio['en']['langPersGoals']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioPersonalGoalsDescr'], 'en' => $eportfolio['en']['langePortfolioPersonalGoalsDescr']])."', '2', 4, 0, 0, ''),
+        (11, 'academic_goals', '".serialize(['el' => $eportfolio['el']['langAcademicGoals'], 'en' => $eportfolio['en']['langAcademicGoals']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioAcademicGoalsDescr'], 'en' => $eportfolio['en']['langePortfolioAcademicGoalsDescr']])."', '2', 4, -1, 0, ''),
+        (12, 'career_goals', '".serialize(['el' => $eportfolio['el']['langCareerGoals'], 'en' => $eportfolio['en']['langCareerGoals']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioCareerGoalsDescr'], 'en' => $eportfolio['en']['langePortfolioCareerGoalsDescr']])."', '2', 4, -2, 0, ''),
+        (13, 'personal_skills', '".serialize(['el' => $eportfolio['el']['langPersSkills'], 'en' => $eportfolio['en']['langPersSkills']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioPersonalSkillsDescr'], 'en' => $eportfolio['en']['langePortfolioPersonalSkillsDescr']])."', '2', 4, -3, 0, ''),
+        (14, 'academic_skills', '".serialize(['el' => $eportfolio['el']['langAcademicSkills'], 'en' => $eportfolio['en']['langAcademicSkills']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioAcademicSkillsDescr'], 'en' => $eportfolio['en']['langePortfolioAcademicSkillsDescr']])."', '2', 4, -4, 0, ''),
+        (15, 'career_skills', '".serialize(['el' => $eportfolio['el']['langCareerSkills'], 'en' => $eportfolio['en']['langCareerSkills']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioCareerSkillsDesc'], 'en' => $eportfolio['en']['langePortfolioCareerSkillsDesc']])."', '2', 4, -5, 0, ''),
+        (16, 'email', '".serialize(['el' => $eportfolio['el']['langEmail'], 'en' => $eportfolio['en']['langEmail']])."', '', '1', 5, 0, 0, ''),
+        (17, 'phone_number', '".serialize(['el' => $eportfolio['el']['langPhone'], 'en' => $eportfolio['en']['langPhone']])."', '', '1', 5, -1, 0, ''),
+        (18, 'Address', '".serialize(['el' => $eportfolio['el']['langAddress'], 'en' => $eportfolio['en']['langAddress']])."', '', '1', 5, -2, 0, ''),
+        (19, 'fb', '".serialize(['el' => $eportfolio['el']['langFBProfile'], 'en' => $eportfolio['en']['langFBProfile']])."', '', '5', 5, -3, 0, ''),
+        (20, 'twitter', '".serialize(['el' => $eportfolio['el']['langTwitterAccount'], 'en' => $eportfolio['en']['langTwitterAccount']])."', '', '5', 5, -4, 0, ''),
+        (21, 'linkedin', '".serialize(['el' => $eportfolio['el']['langLinkedInProfile'], 'en' => $eportfolio['en']['langLinkedInProfile']])."', '', '5', 5, -5, 0, ''),
+        (22, 'gscholar', '".serialize(['el' => $eportfolio['el']['langGoogleScholarProfile'], 'en' => $eportfolio['en']['langGoogleScholarProfile']])."', '', '5', 6, 0, 0, ''),
+        (23, 'scopus', '".serialize(['el' => $eportfolio['el']['langScopusID'], 'en' => $eportfolio['en']['langScopusID']])."', '', '1', 6, -1, 0, ''),
+        (24, 'orcid', '".serialize(['el' => $eportfolio['el']['langOrcid'], 'en' => $eportfolio['en']['langOrcid']])."', '', '5', 6, -2, 0, ''),
+        (25, 'el', '".serialize(['el' => $eportfolio['el']['langGreek'], 'en' => $eportfolio['en']['langGreek']])."', '', '4', 7, 0, 0, '".serialize($lang_proficiency_levels)."'),
+        (26, 'en', '".serialize(['el' => $eportfolio['el']['langEnglish'], 'en' => $eportfolio['en']['langEnglish']])."', '', '4', 7, -1, 0, '".serialize($lang_proficiency_levels)."'),
+        (27, 'sq', '".serialize(['el' => $eportfolio['el']['langAlbanian'], 'en' => $eportfolio['en']['langAlbanian']])."', '', '4', 7, -2, 0, '".serialize($lang_proficiency_levels)."'),
+        (28, 'ar', '".serialize(['el' => $eportfolio['el']['langArabic'], 'en' => $eportfolio['en']['langArabic']])."', '', '4', 7, -3, 0, '".serialize($lang_proficiency_levels)."'),
+        (29, 'fr', '".serialize(['el' => $eportfolio['el']['langFrench'], 'en' => $eportfolio['en']['langFrench']])."', '', '4', 7, -4, 0, '".serialize($lang_proficiency_levels)."'),
+        (30, 'de', '".serialize(['el' => $eportfolio['el']['langGerman'], 'en' => $eportfolio['en']['langGerman']])."', '', '4', 7, -5, 0, '".serialize($lang_proficiency_levels)."'),
+        (31, 'it', '".serialize(['el' => $eportfolio['el']['langItalian'], 'en' => $eportfolio['en']['langItalian']])."', '', '4', 7, -6, 0, '".serialize($lang_proficiency_levels)."'),
+        (32, 'es', '".serialize(['el' => $eportfolio['el']['langSpanish'], 'en' => $eportfolio['en']['langSpanish']])."', '', '4', 7, -7, 0, '".serialize($lang_proficiency_levels)."'),
+        (33, 'zh', '".serialize(['el' => $eportfolio['el']['langChinese'], 'en' => $eportfolio['en']['langChinese']])."', '', '4', 7, -8, 0, '".serialize($lang_proficiency_levels)."'),
+        (34, 'ru', '".serialize(['el' => $eportfolio['el']['langRussian'], 'en' => $eportfolio['en']['langRussian']])."', '', '4', 7, -9, 0, '".serialize($lang_proficiency_levels)."'),
+        (35, 'tr', '".serialize(['el' => $eportfolio['el']['langTurkish'], 'en' => $eportfolio['en']['langTurkish']])."', '', '4', 7, -10, 0, '".serialize($lang_proficiency_levels)."'),
+        (36, 'other_languages', '".serialize(['el' => $eportfolio['el']['langOtherLanguages'], 'en' => $eportfolio['en']['langOtherLanguages']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioOtherLanguagesDescr'], 'en' => $eportfolio['en']['langePortfolioOtherLanguagesDescr']])."', '2', 7, -11, 0, ''),
+        (37, 'social_activities', '".serialize(['el' => $eportfolio['el']['langSocialActivities'], 'en' => $eportfolio['en']['langSocialActivities']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioSocialActivitiesDescr'], 'en' => $eportfolio['en']['langePortfolioSocialActivitiesDescr']])."', '2', 8, 0, 0, ''),
+        (38, 'volunteer_activities', '".serialize(['el' => $eportfolio['el']['langVolunteerActivities'], 'en' => $eportfolio['en']['langVolunteerActivities']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioVolunteerActivitiesDescr'], 'en' => $eportfolio['en']['langePortfolioVolunteerActivitiesDescr']])."', '2', 8, -1, 0, '')");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3032,6 +3070,23 @@ $db->query("CREATE TABLE `session_user_material` (
           FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
           FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
 
+// External Repositories
+$db->query("CREATE TABLE `external_repository` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) NOT NULL,
+    `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay','islandora') NOT NULL,
+    `base_url` varchar(512) DEFAULT NULL,
+    `api_key` varchar(255) DEFAULT NULL,
+    `auth_type` enum('none','api_key','oauth') NOT NULL DEFAULT 'none',
+    `enabled` tinyint(1) NOT NULL DEFAULT 1,
+    `config` text DEFAULT NULL COMMENT 'JSON configuration for additional settings',
+    `created` datetime DEFAULT NULL,
+    `updated` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `idx_type` (`type`),
+    INDEX `idx_enabled` (`enabled`)
+) $tbl_options");
+
 $db->query("CREATE TABLE `course_resource_usage` (
     `course_id` int(11) NOT NULL,
     `disk_size` bigint DEFAULT NULL,
@@ -3040,6 +3095,27 @@ $db->query("CREATE TABLE `course_resource_usage` (
     CONSTRAINT FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
         ON DELETE CASCADE ON UPDATE CASCADE
     ) $tbl_options");
+
+$db->query("CREATE TABLE `external_resource` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL,
+    `repository_id` int(11) NOT NULL,
+    `external_id` varchar(255) DEFAULT NULL COMMENT 'ID in the external system',
+    `title` varchar(512) NOT NULL,
+    `description` text DEFAULT NULL,
+    `url` varchar(1024) NOT NULL,
+    `resource_type` varchar(50) DEFAULT NULL COMMENT 'video, article, image, document',
+    `thumbnail_url` varchar(512) DEFAULT NULL,
+    `metadata` text DEFAULT NULL COMMENT 'JSON for additional data',
+    `rich_preview` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 = rich media preview, 0 = plain link preview',
+    `created` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `idx_course` (`course_id`),
+    INDEX `idx_repository` (`repository_id`),
+    INDEX `idx_external_id` (`external_id`),
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`repository_id`) REFERENCES `external_repository` (`id`) ON DELETE CASCADE
+) $tbl_options");
 
 $db->query("CREATE TABLE `sticky_notes_topic` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
