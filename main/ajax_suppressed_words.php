@@ -29,6 +29,17 @@ if (!isset($_SESSION['uid'])) {
 // Get the requested action (default is 'words')
 $action = $_GET['action'] ?? 'words';
 
+// Check if suppressed words are enabled
+if (!get_config('suppressed_words_enabled')) {
+    header('Content-Type: application/json; charset=utf-8');
+    if ($action === 'version') {
+        echo json_encode(0);
+    } else {
+        echo json_encode([]);
+    }
+    exit;
+}
+
 // Validate action to prevent any unexpected behavior
 if (!in_array($action, ['words', 'version'])) {
     $action = 'words';

@@ -21,6 +21,28 @@
             <div class="col-12 mt-4">
                 <div class="card shadow-sm-eclass border-0">
                     <div class="card-body">
+                        <form action="{{ $_SERVER['SCRIPT_NAME'] }}" method="POST">
+                            {!! generate_csrf_token_form_field() !!}
+                            <div class='checkbox'>
+                                <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                    <input type='checkbox' name='suppressed_words_enabled' value='1' {{ get_config('suppressed_words_enabled') ? 'checked' : '' }}>
+                                    <span class='checkmark'></span>
+                                    {{ trans('langCEnabled') }}
+                                </label>
+                            </div>
+                            <div class="text-end mt-3">
+                                <button type="submit" name="submit_config" class="btn btn-primary submitAdminBtn">
+                                    {{ trans('langSubmit') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 mt-4">
+                <div class="card shadow-sm-eclass border-0">
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table id="suppressed_words_table" class="table-default">
                                 <thead>
