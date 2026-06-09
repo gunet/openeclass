@@ -7988,6 +7988,9 @@ function theme_initialization() {
                 .form-homepage-login {
                     color: $theme_options_styles[textColorCardLogin] !important;
                 }
+                .form-homepage-login #or {
+                    color: $theme_options_styles[textColorCardLogin] !important;
+                }
             ";
         }
 
@@ -7999,7 +8002,7 @@ function theme_initialization() {
 
         if(isset($theme_options_styles['linkColorCardLogin'])) {
             $styles_str .= "
-                .form-homepage-login a {
+                .form-homepage-login a:not(.sso-btn) {
                     color: $theme_options_styles[linkColorCardLogin] !important;
                 }
             ";
@@ -8013,7 +8016,7 @@ function theme_initialization() {
 
         if(isset($theme_options_styles['linkHoverColorCardLogin'])) {
             $styles_str .= "
-                .form-homepage-login a:hover {
+                .form-homepage-login a:not(.sso-btn):hover {
                     color:$theme_options_styles[linkHoverColorCardLogin] !important;
                 }
             ";
