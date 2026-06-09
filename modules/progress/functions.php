@@ -27,7 +27,7 @@ function display_certificates(): void
     global $course_id, $tool_content, $head_content, $course_code, $is_editor, $uid,
            $langNoCertificates, $langNoCertificatesStud, $langActive, $langInactive, $langNoThumbnail,
            $langEditChange, $langNewCertificate, $langActivate, $langDeactivate,
-           $webDir, $langTotalPercentCompleteness;
+           $webDir, $langTotalPercentCompleteness, $langDelete, $langConfirmDelete;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
@@ -101,16 +101,25 @@ function display_certificates(): void
                         </div>
                     </div>";
             } else {
-                $vis_label = $data->active ? $langDeactivate : $langActivate;
-                $right_html = "
-                    <div class='d-flex gap-2'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1' class='btn submitAdminBtn btn-sm'>
-                            <i class='fa fa-pencil'></i>&nbsp;$langEditChange
-                        </a>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-danger btn-sm text-decoration-none' : 'btn btn-success btn-sm text-decoration-none') ."'>
-                            $vis_label
-                        </a>
-                    </div>";
+                $right_html = action_button(array(
+                    array(
+                        'title' => $langEditChange,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
+                        'icon' => 'fa-pencil'
+                    ),
+                    array(
+                        'title' => $data->active ? $langDeactivate : $langActivate,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" . ($data->active ? '0' : '1'),
+                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'
+                    ),
+                    array(
+                        'title' => $langDelete,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
+                        'icon' => 'fa-xmark',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmDelete
+                    ),
+                ));
             }
 
             $cert_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id";
@@ -152,8 +161,8 @@ function display_certificates(): void
 function display_badges(): void
 {
     global $course_id, $tool_content, $head_content, $course_code, $is_editor, $uid,
-           $langNoBadges, $langNoBadgesStud, $langEditChange,
-           $langActivate, $langDeactivate, $langNewBadge,
+           $langNoBadges, $langNoBadgesStud, $langEditChange, $langDelete,
+           $langActivate, $langDeactivate, $langNewBadge, $langConfirmDelete,
            $langActive, $langInactive, $urlServer, $langTotalPercentCompleteness;
 
     if ($is_editor) {
@@ -220,16 +229,25 @@ function display_badges(): void
                         </div>
                     </div>";
             } else {
-                $vis_label = $data->active ? $langDeactivate : $langActivate;
-                $right_html = "
-                    <div class='d-flex gap-2'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1' class='btn submitAdminBtn btn-sm'>
-                            <i class='fa fa-pencil'></i>&nbsp;$langEditChange
-                        </a>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-danger btn-sm text-decoration-none' : 'btn btn-success btn-sm text-decoration-none') ."'>
-                            $vis_label
-                        </a>
-                    </div>";
+                $right_html = action_button(array(
+                    array(
+                        'title' => $langEditChange,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1",
+                        'icon' => 'fa-pencil'
+                    ),
+                    array(
+                        'title' => $data->active ? $langDeactivate : $langActivate,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" . ($data->active ? '0' : '1'),
+                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'
+                    ),
+                    array(
+                        'title' => $langDelete,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
+                        'icon' => 'fa-xmark',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmDelete
+                    )
+                ));
             }
 
             $badge_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id";
@@ -399,21 +417,29 @@ function display_points_games(): void
 
             if ($is_editor) {
                 $tool_content .= action_button(array(
-                    array('title' => $langEditChange,
+                    array(
+                        'title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;edit=1",
-                        'icon' => 'fa-edit'),
-                    array('title' => $data->active ? $langDeactivate : $langActivate,
+                        'icon' => 'fa-edit'
+                    ),
+                    array(
+                        'title' => $data->active ? $langDeactivate : $langActivate,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;vis=" . ($data->active ? '0' : '1'),
-                        'icon' => 'fa-power-off'),
-                    array('title' => $langResetPointsGame,
+                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'
+                    ),
+                    array(
+                        'title' => $langResetPointsGame,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;reset_points_game=$data->id",
                         'icon' => 'fa-arrows-rotate',
-                        'confirm' => $langConfirmResetPointsGame),
-                    array('title' => $langPurge,
+                        'confirm' => $langConfirmResetPointsGame
+                    ),
+                    array(
+                        'title' => $langPurge,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_points_game=$data->id",
                         'icon' => 'fa-trash-can',
                         'class' => 'delete',
-                        'confirm' => $langConfirmPurgePointsGame)
+                        'confirm' => $langConfirmPurgePointsGame
+                    )
                 ));
             }
 
@@ -506,16 +532,18 @@ function display_course_completion(): void
         }
     }
 
-    $vis_label = $data->active ? $langDeactivate : $langActivate;
-    $editor_btns = "
-        <div class='d-flex gap-2'>
-            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-default btn-sm' : 'btn btn-success btn-sm text-decoration-none') ."'>
-                $vis_label
-            </a>
-            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id&amp;tab=course_completion' class='btn deleteAdminBtn btn-sm' onClick='return confirmation(\"$langConfirmDelete\");'>
-                <i class='fa fa-xmark'></i>&nbsp;$langDelete
-            </a>            
-        </div>";
+    $editor_btns = action_button(array(
+        array('title' => $data->active ? $langDeactivate : $langActivate,
+             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;vis=" . ($data->active ? '0' : '1'),
+             'icon' => 'fa-power-off'
+        ),
+        array('title' => $langDelete,
+             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id&amp;tab=course_completion",
+             'icon' => 'fa-xmark',
+             'class' => 'delete',
+             'confirm' => $langConfirmDelete
+        ),
+    ));
 
     $done = count($done_ids);
     $pct  = $total > 0 ? round($done / $total * 100) : 0;
@@ -542,37 +570,39 @@ function display_course_completion(): void
     // Summary card
     if ($is_editor) {
         $tool_content .= "
-        <div onclick=\"window.location.href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'\" style='cursor:pointer;'>        
-            <div class='col-12 mt-4'>
-                <div class='card rounded-3'>                
-                    <div class='card-body p-4'>                    
-                        <h4>$langCourseCompletion</h4>                    
-                        <div class='d-flex align-items-center justify-content-between gap-3 flex-wrap'>
-                            $status_pill
-                            $editor_btns
+            <div onclick=\"window.location.href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'\" style='cursor:pointer;'>        
+                <div class='col-12 mt-4'>
+                    <div class='card rounded-3'>                
+                        <div class='card-body p-4'>                    
+                            <h4>$langCourseCompletion</h4>                    
+                            <div class='d-flex align-items-center justify-content-between gap-3 flex-wrap' >
+                                $status_pill
+                                <div class='reward-bar-col d-flex align-items-center justify-content-end' onclick='event.stopPropagation();'>
+                                    $editor_btns
+                                </div>                            
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>";
+            </div>";
     } else {
         $tool_content .= "
-        <div class='col-12 mt-4'>
-            <div class='card rounded-3'>
-                <div class='card-body p-4'>
-                    <div class='d-flex justify-content-center align-items-center gap-4'>
-                        <div class='cc-donut-wrap'>
-                            $donut_svg
-                            <div class='cc-donut-pct'>{$pct}%</div>
-                        </div>
-                        <div>
-                            <div style='font-size:17px;font-weight:700;color:#1f2937;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
-                            <div style='font-size:13px;color:#6b7280;margin-bottom:10px;'>$sub_text</div>                            
+            <div class='col-12 mt-4'>
+                <div class='card rounded-3'>
+                    <div class='card-body p-4'>
+                        <div class='d-flex justify-content-center align-items-center gap-4'>
+                            <div class='cc-donut-wrap'>
+                                $donut_svg
+                                <div class='cc-donut-pct'>{$pct}%</div>
+                            </div>
+                            <div>
+                                <div style='font-size:17px;font-weight:700;color:#1f2937;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
+                                <div style='font-size:13px;color:#6b7280;margin-bottom:10px;'>$sub_text</div>                            
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>";
+            </div>";
     }
 
     if (!$is_editor || isset($_GET['badge_id'])) { // Activities card
@@ -1478,7 +1508,8 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
  * @param type $points_game_id
  * @param type $activity
  */
-function insert_rec_activity($points_game_id, $activity) {
+function insert_rec_activity($points_game_id, $activity): void
+{
     switch ($activity) {
         case BlogEvent::ACTIVITY:
             display_blog_rec_act_form($points_game_id);
@@ -1709,7 +1740,8 @@ function display_modification_rec_activity($points_game_id, $activity_id) {
  * @param type $activity_id
  * @param int $unit_id
  */
-function display_modification_activity($element, $element_id, $activity_id, $unit_id = 0) {
+function display_modification_activity($element, $element_id, $activity_id, $unit_id = 0): void
+{
     global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $langImgFormsDes, $langPoints, $langValue;
 
     if ($element == 'certificate') {
@@ -1746,9 +1778,9 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
         $tool_content .= "<div class='form-group mt-3'>";
-        $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langOperator:</label>";
+        $tool_content .= "<label for='name' class='col-sm-2 control-label-notes'>$langOperator:</label>";
         $tool_content .= "<span class='col-sm-2'>" . selection($operators, 'cert_operator', $data->operator) . "</span>";
-        $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langValue:</label>";
+        $tool_content .= "<label for='name' class='col-sm-2 control-label-notes'>$langValue:</label>";
         $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='cert_threshold' value='$data->threshold'></span>";
         if ($element == 'points_game') {
             $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langPoints:</label>";
@@ -1767,7 +1799,7 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
 }
 
 /**
- * @brief assignments display form
+ * @brief assignment display form
  * @param type $element
  * @param type $element_id
  * @param int $unit_id
@@ -1777,7 +1809,7 @@ function display_available_assignments($element, $element_id, $activity_type, $u
 
     global $course_id, $tool_content, $langNoAssign, $course_code,
            $langTitle, $langGroupWorkDeadline_of_Submission,
-           $langAddModulesButton, $langChoice, $langParticipateSimple, $langPoints,
+           $langAddModulesButton, $langChoice, $langPoints,
            $langOperator, $langGradebookGrade, $urlServer, $langSelect, $langPollFillText;
 
     if ($element == 'certificate') {
@@ -1890,7 +1922,8 @@ function display_available_assignments($element, $element_id, $activity_type, $u
  * @param int $unit_id
  * @param int $unit_resource_id
  */
-function display_available_exercises($element, $element_id, $unit_id = 0, $unit_resource_id = 0) {
+function display_available_exercises($element, $element_id, $unit_id = 0, $unit_resource_id = 0): void
+{
 
     global $course_id, $course_code, $tool_content, $urlServer, $langExercices,
             $langNoExercises, $langChoice, $langAddModulesButton, $langPoints,
@@ -2916,7 +2949,8 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
  * @param int $unit_id
  * @param int $unit_resource_id
  */
-function display_available_polls($element, $element_id, $unit_id = 0, int $unit_resource_id = 0) {
+function display_available_polls($element, $element_id, $unit_id = 0, int $unit_resource_id = 0): void
+{
 
     global $course_id, $course_code, $urlServer, $tool_content, $langPoints, $langPollFillText,
             $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton, $langSelect;
@@ -3011,7 +3045,8 @@ function display_available_polls($element, $element_id, $unit_id = 0, int $unit_
  * @param type $element_id
  * @param int $unit_id
  */
-function display_available_wiki($element, $element_id, $unit_id = 0) {
+function display_available_wiki($element, $element_id, $unit_id = 0): void
+{
 
     global $tool_content, $langResourceAlreadyAdded, $langPoints,
     $langAddModulesButton, $langChoice, $langTitle, $langWikiPages,
@@ -3084,7 +3119,8 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
  * @param type $element_id
  * @param int $unit_id
  */
-function display_available_participation($element, $element_id, $unit_id = 0) {
+function display_available_participation($element, $element_id, $unit_id = 0): void
+{
 
     global $tool_content, $course_code, $langHours,
            $langTitle, $langChoice, $langAddModulesButton,
@@ -3135,7 +3171,8 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
  * @param type $element
  * @param int $unit_id
  */
-function display_available_gradebooks($element, $element_id, $unit_id = 0) {
+function display_available_gradebooks($element, $element_id, $unit_id = 0): void
+{
 
     global $course_id, $tool_content, $langNoGradeBooks, $course_code, $urlServer,
            $langAvailableGradebooks, $langStart, $langFinish, $langChoice,
@@ -3199,7 +3236,8 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
  * @param $element_id
  * @param int $unit_id
  */
-function display_available_coursecompletiongrade($element, $element_id, $unit_id = 0) {
+function display_available_coursecompletiongrade($element, $element_id, $unit_id = 0): void
+{
 
     global $tool_content, $langAddModulesButton, $langCourseCompletion,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
@@ -3248,7 +3286,8 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
  * @param int $element_id
  * @param int $unit_id
  */
-function display_available_attendances($element, $element_id, $unit_id = 0) {
+function display_available_attendances($element, $element_id, $unit_id = 0): void
+{
 
     global $course_id, $tool_content, $langNoAttendances, $course_code, $urlServer,
            $langAvailableAttendances, $langStart, $langFinish, $langChoice,
@@ -3558,7 +3597,6 @@ function display_settings($element, $element_id, $unit_id = 0): void
     $issuer = $data->issuer;
     $title = $data->title;
     $description = $data->description;
-    $message = $data->message;
 
     if ($bundle != -1) {
         if ($element == 'badge') {
@@ -3566,11 +3604,10 @@ function display_settings($element, $element_id, $unit_id = 0): void
             $badge_icon = $badge_details[key($badge_details)];
             $img_html = "<img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($badge_icon) . "' style='width:80px;height:auto;'>";
         } else {
-            $template_details = get_certificate_template($data->template);
-            $template_filename = $template_details[key($template_details)];
-            //$thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
             $thumbnail_filename = certificate_thumbnails($data->template);
-            $img_html = "<img src='{$thumbnail_filename}' style='width:65%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
+            $img_html = "<a href='$_SERVER[SCRIPT_NAME]?course_code=$course_code&certificate_id=$element_id&preview=1' target=_blank>
+                            <img src='{$thumbnail_filename}' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>
+                        </a>";
         }
 
         $desc_html   = !empty($description) ? "<div style='font-size:14px;margin-top:6px;'>" . q($description) . "</div>" : '';
@@ -3583,38 +3620,38 @@ function display_settings($element, $element_id, $unit_id = 0): void
 
         if ($element == 'certificate') {
             $tool_content .= "
-            <div class='col-12 mt-4'>
-                <div class='card rounded-3'>
-                    <div class='card-body p-4'>
-                        " . (!empty($img_html) ? "<div style='text-align:center;margin-bottom:20px;'>$img_html</div>" : '') . "
-                        <div class='d-flex justify-content-between align-items-start gap-3'>
-                            <div style='font-size:18px;font-weight:700;'>$title</div>
-                            $edit_btn
+                <div class='col-12 mt-4'>
+                    <div class='card rounded-3'>
+                        <div class='card-body p-4'>                                            
+                            <div class='d-flex justify-content-between align-items-start gap-3'>
+                                <h3>$title</h3>
+                                $edit_btn
+                            </div>
+                            $desc_html
+                            $issuer_html
+                            " . (!empty($img_html) ? "<div style='text-align:center;margin-bottom:20px;'>$img_html</div>" : '') . "                        
                         </div>
-                        $desc_html
-                        $issuer_html
                     </div>
-                </div>
-            </div>";
+                </div>";
         } else {
             $tool_content .= "
-            <div class='col-12 mt-4'>
-                <div class='card rounded-3'>
-                    <div class='card-body p-4'>
-                        <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
-                            <div style='flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center;'>$img_html</div>
-                            <div style='flex-grow:1;'>
-                                <div class='d-flex justify-content-between align-items-start gap-3'>
-                                    <div style='font-size:18px;font-weight:700;'>$title</div>
-                                    $edit_btn
+                <div class='col-12 mt-4'>
+                    <div class='card rounded-3'>
+                        <div class='card-body p-4'>
+                            <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
+                                <div style='flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center;'>$img_html</div>
+                                <div style='flex-grow:1;'>
+                                    <div class='d-flex justify-content-between align-items-start gap-3'>
+                                        <div style='font-size:18px;font-weight:700;'>$title</div>
+                                        $edit_btn
+                                    </div>
+                                    $desc_html
+                                    $issuer_html
                                 </div>
-                                $desc_html
-                                $issuer_html
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>";
+                </div>";
         }
     }
 }
@@ -4758,6 +4795,7 @@ function display_users_points_game_progress ($points_game_id): void
  */
 function display_users_progress($element, $element_id): void
 {
+
     global $tool_content, $head_content, $course_id, $langNoCertificateUsers,  $langUsersS,
            $langAmShort, $langProgress, $langUsersCertResults, $langCompletion,
            $urlAppend, $course_code;
@@ -4949,7 +4987,7 @@ function display_user_progress_details($element, $element_id, $user_id): void
 
     global $tool_content, $langNoUserActivity, $langCriteria, $langpublisher, $langTotalPercentCompleteness,
            $langCertAddress, $langRubricCrit, $langCompleted, $langSurveyNotStarted, $head_content,
-           $urlServer, $webDir;
+           $urlServer, $webDir, $course_code, $is_editor;
 
     $element_title = get_cert_title($element, $element_id);
     $resource_data = array();
@@ -5011,7 +5049,14 @@ function display_user_progress_details($element, $element_id, $user_id): void
             $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
             if (file_exists($webDir . CERT_TEMPLATE_PATH . $thumbnail_filename)) {
                 $cert_thumbnail_url = $urlServer . CERT_TEMPLATE_PATH . q($thumbnail_filename);
-                $img_html = "<img src='$cert_thumbnail_url' style='width:65%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
+                if ($is_editor) {
+                    $img_html = "<img src='$cert_thumbnail_url' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
+                } else {
+                    $img_html = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&certificate_id=$element_id&u=$user_id&p=1' target='_blank'>
+                                <img src='$cert_thumbnail_url' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>
+                             </a>";
+                }
+
             }
         }
     }
@@ -5050,11 +5095,10 @@ function display_user_progress_details($element, $element_id, $user_id): void
         $tool_content .= "
         <div class='col-12 mt-4'>
             <div class='card rounded-3'>
-                <div class='card-body p-4'>" .
-                    (!empty($img_html) ? "<div style='text-align:center;margin-bottom:20px;'>$img_html</div>" : '') . "
+                <div class='card-body p-4'>                     
                     <div style='font-size:18px;font-weight:700;'>$element_title</div>
                     $desc_html
-                    $issuer_html
+                    $issuer_html " . (!empty($img_html) ? "<div style='text-align:center;margin-bottom:20px;'>$img_html</div>" : '') . "
                     $cert_link_html
                 </div>
             </div>
@@ -5066,12 +5110,15 @@ function display_user_progress_details($element, $element_id, $user_id): void
             <div class='card rounded-3'>
                 <div class='card-body p-4'>
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
-                        <div style='flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center;'>$img_html</div>
+                        <div style='flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center;'>
+                            $img_html
+                        </div>
                         <div>
                             <div style='font-size:18px;font-weight:700;'>$element_title</div>
                             $desc_html
                             $issuer_html
-                            $cert_link_html                        </div>
+                            $cert_link_html                        
+                        </div>
                     </div>
                 </div>
             </div>
