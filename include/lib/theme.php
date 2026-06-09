@@ -617,6 +617,9 @@ function theme_initialization() {
 
         if (isset($theme_options_styles['introTextCenterPos'])) {
             $styles_str .= "
+                .eclass-title {
+                    text-align: center !important;
+                }
                 .jumbotron-intro-text {
                     text-align: justify !important;
                 }
