@@ -136,6 +136,23 @@ function theme_initialization() {
                             no-repeat,
                             no-repeat !important;
                     }
+
+                    @media (max-width: 991px) {
+                        .portfolio-profile-container .padding-default {
+                            background-size:
+                                cover,
+                                cover !important;
+
+                            background-position:
+                                center top,
+                                center top !important;
+
+                            background-repeat:
+
+                                no-repeat,
+                                no-repeat !important;
+                        }
+                    }
                 ";
             }
         }
@@ -378,12 +395,31 @@ function theme_initialization() {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////// BACKGROUND IMAGE OF LOGIN FORM ///////////////////////////
+        /////////////////// IMAGE OF THE RIGHT SIDE OF THE LOGIN PAGE ///////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
         if (isset($theme_options_styles['loginImgL'])){
             $loginIMG =  "$urlThemeData/$theme_options_styles[loginImgL]";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// BACKGROUND IMAGE IN THE LOGIN PAGE ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (isset($theme_options_styles['loginBgImage'])){
+            $bgloginimage =  "$urlThemeData/$theme_options_styles[loginBgImage]";
+            $styles_str .= "
+                .login-main-section {
+                    background-image: url($bgloginimage);
+                    background-size: cover !important;
+                    background-repeat: no-repeat !important;
+                    background-position: center center !important;
+                }
+            ";
+            
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -587,6 +623,11 @@ function theme_initialization() {
 
         if (isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement']=='center-position') {
             $PositionFormLogin = 1;
+            $styles_str .= "
+                .login-main-section h1 {
+                    display: none;
+                }
+            ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -6592,6 +6633,12 @@ function theme_initialization() {
                     .main-maincontent {
                         border: solid 1px $theme_options_styles[BorderLeftToRightColumnCourseBgColor] !important;
                     }
+                    @media(max-width: 991px) {
+                        .ContentLeftNav, 
+                        .main-maincontent {
+                            border: 0px !important;
+                        }
+                    }
                 ";
             }
         }
@@ -6806,6 +6853,18 @@ function theme_initialization() {
 
 
             ";
+
+            if(!empty($theme_options_styles['enable_aside_main_cards'])) { 
+                $styles_str .= "
+                    .main-section .main-container {
+                        border: 1px solid $theme_options_styles[clBorderPanels];
+                    }
+
+                    .main-container.main-container-login {
+                        border: 0px !important;
+                    }
+                ";
+            }
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -7763,52 +7822,65 @@ function theme_initialization() {
             </script>";
 
             $styles_str .= "
+
+                @media (max-width: 991px) {
+                    .portfolio-courses-container {
+                        padding: 0px;
+                    }
+                    .portfolio-profile-container {
+                        padding-top: 56px !important;
+                        padding-left: 0px !important;
+                        padding-bottom: 0px !important;
+                        padding-right: 0px !important;
+                    }
+                }
                 
-                .main-section .main-container {
-                    padding: 45px 45px !important;
-                    border-radius: 32px !important;
-                    margin-bottom: 35px !important;
-                    margin-top: 35px !important;
-                }
-
-                .module-container .col_maincontent_active {
-                    padding: 45px 45px !important;
-                }
-
-                .portfolio-profile-container .padding-default {
-                    position: relative !important;
-                    overflow: hidden !important;
-                    margin-top: 35px !important;
-                    margin-bottom: 35px !important;
-                    padding: 45px 55px !important;
-                    border-radius: 32px !important;
-                }
-
-                .portfolio-profile-container .padding-default::after {
-                    content:'' !important;
-                    position:absolute !important;
-                    right:-80px !important;
-                    bottom:-150px !important;
-                    width:350px !important;
-                    height:350px !important;
-                    filter: blur(60px) !important;
-                    z-index:0 !important;
-
-                }
-                    
-                .portfolio-profile-container .container.padding-default > * {
-                    position:relative !important;
-                    z-index:2 !important;
-                }
-
-                .portfolio-courses-container .padding-default {
-                    padding: 45px 55px !important;
-                    border-radius: 32px !important;
-                    margin-bottom: 35px !important;
-                } 
-
-
                 @media (min-width: 992px) {
+
+                    .main-section .main-container {
+                        padding: 45px 45px !important;
+                        border-radius: 32px !important;
+                        margin-bottom: 35px !important;
+                        margin-top: 35px !important;
+                    }
+
+                    .module-container .col_maincontent_active {
+                        padding: 45px 45px !important;
+                    }
+
+                    .portfolio-profile-container .padding-default {
+                        position: relative !important;
+                        overflow: hidden !important;
+                        margin-top: 35px !important;
+                        margin-bottom: 35px !important;
+                        padding: 45px 55px !important;
+                        border-radius: 32px !important;
+                    }
+
+                    .portfolio-profile-container .padding-default::after {
+                        content:'' !important;
+                        position:absolute !important;
+                        right:-80px !important;
+                        bottom:-150px !important;
+                        width:350px !important;
+                        height:350px !important;
+                        filter: blur(60px) !important;
+                        z-index:0 !important;
+
+                    }
+                        
+                    .portfolio-profile-container .container.padding-default > * {
+                        position:relative !important;
+                        z-index:2 !important;
+                    }
+
+                    .portfolio-courses-container .padding-default {
+                        padding: 45px 55px !important;
+                        border-radius: 32px !important;
+                        margin-bottom: 35px !important;
+                    } 
+
+
                     body:has(.sidebar-card) .main-maincontent {
                         border-top-left-radius: 0px;
                         border-top-right-radius: 32px;
@@ -7844,6 +7916,89 @@ function theme_initialization() {
                 } 
                 .main-container.main-container-login {
                     background-color: transparent !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// BACKGROUND COLOR TO THE FORM LOGIN ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(isset($theme_options_styles['BgColorCardLogin'])) {
+            $styles_str .= "
+                .form-homepage-login,
+                .login-main-section .form-wrapper.form-edit {
+                    background:$theme_options_styles[BgColorCardLogin] !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// BORDER COLOR TO THE FORM LOGIN ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(isset($theme_options_styles['BgBorderColorCardLogin'])) {
+            $styles_str .= "
+                .form-homepage-login {
+                    border: solid 1px $theme_options_styles[BgBorderColorCardLogin] !important;
+                }
+                .login-main-section .form-wrapper.form-edit {
+                    border: 0px !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// TEXT COLOR TO THE FORM LOGIN ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(isset($theme_options_styles['textColorCardLogin'])) {
+            $styles_str .= "
+                .login-main-section .form-wrapper.form-edit .form-label{
+                    color: $theme_options_styles[textColorCardLogin] !important;
+                }
+                .form-homepage-login label {
+                    color: $theme_options_styles[textColorCardLogin] !important;
+                }
+                .form-homepage-login h2 {
+                    color: $theme_options_styles[textColorCardLogin] !important;
+                }
+                .form-homepage-login {
+                    color: $theme_options_styles[textColorCardLogin] !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// LINK COLOR IN THE FORM LOGIN ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(isset($theme_options_styles['linkColorCardLogin'])) {
+            $styles_str .= "
+                .form-homepage-login a {
+                    color: $theme_options_styles[linkColorCardLogin] !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// HOVER LINK COLOR IN THE FORM LOGIN ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(isset($theme_options_styles['linkHoverColorCardLogin'])) {
+            $styles_str .= "
+                .form-homepage-login a:hover {
+                    color:$theme_options_styles[linkHoverColorCardLogin] !important;
                 }
             ";
         }

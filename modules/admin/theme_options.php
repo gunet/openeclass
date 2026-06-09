@@ -31,17 +31,17 @@ $defaults = array(
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
                                                     'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow',
-                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate', 'bgColorBreadcrumb', 'BorderColorBreadcrumb', 'boxShadowInputSelect'),
+                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate', 'bgColorBreadcrumb', 'BorderColorBreadcrumb', 'boxShadowInputSelect', 'BgColorCardLogin'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor', 'BriefProfilePortfolioBgColor_gr', 'loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'BgColorAnnouncementHomepage_gr', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'bgColorPortfolioButtons', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal',
-                                                'BgColorHeaderAgenda', 'clMenuPopoverOption', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral', 'clHoveredTextPanels', 'TextColorStatisticsHomepage', 'TextColorPopularCoursesHomepage', 'TextColorTextsHomepage', 'TextColorCardAnnouncementDate'),
+                                                'BgColorHeaderAgenda', 'clMenuPopoverOption', 'bgColorTooltip', 'TextColorAnnouncementHomepage','BgBadgeNeutral', 'clHoveredTextPanels', 'TextColorStatisticsHomepage', 'TextColorPopularCoursesHomepage', 'TextColorTextsHomepage', 'TextColorCardAnnouncementDate', 'textColorCardLogin'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','linkCopyrightColorFooter', 'linkCopyrightHoverColorFooter', 'leftSubMenuHoverFontColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
-                                                'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement', 'ColorBlueText', 'ColorFocus'),
-                'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor','bgHoverColorPortfolioButtons', 'clHoveredLinkImportantAnnouncement'),
+                                                'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement', 'ColorBlueText', 'ColorFocus', 'linkColorCardLogin'),
+                'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor','bgHoverColorPortfolioButtons', 'clHoveredLinkImportantAnnouncement', 'linkHoverColorCardLogin'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderReportsPanels', 'clBorderProgressActivitiesPanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
                                                     'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'BgBorderColorAgendaEvent',
@@ -53,7 +53,7 @@ $defaults = array(
                 "rgba(79, 104, 147, 1)" => array('clContainerImportantAnnouncement'),
                 "rgba(104, 125, 163, 1)" => array('ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clBorderSelect', 'clColorHoveredBodyAgenda', 'BgBorderTextEditor'),
                 "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal', 'BgBorderMenuPopover', 'BorderLeftToRightColumnCourseBgColor'),
-                "rgba(239, 242, 251, 1)" => array('clBorderBottomLists','BgBorderColorAnnouncementHomepageLink'),
+                "rgba(239, 242, 251, 1)" => array('clBorderBottomLists','BgBorderColorAnnouncementHomepageLink', 'BgBorderColorCardLogin'),
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
                 "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes', 'bgHelpButtonColor'),
                 "rgba(0, 51, 153, 1)" => array('bgColorActiveDateTime'),
@@ -162,6 +162,9 @@ if (isset($_GET['export'])) {
         }
         if (isset($styles['imageUploadBriefProfilePortfolio'])) {
             $file_list[] = "courses/theme_data/$theme_id/$styles[imageUploadBriefProfilePortfolio]";
+        }
+        if (isset($styles['loginBgImage'])) {
+            $file_list[] = "courses/theme_data/$theme_id/$styles[loginBgImage]";
         }
 
         $zipFile = new ZipArchive();
@@ -950,10 +953,17 @@ if (isset($_POST['optionsSave'])) {
                     <input type='text'class='form-control border-0 pe-none px-0' id='selectedImageLogin'>
                 </div>
             </div>
-
-
-
        ";
+    }
+
+    if (isset($theme_options_styles['loginBgImage'])) {
+        $login_image_fieldL_2 = "<div><label class='form-label' for='loginBgImage' aria-label='$langLoginBgImage'>$langLoginBgImage</label></div><img src='$urlThemeData/$theme_options_styles[loginBgImage]' style='max-height:100px;max-width:150px;' alt='Contact upload'>";
+        if (($tenant && in_array($theme_id, $tenant_theme_ids)) || $is_admin) {
+            $login_image_fieldL_2 .= "&nbsp;&nbsp;<a class='btn deleteAdminBtn d-inline-flex' href='$_SERVER[SCRIPT_NAME]?delete_image=loginBgImage'>$langDelete</a>";
+        }
+        $login_image_fieldL_2 .= "<input type='hidden' name='loginBgImage' value='$theme_options_styles[loginBgImage]'>";
+    } else {
+       $login_image_fieldL_2 = "<div><label class='form-label' for='loginBgImage' aria-label='$langLoginBgImage'>$langLoginBgImage</label></div><input type='file' name='loginBgImage' id='loginBgImage'>";
     }
 
     if (isset($theme_options_styles['imageUploadForm'])) {
@@ -1944,8 +1954,11 @@ $tool_content .= "
 
 
 
-
-
+                                <div class='form-group mt-4'>
+                                    <div class='col-sm-12'>
+                                    $login_image_fieldL_2
+                                    </div>
+                                </div>
                                 <div class='form-group mt-4'>
                                     <div class='col-sm-12'>
                                     $login_image_fieldL
@@ -1967,6 +1980,26 @@ $tool_content .= "
                                             </label>
                                         </div>
                                     </div>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label for='BgColorCardLogin' class='control-label-notes mb-2 me-2'>$langBgColorCardLogin</label>
+                                    <input name='BgColorCardLogin' type='text' class='form-control colorpicker' id='BgColorCardLogin' value='$theme_options_styles[BgColorCardLogin]'>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label for='BgBorderColorCardLogin' class='control-label-notes mb-2 me-2'>$langBgBorderColorCardLogin</label>
+                                    <input name='BgBorderColorCardLogin' type='text' class='form-control colorpicker' id='BgBorderColorCardLogin' value='$theme_options_styles[BgBorderColorCardLogin]'>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label for='textColorCardLogin' class='control-label-notes mb-2 me-2'>$langTextColorCardLogin</label>
+                                    <input name='textColorCardLogin' type='text' class='form-control colorpicker' id='textColorCardLogin' value='$theme_options_styles[textColorCardLogin]'>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label for='linkColorCardLogin' class='control-label-notes mb-2 me-2'>$langLinkColorCardLogin</label>
+                                    <input name='linkColorCardLogin' type='text' class='form-control colorpicker' id='linkColorCardLogin' value='$theme_options_styles[linkColorCardLogin]'>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <label for='linkHoverColorCardLogin' class='control-label-notes mb-2 me-2'>$langLinkHoverColorCardLogin</label>
+                                    <input name='linkHoverColorCardLogin' type='text' class='form-control colorpicker' id='linkHoverColorCardLogin' value='$theme_options_styles[linkHoverColorCardLogin]'>
                                 </div>";
                                 $tool_content .= "
                                 <div class='form-group mt-4'>
@@ -3620,7 +3653,7 @@ function clone_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         make_dir("$webDir/courses/theme_data/$new_theme_id");
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload','contactUpload', 'imageUploadBriefProfilePortfolio');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload','contactUpload', 'imageUploadBriefProfilePortfolio', 'loginBgImage');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
@@ -3636,7 +3669,7 @@ function upload_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$theme_id")) {
         make_dir("$webDir/courses/theme_data/$theme_id", 0755);
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload','contactUpload', 'imageUploadBriefProfilePortfolio');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter','imageUploadForm', 'imageUploadRegistration', 'imageUploadFaq', 'RightColumnCourseBgImage','faviconUpload','contactUpload', 'imageUploadBriefProfilePortfolio', 'loginBgImage');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
             $file_name = $_FILES[$image]['name'];
