@@ -4697,7 +4697,7 @@ $langWarnShibUser = "
 $langCheckUserRegistration = "<strong>Η ενέργεια που προσπαθείτε να εκτελέσετε απαιτεί εγγραφή στο $langsCourse</strong>";
 
 $langUserPortfolio = "Χαρτοφυλάκιο χρήστη";
-$langPortfolio = "Χαρτοφυλάκιο";
+$langPortfolio = "Προσωπικός χώρος";
 $langMyPortfolio = "Το χαρτοφυλάκιο μου";
 $langAdvancedSearch = "Σύνθετη αναζήτηση";
 $langTitle = "Τίτλος";
@@ -6283,6 +6283,7 @@ $langMyePortfolio = 'Το e-Portfolio μου';
 $langUserePortfolio = 'e-Portfolio χρήστη';
 $langePortfolioChangeSucc = 'Οι αλλαγές στο e-Portfolio αποθηκεύθηκαν επιτυχώς';
 $langPersInfo = 'Προσωπικά στοιχεία';
+$langAcademicInfo = 'Ακαδημαϊκά στοιχεία';
 $langEduEmpl = 'Εκπαίδευση και εργασία';
 $langAchievements = 'Διακρίσεις - επιτεύγματα';
 $langGoalsSkills = 'Στόχοι και δεξιότητες';

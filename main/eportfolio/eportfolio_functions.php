@@ -80,17 +80,21 @@ function render_eportfolio_fields_content($uid) {
         $cat_return_string['panels'] = "";
         $cat_return_string['right_menu'] = "";
 
-        $cat_icon = isset($category_icons[getSerializedMessage($c->name)]) ? $category_icons[getSerializedMessage($c->name)] : 'fa-solid fa-circle-dot';
+        $cat_name  = getSerializedMessage($c->name);
+        $cat_icon  = isset($category_icons[$cat_name])  ? $category_icons[$cat_name]  : 'fa-solid fa-circle-dot';
+        $cat_color = isset($category_colors[$cat_name]) ? $category_colors[$cat_name] : '#6c757d';
 
         $res = Database::get()->queryArray("SELECT id, shortname, name, datatype, data FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
 
         if (count($res) > 0) {
             $cat_return_string['panels'] .= '
-            <div class="card panelCard card-default rounded-3" style="border: 1px solid #dee2e6; scroll-margin-top: 70px;" id="IndexPortfolio'.$c->id.'">
-                <div class="card-body px-3 py-0">
-                <div class="d-flex align-items-center gap-2 border-bottom py-3">
-                    <i class="'.$cat_icon.' Primary-500-cl"></i>
-                    <h2 class="text-heading-h3 mb-0">'. q(getSerializedMessage($c->name)) .'</h2>
+            <div class="card panelCard card-default rounded-3 epf-panel-card" id="IndexPortfolio'.$c->id.'">
+                <div class="card-body px-4 py-0">
+                <div class="d-flex align-items-center gap-3 py-3">
+                    <div class="epf-cat-icon" style="background:'.$cat_color.';">
+                        <i class="'.$cat_icon.'"></i>
+                    </div>
+                    <h2 class="text-heading-h3 mb-0">'. q($cat_name) .'</h2>
                 </div>';
 
             if ($j == 0) {
@@ -101,7 +105,7 @@ function render_eportfolio_fields_content($uid) {
 
             $j++;
 
-            $cat_return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools Neutral-900-cl' href='#IndexPortfolio$c->id'>" . q(getSerializedMessage($c->name)) . "</a>";
+            $cat_return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools' href='#IndexPortfolio$c->id'><span class='epf-nav-icon'><i class='" . $cat_icon . "'></i></span>" . q($cat_name) . "</a>";
 
             foreach ($res as $f) {
 
@@ -137,7 +141,7 @@ function render_eportfolio_fields_content($uid) {
                     $showCat = true;
                     $showAll = true;
 
-                    $row  = '<div class="d-flex align-items-start border-bottom py-3">';
+                    $row  = '<div class="d-flex align-items-start border-bottom py-2">';
                     $row .= '<div class="col-4">'.q(getSerializedMessage($f->name)).'</div>';
                     $row .= '<div class="col-8">';
 
@@ -157,9 +161,12 @@ function render_eportfolio_fields_content($uid) {
                             $options = unserialize($f->data);
                             if (isset($options[$_SESSION['langswitch']])) {
                                 $options_lang = $options[$_SESSION['langswitch']];
-                            } else {
+                            } elseif (isset($options[get_config('default_language')])) {
                                 $options_lang = $options[get_config('default_language')];
+                            } else {
+                                $options_lang = is_array($options) ? reset($options) : [];
                             }
+                            if (!is_array($options_lang) || empty($options_lang)) { break; }
                             $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
                             $options_lang[0] = "";
                             ksort($options_lang);
@@ -177,7 +184,7 @@ function render_eportfolio_fields_content($uid) {
            
             if (!empty($cat_rows)) {
                 $last = array_pop($cat_rows);
-                $cat_rows[] = str_replace('border-bottom py-3', 'py-3', $last);
+                $cat_rows[] = str_replace('border-bottom py-2', 'py-2', $last);
             }
             $cat_return_string['panels'] .= implode('', $cat_rows);
             $cat_return_string['panels'] .= '</div></div>';
@@ -275,9 +282,12 @@ function render_eportfolio_profile_card($uid, $resources_url = null, $resources_
                 $options = unserialize($f->data);
                 if (isset($options[$_SESSION['langswitch']])) {
                     $options_lang = $options[$_SESSION['langswitch']];
+                } elseif (isset($options[get_config('default_language')])) {
+                    $options_lang = $options[get_config('default_language')];
                 } else {
-                    $options_lang = $options[get_config('default_language')]; //use platform default language
+                    $options_lang = is_array($options) ? reset($options) : [];
                 }
+                if (!is_array($options_lang) || empty($options_lang)) { $options_lang = []; break; }
                 $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
                 if (!empty($options_lang[$fdata_res->data])) {
                     $demographics[] = q($options_lang[$fdata_res->data]);

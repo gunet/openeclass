@@ -4542,6 +4542,7 @@ $langMyePortfolio = 'My e-portfolio';
 $langUserePortfolio = 'User e-portfolio';
 $langePortfolioChangeSucc = 'E-portfolio changes were processed succesfully';
 $langPersInfo = 'Personal info';
+$langAcademicInfo = 'Academic information';
 $langEduEmpl = 'Education and employment';
 $langAchievements = 'Achievements';
 $langGoalsSkills = 'Goals and skills';
