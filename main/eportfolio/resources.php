@@ -178,11 +178,6 @@ if ($userdata) {
             array('title' => $langEditChange,
                 'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                 'icon' => 'fa-edit' ),
-            array('title' => $langResourcesCollection,
-                'url' => "{$urlAppend}main/eportfolio/resources.php".$view_str,
-                'icon' => 'fa-solid fa-award',
-                'level' => 'primary'
-            )
         ));
         $tool_content .= $action_bar;
 
