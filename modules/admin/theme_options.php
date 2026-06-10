@@ -1348,6 +1348,15 @@ $tool_content .= "
                                 <label for='bgColorSectionContainers' class='control-label-notes mb-2 me-2'>Χρώμα φόντου στην μορφή των cards:</label>
                                 <input name='bgColorSectionContainers' type='text' class='form-control colorpicker' id='bgColorSectionContainers' value='$theme_options_styles[bgColorSectionContainers]'>
                             </div>
+                            <div class='form-group mt-4'>
+                                <div class='checkbox'>
+                                    <label class='label-container'>
+                                        <input type='checkbox' name='enable_aside_main_cards_no_border_radius' id='enable_aside_main_cards_no_border_radius' value='1' ".((isset($theme_options_styles['enable_aside_main_cards_no_border_radius']))? 'checked' : '').">
+                                        <span class='checkmark'></span>
+                                        $langDisplayPlatformAsCardLayoutNoBorderRadius
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
                 </div>

@@ -122,7 +122,8 @@ $langEnableStrongPasswords = "Δημιουργία 'δύσκολων' συνθη
  * admin.php
  * ************************************************** */
 // index
-$langDisplayPlatformAsCardLayout = "Εμφάνιση πλατφόρμας σε μορφή cards";
+$langDisplayPlatformAsCardLayout = "Ενεργοποίηση εμφάνισης της πλατφόρμας σε μορφή cards (περιλαμβάνει border-radius)";
+$langDisplayPlatformAsCardLayoutNoBorderRadius = "Ενεργοποιημένη εμφάνιση σε μορφή cards (δεν περιλαμβάνει border-radius)";
 $langComments = "Σχόλια";
 $langCommentsUser = "Σχόλια χρηστών";
 $langAdminTool = "Διαχείριση Πλατφόρμας";

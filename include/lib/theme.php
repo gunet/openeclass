@@ -7857,8 +7857,8 @@ function theme_initialization() {
                     .main-section .main-container {
                         padding: 45px 45px !important;
                         border-radius: 32px !important;
-                        margin-bottom: 35px !important;
-                        margin-top: 35px !important;
+                        margin-bottom: 28px !important;
+                        margin-top: 28px !important;
                     }
 
                     .module-container .col_maincontent_active {
@@ -7868,8 +7868,8 @@ function theme_initialization() {
                     .portfolio-profile-container .padding-default {
                         position: relative !important;
                         overflow: hidden !important;
-                        margin-top: 35px !important;
-                        margin-bottom: 35px !important;
+                        margin-top: 28px !important;
+                        margin-bottom: 28px !important;
                         padding: 45px 55px !important;
                         border-radius: 32px !important;
                     }
@@ -7894,7 +7894,7 @@ function theme_initialization() {
                     .portfolio-courses-container .padding-default {
                         padding: 45px 55px !important;
                         border-radius: 32px !important;
-                        margin-bottom: 35px !important;
+                        margin-bottom: 28px !important;
                     } 
 
 
@@ -7921,6 +7921,51 @@ function theme_initialization() {
                     setNewCookieSlider('asideBarOn','true',0);
                 });
             </script>";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////// PLATFORM VIEW AS CARD WITHOUS BORDER-RADIUS ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['enable_aside_main_cards_no_border_radius'])){
+            $styles_str .= "
+                @media (min-width: 992px) {
+                    .main-section .main-container {
+                        border-radius: 4px !important;
+                    }
+
+                    .portfolio-profile-container .padding-default {
+                        border-radius: 4px !important;
+                    }
+
+                    .portfolio-courses-container .padding-default {
+                        border-radius: 4px !important;
+                    } 
+
+
+                    body:has(.sidebar-card) .main-maincontent {
+                        border-top-right-radius: 4px;
+                        border-bottom-right-radius: 4px;
+                    }
+
+                    .sidebar-card .ContentLeftNav {
+                        border-top-left-radius: 4px;
+                        border-bottom-left-radius: 4px;
+                    }
+
+                    .breadcrumbs-init {
+                        border-radius: 4px;
+                    }
+
+                    .portfolio-profile-container .padding-default{
+                        background-size:100% auto !important;
+                        background-position:center top !important;
+                        background-repeat:no-repeat !important;
+                    }
+                }
+            ";
         }
 
         if(!empty($theme_options_styles['bgColorSectionContainers'])){
