@@ -520,7 +520,7 @@ class Hierarchy {
      * @return string $js              - The returned JS code
      */
     private function buildJSNodePicker($options) {
-        global $urlAppend, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
+        global $urlServer, $urlAppend, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
 
         $params = $options['params'];
         $offset = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0; // The number of the parents that the editing child already belongs to (mainly for edit forms)
@@ -997,7 +997,7 @@ jContent;
         } else {
             $ret .= self::unserializeLangField($node->name) . ' ';
         }
-        
+
         return $ret;
     }
 
@@ -1181,6 +1181,9 @@ jContent;
      * @return string   $ret           - The returned HTML output
      */
     public function buildNodesNavigationHtml($nodes, $url, $countCallback = null, $options = array('showEmpty' => true, 'respectVisibility' => true), $subtrees = array()) {
+        if (!isset($options['textIfEmpty'])) {
+            $options['textIfEmpty'] = false;
+        }
         global $langAvCours, $langAvCourses, $urlServer;
         $ret = '';
 
@@ -1261,9 +1264,9 @@ jContent;
                     $ret .= "<li class='list-group-item element'>
                                 <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                     <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                        $f_img
-                                        <a class='TextBold' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
-                                $ret .= (!empty($code)) ? "<span>(" . q($code) . ")</span>" : '';
+                                        $f_img ";
+                    $ret .= ($options['textIfEmpty'] && $count == 0) ? "<span class='TextBold'>" . q($name) . "</span>" : "<a class='TextBold' href='$url.php?fc=" . $id . "'>" . q($name) . "</a>";
+                    $ret .= (!empty($code)) ? "<span>(" . q($code) . ")</span>" : "";
                             $ret.="</div>";
                             $ret .= "<div class='vsmall-text text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>
                                 </div>";
@@ -1320,7 +1323,7 @@ jContent;
         $ret = '';
         if (count($res) > 0) {
             // locate root parent of current Node
-            $node0 = $this->getNodeLftRgt($currentNode);
+            $node0 = $this->getNodeLgtRgt($currentNode);
             $parent = $this->getRootParent($node0->lft, $node0->rgt);
             $parentId = ($parent) ? $parent->id : $currentNode;
 

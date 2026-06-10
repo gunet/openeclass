@@ -42,6 +42,9 @@
             </div>
 
             <div class='col-12 mt-4'>
+                <div class='d-flex justify-content-between align-items-center'>
+                    <h2 class='text-heading-h3 mb-2'>{{ trans('langFaculties') }}</h2>
+                </div>
                 @if (isset($buildRoots))
                     {!! $buildRoots !!}
                 @endif
@@ -56,8 +59,7 @@
             @if (count($courses) > 0)
                 <div class='col-12 mt-4'>
                     <div class='d-flex justify-content-between align-items-center'>
-                        <h2 class='text-heading-h3 mb-2'>{{ trans('langCourse') }}</h2>
-                        <h2 class='text-heading-h3 mb-2'>{{ trans('langGroupAccess') }}</h2>
+                        <h2 class='text-heading-h3 mb-2'>{{ trans('langCoursesList') }}</h2>
                     </div>
                     <ul class='list-group list-group-flush'>
                         @foreach($courses as $mycourse)
