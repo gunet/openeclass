@@ -1265,7 +1265,8 @@ jContent;
                                 <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                     <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                                         $f_img ";
-                    $ret .= ($options['textIfEmpty'] && $count == 0) ? "<span class='TextBold'>" . q($name) . "</span>" : "<a class='TextBold' href='$url.php?fc=" . $id . "'>" . q($name) . "</a>";
+                    $icon = "<div class='d-flex justify-content-center align-items-center gap-3' style='min-width: 30px;'><i class='fa-solid fa-folder-tree fa-lg'></i></div>";
+                    $ret .= ($options['textIfEmpty'] && $count == 0) ? "<span class='TextBold d-flex gap-3'>$icon " . q($name) . "</span>" : "<a class='TextBold d-flex gap-3' href='$url.php?fc=" . $id . "'>$icon " . q($name) . "</a>";
                     $ret .= (!empty($code)) ? "<span>(" . q($code) . ")</span>" : "";
                             $ret.="</div>";
                             $ret .= "<div class='vsmall-text text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>
