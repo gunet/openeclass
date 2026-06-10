@@ -171,6 +171,7 @@ if ($userdata) {
            $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
                     $warning</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div>"; 
+
         }
         
         $tool_content .= $preview_info_div;

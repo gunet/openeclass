@@ -520,7 +520,7 @@ class Hierarchy {
      * @return string $js              - The returned JS code
      */
     private function buildJSNodePicker($options) {
-        global $urlAppend, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
+        global $urlServer, $urlAppend, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
 
         $params = $options['params'];
         $offset = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0; // The number of the parents that the editing child already belongs to (mainly for edit forms)
@@ -815,7 +815,7 @@ jContent;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn submitAdminBtn ms-1" id="treeModalSelect">' . $langSelect . '</button>
-                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>                    
+                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>
                 </div>
             </div>
         </div></div>';
@@ -997,7 +997,7 @@ jContent;
         } else {
             $ret .= self::unserializeLangField($node->name) . ' ';
         }
-        
+
         return $ret;
     }
 
@@ -1181,6 +1181,9 @@ jContent;
      * @return string   $ret           - The returned HTML output
      */
     public function buildNodesNavigationHtml($nodes, $url, $countCallback = null, $options = array('showEmpty' => true, 'respectVisibility' => true), $subtrees = array()) {
+        if (!isset($options['textIfEmpty'])) {
+            $options['textIfEmpty'] = false;
+        }
         global $langAvCours, $langAvCourses, $urlServer;
         $ret = '';
 
@@ -1261,9 +1264,10 @@ jContent;
                     $ret .= "<li class='list-group-item element'>
                                 <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                     <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                        $f_img
-                                        <a class='TextBold' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
-                                $ret .= (!empty($code)) ? "<span>(" . q($code) . ")</span>" : '';
+                                        $f_img ";
+                    $icon = "<div class='d-flex justify-content-center align-items-center gap-3' style='min-width: 30px;'><i class='fa-solid fa-folder-tree fa-lg'></i></div>";
+                    $ret .= ($options['textIfEmpty'] && $count == 0) ? "<span class='TextBold d-flex gap-3'>$icon " . q($name) . "</span>" : "<a class='TextBold d-flex gap-3' href='$url.php?fc=" . $id . "'>$icon " . q($name) . "</a>";
+                    $ret .= (!empty($code)) ? "<span>(" . q($code) . ")</span>" : "";
                             $ret.="</div>";
                             $ret .= "<div class='vsmall-text text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>
                                 </div>";

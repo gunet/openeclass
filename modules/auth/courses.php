@@ -139,10 +139,11 @@ if (count($tree->buildRootsArray()) > 1) {
 }
 
 if ($data['isInOpenCoursesMode']) {
-    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true, 'textIfEmpty' => true));
 } else {
-    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true, 'textIfEmpty' => true));
 }
+$data['childCount'] = $childCount;
 
 $queryCourseIds = '';
 $queryExtraSelect = '';

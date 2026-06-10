@@ -271,6 +271,7 @@ if (!DBHelper::fieldExists('exercise_answer_record', 'centainty')) {
                 }
                 if ($step == 2) {
                     upgrade_openbadges_backpack($tbl_options);
+                    upgrade_external_repositories();
                     steps_finished();
                 }
             }

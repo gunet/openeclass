@@ -255,6 +255,7 @@ $langMultiRegUserInfo = "<p>Please enter in the area below a list of user detail
 <li><tt>phone</tt>: Phone number</li>
 <li><tt>username</tt>: Username</li>
 <li><tt>password</tt>: Password</li>
+<li><tt>ext_uid</tt>: External user identifier (depending on authentication method)</li>
 </ul>
 <p>To have the users automatically registered to some courses, please add the course codes after the user details in the end of each line. The e-mail address is optional - you can use a hyphen (-) in its place if you want to omit it. Lines beginning with # are ignored. If you don't specify usernames, they will be automatically created by appending a serial number to the user prefix entered below. If you don't specify passwords, a random password will be created for each account.</p>";
 $langMultiRegCourseInvalid = 'User %s: invalid course code "%s"';
@@ -3622,7 +3623,13 @@ $langProfileQuickPassword = "Change Password";
 $langAvailableUnitResources = "Educational Resource";
 $langNoteSaved = "Submitted successfully";
 $langLoginBgGradient = "Login screen background gradient";
-$langLoginImg = "Login screen image";
+$langLoginImg = "Login screen image in the right side of login page";
+$langLoginBgImage = "Background image to the login page";
+$langBgColorCardLogin = "Background color to the form login";
+$langBgBorderColorCardLogin = "Border color to the form login";
+$langTextColorCardLogin = "Text color in the form login";
+$langLinkColorCardLogin = "Link color in the form login";
+$langLinkHoverColorCardLogin = "Hover to the link color of the form login";
 $langThemeOptionsName = "Theme Options Name";
 $langMyCoursesSide = "My $langsCourses";
 $langMyMessagesSide = 'My Messages';
@@ -6804,6 +6811,7 @@ you will temporarily register the new start and end date of the session. </br></
 <strong>You can also change the duration of the current session by changing the size of the green slot</strong>';
 $langJumbotronWithVideo = 'The file you uploaded is of type .mp4 with full name "video.mp4"';
 $langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the height is set to half the height of the current screen.";
+$langIntroTextCenterPos = "Move the introductory text to the center position of the screen?";
 $langOfSubmitQuestionnaire = "By submitting a questionnaire";
 $langAddConsultantComments = "The consultant's comments were successfully added.";
 $langContinueToDelComment = "Do you want to proceed with deleting comments for the user?";

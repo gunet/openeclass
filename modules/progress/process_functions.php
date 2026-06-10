@@ -125,9 +125,9 @@ function add_exercise_to_certificate($element, $element_id) {
  * @brief add document db entries in certificate criterion
  * @param type $element
  * @param type $element_id
- * @return type
  */
-function add_document_to_certificate($element, $element_id) {
+function add_document_to_certificate($element, $element_id): void
+{
 
     if (isset($_POST['document'])) {
         foreach ($_POST['document'] as $data) {
@@ -150,7 +150,6 @@ function add_document_to_certificate($element, $element_id) {
             }
         }
     }
-    return;
 }
 
 
@@ -159,7 +158,8 @@ function add_document_to_certificate($element, $element_id) {
  * @param type $element
  * @param type $element_id
  */
-function add_multimedia_to_certificate($element, $element_id) {
+function add_multimedia_to_certificate($element, $element_id): void
+{
 
     if (isset($_POST['video'])) {
         foreach ($_POST['video'] as $data) {
@@ -198,7 +198,8 @@ function add_multimedia_to_certificate($element, $element_id) {
  * @param type $element
  * @param type $element_id
  */
-function add_lp_to_certificate($element, $element_id, $activity_type) {
+function add_lp_to_certificate($element, $element_id, $activity_type): void
+{
 
     if (isset($_POST['lp'])) {
         foreach ($_POST['lp'] as $datakey => $data) {
@@ -224,7 +225,8 @@ function add_lp_to_certificate($element, $element_id, $activity_type) {
  * @param string $element  'certificate' or 'badge'
  * @param int    $element_id
  */
-function add_lp_lessonstatus_to_certificate($element, $element_id) {
+function add_lp_lessonstatus_to_certificate($element, $element_id): void
+{
     if (isset($_POST['lp'])) {
         foreach ($_POST['lp'] as $datakey => $data) {
             Database::get()->query("INSERT INTO {$element}_criterion
@@ -246,9 +248,9 @@ function add_lp_lessonstatus_to_certificate($element, $element_id) {
  * @brief add course participation db entries in criterion
  * @param type $element
  * @param type $element_id
- * @return type
  */
-function add_courseparticipation_to_certificate($element, $element_id) {
+function add_courseparticipation_to_certificate($element, $element_id): void
+{
 
     if (isset($_POST['participation'])) {
         Database::get()->query("INSERT INTO {$element}_criterion
@@ -262,16 +264,15 @@ function add_courseparticipation_to_certificate($element, $element_id) {
             $_POST['operator'],
             $_POST['threshold']);
     }
-    return;
 }
 
 /**
- * @brief add wiki db entries in criterion
+ * @brief add wiki db entries in the criterion
  * @param type $element
  * @param type $element_id
- * @return type
  */
-function add_wiki_to_certificate($element, $element_id) {
+function add_wiki_to_certificate($element, $element_id): void
+{
 
     if (isset($_POST['wiki'])) {
         if ($element == 'points_game') {
@@ -302,14 +303,14 @@ function add_wiki_to_certificate($element, $element_id) {
                 $_POST['threshold']);
         }
     }
-    return;
 }
 
 /**
- * @brief add wiki recurring activities in criterion
+ * @brief add wiki recurring activities in the criterion
  * @param type $points_game_id
  */
-function add_rec_wiki_to_points_game($points_game_id) {
+function add_rec_wiki_to_points_game($points_game_id): void
+{
     if (isset($_POST['wiki'])) {
         $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
         $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
@@ -340,9 +341,9 @@ function add_rec_wiki_to_points_game($points_game_id) {
  * @brief add poll db entries in criterion
  * @param type $element
  * @param type $element_id
- * @return type
  */
-function add_poll_to_certificate($element, $element_id) {
+function add_poll_to_certificate($element, $element_id): void
+{
 
     if (isset($_POST['poll'])) {
         foreach ($_POST['poll'] as $data) {
@@ -369,7 +370,6 @@ function add_poll_to_certificate($element, $element_id) {
             }
         }
     }
-    return;
 }
 
 
@@ -377,9 +377,9 @@ function add_poll_to_certificate($element, $element_id) {
  * @brief add ebook db entries in criterion
  * @param type $element
  * @param type $element_id
- * @return type
  */
-function add_ebook_to_certificate($element, $element_id) {
+function add_ebook_to_certificate($element, $element_id): void
+{
      if (isset($_POST['ebook'])) {
          foreach ($_POST['ebook'] as $data) {
             if ($element == 'points_game') {
@@ -455,19 +455,15 @@ function add_ebook_to_certificate($element, $element_id) {
             }
         }
     }
-
-    return;
 }
-
-
 
 /**
  * @brief add forum db entries in criterion
  * @param type $element
  * @param type $element_id
- * @return type
  */
-function add_forum_to_certificate($element, $element_id) {
+function add_forum_to_certificate($element, $element_id): void
+{
 
     if (isset($_POST[ForumEvent::ACTIVITY])) {
         if ($element == 'points_game') {
@@ -498,14 +494,14 @@ function add_forum_to_certificate($element, $element_id) {
             $_POST['threshold']);
         }
     }
-    return;
 }
 
 /**
  * @brief add forum recurring activities in criterion
  * @param type $points_game_id
  */
-function add_rec_forum_to_points_game($points_game_id) {
+function add_rec_forum_to_points_game($points_game_id): void
+{
     if (isset($_POST[ForumEvent::ACTIVITY])) {
         $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
         $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
@@ -536,9 +532,9 @@ function add_rec_forum_to_points_game($points_game_id) {
  * @brief add forum topic db entries in criterion
  * @param type $element
  * @param type $element_id
- * @return type
  */
-function add_forumtopic_to_certificate($element, $element_id) {
+function add_forumtopic_to_certificate($element, $element_id): void
+{
     if (isset($_POST[ForumTopicEvent::ACTIVITY])) {
         foreach ($_POST[ForumTopicEvent::ACTIVITY] as $datakey => $data) {
             if ($element == 'points_game') {
@@ -572,7 +568,6 @@ function add_forumtopic_to_certificate($element, $element_id) {
             }
         }
     }
-    return;
 }
 
 /**
@@ -580,7 +575,8 @@ function add_forumtopic_to_certificate($element, $element_id) {
  * @param type $element
  * @param type $element_id
  */
-function add_blog_to_certificate($element, $element_id) {
+function add_blog_to_certificate($element, $element_id): void
+{
 
     if (isset($_POST[BlogEvent::ACTIVITY])) {
         if ($element == 'points_game') {
@@ -617,7 +613,8 @@ function add_blog_to_certificate($element, $element_id) {
  * @brief add blog post recurring activities in criterion
  * @param type $points_game_id
  */
-function add_rec_blog_to_points_game($points_game_id) {
+function add_rec_blog_to_points_game($points_game_id): void
+{
     if (isset($_POST[BlogEvent::ACTIVITY])) {
         $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
         $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
@@ -649,7 +646,8 @@ function add_rec_blog_to_points_game($points_game_id) {
  * @param type $element
  * @param type $element_id
  */
-function add_blogcomment_to_certificate($element, $element_id) {
+function add_blogcomment_to_certificate($element, $element_id): void
+{
 
     if (isset($_POST['blogcomment'])) {
         foreach ($_POST['blogcomment'] as $datakey => $data) {
@@ -690,7 +688,8 @@ function add_blogcomment_to_certificate($element, $element_id) {
  * @brief add blog comment recurring activities in criterion
  * @param type $points_game_id
  */
-function add_rec_blogcomment_to_points_game($points_game_id) {
+function add_rec_blogcomment_to_points_game($points_game_id): void
+{
     if (isset($_POST['blogcomment'])) {
         $_POST['max_points_from_criterion'] = empty($_POST['max_points_from_criterion']) ? NULL : $_POST['max_points_from_criterion'];
         $_POST['max_points_from_criterion_time_period'] = empty($_POST['max_points_from_criterion_time_period']) ? NULL : $_POST['max_points_from_criterion_time_period'];
@@ -718,10 +717,11 @@ function add_rec_blogcomment_to_points_game($points_game_id) {
 }
 
 /**
- * @brief add course completion as certificate
+ * @brief add course completion as a certificate
  * @param type $element_id
  */
-function add_course_completion_to_certificate($element_id) {
+function add_course_completion_to_certificate($element_id): void
+{
 
     global $langQuotaSuccess, $course_code;
     $badge_id = is_course_completion_active(); // get course completion id
@@ -762,11 +762,12 @@ function add_course_completion_to_certificate($element_id) {
 }
 
 /**
- * @brief add unit completion as certificate
+ * @brief add unit completion as a certificate
  * @param type $element_id
  * @param int $unit_id
  */
-function add_unit_completion_to_certificate($element_id, $unit_id) {
+function add_unit_completion_to_certificate($element_id, $unit_id): void
+{
     global $langQuotaSuccess, $course_code;
 
     $badge_id = is_unit_completion_active($unit_id); // get unit completion id
@@ -812,10 +813,9 @@ function add_unit_completion_to_certificate($element_id, $unit_id) {
 }
 
 /**
- * @brief add gradebook db entries in certificate criterion
+ * @brief add gradebook db entries in the certificate criterion
  * @param type $element
  * @param type $element_id
- * @return type
  */
 function add_gradebook_to_certificate($element, $element_id) {
     if (isset($_POST['gradebook'])) {
@@ -833,15 +833,15 @@ function add_gradebook_to_certificate($element, $element_id) {
                 $_POST['threshold'][$data]);
         }
     }
-    return;
 }
 
 /**
- * @brief add coursecompletion grade entry in criterion
+ * @brief add course completion grade entry in the criterion
  * @param type $element
  * @param type $element_id
  */
-function add_coursecompletiongrade_to_certificate($element, $element_id) {
+function add_coursecompletiongrade_to_certificate($element, $element_id): void
+{
     if (isset($_POST[CourseCompletionEvent::ACTIVITY])) {
         Database::get()->query("INSERT INTO {$element}_criterion
                             SET $element = ?d,
@@ -856,7 +856,8 @@ function add_coursecompletiongrade_to_certificate($element, $element_id) {
     }
 }
 
-function add_attendance_to_certificate($element, $element_id) {
+function add_attendance_to_certificate($element, $element_id): void
+{
     if (isset($_POST['attendance'])) {
         foreach ($_POST['attendance'] as $datakey => $data) {
             Database::get()->query("INSERT INTO {$element}_criterion
@@ -1093,7 +1094,6 @@ function has_certificate_completed($uid, $element, $element_id) {
  * @param type $enddate
  * @param type $config
  * @return type
- * @global type $course_id
  */
 function add_points_game($title, $description, $startdate, $enddate, $level_names, $level_required_points, $config) {
     global $course_id;
@@ -1130,7 +1130,6 @@ function add_points_game($title, $description, $startdate, $enddate, $level_name
  * @param type $bundle
  * @param type $expiration_day
  * @return type
- * @global type $course_id
  */
 function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $unit_id = 0, $session_id = 0, $allow_export = 1) {
 
@@ -1182,7 +1181,6 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
 
 /**
  * @brief modify points game settings in DB
- * @global type $course_id
  * @param type $points_game_id
  * @param type $title
  * @param type $description
@@ -1214,7 +1212,6 @@ function modify_points_game($points_game_id, $title, $description, $startdate, $
 
 /**
  * @brief modify settings in DB
- * @global type $course_id
  * @param type $element_id
  * @param type $element
  * @param type $title
@@ -1291,7 +1288,7 @@ function modify_points_game_rec_activity($points_game_id, $activity_id) {
 }
 
 /**
- * @brief check if certificate / badge has activities
+ * @brief check if the certificate / badge has activities
  * @param type $element
  * @param type $element_id
  * @return type
@@ -1306,7 +1303,6 @@ function has_activity($element, $element_id) {
 
 /**
  * @brief modify certificate / badge visibility in DB
- * @global type $course_id
  * @param type $element_id
  * @param type $element
  * @param type $visibility
@@ -1314,13 +1310,13 @@ function has_activity($element, $element_id) {
 function update_visibility($element, $element_id, $visibility) {
 
     global $course_id;
+
     Database::get()->query("UPDATE $element SET active = ?d WHERE id = ?d
                                     AND course_id = ?d", $visibility, $element_id, $course_id);
 }
 
 /**
  * @brief check if course completion badge is active
- * @global type $course_id
  * @return boolean
  */
 function is_course_completion_active() {
@@ -1337,25 +1333,7 @@ function is_course_completion_active() {
 }
 
 /**
- * @brief check if we have created course completion badge
- * @global type $course_id
- * @return boolean
- */
-function is_course_completion_enabled() {
-    global $course_id;
-
-    $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1
-                                                    AND unit_id = 0 AND session_id = 0", $course_id);
-    if ($sql) {
-        return $sql->id;
-    } else {
-        return 0;
-    }
-}
-
-/**
  * @brief check if course completion badge is active
- * @global type $course_id
  * @return boolean
  */
 function is_unit_completion_active($unit_id) {
@@ -1372,9 +1350,8 @@ function is_unit_completion_active($unit_id) {
 }
 
 /**
- * @brief check if we have created unit completion badge
+ * @brief check if we have created a unit completion badge
  * @return boolean
- * @global type $course_id
  * @param int $unit_id
  */
 function is_unit_completion_enabled($unit_id) {
@@ -1392,7 +1369,6 @@ function is_unit_completion_enabled($unit_id) {
 
 /**
  * @brief get certificate / badge percentage completion
- * @global type $uid
  * @param type $element
  * @param type $element_id
  * @return type
@@ -1416,7 +1392,8 @@ function get_cert_percentage_completion($element, $element_id) {
  * @param type $certificate_id
  * @param type $element
  */
-function delete_certificate($element, $element_id) {
+function delete_certificate($element, $element_id): bool
+{
 
     global $course_id;
 
@@ -1424,12 +1401,14 @@ function delete_certificate($element, $element_id) {
         if (!Database::get()->querySingle('SELECT id FROM certificate WHERE id = ?d AND course_id = ?d', $element_id, $course_id)) {
             forbidden();
         }
-        $delete_cert = true;
+
+        $delete_cert = false;
         $r = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d", $element_id);
         foreach ($r as $act) {
-            if (resource_usage($element, $act->id)) { // check if a user has used activity
-                $delete_cert = false;
-                break;
+            if (!resource_usage($element, $act->id)) { // check if a user has used activity
+                $delete_cert = true;
+            } else {
+                return false;
             }
         }
         if ($delete_cert) {  // delete certificate activities
@@ -1438,16 +1417,17 @@ function delete_certificate($element, $element_id) {
             }
             Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
         }
-    } elseif ($element == 'badge') {
+    } else {
         if (!Database::get()->querySingle('SELECT id FROM badge WHERE id = ?d AND course_id = ?d', $element_id, $course_id)) {
             forbidden();
         }
-        $delete_badge = true;
+        $delete_badge = false;
         $r = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d", $element_id);
         foreach ($r as $act) {
-            if (resource_usage($element, $act->id)) { // check if a user has used activity
-                $delete_badge = false;
-                break;
+            if (!resource_usage($element, $act->id)) { // check if a user has used activity
+                $delete_badge = true;
+            } else {
+                return false;
             }
         }
         if ($delete_badge) {  // delete badge activities
@@ -1463,11 +1443,11 @@ function delete_certificate($element, $element_id) {
 
 /**
  * @brief reset points game
- * @global type $course_id
  * @param type $element_id
  */
 function reset_points_game($element_id) {
     global $course_id;
+
     $pg = Database::get()->querySingle("SELECT * FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
     if ($pg) {
         Database::get()->query("DELETE upgc
@@ -1574,9 +1554,10 @@ function resource_usage($element, $element_resource_id) {
  * @brief get resource details given a certificate resource
  * @param type $element
  * @param type $resource_id
- * @return type
+ * @return string
  */
 function get_activity_url($activity_type, $resource_id, $course_code) {
+
     switch ($activity_type) {
         case ExerciseEvent::ACTIVITY:
             return "modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$resource_id";
@@ -1585,6 +1566,8 @@ function get_activity_url($activity_type, $resource_id, $course_code) {
             return "modules/work/index.php?course=$course_code&id=$resource_id";
         case LearningPathEvent::ACTIVITY:
         case LearningPathDurationEvent::ACTIVITY:
+        case LearningPathProgressMeasureEvent::ACTIVITY:
+        case LearningPathLessonStatusEvent::ACTIVITY:
             return "modules/learnPath/viewer.php?course=$course_code&path_id=$resource_id";
         case ViewingEvent::DOCUMENT_ACTIVITY:
             $doc = Database::get()->querySingle("SELECT path FROM document WHERE id = ?d", $resource_id);
@@ -1594,9 +1577,8 @@ function get_activity_url($activity_type, $resource_id, $course_code) {
                 return "modules/document/index.php?course=$course_code$openDir";
             }
             return "modules/document/index.php?course=$course_code";
-        case ViewingEvent::VIDEO_ACTIVITY:
-            return "modules/video/index.php?course=$course_code";
         case ViewingEvent::VIDEOLINK_ACTIVITY:
+        case ViewingEvent::VIDEO_ACTIVITY:
             return "modules/video/index.php?course=$course_code";
         case ViewingEvent::EBOOK_ACTIVITY:
             return "modules/ebook/index.php?course=$course_code&open=$resource_id";
@@ -1625,9 +1607,14 @@ function get_activity_url($activity_type, $resource_id, $course_code) {
     }
 }
 
+/**
+ * @param $element
+ * @param $resource_id
+ * @return string[]
+ */
 function get_resource_details($element, $resource_id) {
 
-    global $course_id, $langExercise, $langAssignment, $langLearnPath, $langNumOfForums,
+    global $course_id, $langExercise, $langAssignment, $langNumOfForums,
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire,
             $langBlog, $langForums, $langWikiPages, $langWikiCreateWiki, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
@@ -1776,7 +1763,7 @@ function get_resource_details($element, $resource_id) {
             break;
         case RatingEvent::SOCIALBOOKMARK_ACTIVITY:
                 $type = "$langPersoValue $langCourseSocialBookmarks";
-                $title = $langPersoValu;
+                $title = $langPersoValue;
             break;
         case ForumEvent::ACTIVITY:
                 if ($criterion_type == 'recurring') {
@@ -1869,9 +1856,9 @@ function get_resource_details($element, $resource_id) {
 
 
 /**
- * @brief certificate pdf output
+ * @brief certificate PDF output
  * @param int $certificate_id
- * @param int $user_id
+ * @param int $user
  * @param string $certificate_title
  * @param string $certificate_message
  * @param string $certificate_issuer
@@ -2014,7 +2001,7 @@ function register_certified_user($table, $element_id, $user_id): void
 }
 
 /**
- * @brief refresh user progress from activities (note: only from exercises, assignments and learning path)
+ * @brief refresh user progress from activities (note: only from exercises, assignments, and learning path)
  * @param $element
  * @param $element_id
  * @return void
@@ -2114,7 +2101,6 @@ function get_cert_identifier($certificate_id, $user_id) {
 
 /**
  * @brief get public certificate link
- * @global type $urlServer
  * @param type $element_id
  * @param type $user_id
  * @param type $printable
@@ -2216,7 +2202,7 @@ function getFilepaths($certificatesStatus, $fileId, $fileType) {
  * @param $certificatesStatus
  * @param $filePath
  * @param $fileType
- * @return type
+ * @return string
  */
 function getFilenames($certificatesStatus, $fileId, $fileType)
 {
