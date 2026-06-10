@@ -149,6 +149,20 @@ if ($userdata) {
         }
 
         $action_bar = action_bar(array(
+            array('title' => $langSee,
+                    'icon' => 'fa-solid fa-binoculars',
+                    'level' => 'primary',
+                    'options' => array(
+                        array('class' => '', 'title' => $langNotRegistered,
+                              'url' => "{$urlAppend}main/eportfolio/resources.php?view=public",
+                              'icon' => 'fa-solid fa-globe'),
+                        array('class' => '', 'title' => $langRegisteredUsers,
+                              'url' => "{$urlAppend}main/eportfolio/resources.php?view=registered",
+                              'icon' => 'fa-solid fa-users'),
+                        array('class' => '', 'title' => $langUser,
+                              'url' => "{$urlAppend}main/eportfolio/resources.php",
+                              'icon' => 'fa-solid fa-lock'),
+                )),
             array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
                 'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?toggle_val=on",
                 'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye',
@@ -172,18 +186,6 @@ if ($userdata) {
         ));
         $tool_content .= $action_bar;
 
-        $tool_content .= "<div class='d-flex mb-3'><div class='ms-auto'>".action_button(array(
-            array('title' => $langNotRegistered,
-                  'url' => "{$urlAppend}main/eportfolio/resources.php?view=public",
-                  'icon' => 'fa-globe'),
-            array('title' => $langRegisteredUsers,
-                  'url' => "{$urlAppend}main/eportfolio/resources.php?view=registered",
-                  'icon' => 'fa-users'),
-            array('title' => $langUser,
-                  'url' => "{$urlAppend}main/eportfolio/resources.php",
-                  'icon' => 'fa-lock')
-            ),
-            array('secondary_icon' => 'fa-binoculars', 'secondary_title' => $langSee))."</div></div>";
 
         $tool_content .= "<div class='col-12'><div class='alert alert-info alert-dismissible'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                             $langePortfolioCollectionUserInfo</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
