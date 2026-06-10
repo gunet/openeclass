@@ -255,6 +255,7 @@ $langMultiRegUserInfo = "<p>Please enter in the area below a list of user detail
 <li><tt>phone</tt>: Phone number</li>
 <li><tt>username</tt>: Username</li>
 <li><tt>password</tt>: Password</li>
+<li><tt>ext_uid</tt>: External user identifier (depending on authentication method)</li>
 </ul>
 <p>To have the users automatically registered to some courses, please add the course codes after the user details in the end of each line. The e-mail address is optional - you can use a hyphen (-) in its place if you want to omit it. Lines beginning with # are ignored. If you don't specify usernames, they will be automatically created by appending a serial number to the user prefix entered below. If you don't specify passwords, a random password will be created for each account.</p>";
 $langMultiRegCourseInvalid = 'User %s: invalid course code "%s"';
