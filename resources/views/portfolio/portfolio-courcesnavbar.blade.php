@@ -32,12 +32,12 @@
     </div>
     @else
         <div class='col-12'>
-            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{trans('langNotEnrolledToLessons')}}!</span></div>
+            <div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{trans('langNotEnrolledToLessons')}}!</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='{{ trans("langClose") }}'></button></div>
         </div>
         @if($_SESSION['status'] == USER_TEACHER)
-            <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{trans('langWelcomeSelect')}} {!! trans('langWelcomeProfPerso') !!}</span></div></div>
+            <div class='col-12'><div class='alert alert-info alert-dismissible'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{trans('langWelcomeSelect')}} {!! trans('langWelcomeProfPerso') !!}</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='{{ trans("langClose") }}'></button></div></div>
         @else
-            <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{trans('langWelcomeSelect')}} {!! trans('langWelcomeStudPerso') !!}</span></div></div>
+            <div class='col-12'><div class='alert alert-info alert-dismissible'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{trans('langWelcomeSelect')}} {!! trans('langWelcomeStudPerso') !!}</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='{{ trans("langClose") }}'></button></div></div>
         @endif
     @endif
    

@@ -36,7 +36,6 @@
         <link rel="stylesheet" href="{{ $urlAppend }}modules/backpack/css/badge-publication.css">
         <script src="{{ $urlAppend }}modules/backpack/js/badge-publication.js"></script>
         <script>
-            // Language strings for JavaScript
             const BADGE_SELECT_PROVIDER = "{{ trans('langSelectProvider') }}";
             const BADGE_NO_PROVIDERS_CONNECTED = "{{ trans('langNoProvidersConnected') }}";
             const BADGE_PUBLISH_SUCCESS = "{{ trans('langBadgePublishedSuccessfully') }}";
@@ -52,18 +51,14 @@
         <script>
             $(document).on('click', 'a.list-group-item[href*="resources.php"]', function(e) {
                 e.preventDefault();
-
                 const href = $(this).attr('href');
                 const url = new URL(href, window.location.origin);
                 const rid = url.searchParams.get('rid');
-
                 const modalId = `modal_blog_${rid}`;
                 const modalElement = document.getElementById(modalId);
-
                 if (modalElement) {
                     const Modal = new bootstrap.Modal(modalElement);
                     Modal.show();
-
                     const formSelector = `#vis_form_blog_${rid}`;
                     $(formSelector).attr('action', href);
                 } else {
@@ -72,7 +67,6 @@
             });
         </script>
     @endif
-
 @endpush
 
 @section('content')
@@ -88,347 +82,260 @@
                 <div class='mt-4'></div>
             @endif
             @include('layouts.partials.show_alert')
-            <div class='col-12'>
-                <div class="row row-cols-1 row-cols-md-2 g-4">
-                    <div class="col">
-                        <div class="card panelCard border-card-left-default px-3 py-2 h-100">
-                            <div class="card-body">
-                                <div class="col-12">
-                                    <div id='profile-avatar'>
-                                        {!! $profile_img !!}
-                                    </div>
-                                    <h2 class='text-heading-h3 text-center mt-3'> {{ $userdata->surname }} {{ $userdata->givenname }} </h2>
-                                    <div class='text-center title-default-line-height m-3'>
-                                        {{ $userdata->username }}
-                                    </div>
-                                    @if(get_config('eportfolio_enable'))
-										@if ($uid == $id)
-											<p class='text-center mt-2'>
-												<a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php'>
-													{{ trans('langMyePortfolio') }}
-												</a>
-											</p>
-										@elseif($userdata->eportfolio_enable)
-											<p class='text-center mt-2'>
-												<a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}main/eportfolio/index.php?token={{$userdata->eportfolio_token}}'>
-													{{ trans('langMyePortfolio') }}
-												</a>
-											</p>
-										@endif
-                                    @endif
-                                    @if(get_config('personal_blog'))
-                                        <p class='text-center mt-2'>
-                                            <a class='btn submitAdminBtn d-inline-flex' href='{{ $urlAppend }}modules/blog/index.php?user_id={{ $id }}&token={{ token_generate("personal_blog" . $id) }}'>
-                                                {{ trans('langUserBlog') }}
-                                            </a>
-                                        </p>
-                                    @endif
-                                </div>
+
+            {{-- Top profile card: avatar + name + role + dept/date + buttons --}}
+            <div class='col-12 mt-3'>
+                <div class="card panelCard rounded-3 epf-panel-card px-4 profile-top-card" style="padding-top:1.25rem;padding-bottom:1.25rem;">
+                    <div class="d-flex align-items-center gap-4 flex-wrap">
+
+                        {{-- Avatar --}}
+                        {!! $profile_img !!}
+
+                        {{-- Name + role badge + dept/date row --}}
+                        <div class="flex-grow-1">
+                            <div class="fw-bold" style="font-size:1.15rem;">
+                                {{ $userdata->surname }} {{ $userdata->givenname }}
+                            </div>
+                            <div class="d-flex align-items-center gap-2 mt-1 flex-wrap">
+                                <span class="text-muted" style="font-size:0.9rem;">{{ '@' . $userdata->username }}</span>
+                                @php
+                                    if ($userdata->status == USER_TEACHER) { $dp_role = trans('langTeacher'); }
+                                    elseif ($userdata->status == USER_STUDENT) { $dp_role = trans('langStudent'); }
+                                    else { $dp_role = ''; }
+                                @endphp
+                                @if(!empty($dp_role))
+                                    <span class="badge rounded-pill" style="background:#eff6ff;color:#2563eb;font-weight:500;font-size:0.8rem;">{{ $dp_role }}</span>
+                                @endif
                             </div>
                         </div>
-                    </div>
 
-                    <div class="col">
-                        <div class="card panelCard border-card-left-default px-3 py-2 h-100">
-                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                <h2 class='text-heading-h3'>{{ trans('langPersInfo') }}</h2>
-                            </div>
-                            <div class="card-body">
-                                <ul class='list-group list-group-flush'>
-                                    <li class='list-group-item element'>
-                                        <div class='row row-cols-1 row-cols-lg-2 g-1'>
-                                            <div class='col-lg-4 col-12'>
-                                                <div class='title-default'>{{ trans('langUserPermissions') }}</div>
-                                            </div>
-                                            <div class='col-lg-8 col-12 title-default-line-height'>
-                                                {{ $privilege_message }}
-                                            </div>
-                                        </div>
-                                    </li>
-                                    @if (!empty($userdata->email) and allow_access($userdata->email_public))
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>
-                                                <div class='col-lg-4 col-12'>
-                                                    <div class='title-default'>{{ trans('langEmail') }}</div>
-                                                </div>
-                                                <div class='col-lg-8 col-12 title-default-line-height'>
-                                                    {!! mailto($userdata->email) !!}
-                                                </div>
-                                            </div>
-                                        </li>
-                                    @endif
-                                    @if (!empty($userdata->phone) and allow_access($userdata->phone_public))
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>
-                                                <div class='col-lg-4 col-12'>
-                                                    <div class='title-default'>{{ trans('langPhone') }}</div>
-                                                </div>
-                                                <div class='col-lg-8 col-12 title-default-line-height'>
-                                                    {{ $userdata->phone }}
-                                                </div>
-                                            </div>
-                                        </li>
-                                    @endif
-                                    @if (!empty($userdata->am) and allow_access($userdata->am_public))
-                                        <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>
-                                                <div class='col-lg-4 col-12'>
-                                                    <div class='title-default'>{{ trans('langAm') }}</div>
-                                                </div>
-                                                <div class='col-lg-8 col-12 title-default-line-height'>
-                                                    {{ $userdata->am }}
-                                                </div>
-                                            </div>
-                                        </li>
-                                    @endif
-                                    @if($id == $uid && !empty($extAuthList))
-                                        @foreach ($extAuthList as $item)
-                                            <li class='list-group-item element'>
-                                                <div class='row row-cols-1 row-cols-lg-2 g-1'>
-                                                    <div class='col-lg-4 col-12'>
-                                                        <div class='title-default'>{{ trans('langProviderConnectWith') }}</div>
-                                                    </div>
-                                                    <div class='col-lg-8 col-12 title-default-line-height'>
-                                                        <img src='{{ $themeimg }}/{{ $item->auth_name }}.png' alt=''>
-                                                        {{ $authFullName[$item->auth_id] }}
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                    <li class='list-group-item element'>
-                                        <div class='row row-cols-1 row-cols-lg-2 g-1'>
-                                            <div class='col-lg-4 col-12'>
-                                                <div class='title-default'>{{ trans('langFaculty') }}</div>
-                                            </div>
-                                            <div class='col-lg-8 col-12 title-default-line-height'>
-                                                @foreach ($user->getDepartmentIds($id) as $i=>$dep)
-                                                    {!! $tree->getFullPath($dep) !!}
-                                                    @if($i+1 < count($user->getDepartmentIds($id)))
-                                                        <br/>
-                                                    @endif
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class='list-group-item element'>
-                                        <div class='row row-cols-1 row-cols-lg-2 g-1'>
-                                            <div class='col-lg-4 col-12'>
-                                                <div class='title-default'>{{ trans('langProfileMemberSince') }}</div>
-                                            </div>
-                                            <div class='col-lg-8 col-12 title-default-line-height'>
-                                                {{ format_locale_date(strtotime($userdata->registered_at)) }}
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class='panel-group group-section mt-4' id='accordion' role='tablist' aria-multiselectable='true'>
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item px-0 mb-4 bg-transparent">
-                                            <a class="accordion-btn d-flex justify-content-start align-items-start" role="button" data-bs-toggle="collapse" href="#AboutMe" aria-expanded="false">
-                                                <span class="fa-solid fa-chevron-down"></span>
-                                                {{ trans('langAboutMe') }}
-                                            </a>
-                                            <div id="AboutMe" class="panel-collapse accordion-collapse collapse border-0 rounded-0" role="tabpanel" data-bs-parent="#accordion">
-                                                <div class="panel-body bg-transparent Neutral-900-cl px-4">
-                                                    @if(!empty($userdata->description) && ($userdata->pic_public || $_SESSION['status'] == USER_TEACHER || $uid == $id))
-                                                        {!! $userdata->description !!}
-                                                    @else
-                                                        {{ trans('langNoInfoAvailable') }}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            @if($is_user_teacher && get_config('individual_group_bookings'))
-                                <div class='card-footer border-0'>
-                                    <div class='col-12'>
-                                        <div class='control-label-notes mb-3'>{{ trans('langAvailableDateForUser') }}</div>
-                                        <div id='smallCalendar{{ $id }}' class='calendarViewDatesTutorGroup'></div>
-                                        @if(isset($_GET['id']) and isset($_GET['token']) and $is_simple_user)
-                                            <a class="btn submitAdminBtnDefault w-100 m-auto mt-3"
-                                                href="{{ $urlAppend }}main/profile/add_available_dates.php?uBook={{ $id }}&bookWith=1&do_booking=1&token={{ $_GET['token'] }}">
-                                                    {{ trans('langDoBooking') }}
-                                            </a>
-                                        @endif
-                                    </div>
-                                </div>
+                        {{-- Action buttons --}}
+                        <div class="d-flex gap-2 flex-wrap flex-shrink-0 align-items-center">
+                            @if(get_config('eportfolio_enable'))
+                                @if($uid == $id)
+                                    <a class="btn btn-primary d-inline-flex align-items-center gap-2"
+                                       href="{{ $urlAppend }}main/eportfolio/index.php">
+                                        <i class="fa-solid fa-table-columns"></i>{{ trans('langMyePortfolio') }}
+                                    </a>
+                                @elseif($userdata->eportfolio_enable)
+                                    <a class="btn btn-primary d-inline-flex align-items-center gap-2"
+                                       href="{{ $urlAppend }}main/eportfolio/index.php?token={{ $userdata->eportfolio_token }}">
+                                        <i class="fa-solid fa-table-columns"></i>{{ trans('langMyePortfolio') }}
+                                    </a>
+                                @endif
+                            @endif
+                            @if(get_config('personal_blog'))
+                                <a class="btn btn-outline-secondary d-inline-flex align-items-center gap-2"
+                                   href="{{ $urlAppend }}modules/blog/index.php?user_id={{ $id }}&token={{ token_generate('personal_blog' . $id) }}">
+                                    <i class="fa-regular fa-user"></i>{{ trans('langUserBlog') }}
+                                </a>
+                            @endif
+                            @if($uid == $id)
+                                <a class="btn btn-outline-secondary d-inline-flex align-items-center gap-2"
+                                   href="{{ $urlAppend }}main/profile/profile.php?edProfile=true">
+                                    <i class="fa-solid fa-pen-to-square"></i>{{ trans('langModProfile') }}
+                                </a>
+                            @elseif(get_config('dropbox_allow_personal_messages'))
+                                <a class="btn btn-outline-secondary d-inline-flex align-items-center gap-2"
+                                   href="{{ $urlAppend }}modules/message/index.php?upload=1&amp;id={{ $id }}">
+                                    <i class="fa-solid fa-envelope"></i>{{ trans('langProfileSendMail') }}
+                                </a>
                             @endif
                         </div>
+
                     </div>
                 </div>
             </div>
 
-            @if ($userdata->status != USER_GUEST)
-                {!! render_profile_fields_content(array('user_id' => $id)) !!}
-            @endif
-            @if(!isset($_GET['id']) and !isset($_GET['token']))
-                @if(count($cert_completed) > 0 or count($badge_completed) > 0)
-                    @if (count($cert_completed) > 0)
-                        <div class='col-12 mt-4'>
-                            <div class="card panelCard border-card-left-default px-3 py-2">
-                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h2 class='text-heading-h3'>{{ trans('langMyCertificates') }}</h2>
-                                </div>
-                                <div class="card-body">
-                                    @if (count($cert_completed) == 1)
-                                        <div class='row row-cols-1 row-cols-md-1 g-4'>
-                                    @else
-                                        <div class='row row-cols-1 row-cols-md-2 g-4'>
-                                    @endif
-                                        @foreach ($cert_completed as $key => $certificate)
-                                            <div class='col'>
-                                                <div class="card h-100 border-0">
-                                                    <img style='height:150px; width:150px;' src="{{ $urlServer }}resources/img/game/badge.png" class="card-img-top ms-auto me-auto mt-3" alt="certificate">
-                                                    <div class="card-body text-center">
-                                                        <a href='../out.php?i={{ $certificate->identifier }}'>
-                                                            <h4 class='certificate_panel_title text-center'>
-                                                                {!! $certificate->cert_title !!}
-                                                            </h4>
-                                                            <div class='text-center text-success'>
-                                                                {!! format_locale_date(strtotime($certificate->assigned), null, false) !!}
-                                                            </div>
-                                                            <div class='certificate_panel_issuer text-center'>
-                                                                {!! $certificate->cert_issuer !!}
-                                                            </div>
+            {{-- Personal Info + Academic Info (left) | About Me + Awards (right) --}}
+            @php
+                $deptIds     = $user->getDepartmentIds($id);
+                $hasCerts    = count($cert_completed) > 0;
+                $hasBadges   = count($badge_completed) > 0;
+                $hasExternal = isset($openBadgesEnabled) && $openBadgesEnabled && isset($badge_external) && count($badge_external) > 0;
+            @endphp
+            <div class="col-12 mt-4">
+                <div class="row g-3">
 
-                                                            <div class='certificate_panel_state text-center mt-2'>
-                                                                <i class='fa fa-check-circle fa-inverse state_success fs-5'></i>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
+                    {{-- Left column: Personal Info stacked above Academic Info --}}
+                    <div class="col-md-4 d-flex flex-column gap-3">
+
+                        {{-- Personal Info card --}}
+                        <div class="card panelCard rounded-3 epf-panel-card px-4 py-3">
+                            <h2 class="text-heading-h3 mb-3">{{ trans('langPersInfo') }}</h2>
+                            <div class="d-flex flex-column gap-3">
+                                @if(!empty($userdata->email) and allow_access($userdata->email_public))
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="epf-cat-icon flex-shrink-0" style="background:#f97316;">
+                                            <i class="fa-solid fa-envelope"></i>
+                                        </div>
+                                        <span class="text-muted" style="font-size:0.9rem;">{!! mailto($userdata->email) !!}</span>
                                     </div>
+                                @endif
+                                @if(!empty($userdata->phone) and allow_access($userdata->phone_public))
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="epf-cat-icon flex-shrink-0" style="background:#22c55e;">
+                                            <i class="fa-solid fa-phone"></i>
+                                        </div>
+                                        <span class="text-muted" style="font-size:0.9rem;">{{ $userdata->phone }}</span>
+                                    </div>
+                                @endif
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="epf-cat-icon flex-shrink-0" style="background:#8b5cf6;">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </div>
+                                    <span class="text-muted" style="font-size:0.9rem;">{{ $privilege_message }}</span>
                                 </div>
+                                @if(!empty($userdata->am) and allow_access($userdata->am_public))
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="epf-cat-icon flex-shrink-0" style="background:#06b6d4;">
+                                            <i class="fa-solid fa-id-card"></i>
+                                        </div>
+                                        <span class="text-muted" style="font-size:0.9rem;">{{ $userdata->am }}</span>
+                                    </div>
+                                @endif
+                                @if($id == $uid && !empty($extAuthList))
+                                    @foreach($extAuthList as $item)
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="epf-cat-icon flex-shrink-0" style="background:#6366f1;">
+                                                <i class="fa-solid fa-link"></i>
+                                            </div>
+                                            <span class="text-muted" style="font-size:0.9rem;">
+                                                <img src="{{ $themeimg }}/{{ $item->auth_name }}.png" alt="">
+                                                {{ $authFullName[$item->auth_id] }}
+                                            </span>
+                                        </div>
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
-                    @endif
-                    @if (count($badge_completed) > 0)
-                        <div class='col-12 mt-4'>
-                            <div class="card panelCard border-card-left-default px-3 py-2">
-                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h2 class='text-heading-h3'>{{ trans('langBadges') }}</h2>
+
+                        {{-- Academic Info card --}}
+                        @if(!empty($deptIds))
+                            <div class="card panelCard rounded-3 epf-panel-card px-4 py-3">
+                                <h2 class="text-heading-h3 mb-3">{{ trans('langAcademicInfo') }}</h2>
+                                <div class="d-flex flex-column gap-3">
+                                    @foreach($deptIds as $dep)
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="epf-cat-icon flex-shrink-0" style="background:#3b82f6;">
+                                                <i class="fa-solid fa-building-columns"></i>
+                                            </div>
+                                            <span class="text-muted" style="font-size:0.9rem;">{!! $tree->getFullPath($dep) !!}</span>
+                                        </div>
+                                    @endforeach
                                 </div>
-                                <div class="card-body">
-                                    @if(count($badge_completed) == 1)
-                                    <div class='row row-cols-1 row-cols-md-1 g-4'>
-                                    @else
-                                    <div class='row row-cols-1 row-cols-md-2 g-4'>
-                                    @endif
-                                        @foreach ($badge_completed as $key => $badge)
-                                            <div class='col'>
-                                                <div class="card h-100 border-0 badge-card-wrapper">
-                                                    <img style='height:150px; width:150px;' src="{{ $urlServer . BADGE_TEMPLATE_PATH . get_badge_filename($badge->badge) }}" class="card-img-top ms-auto me-auto mt-3" alt="badge">
-                                                    <div class="card-body">
-                                                        <a href='../../modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}'>
-                                                            <div class='text-heading-h5 text-center'>
-                                                                {{ ellipsize($badge->title, 40) }}
-                                                            </div>
-                                                            <div class='badge_date text-center text-success'>
-                                                                {!! format_locale_date(strtotime($badge->assigned), null, false) !!}
-                                                            </div>
-                                                            <div class='bagde_panel_issuer text-center'>
-                                                                {!! $badge->issuer !!}
-                                                            </div>
-                                                        </a>
+                            </div>
+                        @endif
+
+                    </div>
+
+                    {{-- Right column: About Me + Awards stacked --}}
+                    <div class="col-md-8 d-flex flex-column gap-3">
+
+                        {{-- About Me card --}}
+                        <div class="card panelCard rounded-3 epf-panel-card px-4 py-3">
+                            <h2 class="text-heading-h3 mb-3">{{ trans('langAboutMe') }}</h2>
+                            @if(!empty($userdata->description) && ($userdata->pic_public || $_SESSION['status'] == USER_TEACHER || $uid == $id))
+                                <p class="text-muted mb-0" style="font-size:0.9rem;">{!! standard_text_escape($userdata->description) !!}</p>
+                            @else
+                                <p class="text-muted mb-0" style="font-size:0.9rem;">-</p>
+                            @endif
+                        </div>
+
+                        {{-- Certificates card --}}
+                        @if($hasCerts)
+                            <div class="card panelCard epf-panel-card rounded-3 px-4 py-3">
+                                <h2 class="text-heading-h3 mb-3">{{ trans('langMyCertificates') }}</h2>
+                                <div class="row row-cols-1 row-cols-md-2 g-3">
+                                    @foreach($cert_completed as $certificate)
+                                        <div class="col">
+                                            <a href="../out.php?i={{ $certificate->identifier }}"
+                                               class="card h-100 border p-3 d-flex flex-row align-items-center gap-3 text-decoration-none epf-award-item">
+                                                <img style="height:65px;width:65px;object-fit:contain;flex-shrink:0;"
+                                                     src="{{ $urlServer }}resources/img/game/badge.png"
+                                                     alt="{{ trans('langCertificate') }}">
+                                                <div class="text-start">
+                                                    <div class="fw-semibold text-dark mb-1">{!! $certificate->cert_title !!}</div>
+                                                    <div class="text-muted small">{!! $certificate->cert_issuer !!}</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Badges card --}}
+                        @if($hasBadges)
+                            <div class="card panelCard epf-panel-card rounded-3 px-4 py-3">
+                                <h2 class="text-heading-h3 mb-3">{{ trans('langBadges') }}</h2>
+                                <div class="row row-cols-1 row-cols-md-2 g-3">
+                                    @foreach($badge_completed as $badge)
+                                        <div class="col">
+                                            <div class="card h-100 border p-3 epf-award-item badge-card-wrapper">
+                                                <a href="{{ $urlAppend }}modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}"
+                                                   class="d-flex align-items-center gap-3 text-decoration-none flex-grow-1">
+                                                    <img style="height:65px;width:65px;object-fit:contain;flex-shrink:0;"
+                                                         src="{{ $urlServer . BADGE_TEMPLATE_PATH . get_badge_filename($badge->badge) }}"
+                                                         alt="{{ trans('langBadge') }}">
+                                                    <div class="text-start">
+                                                        <div class="fw-semibold text-dark mb-1">{{ ellipsize($badge->title, 40) }}</div>
+                                                        <div class="text-muted small">{!! $badge->issuer !!}</div>
                                                     </div>
-                                                    <!-- Badge Publish Status -->
-                                                    @if ($uid == $id && isset($openBadgesEnabled) && $openBadgesEnabled)
-                                                    <div class='badge-card-footer d-flex flex-wrap align-items-center justify-content-between gap-2'>
-                                                        @if (!empty($badge->external_assertion_id))
-                                                            <!-- Badge is published -->
-                                                            <div class='badge-published-status d-flex align-items-center gap-2 mb-0'>
-                                                                <i class='fa fa-check-circle text-success'></i>
-                                                                <span class='text-success'>{{ trans('langPublishedToBackpack') }}</span>
+                                                </a>
+                                                @if($uid == $id && isset($openBadgesEnabled) && $openBadgesEnabled)
+                                                    <div class="badge-card-footer d-flex flex-wrap align-items-center justify-content-between gap-2 mt-2 pt-2 border-top">
+                                                        @if(!empty($badge->external_assertion_id))
+                                                            <div class="badge-published-status d-flex align-items-center gap-2 mb-0">
+                                                                <i class="fa fa-check-circle text-success"></i>
+                                                                <span class="text-success small">{{ trans('langPublishedToBackpack') }}</span>
                                                             </div>
-                                                        @elseif (isset($badge->allow_export) && $badge->allow_export == 0)
-                                                            <!-- Badge export is disabled by instructor -->
-                                                            <div class='badge-card-footer-text text-muted mb-0'>
-                                                                {{ trans('langPublishToBackpack') }}
-                                                            </div>
-                                                            <div class='badge-card-actions d-flex align-items-center gap-2 flex-wrap'>
-                                                                <button class='badge-publish-btn disabled' 
-                                                                        disabled
-                                                                        data-bs-toggle='tooltip'
-                                                                        data-bs-placement='left'
-                                                                        title='{{ trans('langBadgeExportDisabled') }}'
-                                                                        style='opacity: 0.5; cursor: not-allowed;'>
-                                                                    <i class='fa fa-cloud-upload'></i>
+                                                        @elseif(isset($badge->allow_export) && $badge->allow_export == 0)
+                                                            <div class="badge-card-actions d-flex align-items-center gap-2 flex-wrap">
+                                                                <button class="badge-publish-btn disabled" disabled
+                                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                        title="{{ trans('langBadgeExportDisabled') }}"
+                                                                        style="opacity:0.5;cursor:not-allowed;">
+                                                                    <i class="fa fa-cloud-upload"></i>
                                                                 </button>
-                                                                <span class='text-muted small'>
-                                                                    {{ trans('langBadgeExportDisabledShort') }}
-                                                                </span>
+                                                                <span class="text-muted small">{{ trans('langBadgeExportDisabledShort') }}</span>
                                                             </div>
                                                         @else
-                                                            <!-- Badge not published yet -->
-                                                            <div class='badge-card-footer-text mb-0'>
-                                                                {{ trans('langPublishToBackpack') }}
-                                                            </div>
-                                                            <div class='badge-card-actions d-flex align-items-center gap-2 flex-wrap'>
-                                                                <button class='badge-publish-btn disabled' 
-                                                                        data-user-badge-id='{{ $badge->user_badge_id }}'
-                                                                        data-bs-toggle='tooltip'
-                                                                        data-bs-placement='left'
-                                                                        title='{{ trans('langPublishBadgeTooltip') }}'
-                                                                        aria-label='{{ trans('langPublishBadgeAriaLabel') }}'>
-                                                                    <i class='fa fa-cloud-upload'></i>
+                                                            <span class="text-muted small">{{ trans('langPublishToBackpack') }}</span>
+                                                            <div class="badge-card-actions d-flex align-items-center gap-2 flex-wrap">
+                                                                <button class="badge-publish-btn"
+                                                                        data-user-badge-id="{{ $badge->user_badge_id }}"
+                                                                        data-bs-toggle="tooltip" data-bs-placement="left"
+                                                                        title="{{ trans('langPublishBadgeTooltip') }}"
+                                                                        aria-label="{{ trans('langPublishBadgeAriaLabel') }}">
+                                                                    <i class="fa fa-cloud-upload"></i>
                                                                 </button>
                                                             </div>
                                                         @endif
                                                     </div>
-                                                    @endif
-                                                </div>
+                                                @endif
                                             </div>
-                                        @endforeach
-                                    </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
-                        </div>
-                    @endif
-                    
-                    {{-- External Badges from Backpack --}}
-                    @if (isset($openBadgesEnabled) && $openBadgesEnabled && isset($badge_external) && count($badge_external) > 0)
-                        <div class='col-12 mt-4'>
-                            <div class="card panelCard border-card-left-default px-3 py-2">
-                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3>
-                                        {{ trans('langExternalBadges') }}
-                                        <small class='text-muted ms-2'>({{ trans('langSyncedFromBackpack') }})</small>
-                                    </h3>
-                                </div>
-                                <div class="card-body">
-                                    @if(count($badge_external) == 1)
-                                    <div class='row row-cols-1 row-cols-md-1 g-4'>
-                                    @else
-                                    <div class='row row-cols-1 row-cols-md-2 g-4'>
-                                    @endif
-                                        @foreach ($badge_external as $key => $badge)
-                                            <div class='col'>
+                        @endif
 
-                                                @if (get_config('eportfolio_enable') && ($id == $uid))
-                                                <div class="text-end">
-                                                    {!!
-                                                        action_button(array(
-                                                            array(
-                                                                'title' => trans('langAddResePortfolio'),
-                                                                'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=external_badges&amp;rid=".$badge->user_badge_id,
-                                                                'icon' => 'fa-star'
-                                                            ),
-                                                        ))
-                                                    !!}
-                                                </div>
+                        {{-- External badges card --}}
+                        @if($hasExternal)
+                            <div class="card panelCard epf-panel-card rounded-3 px-4 py-3">
+                                <h2 class="text-heading-h3 mb-3">{{ trans('langExternalBadges') }}</h2>
+                                <div class="row row-cols-1 row-cols-md-2 g-3">
+                                    @foreach($badge_external as $badge)
+                                        <div class="col">
+                                            @if(get_config('eportfolio_enable') && ($id == $uid))
                                                 <div class="modal fade" id="modal_blog_{{$badge->user_badge_id}}" tabindex="-1" aria-labelledby="blogModalLabel_{{$badge->user_badge_id}}" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="blogModalLabel_{{$badge->user_badge_id}}">{{trans('langAddResePortfolio')}} - {{ellipsize($badge->title, 40)}}</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="'.$langClose.'"></button>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
-                
                                                             <div class="modal-body">
                                                                 <form id="vis_form_blog_{{$badge->user_badge_id}}" name="vis_form_blog_{{$badge->user_badge_id}}" action="" method="post">
                                                                     <div class="mb-3">
@@ -446,58 +353,63 @@
                                                                     <button type="submit" class="btn btn-primary">{{trans('langSubmit')}}</button>
                                                                 </form>
                                                             </div>
-                
                                                         </div>
                                                     </div>
                                                 </div>
+                                            @endif
+                                            <a href="{{ !empty($badge->external_assertion_id) ? $badge->external_assertion_id : '#' }}"
+                                               target="_blank" rel="noopener"
+                                               class="card h-100 border p-3 d-flex flex-row align-items-center gap-3 text-decoration-none epf-award-item">
+                                                @if(!empty($badge->image_url))
+                                                    <img style="height:65px;width:65px;object-fit:contain;flex-shrink:0;"
+                                                         src="{{ $badge->image_url }}"
+                                                         alt="{{ trans('langExternalBadge') }}"
+                                                         onerror="this.src='{{ $urlServer }}resources/img/game/badge.png'">
+                                                @else
+                                                    <img style="height:65px;width:65px;object-fit:contain;flex-shrink:0;"
+                                                         src="{{ $urlServer }}resources/img/game/badge.png"
+                                                         alt="{{ trans('langExternalBadge') }}">
                                                 @endif
-
-                                                <div class="card h-100 border-0 badge-card-wrapper external-badge">
-                                                    @if(!empty($badge->image_url))
-                                                        <img style='height:150px; width:150px; object-fit: contain;' 
-                                                             src="{{ $badge->image_url }}" 
-                                                             class="card-img-top ms-auto me-auto mt-3" 
-                                                             alt="external badge"
-                                                             onerror="this.src='{{ $urlServer }}resources/img/game/badge.png'">
-                                                    @else
-                                                        <img style='height:150px; width:150px;' 
-                                                             src="{{ $urlServer }}resources/img/game/badge.png" 
-                                                             class="card-img-top ms-auto me-auto mt-3" 
-                                                             alt="external badge">
-                                                    @endif
-                                                    <div class="card-body">
-                                                        <div class='text-heading-h5 text-center'>
-                                                            {{ ellipsize($badge->title, 40) }}
-                                                        </div>
-                                                        @if(!empty($badge->created))
-                                                            <div class='badge_date text-center text-success'>
-                                                                {!! format_locale_date(strtotime($badge->created), null, false) !!}
-                                                            </div>
-                                                        @endif
-                                                        <div class='bagde_panel_issuer text-center'>
-                                                            {{ $badge->issuer ?? trans('langUnknownIssuer') }}
-                                                        </div>
-                                                        @if(!empty($badge->description))
-                                                            <div class='badge_description text-center text-muted mt-2' style='font-size: 0.9em;'>
-                                                                {{ ellipsize($badge->description, 100) }}
-                                                            </div>
-                                                        @endif
-                                                    </div>
+                                                <div class="text-start">
+                                                    <div class="fw-semibold text-dark mb-1">{{ ellipsize($badge->title, 40) }}</div>
+                                                    <div class="text-muted small">{{ $badge->issuer ?? trans('langUnknownIssuer') }}</div>
                                                 </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                                            </a>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
-                        </div>
-                    @endif
-                @endif
+                        @endif
+
+                    </div>{{-- /col-md-8 --}}
+
+                </div>
+            </div>
+
+            {{-- Teacher availability calendar --}}
+            @if($is_user_teacher && get_config('individual_group_bookings'))
+                <div class="col-12 mt-4">
+                    <div class="card panelCard rounded-3 epf-panel-card px-4 py-3">
+                        <div class="control-label-notes mb-3">{{ trans('langAvailableDateForUser') }}</div>
+                        <div id="smallCalendar{{ $id }}" class="calendarViewDatesTutorGroup"></div>
+                        @if(isset($_GET['id']) && isset($_GET['token']) && $is_simple_user)
+                            <a class="btn submitAdminBtnDefault w-100 m-auto mt-3"
+                               href="{{ $urlAppend }}main/profile/add_available_dates.php?uBook={{ $id }}&bookWith=1&do_booking=1&token={{ $_GET['token'] }}">
+                                {{ trans('langDoBooking') }}
+                            </a>
+                        @endif
+                    </div>
+                </div>
             @endif
+
+            @if ($userdata->status != USER_GUEST)
+                {!! render_profile_fields_content(array('user_id' => $id)) !!}
+            @endif
+
         </div>
     </div>
 </main>
 
-<!-- Include Publish Badge Modal -->
 @if ($uid == $id && !isset($_GET['id']) && !isset($_GET['token']))
     @include('modules.backpack.templates.publish_badge_modal')
 @endif

@@ -32,7 +32,7 @@ require_once 'main/eportfolio/eportfolio_functions.php';
 require_once 'modules/sharing/sharing.php';
 
 if (!get_config('eportfolio_enable')) {
-    $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
+    $tool_content = "<div class='alert alert-danger alert-dismissible'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
     if ($session->status == 0) {
         draw($tool_content, 0);
     } else {
@@ -91,27 +91,43 @@ if ($userdata) {
         }
 
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span></div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
         }
 
         if (isset($_GET['view']) && $_GET['view'] == 'public') {
             $view_str = "?view=public";
-            $preview_info_div = "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
-                    $langePortfolioPreviewAsGuest</span>
+            $preview_info_div = "<div class='col-12'><div class='alert alert-info alert-dismissible'><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                    $langePortfolioPreviewAsGuest</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div></div>";
         } elseif (isset($_GET['view']) && $_GET['view'] == 'registered') {
             $view_str = "?view=registered";
-            $preview_info_div = "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
-                    $langePortfolioPreviewAsRegistered</span>
+            $preview_info_div = "<div class='col-12'><div class='alert alert-info alert-dismissible'><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                    $langePortfolioPreviewAsRegistered</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div></div>";
         } else {
             $view_str = "";
             $preview_info_div = "";
         }
         
+        $resources_url = "{$urlAppend}main/eportfolio/resources.php".$view_str;
+
         $action_bar = action_bar(array(
+                                        array('title' => $langSee,
+                                            'icon' => 'fa-solid fa-binoculars',
+                                            'level' => 'primary',
+                                            'options' => array(
+                                                array('class' => '', 'title' => $langNotRegistered,
+                                                      'url' => "{$urlAppend}main/eportfolio/index.php?view=public",
+                                                      'icon' => 'fa-solid fa-globe'),
+                                                array('class' => '', 'title' => $langRegisteredUsers,
+                                                      'url' => "{$urlAppend}main/eportfolio/index.php?view=registered",
+                                                      'icon' => 'fa-solid fa-users'),
+                                                array('class' => '', 'title' => $langUser,
+                                                      'url' => "{$urlAppend}main/eportfolio/index.php",
+                                                      'icon' => 'fa-solid fa-lock'),
+                                            )),
                                         array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
                                             'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?toggle_val=on",
                                             'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye',
@@ -127,33 +143,42 @@ if ($userdata) {
                                         array('title' => $langEditChange,
                                             'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                                             'icon' => 'fa-edit' ),
-                                        array('title' => $langResourcesCollection,
-                                            'url' => "{$urlAppend}main/eportfolio/resources.php".$view_str,
-                                            'icon' => 'fa-solid fa-award',
-                                            'level' => 'primary'
-                                            )
                                 ));
         $tool_content .= $action_bar;
 
-        $tool_content .= "<div class='d-flex mb-3'><div class='ms-auto'>".action_button(array(
-            array('title' => $langNotRegistered,
-                  'url' => "{$urlAppend}main/eportfolio/index.php?view=public",
-                  'icon' => 'fa-globe'),
-            array('title' => $langRegisteredUsers,
-                  'url' => "{$urlAppend}main/eportfolio/index.php?view=registered",
-                  'icon' => 'fa-users'),
-            array('title' => $langUser,
-                  'url' => "{$urlAppend}main/eportfolio/index.php",
-                  'icon' => 'fa-lock')
-            ),
-            array('secondary_icon' => 'fa-binoculars', 'secondary_title' => $langSee))."</div></div>";
+        $warning = '';
 
+        if (!file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
+            $warning = $langePortfolioAddCVPrompt;
+        }
 
+        $eportfolio_completion = calculate_eportfolio_completion($id);
+        if ($eportfolio_completion < 30) {
+            if (!empty($warning)) {
+                $warning .= "<br><br>".$langePortfolioComplBelow30;
+            } else {
+                $warning = $langePortfolioComplBelow30;
+            }
+        } elseif ($eportfolio_completion < 60) {
+            if (!empty($warning)) {
+                $warning .= "<br><br>".$langePortfolioComplBelow60;
+            } else {
+                $warning = $langePortfolioComplBelow60;
+            }
+        }
+
+        if (!empty($warning)) {
+           $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                    $warning</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                </div>"; 
+
+        }
+        
         $tool_content .= $preview_info_div;
 
     } else {
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span></div></div>";
+            $tool_content = "<div class='col-12'><div class='alert alert-danger alert-dismissible'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
             if ($session->status == 0) {
                 draw($tool_content, 0);
             } else {
@@ -162,16 +187,14 @@ if ($userdata) {
             exit;
         }
 
+        $resources_url = "{$urlAppend}main/eportfolio/resources.php?token=$userdata->eportfolio_token";
+
         $action_bar = action_bar(array(
                                         array('title' => $langBio,
                                             'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;token=$userdata->eportfolio_token",
                                             'icon' => 'fa-solid fa-book-open',
                                             'level' => 'primary-label',
                                             'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
-                                        array('title' => $langResourcesCollection,
-                                              'url' => "{$urlAppend}main/eportfolio/resources.php?token=$userdata->eportfolio_token",
-                                              'icon' => 'fa-solid fa-award',
-                                              'level' => 'primary-label'),
                                     ));
 
         $tool_content .= $action_bar;
@@ -183,39 +206,23 @@ if ($userdata) {
         }
     }
 
-    $head_content .= "<script type='text/javascript'>
-    $(document).ready(function() {
-        /* Check if we are in safari and fix Bootstrap Affix*/
-        if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
-        var stickywidget = $('#floatMenu');
-        var explicitlySetAffixPosition = function() {
-            stickywidget.css('left',stickywidget.offset().left+'px');
-        };
-        /* Before the element becomes affixed, add left CSS that is equal to the distance of the element from the left of the screen */
-        stickywidget.on('affix.bs.affix',function(){
-            stickywidget.removeAttr('style');
-            explicitlySetAffixPosition();
-        });
-        stickywidget.on('affixed-bottom.bs.affix',function(){
-            stickywidget.css('left', 'auto');
-        });
-        /* On resize of window, un-affix affixed widget to measure where it should be located, set the left CSS accordingly, re-affix it */
-        $(window).resize(function(){
-            if(stickywidget.hasClass('affix')) {
-                stickywidget.removeClass('affix');
-                explicitlySetAffixPosition();
-                stickywidget.addClass('affix');
-            }
-        });
-    }
-    </script>";
+    $head_content .= eportfolio_alert_css();
 
     $head_content .= "
         <script>
         $(function() {
             var navLinks = \$('#navbar-exampleIndexPortfolio .nav-link');
+            var scrollLock = false;
+
+            navLinks.on('click', function() {
+                navLinks.removeClass('active');
+                \$(this).addClass('active');
+                scrollLock = true;
+                setTimeout(function() { scrollLock = false; }, 1000);
+            });
 
             function updateActive() {
+                if (scrollLock) return;
                 var scrollTop = \$(window).scrollTop();
                 var offset = 90;
                 var current = null;
@@ -240,28 +247,14 @@ if ($userdata) {
         </script>
     ";
 
-    $head_content .= "
-        <script>
-        $(function() {
-            $('#floatMenu').affix({
-              offset: {
-                top: 230,
-                bottom: function () {
-                  return (this.bottom = $('.footer').outerHeight(true))
-                }
-              }
-            })
-        });
-        </script>";
-
-    $tool_content .= render_eportfolio_profile_card($id);
+    $tool_content .= render_eportfolio_profile_card($id, $resources_url ?? null, $langResourcesCollection);
 
     $ret_str = render_eportfolio_fields_content($id);
 
     if ($ret_str['panels'] == "") {
         $tool_content .= "
                     <div class='col-12'>
-                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoInfoAvailable.</span>
+                        <div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoInfoAvailable.</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                         </div>
                     </div>";
     } else {

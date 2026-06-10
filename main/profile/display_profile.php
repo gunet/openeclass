@@ -119,6 +119,7 @@ if ($data['userdata']) {
     } else {
         $allow_password_change = true;
     }
+    $data['allow_password_change'] = $allow_password_change;
     if ($uid == $data['id']) {
         $passurl = $urlServer . 'main/profile/password.php';
         $data['action_bar'] =
