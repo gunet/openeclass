@@ -143,6 +143,7 @@ if ($data['isInOpenCoursesMode']) {
 } else {
     list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true, 'textIfEmpty' => true));
 }
+$data['childCount'] = $childCount;
 
 $queryCourseIds = '';
 $queryExtraSelect = '';

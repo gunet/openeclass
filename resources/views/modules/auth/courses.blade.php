@@ -42,17 +42,20 @@
             </div>
 
             <div class='col-12 mt-4'>
-                <div class='d-flex justify-content-between align-items-center'>
-                    <h2 class='text-heading-h3 mb-2'>{{ trans('langFaculties') }}</h2>
-                </div>
+
                 @if (isset($buildRoots))
                     {!! $buildRoots !!}
                 @endif
                 <div class='col-12'>
                     <h2 tabindex='0' class='text-heading-h3 mb-2' aria-label="{{ trans('NavCatCourses') }}">{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=', true) !!}</h2>
-                    <ul class='list-group list-group-flush'>
-                        {!! $childHTML !!}
-                    </ul>
+                    @if ($childCount > 0)
+                        <div class='d-flex justify-content-between align-items-center mt-4'>
+                            <h2 class='text-heading-h3 mb-2'>{{ trans('langFaculties') }}</h2>
+                        </div>
+                        <ul class='list-group list-group-flush' style="margin-left: 1rem">
+                            {!! $childHTML !!}
+                        </ul>
+                    @endif
                 </div>
             </div>
 
