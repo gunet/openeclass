@@ -815,7 +815,7 @@ jContent;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn submitAdminBtn ms-1" id="treeModalSelect">' . $langSelect . '</button>
-                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>                    
+                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>
                 </div>
             </div>
         </div></div>';
@@ -1323,7 +1323,7 @@ jContent;
         $ret = '';
         if (count($res) > 0) {
             // locate root parent of current Node
-            $node0 = $this->getNodeLgtRgt($currentNode);
+            $node0 = $this->getNodeLftRgt($currentNode);
             $parent = $this->getRootParent($node0->lft, $node0->rgt);
             $parentId = ($parent) ? $parent->id : $currentNode;
 
