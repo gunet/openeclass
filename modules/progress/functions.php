@@ -1187,7 +1187,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                         $act_link_open  = "<div onclick=\"window.location.href='{$urlServer}{$act_url}'\" class='progress-activity-card-link' style='cursor:pointer;display:block;height:100%;'>";
                                         $act_link_close = "</div>";
                                     } else {
-                                        $act_link_open  = $act_url ? "<a class='progress-activity-card-link' href='{$urlServer}{$act_url}' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
+                                        $act_link_open  = $act_url ? "<a class='progress-activity-card-link' href='{$urlServer}$act_url' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
                                         $act_link_close = $act_url ? "</a>" : '';
                                     }
                                     $tool_content .= "

@@ -2375,6 +2375,8 @@ function certificate_criterion_map_function(&$data, $maps) {
                     break;
         case 'learning path':
         case 'learning path duration':
+        case 'learning path progress measure':
+        case 'learning path lesson status':
                     $data['resource'] = $lp_learnPath_map[$data['resource']];
                     $data['module'] = MODULE_ID_LP;
                     break;
@@ -2433,6 +2435,8 @@ function badge_criterion_map_function(&$data, $maps) {
                     break;
         case 'learning path':
         case 'learning path duration':
+        case 'learning path progress measure':
+        case 'learning path lesson status':
                     $data['resource'] = $lp_learnPath_map[$data['resource']];
                     $data['module'] = MODULE_ID_LP;
                     break;

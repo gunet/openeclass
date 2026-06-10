@@ -1554,9 +1554,10 @@ function resource_usage($element, $element_resource_id) {
  * @brief get resource details given a certificate resource
  * @param type $element
  * @param type $resource_id
- * @return type
+ * @return string
  */
 function get_activity_url($activity_type, $resource_id, $course_code) {
+
     switch ($activity_type) {
         case ExerciseEvent::ACTIVITY:
             return "modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$resource_id";
@@ -1565,6 +1566,8 @@ function get_activity_url($activity_type, $resource_id, $course_code) {
             return "modules/work/index.php?course=$course_code&id=$resource_id";
         case LearningPathEvent::ACTIVITY:
         case LearningPathDurationEvent::ACTIVITY:
+        case LearningPathProgressMeasureEvent::ACTIVITY:
+        case LearningPathLessonStatusEvent::ACTIVITY:
             return "modules/learnPath/viewer.php?course=$course_code&path_id=$resource_id";
         case ViewingEvent::DOCUMENT_ACTIVITY:
             $doc = Database::get()->querySingle("SELECT path FROM document WHERE id = ?d", $resource_id);
@@ -1574,9 +1577,8 @@ function get_activity_url($activity_type, $resource_id, $course_code) {
                 return "modules/document/index.php?course=$course_code$openDir";
             }
             return "modules/document/index.php?course=$course_code";
-        case ViewingEvent::VIDEO_ACTIVITY:
-            return "modules/video/index.php?course=$course_code";
         case ViewingEvent::VIDEOLINK_ACTIVITY:
+        case ViewingEvent::VIDEO_ACTIVITY:
             return "modules/video/index.php?course=$course_code";
         case ViewingEvent::EBOOK_ACTIVITY:
             return "modules/ebook/index.php?course=$course_code&open=$resource_id";
@@ -1761,7 +1763,7 @@ function get_resource_details($element, $resource_id) {
             break;
         case RatingEvent::SOCIALBOOKMARK_ACTIVITY:
                 $type = "$langPersoValue $langCourseSocialBookmarks";
-                $title = $langPersoValu;
+                $title = $langPersoValue;
             break;
         case ForumEvent::ACTIVITY:
                 if ($criterion_type == 'recurring') {
