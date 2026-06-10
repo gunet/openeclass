@@ -52,7 +52,7 @@
                         <div class='d-flex justify-content-between align-items-center mt-4'>
                             <h2 class='text-heading-h3 mb-2'>{{ trans('langFaculties') }}</h2>
                         </div>
-                        <ul class='list-group list-group-flush' style="margin-left: 1rem">
+                        <ul class='list-group list-group-flush'>
                             {!! $childHTML !!}
                         </ul>
                     @endif

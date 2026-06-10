@@ -1262,7 +1262,7 @@ jContent;
                     }
 
                     $ret .= "<li class='list-group-item element'>
-                                <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap gap-2'>
+                                <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap gap-2' style='padding-left: 1rem'>
                                     <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                                         $f_img ";
                     $ret .= ($options['textIfEmpty'] && $count == 0) ? "<span class='TextBold'>" . q($name) . "</span>" : "<a class='TextBold' href='$url.php?fc=" . $id . "'>" . q($name) . "</a>";
