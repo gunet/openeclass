@@ -148,23 +148,7 @@ if ($userdata) {
             ),
             array('secondary_icon' => 'fa-binoculars', 'secondary_title' => $langSee))."</div></div>";
 
-        if (!file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioAddCVPrompt</span>
-                </div>";
-        }
 
-        $eportfolio_completion = calculate_eportfolio_completion($id);
-        if ($eportfolio_completion < 30) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioComplBelow30</span>
-                </div>";
-        } elseif ($eportfolio_completion < 60) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
-                    $langePortfolioComplBelow60</span>
-                </div>";
-        }
-        
         $tool_content .= $preview_info_div;
 
     } else {
