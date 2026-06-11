@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2025-12-02 16:31:15
+// Generated 2026-06-11 10:59:49
 
 $langCourse = "Kurs";
 $langEclass = "Open eClass - die asynchrone E-Learning Plattform";
@@ -87,8 +87,6 @@ $langOfCourseReviewer = "Reviewer";
 $langsCourseReviewer = "reviewer";
 $langsOfCourseReviewer = "reviewer";
 $langCTeacher = "INSTRUCTOR";
-$langCStudent = "LEARNER";
-$langCStudent2 = "STUDENT";
 $langAlignment = "Alignment";
 $langWidth = "Width";
 $langAlignLeft = "Left";

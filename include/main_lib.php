@@ -5561,7 +5561,7 @@ function get_suppressed_words_data($action = 'words') {
 }
 
 /**
- * Return a set of strings from a messages file for a specific language.
+ * Return a set of strings from a message file for a specific language.
  *
  * This function returns for a given language code and a set of language variables
  * their values from the respective messages file.
@@ -5572,8 +5572,12 @@ function get_suppressed_words_data($action = 'words') {
  */
 function load_lang_strings(string $lang, array $strings) : array {
     global $language_codes;
+
     //add global variables to suppress warnings for undefined variables in messages.inc.php files
-    global $siteName, $InstitutionUrl, $Institution ;
+    $siteName = $GLOBALS['siteName'];
+    $InstitutionUrl = $GLOBALS['InstitutionUrl'];
+    $Institution = $GLOBALS['Institution'];
+
     $arr = array();
     
     if (isset($language_codes[$lang])) {

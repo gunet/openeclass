@@ -1,24 +1,7 @@
 <?php
-/*
- *  ========================================================================
- *  * Open eClass
- *  * E-learning and Course Management System
- *  * ========================================================================
- *  * Copyright 2003-2026, Greek Universities Network - GUnet
- *  *
- *  * Open eClass is an open platform distributed in the hope that it will
- *  * be useful (without any warranty), under the terms of the GNU (General
- *  * Public License) as published by the Free Software Foundation.
- *  * The full license can be read in "/info/license/license_gpl.txt".
- *  *
- *  * Contact address: GUnet Asynchronous eLearning Group
- *  *                  e-mail: info@openeclass.org
- *  * ========================================================================
- *
- */
 
 // Message file for language en
-// Generated 2026-03-31 11:43:38
+// Generated 2026-06-11 10:59:50
 
 $langYes = "Yes";
 $langNo = "No";
@@ -354,7 +337,20 @@ $langDay_of_weekNames['long'] = array('Sunday', 'Monday', 'Tuesday', 'Wednesday'
 $langMonthNames['init'] = array('J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D');
 $langMonthNames['short'] = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 $langMonthNames['long'] = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-$langMonthNames['fine'] = $langMonthNames['long'];
+$langMonthNames['fine'] = array(
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+);
 $langOn = "Of";
 $langRegUser = "course registered users";
 $langModifAnn = "Modify this announcement";
@@ -512,7 +508,7 @@ $langNonUserContact = "To contact this course\'s $langsTeachers, you
 must have a valid account and be logged-in to the system. Please
 visit the <a href='%s'>login page</a>.";
 $langIntroMessage = "Compose your message";
-$langDescrInfo = 'Brief course description';
+$langDescrInfo = 'Course description';
 $langFieldsRequ = "All fields required";
 $langFieldsOptional = "Optional fields";
 $langFieldsOptionalNote = "note: you can change anything you wish later";
@@ -527,7 +523,7 @@ $langCourseAddon = "Other Information:";
 $langErrorDir = "Unable to create course subdirectory. The course was not created! <br><br>Please check <em>courses</em> directory access permissions.";
 $langSubsystems = "Select the desired enabled modules";
 $langLanguageTip = "Select the language that will be used in the course's pages";
-$langAccess = "Course Access Type:";
+$langAccess = "Access Type";
 $langAvailableTypes = "Course access";
 $langModules = "Modules:";
 $langTestForum = "General forum";
@@ -556,8 +552,6 @@ $langCatagoryMain = "Main";
 $langCatagoryGroup = "Groups forums";
 $langNoGroup = "There are no user groups defined";
 $langEnterMetadata = "You can modify any course settings by clicking in 'Course Administration'";
-$langUseOfCoby = "Enable use of Cadmos / Coby service";
-$langUploadCadmosFile = 'Upload Cadmos (.cdm) file';
 $langCreateCourse = "Create new course wizard";
 $langCreateCourseStep = "Step";
 $langCreateCourseStep2 = "of";
@@ -647,11 +641,6 @@ $langGerman = "German";
 $langGreek = "Greek";
 $langItalian = "Italian";
 $langSpanish = "Spanish";
-$langAlbanian = "Albanian";
-$langArabic = "Arabic";
-$langChinese = "Chinese";
-$langRussian = "Russian";
-$langTurkish = "Turkish";
 $langDirectory = "Folder";
 $langGeneralError = "An error has occurred. Please contact the platform administrator.";
 $langExercicesView = "Exercise View";
@@ -872,7 +861,6 @@ $langPublicAccess = "open";
 $langForumType = "Forum type";
 $langPropModify = "Modify settings";
 $langGroupAccess = "Access";
-$NavCatCourses = "Navigation path to course categories";
 $langGroupFilledGroups = "Groups have been filled (or completed) by $langsOfStudentss present in the 'Users' list.";
 $langGroupInfo = "Group Info";
 $langEmailGroup = "Send message to group";
@@ -939,7 +927,7 @@ $langAccountInactive1 = "Inactive Account.";
 $langAccountInactive2 = "Please contact the administrator to activate your account.";
 $langMyCoursesProf = "My courses (".$langsTeachers.")";
 $langMyCoursesUser = "My registered courses (".$langStudent.")";
-$langNoCourses = "There are no $langsCourses";
+$langNoCourses = "There are no $langsCourses available in this category!";
 $langCourseCreate = "Create Course";
 $langMyAgenda = "My Calendar";
 $langMyStats = "User Statistics";
@@ -1249,6 +1237,7 @@ $langAllCategoryDel = "Delete all categories and all links";
 $langAllCategoryDeleted = "All categories and all links have been deleted";
 $langGiveURL = "Please give the link URL";
 $langGiveCategoryName = "Please give the category name";
+$langNoCategory = 'No category';
 $langCategorisedLinks = "Categorised links";
 $langProfNoLinksExist = "No links exist! <br /><p align=\"center\">You may use the tool operations to add links.";
 $langNoLinksExist = "No links exist!";
@@ -1620,11 +1609,7 @@ $langUserAccount = "".$langStudent." Account";
 $langProfAccount = "".$langTeacher." Account";
 $langUserAccountInfo1 = 'New Account Request';
 $langUserAccountInfo2 = 'New Account Registration';
-$langUserAccountHelp1 = '';
-$langUserAccountHelp2 = '';
-$langUserAccountHelp3 = '';
-$langUserAccountHelp4 = '';
-$langUserAccountHelp5 = '';
+$langUserAccountInfo3 = 'Alternative Selection';
 $langNewAccount = 'New Account';
 $langNewAccountActivation = 'Account Activation';
 $langNewUserAccountActivation = $langStudent. ' Account Activation';
@@ -1876,7 +1861,6 @@ $langUserLogins = "User visits";
 $langUserDuration = "User participation";
 $langStartDate = "Start Date";
 $langEndDate = "End Date";
-$langStartEndDate = "Active Period";
 $langAllUsers = "All Users";
 $langAllCourses = "All Courses";
 $langSubmit = "Submit";
@@ -2339,6 +2323,7 @@ $langNewForumCat = "New forum category";
 $langNewForum = "New Forum";
 $langEditedBy = "Edited by";
 $langCaptchaWrong = "Wrong Captcha";
+$langUserAccountInfo4 = 'Login as a different user';
 $langMultiRegUserData = "Usernames";
 $langRegistrationDateShort = "Registration <br />date";
 $langUserDurationAccount = "User Account Duration";
@@ -2348,7 +2333,6 @@ $langInsertEBook = "e-book";
 $langAddToCourseHome = "Display / Don't display in course home page";
 $langGlossaryExpand = 'Display glossary terms in course pages';
 $langConfig = 'Config settings';
-$langTenantConfig = 'Tenant Config settings';
 $langSections = 'Sections';
 $langJQSelectNum = 'Selected # from #';
 $langJQNoneSelected = 'Select';
@@ -2455,7 +2439,6 @@ $langDropBoxIncompatible = "Attention! 'Dropbox' probably hasn't been restored p
 $langInfoGrades = "grades";
 $langInfoGrade = "grade";
 $langFromRandomQuestions = "random questions from";
-$langNoRandomization ="No randomization";
 $lang_email_verification_required = "Email verification of $langOfUser is required";
 $langCategoryDeletedGlossary = "Category has been deleted. The terms belonging to it are now unclassified.";
 $langEmailVerified = "email has been verified";
@@ -2724,7 +2707,6 @@ $langPurgeExerciseResults = "Delete course exercise results";
 $langClearStats = "Clear Statistics";
 $langStatsCleared = "Statistics cleared";
 $langMultiCourse = 'Multiple course creation';
-$langMultiCourseDelete = "Multiple course deletion";
 $langMultiCourseInfo = 'Enter course titles (one title per line). If you wish to add a course administrator, too then enter his username or name / surname, separated with character "|".';
 $langMultiCourseTitles = 'Courses Titles';
 $langMultiCourseData = 'Course Data';
@@ -3415,7 +3397,6 @@ $langNoStats = "No statistics available";
 $langCatVideoDirectory = "Categorized multimedia files";
 $langCatVideoDirectoryCreated = "Category added";
 $langMyProfile = "Μy Profile";
-$langProfileLinks = "Links of short user profile";
 $m['with_deadline'] = "With Submission Deadline";
 $m['late_submission'] = "Late Submission";
 $m['late_submission_enable'] = "Enable late submission";
@@ -3624,12 +3605,6 @@ $langAvailableUnitResources = "Educational Resource";
 $langNoteSaved = "Submitted successfully";
 $langLoginBgGradient = "Login screen background gradient";
 $langLoginImg = "Login screen image in the right side of login page";
-$langLoginBgImage = "Background image to the login page";
-$langBgColorCardLogin = "Background color to the form login";
-$langBgBorderColorCardLogin = "Border color to the form login";
-$langTextColorCardLogin = "Text color in the form login";
-$langLinkColorCardLogin = "Link color in the form login";
-$langLinkHoverColorCardLogin = "Hover to the link color of the form login";
 $langThemeOptionsName = "Theme Options Name";
 $langMyCoursesSide = "My $langsCourses";
 $langMyMessagesSide = 'My Messages';
@@ -3676,6 +3651,7 @@ $langBlogSharing = "Blog post sharing in social networks";
 $lang_display_captcha_label = "Security Code (CAPTCHA)";
 $lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';
 $langAddGUser = "Add Guest User";
+$langUserForum = 'User';
 $langStopNotify = "Stop notification via email if replies are posted";
 $langNoLinkInCategory = "There are no links in this category";
 $langNoLinkCategories = "There are no link categories";
@@ -3707,7 +3683,6 @@ $langExtAppConfig = 'External Tools';
 $langActiveTheme = 'Active Theme';
 $langPreviewState = 'You are in a preview state of theme';
 $langThemeInstalled = 'Theme was successfully installed';
-$langThemeEditNotAllowed = 'Editing/deleting is not allowed for this theme';
 $langAvailableThemes = 'Available Themes';
 $langLayout = 'Layout';
 $langFluid = 'Fluid';
@@ -4521,9 +4496,6 @@ $langNoGradeRubrics = 'No rubrics available.';
 $langTitleRubric = "Rubric name";
 $langRubricDesc = "Rubric description";
 $langRubricCrit = "Criterion";
-$langRubricCritTitle = "Criterion title";
-$langDelCrit = "Delelte criterion";
-$langAddScaleText = "Add scale option";
 $langAddRubricCriteria = "New criterion";
 $langRubricOptions = "Rubric options";
 $langRubricOption1 = "Allow student preview of the rubric before grading";
@@ -4549,14 +4521,9 @@ $langMyePortfolio = 'My e-portfolio';
 $langUserePortfolio = 'User e-portfolio';
 $langePortfolioChangeSucc = 'E-portfolio changes were processed succesfully';
 $langPersInfo = 'Personal info';
-$langAcademicInfo = 'Academic information';
 $langEduEmpl = 'Education and employment';
 $langAchievements = 'Achievements';
 $langGoalsSkills = 'Goals and skills';
-$langResearchProfiles = 'Research Profiles';
-$langGoogleScholarProfile = 'Google Scholar Profile';
-$langScopusID = 'Scopus ID';
-$langOrcid = 'ORCID ID';
 $langBirthDate = 'Birth date';
 $langBirthPlace = 'Birth place';
 $langGender = 'Gender';
@@ -4594,29 +4561,6 @@ $langCareerSkills = 'Career skills';
 $langFBProfile = 'Facebook profile';
 $langTwitterAccount = 'Twitter account';
 $langLinkedInProfile = 'LinkedIn profile';
-$langGScholarURLValidFail = 'Field %s is invalid (required format https://scholar.google.com/citations?user=XXXXXXXXXXX). ';
-$langOrcidURLValidFail = 'Field %s is invalid (required format https://orcid.org/0000-xxxx-xxxx-xxxx). ';
-$langScopusIDValidFail = 'Field %s is invalid (required format 9 to 11 numeric characters)';
-$langFacebookUrlValidFail = 'Field %s is invalid (required format https://www.facebook.com/xxxxxx ή https://fb.me/xxxxxx)';
-$langTwitterUrlValidFail = 'Field %s is invalid (required format https://twitter.com/xxxxxx ή https://x.com/xxxxxx)';
-$langLinkedInUrlValidFail = 'Field %s is invalid (required format https://www.linkedin.com/in/xxxxxx)';
-$langLangProfLevel = 'Language Proficiency Level';
-$langLangCEFRA1 = 'A1 - Beginner';
-$langLangCEFRA2 = 'Α2 - Elementary';
-$langLangCEFRB1 = 'B1 - Intermediate';
-$langLangCEFRB2 = 'B2 - Upper-Intermediate';
-$langLangCEFRC1 = 'C1 - Advanced';
-$langLangCEFRC2 = 'C2 - Proficient / Mastery';
-$langOtherLanguages = 'Other languages';
-$langePortfolioOtherLanguagesDescr = '<p>List any other languages ​​you may know, as well as your level of proficiency.</p>';
-$langVolontSocialAct = 'Social and Volunteer Activities';
-$langSocialActivities = 'Social Activities';
-$langVolunteerActivities = 'Volunteer Activities';
-$langePortfolioFieldsVisibilitySettings = 'Visibility settings';
-$langPublicePortfolioField = 'Public';
-$langOpenToRegisteredUsers = 'Visible to registered users';
-$langePortfolioPreviewAsGuest = 'You are in preview mode. You are vewing this page as guest user. You can change preview mode using the Preview button.';
-$langePortfolioPreviewAsRegistered = 'You are in preview mode. You are vewing this page as registered user. You can change preview mode using the Preview button.';
 $langBio = 'Curriculum vitae';
 $langBioQuota = 'E-portfolio CV quota';
 $langUploadBioFailSize = 'The CV file size exceeds maximum allowed limit (%d MB)';
@@ -4631,8 +4575,6 @@ $langePortfolioDisabled = 'e-portfolio feature is disabled by the platform\'s ad
 $langUserePortfolioDisabled = 'This user has disabled the e-portfolio feature.';
 $langePortfolioDisableWarning = 'Your e-portfolio is disabled, therefore it is not accessible to platform\s users and guests';
 $langAddResePortfolio = 'Add to e-Portfolio';
-$langAddResePortfolioExternalAchievements = 'Add to e-Portfolio (external achievements)';
-$langExternalAchievements = 'External Achievements';
 $langAddGroupWorkSubePortfolio = 'Add submission of group "%s" to e-Portfolio';
 $langResourcesCollection = 'Resources collection';
 $langePortfolioResourceAdded = 'The resource was successfully added to your collection';
@@ -4648,113 +4590,6 @@ $langCopiedSucc = 'Copied';
 $langCopiedErr = 'Press Ctrl+c to copy';
 $langResetMap = "Reset Map";
 $langCourseCategoryActions = "Metadata Categories";
-$langReflectionComment = "Reflection Comment";
-$langePortfolioPromptAddReflComments = "Optionally record some personal, reflective comments about this resource. Answer questions like \"What did I learn from this activity?\" or \"What difficulties and challenges did I face?\", etc.";
-$langePortfolioAddCVPrompt = "Don't forget to upload your CV! It's one of the key elements of a complete e-portfolio.";
-$langePortfolioCertificatesAwardsDescr = "<p>Record official certifications, distinctions, or awards you have received from educational institutions, organizations, or competitions. These may include language certifications, professional licenses, competition participations with honors, or other recognized achievements.</p>
-<p>Filling in this field enhances the credibility of your profile and highlights your skills and efforts.</p>
-<p><strong>It is recommended to include:</strong></p>
-<ul>
-  <li>Title of the certification or award</li>
-  <li>Issuing organization</li>
-  <li>Date obtained</li>
-  <li>Brief description or subject</li>
-  <li>(Optional) Relevant link</li>
-</ul>";
-$langePortfolioPublicationsDescr = "<p>Record scientific articles, papers, presentations, or other written work you have published in journals, conferences, websites, or other official platforms.</p>
-<p>This field highlights your research or writing activity and provides evidence of your expertise in specific areas.</p>
-<p><strong>It is recommended to include:</strong></p>
-<ul>
-  <li>Title of publication</li>
-  <li>Authors (if collaborative work)</li>
-  <li>Place and type of publication (e.g., journal, conference, website)</li>
-  <li>Date of publication</li>
-  <li>(Optional) Relevant link</li>
-</ul>";
-$langePortfolioPersonalGoalsDescr = "<p>Record your individual goals related to learning, professional development, or personal growth. Goals may include skills you want to develop, experiences you seek, or achievements you aim to accomplish.</p>
-<p>Formulating personal goals helps focused progress and gives meaning to your educational and professional choices.</p>
-<p><strong>It is recommended to write:</strong></p>
-<ul>
-  <li>Specific and realistic goal</li>
-  <li>Brief explanation of why it is important to you</li>
-  <li>(Optional) Timeline or plan for achievement</li>
-</ul>";
-$langePortfolioAcademicGoalsDescr = "<p>Record goals related to your studies and learning path. These may include obtaining a degree, improving performance in specific courses, or developing skills in academic fields of interest.</p>
-<p>Formulating academic goals helps plan and monitor your progress, strengthening your commitment to learning.</p>
-<p><strong>It is recommended to write:</strong></p>
-<ul>
-  <li>Specific goal related to studies</li>
-  <li>Brief justification of the goal</li>
-  <li>(Optional) Expected steps or timeline</li>
-</ul>";
-$langePortfolioCareerGoalsDescr = "<p>Record goals related to your career and professional development. These may include job positions you pursue, skills you want to acquire, or significant professional achievements you aim for.</p>
-<p>Recording career goals helps design your path and focus on specific steps to achieve them.</p>
-<p><strong>It is recommended to write:</strong></p>
-<ul>
-  <li>Specific professional goal</li>
-  <li>Reasons why you consider it important</li>
-  <li>(Optional) Action plan or timeline</li>
-</ul>";
-$langePortfolioPersonalSkillsDescr = "<p>Record skills related to your personal development, such as communication, teamwork, time management, or problem-solving.</p>
-<p>These skills are important for effective collaboration and professional success.</p>
-<p><strong>It is recommended to mention:</strong></p>
-<ul>
-  <li>The skills you possess</li>
-  <li>Examples where you have applied them</li>
-  <li>(Optional) Ways to improve or develop</li>
-</ul>";
-$langePortfolioAcademicSkillsDescr = "<p>Record the skills you have developed through your studies, such as research, data analysis, written and oral communication, or the use of specialized tools.</p>
-<p>These skills enhance your academic performance and prepare you for future professional challenges.</p>
-<p><strong>It is recommended to mention:</strong></p>
-<ul>
-  <li>The academic skills you possess</li>
-  <li>Examples of their application</li>
-  <li>(Optional) Areas for further development</li>
-</ul>";
-$langePortfolioCareerSkillsDesc = "<p>Record the skills you have acquired through work or professional experience, such as technical knowledge, project management, leadership, or the use of specialized tools and software.</p>
-<p>These skills enhance your professional efficiency and ability to take on responsibilities.</p>
-<p><strong>It is recommended to mention:</strong></p>
-<ul>
-  <li>The professional skills you possess</li>
-  <li>Examples of their application</li>
-  <li>(Optional) Plan for further improvement</li>
-</ul>";
-$langePortfolioPersonalWebsiteDescr = "<p>If you have a personal website or online profile, record the URL where you present your work or CV. If you don’t have one, you can leave this field blank.</p>
-<p>This allows others to see more about you online, if available.</p>
-<p><strong>It is recommended to include:</strong></p>
-<ul>
-  <li>Valid URL</li>
-  <li>Brief description of the content (optional)</li>
-</ul>";
-$langePortfolioEmploymentDescr = "<p>Record the job positions you have held, along with your main duties and achievements. Mention the employer, duration of employment, and job responsibilities.</p>
-<p>This field highlights your professional path and the skills you have acquired through practical experience.</p>
-<p><strong>It is recommended to include:</strong></p>
-<ul>
-  <li>Job title</li>
-  <li>Employer’s name</li>
-  <li>Duration of employment</li>
-  <li>Main duties and achievements</li>
-</ul>";
-$langePortfolioSocialActivitiesDescr = "<p>Record your participation in activities with social or community character, such as organizations, groups, or initiatives aimed at social development and awareness.</p>
-<p>This field highlights your social responsibility and commitment to improving the community.</p>
-<p><strong>It is recommended to include:</strong></p>
-<ul>
-  <li>Type of activity or organization</li>
-  <li>Role and activities</li>
-  <li>Duration of participation</li>
-  <li>Results or impact</li>
-</ul>";
-$langePortfolioVolunteerActivitiesDescr = "<p>Record your participation in volunteer initiatives where you offer services or assistance without pay, such as charity events, social services, or organizations.</p>
-<p>This field highlights your willingness for selfless contribution and active involvement.</p>
-<p><strong>It is recommended to include:</strong></p>
-<ul>
-  <li>Type of volunteer activity</li>
-  <li>Role and responsibilities</li>
-  <li>Duration and frequency of participation</li>
-  <li>Achievements or experiences</li>
-</ul>";
-$langePortfolioComplBelow30 = "Fill in as many fields as possible to better showcase your skills, experiences, and interests. Your e-portfolio is your personal footprint – start building it today!";
-$langePortfolioComplBelow60 = "Keep completing your e-portfolio to fully highlight your profile. The more complete it is, the stronger your presence will be.";
 $langCourseCategoryDel = "Delete category";
 $langCourseCategoryEdit = "Edit category";
 $langAllCourseCategories = "Metadata Categories";
@@ -4816,7 +4651,7 @@ $langForumNotifications = "$langStudents notifications";
 $langActivateForumNotifications = "Enable $langsStudents notification (via email)";
 $langDisableForumNotifications = "Disable $langsStudents notification (via email)";
 $langPublicDocumentManagement = 'Public documents editing';
-$langPublicDocumentManagementExplanation = 'Allow upload and editing of files in the Documents module for all registered users';
+$langPublicDocumentManagementExplanation = "Uploading and managing files in 'Documents' by all registered $langsOfStudentss";
 $langEnableDocsPublicWrite = "Enable public document management option";
 $langOrLoginWith = 'Or log in with';
 $langNumEntryFound = '%s result found matching your search';
@@ -4835,30 +4670,6 @@ $langHasAssignmentPublished = 'One file has been submitted';
 $langWillExpireUsers = "Expire in one month";
 $langAttendanceNoActMessageTc = "There are no conferences for automatic registration";
 $langSGradebookBook = "Register grade";
-$langPointsGames = "Points games";
-$langPointsGame = "Points game";
-$langPoints = "Points";
-$langNewPointsGame = "New points game";
-$langNewPointsGameSuc = "New points game created succesfully";
-$langActivateLeaderboard = "Enable leaderboard";
-$langAnonymizeLeaderboard = "Anonymize leaderboard";
-$langLeaderboardActivation = "Ranking table";
-$langLeaderboardAnonymization = "Table anonymization";
-$langLeaderboard = "Leaderboard";
-$langCompletion = "completion";
-$langForNextLevel = "for next level";
-$langPointsGameRecActivities = "Recurring activities";
-$langPointsGameOneTimeActivities = "One-time activities";
-$langPointsGameNoRecActivities = "There are no recurring activities";
-$langPointsGameNoOneTimeActivities = "There are no one-time activities";
-$langActivityMaxPoints = "Maximum total points for this activity";
-$langActivityMaxPointsInPeriod = "Maximum points for this activity in time period";
-$langActivityMaxPointsTimePeriod = "Time period (days)";
-$langPointsGameLevels = "Levels";
-$langPointsGameLevelName = "Level name";
-$langPointsGameLevelRequiredPoints = "Required points";
-$langPointsWon = "Congratulations! You have just won %s points!";
-$langLevelPromoted = "Congratulations! You have just been promoted to level <i>%s</i>!";
 $langCertificate = "Certificate";
 $langCertificates = "Certificates";
 $langNewCertificateSuc = "Certificate created successfully";
@@ -4883,10 +4694,6 @@ $langNoInsCert = "There are no activities";
 $lanfCertNoValMes = "If you don't define a value, activity completion will be take into account";
 $langNoCertificates = 'There are no certificates. You can create a new one by clicking on "New certificate"';
 $langNoBadges = 'There are no badges. You can create a new one by clicking on "New Badge"';
-$langNoPointsGames = 'There are no points games. You can create a new one by clicking on "New point game"';
-$langNoCertificatesStud = "There are no certificates.";
-$langNoBadgesStud = "There are no badges.";
-$langNoPointsGames = "There are no points games.";
 $langTemplate = 'Template';
 $langOfAssignment = 'Assignment';
 $langOfBlog = 'blog';
@@ -4896,7 +4703,7 @@ $langOfPoll = 'Questionnaire';
 $langOfBlogComments = "Blog comments";
 $langOfCourseComments = "$langsCourse comments";
 $langOfLearningPath = "Learning Path score";
-$langNoCertificateUsers = "There are no $langsStudents who participate in this certificate.";
+$langNoCertificateUsers = "The $langsStudents have not yet started their activities.";
 $langUsedCertRes = "Activity has alread been used by some $langsstudent_acc";
 $langNoUserActivity = "$langStudent hasn't completed any actitivity.";
 $langTotalPercentCompleteness = "Percentage of completion";
@@ -4918,7 +4725,6 @@ $langBadgeDetails = "Badge details";
 $langCourseParticipation = "Participation duration";
 $langCourseHoursParticipation = "Hours of participation";
 $langNoCertBadge = "There are no certificates or badges.";
-$langNotAllowedCertBadge = "You do not have permission to edit the certificate or badge.";
 $langResourceBelongsToCert = "Resource belongs to certificate or badge.";
 $langTemplateBelongsToCert = "Template has been used by certificate.";
 $langIconBelongsToBadge = "The icon has beed used by some badge.";
@@ -4944,7 +4750,6 @@ $langGradeNumber = "Number";
 $langGradeScale = "Scale grade";
 $langDeleteSubmission = 'Submission delete';
 $langGradeRubricsSelect = "Select Rubric";
-$langRubricCriteria = "Criteria";
 $langRubricWeight = "The sum of percentage completion must be equal to 100";
 $langRubricDeleted = "Rubric deleted";
 $langRubricNotEditable = "Rubric has been used in assignment(s) and is not editable.";
@@ -4983,16 +4788,10 @@ $langNewScoreRecorded = 'The recalculated score was recorded';
 $langQuestionStoredScore = 'Recorded Question Score';
 $langContactAdminAuth = "Contact with admin";
 $langDeleteCourseActivities = "Delete activities";
-$langResetPointsGame = "Reset points game";
 $langPurge = "Purge activities";
 $langConfirmPurgeCourseCompletion = "Caution: The completion record for all users in this course will be deleted.";
 $langConfirmPurgeBadge = "Caution: The progress record for this badge will be deleted for all course users.";
 $langConfirmPurgeCert = "Caution: The progress record for this certificate will be deleted for all course users.";
-$langConfirmResetPointsGame = "Caution: The progress record for this points game will be deleted for all course users!";
-$langConfirmPurgePointsGame = "Caution: The points game will be permanently deleted and all relevant data will be lost!";
-$langPointsGameReset = "The points game was succesfully reset.";
-$langCourseCompletionNotActivated = "Course completion has not been activated yet.";
-$langActivateCourseCompletion = "Activate Course Completion";
 $langDownloadCourse = "Download $langsCourse";
 $langTopics = "Topics";
 $langGoToHomePage = 'Go to home page';
@@ -5561,7 +5360,7 @@ $langAttemptStarted = "First Attempt";
 $langAttemptAccessed = "Last Access";
 $langAttemptsNb = "Number of attempts";
 $langExerciseFeedback = "Completion Μessage";
-$langExerciseFeedbackInfo = "appears after exercise is complete";
+$langExerciseFeedbackInfo = "appears after the exercise is completed";
 $langQuestionFeedback = "Feedback";
 $langPageUpdated = "Page updated";
 $langPageDeleted = "The page was deleted";
@@ -5625,11 +5424,6 @@ $langBBBCronEnableInstructions = '
 <code>{cronURL}</code><br>
 This can be done, for instance, via an external webcron service.</p>
 <p>In any case, the call must be made every minute in order for the log data to be accurate.</p>';
-$langViewRecording = "Watch the video";
-$langViewListRecordings = "Recorded videos";
-$langViewDeletedListRecordings = "Deleted recorded videos";
-$langTotalSizeRecordings = "Total size of recorded videos";
-$langNoAvailableRecordings = "There are no recorded videos.";
 $langAPITokenLongDesc = "Information for calls currently supported by the API can be found
 <a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>here</a>.";
 $langAPITokenCreated = "Token created. Please copy it for use in your application.";
@@ -5683,8 +5477,6 @@ $langOpenCamera = "Open camera";
 $langMaxRecAudioTime = "max recording time: 5 min";
 $langMaxRecVideoTime = "max recording time: 2 min";
 $langOfLearningPathDuration = "Learning Path duration";
-$langOfLearningPathProgressMeasure = "Learning Path progress";
-$langOfLearningPathLessonStatus = "Learning Path completion";
 $langRefreshProgress = "Refresh from activities";
 $langRefreshProgressInfo = "Refreshing only takes into account exercises, assignments and learning path progress.";
 $langRefreshProgressResults = "$langStudents progress updated";
@@ -5728,7 +5520,6 @@ $lang_allow_rec_audio = "Allow creation of audio recordings in $langsCourse docu
 $langLearningPathCleanAttempt = "Start over on next attempt";
 $langConfirmLpCleanAttemptTitle = "Confirmation for starting over on next attempt";
 $langConfirmLpCleanAttemptBody = "With this option the next attempt of the Learning Path <u>will not</u> use the saved data to continue from where you last left off.<br/><br/><em>Cancel</em> your choice if you <u>do not</u> wish to start over on the next attempt.";
-$langLearningPathProgressOutdated = "Progress display may be outdated. It will refresh automatically.";
 $langAssignmentParticipation = "Assignment Participation";
 $langParticipateSimple = "Simple Participation";
 $langQuickSurvey = "Quick Poll";
@@ -5813,15 +5604,10 @@ $langSSOMailAttr = "Profile attribute for e-mail";
 $langSSOGivenNameAttr = "Profile attribute for First Name";
 $langSSOSurnameAttr = "Profile attribute for Last Name";
 $langSSOStudentIDAttr = "Profile attribute for Student ID";
-$langSSOUsernameAttr = "Profile attribute for user identifier";
-$langSSOUidIsUsername = "Use user identifier attribute as username";
-$langSSOUsernameHelp = "When the user identifier attribute is not used as username, the username is created using the prefix and an auto-incremented number.";
 $langFCDigitalStorytelling = "Digital Storytelling";
 $langFCSupportingMaterial = "Supporting Material";
 $langAddNewAuthMethod = 'Add new authentication mode';
 $langViaOAuth2 = 'authentication via OAuth 2.0';
-$langViaKeycloak = 'authentication via Keycloak (OIDC)';
-$langViaLTI = 'authentication via LTI';
 $langAvailable = "available";
 $langNoQuestionWeight = "The question does not have a grade";
 $langNoQuestionAnswers = "There are no answers to the question";
@@ -6046,7 +5832,6 @@ $langConcerngingCommentsPanels = "Regarding the panels of both blog and course";
 $langConcerngingQuestionnairePanels = "Regarding the questionnaires panels";
 $langConcerngingExercisePanels = "Redarding the display of question in the exercise panel";
 $langConcerngingReportsPanels = "Regarding the user reports panels in a session";
-$langConcerngingProgressActivitiesPanels = "Regarding the progress activities panels in a course";
 $langPanels = "Card";
 $langForms = "Forms";
 $langBgForms = "Background color";
@@ -6205,55 +5990,6 @@ $langBgColorListItem = "Background color to the list item";
 $langBgBorderColorListItem = "Border color to the bottom side of list item";
 $langNotesNotifications = "Notifications";
 $langAnalyticsStatus = 'Level';
-// sticky notes
-$langStickyNotes = "Sticky Notes";
-$langStickyNotesTopic = "Topic";
-$langStickyNotesTopics = "Topics";
-$langStickyNotesTotal = "Notes";
-$langStickyNotesTopicCreated = "The topic was created";
-$langStickyNotesTopicUpdated = "The topic was updated";
-$langStickyNotesTopicFailed = "Failed to create new topic";
-$langStickyNotesTopicDeletionFailed = "Failed to delete the topic";
-$langStickyNotesTopicDeleted = "The topic was deleted";
-$langStickyNotesTopicNotFound = "The topic was not found";
-$langNewTopic = "New topic";
-$langStickyNotesAllowEdit = "Allow creators to edit notes";
-$langStickyNotesAllowDelete = "Allow creators to delete notes";
-$langStickyNotesNoTopics = "No topics found";
-$langNoStickyNotes = "No sticky notes found";
-$langStickyNotesMoved  = 'Note moved successfully!';
-$langStickyNotesMoveError = 'Failed to move note';
-$langStickyNotesConnError = 'Connection error';
-$langStickyNotesDeleted = 'Note deleted successfully';
-$langStickyNotesDeleteError = 'Failed to delete note';
-$langStickyNotesConfirmDelete = 'Are you sure you want to delete this note?';
-$langStickyNotesConfirmDeleteSub = 'This action cannot be undone.';
-$langStickyNotesPerPage  = 'Notes per page';
-$langStickyNotesHasCategories  = 'Categories (Kanban)';
-$langStickyNotesCategoriesHint = 'Enable to organise notes into Kanban-style columns';
-$langStickyNotesCategories     = 'Categories';
-$langStickyNotesCategoryName   = 'Category name';
-$langNewStickyNote  = 'New Note';
-$langEditStickyNote = 'Edit Note';
-$langStickyNotesColor = 'Note colour';
-$langStickyNotesCategory  = 'Category';
-$langStickyNotesPreview  = 'Preview';
-$langStickyNotesPreviewPlaceholder = 'Write something...';
-$langStickyNotesContentPlaceholder = 'Write your note';
-$langStickyNotesPostCreated  = 'Note created successfully';
-$langStickyNotesPostUpdated  = 'Note updated successfully';
-$langStickyNotesPostNotFound = 'Note not found';
-$langStickyColorYellow  = 'Yellow';
-$langStickyColorGreen = 'Green';
-$langStickyColorBlue  = 'Blue';
-$langStickyColorRed  = 'Red';
-$langStickyColorPurple = 'Purple';
-$langStickyColorOrange = 'Orange';
-$langStickyColorWhite = 'White';
-$langStickyColorBrown = 'Brown';
-$langStickyNotesColorHint = 'If no colour is selected, a random colour will be assigned each time the note is displayed.';
-$langStickyNotesIsActive = 'Active topic';
-
 $langRequests = "Requests";
 $langMyRequests = "My requests";
 $langSingleRequest = 'Request';
@@ -6473,7 +6209,6 @@ $langGreenText = "Text in green";
 $langBlueText = "Text in blue";
 $langOrangeText = "Text in orange";
 $langColorFocus = "Focus color (Focus) in text areas and buttons";
-$langBoxShadowInputSelect = "Box shadow to input, select fields";
 $langbgPanelEvents = "Background color (Panel event)";
 $langMaxHeight = "Max height";
 $langPositionJumbotronText = "Text position";
@@ -6811,7 +6546,6 @@ you will temporarily register the new start and end date of the session. </br></
 <strong>You can also change the duration of the current session by changing the size of the green slot</strong>';
 $langJumbotronWithVideo = 'The file you uploaded is of type .mp4 with full name "video.mp4"';
 $langMaxHeightHalfMaxScreenJumbotron = "Alternatively, the height is set to half the height of the current screen.";
-$langIntroTextCenterPos = "Move the introductory text to the center position of the screen?";
 $langOfSubmitQuestionnaire = "By submitting a questionnaire";
 $langAddConsultantComments = "The consultant's comments were successfully added.";
 $langContinueToDelComment = "Do you want to proceed with deleting comments for the user?";
@@ -7068,8 +6802,6 @@ $langRequestAlreadySent = "A registration request has already been sent for this
 $langRejectedRequests = "Rejected User Requests";
 $langAcceptedRequests = "Accepted User Requests";
 $lang_enable_user_consent = "Enable confirmation of user participation in sessions";
-$langThirdPartyCookies = "Allow third-party cookies";
-$langThirdPartyCookiesRequired = "To configure the Turnitin integration, third-party cookies must be enabled. Please enable the relevant setting in eClass Configuration, then log out and log back in for the change to take effect, and then return to this page.";
 $langEditSessionSection = "Edit session";
 $langInsertTcMeetingSession = "teleconference";
 $langCompleteCriteriaSession = "Completion criteria";
@@ -7131,7 +6863,6 @@ $langPartiallyCorrect = "Partially Correct";
 $langIPUnlockLegend = "in IP(s) or CIDR(s) format";
 $langCertainty = "Certainty";
 $langGradeMethod = "Certainty Distribution";
-$langNotAnswered = "Not Answered";
 $lang_allow_teacher_import_course = "Allow $langsOfCourses material to be imported by $langsTeachers";
 $langForceCompletedProgress = "Automatic progress completion";
 $langForceCompletedProgressInfo = "Set module progress to 100% when status is Completed.";
@@ -7222,6 +6953,86 @@ $langIdleWarningTitle = "Inactivity warning";
 $langIdleExpireSoon = "Your session is about to expire soon due to inactivity.";
 $langIdleStayLoggedIn = "Do you want to stay logged in?";
 $langIdleExtendSession = "Extend session";
+$langDisplayPlatformAsCardLayout = "Enable card view for the platform (includes border-radius)";
+$langDisplayPlatformAsCardLayoutNoBorderRadius = "Card view enabled (does not include border-radius)";
+$langCourseHasAlreadyImported = "Content has already been uploaded to $langsCourse! Would you like to upload it again?";
+$langCourseHasAlreadyImportedExplain = "Note: Importing files will add files that may already exist!";
+$langSSOUsernameAttr = "Profile attribute for user identifier";
+$langSSOUidIsUsername = "Use user identifier attribute as username";
+$langSSOUsernameHelp = "When the user identifier attribute is not used as username, the username is created using the prefix and an auto-incremented number.";
+$langsActivities = "activities";
+$langNavigationDoc = "Document navigation path";
+$langDeSelect = "Deselect";
+$langViaKeycloak = 'authentication via Keycloak (OIDC)';
+$langViaLTI = 'authentication via LTI';
+$langPointsGames = "Points games";
+$langPointsGame = "Points game";
+$langPoints = "Points";
+$langNewPointsGame = "New points game";
+$langNewPointsGameSuc = "New points game created succesfully";
+$langActivateLeaderboard = "Enable leaderboard";
+$langAnonymizeLeaderboard = "Anonymize leaderboard";
+$langLeaderboardAnonymization = "Table anonymization";
+$langLeaderboard = "Leaderboard";
+$langCompletion = "completion";
+$langForNextLevel = "for next level";
+$langPointsGameRecActivities = "Recurring activities";
+$langPointsGameOneTimeActivities = "One-time activities";
+$langPointsGameNoRecActivities = "There are no recurring activities";
+$langPointsGameNoOneTimeActivities = "There are no one-time activities";
+$langActivityMaxPoints = "Maximum total points for this activity";
+$langActivityMaxPointsInPeriod = "Maximum points for this activity in time period";
+$langActivityMaxPointsTimePeriod = "Time period (days)";
+$langPointsGameLevels = "Levels";
+$langPointsGameLevelName = "Level name";
+$langPointsGameLevelRequiredPoints = "Required points";
+$langPointsWon = "Congratulations! You have just won %s points!";
+$langLevelPromoted = "Congratulations! You have just been promoted to level <i>%s</i>!";
+$langNoPointsGames = "There are no points games.";
+$langNoCertificatesStud = "There are no certificates.";
+$langNoBadgesStud = "There are no badges.";
+$langOfLearningPathProgressMeasure = "Learning Path progress";
+$langOfLearningPathLessonStatus = "Learning Path completion";
+$langNotAllowedCertBadge = "You do not have permission to edit the certificate or badge.";
+$langResetPointsGame = "Reset points game";
+$langConfirmResetPointsGame = "Caution: The progress record for this points game will be deleted for all course users!";
+$langConfirmPurgePointsGame = "Caution: The points game will be permanently deleted and all relevant data will be lost!";
+$langPointsGameReset = "The points game was succesfully reset.";
+$langIsActive = "Active";
+$langCourseCompletionNotActivated = "Course completion has not been activated yet.";
+$langActivateCourseCompletion = "Activate Course Completion";
+$langYouHaveCompleted = "You're done";
+$langCourseStartDateLegend = "Click to set the start date for $langsOfCourse. Please note that the course will be 'inactive' prior to the start date.";
+$langCourseEndDateLegend = "Click to set the expiration date for $langsOfCourse. Please note that after the expiration date, the course will be 'inactive'";
+$langCourseRegStartDateLegend = "Click here to set the registration start date for $langsCourse.";
+$langCourseRegEndDateLegend = "Click here to set the registration deadline for $langsCourse.";
+$langCourseRegStartDate = "Registration for $langsCourse is now open.";
+$langCourseRegEndDate = "Registration for $langsCourse is now closed.";
+$langCourseRegPeriod = "Registration period for $langsCourse";
+$langCourseRegPeriodHasNotStarted = "The registration period for $langsCourse has not yet begun or has already ended.";
+$langUseOfCoby = "Enable use of Cadmos / Coby service";
+$langUploadCadmosFile = 'Upload Cadmos (.cdm) file';
+$langMultiCourseDelete = "Multiple course deletion";
+$langMultiCourseDeleteInfo = "Enter a list of the $langsOfCourses codes you want to delete in the field below.";
+$langMultiCourseCodes = "Codes $langOfCourses";
+$langMultiCourseDeleted = "The $langsCourse has been deleted";
+$langMultiCourseNotDeleted = "$langsCourse was not deleted";
+$langAlbanian = "Albanian";
+$langArabic = "Arabic";
+$langChinese = "Chinese";
+$langRussian = "Russian";
+$langTurkish = "Turkish";
+$langNoRandomization = "No randomization";
+$langLaunchSafeExamBrowser = "Launch Safe Exam Browser";
+$langDownloadSafeExamBrowser = "Download Safe Exam Browser";
+$langSEBInfo1 = "You must use the Safe Exam Browser to complete this exercise!";
+$langSEBInfo2 = "First, you need to install Safe Exam Browser on your computer by clicking 'Download' (if you already have it installed, you don't need to download it again).
+Once you have installed it, click 'Start' to begin the exercise.";
+$langSafeExamBrowserInfo = "The exam is administered exclusively through the Safe Exam Browser.";
+$langSafeExamBrowserLegend = "Users will need to install the Safe Exam Browser on their computer. It is only supported on Windows, macOS, and iOS.";
+$langSafeExamBrowserQuitMessage = "Close and return";
+$langActivateExamMode = "Enable exam mode";
+$langNotAnswered = "Not Answered";
 $langTenants = 'Tenants';
 $langTenantProfile = 'Tenant Profile';
 $langNoTenants = 'No tenants defined';
@@ -7232,16 +7043,16 @@ $langTenantAdminNotFound = 'User could not not be found';
 $langTenantCategoryNotFound = 'The category has not been set or could not be found';
 $langTenantCategoryNotExist = 'No available category exists';
 $langTenantProfileEditNotAllowed = 'Editing this tenant\'s information is not allowed';
+$langDiskUsage = 'Resource usage';
+$langTenantURLChange = 'Tenant URL changed';
 $langTenantActivateURL = 'Activate tenant URL';
 $langTenantURLActivateText = "Tenant {name} activated their URL:\n\n{url}\n";
-$langTenantInvalidURL  = 'The address you\'ve entered (%s) is not valid.';
-$langTenantURLChange = 'Tenant URL changed';
 $langTenantURLChangeText = "Tenant {name} changed their URL from '{oldurl}' to:\n\n{newurl}\n";
+$langTenantInvalidURL = 'The address you\'ve entered (%s) is not valid.';
 $langTenantURL = 'Platform URL';
 $langTenantURLCheckActivate = 'Check and activate';
 $langTenantURLText = 'The platform can be displayed at your organization\'s URL. In this case, you can define display options (colors, etc.) with greater flexibility, but the relevant settings must be made by your website administrator.';
 $langTenantURLNote = 'Note: the information below will be visible to your platform users after your URL is activated by the service administrators.';
-$langDiskUsage = 'Resource usage';
 $langTenantURLDelete = 'Tenant URL deletion';
 $langTenantURLDeleteText = "Tenant {name} deleted their URL - was: {url}\n";
 $langTenantURLDeleted = 'Your URL (%s) has been deleted. Access to the platform is no longer possible from it.';
@@ -7268,58 +7079,239 @@ For example, this can be done through an external webcron system.</p>';
 $langTenantsCronRunning = 'Automatic disk usage logging is active.';
 $langTenantsCronStopped = 'Warning! Automatic disk usage logging has stopped! {Check the settings}';
 $langTenantsCronEnable = 'Note: You can enable automatic disk usage logging without additional actions from administrators (opening the logging window). {Read more}';
-$langTenants = 'Tenants';
-$langTenantProfile = 'Tenant Profile';
-$langNoTenants = 'No tenants defined';
-$langAddTenant = 'Add Tenant';
-$langTenantAdded = 'The tenant has been added';
-$langTenantUpdated = 'Tenant information updated';
-$langTenantAdminNotFound = 'User could not not be found';
-$langTenantCategoryNotFound = 'The category has not been set or could not be found';
-$langTenantCategoryNotExist = 'No available category exists';
-$langTenantProfileEditNotAllowed = 'Editing this tenant\'s information is not allowed';
-$langTenantActivateURL = 'Activate tenant URL';
-$langTenantURLActivateText = "Tenant {name} activated their URL:\n\n{url}\n";
-$langTenantInvalidURL  = 'The address you\'ve entered (%s) is not valid.';
-$langTenantURLChange = 'Tenant URL changed';
-$langTenantURLChangeText = "Tenant {name} changed their URL from '{oldurl}' to:\n\n{newurl}\n";
-$langTenantURL = 'Platform URL';
-$langTenantURLCheckActivate = 'Check and activate';
-$langTenantURLText = 'The platform can be displayed at your organization\'s URL. In this case, you can define display options (colors, etc.) with greater flexibility, but the relevant settings must be made by your website administrator.';
-$langTenantURLNote = 'Note: the information below will be visible to your platform users after your URL is activated by the service administrators.';
-$langDiskUsage = 'Resource usage';
-$langTenantURLDelete = 'Tenant URL deletion';
-$langTenantURLDeleteText = "Tenant {name} deleted their URL - was: {url}\n";
-$langTenantURLDeleted = 'Your URL (%s) has been deleted. Access to the platform is no longer possible from it.';
-$langTenantURLRegisterInfo = 'Your URL has been registered. You will be notified soon by the platform administrators about the necessary actions.';
-$langTenantURLRegisterActivate = 'Your URL has been registered. Please see the instructions below for the required actions.';
-$langTenantURLChecking = 'Checking...';
-$langTenantURLCheckSuccess = 'The check was successful!';
-$langTenantURLActivating = 'Activating...';
-$langTenantURLActivated = 'Activation was successful!';
-$langTenantGotoURL = 'Go to your URL';
-$langTenantURLCheckFail = 'The check failed. Please verify that the address <b>{host}</b> points to the service server ({server}) and try again. Note that due to DNS record caching, it may take several hours until your change becomes visible to the system.';
-$langTenantURLActivationInfo1 = 'Your URL is not yet active. Before activation, you must perform the following required actions.';
-$langTenantURLActivationInfo2 = 'In order for the platform to work at your organization\'s URL, the DNS address %s must be mapped to the service server address. The following record should be added by the technicians managing the DNS zone %s:';
-$langTenantsCronEnableTitle = 'Instructions for enabling automatic disk usage logging';
-$langTenantsCronEnableInstructions = '
-<p>If the service is hosted in a Unix / Linux environment, you can add the following command as a cron job on the server by entering <code>crontab -e</code>:</p>
-<pre>
-* * * * *  /usr/bin/php {webRoot}/cron-disk-usage.php
-</pre>
-<p>Depending on the hosting system, you may need to modify the full path to the php command.</p>
-<p>Alternatively, you can enable loading of the address / URL:<br>
-<code>{cronURL}</code><br>
-For example, this can be done through an external webcron system.</p>';
-$langTenantsCronRunning = 'Automatic disk usage logging is active.';
-$langTenantsCronStopped = 'Warning! Automatic disk usage logging has stopped! {Check the settings}';
-$langTenantsCronEnable = 'Note: You can enable automatic disk usage logging without additional actions from administrators (opening the logging window). {Read more}';
+$langTenantSettings = "Tenant Settings";
+$langTenantEnable = "Enable Multi-Tenant";
+$langWhiteLabelEnable = "Enable Tenant White Label";
+$langWhiteLabel = "White Label";
+$langWhiteLabelΤenant = "Tenant's Name";
+$langAddCategoryAuto = "Automatically creation of new category";
+$langChooseExistingCategory = "Select an existing category";
+$langChooseExistingInfo = "All of the tenant's courses and users are located in this category and its subcategories";
+$langAssociateCategory = "Related category";
+$NavCatCourses = "Navigation path to course categories";
+$langThirdPartyCookies = "Allow third-party cookies";
+$langThirdPartyCookiesRequired = "To configure the Turnitin integration, third-party cookies must be enabled. Please enable the relevant setting in eClass Configuration, then log out and log back in for the change to take effect, and then return to this page.";
+$langNoCourseDescription = "No description";
+$langLearningPathProgressOutdated = "Progress display may be outdated. It will refresh automatically.";
+$langUserAccountHelp1 = '';
+$langUserAccountHelp2 = '';
+$langUserAccountHelp3 = '';
+$langUserAccountHelp4 = '';
+$langUserAccountHelp5 = '';
+$langCourseHasExpired = "<strong>The $langsCourse you tried to access has expired or hasn't started yet.</strong>";
+$langStartEndDate = "Active Period";
+$langProfileLinks = "Links of short user profile";
+$langRubricCritTitle = "Criterion title";
+$langDelCrit = "Delelte criterion";
+$langAddScaleText = "Add scale option";
+$langTenantConfig = 'Tenant Config settings';
+$langViewRecording = "Watch the video";
+$langViewListRecordings = "Recorded videos";
+$langViewDeletedListRecordings = "Deleted recorded videos";
+$langTotalSizeRecordings = "Total size of recorded videos";
+$langNoAvailableRecordings = "There are no recorded videos.";
+$langAcademicInfo = 'Academic information';
+$langResearchProfiles = 'Research Profiles';
+$langGoogleScholarProfile = 'Google Scholar Profile';
+$langScopusID = 'Scopus ID';
+$langOrcid = 'ORCID ID';
+$langGScholarURLValidFail = 'Field %s is invalid (required format https://scholar.google.com/citations?user=XXXXXXXXXXX). ';
+$langOrcidURLValidFail = 'Field %s is invalid (required format https://orcid.org/0000-xxxx-xxxx-xxxx). ';
+$langScopusIDValidFail = 'Field %s is invalid (required format 9 to 11 numeric characters)';
+$langFacebookUrlValidFail = 'Field %s is invalid (required format https://www.facebook.com/xxxxxx ή https://fb.me/xxxxxx)';
+$langTwitterUrlValidFail = 'Field %s is invalid (required format https://twitter.com/xxxxxx ή https://x.com/xxxxxx)';
+$langLinkedInUrlValidFail = 'Field %s is invalid (required format https://www.linkedin.com/in/xxxxxx)';
+$langLangProfLevel = 'Language Proficiency Level';
+$langLangCEFRA1 = 'A1 - Beginner';
+$langLangCEFRA2 = 'Α2 - Elementary';
+$langLangCEFRB1 = 'B1 - Intermediate';
+$langLangCEFRB2 = 'B2 - Upper-Intermediate';
+$langLangCEFRC1 = 'C1 - Advanced';
+$langLangCEFRC2 = 'C2 - Proficient / Mastery';
+$langOtherLanguages = 'Other languages';
+$langePortfolioOtherLanguagesDescr = '<p>List any other languages ​​you may know, as well as your level of proficiency.</p>';
+$langVolontSocialAct = 'Social and Volunteer Activities';
+$langSocialActivities = 'Social Activities';
+$langVolunteerActivities = 'Volunteer Activities';
+$langePortfolioFieldsVisibilitySettings = 'Visibility settings';
+$langPublicePortfolioField = 'Public';
+$langOpenToRegisteredUsers = 'Visible to registered users';
+$langePortfolioPreviewAsGuest = 'You are in preview mode. You are vewing this page as guest user. You can change preview mode using the Preview button.';
+$langePortfolioPreviewAsRegistered = 'You are in preview mode. You are vewing this page as registered user. You can change preview mode using the Preview button.';
+$langAddResePortfolioExternalAchievements = 'Add to e-Portfolio (external achievements)';
+$langExternalAchievements = 'External Achievements';
+$langReflectionComment = "Reflection Comment";
+$langePortfolioPromptAddReflComments = "Optionally record some personal, reflective comments about this resource. Answer questions like \"What did I learn from this activity?\" or \"What difficulties and challenges did I face?\", etc.";
+$langePortfolioAddCVPrompt = "Don't forget to upload your CV! It's one of the key elements of a complete e-portfolio.";
+$langePortfolioCertificatesAwardsDescr = "<p>Record official certifications, distinctions, or awards you have received from educational institutions, organizations, or competitions. These may include language certifications, professional licenses, competition participations with honors, or other recognized achievements.</p>
+<p>Filling in this field enhances the credibility of your profile and highlights your skills and efforts.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Title of the certification or award</li>
+  <li>Issuing organization</li>
+  <li>Date obtained</li>
+  <li>Brief description or subject</li>
+  <li>(Optional) Relevant link</li>
+</ul>";
+$langePortfolioPublicationsDescr = "<p>Record scientific articles, papers, presentations, or other written work you have published in journals, conferences, websites, or other official platforms.</p>
+<p>This field highlights your research or writing activity and provides evidence of your expertise in specific areas.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Title of publication</li>
+  <li>Authors (if collaborative work)</li>
+  <li>Place and type of publication (e.g., journal, conference, website)</li>
+  <li>Date of publication</li>
+  <li>(Optional) Relevant link</li>
+</ul>";
+$langePortfolioPersonalGoalsDescr = "<p>Record your individual goals related to learning, professional development, or personal growth. Goals may include skills you want to develop, experiences you seek, or achievements you aim to accomplish.</p>
+<p>Formulating personal goals helps focused progress and gives meaning to your educational and professional choices.</p>
+<p><strong>It is recommended to write:</strong></p>
+<ul>
+  <li>Specific and realistic goal</li>
+  <li>Brief explanation of why it is important to you</li>
+  <li>(Optional) Timeline or plan for achievement</li>
+</ul>";
+$langePortfolioAcademicGoalsDescr = "<p>Record goals related to your studies and learning path. These may include obtaining a degree, improving performance in specific courses, or developing skills in academic fields of interest.</p>
+<p>Formulating academic goals helps plan and monitor your progress, strengthening your commitment to learning.</p>
+<p><strong>It is recommended to write:</strong></p>
+<ul>
+  <li>Specific goal related to studies</li>
+  <li>Brief justification of the goal</li>
+  <li>(Optional) Expected steps or timeline</li>
+</ul>";
+$langePortfolioCareerGoalsDescr = "<p>Record goals related to your career and professional development. These may include job positions you pursue, skills you want to acquire, or significant professional achievements you aim for.</p>
+<p>Recording career goals helps design your path and focus on specific steps to achieve them.</p>
+<p><strong>It is recommended to write:</strong></p>
+<ul>
+  <li>Specific professional goal</li>
+  <li>Reasons why you consider it important</li>
+  <li>(Optional) Action plan or timeline</li>
+</ul>";
+$langePortfolioPersonalSkillsDescr = "<p>Record skills related to your personal development, such as communication, teamwork, time management, or problem-solving.</p>
+<p>These skills are important for effective collaboration and professional success.</p>
+<p><strong>It is recommended to mention:</strong></p>
+<ul>
+  <li>The skills you possess</li>
+  <li>Examples where you have applied them</li>
+  <li>(Optional) Ways to improve or develop</li>
+</ul>";
+$langePortfolioAcademicSkillsDescr = "<p>Record the skills you have developed through your studies, such as research, data analysis, written and oral communication, or the use of specialized tools.</p>
+<p>These skills enhance your academic performance and prepare you for future professional challenges.</p>
+<p><strong>It is recommended to mention:</strong></p>
+<ul>
+  <li>The academic skills you possess</li>
+  <li>Examples of their application</li>
+  <li>(Optional) Areas for further development</li>
+</ul>";
+$langePortfolioCareerSkillsDesc = "<p>Record the skills you have acquired through work or professional experience, such as technical knowledge, project management, leadership, or the use of specialized tools and software.</p>
+<p>These skills enhance your professional efficiency and ability to take on responsibilities.</p>
+<p><strong>It is recommended to mention:</strong></p>
+<ul>
+  <li>The professional skills you possess</li>
+  <li>Examples of their application</li>
+  <li>(Optional) Plan for further improvement</li>
+</ul>";
+$langePortfolioPersonalWebsiteDescr = "<p>If you have a personal website or online profile, record the URL where you present your work or CV. If you don’t have one, you can leave this field blank.</p>
+<p>This allows others to see more about you online, if available.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Valid URL</li>
+  <li>Brief description of the content (optional)</li>
+</ul>";
+$langePortfolioEmploymentDescr = "<p>Record the job positions you have held, along with your main duties and achievements. Mention the employer, duration of employment, and job responsibilities.</p>
+<p>This field highlights your professional path and the skills you have acquired through practical experience.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Job title</li>
+  <li>Employer’s name</li>
+  <li>Duration of employment</li>
+  <li>Main duties and achievements</li>
+</ul>";
+$langePortfolioSocialActivitiesDescr = "<p>Record your participation in activities with social or community character, such as organizations, groups, or initiatives aimed at social development and awareness.</p>
+<p>This field highlights your social responsibility and commitment to improving the community.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Type of activity or organization</li>
+  <li>Role and activities</li>
+  <li>Duration of participation</li>
+  <li>Results or impact</li>
+</ul>";
+$langePortfolioVolunteerActivitiesDescr = "<p>Record your participation in volunteer initiatives where you offer services or assistance without pay, such as charity events, social services, or organizations.</p>
+<p>This field highlights your willingness for selfless contribution and active involvement.</p>
+<p><strong>It is recommended to include:</strong></p>
+<ul>
+  <li>Type of volunteer activity</li>
+  <li>Role and responsibilities</li>
+  <li>Duration and frequency of participation</li>
+  <li>Achievements or experiences</li>
+</ul>";
+$langePortfolioComplBelow30 = "Fill in as many fields as possible to better showcase your skills, experiences, and interests. Your e-portfolio is your personal footprint – start building it today!";
+$langePortfolioComplBelow60 = "Keep completing your e-portfolio to fully highlight your profile. The more complete it is, the stronger your presence will be.";
+$langThemeEditNotAllowed = 'Editing/deleting is not allowed for this theme';
+$langLoginBgImage = "Background image to the login page";
+$langBgColorCardLogin = "Background color to the form login";
+$langBgBorderColorCardLogin = "Border color to the form login";
+$langTextColorCardLogin = "Text color in the form login";
+$langLinkColorCardLogin = "Link color in the form login";
+$langLinkHoverColorCardLogin = "Hover to the link color of the form login";
+$langConcerngingProgressActivitiesPanels = "Regarding the progress activities panels in a course";
+$langSafeExamBrowserShortDescription = "Use of Safe Exam Browser in the 'Exercises' of $langsOfCourses.";
+$langSafeExamBrowserLongDescription = "Use of Safe Exam Browser in the 'Exercises' of $langsOfCourses.";
+$langCobyShortDescription = "Using Coby service in $langsCourses.";
+$langCobyLongDescription = "Use of Coby Service in $langsCourses.";
+$langCobyUrl = "Coby URL";
+$langStickyNotes = "Sticky Notes";
+$langStickyNotesTopic = "Topic";
+$langStickyNotesTopics = "Topics";
+$langStickyNotesTotal = "Notes";
+$langStickyNotesTopicCreated = "The topic was created";
+$langStickyNotesTopicUpdated = "The topic was updated";
+$langStickyNotesTopicFailed = "Failed to create new topic";
+$langStickyNotesTopicDeletionFailed = "Failed to delete the topic";
+$langStickyNotesTopicDeleted = "The topic was deleted";
+$langStickyNotesTopicNotFound = "The topic was not found";
+$langStickyNotesAllowEdit = "Allow creators to edit notes";
+$langStickyNotesAllowDelete = "Allow creators to delete notes";
+$langStickyNotesNoTopics = "No topics found";
+$langNoStickyNotes = "No sticky notes found";
+$langStickyNotesMoved = 'Note moved successfully!';
+$langStickyNotesMoveError = 'Failed to move note';
+$langStickyNotesConnError = 'Connection error';
+$langStickyNotesDeleted = 'Note deleted successfully';
+$langStickyNotesDeleteError = 'Failed to delete note';
+$langStickyNotesConfirmDelete = 'Are you sure you want to delete this note?';
+$langStickyNotesConfirmDeleteSub = 'This action cannot be undone.';
+$langStickyNotesPerPage = 'Notes per page';
+$langStickyNotesHasCategories = 'Categories (Kanban)';
+$langStickyNotesCategoriesHint = 'Enable to organise notes into Kanban-style columns';
+$langStickyNotesCategories = 'Categories';
+$langStickyNotesCategoryName = 'Category name';
+$langNewStickyNote = 'New Note';
+$langEditStickyNote = 'Edit Note';
+$langStickyNotesColor = 'Note colour';
+$langStickyNotesCategory = 'Category';
+$langStickyNotesPreview = 'Preview';
+$langStickyNotesPreviewPlaceholder = 'Write something...';
+$langStickyNotesContentPlaceholder = 'Write your note';
+$langStickyNotesPostCreated = 'Note created successfully';
+$langStickyNotesPostUpdated = 'Note updated successfully';
+$langStickyNotesPostNotFound = 'Note not found';
+$langStickyColorYellow = 'Yellow';
+$langStickyColorGreen = 'Green';
+$langStickyColorBlue = 'Blue';
+$langStickyColorRed = 'Red';
+$langStickyColorPurple = 'Purple';
+$langStickyColorOrange = 'Orange';
+$langStickyColorWhite = 'White';
+$langStickyColorBrown = 'Brown';
+$langStickyNotesColorHint = 'If no colour is selected, a random colour will be assigned each time the note is displayed.';
+$langStickyNotesIsActive = 'Active topic';
+$langBoxShadowInputSelect = "Box shadow to input, select fields";
+$langIntroTextCenterPos = "Move the introductory text to the center position of the screen?";
 $langDtFirstPage = "First page";
 $langDtNextPage = "Next page";
 $langDtPrevPage = "Previous page";
 $langDtLastPage = "Last page";
-
-// Backpack Provider Management
 $langBackpackExternalProvider = "Add External OpenBadge Backpack Provider";
 $langBackpackExternalProviderTitle = "Title";
 $langBackpackExternalProviderDescription = "Description";
@@ -7347,14 +7339,12 @@ $langEnableProvider = "Enable Provider";
 $langProviderNameRequired = "Provider name required";
 $langApiUrlRequired = "API URL required";
 $langVersionRequired = "Version required";
-
-// My Backpacks Page
 $langMyBackpacks = "My Backpacks";
 $langMyBackpacksInfo = "Connect your OpenBadges backpack to sync and manage your digital badges.";
 $langConnectedBackpack = "Connected Backpack";
 $langConnectBackpack = "Connect Backpack";
 $langDisconnectBackpack = "Disconnect Backpack";
-$langSelectBackpackProvider = "Select Backpack Provider";
+$langSelectBackpackProvider = "Select Provider";
 $langSelectProvider = "-- Select Provider --";
 $langProtocol = "Protocol";
 $langDisconnected = "Disconnected";
@@ -7362,8 +7352,6 @@ $langLastSync = "Last Sync";
 $langNever = "Never";
 $langEmailAddress = "Email Address";
 $langOB3Info = "OB_V3: This provider uses the OpenBadges 3.0 protocol. Click connect to proceed with OAuth verification.";
-
-// Connection Management
 $langBackpackProviderRequired = "Please select a backpack provider.";
 $langBackpackProviderNotFound = "The selected backpack provider was not found or is disabled.";
 $langBackpackCredentialsRequired = "Email and password are required for this provider.";
@@ -7376,32 +7364,10 @@ $langProviderDiscoveryFailed = "Provider discovery failed";
 $langProviderNotCompatible = "Provider is not compatible with OpenEClass";
 $langProviderRegistrationFailed = "Provider registration failed";
 $langProviderProcessingFailed = "Provider processing failed";
-
-// OAuth Configuration
 $langClientId = "Client ID";
 $langClientSecret = "Client Secret";
 $langClientIdHelp = "OAuth Client ID for authentication with the backpack provider";
 $langClientSecretHelp = "OAuth Client Secret for authentication with the backpack provider";
-
-// Publishing Modal
-$langPublishBadgeToBackpack = "Publish to Backpack";
-$langSelectBackpackProvider = "Select Provider";
-$langSelectProviderHelp = "Choose a backpack provider where you want to publish this badge";
-$langSelectedProvider = "Selected Provider:";
-$langPublishBadgeInfo = "This badge will be published to your selected backpack provider.";
-$langPublish = "Publish";
-$langPublishing = "Publishing";
-$langPublishToBackpack = "Publish to External Backpack";
-$langPublishedToBackpack = "Published to Backpack";
-$langPublishBadgeTooltip = "Publish this badge to your connected backpack";
-$langPublishBadgeAriaLabel = "Publish badge to backpack";
-$langNoBackpackConnected = "No backpack connected";
-$langNoProvidersConnected = "You don't have any backpack providers connected";
-$langBadgePublishedSuccessfully = "Badge published successfully!";
-$langBadgePublishError = "Failed to publish badge. Please make sure you have not already published this badge.";
-$langSelectProviderAlert = "Please select a backpack provider";
-
-// Badge Collections
 $langMyBadgeCollections = "My Badge Collections";
 $langFetchCollections = "Fetch Collections";
 $langLoadingCollections = "Loading Collections";
@@ -7419,8 +7385,6 @@ $langCollectionID = "Collection ID";
 $langBadgeCount = "Badge Count";
 $langBackpackConnectedWantRefresh = "Backpack connected successfully! Would you like to refresh the page?";
 $langPleaseSelectProviderAndCredentials = "Please select a provider and enter your credentials";
-
-// Badge Synchronization
 $langSyncCollectionInfo = "Select a collection from your external backpack to sync its badges into your OpenEClass portfolio. This will import all badges from the selected collection.";
 $langSelectCollectionToSync = "Select Collection to Sync";
 $langChooseCollectionToSync = "Choose a collection to sync";
@@ -7452,8 +7416,21 @@ $langExternalBadges = "External Badges";
 $langSyncedFromBackpack = "Synced from Backpack";
 $langExternalBadge = "External Badge";
 $langUnknownIssuer = "Unknown Issuer";
-
-// OpenBadges Statistics
+$langPublishBadgeToBackpack = "Publish to Backpack";
+$langSelectProviderHelp = "Choose a backpack provider where you want to publish this badge";
+$langSelectedProvider = "Selected Provider:";
+$langPublishBadgeInfo = "This badge will be published to your selected backpack provider.";
+$langPublish = "Publish";
+$langPublishing = "Publishing";
+$langPublishToBackpack = "Publish to External Backpack";
+$langPublishedToBackpack = "Published to Backpack";
+$langPublishBadgeTooltip = "Publish this badge to your connected backpack";
+$langPublishBadgeAriaLabel = "Publish badge to backpack";
+$langNoBackpackConnected = "No backpack connected";
+$langNoProvidersConnected = "You don't have any backpack providers connected";
+$langBadgePublishedSuccessfully = "Badge published successfully!";
+$langBadgePublishError = "Failed to publish badge. Please make sure you have not already published this badge.";
+$langSelectProviderAlert = "Please select a backpack provider";
 $langOpenBadgesStatistics = "OpenBadges Statistics";
 $langUsersWithBackpack = "Users with Connected Backpack";
 $langActiveBackpackUsers = "Users with Import/Export Activity";
@@ -7471,18 +7448,13 @@ $langUsersLast30Days = "users in the last 30 days";
 $langLastActivity = "Last Activity";
 $langLastImport = "Last Import";
 $langLastExport = "Last Export";
-
-// Badge Export Settings
 $langAllowBadgeExport = "Allow Badge Export";
 $langAllowBadgeExportHelp = "Allow students to export this badge to external backpack providers";
 $langBadgeExportDisabled = "Badge export is disabled by the instructor";
 $langBadgeExportDisabledShort = "Export disabled";
-
-// --- external_repositories branch: keys not present on default ---
-$langNoCategory = 'No category';
-$langUserAccountInfo3 = 'Alternative Selection';
-$langUserAccountInfo4 = 'Login as a different user';
-$langUserForum = 'User';
+$langSuppressedWords = "Censored words";
+$langSuppressedwordDeleteSuccess = "The word has been successfully deleted.";
+$langNoAuthorization = "You do not have permission to perform this action.";
 $langExternalRepos = 'External Repositories';
 $langExternalReposInfo = 'Configure connections to external multimedia and educational content repositories. Teachers can search and link content from these repositories into their course units.';
 $langExternalReposShortDescription = 'Connect to external content repositories (DSpace, YouTube, Wikipedia, etc.)';

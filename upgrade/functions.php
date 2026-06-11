@@ -779,12 +779,11 @@ set_config('ext_bigbluebutton_enabled',
 
 /**
  * @brief upgrade queries to 3.3
- * @param $tbl_options
  * @return void
  */
-function upgrade_to_3_3($tbl_options): void
+function upgrade_to_3_3(): void
 {
-
+    global $webDir;
 // Remove '0000-00-00' default dates and fix exercise weight fields
     Database::get()->query('ALTER TABLE `announcement`
             MODIFY `date` DATETIME NOT NULL,

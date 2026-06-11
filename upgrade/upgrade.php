@@ -104,7 +104,7 @@ if ($command_line or $ajax_call) {
 
     if ($ajax_call) {
         set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-            fatal_error("$errno: $errstr (line: $errline)");
+            fatal_error("$errno: $errstr (line: $errline) in $errfile");
         });
     }
 
@@ -157,7 +157,7 @@ if (!DBHelper::fieldExists('exercise_answer_record', 'centainty')) {
                 steps_finished();
 
             } elseif ($version === '3.3') {
-                upgrade_to_3_3($tbl_options);
+                upgrade_to_3_3();
                 steps_finished();
 
             } elseif ($version === '3.4') {
