@@ -8252,3 +8252,9 @@ $langDSpaceMetadataProfileHelp = "Ποιο σχήμα μεταδεδομένων
 $langDSpaceProfileDublinCore = "Dublin Core (προεπιλογή)";
 $langDSpaceProfileLom = "LOM (Μεταδεδομένα Μαθησιακών Αντικειμένων)";
 $langExtRepoRichPreview = "Πλούσια προεπισκόπηση";
+
+// Portfolio
+$langViewEditProfile = "Δείτε και επεξεργαστείτε το προφίλ σας";
+$langViewEditMyStats = "Δείτε αναλυτικά τα στατιστικά σας";
+$langSettingsAdminTool = "Ρυθμίσεις και διαχείριση πλατφόρμας";
+$langGetRights = "Αποκτήστε δικαιώματα";

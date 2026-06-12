@@ -534,7 +534,7 @@
                         </span>
                         <span>
                             <strong>{{ trans('langMyProfile') }}</strong>
-                            <small>Δείτε και επεξεργαστείτε το προφίλ σας</small>
+                            <small>{{ trans('langViewEditProfile') }}</small>
                         </span>
                         <i class="fa-solid fa-chevron-right arrow"></i>
                     </a>
@@ -546,7 +546,7 @@
                         </span>
                         <span>
                             <strong>{{ trans('langMyStats') }}</strong>
-                            <small>Δείτε αναλυτικά τα στατιστικά σας</small>
+                            <small>{{ trans('langViewEditMyStats') }}</small>
                         </span>
                         <i class="fa-solid fa-chevron-right arrow"></i>
                     </a>
@@ -562,18 +562,18 @@
                             </span>
                             <span>
                                 <strong>{{ trans('langAdminTool') }}</strong>
-                                <small>Ρυθμίσεις και διαχείριση πλατφόρμας</small>
+                                <small>{{ trans('langSettingsAdminTool') }}</small>
                             </span>
                             <i class="fa-solid fa-chevron-right arrow"></i>
                         </a>
                     @elseif ($_SESSION['status'] == USER_STUDENT)
                         <a class="dashboard-card-btn admin-btn brief-profile-btn text-decoration-none h-100" href="{{ $urlAppend }}modules/auth/formuser.php">
                             <span class="icon-circle">
-                                <i class="fa-solid fa-screwdriver-wrench"></i>
+                                <i class="fa-regular fa-envelope"></i>
                             </span>
                             <span>
                                 <strong>{{ trans('langMyRequests') }}</strong>
-                                <small>Αποκτήστε δικαιώματα</small>
+                                <small>{{ trans('langGetRights') }}</small>
                             </span>
                             <i class="fa-solid fa-chevron-right arrow"></i>
                         </a>

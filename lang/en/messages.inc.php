@@ -7542,3 +7542,9 @@ $langDSpaceMetadataProfileHelp = "Which metadata schema the repository uses. Cho
 $langDSpaceProfileDublinCore = "Dublin Core (default)";
 $langDSpaceProfileLom = "LOM (Learning Object Metadata)";
 $langExtRepoRichPreview = "Rich preview";
+
+// Portfolio
+$langViewEditProfile = "View and edit your profile";
+$langViewEditMyStats = "See your statistics in detail";
+$langSettingsAdminTool = "Platform settings and management";
+$langGetRights = "Get rights";
