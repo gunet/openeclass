@@ -55,7 +55,7 @@ $defaults = array(
                 "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal', 'BgBorderMenuPopover', 'BorderLeftToRightColumnCourseBgColor'),
                 "rgba(239, 242, 251, 1)" => array('clBorderBottomLists','BgBorderColorAnnouncementHomepageLink', 'BgBorderColorCardLogin'),
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
-                "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes', 'bgHelpButtonColor'),
+                "rgba(155, 169, 193, 1)" => array('ColorMutedTexts', 'BgBorderRadios', 'BgBorderCheckboxes', 'bgHelpButtonColor'),
                 "rgba(0, 51, 153, 1)" => array('bgColorActiveDateTime'),
                 "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
                 "rgba(196, 70, 1, 1)" => array('bgDeleteButtonColor', 'clListMenuLogout', 'clListMenuDeletion', 'linkDeleteColor', 'clDeleteMenuPopoverOption', 'clDeleteIconModal', 'clXmarkModal','BgBadgeAccent', 'bgAlertDanger', 'clRequiredFieldForm', 'ColorRedText'),
@@ -2437,6 +2437,10 @@ $tool_content .= "
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='ColorHyperTexts' class='control-label-notes mb-2 me-2'>$langPHyperTextColor:</label>
                                 <input name='ColorHyperTexts' type='text' class='form-control colorpicker' id='ColorHyperTexts' value='$theme_options_styles[ColorHyperTexts]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='ColorMutedTexts' class='control-label-notes mb-2 me-2'>$langMytedTextColor:</label>
+                                <input name='ColorMutedTexts' type='text' class='form-control colorpicker' id='ColorMutedTexts' value='$theme_options_styles[ColorMutedTexts]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='ColorRedText' class='control-label-notes mb-2 me-2'>$langRedText:</label>

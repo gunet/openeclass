@@ -5836,6 +5836,7 @@ $langBgBorderLeftColor = "Border color on the left edge of the content column";
 $langHelpCourseUI = "(<small>Left column with course tools</small>)";
 $langNavHyperTexts = "Typography";
 $langPHyperTextColor = "Color of headings - texts";
+$langMytedTextColor = "Text color to muted texts";
 $langBgPanels = "Background color";
 $langBgHoveredPanels = "Background hovered color";
 $langConcerngingPanels = "Regarding the panels of platform";

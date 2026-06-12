@@ -35,21 +35,6 @@ function display_certificates(): void
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d AND active = 1", $course_id);
     }
 
-    $head_content .= "<style>
-        .reward-list-card { display:block; border:1px solid #e5e7eb; border-radius:12px; padding:22px 28px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.07); margin-bottom:12px; transition:box-shadow 0.2s,transform 0.2s; text-decoration:none !important; color:inherit !important; cursor:pointer; }
-        .reward-list-card:hover { box-shadow:0 8px 28px rgba(0,0,0,0.13); transform:translateY(-2px); }
-        .reward-img-col { flex-shrink:0; width:72px; display:flex; align-items:center; justify-content:center; }
-        .reward-title-col { flex-shrink:0; min-width:180px; }
-        .reward-bar-col { flex-grow:1; }
-        .reward-bar-inner { width:75%; }
-        @media (max-width:575.98px) {
-            .reward-list-card { padding:16px 18px; }
-            .reward-img-col { width:100%; justify-content:flex-start; }
-            .reward-title-col { width:100%; min-width:0; }
-            .reward-bar-col { width:100%; }
-            .reward-bar-inner { width:100%; }
-        }
-    </style>";
 
     $tool_content .= "<div class='col-12 mt-4'>";
 
@@ -92,12 +77,12 @@ function display_certificates(): void
                 $pct = $total > 0 ? round($done / $total * 100) : 0;
                 $right_html = "
                     <div class='reward-bar-inner'>
-                        <div style='font-size:13px;color:#6b7280;margin-bottom:8px;'>$langTotalPercentCompleteness</div>
+                        <div class='text_muted_cl' style='font-size:13px; margin-bottom:8px;'>$langTotalPercentCompleteness</div>
                         <div class='d-flex align-items-center gap-3'>
-                            <div style='flex-grow:1;height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;'>
-                                <div style='height:100%;width:{$pct}%;background:#2563eb;border-radius:3px;'></div>
+                            <div class='progress_bar_certificates'>
+                                <div class='progress_bar_fill_certificates' style='width:{$pct}%;'></div>
                             </div>
-                            <span style='font-size:14px;font-weight:600;color:#374151;min-width:40px;text-align:right;'>{$pct}%</span>
+                            <span class='text_muted_cl' style='font-size:14px;font-weight:600;min-width:40px;text-align:right;'>{$pct}%</span>
                         </div>
                     </div>";
             } else {
@@ -171,22 +156,6 @@ function display_badges(): void
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1 AND bundle >= 0", $course_id);
     }
 
-    $head_content .= "<style>
-        .reward-list-card { display:block; border:1px solid #e5e7eb; border-radius:12px; padding:22px 28px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.07); margin-bottom:12px; transition:box-shadow 0.2s,transform 0.2s; text-decoration:none !important; color:inherit !important; cursor:pointer; }
-        .reward-list-card:hover { box-shadow:0 8px 28px rgba(0,0,0,0.13); transform:translateY(-2px); }
-        .reward-img-col { flex-shrink:0; width:72px; display:flex; align-items:center; justify-content:center; }
-        .reward-title-col { flex-shrink:0; min-width:180px; }
-        .reward-bar-col { flex-grow:1; }
-        .reward-bar-inner { width:75%; }
-        @media (max-width:575.98px) {
-            .reward-list-card { padding:16px 18px; }
-            .reward-img-col { width:100%; justify-content:flex-start; }
-            .reward-title-col { width:100%; min-width:0; }
-            .reward-bar-col { width:100%; }
-            .reward-bar-inner { width:100%; }
-        }
-    </style>";
-
     $tool_content .= "<div class='col-12 mt-4'>";
 
     if ($is_editor) {
@@ -220,12 +189,12 @@ function display_badges(): void
                 $pct = $total > 0 ? round($done / $total * 100) : 0;
                 $right_html = "
                     <div class='reward-bar-inner'>
-                        <div style='font-size:13px;color:#6b7280;margin-bottom:8px;'>$langTotalPercentCompleteness</div>
+                        <div class='text_muted_cl' style='font-size:13px;margin-bottom:8px;'>$langTotalPercentCompleteness</div>
                         <div class='d-flex align-items-center gap-3'>
-                            <div style='flex-grow:1;height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;'>
-                                <div style='height:100%;width:{$pct}%;background:#2563eb;border-radius:3px;'></div>
+                            <div class='progress_bar_badges'>
+                                <div class='progress_bar_fill_badges' style='width:{$pct}%;'></div>
                             </div>
-                            <span style='font-size:14px;font-weight:600;color:#374151;min-width:40px;text-align:right;'>{$pct}%</span>
+                            <span class='text_muted_cl' style='font-size:14px;font-weight:600;min-width:40px;text-align:right;'>{$pct}%</span>
                         </div>
                     </div>";
             } else {
@@ -304,31 +273,6 @@ function display_points_games(): void
     } else {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, starts, expires FROM points_game WHERE course_id = ?d AND active = 1 ORDER BY starts DESC", $course_id);
     }
-
-    $head_content .= "<style>
-        .pg-list-card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px 24px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.06); transition: box-shadow 0.2s; margin-bottom: 12px; }
-        .pg-list-card-link:hover .pg-list-card { box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
-        .pg-list-badge { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 48px; height: 48px; flex-shrink: 0; }
-        .pg-list-badge span { border-radius: 4px; display: block; }
-        .pg-list-title { font-size: 16px; font-weight: 700; color: #1f2937; }
-        .pg-list-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: #6b7280; }
-        .pg-list-sep { color: #d1d5db; }
-        .pg-list-active { color: #6b7280; font-weight: 600; }
-        .pg-list-inactive { color: #6b7280; font-weight: 600; }
-        .pg-list-date { font-size: 13px; color: #111827; font-weight: 600; white-space: nowrap; }
-        .pg-list-bar-outer { height: 7px; background: #e5e7eb; border-radius: 4px; overflow: hidden; flex-grow: 1; min-width: 60px; }
-        .pg-list-bar-inner { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2563eb, #7c3aed); }
-        .pg-list-bar-label { font-size: 12px; color: #6b7280; margin-bottom: 5px; }
-        .pg-list-bar-pct { font-size: 12px; color: #374151; font-weight: 600; white-space: nowrap; }
-        @media (max-width: 575.98px) {
-            .pg-list-card { padding: 14px 16px; }
-            .pg-list-date { width: 100%; margin-top: 4px; }
-        }
-        .pg-list-desc { font-size: 13px; color: #4b5563; margin-top: 10px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .pg-list-desc:hover { -webkit-line-clamp: unset; overflow: visible; }
-        .pg-list-more { font-size: 13px; font-weight: 600; color: #2563eb; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; margin-top: 12px; }
-        .pg-list-more:hover { text-decoration: underline; color: #1d4ed8; }
-    </style>";
 
     $tool_content .= "<div class='col-12 mt-4'>";
 
@@ -470,30 +414,6 @@ function display_course_completion(): void
            $langRubricCrit, $langNoActivCert, $langActivate, $langDeactivate, $langTotalPercentCompleteness,
            $langsActivities, $langYouHaveCompleted, $langFrom2, $langCourseCompletion, $langConfirmDelete;
 
-    $head_content .= "<style>
-        .progress-activity-card {
-            border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px; background: #fff;
-            height: 100%; display: flex; flex-direction: column;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.07); transition: box-shadow 0.2s;
-        }
-        .progress-activity-card-link:hover .progress-activity-card { box-shadow: 0 4px 16px rgba(0,0,0,0.11); transform: translateY(-1px); }
-        .progress-activity-icon {
-            width: 44px; height: 44px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; color: #fff; font-size: 20px;
-        }
-        .progress-activity-type-label { font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.06em; }
-        .progress-activity-name { font-size: 15px; font-weight: 600; color: #1f2937; margin: 10px 0 4px; flex-grow: 1; }
-        .progress-activity-criteria { font-size: 13px; color: #6b7280; margin-bottom: 4px; }
-        .progress-activity-status { display: inline-flex !important; align-items: center !important; gap: 5px; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: auto; align-self: flex-start; }
-        .status-completed { border: 1.5px solid #16a34a !important; color: #16a34a !important; background: transparent !important; }
-        .status-not-started { border: 1.5px solid #f97316 !important; color: #ea580c !important; background: transparent !important; }
-        .cc-donut-wrap { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
-        .cc-donut-pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #1f2937; }
-        .cc-pill-active { display: inline-block; padding: 3px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; background: transparent; color: #16a34a; border: 1.5px solid #16a34a; }
-        .cc-pill-inactive { display: inline-block; padding: 3px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; background: transparent; color: #dc2626; border: 1.5px solid #dc2626; }
-    </style>";
-
     $data = Database::get()->querySingle("SELECT id, title, description, active, icon FROM badge
                                          WHERE course_id = ?d AND bundle = -1 AND unit_id = 0", $course_id);
 
@@ -598,8 +518,8 @@ function display_course_completion(): void
                                 <div class='cc-donut-pct'>{$pct}%</div>
                             </div>
                             <div>
-                                <div style='font-size:17px;font-weight:700;color:#1f2937;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
-                                <div style='font-size:13px;color:#6b7280;margin-bottom:10px;'>$sub_text</div>                            
+                                <div class='default-dark-text' style='font-size:17px;font-weight:700;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
+                                <div class='text_muted_cl' style='font-size:13px;margin-bottom:10px;'>$sub_text</div>                            
                             </div>
                         </div>
                     </div>
@@ -704,27 +624,6 @@ function display_activities($element, $id, $unit_id = 0) {
         act_confirm();
     });
     </script>";
-
-    $head_content .= "<style>
-        .progress-activity-card {
-            border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px; background: #fff;
-            height: 100%; display: flex; flex-direction: column;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.07); transition: box-shadow 0.2s;
-        }
-        .progress-activity-card-link:hover .progress-activity-card { box-shadow: 0 4px 16px rgba(0,0,0,0.11); transform: translateY(-1px); }
-        .progress-activity-icon {
-            width: 44px; height: 44px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; color: #fff; font-size: 20px;
-        }
-        .progress-activity-type-label { font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.06em; }
-        .progress-activity-name { font-size: 15px; font-weight: 600; color: #1f2937; margin: 10px 0 4px; flex-grow: 1; }
-        .progress-activity-criteria { font-size: 13px; color: #6b7280; margin-bottom: 4px; }
-        .progress-activity-status { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: auto; align-self: flex-start; }
-        .status-completed { border: 1.5px solid #16a34a; color: #16a34a; background: transparent; }
-        .status-not-started { border: 1.5px solid #f97316; color: #ea580c; background: transparent; }
-        .progress-activity-criterion-type { font-size: 11px; color: #d1d5db; font-weight: 500; }
-    </style>";
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
@@ -3553,33 +3452,6 @@ function display_points_game_settings($element_id): void
 
     $tool_content .= "
     </div>"; // end col-12
-
-    $head_content .= "<style>
-        .pg-level-badge-icon {
-            width: 54px; height: 54px; border-radius: 14px;
-            background: linear-gradient(135deg, #14b8a6, #6366f1);
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 22px; flex-shrink: 0;
-        }
-        .pg-stat-label { font-size: 11px; color: #9ca3af; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
-        .pg-stat-val { font-size: 16px; font-weight: 700; color: #1f2937; }
-        .pg-progress-label { font-size: 12px; font-weight: 600; color: #6b7280; }
-        .pg-progress-bar-outer { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
-        .pg-progress-bar-inner { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2563eb, #7c3aed); transition: width 0.4s; }
-        .pg-progress-text { font-size: 11px; color: #6b7280; }
-        .pg-progress-pct { font-size: 11px; color: #6b7280; font-weight: 600; }
-        .pg-lvl-icon {
-            width: 54px; height: 54px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 20px; margin: 0 auto 6px;
-        }
-        .pg-lvl-name { font-size: 12px; font-weight: 600; color: #374151; }
-        .pg-lvl-pts { font-size: 11px; color: #9ca3af; }
-        .pg-stat-col { min-width: 80px; }
-        @media (max-width: 575.98px) {
-            .pg-stat-col { flex: 1 1 30%; min-width: 70px; }
-        }
-    </style>";
 }
 
 /**
@@ -4216,29 +4088,6 @@ function student_view_progress() {
     require_once 'Game.php';
     require_once 'PointsGame.php';
 
-    $head_content .= "<style>
-        #progress_circle {
-            display: flex;
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            background: conic-gradient(#0073E6 var(--progress), #E8EDF8 0deg);
-            font-size: 0;
-        }
-        #progress_circle::after {
-            content: attr(data-progress) '%';
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            width: 100%;
-            margin: 10px;
-            border-radius: 50%;
-            background: white;
-            font-size: 2rem;
-            text-align: center;
-        }
-    </style>";
-
     // check for completeness in order to refresh user data
     Game::checkCompleteness($uid, $course_id);
     $found = false;
@@ -4506,69 +4355,6 @@ function display_leaderboard_accordion($points_game_id): void
                                             upp.total_points DESC,
                                             u.surname ASC,
                                             u.givenname ASC", $points_game_id, $course_id);
-
-    $head_content .= "<style>
-        .lb-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
-        .lb-row {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 14px 20px;
-            border-radius: 12px;
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: box-shadow 0.2s;
-            flex-wrap: wrap;
-        }
-        .lb-row:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.09); }
-        .lb-row.lb-current-user { background: #f3f4f6; border-color: #d1d5db; font-weight: 700; }
-        .lb-rank { font-size: 16px; font-weight: 700; color: #374151; flex: 1 1 0; text-align: center; }
-        .lb-avatar-wrap { display: flex; align-items: center; gap: 10px; flex: 1 1 0; min-width: 0; }
-        .lb-avatar {
-            width: 42px; height: 42px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0;
-        }
-        .lb-username { font-size: 14px; color: #374151; word-break: break-all; }
-        .lb-username-link { font-size: 14px; color: #2563eb; text-decoration: none; word-break: break-all; }
-        .lb-username-link:hover { text-decoration: underline; }
-        .lb-level-wrap { display: flex; align-items: center; gap: 8px; flex: 1 1 0; min-width: 0; }
-        .lb-level-badge-star {
-            width: 28px; height: 28px; border-radius: 5px;
-            background: #f59e0b;
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 14px; flex-shrink: 0;
-        }
-        .lb-level-text { font-size: 13px; color: #374151; white-space: nowrap; }
-        .lb-points-wrap { flex: 1 1 0; text-align: center; }
-        .lb-points-val { font-size: 16px; font-weight: 700; color: #2563eb; }
-        .lb-points-val a { color: inherit; text-decoration: none; }
-        .lb-points-val a:hover { text-decoration: underline; }
-        .lb-points-label { font-size: 11px; color: #9ca3af; }
-        .lb-progress-wrap { flex: 2 1 0; min-width: 0; }
-        .lb-progress-bar-outer { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
-        .lb-progress-bar-inner { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2563eb, #7c3aed); transition: width 0.4s; }
-        .lb-progress-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
-        .lb-progress-text-val { font-size: 11px; color: #6b7280; }
-        .lb-progress-pct { font-size: 11px; color: #6b7280; font-weight: 600; }
-        .lb-pagination { display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
-        .lb-page-btn {
-            padding: 5px 13px; border-radius: 6px; border: 1px solid #d1d5db;
-            background: #fff; color: #374151; font-size: 13px; cursor: pointer;
-            transition: background 0.15s, color 0.15s;
-        }
-        .lb-page-btn:hover { background: #f3f4f6; }
-        .lb-page-btn.lb-page-active { background: #2563eb; color: #fff; border-color: #2563eb; font-weight: 700; }
-        @media (max-width: 575.98px) {
-            .lb-row { gap: 10px; padding: 12px 14px; }
-            .lb-rank { flex: 0 0 28px; font-size: 14px; }
-            .lb-avatar-wrap { flex: 1 1 auto; min-width: 0; }
-            .lb-level-wrap { flex: 1 1 45%; }
-            .lb-points-wrap { flex: 1 1 45%; }
-            .lb-progress-wrap { flex: 1 1 100%; }
-        }
-    </style>";
 
     $tool_content .= "
         <div class='card rounded-3 mt-4'>
@@ -4858,36 +4644,6 @@ function display_users_progress($element, $element_id): void
                                             AND reviewer = 0
                                             AND course_id = ?d", $course_id)->total;
 
-    $head_content .= "<style>
-        .up-lb-list { display: flex; flex-direction: column; gap: 10px; }
-        .up-lb-row {
-            display: flex; align-items: center; gap: 20px; padding: 14px 20px;
-            border-radius: 12px; background: #fff; border: 1px solid #e5e7eb;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05); flex-wrap: wrap;
-        }
-        .up-lb-rank { font-size: 16px; font-weight: 700; color: #374151; flex: 0 0 38px; text-align: center; }
-        .up-lb-avatar-wrap { display: flex; align-items: center; gap: 10px; flex: 1 1 160px; min-width: 0; }
-        .up-lb-avatar {
-            width: 42px; height: 42px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0;
-        }
-        .up-lb-username { font-size: 14px; color: #374151; }
-        .up-lb-username-link { font-size: 14px; color: #2563eb; text-decoration: none; }
-        .up-lb-username-link:hover { text-decoration: underline; }
-        .up-lb-progress-wrap { flex: 3 1 200px; min-width: 0; }
-        .up-lb-bar-outer { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
-        .up-lb-bar-inner { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2563eb, #7c3aed); transition: width 0.4s; }
-        .up-lb-bar-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
-        .up-lb-bar-label { font-size: 11px; color: #6b7280; }
-        .up-lb-bar-pct { font-size: 11px; color: #6b7280; font-weight: 600; }
-        @media (max-width: 575.98px) {
-            .up-lb-row { gap: 10px; padding: 12px 14px; }
-            .up-lb-rank { flex: 0 0 28px; font-size: 14px; }
-            .up-lb-avatar-wrap { flex: 1 1 auto; }
-            .up-lb-progress-wrap { flex: 1 1 100%; }
-        }
-    </style>";
 
     $avatar_colors = ['#2563eb','#7c3aed','#db2777','#ea580c','#16a34a','#0891b2','#b45309','#0e7490','#6d28d9','#059669'];
 
@@ -5083,12 +4839,12 @@ function display_user_progress_details($element, $element_id, $user_id): void
 
     // Info card elements
     $cert_desc   = get_cert_desc($element, $element_id);
-    $desc_html   = !empty($cert_desc) ? "<div style='font-size:14px;color:#6b7280;margin-top:6px;'>" . $cert_desc . "</div>" : '';
+    $desc_html   = !empty($cert_desc) ? "<div class='text_muted_cl' style='font-size:14px;margin-top:6px;'>" . $cert_desc . "</div>" : '';
     $issuer_html = '';
     if ($bundle != -1) {
         $issuer = get_cert_issuer($element, $element_id);
         if (!empty($issuer)) {
-            $issuer_html = "<div style='font-size:13px;color:#6b7280;margin-top:6px;'><span style='font-weight:600;'>$langpublisher:</span> " . q($issuer) . "</div>";
+            $issuer_html = "<div class='text_muted_cl' style='font-size:13px;margin-top:6px;'><span style='font-weight:600;'>$langpublisher:</span> " . q($issuer) . "</div>";
         }
     }
     $cert_link_html = !empty($cert_public_link) ? "<div style='margin-top:8px;font-size:13px;'>$cert_public_link</div>" : '';
@@ -5137,69 +4893,13 @@ function display_user_progress_details($element, $element_id, $user_id): void
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                         <div class='cc-donut-wrap'>$donut_svg<div class='cc-donut-pct'>{$pct}%</div></div>
                         <div>
-                            <div style='font-size:17px;font-weight:700;color:#1f2937;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
-                            <div style='font-size:13px;color:#6b7280;'>$completed_num / $total_num $langCriteria</div>
+                            <div class='default-dark-text' style='font-size:17px;font-weight:700;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
+                            <div class='text_muted_cl' style='font-size:13px;'>$completed_num / $total_num $langCriteria</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>";
-
-	$head_content .= "<style>
-        .progress-activity-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            padding: 18px;
-            background: #fff;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.07);
-            transition: box-shadow 0.2s;
-        }
-        .progress-activity-card-link:hover .progress-activity-card { box-shadow: 0 4px 16px rgba(0,0,0,0.11); transform: translateY(-1px); }
-        .progress-activity-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: #fff;
-            font-size: 20px;
-        }
-        .progress-activity-type-label {
-            font-size: 12px;
-            font-weight: 700;
-            color: #9ca3af;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-        .progress-activity-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1f2937;
-            margin: 10px 0 4px;
-            flex-grow: 1;
-        }
-        .progress-activity-criteria { font-size: 13px; color: #6b7280; margin-bottom: 12px; }
-        .progress-activity-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: auto;
-            align-self: flex-start;
-        }
-        .status-completed { border: 1.5px solid #16a34a; color: #16a34a; background: transparent; }
-        .status-not-started { border: 1.5px solid #f97316; color: #ea580c; background: transparent; }
-        .cc-donut-wrap { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
-        .cc-donut-pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #1f2937; }
-    </style>";
 
 	$tool_content .= "
         <div class='col-12 mt-3'>
@@ -5335,6 +5035,82 @@ function criteria_with_operators() {
                  CourseCompletionEvent::ACTIVITY,
                  AttendanceEvent::ACTIVITY);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function display_user_points_game_details($points_game_id, $user_id) {

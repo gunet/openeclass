@@ -801,7 +801,7 @@ if ($userdata) {
                         </div>
                         <div class='reward-title-col'>
                             <div style='margin-bottom:4px;line-height:1.3;'><strong style='font-size:16px;font-weight:600;'>".q($data['title'])."</strong>".$title_vis_icon."</div>
-                            <div style='font-size:13px;color:#6b7280;'>".q($data['issuer'] ?? '')." &bull; {$cert_date}</div>
+                            <div class='text_muted_cl' style='font-size:13px;'>".q($data['issuer'] ?? '')." &bull; {$cert_date}</div>
                             ".($reflection_comments ? "<div style='font-size:12px;color:#9ca3af;font-style:italic;margin-top:4px;'>{$reflection_comments}</div>" : "")."
                         </div>
                         <div class='reward-bar-col d-flex align-items-center justify-content-end gap-2' onclick='event.stopPropagation();'>
@@ -926,7 +926,7 @@ if ($userdata) {
                         </div>
                         <div class='reward-title-col'>
                             <div style='margin-bottom:4px;line-height:1.3;'>{$title_html}{$ext_badge_str}{$title_vis_icon}</div>
-                            <div style='font-size:13px;color:#6b7280;'>{$badge_issuer}".($mybadge->resource_type == 'my_badges' ? " &bull; {$mybadge->course_title}" : "").($badge_date ? " &bull; {$badge_date}" : "")."</div>
+                            <div class='text_muted_cl' style='font-size:13px;'>{$badge_issuer}".($mybadge->resource_type == 'my_badges' ? " &bull; {$mybadge->course_title}" : "").($badge_date ? " &bull; {$badge_date}" : "")."</div>
                             ".($badge_desc ? "<div style='font-size:12px;color:#9ca3af;margin-top:2px;'>{$badge_desc}</div>" : "")."
                             ".($reflection_comments ? "<div style='font-size:12px;color:#9ca3af;font-style:italic;margin-top:4px;'>{$reflection_comments}</div>" : "")."
                         </div>

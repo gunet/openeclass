@@ -746,10 +746,16 @@ function theme_initialization() {
                 .secondary-title,
                 .pg-lvl-name,
                 .lb-rank,
+                .cc-donut-pct,
+                .default-dark-text,
+                .pg-stat-val,
+                .lb-username,
+                .lb-points-label,
+                .up-lb-bar-label,
+                .up-lb-bar-pct,
                 .lb-level-text,
                 .lb-progress-text-val,
                 .lb-progress-pct,
-                .progress-activity-type-label,
                 .progress-activity-name,
                 .progress-activity-criteria,
                 .progress-activity-criteria {
@@ -792,13 +798,32 @@ function theme_initialization() {
                     color:$theme_options_styles[ColorHyperTexts] ;
                 }
 
-                .text-muted{
-                    color:$theme_options_styles[ColorHyperTexts] !important;
-                }
-
                 .showCoursesBars:not(:has(.active)) i,
                 .showCoursesPics:not(:has(.active)) i {
                     color:$theme_options_styles[ColorHyperTexts] ;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['ColorMutedTexts'])){
+            $styles_str .= "
+                .text-muted{
+                    color: $theme_options_styles[ColorMutedTexts] !important;
+                }
+                .text_muted_cl,
+                .progress-activity-type-label,
+                .pg-list-active,
+                .pg-list-sep,
+                .pg-list-meta,
+                .pg-list-bar-label,
+                .pg-list-bar-pct,
+                .pg-progress-text,
+                .pg-progress-pct,
+                .pg-progress-label,
+                .pg-stat-label,
+                .pg-progress-pct,
+                .pg-lvl-pts { 
+                    color: $theme_options_styles[ColorMutedTexts] !important;
                 }
             ";
         }
@@ -850,6 +875,12 @@ function theme_initialization() {
                     color:$theme_options_styles[ColorGreenText];
                     border:1.5px solid $theme_options_styles[ColorGreenText];
                 }
+
+                .lb-row.lb-current-user {
+                    background: transparent;
+                    border: solid 2px $theme_options_styles[ColorGreenText] !important;
+                }
+
             ";
         }
 
@@ -5672,6 +5703,21 @@ function theme_initialization() {
                     border-left: solid 4px $theme_options_styles[BgColorProgressBarAndText] !important;
                 }
 
+                .progress_bar_badges,
+                .progress_bar_certificates,
+                .pg-list-bar-outer,
+                .pg-progress-bar-outer,
+                .up-lb-bar-outer {
+                    background: $theme_options_styles[BgProgressBar] !important;
+                }
+                .progress_bar_fill_badges,
+                .progress_bar_fill_certificates,
+                .pg-list-bar-inner,
+                .pg-progress-bar-inner,
+                .up-lb-bar-inner {
+                    background: $theme_options_styles[BgColorProgressBarAndText] !important;
+                }
+
                 
             ";
         }
@@ -5723,6 +5769,10 @@ function theme_initialization() {
                 .alert-info {
                     background-color:$theme_options_styles[bgAlertInfo];
                 }
+
+                .progress-module .alert-info {
+                    background-color: $theme_options_styles[bgAlertInfo] !important;
+                }
             ";
         }
         if(!empty($theme_options_styles['clAlertInfo'])){
@@ -5755,6 +5805,26 @@ function theme_initialization() {
                     -webkit-appearance: none;
                     -moz-appearance: none;
                     appearance: none;
+                }
+
+                .progress-module .alert-info, 
+                .progress-module .alert-info h1, 
+                .progress-module .alert-info h2, 
+                .progress-module .alert-info h3, 
+                .progress-module .alert-info h4, 
+                .progress-module .alert-info h5, 
+                .progress-module .alert-info h6, 
+                .progress-module .alert-info div, 
+                .progress-module .alert-info small, 
+                .progress-module .alert-info span, 
+                .progress-module .alert-info p, 
+                .progress-module .alert-info b, 
+                .progress-module .alert-info strong, 
+                .progress-module .alert-info li, 
+                .progress-module .alert-info label, 
+                .progress-module .alert-info i, 
+                .progress-module .alert-info svg {
+                    color: $theme_options_styles[clAlertInfo] !important;
                 }
             ";
         }
@@ -5907,6 +5977,9 @@ function theme_initialization() {
         if(!empty($theme_options_styles['borderClAlertInfo'])){
             $styles_str .= "
                 .alert-info {
+                    border: solid 1px $theme_options_styles[borderClAlertInfo] !important;
+                }
+                .progress-module .alert-info {
                     border: solid 1px $theme_options_styles[borderClAlertInfo] !important;
                 }
             ";
@@ -6774,6 +6847,10 @@ function theme_initialization() {
                     background: $theme_options_styles[BgPanels];
                 }
 
+                .progress-activity-card {
+                    background: $theme_options_styles[BgPanels];
+                }
+
 
             ";
         }
@@ -6881,6 +6958,10 @@ function theme_initialization() {
                 }
 
                 .pg-list-card {
+                    border: 1px solid $theme_options_styles[clBorderPanels];
+                }
+
+                .progress-activity-card {
                     border: 1px solid $theme_options_styles[clBorderPanels];
                 }
 
@@ -7099,6 +7180,10 @@ function theme_initialization() {
                 }
 
                 .pg-list-card {
+                    box-shadow: 0 1px 3px $theme_options_styles[BoxShadowPanels];
+                }
+
+                .progress-activity-card {
                     box-shadow: 0 1px 3px $theme_options_styles[BoxShadowPanels];
                 }
 
