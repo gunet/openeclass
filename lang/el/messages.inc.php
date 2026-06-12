@@ -8259,3 +8259,7 @@ $langViewEditProfile = "Δείτε και επεξεργαστείτε το πρ
 $langViewEditMyStats = "Δείτε αναλυτικά τα στατιστικά σας";
 $langSettingsAdminTool = "Ρυθμίσεις και διαχείριση πλατφόρμας";
 $langGetRights = "Αποκτήστε δικαιώματα";
+$langRegisterToCourse = "Εγγραφείτε σε ένα ή περισσότερα $langsCourses";
+$langRegisterToCollab = "Εγγραφείτε σε μία ή περισσότερες $langsCourses";
+$langAddNewCourse = "Προσθέστε ένα νέο $langsCourse";
+$langAddNewCollab = "Προσθέστε μία νέα $langsCourse";

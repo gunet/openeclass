@@ -7549,3 +7549,7 @@ $langViewEditProfile = "View and edit your profile";
 $langViewEditMyStats = "See your statistics in detail";
 $langSettingsAdminTool = "Platform settings and management";
 $langGetRights = "Get rights";
+$langRegisterToCourse = "Enroll in one or more $langsCourses";
+$langRegisterToCollab = "Enroll in one or more $langsCourses";
+$langAddNewCourse = "Add a new $langsCourse";
+$langAddNewCollab = "Add a new $langsCourse";

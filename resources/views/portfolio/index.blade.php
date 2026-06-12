@@ -567,13 +567,25 @@
                             <i class="fa-solid fa-chevron-right arrow"></i>
                         </a>
                     @elseif ($_SESSION['status'] == USER_STUDENT)
-                        <a class="dashboard-card-btn admin-btn brief-profile-btn text-decoration-none h-100" href="{{ $urlAppend }}modules/auth/formuser.php">
+                        <a class="dashboard-card-btn admin-btn brief-profile-btn text-decoration-none h-100" href="{{ $urlAppend }}modules/auth/courses.php">
                             <span class="icon-circle">
-                                <i class="fa-regular fa-envelope"></i>
+                                <i class="fa-regular fa-pen-to-square"></i>
                             </span>
                             <span>
-                                <strong>{{ trans('langMyRequests') }}</strong>
-                                <small>{{ trans('langGetRights') }}</small>
+                                <strong>{{ trans('langRegister') }}</strong>
+                                <small>@if (!get_config('show_always_collaboration')) {{ trans('langRegisterToCourse') }} @else {{ trans('langRegisterToCollab') }} @endif</small>
+                            </span>
+                            <i class="fa-solid fa-chevron-right arrow"></i>
+                        </a>
+                    @elseif ($_SESSION['status'] == USER_TEACHER)
+                        <a id="btn_create_course" class="dashboard-card-btn admin-btn brief-profile-btn text-decoration-none h-100" href="{{ $urlAppend }}modules/create_course/create_course.php">
+
+                            <span class="icon-circle">
+                                <i class="fa-solid fa-book-open"></i>
+                            </span>
+                            <span>
+                                <strong>{{ trans('langCreate') }}</strong>
+                                <small>@if (!get_config('show_always_collaboration')) {{ trans('langAddNewCourse') }} @else {{ trans('langAddNewCollab') }} @endif</small>
                             </span>
                             <i class="fa-solid fa-chevron-right arrow"></i>
                         </a>
@@ -600,17 +612,6 @@
                             @endif
 
                         </h2>
-                        <div class='d-flex mt-md-0 mt-3'>
-                            <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
-                                <i class="fa-regular fa-pen-to-square"></i>&nbsp
-                                {{ trans('langRegister') }}
-                            </a>
-                            @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
-                                <a id="btn_create_course" class="btn submitAdminBtnDefault" href="{{ $urlAppend }}modules/create_course/create_course.php">
-                                    <i class="fa-solid fa-plus"></i>&nbsp;{{ trans('langCreate') }}
-                                </a>
-                            @endif
-                        </div>
                     </div>
                     <div class='card-body px-0'>
                         @if(Session::has('message'))
