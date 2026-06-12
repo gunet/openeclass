@@ -5934,6 +5934,16 @@ pre {
 .hierarchy .jstree-proton .jstree-anchor {
   max-width: 100%;
 }
+.category-element a.TextBold:hover {
+    text-decoration: none !important;
+}
+
+.category-element a.TextBold:hover {
+    background-image: linear-gradient(to right, transparent 45px, currentColor 45px);
+    background-position: 0 100%;
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+}
 
 .jstree-proton .jstree-anchor {
   height: auto!important;
