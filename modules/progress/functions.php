@@ -51,7 +51,7 @@ function display_certificates(): void
         }
     </style>";
 
-    $tool_content .= "<div class='col-12 mt-4 px-3 px-md-4'>";
+    $tool_content .= "<div class='col-12 mt-4'>";
 
     if ($is_editor) {
         $tool_content .= "
@@ -187,7 +187,7 @@ function display_badges(): void
         }
     </style>";
 
-    $tool_content .= "<div class='col-12 mt-4 px-3 px-md-4'>";
+    $tool_content .= "<div class='col-12 mt-4'>";
 
     if ($is_editor) {
         $tool_content .= "
@@ -573,10 +573,12 @@ function display_course_completion(): void
             <div onclick=\"window.location.href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'\" style='cursor:pointer;'>        
                 <div class='col-12 mt-4'>
                     <div class='card rounded-3'>                
-                        <div class='card-body p-4'>                    
-                            <h4>$langCourseCompletion</h4>                    
+                        <div class='card-body p-4'>                          
                             <div class='d-flex align-items-center justify-content-between gap-3 flex-wrap' >
-                                $status_pill
+                                <div>
+                                    <div class='text-heading-h4 mb-2'>$langCourseCompletion</div>          
+                                    $status_pill
+                                </div>
                                 <div class='reward-bar-col d-flex align-items-center justify-content-end' onclick='event.stopPropagation();'>
                                     $editor_btns
                                 </div>                            
@@ -1172,7 +1174,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                         $status_pill = "<div class='progress-activity-status status-not-started'><i class='fa fa-clock-o'></i> $langSurveyNotStarted</div>";
                                     }
 
-                                    $editor_btns = $is_editor ? "<div class='mt-1 pt-2 text-end' onclick='event.stopPropagation()'>" .
+                                    $editor_btns = $is_editor ? "<div class='text-end' onclick='event.stopPropagation()'>" .
                                         action_button(array(
                                             array('title' => $langEditChange, 'icon' => 'fa-edit',
                                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
@@ -1193,11 +1195,13 @@ function display_activities($element, $id, $unit_id = 0) {
                                     $tool_content .= "
                                         <div class='col'>
                                             {$act_link_open}<div class='progress-activity-card'>
-                                                <div class='d-flex align-items-center gap-3 mb-2'>
-                                                    <div class='progress-activity-icon' style='background:{$activity_style['color']};'>
-                                                        <i class='fa {$activity_style['icon']}'></i>
+                                                <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                    <div class='d-flex align-items-center gap-3 mb-2'>
+                                                        <div class='progress-activity-icon' style='background:{$activity_style['color']};'>
+                                                            <i class='fa {$activity_style['icon']}'></i>
+                                                        </div>
+                                                        <span class='progress-activity-type-label text-nowrap me-4'>$activity_type_label</span>
                                                     </div>
-                                                    <span class='progress-activity-type-label me-4'>$activity_type_label</span>
                                                     $editor_btns
                                                 </div>
                                                 <div class='progress-activity-name'>
@@ -4376,7 +4380,7 @@ function student_view_progress() {
                 $tool_content .= "<div class='col-12'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
                 $tool_content .= "<div class='col-12 certificate_panel border-card m-auto d-block p-3'>
-                        <h4 class='text-center'>$certificate->title</h4>
+                        <div class='text-heading-h4 text-center'>$certificate->title</div>
                         <div class='row'>
                             <div class='col-sm-12 certificate_panel_date text-success text-center'>$dateAssigned</div>
                             <div class='col-sm-12 certificate_panel_issuer text-center'>$certificate->issuer</div>

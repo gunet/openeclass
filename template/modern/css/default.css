@@ -102,12 +102,6 @@ iframe{
   .module-container{
     padding: 24px 0px 24px 0px;
   }
-
-  .portfolio-profile-container{
-    min-height: 96px;
-    padding: 0px 8px 0px 8px;
-    background-color: #F7F9FE;
-  }
   .portfolio-courses-container{
     padding: 24px 8px 24px 8px;
     background-color: #ffffff;
@@ -160,18 +154,6 @@ iframe{
     padding-left: 0px;
     padding-right: 0px;
   }
-
-  .portfolio-profile-container{
-    min-height: 96px;
-    background-color: #F7F9FE;
-  }
-  .container.portfolio-profile-container{
-    padding: 40px 8px 40px 8px;
-  }
-  .container-fluid.portfolio-profile-container{
-    padding: 16px 16px 16px 16px;
-  }
-
 
   .portfolio-courses-container{
     background-color: #ffffff;
@@ -7527,7 +7509,6 @@ a.reward-list-card:hover, [onclick].reward-list-card:hover { box-shadow: 0 8px 2
 .epf-award-item:hover { box-shadow: 0 8px 28px rgba(0,0,0,.13) !important; transform: translateY(-2px); }
 
 /* ===================== Portfolio profile bar ===================== */
-.portfolio-profile-container { padding-bottom: 8px; }
 .epf-profile-card { box-shadow: none !important; }
 .epf-avatar-circle { width: 80px; height: 80px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
 .epf-avatar-circle img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
@@ -7536,12 +7517,6 @@ a.reward-list-card:hover, [onclick].reward-list-card:hover { box-shadow: 0 8px 2
 .epf-info-icon-badge { width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .epf-info-icon-badge i { color: #3b82f6; font-size: 1rem; }
 .epf-info-text { font-size: 0.875rem; }
-@media(max-width:991px) {
-    .portfolio-profile-container { padding-top: 56px; }
-}
-@media(min-width:992px) {
-    .portfolio-profile-container { padding-top: 80px; }
-}
 
 .form-homepage-login .form-wrapper.form-edit {
   background-color: transparent !important;
@@ -7549,13 +7524,179 @@ a.reward-list-card:hover, [onclick].reward-list-card:hover { box-shadow: 0 8px 2
   border: 0px !important;
 }
 
-@media(max-width: 991px) {
-  body:has(.fixed-announcement) .portfolio-profile-container {
-    padding-top: 116px !important;
+/******************* BRIEF PROFILE IN PORTFOLIO ******************/
+
+.profile-info-icon-badge { width: 46px; height: 46px; border-radius: 8px; background: #eff6ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.profile-info-icon-badge i { color: #3b82f6; font-size: 1rem; }
+@media(max-width: 769px) {
+  .brief-profile-small-screen {
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
+
+.dashboard-card-btn {
+    min-height: 92px;
+    padding: 22px 28px;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    gap: 20px;
+    background: linear-gradient(
+        135deg,
+        #F8FBFF 0%,
+        #EFF6FF 100%
+    );
+    border: 1px solid rgba(37, 99, 235, 0.08);
+    border-radius: 4px;
+    color: #12376B;
+    text-decoration: none;
+    transition: all .25s ease;
+}
+
+.dashboard-card-btn .icon-circle {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: linear-gradient(
+        135deg,
+        #3B82F6 0%,
+        #1D4ED8 100%
+    );
+}
+
+.dashboard-card-btn .icon-circle i {
+    color: #FFFFFF;
+    font-size: 21px;
+}
+
+.dashboard-card-btn strong {
+    display:block;
+    font-size: 17px;
+    font-weight: 700;
+    color:#12376B;
+}
+
+.dashboard-card-btn small {
+    display:block;
+    margin-top:4px;
+    font-size:14px;
+    color:#52709A;
+}
+
+.dashboard-card-btn .arrow {
+    margin-left:auto;
+    color:#2563EB;
+    font-size:18px;
+    transition:.25s ease;
+}
+
+.dashboard-card-btn:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(
+        135deg,
+        #FFFFFF 0%,
+        #EFF6FF 100%
+    );
+    color:#12376B;
+}
+
+.dashboard-card-btn:hover .arrow {
+    transform: translateX(5px);
+}
+
+.dashboard-card-btn.stats-btn {
+    background: linear-gradient(
+        135deg,
+        #FAFFFD 0%,
+        #ECFDF5 100%
+    );
+    border-color: rgba(16,185,129,0.10);
+}
+
+.dashboard-card-btn.stats-btn .icon-circle {
+    background: linear-gradient(
+        135deg,
+        #10B981 0%,
+        #047857 100%
+    );
+}
+
+.dashboard-card-btn.stats-btn strong {
+    color:#064E3B;
+}
+
+.dashboard-card-btn.stats-btn small {
+    color:#4B7C68;
+}
+
+.dashboard-card-btn.stats-btn .arrow {
+    color:#059669;
+}
+
+.dashboard-card-btn.stats-btn:hover {
+    background: linear-gradient(
+        135deg,
+        #FFFFFF 0%,
+        #ECFDF5 100%
+    );
+}
+
+.dashboard-card-btn.admin-btn {
+    background: linear-gradient(
+        135deg,
+        #FFFBFF 0%,
+        #F5F3FF 100%
+    );
+    border-color: rgba(139,92,246,0.10);
+}
+
+.dashboard-card-btn.admin-btn .icon-circle {
+    background: linear-gradient(
+        135deg,
+        #8B5CF6 0%,
+        #5B21B6 100%
+    );
+}
+
+.dashboard-card-btn.admin-btn strong {
+    color:#3B237A;
+}
+
+.dashboard-card-btn.admin-btn small {
+    color:#6D5A95;
+}
+
+.dashboard-card-btn.admin-btn .arrow {
+    color:#6D28D9;
+}
+
+.dashboard-card-btn.admin-btn:hover {
+    background: linear-gradient(
+        135deg,
+        #FFFFFF 0%,
+        #F5F3FF 100%
+    );
+}
+
+.section-portfolio-profile-container-info {
+  background: transparent;
+}
+.section-portfolio-profile-container-btns {
+  background: transparent;
+}
 @media(min-width: 992px) {
-  body:has(.fixed-announcement) .portfolio-profile-container {
-    padding-top: 140px !important;
+  .section-portfolio-profile-container-info {
+    padding-top: 80px;
+  }
+}
+@media(max-width: 991px) {
+  .section-portfolio-profile-container-info {
+    padding-top: 56px;
   }
 }

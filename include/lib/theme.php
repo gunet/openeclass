@@ -91,10 +91,10 @@ function theme_initialization() {
 
         if(isset($theme_options_styles['imageUploadBriefProfilePortfolio'])){
             $urlThData = $urlAppend . 'courses/theme_data/' . $theme_id;
-            $contact_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
+            $brief_profile_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
             $styles_str .= "
-                .portfolio-profile-container .padding-default {
-                    background-image: url($contact_image);
+                .brief-profile-container-info {
+                    background-image: url($brief_profile_image);
                 }
             ";
         }
@@ -107,38 +107,24 @@ function theme_initialization() {
 
         if(!empty($theme_options_styles['BriefProfilePortfolioBgColor']) && !empty($theme_options_styles['BriefProfilePortfolioBgColor_gr'])){
             $new_gradient_str_bpr = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[BriefProfilePortfolioBgColor], $theme_options_styles[BriefProfilePortfolioBgColor_gr])";
-            $styles_str .= "
-                .portfolio-profile-container{
-                    background: $new_gradient_str_bpr;
-                 }
-            ";
             if(isset($theme_options_styles['imageUploadBriefProfilePortfolio'])){
                 $urlThData = $urlAppend . 'courses/theme_data/' . $theme_id;
-                $contact_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
+                $brief_profile_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
                 $styles_str .= "
-                    .portfolio-profile-container{
-                        background: transparent !important;
-                    }
-                    .portfolio-profile-container .padding-default {
+                    .brief-profile-container-info {
                         background-image: linear-gradient(
                                             135deg,
                                             $theme_options_styles[BriefProfilePortfolioBgColor],
                                             $theme_options_styles[BriefProfilePortfolioBgColor_gr]
-                                        ), url($contact_image);
+                                        ), url($brief_profile_image);
 
-                        background-size:
-                            100% 100%,
-                            100% 100% !important;
-                        background-position:
-                            center center,
-                            center center !important;
-                        background-repeat:
-                            no-repeat,
-                            no-repeat !important;
+                        background-size:100% auto !important;
+                        background-position:center top !important;
+                        background-repeat:no-repeat !important;
                     }
 
                     @media (max-width: 991px) {
-                        .portfolio-profile-container .padding-default {
+                        .brief-profile-container-info {
                             background-size:
                                 cover,
                                 cover !important;
@@ -157,6 +143,22 @@ function theme_initialization() {
             }
         }
 
+        if(!empty($theme_options_styles['bgColorContainerPortfolioInfo'])){
+            $styles_str .= "
+                .section-portfolio-profile-container-info {
+                    background: $theme_options_styles[bgColorContainerPortfolioInfo] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['bgColorSectionPortfolioBtns'])){
+            $styles_str .= "
+                .section-portfolio-profile-container-btns {
+                    background: $theme_options_styles[bgColorSectionPortfolioBtns] !important;
+                }
+            ";
+        }
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ////////////////// TEXT COLOR OF BRIEF PROFILE IN PORTOFOLIO ///////////////////////
@@ -167,11 +169,12 @@ function theme_initialization() {
             $styles_str .= "
                 .portofolio-text-intro{
                     color: $theme_options_styles[BriefProfilePortfolioTextColor] !important;
-                  }
+                }
 
-                  .portfolio-texts *{
+                .portfolio-texts *{
                     color: $theme_options_styles[BriefProfilePortfolioTextColor] !important;
-                  }
+                }
+                
             ";
         }
 
@@ -181,17 +184,29 @@ function theme_initialization() {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
+        if(!empty($theme_options_styles['bgColorContainerPortfolioButtons'])){
+            $styles_str .= "
+                .brief-profile-container-btns{
+                    background-color: $theme_options_styles[bgColorContainerPortfolioButtons] !important;
+                }
+            ";
+        }
+
         if(!empty($theme_options_styles['bgColorPortfolioButtons'])){
             $styles_str .= "
-                .myProfileBtn{
-                    background-color: $theme_options_styles[bgColorPortfolioButtons] !important;
+                .myProfileBtn,
+                .dashboard-card-btn{
+                    background: $theme_options_styles[bgColorPortfolioButtons] !important;
                 }
             ";
         }
 
         if(!empty($theme_options_styles['textColorPortfolioButtons'])){
             $styles_str .= "
-                .myProfileBtn{
+                .myProfileBtn,
+                .dashboard-card-btn strong,
+                .dashboard-card-btn small,
+                .dashboard-card-btn .arrow{
                     color: $theme_options_styles[textColorPortfolioButtons] !important;
                 }
             ";
@@ -200,7 +215,9 @@ function theme_initialization() {
         if(!empty($theme_options_styles['bgHoverColorPortfolioButtons'])){
             $styles_str .= "
                 .myProfileBtn:hover,
-                .myProfileBtn:focus{
+                .myProfileBtn:focus,
+                .dashboard-card-btn:hover,
+                .dashboard-card-btn:focus{
                     background-color: $theme_options_styles[bgHoverColorPortfolioButtons] !important;
                 }
             ";
@@ -7670,7 +7687,6 @@ function theme_initialization() {
                 .homepage-opencourses-container,
                 .homepage-texts-container,
                 .homepage-login-container,
-                .portfolio-profile-container,
                 .portfolio-courses-container,
                 .main-container,
                 .module-container,
@@ -7841,18 +7857,45 @@ function theme_initialization() {
             $styles_str .= "
 
                 @media (max-width: 991px) {
+
+                    .section-portfolio-profile-container-info .padding-default {
+                        padding-top: 0px !important;
+                        padding-left: 0px !important;
+                        padding-right: 0px !important;
+                        padding-bottom: 0px !important;
+                    }
+
+                    .section-portfolio-profile-container-btns .padding-default {
+                        padding-top: 0px !important;
+                        padding-left: 0px !important;
+                        padding-right: 0px !important;
+                        padding-bottom: 0px !important;
+                    }
+
                     .portfolio-courses-container {
                         padding: 0px;
                     }
-                    .portfolio-profile-container {
-                        padding-top: 56px !important;
-                        padding-left: 0px !important;
-                        padding-bottom: 0px !important;
-                        padding-right: 0px !important;
+
+                    .brief-profile-container-info,
+                    .brief-profile-container-btns {
+                        padding: 32px 16px 32px 16px;
                     }
                 }
                 
                 @media (min-width: 992px) {
+
+                    .section-portfolio-profile-container-info .padding-default {
+                        padding-left: 0px !important;
+                        padding-right: 0px !important;
+                        padding-bottom: 0px !important;
+                    }
+
+                    .section-portfolio-profile-container-btns .padding-default {
+                        padding-top: 0px !important;
+                        padding-left: 0px !important;
+                        padding-right: 0px !important;
+                    }
+
 
                     .main-section .main-container {
                         padding: 45px 45px !important;
@@ -7865,16 +7908,21 @@ function theme_initialization() {
                         padding: 45px 45px !important;
                     }
 
-                    .portfolio-profile-container .padding-default {
-                        position: relative !important;
-                        overflow: hidden !important;
-                        margin-top: 28px !important;
-                        margin-bottom: 28px !important;
-                        padding: 45px 55px !important;
-                        border-radius: 32px !important;
+                    .brief-profile-container-btns {
+                        border-bottom-left-radius: 32px !important;
+                        border-bottom-right-radius: 32px !important;
+                        padding: 25px 55px !important;
                     }
 
-                    .portfolio-profile-container .padding-default::after {
+                    .brief-profile-container-info {
+                        position: relative !important;
+                        overflow: hidden !important;
+                        padding: 45px 55px !important;
+                        border-top-left-radius: 32px !important;
+                        border-top-right-radius: 32px !important;
+                    }
+
+                    .brief-profile-container-info::after {
                         content:'' !important;
                         position:absolute !important;
                         right:-80px !important;
@@ -7886,10 +7934,7 @@ function theme_initialization() {
 
                     }
                         
-                    .portfolio-profile-container .container.padding-default > * {
-                        position:relative !important;
-                        z-index:2 !important;
-                    }
+                    
 
                     .portfolio-courses-container .padding-default {
                         padding: 45px 55px !important;
@@ -7936,8 +7981,14 @@ function theme_initialization() {
                         border-radius: 4px !important;
                     }
 
-                    .portfolio-profile-container .padding-default {
-                        border-radius: 4px !important;
+                    .brief-profile-container-info {
+                        border-top-left-radius: 4px !important;
+                        border-top-right-radius: 4px !important;
+                    }
+
+                    .brief-profile-container-btns {
+                        border-bottom-left-radius: 4px !important;
+                        border-bottom-right-radius: 4px !important;
                     }
 
                     .portfolio-courses-container .padding-default {
@@ -7959,11 +8010,6 @@ function theme_initialization() {
                         border-radius: 4px;
                     }
 
-                    .portfolio-profile-container .padding-default{
-                        background-size:100% auto !important;
-                        background-position:center top !important;
-                        background-repeat:no-repeat !important;
-                    }
                 }
             ";
         }

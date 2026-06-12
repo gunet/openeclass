@@ -23,7 +23,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','leftNavBgColorSmallScreen','bgColor','buttonTextColor','textColorPortfolioButtons', 'bgColorContentPlatform', 'clAlertInfo', 'clAlertWarning', 'clAlertSuccess', 'clAlertDanger',
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColorContainerPortfolioInfo', 'leftNavBgColorSmallScreen','bgColor','buttonTextColor','textColorPortfolioButtons', 'bgColorContentPlatform', 'clAlertInfo', 'clAlertWarning', 'clAlertSuccess', 'clAlertDanger',
                                                     'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'BgColorContainerLogo', 'bgColorWrapperFooter', 'clLinkAlertInfo', 'clLinkAlertWarning', 'clLinkAlertSuccess', 'clLinkAlertDanger',
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgCommentsPanels', 'BgQuestionnairePanels', 'BgReportsPanels', 'BgProgressActivitiesPanels', 'BgExercisesPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes',
@@ -31,8 +31,8 @@ $defaults = array(
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
                                                     'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow',
-                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate', 'bgColorBreadcrumb', 'BorderColorBreadcrumb', 'boxShadowInputSelect', 'BgColorCardLogin'),
-                'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor', 'BriefProfilePortfolioBgColor_gr', 'loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'BgColorAnnouncementHomepage_gr', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
+                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgColorContainerPortfolioButtons', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate', 'bgColorBreadcrumb', 'BorderColorBreadcrumb', 'boxShadowInputSelect', 'BgColorCardLogin'),
+                'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor', 'bgColorSectionPortfolioBtns', 'BriefProfilePortfolioBgColor_gr', 'loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'BgColorAnnouncementHomepage_gr', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'bgColorPortfolioButtons', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal',
@@ -1111,7 +1111,7 @@ if (isset($_POST['optionsSave'])) {
             }
         $logo_imageUploadBriefProfilePortfolio .= "<input type='hidden' name='imageUploadBriefProfilePortfolio' value='$theme_options_styles[imageUploadBriefProfilePortfolio]'>";
     } else {
-       $logo_imageUploadBriefProfilePortfolio = "<label for='imageUploadBriefProfilePortfolio' aria-label='$langLogo'></label><input type='file' name='imageUploadBriefProfilePortfolio' id='imageUploadBriefProfilePortfolio'>";
+       $logo_imageUploadBriefProfilePortfolio = "<label class='control-label-notes mb-2 me-2' for='imageUploadBriefProfilePortfolio' aria-label='$langLogo'>$langBgImageBasicUserInfo</label><input type='file' name='imageUploadBriefProfilePortfolio' id='imageUploadBriefProfilePortfolio'>";
     }
 
     $action_bar .= action_bar(array(
@@ -2368,10 +2368,15 @@ $tool_content .= "
                 <div class='form-wrapper form-edit rounded'>
                     <div class='d-flex justify-content-between align-items-start flex-wrap gap-3'>
                         <div>
+
                             <h2 class='theme_options_legend text-decoration-underline text-heading-h3'>$langPortFolioProfileContainer</h2>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center mb-3'>
+                                <label for='bgColorContainerPortfolioInfo' class='control-label-notes mb-2 me-2'>$langBgColorBasicUserInfo</label>
+                                <input name='bgColorContainerPortfolioInfo' type='text' class='form-control colorpicker' id='bgColorContainerPortfolioInfo' value='$theme_options_styles[bgColorContainerPortfolioInfo]'>
+                            </div>
                             $logo_imageUploadBriefProfilePortfolio
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='BriefProfilePortfolioBgColor' class='control-label-notes mb-2 me-2'>$langPortFolioProfileContainer - radial gradient:</label>
+                                <label for='BriefProfilePortfolioBgColor' class='control-label-notes mb-2 me-2'>$langBgGradientBgImageProfileContainerInfo</label>
                                 <input name='BriefProfilePortfolioBgColor' type='text' class='form-control colorpicker' id='BriefProfilePortfolioBgColor' value='$theme_options_styles[BriefProfilePortfolioBgColor]'>
                                 <i class='fa fa-arrow-right ms-3 me-3'></i>
                                 <input aria-label='$langBgColor' name='BriefProfilePortfolioBgColor_gr' type='text' class='form-control colorpicker' id='BriefProfilePortfolioBgColor_gr' value='$theme_options_styles[BriefProfilePortfolioBgColor_gr]'>
@@ -2380,23 +2385,33 @@ $tool_content .= "
                                 <label for='BriefProfilePortfolioTextColor' class='control-label-notes mb-2 me-2'>$langBriefProfilePortfolioTextColor:</label>
                                 <input name='BriefProfilePortfolioTextColor' type='text' class='form-control colorpicker' id='BriefProfilePortfolioTextColor' value='$theme_options_styles[BriefProfilePortfolioTextColor]'>
                             </div>
+
                             <hr>
 
                             <h2 class='theme_options_legend text-decoration-underline mt-4 text-heading-h3'>$langButtonInBriefProfile</h2>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center mb-3'>
+                                <label for='bgColorSectionPortfolioBtns' class='control-label-notes mb-2 me-2'>$langBgColorSectionBasicUserBtns</label>
+                                <input name='bgColorSectionPortfolioBtns' type='text' class='form-control colorpicker' id='bgColorSectionPortfolioBtns' value='$theme_options_styles[bgColorSectionPortfolioBtns]'>
+                            </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='bgColorPortfolioButtons' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                                <label for='bgColorContainerPortfolioButtons' class='control-label-notes mb-2 me-2'>$langBgColorContainerOfBriefBtns</label>
+                                <input name='bgColorContainerPortfolioButtons' type='text' class='form-control colorpicker' id='bgColorContainerPortfolioButtons' value='$theme_options_styles[bgColorContainerPortfolioButtons]'>
+                            </div>
+                            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                                <label for='bgColorPortfolioButtons' class='control-label-notes mb-2 me-2'>$langBgColorButton:</label>
                                 <input name='bgColorPortfolioButtons' type='text' class='form-control colorpicker' id='bgColorPortfolioButtons' value='$theme_options_styles[bgColorPortfolioButtons]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='textColorPortfolioButtons' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                                <label for='textColorPortfolioButtons' class='control-label-notes mb-2 me-2'>$langTextColorButton:</label>
                                 <input name='textColorPortfolioButtons' type='text' class='form-control colorpicker' id='textColorPortfolioButtons' value='$theme_options_styles[textColorPortfolioButtons]'>
                             </div>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                <label for='bgHoverColorPortfolioButtons' class='control-label-notes mb-2 me-2'>$langHoverWhiteColorButton:</label>
+                                <label for='bgHoverColorPortfolioButtons' class='control-label-notes mb-2 me-2'>$langHoverBgColorButton:</label>
                                 <input name='bgHoverColorPortfolioButtons' type='text' class='form-control colorpicker' id='bgHoverColorPortfolioButtons' value='$theme_options_styles[bgHoverColorPortfolioButtons]'>
                             </div>
 
                             <hr>
+
                             <h2 class='theme_options_legend text-decoration-underline mt-4 text-heading-h3'>$langPortfolioCoursesContainer</h2>
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='BgColorWrapperPortfolioCourses' class='control-label-notes mb-2 me-2'>$langBgColor:</label>

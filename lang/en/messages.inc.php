@@ -5805,7 +5805,18 @@ $langActiveLinkColorHeader = "Active Link Header Color";
 $langHoveredActiveLinkColorHeader = "Hovered active link color";
 $langLinkColorFooter = 'Footer Link Color';
 $langHoverLinkColorFooter = 'Color Hovered Footer Links';
-$langPortFolioProfileContainer = "Short Profile Background Color In User Portfolio";
+
+$langPortFolioProfileContainer = "Components of a short user profile";
+$langBgColorBasicUserInfo = "Background color (regards the section with the user's basic information in their short profile)";
+$langBgImageBasicUserInfo = "Background image (refers to the container of the section with the user's basic information in their short profile)";
+$langBgColorBasicUserBtns = "Background color (applies to the container with the navigation buttons in the short user profile)";
+$langBgGradientBgImageProfileContainerInfo = "Adding color (filtering) to the background image";
+$langBgColorSectionBasicUserBtns = "Background color (applies to the section with the navigation buttons in the user's short profile)";
+$langBgColorContainerOfBriefBtns = "Background color (regards the section container with the navigation buttons in the user's short profile)";
+$langBgColorButton = "Navigation button background color";
+$langTextColorButton = "Navigation button text color";
+$langHoverBgColorButton = "Navigation button background hover color";
+
 $langBgColorWrapperJumbotron = "Gradient background on login screen wrapper";
 $langBgColorWrapperHeader = "Background color in the Header wrapper";
 $langBgColorWrapperFooter = "Footer wrapper background color";
