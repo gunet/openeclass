@@ -477,7 +477,7 @@
                 </div>
                 <div class="col-lg-8 d-flex justify-content-lg-start justify-content-center align-items-center">
                     {{-- Info items --}}
-                    <div class="row row-cols-md-3 row-cols-1 g-3 mt-lg-0 mt-2">
+                    <div class="row @if(!get_config('show_collaboration') or get_config('show_always_collaboration')) row-cols-md-2 @else row-cols-md-3 @endif row-cols-1 g-3 mt-lg-0 mt-2">
                         @if(!get_config('show_always_collaboration'))
                             <div class="col brief-profile-small-screen">
                                 <div class='d-flex justify-content-start align-items-start gap-3'>
