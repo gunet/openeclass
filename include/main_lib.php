@@ -4454,7 +4454,7 @@ function getSerializedMessage($message, $lang=null) {
         $lang = $language;
     }
 
-    $data = @unserialize($message);
+    $data = @unserialize($message, ["allowed_classes" => false]);
     // Message is simple string, not serialized array - just return it
     if ($data === false) {
         return $message;
@@ -4463,7 +4463,9 @@ function getSerializedMessage($message, $lang=null) {
     } else {
         if (isset($data[$lang])) {
             return $data[$lang]; // return requested language if possible...
-        } elseif (isset($data['en'])) {
+        } elseif ($lang != $language && isset($data[$language])) {
+			return $data[$language]; // return default language (if different than requested) if possible...
+		} elseif (isset($data['en'])) {
             return $data['en']; // ... else return English message if possible...
         } elseif (isset($data['el'])) {
             return $data['el']; // ... else return Greek message
