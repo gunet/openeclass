@@ -34,6 +34,11 @@ $toolName = $langAdmin;
 $pageName = $langEPFAdmin;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
+$default_lang = get_config('default_language');
+//create an array where default language is the first element
+$available_langs = [$default_lang => $session->native_language_names[$default_lang]]
+        + array_diff_key($session->native_language_names, [$default_lang => true]);
+
 if (isset($_GET['add_cat'])) { //add a new category form
     load_js('validation.js');
 
@@ -45,12 +50,18 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 <div class='col-lg-6 col-12 mt-3'>
                     <div class='form-wrapper form-edit border-0 px-0'>
                         <form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>
-                        <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
-                        <div class='form-group'>
-                            <label for='catname' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
-                            <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' placeholder='$langName...'></div>
-                        </div>
-                        <div class='row p-2'>
+                        <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
+                        foreach ($available_langs as $code => $lang) {
+                            $tool_content .="<div class='form-group'>
+                                <label for='catname_".$code."' class='col-sm-12 control-label-notes'>$langName ($lang)";
+                            if ($code == $default_lang) { //required field only for default lang
+                                $tool_content .= "<span class='asterisk Accent-200-cl'>(*)</span>";
+                            }
+                            $tool_content .="</label>
+                            <div class='col-sm-12'><input id='catname_".$code."' class='form-control' type='text' name='cat_name[".$code."]' placeholder='$langName...'></div>
+                        </div>";
+                        }
+                        $tool_content .= "<div class='row p-2'>
                             <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>
                         </fieldset>". generate_csrf_token_form_field() ."</form>
                     </div>
@@ -61,7 +72,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
                         var chkValidator  = new Validator("catForm");
-                        chkValidator.addValidation("catname","req","' . $langCPFCategoryNameAlert . '");
+                        chkValidator.addValidation("catname_'.$default_lang.'","req","' . $langCPFCategoryNameAlert . '");
                     //]]></script>';
 } elseif (isset($_GET['del_cat'])) { //delete category
     $catid = intval(getDirectReference($_GET['del_cat']));
@@ -94,12 +105,18 @@ if (isset($_GET['add_cat'])) { //add a new category form
                   <div class='form-wrapper form-edit border-0 px-0'>
                     <form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>
                     <input type='hidden' name='cat_id' value='" . getIndirectReference($catid) . "'>
-                    <fieldset><legend class='mb-0' aria-label='$langForm'></legend>
-                        <div class='form-group'>
-                        <label for='catname' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
-                              <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' value='$cat_name'></div>
-                        </div>
-                    <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>
+                    <fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
+                    foreach ($available_langs as $code => $lang) {
+                        $tool_content .="<div class='form-group'>
+                        <label for='catname_".$code."' class='col-sm-12 control-label-notes'>$langName ($lang)";
+                        if ($code == $default_lang) { //required field only for default lang
+                            $tool_content .= "<span class='asterisk Accent-200-cl'>(*)</span>";
+                        }
+                        $tool_content .="</label>
+                              <div class='col-sm-12'><input id='catname_".$code."' class='form-control' type='text' name='cat_name[".$code."]' value='".getSerializedMessage($cat_name,$code)."'></div>
+                        </div>";
+                    }
+    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>
                     </fieldset>". generate_csrf_token_form_field() ."</form></div></div>
                     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
                         <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
@@ -108,7 +125,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
                     var chkValidator  = new Validator("catForm");
-                    chkValidator.addValidation("catname","req","' . $langCPFCategoryNameAlert . '");
+                    chkValidator.addValidation("catname_'.$default_lang.'","req","' . $langCPFCategoryNameAlert . '");
             //]]></script>';
 } elseif (isset($_GET['add_field'])) { //add new field form (first step)
     $catid = intval(getDirectReference($_GET['add_field']));
@@ -289,9 +306,9 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $result = Database::get()->querySingle("SELECT * FROM eportfolio_fields WHERE id = ?d", $fieldid);
 
     if ($result) {
-        $name = q($result->name);
+        $name = q(getSerializedMessage($result->name));
         $shortname = q($result->shortname);
-        $description = standard_text_escape($result->description);
+        $description = standard_text_escape(getSerializedMessage($result->description));
         $datatype = $result->datatype;
         $required = $result->required;
         $data = $result->data;
@@ -367,9 +384,16 @@ if (isset($_GET['add_cat'])) { //add a new category form
 } elseif (isset($_POST['submit_cat'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
+    
+    $cat_name_lang_arr = array();
+    foreach ($_POST['cat_name'] as $lang_code => $value) {
+            $cat_name_lang_arr[$lang_code] = $value;
+    }
+
     if (isset($_POST['cat_id'])) { //save edited category
         $catid = intval(getDirectReference($_POST['cat_id']));
-        Database::get()->query("UPDATE eportfolio_fields_category SET name = ?s WHERE id = ?d", $_POST['cat_name'], $catid);
+        
+        Database::get()->query("UPDATE eportfolio_fields_category SET name = ?s WHERE id = ?d", serialize($cat_name_lang_arr), $catid);
         Session::flash('message',$langEPFCatModSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/admin/eportfolio_fields.php");
@@ -381,7 +405,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         } else {
             $sortorder = 0;
         }
-        Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES (?s, ?d)", $_POST['cat_name'], $sortorder);
+        Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES (?s, ?d)", serialize($cat_name_lang_arr), $sortorder);
         Session::flash('message',$langEPFCatAddedSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/admin/eportfolio_fields.php");
