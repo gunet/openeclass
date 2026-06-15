@@ -5571,7 +5571,7 @@ function get_suppressed_words_data($action = 'words') {
  * @return array $arr The array with the values of the language variables for the given language.
  */
 function load_lang_strings(string $lang, array $strings) : array {
-    global $language_codes;
+    global $language_codes, $webDir;
 
     //add global variables to suppress warnings for undefined variables in messages.inc.php files
     $siteName = $GLOBALS['siteName'];
@@ -5582,19 +5582,32 @@ function load_lang_strings(string $lang, array $strings) : array {
     
     if (isset($language_codes[$lang])) {
         //add common.inc.php to prevent warnings for variables that are undefined in messages.inc.php
-        if (file_exists('lang/'.$lang.'/common.inc.php')) {
-            include 'lang/'.$lang.'/common.inc.php';
+        include "$webDir/lang/$lang/common.inc.php";
+        
+        $extra_messages = "config/{$language_codes[$lang]}.inc.php";
+        if (file_exists($extra_messages)) {
+            include $extra_messages;
+        } else {
+            $extra_messages = false;
         }
 
-        if (file_exists('lang/'.$lang.'/messages.inc.php')) {
-            include 'lang/'.$lang.'/messages.inc.php';
-            
-            foreach ($strings as $str) {
-                if (isset($$str)) {
-                    $arr[$str] = $$str;
-                }
+        include "$webDir/lang/$lang/messages.inc.php";
+
+        if (file_exists('config/config.php')) {
+            if(get_config('show_always_collaboration') and get_config('show_collaboration')){
+              include "$webDir/lang/$lang/messages_collaboration.inc.php";
             }
         }
+        if ($extra_messages) {
+            include $extra_messages;
+        }
+            
+        foreach ($strings as $str) {
+            if (isset($$str)) {
+                $arr[$str] = $$str;
+            }
+        }
+        
     }
 
     return $arr;
