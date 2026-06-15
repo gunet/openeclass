@@ -178,39 +178,6 @@ function touch_or_error($filename) {
     }
 }
 
-// We need some messages from all languages to upgrade course accueil table
-function load_global_messages() {
-    global $global_messages, $session, $webDir, $language_codes;
-    // these may seem unused, but they are needed when including messages.inc.php
-    global $siteName, $InstitutionUrl, $Institution;
-
-    foreach ($session->native_language_names as $code => $name) {
-        // include_messages
-        include "$webDir/lang/$code/common.inc.php";
-        $extra_messages = "config/{$language_codes[$code]}.inc.php";
-        if (file_exists($extra_messages)) {
-            include $extra_messages;
-        } else {
-            $extra_messages = false;
-        }
-        include "$webDir/lang/$code/messages.inc.php";
-        if (file_exists('config/config.php')) {
-            if(get_config('show_always_collaboration') and get_config('show_collaboration')){
-              include "$webDir/lang/$code/messages_collaboration.inc.php";
-            }
-        }
-        if ($extra_messages) {
-            include $extra_messages;
-        }
-        $global_messages['langCourseDescription'][$code] = $langCourseDescription;
-        $global_messages['langCourseUnits'][$code] = $langCourseUnits;
-        $global_messages['langGlossary'][$code] = $langGlossary;
-        $global_messages['langEBook'][$code] = $langEBook;
-        $global_messages['langVideo'][$code] = $langVideo;
-        $global_messages['langDropBox'][$code] = $langDropBox;
-    }
-}
-
 // Quote string for output in config.php file
 function quote($s) {
     return "'" . addslashes(canonicalize_whitespace($s)) . "'";

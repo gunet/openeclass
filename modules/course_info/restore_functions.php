@@ -663,7 +663,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $GLOBALS['langCopyFiles'] . "</span></div></div>";
 
             require_once 'upgrade/functions.php';
-            load_global_messages();
 
             $url_prefix_map = [
                 $config_data['urlServer'] . 'modules/ebook/show.php/' . $course_data['code'] =>

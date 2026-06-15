@@ -52,8 +52,6 @@ $error_message = null;
 set_time_limit(0);
 $tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE=InnoDB';
 
-load_global_messages();
-
 if (isset($_POST['action']) and $_POST['action'] == 'preview_theme') {
     if (get_config('theme_options_id') != $_POST['selected_theme_id']) {
         set_config('theme_options_id',$_POST['selected_theme_id']);
