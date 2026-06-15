@@ -120,11 +120,12 @@ function getExternalLinks() {
  * @param bool $rich Whether to include rich text notifications in title
  * @return array
  */
-function lessonToolsMenu(bool $rich=true): array
+function lessonToolsMenu(bool $rich=true, $display_admin_menu = false): array
 {
     global $uid, $is_editor, $is_course_admin, $is_course_reviewer,
            $course_code, $modules, $urlAppend, $status, $course_id, $langCourseOptions,
-           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course;
+           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course,
+           $admin_modules, $langAdministrationTools, $langSyllabus;
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 
@@ -255,6 +256,32 @@ function lessonToolsMenu(bool $rich=true): array
         $sideMenuSubGroup[] = $sideMenuLink;
         $sideMenuSubGroup[] = $sideMenuImg;
         $sideMenuSubGroup[] = $sideMenuID;
+        $sideMenuGroup[] = $sideMenuSubGroup;
+    }
+
+    if ($is_course_admin && $display_admin_menu) {  // display course admin tools
+        $sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
+        $arrMenuType = array('type' => 'text',
+            'text' => $langAdministrationTools,
+            'class' => 'course_admin');
+        $sideMenuSubGroup[] = $arrMenuType;
+
+        $sideMenuText[] = $langSyllabus;
+        $sideMenuLink[] = q($urlAppend . 'modules/course_description/index.php?course=' . $course_code);
+        $sideMenuImg[] = 'fa-pen-to-square';
+
+        foreach ($admin_modules as $adm_mod) {
+            $sideMenuText[] = $adm_mod['title'];
+            $sideMenuLink[] = q($urlAppend . 'modules/' . $adm_mod['link'] . '/?course=' . $course_code);
+            $sideMenuImg[] = $adm_mod['image'];
+        }
+
+        $sideMenuSubGroup[] = $sideMenuText;
+        $sideMenuSubGroup[] = $sideMenuLink;
+        $sideMenuSubGroup[] = $sideMenuImg;
         $sideMenuGroup[] = $sideMenuSubGroup;
     }
 

@@ -27,7 +27,7 @@ require_once('include/tools.php');
 $groupsArr = array();
 $toolsArr = array();
 
-$toolArr = lessonToolsMenu(false);
+$toolArr = lessonToolsMenu(false, true);
 // course tools
 $offset = 1;
 for ($i = 0; $i < count($toolArr); $i++) {
