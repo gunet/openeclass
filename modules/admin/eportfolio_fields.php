@@ -173,19 +173,27 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='name' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
-                      <div class='col-sm-12'><input id='name' class='form-control' type='text' name='field_name'></div>";
-    $tool_content .= "</div>";
+    foreach ($available_langs as $code => $lang) {
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='name_".$code."' class='col-sm-12 control-label-notes'>$langName ($lang)";
+        if ($code == $default_lang) {
+            $tool_content .= "<span class='asterisk Accent-200-cl'>(*)</span>";
+        }
+        $tool_content .= "</label>
+                        <div class='col-sm-12'><input id='name_".$code."' class='form-control' type='text' name='field_name[".$code."]'></div>";
+        $tool_content .= "</div>";
+    }
     $tool_content .= "<div class='form-group mt-4'>";
     $tool_content .= "<label for='shortname' class='col-sm-12 control-label-notes'>$langCPFShortName <small>($langEPFUniqueShortname)</small> <span class='asterisk Accent-200-cl'>(*)</span></label>
                       <div class='col-sm-12'><input id='shortname' class='form-control' type='text' name='field_shortname'></div>";
     $tool_content .= "</div>";
 
-    $tool_content .= "<div class='form-group mt-4'><label for='fielddescr' class='col-sm-12 control-label-notes'>$langDescription</label>
-                      <div class='col-sm-12'>".rich_text_editor('fielddescr', 8, 20, '', options: array('id' => 'fielddescr'))."</div>";
+    foreach ($available_langs as $code => $lang) {
+        $tool_content .= "<div class='form-group mt-4'><label for='fielddescr_".$code."' class='col-sm-12 control-label-notes'>$langDescription ($lang)</label>
+                        <div class='col-sm-12'>".rich_text_editor('fielddescr['.$code.']', 8, 20, '', options: array('id' => 'fielddescr_'.$code))."</div>";
+        $tool_content .= "</div>";
+    }
 
-    $tool_content .= "</div>";
     $tool_content .= "<div class='form-group mt-4'>";
     $tool_content .= "<label for='required' class='col-sm-12 control-label-notes'>$langCPFFieldRequired</label>
                       <div class='col-sm-12'>".selection($yes_no, 'required', 0, 'class="form-control"')."</div>";
@@ -205,8 +213,8 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
             var chkValidator  = new Validator("fieldForm");
-            chkValidator.addValidation("field_name","req","' . $langEPFFieldNameAlert . '");
-            chkValidator.addValidation("field_shortname","req","' . $langEPFFieldShortNameAlert . '");
+            chkValidator.addValidation("name_'.$default_lang.'","req","' . $langEPFFieldNameAlert . '");
+            chkValidator.addValidation("shortname","req","' . $langEPFFieldShortNameAlert . '");
         ';
     if ($datatype == EPF_MENU) {
         $tool_content .= 'chkValidator.addValidation("options","req","' . $langCPFMenuOptionsAlert . '");';
@@ -216,9 +224,19 @@ if (isset($_GET['add_cat'])) { //add a new category form
 } elseif (isset($_POST['submit_field'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
-    $name = $_POST['field_name'];
+    
+    $name_lang_arr = array();
+    foreach ($_POST['field_name'] as $lang_code => $name) {
+        $name_lang_arr[$lang_code] = $name;
+    }
+
     $shortname = $_POST['field_shortname'];
-    $description = $_POST['fielddescr'];
+    
+    $descr_lang_arr = array();
+    foreach ($_POST['fielddescr'] as $lang_code => $description) {
+        $descr_lang_arr[$lang_code] = $description;
+    }
+    
     $datatype = intval($_POST['datatype']);
     if (isset($_POST['required'])) {
         $required = intval($_POST['required']);
@@ -252,7 +270,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                                     datatype = ?d,
                                     required = ?d,
                                     data = ?s
-                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $data, $fieldid);
+                                    WHERE id = ?d", serialize($name_lang_arr), $shortname, serialize($descr_lang_arr), $datatype, $required, $data, $fieldid);
             Session::flash('message',$langEPFFieldEditSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/eportfolio_fields.php");
@@ -277,7 +295,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
             }
 
             Database::get()->query("INSERT INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) 
-                                    VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?s)", $shortname, $name, $description, $datatype, $catid, $sortorder, $required, $data);
+                                    VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?s)", $shortname, serialize($name_lang_arr), serialize($descr_lang_arr), $datatype, $catid, $sortorder, $required, $data);
             Session::flash('message',$langEPFFieldAddSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/eportfolio_fields.php");
@@ -306,9 +324,9 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $result = Database::get()->querySingle("SELECT * FROM eportfolio_fields WHERE id = ?d", $fieldid);
 
     if ($result) {
-        $name = q(getSerializedMessage($result->name));
+        $name_serialized_arr = $result->name;
         $shortname = q($result->shortname);
-        $description = standard_text_escape(getSerializedMessage($result->description));
+        $descr_serialized_arr = $result->description;
         $datatype = $result->datatype;
         $required = $result->required;
         $data = $result->data;
@@ -336,18 +354,26 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "<fieldset><legend class='mb-0' aria-label='$langForm'></legend>";
         $tool_content .= "<input type='hidden' name='field_id' value='" . getIndirectReference($fieldid) . "'>";
         $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='name' class='col-sm-12 control-label-notes'>$langName <span class='asterisk Accent-200-cl'>(*)</span></label>
-                          <div class='col-sm-12'><input id='name' class='form-control' type='text' name='field_name' value='$name'></div>";
-        $tool_content .= "</div>";
+        foreach ($available_langs as $code => $lang) {
+            $tool_content .= "<div class='form-group'>";
+            $tool_content .= "<label for='name_".$code."' class='col-sm-12 control-label-notes'>$langName ($lang)";
+            if ($code == $default_lang) {
+                $tool_content .= "<span class='asterisk Accent-200-cl'>(*)</span>";
+            }
+            $tool_content .= "</label>
+                            <div class='col-sm-12'><input id='name_".$code."' class='form-control' type='text' name='field_name[".$code."]' value='".q(getSerializedMessage($name_serialized_arr,$code))."'></div>";
+            $tool_content .= "</div>";
+        }
         $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='shortname' class='col-sm-12 control-label-notes'>$langCPFShortName <small>($langEPFUniqueShortname)</small> <span class='asterisk Accent-200-cl'>(*)</span></label>
                           <div class='col-sm-12'><input id='shortname' class='form-control' type='text' name='field_shortname' value='$shortname'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group mt-4'><label for='fielddescr' class='col-sm-12 control-label-notes'>$langDescription</label>
-                          <div class='col-sm-12'>".rich_text_editor('fielddescr', 8, 20, $description, options: array('id' => 'fielddescr'))."</div>";
 
-        $tool_content .= "</div>";
+        foreach ($available_langs as $code => $lang) {
+            $tool_content .= "<div class='form-group mt-4'><label for='fielddescr_".$code."' class='col-sm-12 control-label-notes'>$langDescription ($lang)</label>
+                            <div class='col-sm-12'>".rich_text_editor('fielddescr['.$code.']', 8, 20, standard_text_escape(getSerializedMessage($descr_serialized_arr,$code)), options: array('id' => 'fielddescr_'.$code))."</div>";
+            $tool_content .= "</div>";
+        }
         $tool_content .= "<div class='form-group mt-4'>";
         $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype</label>
                           <div class='col-sm-12'>".selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" id="datatype" disabled')."</div>";
@@ -371,8 +397,8 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .='<script language="javaScript" type="text/javascript">
                         //<![CDATA[
                             var chkValidator  = new Validator("fieldForm");
-                            chkValidator.addValidation("field_name","req","' . $langEPFFieldNameAlert . '");
-                            chkValidator.addValidation("field_shortname","req","' . $langEPFFieldShortNameAlert . '");
+                            chkValidator.addValidation("name_'.$default_lang.'","req","' . $langEPFFieldNameAlert . '");
+                            chkValidator.addValidation("shortname","req","' . $langEPFFieldShortNameAlert . '");
                         ';
         if ($datatype == EPF_MENU) {
             $tool_content .= 'chkValidator.addValidation("options","req","' . $langCPFMenuOptionsAlert . '");';
