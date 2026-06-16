@@ -147,13 +147,6 @@
                 </div>
             </div>
 
-            {{-- Personal Info + Academic Info (left) | About Me + Awards (right) --}}
-            @php
-                $deptIds     = $user->getDepartmentIds($id);
-                $hasCerts    = count($cert_completed) > 0;
-                $hasBadges   = count($badge_completed) > 0;
-                $hasExternal = isset($openBadgesEnabled) && $openBadgesEnabled && isset($badge_external) && count($badge_external) > 0;
-            @endphp
             <div class="col-12 mt-4">
                 <div class="row g-3">
 
@@ -180,12 +173,35 @@
                                         <span class="text-muted" style="font-size:0.9rem;">{{ $userdata->phone }}</span>
                                     </div>
                                 @endif
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="epf-cat-icon flex-shrink-0" style="background:#8b5cf6;">
-                                        <i class="fa-solid fa-lock"></i>
+
+                                @if ($is_user_teacher)
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="epf-cat-icon flex-shrink-0" style="background:#8b5cf6;">
+                                            <i class="fa-solid fa-lock"></i>
+                                        </div>
+                                        <span class="text-muted" style="font-size:0.9rem;">
+                                            @if (!is_null($privilege))
+                                                @switch($privilege)
+                                                    @case(ADMIN_USER)
+                                                        {{ trans('langAdministrator') }}
+                                                        @break
+                                                    @case(POWER_USER)
+                                                        {{ trans('langPowerUser') }}
+                                                    @break
+                                                    @case(USERMANAGE_USER)
+                                                        {{ trans('langManageUser') }}
+                                                    @break
+                                                    @case(DEPARTMENTMANAGE_USER)
+                                                        {{ trans('langManageDepartment') }}
+                                                    @break
+                                                @endswitch
+                                            @else
+                                                {{ trans('langWithRights') }}
+                                            @endif
+                                        </span>
                                     </div>
-                                    <span class="text-muted" style="font-size:0.9rem;">{{ $privilege_message }}</span>
-                                </div>
+                                @endif
+
                                 @if(!empty($userdata->am) and allow_access($userdata->am_public))
                                     <div class="d-flex align-items-center gap-3">
                                         <div class="epf-cat-icon flex-shrink-0" style="background:#06b6d4;">
@@ -226,7 +242,6 @@
                                 </div>
                             </div>
                         @endif
-
                     </div>
 
                     {{-- Right column: About Me + Awards stacked --}}

@@ -28,8 +28,8 @@ require_once 'include/lib/user.class.php';
 require_once 'modules/admin/custom_profile_fields_functions.php';
 require_once 'modules/progress/process_functions.php';
 
-$data['tree'] = new Hierarchy();
-$data['user'] = new User();
+$tree = $data['tree'] = new Hierarchy();
+$user = $data['user'] = new User();
 
 $toolName = $langPortfolio;
 $pageName = $langMyProfile;
@@ -84,11 +84,10 @@ $data['userdata'] = Database::get()->querySingle("SELECT surname, givenname, use
                                         WHERE id = ?d", $data['id']);
 
 $is_user_teacher = false;
-$data['privilege_message'] = ' - ';
+$data['privilege'] = null;
 $myBooks = '';
 if ($data['userdata']->status == USER_TEACHER) {
     $is_user_teacher = true;
-    $data['privilege_message'] = $langWithRights;
 } else {
     $myBooks = '&myBooks=true';
 }
@@ -96,17 +95,7 @@ $data['is_user_teacher'] = $is_user_teacher;
 
 $q = Database::get()->querySingle('SELECT privilege FROM admin WHERE user_id = ?d', $data['id']);
 if ($q) {
-    $privilege = $q->privilege;
-    switch ($privilege) {
-        case ADMIN_USER: $data['privilege_message'] = $langAdministrator;
-                        break;
-        case POWER_USER: $data['privilege_message'] = $langPowerUser;
-                        break;
-        case USERMANAGE_USER: $data['privilege_message'] = $langManageUser;
-                        break;
-        case DEPARTMENTMANAGE_USER: $data['privilege_message'] = $langManageDepartment;
-                        break;
-    }
+    $data['privilege'] = $q->privilege;
 }
 
 if ($data['userdata']) {
@@ -187,7 +176,7 @@ if ($data['userdata']) {
     }
 
     $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile');
-    $data['cert_completed'] = Database::get()->queryArray("SELECT cert_title,identifier,template_id,cert_issuer,assigned "
+    $data['cert_completed'] = $cert_completed = Database::get()->queryArray("SELECT cert_title,identifier,template_id,cert_issuer,assigned "
                                         . "FROM certified_users "
                                         . "WHERE add_my_profile = ?d AND (user_fullname = ?s OR user_id = ?d)", 1, uid_to_name($uid, 'fullname'), $uid);
 
@@ -195,6 +184,11 @@ if ($data['userdata']) {
     $openBadgesApp = ExtAppManager::getApp('openbadges');
     $openBadgesEnabled = $openBadgesApp && $openBadgesApp->isEnabled();
     $data['openBadgesEnabled'] = $openBadgesEnabled;
+
+    // Personal Info + Academic Info (left) | About Me + Awards (right)
+    $deptIds = $user->getDepartmentIds($id);
+    $data['hasCerts'] = count($cert_completed) > 0;
+    $data['hasExternal'] = isset($openBadgesEnabled) && $openBadgesEnabled && isset($badge_external) && count($badge_external) > 0;
 
     //get completed badges (always fetch, but export functionality will be hidden if disabled)
     $gameQ = "SELECT a.*, b.title,"
@@ -208,8 +202,9 @@ if ($data['userdata']) {
             . "AND b.active = 1 "
             . "AND b.bundle != -1 "
             . "AND (b.expires IS NULL OR b.expires > NOW())";
-    $data['badge_completed'] = Database::get()->queryArray($gameQ, $uid);
+    $data['badge_completed'] = $badge_completed = Database::get()->queryArray($gameQ, $uid);
 
+    $data['hasBadges'] = count($badge_completed) > 0;
     // Get external badges synced from backpack (only if OpenBadges is enabled)
     if ($openBadgesEnabled) {
     $externalBadgesQ = "SELECT id as user_badge_id, "
@@ -223,7 +218,6 @@ if ($data['userdata']) {
     } else {
         $data['badge_external'] = [];
     }
-
 }
 
 view('main.profile.index', $data);
