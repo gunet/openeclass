@@ -213,7 +213,7 @@
                         {{-- Academic Info card --}}
                         @if(!empty($deptIds))
                             <div class="card panelCard rounded-3 epf-panel-card px-4 py-3">
-                                <h2 class="text-heading-h3 mb-3">{{ trans('langAcademicInfo') }}</h2>
+                                <h2 class="text-heading-h3 mb-3">{{ trans('langFaculty') }}</h2>
                                 <div class="d-flex flex-column gap-3">
                                     @foreach($deptIds as $dep)
                                         <div class="d-flex align-items-center gap-3">

@@ -88,7 +88,7 @@ $data['privilege_message'] = ' - ';
 $myBooks = '';
 if ($data['userdata']->status == USER_TEACHER) {
     $is_user_teacher = true;
-    $data['privilege_message'] = $langWithCourseCreationRights;
+    $data['privilege_message'] = $langWithRights;
 } else {
     $myBooks = '&myBooks=true';
 }

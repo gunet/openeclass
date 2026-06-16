@@ -189,7 +189,6 @@ function add_multimedia_to_certificate($element, $element_id): void
             }
         }
     }
-    return;
 }
 
 
@@ -217,7 +216,6 @@ function add_lp_to_certificate($element, $element_id, $activity_type): void
                 $_POST['threshold'][$data]);
         }
     }
-    return;
 }
 
 /**
@@ -241,7 +239,6 @@ function add_lp_lessonstatus_to_certificate($element, $element_id): void
                 LearningPathLessonStatusEvent::ACTIVITY);
         }
     }
-    return;
 }
 
 /**
