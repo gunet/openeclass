@@ -74,6 +74,102 @@ if (get_config('eportfolio_enable')) {
         </script>';
 }
 
+// Add completed badge to my profile
+if (isset($_GET['action']) && $_GET['action'] == 'add_badge_my_profile') {
+    $badgeId = intval($_GET['badge_id']) ?? 0;
+    if ($badgeId > 0) {
+        $check_exists = Database::get()->querySingle("SELECT add_my_profile FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $badgeId)->add_my_profile;
+        if (!$check_exists) {
+            $completedBadge = Database::get()->querySingle("SELECT completed FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $badgeId)->completed;
+            if ($completedBadge > 0) {
+                Database::get()->query("UPDATE user_badge SET add_my_profile = ?d WHERE user = ?d AND badge = ?d", 1, $uid, $badgeId);
+                Session::flash('message', $langBadgeAddedToMyProfile);
+                Session::flash('alert-class', 'alert-success');
+                redirect_to_home_page("main/mycertificates.php");
+            } else {
+                Session::flash('message', $langIncomplete);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page("main/mycertificates.php");
+            }
+        } else {
+                Session::flash('message', $langResourceExists);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page("main/mycertificates.php");
+        }
+    } else {
+        redirect_to_home_page("main/mycertificates.php");
+    }
+}
+
+// Remove completed badge from my profile
+if (isset($_GET['action']) && $_GET['action'] == 'del_badge_my_profile') {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+    $badgeId = intval($_GET['badge_id']) ?? 0;
+    if ($badgeId > 0) {
+        $completedBadge = Database::get()->querySingle("SELECT completed FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $badgeId)->completed;
+        if ($completedBadge > 0) {
+            Database::get()->query("UPDATE user_badge SET add_my_profile = ?d WHERE user = ?d AND badge = ?d", 0, $uid, $badgeId);
+            Session::flash('message', $langBadgeRemovedToMyProfile);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("main/mycertificates.php");
+        } else {
+            Session::flash('message', $langIncomplete);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("main/mycertificates.php");
+        }
+    } else {
+        redirect_to_home_page("main/mycertificates.php");
+    }
+}
+
+// Add completed certificate to my profile
+if (isset($_GET['action']) && $_GET['action'] == 'add_cert_my_profile') {
+    $certId = intval($_GET['cert_id']) ?? 0;
+    if ($certId > 0) {
+        $check_exists = Database::get()->querySingle("SELECT add_my_profile FROM certified_users WHERE user_id = ?d AND cert_id = ?d", $uid, $certId)->add_my_profile;
+        if (!$check_exists) {
+            $completedCert = Database::get()->querySingle("SELECT completed FROM user_certificate WHERE user = ?d AND certificate = ?d", $uid, $certId)->completed;
+            if ($completedCert > 0) {
+                Database::get()->query("UPDATE certified_users SET add_my_profile = ?d WHERE user_id = ?d AND cert_id = ?d", 1, $uid, $certId);
+                Session::flash('message', $langCertAddedToMyProfile);
+                Session::flash('alert-class', 'alert-success');
+                redirect_to_home_page("main/mycertificates.php");
+            } else {
+                Session::flash('message', $langIncomplete);
+                Session::flash('alert-class', 'alert-warning');
+                redirect_to_home_page("main/mycertificates.php");
+            }
+        } else {
+            Session::flash('message', $langResourceExists);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("main/mycertificates.php");
+        }
+    } else {
+        redirect_to_home_page("main/mycertificates.php");
+    }
+}
+
+// Remove completed certificate from my profile
+if (isset($_GET['action']) && $_GET['action'] == 'del_cert_my_profile') {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+    $certId = intval($_GET['cert_id']) ?? 0;
+    if ($certId > 0) {
+        $completedCert = Database::get()->querySingle("SELECT completed FROM user_certificate WHERE user = ?d AND certificate = ?d", $uid, $certId)->completed;
+        if ($completedCert > 0) {
+            Database::get()->query("UPDATE certified_users SET add_my_profile = ?d WHERE user_id = ?d AND cert_id = ?d", 0, $uid, $certId);
+            Session::flash('message', $langCertRemovedToMyProfile);
+            Session::flash('alert-class', 'alert-success');
+            redirect_to_home_page("main/mycertificates.php");
+        } else {
+            Session::flash('message', $langIncomplete);
+            Session::flash('alert-class', 'alert-warning');
+            redirect_to_home_page("main/mycertificates.php");
+        }
+    } else {
+        redirect_to_home_page("main/mycertificates.php");
+    }
+}
+
 $table_content = '';
 $courses = Database::get()->queryArray("SELECT course.id course_id, code, title
                 FROM course, course_user, user, course_module
@@ -93,7 +189,7 @@ if (count($courses) > 0) {
             <thead><tr class='list-header'><th>$langCourse</th><th>$langResults</th></tr></thead>";
 
     // get completed certificates with public url
-    $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_id, identifier "
+    $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_id, identifier, add_my_profile "
                                         . "FROM certified_users "
                                         . "WHERE user_fullname = ?s", uid_to_name($uid, 'fullname'));
     if (count($sql) > 0) {
@@ -134,8 +230,37 @@ if (count($courses) > 0) {
                 $certificate_modal = '';
             }
 
+                $ePortfolioExists = Database::get()->querySingle("SELECT id FROM eportfolio_resource 
+                                                                  WHERE user_id = ?d
+                                                                  AND resource_id = ?d
+                                                                  AND resource_type = ?s", $uid, $data->cert_id, 'my_certificates');
+                $html_cert_ep = '';
+                if ($ePortfolioExists) {
+                    $html_cert_ep = "
+                        <button type='button' class='badge Success-200-bg border-0 d-flex align-items-center p-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langExistsInEportofolio'>
+                            <i class='fa-regular fa-address-card fs-6'></i>
+                        </button>
+                    ";
+                }
+
+                $myProfileExists = Database::get()->querySingle("SELECT id FROM certified_users 
+                                                                  WHERE user_id = ?d
+                                                                  AND cert_id = ?d
+                                                                  AND add_my_profile = ?d", $uid, $data->cert_id, 1);
+                $html_cert_pr = '';
+                if ($myProfileExists) {
+                    $html_cert_pr = "
+                        <button type='button' class='badge Success-200-bg border-0 d-flex align-items-center p-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langExistsInMyProfile'>
+                            <i class='fa-solid fa-user fs-6'></i>
+                        </button>
+                    ";
+                }
+
                 $icon_content = "<span style='padding-left: 5px;' class='fa fa-check-circle'></span>";
-                $table_content .= "<tr><td>" . $data->course_title . " ($data->cert_title) $certificate_modal</td>
+                $table_content .= "<tr><td>
+                                            " . $data->course_title . " ($data->cert_title) $certificate_modal
+                                            <div class='d-flex gap-3 mt-2'>$html_cert_ep $html_cert_pr</div>
+                                         </td>
                     <td>
                         <div class='d-flex justify-content-between gap-5'>
                             <div><a href= '{$urlServer}main/out.php?i=$data->identifier'>" . "100%" . "</a>" . $icon_content ."</div>
@@ -146,6 +271,19 @@ if (count($courses) > 0) {
                                         'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=my_certificates&amp;rid=".$data->cert_id,
                                         'icon' => 'fa-star',
                                         'show' => (get_config('eportfolio_enable'))
+                                    ),
+                                    array(
+                                        'title' => $langAddToMyProfile,
+                                        'url' => "$_SERVER[SCRIPT_NAME]" . "?action=add_cert_my_profile&amp;cert_id=".$data->cert_id,
+                                        'icon' => 'fa-star',
+                                        'show' => !$data->add_my_profile
+                                    ),
+                                    array(
+                                        'title' => $langDelFromMyProfile,
+                                        'url' => "$_SERVER[SCRIPT_NAME]" . "?action=del_cert_my_profile&amp;cert_id=".$data->cert_id."&amp;token=$_SESSION[csrf_token]",
+                                        'icon' => 'fa-solid fa-xmark',
+                                        'class' => 'Accent-200-cl',
+                                        'show' => $data->add_my_profile
                                     ),
                                 ))."
                             </div>
@@ -250,7 +388,36 @@ if (count($courses) > 0) {
                     $badge_modal = '';
                 }
 
-                $table_content .= "<tr class='$invisible'><td>" . $course1->title . " ($badge->title) $badge_modal</td>
+                $ePortfolioExists = Database::get()->querySingle("SELECT id FROM eportfolio_resource 
+                                                                  WHERE user_id = ?d
+                                                                  AND resource_id = ?d
+                                                                  AND resource_type = ?s", $uid, $badge->badge, 'my_badges');
+                $html_cert_ep = '';
+                if ($ePortfolioExists) {
+                    $html_cert_ep = "
+                        <button type='button' class='badge Success-200-bg border-0 d-flex align-items-center p-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langExistsInEportofolio'>
+                            <i class='fa-regular fa-address-card fs-6'></i>
+                        </button>
+                    ";
+                }
+
+                $myProfileExists = Database::get()->querySingle("SELECT id FROM user_badge 
+                                                                  WHERE user = ?d
+                                                                  AND badge = ?d
+                                                                  AND add_my_profile = ?d", $uid, $badge->badge, 1);
+                $html_cert_pr = '';
+                if ($myProfileExists) {
+                    $html_cert_pr = "
+                        <button type='button' class='badge Success-200-bg border-0 d-flex align-items-center p-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langExistsInMyProfile'>
+                            <i class='fa-solid fa-user fs-6'></i>
+                        </button>
+                    ";
+                }
+
+                $table_content .= "<tr class='$invisible'>
+                                        <td>" . $course1->title . " ($badge->title) $badge_modal
+                                            <div class='d-flex gap-3 mt-2'>$html_cert_ep $html_cert_pr</div>
+                                        </td>
                     <td>
                         <div class='d-flex justify-content-between gap-5'>
                             <div><a href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>" . $cert_content . "</a>" . $icon_content ."</div>
@@ -262,6 +429,19 @@ if (count($courses) > 0) {
                                         'icon' => 'fa-star',
                                         'show' => (get_config('eportfolio_enable'))
                                     ),
+                                    array(
+                                        'title' => $langAddToMyProfile,
+                                        'url' => "$_SERVER[SCRIPT_NAME]" . "?action=add_badge_my_profile&amp;badge_id=".$badge->badge,
+                                        'icon' => 'fa-star',
+                                        'show' => !$badge->add_my_profile
+                                    ),
+                                    array(
+                                        'title' => $langDelFromMyProfile,
+                                        'url' => "$_SERVER[SCRIPT_NAME]" . "?action=del_badge_my_profile&amp;badge_id=".$badge->badge."&amp;token=$_SESSION[csrf_token]",
+                                        'icon' => 'fa-solid fa-xmark',
+                                        'class' => 'Accent-200-cl',
+                                        'show' => $badge->add_my_profile
+                                    )
                                 ))."
                             </div>
                         </div>

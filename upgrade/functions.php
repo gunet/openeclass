@@ -4102,6 +4102,14 @@ function upgrade_to_4_4($tbl_options) : void
             ('imbecile', NOW()),
             ('jerk', NOW())");
     }
+
+    if (!DBHelper::fieldExists('user_badge', 'add_my_profile')) {
+        Database::get()->query("ALTER TABLE user_badge ADD add_my_profile INT NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('certified_users', 'add_my_profile')) {
+        Database::get()->query("ALTER TABLE certified_users ADD add_my_profile INT NOT NULL DEFAULT 0");
+    }
 }
 /**
  * @brief OpenBadges Backpack Integration - Database Migration

@@ -189,7 +189,7 @@ if ($data['userdata']) {
     $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle img-profile img-public-profile');
     $data['cert_completed'] = Database::get()->queryArray("SELECT cert_title,identifier,template_id,cert_issuer,assigned "
                                         . "FROM certified_users "
-                                        . "WHERE user_fullname = ?s OR user_id = ?d", uid_to_name($uid, 'fullname'), $uid);
+                                        . "WHERE add_my_profile = ?d AND (user_fullname = ?s OR user_id = ?d)", 1, uid_to_name($uid, 'fullname'), $uid);
 
     // Check if OpenBadges is enabled
     $openBadgesApp = ExtAppManager::getApp('openbadges');
@@ -204,6 +204,7 @@ if ($data['userdata']) {
             . " JOIN badge b ON (a.badge = b.id) "
             . " WHERE a.user = ?d "
             . "AND a.completed = 1 "
+            . "AND a.add_my_profile = 1 "
             . "AND b.active = 1 "
             . "AND b.bundle != -1 "
             . "AND (b.expires IS NULL OR b.expires > NOW())";

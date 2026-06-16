@@ -7553,3 +7553,13 @@ $langRegisterToCourse = "Enroll in one or more $langsCourses";
 $langRegisterToCollab = "Enroll in one or more $langsCourses";
 $langAddNewCourse = "Add a new $langsCourse";
 $langAddNewCollab = "Add a new $langsCourse";
+
+// My certificates
+$langAddToMyProfile = "Add to my profile";
+$langDelFromMyProfile = "Remove from my profile";
+$langBadgeAddedToMyProfile = "Badge has been added to your profile";
+$langBadgeRemovedToMyProfile = "Badge has been removed from your profile";
+$langCertAddedToMyProfile = "Certificate has been added to your profile";
+$langCertRemovedToMyProfile = "Certificate has been removed from your profile";
+$langExistsInEportofolio = "Added to eportfolio";
+$langExistsInMyProfile = "Added to my profile";

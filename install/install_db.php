@@ -2548,6 +2548,7 @@ $db->query("CREATE TABLE `user_badge` (
   `updated` datetime,
   `assigned` datetime,
   `external_assertion_id` VARCHAR(512) DEFAULT NULL COMMENT 'External assertion ID if published to backpack',
+  `add_my_profile` INT NOT NULL DEFAULT 0,
   unique key `user_badge` (`user`, `badge`),
   INDEX `external_assertion_idx` (`external_assertion_id`),
   foreign key (`user`) references `user`(`id`),
@@ -2609,6 +2610,7 @@ $db->query("CREATE TABLE `certified_users` (
   `expires` datetime DEFAULT NULL,
   `template_id` INT,
   `user_id` INT DEFAULT NULL,
+  `add_my_profile` INT NOT NULL DEFAULT 0,
    PRIMARY KEY (`id`),
    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE SET NULL
   ) $tbl_options");

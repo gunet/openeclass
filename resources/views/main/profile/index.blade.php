@@ -245,7 +245,7 @@
                         {{-- Certificates card --}}
                         @if($hasCerts)
                             <div class="card panelCard epf-panel-card rounded-3 px-4 py-3">
-                                <h2 class="text-heading-h3 mb-3">{{ trans('langMyCertificates') }}</h2>
+                                <h2 class="text-heading-h3 mb-3">{{ trans('langCertificates') }}</h2>
                                 <div class="row row-cols-1 row-cols-md-2 g-3">
                                     @foreach($cert_completed as $certificate)
                                         <div class="col">
