@@ -229,7 +229,9 @@ if (isset($_GET['add_cat'])) { //add a new category form
     
     $name_lang_arr = array();
     foreach ($_POST['field_name'] as $lang_code => $name) {
-        $name_lang_arr[$lang_code] = $name;
+        if (!empty(trim($name))) {
+            $name_lang_arr[$lang_code] = $name;
+        }
     }
 
     $shortname = $_POST['field_shortname'];
