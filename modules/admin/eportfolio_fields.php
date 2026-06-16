@@ -236,7 +236,9 @@ if (isset($_GET['add_cat'])) { //add a new category form
     
     $descr_lang_arr = array();
     foreach ($_POST['fielddescr'] as $lang_code => $description) {
-        $descr_lang_arr[$lang_code] = $description;
+        if (!empty(trim($description))) {
+            $descr_lang_arr[$lang_code] = $description;
+        }
     }
     
     $datatype = intval($_POST['datatype']);
@@ -248,7 +250,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     if ($datatype == EPF_MENU && isset($_POST['options_'.$default_lang])) {
         $data_lang_arr = array();
         foreach ($available_langs as $code => $lang) {
-            if (isset($_POST['options_'.$code])) {
+            if (!empty(trim($_POST['options_'.$code]))) {
                 $data_lang_arr[$code] = explode(PHP_EOL, $_POST['options_'.$code]);
             }
         }
