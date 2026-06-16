@@ -1,14 +1,14 @@
 @extends('layouts.default')
 
 @push('head_scripts')
-<script type='text/javascript'>
-    var urlAppend = '{{ js_escape($urlAppend) }}',
-        lang = {
-            addPicture: '{{ js_escape(trans('langAddPicture')) }}',
-            confirmDelete: '{{ js_escape(trans('langConfirmDelete')) }}'
-        };
-    $(profile_init);
-</script>
+    <script type='text/javascript'>
+        var urlAppend = '{{ js_escape($urlAppend) }}',
+            lang = {
+                addPicture: '{{ js_escape(trans('langAddPicture')) }}',
+                confirmDelete: '{{ js_escape(trans('langConfirmDelete')) }}'
+            };
+        $(profile_init);
+    </script>
 @endpush
 
 @section('content')
@@ -187,7 +187,9 @@
 
                             @if (count($allProviders) > 0)
                                 <div class='form-group mt-4'>
-                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langProviderConnectWith') }}</div>
+                                    <div class='col-sm-12 control-label-notes mb-2'>
+                                        {{ trans('langProviderConnectWith') }}
+                                    </div>
                                     <div class='col-sm-12'>
                                         <div class='row'>
                                         @foreach ($allProviders as $provider)
@@ -207,9 +209,9 @@
                             @endif
 
                             <div class="mt-4"></div>
-                                {{ $SecFactorProfile }}
+                                {!! $SecFactorProfile !!}
                             <div class="mt-3"></div>
-                                {{ $SecFactorChallenge }}
+                                {!! $SecFactorChallenge !!}
                             <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2'>
                                 <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                 <a href='display_profile.php' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>

@@ -4960,11 +4960,12 @@ function login_hook($options) {
 
 function showSecondFactorUserProfile(){
     global $langSFAConf;
+
     $connector = secondfaApp::getsecondfa();
-    if($connector->isEnabled() == true ){
+    if($connector->isEnabled()) {
         return "<div class='form-group'>
-                  <label class='col-sm-2 control-label'>" . $langSFAConf . "</label>
-                  <div class='col-sm-4'>". secondfaApp::showUserProfile($_SESSION['uid']) . "</div>
+                  <strong>" . $langSFAConf . "</strong>
+                  <div class='col-sm-12'>". secondfaApp::showUserProfile($_SESSION['uid']) . "</div>
                 </div>";
     } else {
         return "";
@@ -4977,9 +4978,10 @@ function showSecondFactorUserProfile(){
  * @param  POST variables
  * @return string
  */
-function saveSecondFactorUserProfile(){
+function saveSecondFactorUserProfile() {
+
     $connector = secondfaApp::getsecondfa();
-    if($connector->isEnabled() == true ){
+    if($connector->isEnabled()){
         return secondfaApp::saveUserProfile($_SESSION['uid']);
     } else {
         return "";
@@ -4992,17 +4994,20 @@ function saveSecondFactorUserProfile(){
  *
  * @return string
  */
-function showSecondFactorChallenge(){
+function showSecondFactorChallenge() {
     global $langSFAType;
+
     $connector = secondfaApp::getsecondfa();
-    if($connector->isEnabled() == true ){
+    if($connector->isEnabled()) {
         $challenge = secondfaApp::showChallenge($_SESSION['uid']);
-        if ($challenge!=""){
-            return "<div class='form-group'>
-                    <label class='col-sm-2 control-label'>" . $langSFAType . "</label>
-                    <div class='col-sm-4'>". $challenge . "</div>
+        if ($challenge!="") {
+            return "<div class='col-sm-12 control-label-notes mb-2'>
+                        $langSFAType
+                    </div>
+                    <div class='col-sm-4'>
+                        $challenge
                     </div>";
-        }else{
+        } else {
             return "";
         }
     } else {

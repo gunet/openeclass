@@ -143,7 +143,7 @@ class secondfaApp extends ExtApp {
         } else {
             $user = Database::get()->querySingle("SELECT email FROM user WHERE id = ?s", $userid);
             $email = $user->email;
-            $company = "GUNET eClass";
+            $company = get_config('site_name');
             return self::getInitialize($userid,$company,$email);
         }
     }
@@ -186,13 +186,16 @@ class secondfaApp extends ExtApp {
     }
 
     /* INITIALIZATION FUNCTIONS */
-
     public static function getUnitialize(){
-        global $langSFAkeep,$langSFAremove;
-        return "<select name='sfaremove' class='form-select'><option value='KEEP' selected>$langSFAkeep</option><option value='REMOVE'>$langSFAremove</option></select>";
+        global $langSFAkeep, $langSFAremove;
+
+        return "<select name='sfaremove' class='form-select'>
+                    <option value='KEEP' selected>$langSFAkeep</option>
+                    <option value='REMOVE'>$langSFAremove</option>
+                </select>";
     }
 
-    public static function setUnitialize($userid){
+    public static function setUnitialize($userid) {
         if(isset($_POST['sfaremove']) && !empty($_POST['sfaremove']) && $_POST['sfaremove']==='REMOVE'){
             self::storeSecret($userid, '');
         }
@@ -206,28 +209,27 @@ class secondfaApp extends ExtApp {
             $sfa_svg = $keypack[0];
             $sfa_secret = $keypack[1];
             $_SESSION['sfatempkey'] = $sfa_secret;
-            return "<div name ='2fabutton'>
-                    <input type='button'  class='btn' value='$langSFAadd' onclick='document.getElementsByName(\"2fa\")[0].style.display=\"block\";document.getElementsByName(\"2fa\")[0].style.visibility=\"visible\";document.getElementsByName(\"2fabutton\")[0].style.display=\"none\";document.getElementsByName(\"2fabutton\")[0].style.visibility=\"hidden\"'>
+            return "<div name ='2fabutton' class='mt-3'> 
+                        <input type='button' class='btn submitAdminBtn' value='$langSFAadd' onclick='document.getElementsByName(\"2fa\")[0].style.display=\"block\";document.getElementsByName(\"2fa\")[0].style.visibility=\"visible\";document.getElementsByName(\"2fabutton\")[0].style.display=\"none\";document.getElementsByName(\"2fabutton\")[0].style.visibility=\"hidden\"'>
                     </div>
                     <div name='2fa' style='visibility:hidden;display:none'>
-                    <input type='button'   class='btn' value='$langSFAremove' onclick='document.getElementsByName(\"2fa\")[0].style.display=\"none\";document.getElementsByName(\"2fa\")[0].style.visibility=\"hidden\";document.getElementsByName(\"2fabutton\")[0].style.display=\"block\";document.getElementsByName(\"2fabutton\")[0].style.visibility=\"visible\"''>
-                    <table style='width:100%'>
-                    <tr><p>$langSFAScan</p></tr>
-                    <tr>$sfa_svg</tr>
-                    <tr><p>$langSFAInsert</p></tr>
-                    <p>
-                    <div class=''>
-                        <input class='form-control' type='text' autocomplete='off' name='sfasecret' disabled=disabled value='" . q($sfa_secret) . "'/></tr>
-                    </div>
-                    </p>
-                    <tr><p>(Server Time) ".date("h:i:sa")."</p></tr>
-                    <tr><p>$langSFATypeWYS</p></tr>
-                    <tr>
-                    <div class=''>
-                        <input class='form-control' type='password' autocomplete='off' name='sfaanswer' value=''/></tr>
-                    </div>
-                    </tr>
-                    </table>
+                        <input type='button' class='btn deleteAdminBtn mt-3' value='$langSFAremove' onclick='document.getElementsByName(\"2fa\")[0].style.display=\"none\";document.getElementsByName(\"2fa\")[0].style.visibility=\"hidden\";document.getElementsByName(\"2fabutton\")[0].style.display=\"block\";document.getElementsByName(\"2fabutton\")[0].style.visibility=\"visible\"''>                        
+                            <div class='row justify-content-center'>                                
+                                <div class='m-3 text-center'>
+                                    <strong>$langSFAScan</strong>
+                                    <div class='d-flex justify-content-center'>
+                                        $sfa_svg
+                                    </div>
+                                </div>
+                                <div class='mb-3'>
+                                    <p class='form-label'>$langSFAInsert</p>
+                                    <input class='form-control' type='text' autocomplete='off' name='sfasecret' disabled=disabled value='" .  q($sfa_secret). "'>
+                                </div>                                                    
+                                <div class='mb-3'>
+                                    <p class='form-label font-weight-bold'>$langSFATypeWYS</p>
+                                    <input class='form-control' type='password' autocomplete='off' name='sfaanswer' value=''>
+                                </div>                                    
+                            </div>
                     </div>";
         } else {
             return "$langConfigError";
@@ -236,20 +238,21 @@ class secondfaApp extends ExtApp {
 
     public static function setInitialize($userid){
         global $langSFAfail;
-        if(isset($_POST['sfaanswer']) && !empty($_POST['sfaanswer'])){
+
+        if(!empty($_POST['sfaanswer'])){
             $answer = $_POST['sfaanswer'];
-            if ($answer!=""){
-                if ($_SESSION['sfatempkey']!=""){
+            if ($answer!="") {
+                if ($_SESSION['sfatempkey']!="") {
                     if (self::getsecondfa()->check($userid, $answer, $_SESSION['sfatempkey'])->status === "OK"){
                         self::storeSecret($userid, $_SESSION['sfatempkey']);
-                    }else{
+                    } else {
                         require_once 'include/tools.php';
                         Session::flash('message', $langSFAfail);
                         Session::flash('alert-class', 'alert-danger');
                         header("Location: {$_SERVER['SCRIPT_NAME']}");
                         exit();
                     }
-                }else{
+                } else {
                     require_once 'include/tools.php';
                     Session::flash('message', $langSFAfail);
                     Session::flash('alert-class', 'alert-danger');
@@ -261,15 +264,16 @@ class secondfaApp extends ExtApp {
     }
 
 
-    /* Challenge Responce Functions */
-
+    /**
+     * @brief Challenge Response Functions
+     */
     public static function challenge(){
         return "<input type='password' class='form-control'  autocomplete='off' name='sfaanswer' value=''/>";
     }
 
     public static function verify($userid, $sfa_secret){
         $status = 0;
-        if(isset($_POST['sfaanswer']) && !empty($_POST['sfaanswer'])){
+        if(!empty($_POST['sfaanswer'])){
             $answer = $_POST['sfaanswer'];
             if ($answer!=""){
                 return $status = self::getsecondfa()->check($userid, $answer, $sfa_secret);
