@@ -1590,6 +1590,10 @@ $langTheUser = 'The user';
 $langDestination = 'Recipient:';
 $langAsProf = "as a ".$langsTeacher;
 $langTel = 'Phone';
+$langActivateBorder = "Activate border";
+$langPlatformView = "Platform view";
+$langComponents = "Components";
+$langGenSettings = "Settings";
 $langPassSameAuth = "Your password is the same of the account authentication service.";
 $langLdapRequest = "There is already a request for the user";
 $langLDAPUser = 'LDAP user';
@@ -4683,6 +4687,36 @@ $langCommentsBlog = "Blog comments";
 $langCommentsCourse = "$langsCourse comments";
 $langOfLikesSocial = "Social links likes";
 $langOfLikesForum = "Forum Likes";
+$langLinkColorCopyrights = "Copyright link color";
+$langHoverLinkColorCopyrights = "Copyright hovered link color";
+
+$langBgColorAlertInfo = "Background color to alert-info";
+$langBorderTextColorAlertInfo = "Border color to alert-info";
+$langTextColorAlertInfo = "Text color to alert-info";
+$langLinkColorAlertInfo = "Text link color in alert-info";
+$langLinkHoverColorAlertInfo = "Text hovered link color in alert-info";
+
+$langBgColorAlertWarning = "Background color to alert-warning";
+$langBorderTextColorAlertWarning = "Border color to alert-warning";
+$langTextColorAlertWarning = "Text color to alert-warning";
+$langLinkColorAlertWarning = "Text link color in alert-warning";
+$langLinkHoverColorAlertWarning = "Text hovered link color in alert-warning";
+
+$langBgColorAlertSuccess = "Background color to alert-success";
+$langBorderTextColorAlertSuccess = "Border color to alert-success";
+$langTextColorAlertSuccess = "Text color to alert-success";
+$langLinkColorAlertSuccess = "Text link color in alert-success";
+$langLinkHoverColorAlertSuccess = "Text hovered link color in alert-success";
+
+$langBgColorAlertDanger = "Background color to alert-danger";
+$langBorderTextColorAlertDanger = "Border color to alert-danger";
+$langTextColorAlertDanger = "Text color to alert-danger";
+$langLinkColorAlertDanger = "Text link color in alert-danger";
+$langLinkHoverColorAlertDanger = "Text hovered link color in alert-danger";
+
+$langTextIntroColor = "Intro text color";
+$langBgColorTextIntro = "Background color to the intro text";
+
 $langMult = "Display multimedia";
 $langVideoLink = "Display video link";
 $langEbook = "Ebook access";

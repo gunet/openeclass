@@ -7955,3 +7955,12 @@ th.grade-col a{
     padding-top: 56px;
   }
 }
+
+.theme_options_legend {
+  font-size: 16px;
+}
+@media(max-width: 991px) {
+  .theme_creation_panel .card-body{
+    overflow-x: auto;
+  }
+}
