@@ -199,10 +199,12 @@ if (isset($_GET['add_cat'])) { //add a new category form
                       <div class='col-sm-12'>".selection($yes_no, 'required', 0, 'class="form-control"')."</div>";
     $tool_content .= "</div>";
     if ($datatype == EPF_MENU) {
-        $tool_content .= "<div class='form-group mt-4'>";
-        $tool_content .= "<label for='options' class='col-sm-12 control-label-notes'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan)</small></label>
-                          <div class='col-sm-12'><textarea name='options' rows='8' class='w-100'></textarea></div>";
-        $tool_content .= "</div>";
+        foreach ($available_langs as $code => $lang) {
+            $tool_content .= "<div class='form-group mt-4'>";
+            $tool_content .= "<label for='options_$code' class='col-sm-12 control-label-notes'>$langCPFMenuOptions ($lang) <small>($langCPFMenuOptionsExplan)</small></label>
+                            <div class='col-sm-12'><textarea name='options_$code' id='options_$code' rows='8' class='w-100'></textarea></div>";
+            $tool_content .= "</div>";
+        }
     }
     $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
@@ -217,7 +219,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
             chkValidator.addValidation("shortname","req","' . $langEPFFieldShortNameAlert . '");
         ';
     if ($datatype == EPF_MENU) {
-        $tool_content .= 'chkValidator.addValidation("options","req","' . $langCPFMenuOptionsAlert . '");';
+        $tool_content .= 'chkValidator.addValidation("options_'.$default_lang.'","req","' . $langCPFMenuOptionsAlert . '");';
     }
     $tool_content .= '//]]></script>';
 
@@ -243,9 +245,14 @@ if (isset($_GET['add_cat'])) { //add a new category form
     } else {
         $required = 0;
     }
-    if ($datatype == EPF_MENU && isset($_POST['options'])) {
-        $data = explode(PHP_EOL, $_POST['options']);
-        $data = serialize($data);
+    if ($datatype == EPF_MENU && isset($_POST['options_'.$default_lang])) {
+        $data_lang_arr = array();
+        foreach ($available_langs as $code => $lang) {
+            if (isset($_POST['options_'.$code])) {
+                $data_lang_arr[$code] = explode(PHP_EOL, $_POST['options_'.$code]);
+            }
+        }
+        $data = serialize($data_lang_arr);
     } else {
         $data = '';
     }
@@ -332,12 +339,15 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $data = $result->data;
 
         if ($datatype == EPF_MENU) {
-            $data = unserialize($data);
-            $textarea_val = '';
-            foreach ($data as $line) {
-                $textarea_val .= $line."\n";
+            $data = unserialize($data, ['allowed_classes' => false]);
+            $textarea_val = array();
+            foreach ($data as $lang => $options) {
+                $textarea_val[$lang] = '';
+                foreach ($options as $line) {
+                    $textarea_val[$lang] .= $line."\n";
+                }
+                $textarea_val[$lang] = substr($textarea_val[$lang], 0, strlen($textarea_val[$lang])-1);
             }
-            $textarea_val = substr($textarea_val, 0, strlen($textarea_val)-1);
         }
 
         load_js('validation.js');
@@ -383,10 +393,16 @@ if (isset($_GET['add_cat'])) { //add a new category form
                           <div class='col-sm-12'>".selection($yes_no, 'required', $required, 'class="form-control" id="required"')."</div>";
         $tool_content .= "</div>";
         if ($datatype == EPF_MENU) {
-            $tool_content .= "<div class='form-group mt-4'>";
-            $tool_content .= "<label for='options' class='col-sm-12 control-label-notes'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan - $langCPFMenuOptionsChangeExplan)</small></label>
-                              <div class='col-sm-12'><textarea name='options' rows='8' class='w-100' id='options'>$textarea_val</textarea></div>";
-            $tool_content .= "</div>";
+            foreach ($available_langs as $code => $lang) {
+                $tool_content .= "<div class='form-group mt-4'>";
+                $tool_content .= "<label for='options_$code' class='col-sm-12 control-label-notes'>$langCPFMenuOptions ($lang)<small>($langCPFMenuOptionsExplan - $langCPFMenuOptionsChangeExplan)</small></label>
+                                <div class='col-sm-12'><textarea name='options_$code' rows='8' class='w-100' id='options_$code'>";
+                if (!empty($textarea_val[$code])) {
+                    $tool_content .= $textarea_val[$code];
+                }
+                $tool_content .= "</textarea></div>";
+                $tool_content .= "</div>";
+            }
         }
         $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langSave'></div>";
         $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
@@ -401,7 +417,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                             chkValidator.addValidation("shortname","req","' . $langEPFFieldShortNameAlert . '");
                         ';
         if ($datatype == EPF_MENU) {
-            $tool_content .= 'chkValidator.addValidation("options","req","' . $langCPFMenuOptionsAlert . '");';
+            $tool_content .= 'chkValidator.addValidation("options_'.$default_lang.'","req","' . $langCPFMenuOptionsAlert . '");';
         }
         $tool_content .= '//]]></script>';
     } else {
