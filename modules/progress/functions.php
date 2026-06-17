@@ -174,6 +174,7 @@ function display_badges(): void
         foreach ($sql_cer as $data) {
             $badge_details = get_badge_icon($data->icon);
             $badge_icon    = $badge_details[key($badge_details)];
+            $icon_name     = key($badge_details);
             $icon_link     = $urlServer . BADGE_TEMPLATE_PATH . $badge_icon;
 
             $pill = $data->active
@@ -225,7 +226,7 @@ function display_badges(): void
                 <div class='reward-list-card' onclick=\"window.location.href='$badge_url'\" style='cursor:pointer;'>
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                         <div class='reward-img-col'>
-                            <img src='$icon_link' style='width:64px;height:auto;'>
+                            <img alt='$icon_name' src='$icon_link' style='width:64px;height:auto;'>
                         </div>
                         <div class='reward-title-col'>
                             <div style='font-size:16px;font-weight:700;margin-bottom:8px;'>" . q($data->title) . "</div>
@@ -239,7 +240,7 @@ function display_badges(): void
                 <a href='$badge_url' class='reward-list-card'>
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                         <div class='reward-img-col'>
-                            <img src='$icon_link' style='width:64px;height:auto;'>
+                            <img alt='$icon_name' src='$icon_link' style='width:64px;height:auto;'>
                         </div>
                         <div class='reward-title-col'>
                             <div style='font-size:16px;font-weight:700;margin-bottom:8px;'>" . q($data->title) . "</div>
