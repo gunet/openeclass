@@ -6864,6 +6864,7 @@ function theme_initialization() {
         if(!empty($theme_options_styles['clBorderPanels'])){
             $styles_str .= "
 
+                .card,
                 .user-info-card,
                 .form-homepage-login,
                 .panelCard,
@@ -6963,6 +6964,10 @@ function theme_initialization() {
 
                 .progress-activity-card {
                     border: 1px solid $theme_options_styles[clBorderPanels];
+                }
+
+                .epf-panel-card {
+                    border: 1px solid $theme_options_styles[clBorderPanels] !important;
                 }
 
 
@@ -7185,6 +7190,10 @@ function theme_initialization() {
 
                 .progress-activity-card {
                     box-shadow: 0 1px 3px $theme_options_styles[BoxShadowPanels];
+                }
+
+                .epf-panel-card {
+                    box-shadow: 0 1px 6px $theme_options_styles[BoxShadowPanels] !important;
                 }
 
             ";

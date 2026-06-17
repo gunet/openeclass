@@ -814,7 +814,7 @@ if ($userdata) {
                                     'confirm' => $langePortfolioSureToRemoveResource,
                                     'show' => ($mycertificate->user_id == $uid)
                                 )))."
-                            <a href='{$cert_url}' class='btn btn-sm btn-outline-primary'>$langSee</a>
+                            <a href='{$cert_url}' class='btn btn-sm btn-outline-primary text-decoration-none'>$langSee</a>
                         </div>
                     </div>
                 </div>";

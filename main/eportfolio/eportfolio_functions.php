@@ -344,7 +344,7 @@ function render_eportfolio_profile_card($uid, $resources_url = null, $resources_
 
     $resources_button_html = '';
     if ($resources_url && $resources_label) {
-        $resources_button_html = "<a href='" . q($resources_url) . "' class='btn btn-outline-secondary flex-shrink-0' style='font-size:0.875rem;padding:5px 14px;border-radius:4px;white-space:nowrap;'><i class='fa-solid fa-paperclip me-2'></i>" . q($resources_label) . "</a>";
+        $resources_button_html = "<a href='" . q($resources_url) . "' class='btn submitAdminBtn flex-shrink-0' style='font-size:0.875rem;padding:5px 14px;border-radius:4px;white-space:nowrap;'><i class='fa-solid fa-paperclip me-2'></i>" . q($resources_label) . "</a>";
     }
 
     $link_html = '';
