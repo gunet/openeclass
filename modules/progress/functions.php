@@ -491,20 +491,14 @@ function display_course_completion(): void
     // Summary card
     if ($is_editor) {
         $tool_content .= "
-            <div onclick=\"window.location.href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'\" style='cursor:pointer;'>        
-                <div class='col-12 mt-4'>
-                    <div class='card rounded-3'>                
-                        <div class='card-body p-4'>                          
-                            <div class='d-flex align-items-center justify-content-between gap-3 flex-wrap' >
-                                <div>
-                                    <div class='text-heading-h4 mb-2'>$langCourseCompletion</div>          
-                                    $status_pill
-                                </div>
-                                <div class='reward-bar-col d-flex align-items-center justify-content-end' onclick='event.stopPropagation();'>
-                                    $editor_btns
-                                </div>                            
-                            </div>
-                        </div>
+            <div class='reward-list-card' onclick=\"window.location.href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'\" style='cursor:pointer;'>
+                <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
+                    <div class='reward-title-col'>
+                        <div style='font-size:16px;font-weight:700;margin-bottom:8px;'>$langCourseCompletion</div>
+                        $status_pill
+                    </div>
+                    <div class='reward-bar-col d-flex align-items-center justify-content-end' onclick='event.stopPropagation();'>
+                        $editor_btns
                     </div>
                 </div>
             </div>";
