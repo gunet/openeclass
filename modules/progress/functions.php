@@ -4793,7 +4793,7 @@ function display_user_progress_details($element, $element_id, $user_id): void
         if ($badge_data && $badge_data->icon) {
             $badge_icon_details = get_badge_icon($badge_data->icon);
             $badge_icon_filename = $badge_icon_details[key($badge_icon_details)];
-            $img_html = "<img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($badge_icon_filename) . "' style='width:80px;height:auto;'>";
+            $img_html = "<img alt='".key($badge_icon_details)."' src='" . $urlServer . BADGE_TEMPLATE_PATH . q($badge_icon_filename) . "' style='width:80px;height:auto;'>";
         }
     } else {
         $cert_data = Database::get()->querySingle("SELECT template FROM certificate WHERE id = ?d", $element_id);
@@ -4805,10 +4805,10 @@ function display_user_progress_details($element, $element_id, $user_id): void
             if (file_exists($webDir . CERT_TEMPLATE_PATH . $thumbnail_filename)) {
                 $cert_thumbnail_url = $urlServer . CERT_TEMPLATE_PATH . q($thumbnail_filename);
                 if ($is_editor) {
-                    $img_html = "<img src='$cert_thumbnail_url' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
+                    $img_html = "<img alt='$template_name' src='$cert_thumbnail_url' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
                 } else {
                     $img_html = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&certificate_id=$element_id&u=$user_id&p=1' target='_blank'>
-                                <img src='$cert_thumbnail_url' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>
+                                <img alt='$template_name' src='$cert_thumbnail_url' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>
                              </a>";
                 }
 
