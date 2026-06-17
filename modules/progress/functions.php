@@ -4583,7 +4583,7 @@ function display_users_progress($element, $element_id): void
 
     global $tool_content, $head_content, $course_id, $langNoCertificateUsers,  $langUsersS,
            $langAmShort, $langProgress, $langUsersCertResults, $langCompletion,
-           $urlAppend, $course_code;
+           $urlAppend, $course_code, $active_tab;
 
     if ($element == 'certificate') {
         $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user.am, user, completed, completed_criteria, total_criteria, assigned
@@ -4693,7 +4693,7 @@ function display_users_progress($element, $element_id): void
                     </div>
                 </div>
                 <div class='up-lb-progress-wrap'>
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=$user_data->user'>$progress_col</a>
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=$user_data->user&tab=$active_tab'>$progress_col</a>
                 </div>
             </div>";
             $cnt++;
