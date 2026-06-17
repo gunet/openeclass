@@ -1408,7 +1408,7 @@ function delete_certificate($element, $element_id): bool
                 return false;
             }
         }
-        if ($delete_cert) {  // delete certificate activities
+        if ($delete_cert || count($r) == 0) {  // delete certificate activities. When there are no activities simply delete the certificate
             foreach ($r as $act) {
                 delete_activity('certificate', $element_id, $act->id);
             }
@@ -1427,7 +1427,7 @@ function delete_certificate($element, $element_id): bool
                 return false;
             }
         }
-        if ($delete_badge) {  // delete badge activities
+        if ($delete_badge || count($r) == 0) {  // delete badge activities. When there are no activities simply delete badge
             foreach ($r as $act) {
                 delete_activity('badge', $element_id, $act->id);
             }
