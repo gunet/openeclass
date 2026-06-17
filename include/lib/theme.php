@@ -111,7 +111,8 @@ function theme_initialization() {
                 $urlThData = $urlAppend . 'courses/theme_data/' . $theme_id;
                 $brief_profile_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
                 $styles_str .= "
-                    .brief-profile-container-info {
+                    .brief-profile-container-info,
+                    .portfolio-profile-container .padding-default {
                         background-image: linear-gradient(
                                             135deg,
                                             $theme_options_styles[BriefProfilePortfolioBgColor],
@@ -124,7 +125,8 @@ function theme_initialization() {
                     }
 
                     @media (max-width: 991px) {
-                        .brief-profile-container-info {
+                        .brief-profile-container-info,
+                        .portfolio-profile-container .padding-default {
                             background-size:
                                 cover,
                                 cover !important;
@@ -146,6 +148,9 @@ function theme_initialization() {
         if(!empty($theme_options_styles['bgColorContainerPortfolioInfo'])){
             $styles_str .= "
                 .section-portfolio-profile-container-info {
+                    background: $theme_options_styles[bgColorContainerPortfolioInfo] !important;
+                }
+                .portfolio-profile-container{
                     background: $theme_options_styles[bgColorContainerPortfolioInfo] !important;
                 }
             ";
@@ -7952,6 +7957,13 @@ function theme_initialization() {
 
                 @media (max-width: 991px) {
 
+                    .portfolio-profile-container {
+                        padding-top: 56px !important;
+                        padding-left: 0px !important;
+                        padding-bottom: 0px !important;
+                        padding-right: 0px !important;
+                    }
+
                     .section-portfolio-profile-container-info .padding-default {
                         padding-top: 0px !important;
                         padding-left: 0px !important;
@@ -7977,6 +7989,13 @@ function theme_initialization() {
                 }
                 
                 @media (min-width: 992px) {
+
+                    .portfolio-profile-container .padding-default {
+                        margin-top: 28px !important;
+                        margin-bottom: 28px !important;
+                        padding: 45px 45px !important;
+                        border-radius: 32px !important;
+                    }
 
                     .section-portfolio-profile-container-info .padding-default {
                         padding-left: 0px !important;
@@ -8071,6 +8090,11 @@ function theme_initialization() {
         if(!empty($theme_options_styles['enable_aside_main_cards_no_border_radius'])){
             $styles_str .= "
                 @media (min-width: 992px) {
+
+                    .portfolio-profile-container .padding-default {
+                        border-radius: 4px !important;
+                    }
+
                     .main-section .main-container {
                         border-radius: 4px !important;
                     }

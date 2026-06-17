@@ -457,141 +457,64 @@
     @include('portfolio.privacy_policy_modal')
 @endif
 
-<section class="section-portfolio-profile-container-info" aria-label="{{ trans('langPortfolio') }}">
+<section class="portfolio-profile-container" aria-label="{{ trans('langPortfolio') }}" style="padding-top: 80px;">
     <h1 class="visually-hidden">{{ trans('langPortfolio') }}</h1>
-    <div class='{{ $container }} padding-default'>
-        <div class='brief-profile-container-info'>
-            <div class='row row-cols-lg-2 row-cols-1 g-3' aria-label="{{ trans('langProfileLinks') }}">
-                <div class="col-lg-4">
-                    {{-- Avatar + Name --}}
-                    <div class='d-flex justify-content-lg-start justify-content-center align-items-center gap-3 flex-shrink-0'>
-                        <div class='epf-avatar-circle'>
-                            <img src="{{ user_icon($uid, IMAGESIZE_LARGE) }}"
-                                    alt="{{ trans('langProfileImage') }}: {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
-                        </div>
-                        <div>
-                            <div class='mb-0 portofolio-text-intro portfolio-username TextBold normal-text'>{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}</div>
-                            <div class='small-text Neutral-900-cl mb-0 portofolio-text-intro'>{!! $_SESSION['uname'] !!}</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-8 d-flex justify-content-lg-start justify-content-center align-items-center">
-                    {{-- Info items --}}
-                    <div class="row @if(!get_config('show_collaboration') or get_config('show_always_collaboration')) row-cols-md-2 @else row-cols-md-3 @endif row-cols-1 g-3 mt-lg-0 mt-2 w-100">
-                        @if(!get_config('show_always_collaboration'))
-                            <div class="col brief-profile-small-screen">
-                                <div class='d-flex justify-content-start align-items-start gap-3'>
-                                    <div class='profile-info-icon-badge' style="background-color: #2563EB;">
-                                        <i class='fa-solid fa-graduation-cap' style="color: #ffffff;"></i>
-                                    </div>
-                                    <div class='portfolio-texts'>
-                                        <span class="small-text">{!! trans('langSumCoursesEnrolled') !!}</span>
-                                        <p><strong class="fs-6">{{ $num_of_courses }}</strong></p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        @if(get_config('show_collaboration'))
-                            <div class="col brief-profile-small-screen">
-                                <div class='d-flex justify-content-start align-items-start gap-3'>
-                                    <div class='profile-info-icon-badge' style="background-color: #6D5DF6;">
-                                        <i class='fa-solid fa-people-group' style="color: #ffffff;"></i>
-                                    </div>
-                                    <div class='portfolio-texts'>
-                                        <span class="small-text">{!! trans('langSumCollaborationEnrolled') !!}</span> 
-                                        <p><strong class="fs-6">{{ $num_of_collaborations }}</strong></p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        <div class="col brief-profile-small-screen">
-                            <div class='d-flex justify-content-start align-items-start gap-3'>
-                                <div class='profile-info-icon-badge' style="background-color: #008B8B;">
-                                    <i class='fa-regular fa-calendar' style="color: #ffffff;"></i>
-                                </div>
-                                <div class='portfolio-texts'>
-                                    <span class="small-text">{{ trans('langProfileLastVisit') }}</span>
-                                    <p><strong class="fs-6">{{ format_locale_date(strtotime($last_login)) }}</strong></p>
-                                </div>
-                            </div>
-                        </div>
+    <div class="container padding-default">
+        <div class="row row-cols-xl-3 row-cols-md-2 row-cols-1">
+            <div class="col-xl-4 col-md-6 d-flex col-12 justify-content-md-start justify-content-center align-items-center">
+                <div class="d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3">
+                    <img class="user-detals-photo ms-auto me-auto" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ trans('langProfileImage') }}: {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                    <div>
+                        <div class="mb-0 portofolio-text-intro portfolio-username TextBold normal-text">{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}</div>
+                        <p class="small-text Neutral-900-cl mb-0 portofolio-text-intro">
+                            {!! $_SESSION['uname'] !!}
+                        </p>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-<section class="section-portfolio-profile-container-btns" aria-label="{{ trans('langPortfolio') }}">
-    <div class='{{ $container }} padding-default'>
-        <div class="brief-profile-container-btns">
-            {{-- Buttons --}}
-            <div class='row row-cols-lg-3 row-cols-1 g-3' aria-label="{{ trans('langProfileLinks') }}">
-                <div class="col">
-                    <a class="dashboard-card-btn profile-btn brief-profile-btn text-decoration-none h-100" href="{{ $urlAppend }}main/profile/display_profile.php">
-                        <span class="icon-circle">
-                            <i class="fa-solid fa-user"></i>
-                        </span>
-                        <span>
-                            <strong>{{ trans('langMyProfile') }}</strong>
-                            <small>{{ trans('langViewEditProfile') }}</small>
-                        </span>
-                        <i class="fa-solid fa-chevron-right arrow"></i>
-                    </a>
+            <div class="col-xl-3 col-md-6 col-12 d-flex justify-content-xl-center justify-content-md-end justify-content-center align-items-center mt-md-0 mt-4">
+                <div>
+                    @if(!get_config('show_always_collaboration'))
+                    <div class="d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0">
+                        <div>{!! trans('langSumCoursesEnrolled') !!}: &nbsp;{{ $num_of_courses }}</div>
+                    </div>
+                    @endif
+                    @if(get_config('show_collaboration'))
+                    <div class="d-flex justify-content-start align-items-center gap-2 portfolio-texts mb-0">
+                        <div>{!! trans('langSumCollaborationEnrolled') !!}: &nbsp;{{ $num_of_collaborations }}</div>
+                    </div>
+                    @endif
+                    <p class="small-text Neutral-900-cl mb-0 portofolio-text-intro">
+                        {{ trans('langProfileLastVisit') }}: &nbsp;<span class="TextBold small-text">{{ format_locale_date(strtotime($last_login)) }}</span>
+                    </p>
                 </div>
-                <div class="col">
-                    <a class="dashboard-card-btn stats-btn brief-profile-btn text-decoration-none h-100" href="{{ $urlAppend }}modules/usage/index.php?t=u">
-                        <span class="icon-circle">
-                            <i class="fa-solid fa-chart-bar"></i>
-                        </span>
-                        <span>
-                            <strong>{{ trans('langMyStats') }}</strong>
-                            <small>{{ trans('langViewEditMyStats') }}</small>
-                        </span>
-                        <i class="fa-solid fa-chevron-right arrow"></i>
+            </div>
+            <ul style="list-style-type: none;" class="col-xl-5 col-md-12 col-12 d-flex justify-content-xl-end justify-content-md-start justify-content-center align-items-center gap-2 flex-wrap mt-xl-0 mt-4" aria-label="{{ trans('langProfileLinks') }}">
+                <li class="nav-item" aria-label="{{ trans('langMyProfile') }}">
+                    <a class="btn myProfileBtn nav-link" href="{{ $urlAppend }}main/profile/display_profile.php">
+                        {{ trans('langMyProfile') }}
                     </a>
-                </div>
-                <div class="col">
+                </li>
+                <li class="nav-item" aria-label="{{ trans('langMyStats') }}">
+                    <a class="btn myProfileBtn nav-link" href="{{ $urlAppend }}modules/usage/index.php?t=u">
+                        {{ trans('langMyStats') }}
+                    </a>
+                </li>
+                <li class="nav-item">
                     @if ((isset($is_admin) and $is_admin) or
                             (isset($is_power_user) and $is_power_user) or
                             (isset($is_usermanage_user) and $is_usermanage_user) or
                             (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                        <a class="dashboard-card-btn admin-btn brief-profile-btn text-decoration-none h-100" href="{{ $urlAppend }}modules/admin/index.php">
-                            <span class="icon-circle">
-                                <i class="fa-solid fa-screwdriver-wrench"></i>
-                            </span>
-                            <span>
-                                <strong>{{ trans('langAdminTool') }}</strong>
-                                <small>{{ trans('langSettingsAdminTool') }}</small>
-                            </span>
-                            <i class="fa-solid fa-chevron-right arrow"></i>
-                        </a>
+                                <a class="btn myProfileBtn nav-link" href="{{ $urlAppend }}modules/admin/index.php">
+                                    {{ trans('langAdminTool') }}
+                                </a>
                     @elseif ($_SESSION['status'] == USER_STUDENT)
-                        <a class="dashboard-card-btn admin-btn brief-profile-btn text-decoration-none h-100" href="{{ $urlAppend }}modules/auth/courses.php">
-                            <span class="icon-circle">
-                                <i class="fa-regular fa-pen-to-square"></i>
-                            </span>
-                            <span>
-                                <strong>{{ trans('langRegister') }}</strong>
-                                <small>@if (!get_config('show_always_collaboration')) {{ trans('langRegisterToCourse') }} @else {{ trans('langRegisterToCollab') }} @endif</small>
-                            </span>
-                            <i class="fa-solid fa-chevron-right arrow"></i>
-                        </a>
-                    @elseif ($_SESSION['status'] == USER_TEACHER)
-                        <a id="btn_create_course" class="dashboard-card-btn admin-btn brief-profile-btn text-decoration-none h-100" href="{{ $urlAppend }}modules/create_course/create_course.php">
-
-                            <span class="icon-circle">
-                                <i class="fa-solid fa-book-open"></i>
-                            </span>
-                            <span>
-                                <strong>{{ trans('langCreate') }}</strong>
-                                <small>@if (!get_config('show_always_collaboration')) {{ trans('langAddNewCourse') }} @else {{ trans('langAddNewCollab') }} @endif</small>
-                            </span>
-                            <i class="fa-solid fa-chevron-right arrow"></i>
-                        </a>
+                            <a class="btn myProfileBtn nav-link" href="{{ $urlAppend }}modules/auth/formuser.php">
+                                {{ trans('langMyRequests') }}
+                            </a>
                     @endif
-                </div>
-            </div>
+                </li>
+            </ul>
         </div>
     </div>
 </section>
@@ -610,8 +533,18 @@
                                 {{ trans('langMyCollaborations') }}&nbsp;
                                 ({{ $num_of_collaborations }})
                             @endif
-
                         </h2>
+                        <div class='d-flex mt-md-0 mt-3'>
+                            <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
+                                <i class="fa-regular fa-pen-to-square"></i>&nbsp;
+                                {{ trans('langRegister') }}
+                            </a>
+                            @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
+                                <a id="btn_create_course" class="btn submitAdminBtnDefault" href="{{ $urlAppend }}modules/create_course/create_course.php">
+                                    <i class="fa-solid fa-plus"></i>&nbsp;{{ trans('langCreate') }}
+                                </a>
+                            @endif
+                        </div>
                     </div>
                     <div class='card-body px-0'>
                         @if(Session::has('message'))
