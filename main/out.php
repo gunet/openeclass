@@ -24,10 +24,10 @@ require_once 'modules/progress/process_functions.php';
 
 if (isset($_GET['i'])) {
     $i = $_GET['i'];
-    $sql = Database::get()->querySingle("SELECT cert_id, cert_title, cert_issuer, cert_message, template_id, user_fullname, UNIX_TIMESTAMP(assigned) AS cert_date, expires "
+    $sql = Database::get()->querySingle("SELECT cert_id, cert_title, cert_issuer, cert_message, template_id, user_id, UNIX_TIMESTAMP(assigned) AS cert_date, expires "
                                         . "FROM certified_users WHERE identifier = ?s", $i);
     if ($sql) {
-        $username = $sql->user_fullname;
+        $userid = $sql->user_id;
         $certificate_id = $sql->cert_id;
         $certificate_title = $sql->cert_title;
         $certificate_message = $sql->cert_message;
@@ -38,7 +38,7 @@ if (isset($_GET['i'])) {
         if (!is_null($certificate_expiration_date) and $certificate_expiration_date < date('Y-m-d H:i:s')) {
             echo "<div align='center'><h2>Το πιστοποιητικό που είχατε αποκτήσει έχει λήξει!</h2></div>";
         } else {
-            cert_output_to_pdf($certificate_id, $username, $certificate_title, $certificate_message, $certificate_issuer, $certificate_date, $certificate_template_id, $i);
+            cert_output_to_pdf($certificate_id, $userid, $certificate_title, $certificate_message, $certificate_issuer, $certificate_date, $certificate_template_id, $i);
         }
     }
 }

@@ -4803,7 +4803,12 @@ function display_user_progress_details($element, $element_id, $user_id): void
             $template_filename  = $template_details[$template_name];
             $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
             if (file_exists($webDir . CERT_TEMPLATE_PATH . $thumbnail_filename)) {
-                $cert_thumbnail_url = $urlServer . CERT_TEMPLATE_PATH . q($thumbnail_filename);
+                $fq = Database::get()->querySingle("SELECT id, `filename` FROM certificate_template WHERE id = ?d", $cert_data->template);
+                if (!str_contains($fq->filename, '.html')) { // new way
+                    $cert_thumbnail_url =getFilenames(true, $fq->id, 'thumbnail');
+                } else { // old way
+                    $cert_thumbnail_url = $urlServer . CERT_TEMPLATE_PATH . q($thumbnail_filename);
+                }
                 if ($is_editor) {
                     $img_html = "<img alt='$template_name' src='$cert_thumbnail_url' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
                 } else {
