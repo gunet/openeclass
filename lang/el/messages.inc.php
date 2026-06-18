@@ -1775,6 +1775,7 @@ $langCourseRegPeriod = "Περίοδος εγγραφών στο $langsCourse";
 $langCourseRegPeriodHasNotStarted = "Η περίοδος εγγραφών στο $langsCourse δεν έχει ξεκινήσει ή έχει ολοκληρωθεί.";
 $langUseOfCoby = "Χρήση του εργαλείου σχεδιασμού μαθημάτων Cadmos / Coby";
 $langUploadCadmosFile = 'Ανέβασμα αρχείου Cadmos (.cdm)';
+$langGoToCoby = 'Μετάβαση στο Coby';
 
 // Admin mutiple course creation
 $langMultiCourse = "Μαζική δημιουργία $langsOfCourses";

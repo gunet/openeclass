@@ -7309,6 +7309,7 @@ $langCobyLongDescription = "Enable use of Cadmos / Coby LDT in $langsCourses.";
 $langCobyUrl = "Cadmos / Coby URL";
 $langCobySecret = "Shared Secret";
 $langCobySecretInfo = "The shared secret key for authenticating requests to Coby";
+$langGoToCoby = 'Start Coby';
 $langStickyNotes = "Sticky Notes";
 $langStickyNotesTopic = "Topic";
 $langStickyNotesTopics = "Topics";

@@ -741,13 +741,13 @@
                                     <input type="hidden" name="email" value="{{ $coby_email }}">
                                     <input type="hidden" name="timestamp" value="{{ $coby_timestamp }}">
                                     <input type="hidden" name="token" value="{{ $coby_token }}">
-                                    <button type="submit" class="btn submitAdminBtnDefault" aria-label="{{ trans('langFinalize') }}">
-                                        {{ trans('langFinalize') }}
+                                    <button type="submit" class="btn submitAdminBtnDefault" aria-label="{{ trans('langGoToCoby') }}">
+                                        {{ trans('langGoToCoby') }}
                                     </button>
                                 </form>
                             @else
-                                <a class='btn submitAdminBtnDefault' href='{{ $coby_url }}' aria-label='{{ trans('langFinalize') }}'>
-                                    {{ trans('langFinalize') }}
+                                <a class='btn submitAdminBtnDefault' href='{{ $coby_url }}' aria-label='{{ trans('langGoToCoby') }}'>
+                                    {{ trans('langGoToCoby') }}
                                 </a>
                             @endif
                         </div>
