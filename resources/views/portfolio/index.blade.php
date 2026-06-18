@@ -459,7 +459,7 @@
 
 <section class="portfolio-profile-container" aria-label="{{ trans('langPortfolio') }}" style="padding-top: 80px;">
     <h1 class="visually-hidden">{{ trans('langPortfolio') }}</h1>
-    <div class="container padding-default">
+    <div class="{{ $container }} padding-default">
         <div class="row row-cols-xl-3 row-cols-md-2 row-cols-1">
             <div class="col-xl-4 col-md-6 d-flex col-12 justify-content-md-start justify-content-center align-items-center">
                 <div class="d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3">

@@ -4023,6 +4023,20 @@ body .delThemeBtn{
   height: 24px !important;
 }
 
+@media (max-width: 991px) {
+    .portfolio-profile-container {
+        min-height: 96px;
+        padding: 0px 8px 0px 8px;
+        background-color: #F7F9FE;
+    }
+}
+@media (min-width: 992px) {
+    .portfolio-profile-container {
+        min-height: 96px;
+        background-color: #F7F9FE;
+    }
+}
+
 
 /**********************************************************************************************************************/
 /************************************************* HOMEPAGE ***********************************************************/

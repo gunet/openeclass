@@ -1117,7 +1117,7 @@ if (isset($_POST['optionsSave'])) {
             }
         $logo_imageUploadBriefProfilePortfolio .= "<input type='hidden' name='imageUploadBriefProfilePortfolio' value='$theme_options_styles[imageUploadBriefProfilePortfolio]'>";
     } else {
-       $logo_imageUploadBriefProfilePortfolio = "<label class='control-label-notes mb-2 me-2' for='imageUploadBriefProfilePortfolio' aria-label='$langLogo'>$langBgImageBasicUserInfo</label><input type='file' name='imageUploadBriefProfilePortfolio' id='imageUploadBriefProfilePortfolio'>";
+       $logo_imageUploadBriefProfilePortfolio = "<label class=' mb-2 me-2' for='imageUploadBriefProfilePortfolio' aria-label='$langLogo'>$langBgImageBasicUserInfo</label><input type='file' name='imageUploadBriefProfilePortfolio' id='imageUploadBriefProfilePortfolio'>";
     }
 
     $action_bar .= action_bar(array(
@@ -1890,7 +1890,7 @@ function build_header() {
                             </div>
                             <div class='col-sm-12 logo-container d-none mt-4'>
                                 <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                                    <label for='BgColorContainerLogo' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                                    <label for='BgColorContainerLogo' class=' mb-2 me-2'>$langBgColor:</label>
                                     <input name='BgColorContainerLogo' type='text' class='form-control colorpicker' id='BgColorContainerLogo' value='$theme_options_styles[BgColorContainerLogo]'>
                                 </div>
                             </div>

@@ -107,6 +107,20 @@ function theme_initialization() {
 
         if(!empty($theme_options_styles['BriefProfilePortfolioBgColor']) && !empty($theme_options_styles['BriefProfilePortfolioBgColor_gr'])){
             $new_gradient_str_bpr = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[BriefProfilePortfolioBgColor], $theme_options_styles[BriefProfilePortfolioBgColor_gr])";
+            // old settings . It will be removed.
+            $styles_str .= "
+                .portfolio-profile-container{
+                    background: $new_gradient_str_bpr;
+                }
+            ";
+            /////////////////////////////////////
+            if (!isset($theme_options_styles['imageUploadBriefProfilePortfolio'])) {
+                $styles_str .= "
+                    .portfolio-profile-container .padding-default{
+                        background: $new_gradient_str_bpr;
+                    }
+                ";
+            }
             if(isset($theme_options_styles['imageUploadBriefProfilePortfolio'])){
                 $urlThData = $urlAppend . 'courses/theme_data/' . $theme_id;
                 $brief_profile_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
