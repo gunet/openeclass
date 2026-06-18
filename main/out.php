@@ -24,10 +24,10 @@ require_once 'modules/progress/process_functions.php';
 
 if (isset($_GET['i'])) {
     $i = $_GET['i'];
-    $sql = Database::get()->querySingle("SELECT cert_id, cert_title, cert_issuer, cert_message, template_id, user_id, UNIX_TIMESTAMP(assigned) AS cert_date, expires "
+    $sql = Database::get()->querySingle("SELECT cert_id, cert_title, cert_issuer, cert_message, template_id, user_fullname, UNIX_TIMESTAMP(assigned) AS cert_date, expires "
                                         . "FROM certified_users WHERE identifier = ?s", $i);
     if ($sql) {
-        $userid = $sql->user_id;
+        $username = $sql->user_fullname;
         $certificate_id = $sql->cert_id;
         $certificate_title = $sql->cert_title;
         $certificate_message = $sql->cert_message;
