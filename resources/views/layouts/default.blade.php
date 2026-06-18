@@ -166,9 +166,9 @@
             </div>
         @endif
 
-        @unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
+        @if(isset($_SESSION['safe_exam_browser_view']) || !isset($_SESSION['mobile']))
             @include('layouts.partials.navheadDesktop', ['logo_img' => $logo_img])
-        @endunless
+        @endif
 
         @yield('content')
 

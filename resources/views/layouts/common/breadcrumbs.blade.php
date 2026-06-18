@@ -1,5 +1,13 @@
-@unless(isset($_SESSION['safe_exam_browser_view']))
-    <div class='col-12 breadcrumbs-container @if(!$course_code) d-flex justify-content-md-start justify-content-start @endif overflow-hidden'>
+@if(isset($_SESSION['safe_exam_browser_view']))
+    <style>
+        .breadcrumbs-container a {
+            pointer-events: none;
+            color: #999 !important;
+            opacity: 0.7;
+        }
+    </style>
+@endif
+<div class='col-12 breadcrumbs-container @if(!$course_code) d-flex justify-content-md-start justify-content-start @endif overflow-hidden'>
         <div class='breadcrumbs-init d-inline-flex align-items-top overflow-hidden w-100'>
             <!-- this is toggle-button in breadcrumb -->
             @if($course_code and !$is_in_tinymce and $currentCourseName and !isset($_GET['fromFlipped']) and !isset($_SESSION['mobile']))
@@ -53,4 +61,3 @@
             </div>
         @endif
    @endif
-@endunless
