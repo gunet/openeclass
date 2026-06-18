@@ -114,9 +114,10 @@ if ($u) {
         $data['current_auth'] = 1;
         $data['auth_names'][1] = get_auth_info(1);
         foreach (get_auth_active_methods() as $auth) {
-            if ($auth < 8) {
+	    $auth_name = $auth_ids[$auth];
+            if (!in_array($auth_name, $hybridAuthMethods)) {
                 $data['auth_names'][$auth] = get_auth_info($auth);
-                if ($info->password == $auth_ids[$auth]) {
+                if ($info->password == $auth_name) {
                     $data['current_auth'] = $auth;
                 }
             }
@@ -318,7 +319,7 @@ if ($u) {
                                 am = ?s,
                                 verified_mail = ?d,
                                 whitelist = ?s,
-                                disable_course_registration = ?d            
+                                disable_course_registration = ?d
                           WHERE id = ?d",
             $lname,
             $fname,
