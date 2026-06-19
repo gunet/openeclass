@@ -44,33 +44,7 @@
             });
         }
 
-        function popover_init() {
-            $('[data-bs-toggle="popover"]').on('click',function(e){
-                e.preventDefault();
-            }).popover();
-            var click_in_process = false;
-            var hidePopover = function () {
-                if (!click_in_process) {
-                    $(this).popover('hide');
-                }
-            }
-                , togglePopover = function () {
-                $(this).popover('toggle');
-                $('#action_button_menu').parent().parent().addClass('menu-popover');
-            };
-            $('.menu-popover').popover().on('click', togglePopover).on('blur', hidePopover);
-            $('.menu-popover').on('shown.bs.popover', function () {
-                $('.popover').mousedown(function () {
-                    click_in_process = true;
-                });
-                $('.popover').mouseup(function () {
-                    click_in_process = false;
-                    $(this).popover('hide');
-                });
-                act_confirm();
-            });
 
-        }
 
         /*
             Ref: https://datatables.net/forums/discussion/77095/bootstrap-5-tooltips-stay-on-screen-when-datatable-reloads
@@ -219,7 +193,6 @@
                 },
                 @endif
                 fnDrawCallback: function( oSettings ) {
-                    popover_init();
                     tooltip_init();
                     $('.table_td_body').each(function() {
                         $(this).trunk8({

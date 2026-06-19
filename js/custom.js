@@ -50,7 +50,6 @@ $(document).ready(function(){
 
     act_confirm();
     tooltip_init();
-    popover_init();
     truncate_toggle('.more_less_btn', '#truncated', '#not_truncated', '#descr_content');
     validator_rubric();
     nextAuthedicationMethod();
@@ -163,35 +162,6 @@ function act_confirm() {
             }
         });
     });
-}
-
-function popover_init() {
-
-    $('[data-bs-toggle="popover"]').on('click',function(e){
-        e.preventDefault();
-    }).popover();
-    var click_in_process = false;
-    var hidePopover = function () {
-        if (!click_in_process) {
-            $(this).popover('hide');
-        }
-    }
-    , togglePopover = function () {
-        $(this).popover('toggle');
-        $('#action_button_menu').parent().parent().addClass('menu-popover');
-    };
-    $('.menu-popover').popover({html:true}).on('click', togglePopover).on('blur', hidePopover);
-    $('.menu-popover').on('shown.bs.popover', function () {
-        $('.popover').mousedown(function () {
-            click_in_process = true;
-        });
-        $('.popover').mouseup(function () {
-            click_in_process = false;
-            $(this).popover('hide');
-        });
-        act_confirm();
-    });
-
 }
 
 function tooltip_init() {

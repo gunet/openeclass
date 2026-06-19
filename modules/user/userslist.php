@@ -112,7 +112,6 @@ $head_content .= "
                 'sScrollX': true,
                 'fnDrawCallback': function( oSettings ) {
                     tooltip_init();
-                    popover_init();
                 },
                 ajax: {
                     url: '$_SERVER[REQUEST_URI]',

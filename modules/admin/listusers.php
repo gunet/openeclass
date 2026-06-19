@@ -522,13 +522,14 @@ $head_content .= "<script>
                              .appendTo( $(column.footer()).empty() );
             },
             'fnDrawCallback': function( oSettings ) {
-                popover_init();
+                
             },
             'createdRow': function(row, data, dataIndex) {
                 if (data[6] == 1) {
                     $(row). addClass('not_visible');
                 }
             },
+            'bStateSave': true,
             'bProcessing': true,
             'bServerSide': true,
             'searchDelay': 1000,
