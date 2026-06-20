@@ -1,7 +1,7 @@
 <?php
 
 define('ECLASS_VERSION', 'test');
-define('BASE_DIR', dirname(__DIR__));
+define('BASE_DIR', dirname(__DIR__, 2));
 
 require BASE_DIR . '/vendor/autoload.php';
 
