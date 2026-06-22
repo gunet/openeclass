@@ -3,6 +3,8 @@
 chdir(get_base_path());
 require_once 'include/main_lib.php';
 
+umask(0022);
+
 $webDir = '.';
 
 $command_line = (php_sapi_name() == 'cli' && !isset($_SERVER['REMOTE_ADDR']));
@@ -41,6 +43,9 @@ foreach(['frame.bundle.js', 'main.bundle.js', 'fonts', 'images', 'styles'] as $f
 removeDir('js/mathjax');
 mkdir('js/mathjax');
 recurse_copy('node_modules/mathjax', 'js/mathjax');
+removeDir('resources/fonts/mathjax-newcm-font');
+mkdir('resources/fonts/mathjax-newcm-font', recursive: true);
+recurse_copy('node_modules/@mathjax/mathjax-newcm-font', 'resources/fonts/mathjax-newcm-font');
 
 removeDir('js/video.js');
 mkdir('js/video.js');

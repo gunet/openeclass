@@ -114,6 +114,21 @@
     @endif
 
     @if (file_exists('js/mathjax/tex-chtml.js'))
+        <script>
+          window.MathJax = {
+            loader: {
+              paths: {
+                '@mathjax': '{{ $urlAppend }}resources/fonts',
+                'mathjax-newcm': '{{ $urlAppend }}resources/fonts/mathjax-newcm-font',
+                '@mathjax/mathjax-newcm-font': '{{ $urlAppend }}resources/fonts/mathjax-newcm-font'
+              }
+            },
+            chtml: {
+              fontURL: '{{ $urlAppend }}resources/fonts/mathjax-newcm-font/chtml/woff2',
+              dynamicPrefix: '{{ $urlAppend }}resources/fonts/mathjax-newcm-font/chtml/dynamic'
+            }
+          };
+        </script>
         <script type="text/javascript" id="MathJax-script" async src="{{ $urlAppend }}js/mathjax/tex-chtml.js"></script>
     @endif
 
@@ -235,7 +250,7 @@
                     inputTreeModal.focus();
                 });
             }
-            
+
             document.addEventListener('keydown', function(event) {
                 const activeElement = document.activeElement;
                 const modalBootBox = document.querySelector('.bootbox.show');
