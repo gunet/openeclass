@@ -13,6 +13,7 @@ syntax: regexp
 ^js/h5p-standalone
 ^js/recordrtc
 ^js/video.js
+^resources/fonts/mathjax-newcm-font
 
 ^composer\.phar
 ^storage/views/
