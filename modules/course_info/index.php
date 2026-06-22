@@ -95,6 +95,7 @@ $isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_cer
 $data['disable_visibility'] = $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 if (isset($_POST['submit'])) {
+    //print_a($_POST);die;
     $view_type = $_POST['view_type'];
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
@@ -277,9 +278,9 @@ if (isset($_POST['submit'])) {
                 setting_set(SETTING_OFFLINE_COURSE, 0, $course_id);
             }
             if (isset($_POST['disable_log_course_user_requests'])) {
-                setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, 1, $course_id);
-            } else {
                 setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, 0, $course_id);
+            } else {
+                setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, 1, $course_id);
             }
             if (isset($_POST['f_radio'])) {
                 setting_set(SETTING_COURSE_FORUM_NOTIFICATIONS, 1, $course_id);
