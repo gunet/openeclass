@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0, .st1 {
+        fill: none;
+      }
+
+      .st1 {
+        mix-blend-mode: multiply;
+        opacity: .2;
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 89.14px;
+      }
+
+      .st2 {
+        isolation: isolate;
+      }
+
+      .st3 {
+        fill: #3fa9f5;
+      }
+
+      .st4 {
+        fill: #fff;
+      }
+
+      .st5 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="st0" width="500" height="500" rx="120" ry="120"/>
+    </clipPath>
+  </defs>
+  <g class="st2">
+    <g id="background">
+      <rect class="st3" width="500" height="500" rx="120" ry="120"/>
+    </g>
+    <g id="icon">
+      <g class="st5">
+        <polyline class="st1" points="388.77 -48.34 250 263.58 111.23 -48.34"/>
+      </g>
+      <circle class="st4" cx="250" cy="250" r="147.8"/>
+      <path class="st3" d="M259.94,144.83l29.48,50.91,57.52,12.3c8.64,1.85,12.05,12.34,6.15,18.92l-39.31,43.77,6.07,58.51c.91,8.79-8.02,15.27-16.09,11.69l-53.77-23.86-53.77,23.86c-8.07,3.58-17-2.9-16.09-11.69l6.07-58.51-39.31-43.77c-5.9-6.57-2.49-17.07,6.15-18.92l57.52-12.3,29.48-50.91c4.43-7.64,15.46-7.64,19.89,0Z"/>
+    </g>
+  </g>
+</svg>

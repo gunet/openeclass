@@ -2418,10 +2418,15 @@ $db->query("CREATE TABLE `certificate_template` (
         ON UPDATE CASCADE
 ) $tbl_options");
 
+$db->query("CREATE TABLE `badge_icon_category` (
+    `id` MEDIUMINT not null auto_increment primary key,
+    `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci not null
+) $tbl_options");
+
 $db->query("CREATE TABLE `badge_icon` (
     `id` MEDIUMINT not null auto_increment primary key,
     `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci not null,
-    `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
+    `category` MEDIUMINT not null,
     `filename` varchar(255)
 ) $tbl_options");
 

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        mix-blend-mode: multiply;
+        opacity: .2;
+      }
+
+      .st1 {
+        isolation: isolate;
+      }
+
+      .st2 {
+        fill: #fff;
+      }
+
+      .st3 {
+        fill: #bdccd4;
+      }
+    </style>
+  </defs>
+  <g class="st1">
+    <g id="background">
+      <rect class="st3" width="500" height="500" rx="120" ry="120"/>
+    </g>
+    <g id="icon">
+      <circle class="st2" cx="392.47" cy="441.69" r="14.02"/>
+      <circle class="st2" cx="429.72" cy="315.33" r="33.25"/>
+      <circle class="st2" cx="88.53" cy="109.82" r="33.25"/>
+      <circle class="st2" cx="239.51" cy="66.59" r="12.64"/>
+      <circle class="st2" cx="340.6" cy="359.22" r="12.64"/>
+      <circle class="st2" cx="148.32" cy="199.6" r="18.02"/>
+      <circle class="st2" cx="205.92" cy="441.69" r="18.62"/>
+      <circle class="st2" cx="61.26" cy="322.71" r="13.3"/>
+      <path class="st0" d="M403.05,234.6c-76.33,75.33-223.86,146.59-285.03,174.28-9.82,4.44-19.91-5.65-15.47-15.47,27.87-61.57,99.89-210.65,175.77-286.53,34.88-34.88,91.44-34.86,126.29.06,35.04,35.1,33.74,92.82-1.56,127.66Z"/>
+      <circle class="st2" cx="341.44" cy="169.99" r="69.32"/>
+    </g>
+  </g>
+</svg>

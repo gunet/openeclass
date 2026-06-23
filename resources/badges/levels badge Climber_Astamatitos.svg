@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0, .st1 {
+        fill: none;
+      }
+
+      .st1 {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 18px;
+      }
+
+      .st2 {
+        fill: #bdccd4;
+      }
+
+      .st3 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="st0" width="500" height="500" rx="120" ry="120"/>
+    </clipPath>
+  </defs>
+  <g id="background">
+    <rect class="st2" width="500" height="500" rx="120" ry="120"/>
+  </g>
+  <g id="icon">
+    <g class="st3">
+      <path class="st1" d="M366.54,235.81c82.06-90.01,42.53-160.18,42.53-160.18,0,0-73.52-32.88-155.58,57.13-37.17,40.77-61.41,85-68.69,120.29l68.29,62.26c34.46-10.5,76.27-38.71,113.44-79.49Z"/>
+      <path class="st1" d="M248.19,138.7s-64.33-5.09-123.36,59.66"/>
+      <line class="st1" x1="150.27" y1="221.55" x2="176.71" y2="192.56"/>
+      <path class="st1" d="M361.1,241.64s11,63.58-48.03,128.33"/>
+      <line class="st1" x1="287.64" y1="346.78" x2="314.07" y2="317.78"/>
+      <path class="st1" d="M213.09,327.2s-179.25,158.96,94.6,182.91"/>
+      <path class="st1" d="M155.48,332.5s-130.49,153.66,108.55,184.26"/>
+      <circle class="st1" cx="345.04" cy="145.26" r="30.97"/>
+    </g>
+  </g>
+</svg>

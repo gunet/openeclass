@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #433eac;
+      }
+
+      .st1 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 16px;
+      }
+    </style>
+  </defs>
+  <g id="background">
+    <rect class="st0" width="500" height="500" rx="120" ry="120"/>
+  </g>
+  <g id="icon">
+    <polygon class="st1" points="250 180.75 268.42 230.53 318.2 248.95 268.42 267.37 250 317.15 231.58 267.37 181.8 248.95 231.58 230.53 250 180.75"/>
+    <polygon class="st1" points="349.3 96.63 360.21 126.1 389.67 137 360.21 147.91 349.3 177.37 338.4 147.91 308.93 137 338.4 126.1 349.3 96.63"/>
+    <polygon class="st1" points="124.67 103.11 135.57 132.58 165.04 143.49 135.57 154.39 124.67 183.86 113.76 154.39 84.29 143.49 113.76 132.58 124.67 103.11"/>
+    <polygon class="st1" points="124.67 330.66 135.57 360.13 165.04 371.03 135.57 381.94 124.67 411.4 113.76 381.94 84.29 371.03 113.76 360.13 124.67 330.66"/>
+    <polygon class="st1" points="364.25 330.66 375.16 360.13 404.63 371.03 375.16 381.94 364.25 411.4 353.35 381.94 323.88 371.03 353.35 360.13 364.25 330.66"/>
+    <circle class="st1" cx="217.62" cy="91.02" r="2.24"/>
+    <circle class="st1" cx="412.46" cy="254.72" r="3.55"/>
+    <circle class="st1" cx="107.66" cy="264.38" r="2.02"/>
+    <circle class="st1" cx="243.06" cy="426.72" r="2.74"/>
+    <circle class="st1" cx="313.57" cy="302.91" r="4.64"/>
+    <circle class="st1" cx="421.44" cy="303.71" r="5.43"/>
+    <circle class="st1" cx="69.64" cy="180.62" r="3.24"/>
+  </g>
+</svg>

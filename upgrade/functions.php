@@ -260,16 +260,54 @@ function installCertTemplates($root_dir) {
  * install ready to use badge icons
  */
 function installBadgeIcons($root_dir) {
-    $cert_default_dir = $root_dir . "/resources/img/game";
-    foreach (glob("$cert_default_dir/*.png") as $icon) {
-        $iconname = preg_replace('|.*/(.*)\.png|', '$1', $icon);
-        $filename = $iconname . '.png';
-        if (!copy($icon, $root_dir . BADGE_TEMPLATE_PATH . $filename)) {
-            die("Error copying badge icon!");
+
+    $mapping_file = $root_dir . '/resources/badges/badges_mapping.json';
+    if (!file_exists($mapping_file)) {
+        return;
+    }
+    
+    $json_data = file_get_contents($mapping_file);
+    $badges = json_decode($json_data, true);
+    
+    if (empty($badges)) {
+        return;
+    }
+
+    $categories_map = [];
+
+    foreach ($badges as $badge) {
+        $filename_no_ext = $badge['filename'];
+
+        $existing = Database::get()->querySingle("SELECT id FROM badge_icon WHERE filename = ?s", $filename_no_ext);
+        if ($existing) {
+            continue;
         }
+
+        $filename_with_ext = $filename_no_ext . '.svg';
+        $icon_path = $root_dir . "/resources/badges/" . $filename_with_ext;
+        
+        if (file_exists($icon_path)) {
+            if (!copy($icon_path, $root_dir . BADGE_TEMPLATE_PATH . $filename_with_ext)) {
+                die("Error copying badge icon: " . $filename_with_ext);
+            }
+        }
+        
+        $category_name = $badge['category'];
+        if (!isset($categories_map[$category_name])) {
+            $cat_row = Database::get()->querySingle("SELECT id FROM badge_icon_category WHERE name = ?s", $category_name);
+            if ($cat_row) {
+                $categories_map[$category_name] = $cat_row->id;
+            } else {
+                $categories_map[$category_name] = Database::get()->query("INSERT INTO badge_icon_category (name) VALUES (?s)", $category_name)->lastInsertID;
+            }
+        }
+        $cat_id = $categories_map[$category_name];
+
+        $name_serialized = serialize(['el' => $badge['gr'], 'en' => $badge['en']]);
+        
         Database::get()->query("INSERT INTO badge_icon
-            (name, description, filename) VALUES (?s, '', ?s)",
-            $iconname, $filename);
+            (name, category, filename) VALUES (?s, ?d, ?s)",
+            $name_serialized, $cat_id, $filename_no_ext);
     }
 }
 
@@ -4110,6 +4148,20 @@ function upgrade_to_4_4($tbl_options) : void
     if (!DBHelper::fieldExists('certified_users', 'add_my_profile')) {
         Database::get()->query("ALTER TABLE certified_users ADD add_my_profile INT NOT NULL DEFAULT 0");
     }
+
+    if (!DBHelper::tableExists('badge_icon_category')) {
+        Database::get()->query("CREATE TABLE `badge_icon_category` (
+            `id` MEDIUMINT not null auto_increment primary key,
+            `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci not null
+        ) $tbl_options");
+    }
+
+    if (DBHelper::fieldExists('badge_icon', 'description')) {
+        Database::get()->query("ALTER TABLE `badge_icon` CHANGE `description` `category` MEDIUMINT not null");
+    }
+
+    global $webDir;
+    installBadgeIcons($webDir);
 }
 /**
  * @brief OpenBadges Backpack Integration - Database Migration
