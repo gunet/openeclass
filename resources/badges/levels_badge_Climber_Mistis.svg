@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #3fa9f5;
+      }
+
+      .st1 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 18px;
+      }
+    </style>
+  </defs>
+  <g id="background">
+    <rect class="st0" width="500" height="500" rx="120" ry="120"/>
+  </g>
+  <g id="icon">
+    <g>
+      <path class="st1" d="M369.24,222.68h-64.35c0-29.29-23.83-53.11-53.11-53.11s-53.11,23.83-53.11,53.11h-64.35c0-64.77,52.69-117.46,117.46-117.46s117.46,52.69,117.46,117.46Z"/>
+      <rect class="st1" x="304.89" y="222.68" width="64.35" height="172.09"/>
+      <rect class="st1" x="134.32" y="222.68" width="64.35" height="172.09"/>
+      <line class="st1" x1="251.78" y1="105.22" x2="251.78" y2="394.78"/>
+      <line class="st1" x1="112.34" y1="394.78" x2="391.22" y2="394.78"/>
+      <line class="st1" x1="264.33" y1="279.74" x2="264.33" y2="299.29"/>
+      <line class="st1" x1="239.23" y1="279.74" x2="239.23" y2="299.29"/>
+    </g>
+  </g>
+</svg>

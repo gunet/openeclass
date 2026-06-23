@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fff;
+        stroke-width: 5px;
+      }
+
+      .st0, .st1 {
+        stroke-linecap: round;
+      }
+
+      .st0, .st1, .st2 {
+        stroke: #fff;
+        stroke-linejoin: round;
+      }
+
+      .st3, .st2 {
+        fill: #26bbbf;
+      }
+
+      .st1 {
+        fill: none;
+      }
+
+      .st1, .st2 {
+        stroke-width: 13px;
+      }
+    </style>
+  </defs>
+  <g id="background">
+    <rect class="st3" width="500" height="500" rx="120" ry="120"/>
+  </g>
+  <g id="icon">
+    <path class="st1" d="M250,74.42h0c11.87,0,21.5,9.64,21.5,21.5v329.66h-43.01V95.92c0-11.87,9.64-21.5,21.5-21.5Z"/>
+    <polygon class="st1" points="117.21 278.38 228.5 278.38 228.5 219.85 117.21 219.85 77.74 249.11 117.21 278.38"/>
+    <polygon class="st1" points="388.12 302.76 271.5 302.76 271.5 249.11 388.12 249.11 417.38 275.94 388.12 302.76"/>
+    <polyline class="st1" points="228.5 425.58 193.91 389.22 188.15 425.58 139.82 425.58"/>
+    <polyline class="st1" points="271.5 425.58 306.09 389.22 311.85 425.58 360.18 425.58"/>
+    <polygon class="st2" points="358.41 186.6 160.21 186.6 160.21 124.52 358.41 124.52 394.77 155.56 358.41 186.6"/>
+  </g>
+  <g id="stars">
+    <path class="st0" d="M416.9,408.49h0c0-18.32-14.99-33.3-33.3-33.3h0c18.32,0,33.3-14.99,33.3-33.3h0c0,18.32,14.99,33.3,33.3,33.3h0c-18.32,0-33.3,14.99-33.3,33.3Z"/>
+    <path class="st0" d="M107.64,117.18h0c0-18.32-14.99-33.3-33.3-33.3h0c18.32,0,33.3-14.99,33.3-33.3h0c0,18.32,14.99,33.3,33.3,33.3h0c-18.32,0-33.3,14.99-33.3,33.3Z"/>
+  </g>
+</svg>

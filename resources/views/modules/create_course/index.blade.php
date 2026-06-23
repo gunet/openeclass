@@ -735,9 +735,21 @@
                             <button class='btn submitAdminBtnDefault uploadBtn ms-auto me-2'>
                                 {{ trans('langUploadCadmosFile') }}
                             </button>
-                            <a class='btn submitAdminBtnDefault' href='{{ $coby_url }}' aria-label='{{ trans('langFinalize') }}'>
-                                {{ trans('langFinalize') }}
-                            </a>
+                            @if (!empty($coby_secret))
+                                <form action="{{ rtrim($coby_url, '/') }}/api/auth/eclass" method="POST" style="display: inline;">
+                                    <input type="hidden" name="username" value="{{ $coby_username }}">
+                                    <input type="hidden" name="email" value="{{ $coby_email }}">
+                                    <input type="hidden" name="timestamp" value="{{ $coby_timestamp }}">
+                                    <input type="hidden" name="token" value="{{ $coby_token }}">
+                                    <button type="submit" class="btn submitAdminBtnDefault" aria-label="{{ trans('langGoToCoby') }}">
+                                        {{ trans('langGoToCoby') }}
+                                    </button>
+                                </form>
+                            @else
+                                <a class='btn submitAdminBtnDefault' href='{{ $coby_url }}' aria-label='{{ trans('langGoToCoby') }}'>
+                                    {{ trans('langGoToCoby') }}
+                                </a>
+                            @endif
                         </div>
                         <div class='card-body d-none' id='cadmosUpload'>
                             <div class='col-12 drag_and_drop_container d-none mb-3'>

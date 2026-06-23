@@ -104,39 +104,39 @@
                                     else { $dp_role = ''; }
                                 @endphp
                                 @if(!empty($dp_role))
-                                    <span class="badge rounded-pill" style="background:#eff6ff;color:#2563eb;font-weight:500;font-size:0.8rem;">{{ $dp_role }}</span>
+                                    <span class="badge Primary-600-bg rounded-pill" style="font-weight:500;font-size:0.8rem;">{{ $dp_role }}</span>
                                 @endif
                             </div>
                         </div>
 
                         {{-- Action buttons --}}
-                        <div class="d-flex gap-2 flex-wrap flex-shrink-0 align-items-center">
+                        <div class="d-flex gap-2 align-items-center flex-wrap">
                             @if(get_config('eportfolio_enable'))
                                 @if($uid == $id)
-                                    <a class="btn btn-primary d-inline-flex align-items-center gap-2"
+                                    <a class="btn submitAdminBtnDefault d-inline-flex align-items-center gap-2"
                                        href="{{ $urlAppend }}main/eportfolio/index.php">
                                         <i class="fa-solid fa-table-columns"></i>{{ trans('langMyePortfolio') }}
                                     </a>
                                 @elseif($userdata->eportfolio_enable)
-                                    <a class="btn btn-primary d-inline-flex align-items-center gap-2"
+                                    <a class="btn submitAdminBtnDefault d-inline-flex align-items-center gap-2"
                                        href="{{ $urlAppend }}main/eportfolio/index.php?token={{ $userdata->eportfolio_token }}">
                                         <i class="fa-solid fa-table-columns"></i>{{ trans('langMyePortfolio') }}
                                     </a>
                                 @endif
                             @endif
                             @if(get_config('personal_blog'))
-                                <a class="btn btn-outline-secondary d-inline-flex align-items-center gap-2"
+                                <a class="btn submitAdminBtn d-inline-flex align-items-center gap-2"
                                    href="{{ $urlAppend }}modules/blog/index.php?user_id={{ $id }}&token={{ token_generate('personal_blog' . $id) }}">
                                     <i class="fa-regular fa-user"></i>{{ trans('langUserBlog') }}
                                 </a>
                             @endif
                             @if($uid == $id)
-                                <a class="btn btn-outline-secondary d-inline-flex align-items-center gap-2"
+                                <a class="btn submitAdminBtn d-inline-flex align-items-center gap-2"
                                    href="{{ $urlAppend }}main/profile/profile.php?edProfile=true">
                                     <i class="fa-solid fa-pen-to-square"></i>{{ trans('langModProfile') }}
                                 </a>
                             @elseif(get_config('dropbox_allow_personal_messages'))
-                                <a class="btn btn-outline-secondary d-inline-flex align-items-center gap-2"
+                                <a class="btn submitAdminBtn d-inline-flex align-items-center gap-2"
                                    href="{{ $urlAppend }}modules/message/index.php?upload=1&amp;id={{ $id }}">
                                     <i class="fa-solid fa-envelope"></i>{{ trans('langProfileSendMail') }}
                                 </a>
@@ -147,13 +147,6 @@
                 </div>
             </div>
 
-            {{-- Personal Info + Academic Info (left) | About Me + Awards (right) --}}
-            @php
-                $deptIds     = $user->getDepartmentIds($id);
-                $hasCerts    = count($cert_completed) > 0;
-                $hasBadges   = count($badge_completed) > 0;
-                $hasExternal = isset($openBadgesEnabled) && $openBadgesEnabled && isset($badge_external) && count($badge_external) > 0;
-            @endphp
             <div class="col-12 mt-4">
                 <div class="row g-3">
 
@@ -180,12 +173,35 @@
                                         <span class="text-muted" style="font-size:0.9rem;">{{ $userdata->phone }}</span>
                                     </div>
                                 @endif
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="epf-cat-icon flex-shrink-0" style="background:#8b5cf6;">
-                                        <i class="fa-solid fa-lock"></i>
+
+                                @if ($is_user_teacher)
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="epf-cat-icon flex-shrink-0" style="background:#8b5cf6;">
+                                            <i class="fa-solid fa-lock"></i>
+                                        </div>
+                                        <span class="text-muted" style="font-size:0.9rem;">
+                                            @if (!is_null($privilege))
+                                                @switch($privilege)
+                                                    @case(ADMIN_USER)
+                                                        {{ trans('langAdministrator') }}
+                                                        @break
+                                                    @case(POWER_USER)
+                                                        {{ trans('langPowerUser') }}
+                                                    @break
+                                                    @case(USERMANAGE_USER)
+                                                        {{ trans('langManageUser') }}
+                                                    @break
+                                                    @case(DEPARTMENTMANAGE_USER)
+                                                        {{ trans('langManageDepartment') }}
+                                                    @break
+                                                @endswitch
+                                            @else
+                                                {{ trans('langWithRights') }}
+                                            @endif
+                                        </span>
                                     </div>
-                                    <span class="text-muted" style="font-size:0.9rem;">{{ $privilege_message }}</span>
-                                </div>
+                                @endif
+
                                 @if(!empty($userdata->am) and allow_access($userdata->am_public))
                                     <div class="d-flex align-items-center gap-3">
                                         <div class="epf-cat-icon flex-shrink-0" style="background:#06b6d4;">
@@ -213,7 +229,7 @@
                         {{-- Academic Info card --}}
                         @if(!empty($deptIds))
                             <div class="card panelCard rounded-3 epf-panel-card px-4 py-3">
-                                <h2 class="text-heading-h3 mb-3">{{ trans('langAcademicInfo') }}</h2>
+                                <h2 class="text-heading-h3 mb-3">{{ trans('langFaculty') }}</h2>
                                 <div class="d-flex flex-column gap-3">
                                     @foreach($deptIds as $dep)
                                         <div class="d-flex align-items-center gap-3">
@@ -226,7 +242,6 @@
                                 </div>
                             </div>
                         @endif
-
                     </div>
 
                     {{-- Right column: About Me + Awards stacked --}}
@@ -245,17 +260,17 @@
                         {{-- Certificates card --}}
                         @if($hasCerts)
                             <div class="card panelCard epf-panel-card rounded-3 px-4 py-3">
-                                <h2 class="text-heading-h3 mb-3">{{ trans('langMyCertificates') }}</h2>
+                                <h2 class="text-heading-h3 mb-3">{{ trans('langCertificates') }}</h2>
                                 <div class="row row-cols-1 row-cols-md-2 g-3">
                                     @foreach($cert_completed as $certificate)
                                         <div class="col">
                                             <a href="../out.php?i={{ $certificate->identifier }}"
-                                               class="card h-100 border p-3 d-flex flex-row align-items-center gap-3 text-decoration-none epf-award-item">
+                                               class="card h-100 p-3 d-flex flex-row align-items-center gap-3 text-decoration-none epf-award-item">
                                                 <img style="height:65px;width:65px;object-fit:contain;flex-shrink:0;"
                                                      src="{{ $urlServer }}resources/img/game/badge.png"
                                                      alt="{{ trans('langCertificate') }}">
                                                 <div class="text-start">
-                                                    <div class="fw-semibold text-dark mb-1">{!! $certificate->cert_title !!}</div>
+                                                    <div class="fw-semibold mb-1">{!! $certificate->cert_title !!}</div>
                                                     <div class="text-muted small">{!! $certificate->cert_issuer !!}</div>
                                                 </div>
                                             </a>
@@ -272,14 +287,14 @@
                                 <div class="row row-cols-1 row-cols-md-2 g-3">
                                     @foreach($badge_completed as $badge)
                                         <div class="col">
-                                            <div class="card h-100 border p-3 epf-award-item badge-card-wrapper">
+                                            <div class="card h-100 p-3 epf-award-item badge-card-wrapper">
                                                 <a href="{{ $urlAppend }}modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}"
                                                    class="d-flex align-items-center gap-3 text-decoration-none flex-grow-1">
                                                     <img style="height:65px;width:65px;object-fit:contain;flex-shrink:0;"
                                                          src="{{ $urlServer . BADGE_TEMPLATE_PATH . get_badge_filename($badge->badge) }}"
                                                          alt="{{ trans('langBadge') }}">
                                                     <div class="text-start">
-                                                        <div class="fw-semibold text-dark mb-1">{{ ellipsize($badge->title, 40) }}</div>
+                                                        <div class="fw-semibold mb-1">{{ ellipsize($badge->title, 40) }}</div>
                                                         <div class="text-muted small">{!! $badge->issuer !!}</div>
                                                     </div>
                                                 </a>
@@ -359,7 +374,7 @@
                                             @endif
                                             <a href="{{ !empty($badge->external_assertion_id) ? $badge->external_assertion_id : '#' }}"
                                                target="_blank" rel="noopener"
-                                               class="card h-100 border p-3 d-flex flex-row align-items-center gap-3 text-decoration-none epf-award-item">
+                                               class="card h-100 p-3 d-flex flex-row align-items-center gap-3 text-decoration-none epf-award-item">
                                                 @if(!empty($badge->image_url))
                                                     <img style="height:65px;width:65px;object-fit:contain;flex-shrink:0;"
                                                          src="{{ $badge->image_url }}"
@@ -371,7 +386,7 @@
                                                          alt="{{ trans('langExternalBadge') }}">
                                                 @endif
                                                 <div class="text-start">
-                                                    <div class="fw-semibold text-dark mb-1">{{ ellipsize($badge->title, 40) }}</div>
+                                                    <div class="fw-semibold mb-1">{{ ellipsize($badge->title, 40) }}</div>
                                                     <div class="text-muted small">{{ $badge->issuer ?? trans('langUnknownIssuer') }}</div>
                                                 </div>
                                             </a>

@@ -88,6 +88,7 @@
         var table = $('#suppressed_words_table').DataTable({
             processing: true,
             serverSide: true,
+            stateSave: true,
             ajax: {
                 url: '{{ $_SERVER["SCRIPT_NAME"] }}?ajax=1',
                 type: 'POST'
@@ -114,7 +115,7 @@
             ],
             order: [[2, 'desc']],
             drawCallback: function(settings) {
-                popover_init();
+                
             }
         });
 

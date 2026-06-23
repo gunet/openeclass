@@ -91,10 +91,10 @@ function theme_initialization() {
 
         if(isset($theme_options_styles['imageUploadBriefProfilePortfolio'])){
             $urlThData = $urlAppend . 'courses/theme_data/' . $theme_id;
-            $contact_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
+            $brief_profile_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
             $styles_str .= "
-                .portfolio-profile-container .padding-default {
-                    background-image: url($contact_image);
+                .brief-profile-container-info {
+                    background-image: url($brief_profile_image);
                 }
             ";
         }
@@ -107,37 +107,39 @@ function theme_initialization() {
 
         if(!empty($theme_options_styles['BriefProfilePortfolioBgColor']) && !empty($theme_options_styles['BriefProfilePortfolioBgColor_gr'])){
             $new_gradient_str_bpr = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[BriefProfilePortfolioBgColor], $theme_options_styles[BriefProfilePortfolioBgColor_gr])";
+            // old settings . It will be removed.
             $styles_str .= "
                 .portfolio-profile-container{
                     background: $new_gradient_str_bpr;
-                 }
+                }
             ";
+            /////////////////////////////////////
+            if (!isset($theme_options_styles['imageUploadBriefProfilePortfolio'])) {
+                $styles_str .= "
+                    .portfolio-profile-container .padding-default{
+                        background: $new_gradient_str_bpr;
+                    }
+                ";
+            }
             if(isset($theme_options_styles['imageUploadBriefProfilePortfolio'])){
                 $urlThData = $urlAppend . 'courses/theme_data/' . $theme_id;
-                $contact_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
+                $brief_profile_image = "$urlThData/$theme_options_styles[imageUploadBriefProfilePortfolio]";
                 $styles_str .= "
-                    .portfolio-profile-container{
-                        background: transparent !important;
-                    }
+                    .brief-profile-container-info,
                     .portfolio-profile-container .padding-default {
                         background-image: linear-gradient(
                                             135deg,
                                             $theme_options_styles[BriefProfilePortfolioBgColor],
                                             $theme_options_styles[BriefProfilePortfolioBgColor_gr]
-                                        ), url($contact_image);
+                                        ), url($brief_profile_image);
 
-                        background-size:
-                            100% 100%,
-                            100% 100% !important;
-                        background-position:
-                            center center,
-                            center center !important;
-                        background-repeat:
-                            no-repeat,
-                            no-repeat !important;
+                        background-size:100% auto !important;
+                        background-position:center top !important;
+                        background-repeat:no-repeat !important;
                     }
 
                     @media (max-width: 991px) {
+                        .brief-profile-container-info,
                         .portfolio-profile-container .padding-default {
                             background-size:
                                 cover,
@@ -157,6 +159,25 @@ function theme_initialization() {
             }
         }
 
+        if(!empty($theme_options_styles['bgColorContainerPortfolioInfo'])){
+            $styles_str .= "
+                .section-portfolio-profile-container-info {
+                    background: $theme_options_styles[bgColorContainerPortfolioInfo] !important;
+                }
+                .portfolio-profile-container{
+                    background: $theme_options_styles[bgColorContainerPortfolioInfo] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['bgColorSectionPortfolioBtns'])){
+            $styles_str .= "
+                .section-portfolio-profile-container-btns {
+                    background: $theme_options_styles[bgColorSectionPortfolioBtns] !important;
+                }
+            ";
+        }
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ////////////////// TEXT COLOR OF BRIEF PROFILE IN PORTOFOLIO ///////////////////////
@@ -167,11 +188,12 @@ function theme_initialization() {
             $styles_str .= "
                 .portofolio-text-intro{
                     color: $theme_options_styles[BriefProfilePortfolioTextColor] !important;
-                  }
+                }
 
-                  .portfolio-texts *{
+                .portfolio-texts *{
                     color: $theme_options_styles[BriefProfilePortfolioTextColor] !important;
-                  }
+                }
+                
             ";
         }
 
@@ -181,17 +203,29 @@ function theme_initialization() {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
+        if(!empty($theme_options_styles['bgColorContainerPortfolioButtons'])){
+            $styles_str .= "
+                .brief-profile-container-btns{
+                    background-color: $theme_options_styles[bgColorContainerPortfolioButtons] !important;
+                }
+            ";
+        }
+
         if(!empty($theme_options_styles['bgColorPortfolioButtons'])){
             $styles_str .= "
-                .myProfileBtn{
-                    background-color: $theme_options_styles[bgColorPortfolioButtons] !important;
+                .myProfileBtn,
+                .dashboard-card-btn{
+                    background: $theme_options_styles[bgColorPortfolioButtons] !important;
                 }
             ";
         }
 
         if(!empty($theme_options_styles['textColorPortfolioButtons'])){
             $styles_str .= "
-                .myProfileBtn{
+                .myProfileBtn,
+                .dashboard-card-btn strong,
+                .dashboard-card-btn small,
+                .dashboard-card-btn .arrow{
                     color: $theme_options_styles[textColorPortfolioButtons] !important;
                 }
             ";
@@ -200,7 +234,9 @@ function theme_initialization() {
         if(!empty($theme_options_styles['bgHoverColorPortfolioButtons'])){
             $styles_str .= "
                 .myProfileBtn:hover,
-                .myProfileBtn:focus{
+                .myProfileBtn:focus,
+                .dashboard-card-btn:hover,
+                .dashboard-card-btn:focus{
                     background-color: $theme_options_styles[bgHoverColorPortfolioButtons] !important;
                 }
             ";
@@ -729,10 +765,16 @@ function theme_initialization() {
                 .secondary-title,
                 .pg-lvl-name,
                 .lb-rank,
+                .cc-donut-pct,
+                .default-dark-text,
+                .pg-stat-val,
+                .lb-username,
+                .lb-points-label,
+                .up-lb-bar-label,
+                .up-lb-bar-pct,
                 .lb-level-text,
                 .lb-progress-text-val,
                 .lb-progress-pct,
-                .progress-activity-type-label,
                 .progress-activity-name,
                 .progress-activity-criteria,
                 .progress-activity-criteria {
@@ -775,13 +817,32 @@ function theme_initialization() {
                     color:$theme_options_styles[ColorHyperTexts] ;
                 }
 
-                .text-muted{
-                    color:$theme_options_styles[ColorHyperTexts] !important;
-                }
-
                 .showCoursesBars:not(:has(.active)) i,
                 .showCoursesPics:not(:has(.active)) i {
                     color:$theme_options_styles[ColorHyperTexts] ;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['ColorMutedTexts'])){
+            $styles_str .= "
+                .text-muted{
+                    color: $theme_options_styles[ColorMutedTexts] !important;
+                }
+                .text_muted_cl,
+                .progress-activity-type-label,
+                .pg-list-active,
+                .pg-list-sep,
+                .pg-list-meta,
+                .pg-list-bar-label,
+                .pg-list-bar-pct,
+                .pg-progress-text,
+                .pg-progress-pct,
+                .pg-progress-label,
+                .pg-stat-label,
+                .pg-progress-pct,
+                .pg-lvl-pts { 
+                    color: $theme_options_styles[ColorMutedTexts] !important;
                 }
             ";
         }
@@ -833,6 +894,12 @@ function theme_initialization() {
                     color:$theme_options_styles[ColorGreenText];
                     border:1.5px solid $theme_options_styles[ColorGreenText];
                 }
+
+                .lb-row.lb-current-user {
+                    background: transparent;
+                    border: solid 2px $theme_options_styles[ColorGreenText] !important;
+                }
+
             ";
         }
 
@@ -5655,6 +5722,21 @@ function theme_initialization() {
                     border-left: solid 4px $theme_options_styles[BgColorProgressBarAndText] !important;
                 }
 
+                .progress_bar_badges,
+                .progress_bar_certificates,
+                .pg-list-bar-outer,
+                .pg-progress-bar-outer,
+                .up-lb-bar-outer {
+                    background: $theme_options_styles[BgProgressBar] !important;
+                }
+                .progress_bar_fill_badges,
+                .progress_bar_fill_certificates,
+                .pg-list-bar-inner,
+                .pg-progress-bar-inner,
+                .up-lb-bar-inner {
+                    background: $theme_options_styles[BgColorProgressBarAndText] !important;
+                }
+
                 
             ";
         }
@@ -5706,6 +5788,10 @@ function theme_initialization() {
                 .alert-info {
                     background-color:$theme_options_styles[bgAlertInfo];
                 }
+
+                .progress-module .alert-info {
+                    background-color: $theme_options_styles[bgAlertInfo] !important;
+                }
             ";
         }
         if(!empty($theme_options_styles['clAlertInfo'])){
@@ -5738,6 +5824,26 @@ function theme_initialization() {
                     -webkit-appearance: none;
                     -moz-appearance: none;
                     appearance: none;
+                }
+
+                .progress-module .alert-info, 
+                .progress-module .alert-info h1, 
+                .progress-module .alert-info h2, 
+                .progress-module .alert-info h3, 
+                .progress-module .alert-info h4, 
+                .progress-module .alert-info h5, 
+                .progress-module .alert-info h6, 
+                .progress-module .alert-info div, 
+                .progress-module .alert-info small, 
+                .progress-module .alert-info span, 
+                .progress-module .alert-info p, 
+                .progress-module .alert-info b, 
+                .progress-module .alert-info strong, 
+                .progress-module .alert-info li, 
+                .progress-module .alert-info label, 
+                .progress-module .alert-info i, 
+                .progress-module .alert-info svg {
+                    color: $theme_options_styles[clAlertInfo] !important;
                 }
             ";
         }
@@ -5890,6 +5996,9 @@ function theme_initialization() {
         if(!empty($theme_options_styles['borderClAlertInfo'])){
             $styles_str .= "
                 .alert-info {
+                    border: solid 1px $theme_options_styles[borderClAlertInfo] !important;
+                }
+                .progress-module .alert-info {
                     border: solid 1px $theme_options_styles[borderClAlertInfo] !important;
                 }
             ";
@@ -6757,6 +6866,10 @@ function theme_initialization() {
                     background: $theme_options_styles[BgPanels];
                 }
 
+                .progress-activity-card {
+                    background: $theme_options_styles[BgPanels];
+                }
+
 
             ";
         }
@@ -6770,6 +6883,7 @@ function theme_initialization() {
         if(!empty($theme_options_styles['clBorderPanels'])){
             $styles_str .= "
 
+                .card,
                 .user-info-card,
                 .form-homepage-login,
                 .panelCard,
@@ -6865,6 +6979,14 @@ function theme_initialization() {
 
                 .pg-list-card {
                     border: 1px solid $theme_options_styles[clBorderPanels];
+                }
+
+                .progress-activity-card {
+                    border: 1px solid $theme_options_styles[clBorderPanels];
+                }
+
+                .epf-panel-card {
+                    border: 1px solid $theme_options_styles[clBorderPanels] !important;
                 }
 
 
@@ -7083,6 +7205,14 @@ function theme_initialization() {
 
                 .pg-list-card {
                     box-shadow: 0 1px 3px $theme_options_styles[BoxShadowPanels];
+                }
+
+                .progress-activity-card {
+                    box-shadow: 0 1px 3px $theme_options_styles[BoxShadowPanels];
+                }
+
+                .epf-panel-card {
+                    box-shadow: 0 1px 6px $theme_options_styles[BoxShadowPanels] !important;
                 }
 
             ";
@@ -7670,7 +7800,6 @@ function theme_initialization() {
                 .homepage-opencourses-container,
                 .homepage-texts-container,
                 .homepage-login-container,
-                .portfolio-profile-container,
                 .portfolio-courses-container,
                 .main-container,
                 .module-container,
@@ -7841,40 +7970,86 @@ function theme_initialization() {
             $styles_str .= "
 
                 @media (max-width: 991px) {
-                    .portfolio-courses-container {
-                        padding: 0px;
-                    }
+
                     .portfolio-profile-container {
                         padding-top: 56px !important;
                         padding-left: 0px !important;
                         padding-bottom: 0px !important;
                         padding-right: 0px !important;
                     }
+
+                    .section-portfolio-profile-container-info .padding-default {
+                        padding-top: 0px !important;
+                        padding-left: 0px !important;
+                        padding-right: 0px !important;
+                        padding-bottom: 0px !important;
+                    }
+
+                    .section-portfolio-profile-container-btns .padding-default {
+                        padding-top: 0px !important;
+                        padding-left: 0px !important;
+                        padding-right: 0px !important;
+                        padding-bottom: 0px !important;
+                    }
+
+                    .portfolio-courses-container {
+                        padding: 0px;
+                    }
+
+                    .brief-profile-container-info,
+                    .brief-profile-container-btns {
+                        padding: 32px 16px 32px 16px;
+                    }
                 }
                 
                 @media (min-width: 992px) {
 
+                    .portfolio-profile-container .padding-default {
+                        margin-top: 28px !important;
+                        margin-bottom: 28px !important;
+                        padding: 45px 45px !important;
+                        border-radius: 32px !important;
+                    }
+
+                    .section-portfolio-profile-container-info .padding-default {
+                        padding-left: 0px !important;
+                        padding-right: 0px !important;
+                        padding-bottom: 0px !important;
+                    }
+
+                    .section-portfolio-profile-container-btns .padding-default {
+                        padding-top: 0px !important;
+                        padding-left: 0px !important;
+                        padding-right: 0px !important;
+                    }
+
+
                     .main-section .main-container {
                         padding: 45px 45px !important;
                         border-radius: 32px !important;
-                        margin-bottom: 35px !important;
-                        margin-top: 35px !important;
+                        margin-bottom: 28px !important;
+                        margin-top: 28px !important;
                     }
 
                     .module-container .col_maincontent_active {
                         padding: 45px 45px !important;
                     }
 
-                    .portfolio-profile-container .padding-default {
-                        position: relative !important;
-                        overflow: hidden !important;
-                        margin-top: 35px !important;
-                        margin-bottom: 35px !important;
-                        padding: 45px 55px !important;
-                        border-radius: 32px !important;
+                    .brief-profile-container-btns {
+                        border-bottom-left-radius: 32px !important;
+                        border-bottom-right-radius: 32px !important;
+                        padding: 25px 55px !important;
                     }
 
-                    .portfolio-profile-container .padding-default::after {
+                    .brief-profile-container-info {
+                        position: relative !important;
+                        overflow: hidden !important;
+                        padding: 45px 55px !important;
+                        border-top-left-radius: 32px !important;
+                        border-top-right-radius: 32px !important;
+                    }
+
+                    .brief-profile-container-info::after {
                         content:'' !important;
                         position:absolute !important;
                         right:-80px !important;
@@ -7886,15 +8061,12 @@ function theme_initialization() {
 
                     }
                         
-                    .portfolio-profile-container .container.padding-default > * {
-                        position:relative !important;
-                        z-index:2 !important;
-                    }
+                    
 
                     .portfolio-courses-container .padding-default {
                         padding: 45px 55px !important;
                         border-radius: 32px !important;
-                        margin-bottom: 35px !important;
+                        margin-bottom: 28px !important;
                     } 
 
 
@@ -7921,6 +8093,57 @@ function theme_initialization() {
                     setNewCookieSlider('asideBarOn','true',0);
                 });
             </script>";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////// PLATFORM VIEW AS CARD WITHOUS BORDER-RADIUS ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['enable_aside_main_cards_no_border_radius'])){
+            $styles_str .= "
+                @media (min-width: 992px) {
+
+                    .portfolio-profile-container .padding-default {
+                        border-radius: 4px !important;
+                    }
+
+                    .main-section .main-container {
+                        border-radius: 4px !important;
+                    }
+
+                    .brief-profile-container-info {
+                        border-top-left-radius: 4px !important;
+                        border-top-right-radius: 4px !important;
+                    }
+
+                    .brief-profile-container-btns {
+                        border-bottom-left-radius: 4px !important;
+                        border-bottom-right-radius: 4px !important;
+                    }
+
+                    .portfolio-courses-container .padding-default {
+                        border-radius: 4px !important;
+                    } 
+
+
+                    body:has(.sidebar-card) .main-maincontent {
+                        border-top-right-radius: 4px;
+                        border-bottom-right-radius: 4px;
+                    }
+
+                    .sidebar-card .ContentLeftNav {
+                        border-top-left-radius: 4px;
+                        border-bottom-left-radius: 4px;
+                    }
+
+                    .breadcrumbs-init {
+                        border-radius: 4px;
+                    }
+
+                }
+            ";
         }
 
         if(!empty($theme_options_styles['bgColorSectionContainers'])){

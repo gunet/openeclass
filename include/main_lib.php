@@ -4039,13 +4039,8 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 
     $out_primary = $out_secondary = array();
     $i=0;
-    $page_title = "";
 
     $temporary_button_class = "";
-
-    if (isset($pageName) and !empty($pageName) and $page_title_flag) {
-        $page_title = "<div class='form-label TextBold text-capitalize mb-0'><span class='fa-solid fa-check text-success pe-2'></span>".q($pageName)."</div>";
-    }
 
     foreach (array_reverse($options) as $option) {
 
@@ -4200,7 +4195,11 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $pageTitleActive = "";
     if (($action_button || $out) && $i!=0) {
         if(isset($course_code) and $course_code) {
-            $titleHeader = (!empty($pageName) ? q($pageName) : $toolName);
+            if (isset($_SESSION['mobile'])) {
+                $titleHeader = '';
+            } else {
+                $titleHeader = (!empty($pageName) ? q($pageName) : $toolName);
+            }
             if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
                             <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
@@ -4454,7 +4453,7 @@ function getSerializedMessage($message, $lang=null) {
         $lang = $language;
     }
 
-    $data = @unserialize($message);
+    $data = @unserialize($message, ["allowed_classes" => false]);
     // Message is simple string, not serialized array - just return it
     if ($data === false) {
         return $message;
@@ -4463,7 +4462,9 @@ function getSerializedMessage($message, $lang=null) {
     } else {
         if (isset($data[$lang])) {
             return $data[$lang]; // return requested language if possible...
-        } elseif (isset($data['en'])) {
+        } elseif ($lang != $language && isset($data[$language])) {
+			return $data[$language]; // return default language (if different than requested) if possible...
+		} elseif (isset($data['en'])) {
             return $data['en']; // ... else return English message if possible...
         } elseif (isset($data['el'])) {
             return $data['el']; // ... else return Greek message
@@ -4958,11 +4959,12 @@ function login_hook($options) {
 
 function showSecondFactorUserProfile(){
     global $langSFAConf;
+
     $connector = secondfaApp::getsecondfa();
-    if($connector->isEnabled() == true ){
+    if($connector->isEnabled()) {
         return "<div class='form-group'>
-                  <label class='col-sm-2 control-label'>" . $langSFAConf . "</label>
-                  <div class='col-sm-4'>". secondfaApp::showUserProfile($_SESSION['uid']) . "</div>
+                  <strong>" . $langSFAConf . "</strong>
+                  <div class='col-sm-12'>". secondfaApp::showUserProfile($_SESSION['uid']) . "</div>
                 </div>";
     } else {
         return "";
@@ -4975,9 +4977,10 @@ function showSecondFactorUserProfile(){
  * @param  POST variables
  * @return string
  */
-function saveSecondFactorUserProfile(){
+function saveSecondFactorUserProfile() {
+
     $connector = secondfaApp::getsecondfa();
-    if($connector->isEnabled() == true ){
+    if($connector->isEnabled()){
         return secondfaApp::saveUserProfile($_SESSION['uid']);
     } else {
         return "";
@@ -4990,17 +4993,20 @@ function saveSecondFactorUserProfile(){
  *
  * @return string
  */
-function showSecondFactorChallenge(){
+function showSecondFactorChallenge() {
     global $langSFAType;
+
     $connector = secondfaApp::getsecondfa();
-    if($connector->isEnabled() == true ){
+    if($connector->isEnabled()) {
         $challenge = secondfaApp::showChallenge($_SESSION['uid']);
-        if ($challenge!=""){
-            return "<div class='form-group'>
-                    <label class='col-sm-2 control-label'>" . $langSFAType . "</label>
-                    <div class='col-sm-4'>". $challenge . "</div>
+        if ($challenge!="") {
+            return "<div class='col-sm-12 control-label-notes mb-2'>
+                        $langSFAType
+                    </div>
+                    <div class='col-sm-4'>
+                        $challenge
                     </div>";
-        }else{
+        } else {
             return "";
         }
     } else {
@@ -5561,7 +5567,7 @@ function get_suppressed_words_data($action = 'words') {
 }
 
 /**
- * Return a set of strings from a messages file for a specific language.
+ * Return a set of strings from a message file for a specific language.
  *
  * This function returns for a given language code and a set of language variables
  * their values from the respective messages file.
@@ -5571,26 +5577,43 @@ function get_suppressed_words_data($action = 'words') {
  * @return array $arr The array with the values of the language variables for the given language.
  */
 function load_lang_strings(string $lang, array $strings) : array {
-    global $language_codes;
+    global $language_codes, $webDir;
+
     //add global variables to suppress warnings for undefined variables in messages.inc.php files
-    global $siteName, $InstitutionUrl, $Institution ;
+    $siteName = $GLOBALS['siteName'];
+    $InstitutionUrl = $GLOBALS['InstitutionUrl'];
+    $Institution = $GLOBALS['Institution'];
+
     $arr = array();
     
     if (isset($language_codes[$lang])) {
         //add common.inc.php to prevent warnings for variables that are undefined in messages.inc.php
-        if (file_exists('lang/'.$lang.'/common.inc.php')) {
-            include 'lang/'.$lang.'/common.inc.php';
+        include "$webDir/lang/$lang/common.inc.php";
+        
+        $extra_messages = "config/{$language_codes[$lang]}.inc.php";
+        if (file_exists($extra_messages)) {
+            include $extra_messages;
+        } else {
+            $extra_messages = false;
         }
 
-        if (file_exists('lang/'.$lang.'/messages.inc.php')) {
-            include 'lang/'.$lang.'/messages.inc.php';
-            
-            foreach ($strings as $str) {
-                if (isset($$str)) {
-                    $arr[$str] = $$str;
-                }
+        include "$webDir/lang/$lang/messages.inc.php";
+
+        if (file_exists('config/config.php')) {
+            if(get_config('show_always_collaboration') and get_config('show_collaboration')){
+              include "$webDir/lang/$lang/messages_collaboration.inc.php";
             }
         }
+        if ($extra_messages) {
+            include $extra_messages;
+        }
+            
+        foreach ($strings as $str) {
+            if (isset($$str)) {
+                $arr[$str] = $$str;
+            }
+        }
+        
     }
 
     return $arr;

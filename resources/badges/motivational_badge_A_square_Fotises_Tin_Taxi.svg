@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #ff931e;
+      }
+
+      .st1 {
+        mix-blend-mode: multiply;
+        opacity: .2;
+      }
+
+      .st2 {
+        isolation: isolate;
+      }
+
+      .st3 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g class="st2">
+    <g id="background">
+      <rect class="st0" width="500" height="500" rx="120" ry="120"/>
+    </g>
+    <g id="icon">
+      <circle class="st3" cx="250" cy="250" r="117.2"/>
+      <g>
+        <ellipse class="st1" cx="250" cy="80.39" rx="15.2" ry="26.44"/>
+        <ellipse class="st1" cx="250" cy="419.61" rx="15.2" ry="26.44"/>
+      </g>
+      <g>
+        <ellipse class="st1" cx="165.19" cy="103.11" rx="15.2" ry="26.44" transform="translate(-29.42 96.41) rotate(-30)"/>
+        <ellipse class="st1" cx="334.81" cy="396.89" rx="15.2" ry="26.44" transform="translate(-153.59 220.58) rotate(-30)"/>
+      </g>
+      <g>
+        <ellipse class="st1" cx="103.11" cy="165.19" rx="15.2" ry="26.44" transform="translate(-91.51 171.89) rotate(-60)"/>
+        <ellipse class="st1" cx="396.89" cy="334.81" rx="15.2" ry="26.44" transform="translate(-91.51 511.12) rotate(-60)"/>
+      </g>
+      <g>
+        <ellipse class="st1" cx="80.39" cy="250" rx="26.44" ry="15.2"/>
+        <ellipse class="st1" cx="419.61" cy="250" rx="26.44" ry="15.2"/>
+      </g>
+      <g>
+        <ellipse class="st1" cx="103.11" cy="334.81" rx="26.44" ry="15.2" transform="translate(-153.59 96.41) rotate(-30)"/>
+        <ellipse class="st1" cx="396.89" cy="165.19" rx="26.44" ry="15.2" transform="translate(-29.42 220.58) rotate(-30)"/>
+      </g>
+      <g>
+        <ellipse class="st1" cx="165.19" cy="396.89" rx="26.44" ry="15.2" transform="translate(-261.12 341.51) rotate(-60)"/>
+        <ellipse class="st1" cx="334.81" cy="103.11" rx="26.44" ry="15.2" transform="translate(78.11 341.51) rotate(-60)"/>
+      </g>
+    </g>
+  </g>
+</svg>

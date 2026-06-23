@@ -27,7 +27,8 @@ require_once('include/tools.php');
 $groupsArr = array();
 $toolsArr = array();
 
-$toolArr = lessonToolsMenu(false);
+$toolArr = lessonToolsMenu(false, true);
+
 // course tools
 $offset = 1;
 for ($i = 0; $i < count($toolArr); $i++) {
@@ -47,6 +48,9 @@ for ($i = 0; $i < count($toolArr); $i++) {
             $tool->link = $toolArr[$i][2][$j];
             $tool->img = $toolArr[$i][3][$j];
             $tool->active = visible_module($toolArr[$i][4][$j], $course_id);
+            if ($tool->img == 'fa-external-link') { // ignore external links
+                continue;
+            }
             $toolsArr[$id][] = $tool;
         }
     }

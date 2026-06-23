@@ -52,8 +52,6 @@ $error_message = null;
 set_time_limit(0);
 $tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_unicode_520_ci ENGINE=InnoDB';
 
-load_global_messages();
-
 if (isset($_POST['action']) and $_POST['action'] == 'preview_theme') {
     if (get_config('theme_options_id') != $_POST['selected_theme_id']) {
         set_config('theme_options_id',$_POST['selected_theme_id']);
@@ -104,7 +102,7 @@ if ($command_line or $ajax_call) {
 
     if ($ajax_call) {
         set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-            fatal_error("$errno: $errstr (line: $errline)");
+            fatal_error("$errno: $errstr (line: $errline) in $errfile");
         });
     }
 
@@ -157,7 +155,7 @@ if (!DBHelper::fieldExists('exercise_answer_record', 'centainty')) {
                 steps_finished();
 
             } elseif ($version === '3.3') {
-                upgrade_to_3_3($tbl_options);
+                upgrade_to_3_3();
                 steps_finished();
 
             } elseif ($version === '3.4') {

@@ -28,7 +28,9 @@ if (isset($_GET['term'])) {
     $q = $_GET['term'];
 
     $courselist = Database::get()->queryArray("SELECT id, title, public_code FROM course
-        WHERE title LIKE ?s OR code LIKE ?s OR public_code LIKE ?s
+        WHERE title LIKE ?s
+        OR CONVERT(code USING utf8mb4) LIKE ?s 
+        OR public_code LIKE ?s
         ORDER BY title, public_code, code
         LIMIT 30", "%$q%", "$q%", "$q%");
 

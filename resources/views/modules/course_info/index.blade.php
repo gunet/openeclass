@@ -336,8 +336,7 @@
                                             <label for='fcode'
                                                    class='col-sm-12 control-label-notes'>{{ trans('langCode') }}</label>
                                             <div class='col-sm-12'>
-                                                <input type='text' class='form-control' name='fcode' id='fcode'
-                                                       value='{{ $public_code }}'>
+                                                <input type='text' class='form-control' name='fcode' id='fcode' value='{{ $public_code }}'>
                                             </div>
                                         </div>
 
@@ -444,7 +443,9 @@
                                         @endif
 
                                         <div class='form-group mt-4'>
-                                            <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langConfidentiality') }}</div>
+                                            <div class='col-sm-12 control-label-notes mb-2'>
+                                                {{ trans('langConfidentiality') }}
+                                            </div>
                                             <div class='col-sm-12'>
 
                                                 <div class='radio mb-3'>
@@ -653,7 +654,7 @@
                                         @if (course_status($course_id) == COURSE_CLOSED)
                                             <div class='checkbox mb-2 mt-2'>
                                                 <label class='label-container' aria-label="{{ trans('langSelect') }}">
-                                                    <input type='checkbox' name='disable_log_course_user_requests' @unless (!setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) checked @endunless >
+                                                    <input type='checkbox' name='disable_log_course_user_requests' @if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id) == 0) checked @endif>
                                                     <span class='checkmark'></span>{{ trans('langCourseUserRequests') }}
                                                 </label>
                                             </div>

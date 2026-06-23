@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 13.81px;
+      }
+
+      .st0, .st1 {
+        fill: #7b9048;
+      }
+    </style>
+  </defs>
+  <g id="background">
+    <rect class="st1" width="500" height="500" rx="120" ry="120"/>
+  </g>
+  <g id="icon">
+    <g>
+      <polygon class="st0" points="193.4 403.08 239.51 345.32 154.58 261.36 97.35 308.12 193.4 403.08"/>
+      <g>
+        <path class="st0" d="M178.68,158.58l-33.37,33.76c-16.53,16.72-16.37,43.67.35,60.19l102.79,101.62c16.72,16.53,43.67,16.37,60.19-.35l75.06-75.92"/>
+        <path class="st0" d="M301.08,80.05h0c36.23,0,65.65,29.42,65.65,65.65v98.37c0,36.23-29.42,65.65-65.65,65.65h0c-32.72,0-59.29-26.57-59.29-59.29v-111.08c0-32.72,26.57-59.29,59.29-59.29Z" transform="translate(-48.24 274.25) rotate(-45.33)"/>
+        <path class="st0" d="M148.97,188.63l29.91-30.26c14.87-15.04,39.12-15.18,54.16-.31l21.39,21.14c15.88,15.69,16.02,41.29.33,57.16h0c-15.69,15.88-41.29,16.02-57.16.33l-23.14-22.88"/>
+      </g>
+      <line class="st0" x1="141.08" y1="351.35" x2="166.91" y2="325.22"/>
+      <line class="st0" x1="186.32" y1="292.73" x2="197.94" y2="280.97"/>
+      <line class="st0" x1="206.57" y1="312.75" x2="226.59" y2="292.5"/>
+    </g>
+  </g>
+</svg>

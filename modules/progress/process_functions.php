@@ -189,7 +189,6 @@ function add_multimedia_to_certificate($element, $element_id): void
             }
         }
     }
-    return;
 }
 
 
@@ -217,7 +216,6 @@ function add_lp_to_certificate($element, $element_id, $activity_type): void
                 $_POST['threshold'][$data]);
         }
     }
-    return;
 }
 
 /**
@@ -241,7 +239,6 @@ function add_lp_lessonstatus_to_certificate($element, $element_id): void
                 LearningPathLessonStatusEvent::ACTIVITY);
         }
     }
-    return;
 }
 
 /**
@@ -1411,7 +1408,7 @@ function delete_certificate($element, $element_id): bool
                 return false;
             }
         }
-        if ($delete_cert) {  // delete certificate activities
+        if ($delete_cert || count($r) == 0) {  // delete certificate activities. When there are no activities simply delete the certificate
             foreach ($r as $act) {
                 delete_activity('certificate', $element_id, $act->id);
             }
@@ -1430,7 +1427,7 @@ function delete_certificate($element, $element_id): bool
                 return false;
             }
         }
-        if ($delete_badge) {  // delete badge activities
+        if ($delete_badge || count($r) == 0) {  // delete badge activities. When there are no activities simply delete badge
             foreach ($r as $act) {
                 delete_activity('badge', $element_id, $act->id);
             }
@@ -1884,7 +1881,7 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         } else {
             $cert_file = $q->filename;
         }
-        
+
         $student_name = uid_to_name($user);
         $orientation = $q->orientation;
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . certificate_link($certificate_id, $user, true);
@@ -1894,10 +1891,23 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $certificate_title = get_cert_title('certificate', $certificate_id);
         $certificate_issuer = get_cert_issuer('certificate', $certificate_id);
         $certificate_message = get_cert_message('certificate', $certificate_id);
-        $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template
-                                                    JOIN certificate ON certificate_template.id = certificate.template
-                                               AND certificate.id = ?d", $certificate_id);
-        $cert_file = $q->filename;
+
+        // $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template
+        //                                             JOIN certificate ON certificate_template.id = certificate.template
+        //                                        AND certificate.id = ?d", $certificate_id);
+
+        $q = Database::get()->querySingle("SELECT ct.id, ct.filename, ct.orientation FROM certificate_template ct
+                                                    JOIN certificate c ON ct.id = c.template
+                                               AND c.id = ?d", $certificate_id);
+
+        if (!str_contains($q->filename, '.html')) { // new way
+            $newCertificates = true;
+            $cert_path = getFilepaths(true, $q->id, '.html');
+            $cert_file = getFilenames(true, $q->id, '.html');
+        } else { // old way
+            $cert_file = $q->filename;
+        }
+        
         $orientation = $q->orientation;
         $student_name = uid_to_name($user);
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . certificate_link($certificate_id, $user, true);
@@ -1905,10 +1915,23 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $cert_date = ($cert_date && $cert_date->cert_date) ? $cert_date->cert_date : time();
         $certificate_date = format_locale_date($cert_date, 'full', false);
     } else { // logged out
-        $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template
-                                                JOIN certified_users ON certificate_template.id = certified_users.template_id
-                                                AND certified_users.identifier = ?s", $certificate_identifier);
-        $cert_file = $q->filename;
+
+        // $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template
+        //                                         JOIN certified_users ON certificate_template.id = certified_users.template_id
+        //                                         AND certified_users.identifier = ?s", $certificate_identifier);
+
+        $q = Database::get()->querySingle("SELECT ct.id, ct.filename, ct.orientation FROM certificate_template ct
+                                            JOIN certified_users cu ON ct.id = cu.template_id
+                                            AND cu.identifier = ?s", $certificate_identifier);
+
+        if (!str_contains($q->filename, '.html')) { // new way
+            $newCertificates = true;
+            $cert_path = getFilepaths(true, $q->id, '.html');
+            $cert_file = getFilenames(true, $q->id, '.html');
+        } else { // old way
+            $cert_file = $q->filename;
+        }
+
         $orientation = $q->orientation;
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . $urlServer . "main/out.php?i=" .$certificate_identifier;
         $student_name = $user;

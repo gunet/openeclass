@@ -53,7 +53,7 @@
                                             @endphp
                                             <tr data-repo-id='{{ $repo->id }}' class='align-middle'>
                                                 <td class='align-middle'>
-                                                    <i class='fa-brands {{ $typeInfo['icon'] }} me-2'></i>
+                                                    <i class='{{ $typeInfo['icon'] }} me-2'></i>
                                                     <strong>{{ $repo->name }}</strong>
                                                 </td>
                                                 <td class='align-middle'>
@@ -79,23 +79,23 @@
                                                 </td>
                                                 <td class='text-end align-middle'>
                                                     <div class='btn-group btn-group-sm' style='gap: 0.25rem;'>
-                                                        <button type='button' class='btn btn-info test-repo-btn px-3 py-2 text-white' 
+                                                        <button type='button' class='btn btn-info test-repo-btn px-3 py-2 text-white'
                                                                 data-repo-id='{{ $repo->id }}'
                                                                 title='{{ trans('langTestConnection') }}'>
                                                             <i class='fa fa-plug text-white'></i>
                                                         </button>
-                                                        <button type='button' class='btn btn-{{ $repo->enabled ? 'warning' : 'success' }} toggle-repo-btn px-3 py-2 text-white' 
+                                                        <button type='button' class='btn btn-{{ $repo->enabled ? 'warning' : 'success' }} toggle-repo-btn px-3 py-2 text-white'
                                                                 data-repo-id='{{ $repo->id }}'
                                                                 data-enabled='{{ $repo->enabled ? 0 : 1 }}'
                                                                 title='{{ $repo->enabled ? trans('langDeactivate') : trans('langActivate') }}'>
                                                             <i class='fa fa-toggle-{{ $repo->enabled ? 'on' : 'off' }} text-white'></i>
                                                         </button>
-                                                        <a href='{{ $urlAppend }}modules/admin/externalreposconf.php?edit={{ $repo->id }}' 
+                                                        <a href='{{ $urlAppend }}modules/admin/externalreposconf.php?edit={{ $repo->id }}'
                                                            class='btn btn-primary px-3 py-2 text-white'
                                                            title='{{ trans('langEdit') }}'>
                                                             <i class='fa fa-edit text-white'></i>
                                                         </a>
-                                                        <button type='button' class='btn btn-danger delete-repo-btn px-3 py-2 text-white' 
+                                                        <button type='button' class='btn btn-danger delete-repo-btn px-3 py-2 text-white'
                                                                 data-repo-id='{{ $repo->id }}'
                                                                 data-repo-name='{{ $repo->name }}'
                                                                 title='{{ trans('langDelete') }}'>
@@ -131,7 +131,7 @@
                                     <div class='card h-100'>
                                         <div class='card-body'>
                                             <h5 class='card-title'>
-                                                <i class='fa-brands {{ $info['icon'] }} me-2'></i>
+                                                <i class='{{ $info['icon'] }} me-2'></i>
                                                 {{ $info['name'] }}
                                             </h5>
                                             <p class='card-text text-muted small'>{{ $info['description'] }}</p>
@@ -215,16 +215,16 @@
 $(document).ready(function() {
     var csrfToken = '{{ $_SESSION['csrf_token'] }}';
     var deleteRepoId = null;
-    
+
     // Toggle repository enabled status
     $('.toggle-repo-btn').on('click', function() {
         var btn = $(this);
         var repoId = btn.data('repo-id');
         var enabled = btn.data('enabled');
         var icon = btn.find('i');
-        
+
         icon.removeClass('fa-toggle-on fa-toggle-off').addClass('fa-spinner fa-spin');
-        
+
         $.post('{{ $urlAppend }}modules/admin/externalreposconf.php', {
             action: 'toggle',
             id: repoId,
@@ -254,14 +254,14 @@ $(document).ready(function() {
             alert('{{ trans('langError') }}');
         });
     });
-    
+
     // Delete repository
     $('.delete-repo-btn').on('click', function() {
         deleteRepoId = $(this).data('repo-id');
         $('#deleteRepoName').text($(this).data('repo-name'));
         $('#deleteRepoModal').modal('show');
     });
-    
+
     $('#confirmDeleteRepo').on('click', function() {
         if (deleteRepoId) {
             $.post('{{ $urlAppend }}modules/admin/externalreposconf.php', {
@@ -283,30 +283,30 @@ $(document).ready(function() {
             });
         }
     });
-    
+
     // Test connection
     $('.test-repo-btn').on('click', function() {
         var btn = $(this);
         var repoId = btn.data('repo-id');
         var icon = btn.find('i');
-        
+
         icon.removeClass('fa-plug').addClass('fa-spinner fa-spin');
-        
+
         $.post('{{ $urlAppend }}modules/admin/externalreposconf.php', {
             action: 'test',
             id: repoId,
             token: csrfToken
         }, function(response) {
             icon.removeClass('fa-spinner fa-spin').addClass('fa-plug');
-            
+
             var content = '';
             if (response.success) {
                 content = '<div class="alert alert-success"><i class="fa fa-check-circle me-2"></i>{{ trans('langConnectionSuccess') }}</div>';
             } else {
-                content = '<div class="alert alert-danger"><i class="fa fa-times-circle me-2"></i>' + 
+                content = '<div class="alert alert-danger"><i class="fa fa-times-circle me-2"></i>' +
                           (response.message || '{{ trans('langConnectionFailed') }}') + '</div>';
             }
-            
+
             $('#testResultContent').html(content);
             $('#testResultModal').modal('show');
         }, 'json').fail(function() {
@@ -319,4 +319,3 @@ $(document).ready(function() {
 </script>
 
 @endsection
-

@@ -198,6 +198,12 @@ if (!isset($_POST['create_course'])) {
         $data['default_access'] = intval(get_config('default_course_access', COURSE_REGISTRATION));
 
         // check if Coby service is enabled
+        $data['coby_url'] = null;
+        $data['coby_secret'] = null;
+        $data['coby_username'] = null;
+        $data['coby_email'] = null;
+        $data['coby_timestamp'] = null;
+        $data['coby_token'] = null;
         if (get_config("ext_coby_enabled")) {
             if (get_config('ext_coby_enabled_all_users', 1)) {
                 $data['is_coby_enabled'] = true;
@@ -205,6 +211,22 @@ if (!isset($_POST['create_course'])) {
                 $data['is_coby_enabled'] = true;
             }
             $data['coby_url'] = get_config('ext_coby_url');
+            if ($data['is_coby_enabled']) {
+                $coby_secret = get_config('ext_coby_secret');
+                if (!empty($coby_secret)) {
+                    $userdata = Database::get()->querySingle("SELECT username, email FROM user WHERE id = ?d", $uid);
+                    if ($userdata) {
+                        $timestamp = time();
+                        $payload = "{$userdata->username}|{$userdata->email}|{$timestamp}";
+                        $token = hash_hmac('sha256', $payload, $coby_secret);
+                        $data['coby_secret'] = $coby_secret;
+                        $data['coby_username'] = $userdata->username;
+                        $data['coby_email'] = $userdata->email;
+                        $data['coby_timestamp'] = $timestamp;
+                        $data['coby_token'] = $token;
+                    }
+                }
+            }
         }
 
         // Check if AI service is available

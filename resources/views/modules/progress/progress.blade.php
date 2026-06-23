@@ -173,7 +173,7 @@
 
     <div class="row">
         <div class="badge-container">
-            <h4>{{  trans('langBadges') }}</h4>
+            <div class='text-heading-h4'>{{  trans('langBadges') }}</div>
             <div class="form-wrapper">
             @if (count($game_badge) > 0)
                 <div class="clearfix">
@@ -218,7 +218,7 @@
 
     <div class="row">
         <div class="badge-container">
-            <h4>{{  trans('langCertificates') }}</h4>
+            <div class='text-heading-h4'>{{  trans('langCertificates') }}</div>
             <div class="form-wrapper">
             @if (count($game_certificate) > 0)
                 <div class="clearfix">
@@ -230,7 +230,7 @@
                         <div class="col-xs-12 col-sm-6 col-xl-4">
                         <a style="display:inline-block; width: 100%" href="index.php?course={{$course_code}}&amp;certificate_id={{$certificate->certificate}}&amp;u={{$certificate->user}}">
                             <div class="certificate_panel">
-                                <h4 class="certificate_panel_title">{{ $certificate->title }}</h4>
+                                <div class="certificate_panel_title text-heading-h4">{{ $certificate->title }}</div>
                                 <div class="certificate_panel_date">{{ $dateAssigned }}</div>
                                 <div class="certificate_panel_issuer">{{ $certificate->issuer }}</div>
                                 <div class="certificate_panel_viewdetails">
