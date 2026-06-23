@@ -180,6 +180,23 @@ if ($data['userdata']) {
                                         . "FROM certified_users "
                                         . "WHERE add_my_profile = ?d AND (user_fullname = ?s OR user_id = ?d)", 1, uid_to_name($uid, 'fullname'), $uid);
 
+    if (count($data['cert_completed']) > 0) {
+        foreach ($data['cert_completed'] as $d) {
+            $cert_file = '';
+            $certFilename = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $d->template_id)->filename;
+            if (!str_contains($certFilename, '.html')) { // new way
+                $cert_file = getFilenames(true, $d->template_id, 'thumbnail');
+            } else { // old way
+                $f = explode('.html', $certFilename);
+                if (count($f) > 0) {
+                    $cert_file = $urlServer . "courses/user_progress_data/cert_templates/" . $f[0] . "_thumbnail.png";
+                }
+            }
+            $d->cert_path = $cert_file;
+        }
+    }
+
+
     // Check if OpenBadges is enabled
     $openBadgesApp = ExtAppManager::getApp('openbadges');
     $openBadgesEnabled = $openBadgesApp && $openBadgesApp->isEnabled();

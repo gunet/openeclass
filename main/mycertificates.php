@@ -340,9 +340,9 @@ if (count($courses) > 0) {
                                                     <div class='w-75 d-flex justify-content-start align-items-start gap-3 no-completed-cert-col'>
                                                         <img style='width: 50px; height: 50px; margin-top: 5px;' src='{$CertThumb}'>
                                                         <div>
-                                                            <a class='TextBold opacity-help-cert-badges' href= '{$urlServer}modules/progress/index.php?course=$code&amp;certificate_id=$certificate->certificate&amp;u=$uid'>$certificate->title</a> 
-                                                            <p class='small-text text-muted opacity-help-cert-badges'>$course1->title</p>
-                                                            <p class='small-text text-muted opacity-help-cert-badges'>$certificate->issuer</p>
+                                                            <a class='TextBold' href= '{$urlServer}modules/progress/index.php?course=$code&amp;certificate_id=$certificate->certificate&amp;u=$uid'>$certificate->title</a> 
+                                                            <p class='small-text text-muted'>$course1->title</p>
+                                                            <p class='small-text text-muted'>$certificate->issuer</p>
                                                         </div>
                                                     </div>
                                                     <div class='w-25'>
@@ -423,8 +423,6 @@ if (count($courses) > 0) {
                     ";
                 }
 
-                $opacity = !$badge->completed ? 'opacity-help-cert-badges' : '';
-
                 $iconBadge = get_icon_badge($badge->badge);
 
                 $badge_content .= " <div class='col'>";
@@ -435,9 +433,9 @@ if (count($courses) > 0) {
                                                 <div class='w-75 d-flex justify-content-start align-items-start gap-3 no-completed-cert-col'>
                                                     <img style='width: 50px; height: 50px; margin-top: 5px;' src='{$iconBadge}'>
                                                     <div>
-                                                        <a class='TextBold $opacity' href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>$badge->title</a> 
-                                                        <p class='small-text text-muted $opacity'>$course1->title</p>
-                                                        <p class='small-text text-muted $opacity'>$badge->issuer</p>
+                                                        <a class='TextBold' href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>$badge->title</a> 
+                                                        <p class='small-text text-muted'>$course1->title</p>
+                                                        <p class='small-text text-muted'>$badge->issuer</p>
                                                     </div>
                                                 </div>
                                                 <div class='w-25'>";
@@ -480,25 +478,8 @@ if (count($courses) > 0) {
             }
         }
     }
-    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // edw vazeis to teliko ui me certs kai badges
+    // ui certificates and badges
     if (count($sql) == 0 && $counter_game_certificate == 0 && $counter_game_badge == 0) {
         $tool_content .= "
             <div class='col-12'>
