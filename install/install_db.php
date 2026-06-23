@@ -292,9 +292,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_description` (
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE course_import (
-        id INT NOT NULL AUTO_INCREMENT, 
-        course_id INT NOT NULL, 
-        imported_course_id INT NOT NULL, 
+        id INT NOT NULL AUTO_INCREMENT,
+        course_id INT NOT NULL,
+        imported_course_id INT NOT NULL,
         imported DATETIME NOT NULL,
         PRIMARY KEY(id)) $tbl_options");
 
@@ -1020,8 +1020,8 @@ $eportfolio_strings = array(
     'langePortfolioSocialActivitiesDescr', 'langVolunteerActivities', 'langePortfolioVolunteerActivitiesDescr'
 );
 
-$eportfolio = [ 
-    'el' => load_lang_strings('el', $eportfolio_strings), 
+$eportfolio = [
+    'el' => load_lang_strings('el', $eportfolio_strings),
     'en' => load_lang_strings('en', $eportfolio_strings)
 ];
 
@@ -1041,7 +1041,7 @@ $gender_options = [
 ];
 $lang_proficiency_levels = [
     'el' => [
-        $eportfolio['el']['langLangCEFRA1'], 
+        $eportfolio['el']['langLangCEFRA1'],
         $eportfolio['el']['langLangCEFRA2'],
         $eportfolio['el']['langLangCEFRB1'],
         $eportfolio['el']['langLangCEFRB2'],
@@ -1049,7 +1049,7 @@ $lang_proficiency_levels = [
         $eportfolio['el']['langLangCEFRC2']
     ],
     'en' => [
-        $eportfolio['en']['langLangCEFRA1'], 
+        $eportfolio['en']['langLangCEFRA1'],
         $eportfolio['en']['langLangCEFRA2'],
         $eportfolio['en']['langLangCEFRB1'],
         $eportfolio['en']['langLangCEFRB2'],
@@ -2412,9 +2412,9 @@ $db->query("CREATE TABLE `certificate_template` (
     `all_courses` TINYINT not null default 1,
     `department_id` int(11) default null,
     KEY `fk_certificate_template_hierarchy` (`department_id`),
-    CONSTRAINT `fk_certificate_template_hierarchy` 
-        FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`) 
-        ON DELETE SET NULL 
+    CONSTRAINT `fk_certificate_template_hierarchy`
+        FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`)
+        ON DELETE SET NULL
         ON UPDATE CASCADE
 ) $tbl_options");
 
@@ -2426,8 +2426,9 @@ $db->query("CREATE TABLE `badge_icon_category` (
 $db->query("CREATE TABLE `badge_icon` (
     `id` MEDIUMINT not null auto_increment primary key,
     `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci not null,
-    `category` MEDIUMINT not null,
-    `filename` varchar(255)
+    `category` mediumint DEFAULT NULL,
+    `filename` varchar(255),
+    CONSTRAINT FOREIGN KEY (`category`) REFERENCES `badge_icon_category` (`id`)
 ) $tbl_options");
 
 $db->query("CREATE TABLE `certificate` (
@@ -2642,7 +2643,7 @@ $db->query("CREATE TABLE `points_game` (
     index `points_game_course` (`course_id`),
     foreign key (`course_id`) references `course` (`id`)
 ) $tbl_options");
-  
+
 $db->query("CREATE TABLE `points_game_criterion` (
     `id` int(11) not null auto_increment primary key,
     `points_game` int(11) not null,
@@ -2658,7 +2659,7 @@ $db->query("CREATE TABLE `points_game_criterion` (
     `time_period_in_days` int(11),
     foreign key (`points_game`) references `points_game`(`id`)
 ) $tbl_options");
-  
+
 $db->query("CREATE TABLE `points_game_levels` (
     `id` int(11) not null auto_increment primary key,
     `points_game` int(11) not null,
@@ -2666,7 +2667,7 @@ $db->query("CREATE TABLE `points_game_levels` (
     `required_points` int(11) not null,
     foreign key (`points_game`) references `points_game`(`id`)
 ) $tbl_options");
-  
+
 $db->query("CREATE TABLE `user_points_game_criterion` (
     `id` int(11) not null auto_increment primary key,
     `user` int(11) not null,
@@ -2676,7 +2677,7 @@ $db->query("CREATE TABLE `user_points_game_criterion` (
     foreign key (`user`) references `user`(`id`),
     foreign key (`points_game_criterion`) references `points_game_criterion`(`id`)
 ) $tbl_options");
-  
+
 $db->query("CREATE TABLE `user_points_game_points` (
     `id` int(11) not null auto_increment primary key,
     `user` int(11) not null,
@@ -2936,7 +2937,7 @@ $db->query("CREATE TABLE `api_token_course` (
    `token_id` smallint(11) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`token_id`) REFERENCES `api_token` (`id`) ON DELETE CASCADE) 
+    FOREIGN KEY (`token_id`) REFERENCES `api_token` (`id`) ON DELETE CASCADE)
     $tbl_options");
 
 $db->query("CREATE TABLE ai_providers (

@@ -265,10 +265,10 @@ function installBadgeIcons($root_dir) {
     if (!file_exists($mapping_file)) {
         return;
     }
-    
+
     $json_data = file_get_contents($mapping_file);
     $badges = json_decode($json_data, true);
-    
+
     if (empty($badges)) {
         return;
     }
@@ -276,22 +276,21 @@ function installBadgeIcons($root_dir) {
     $categories_map = [];
 
     foreach ($badges as $badge) {
-        $filename_no_ext = $badge['filename'];
+        $filename = $badge['filename'];
 
-        $existing = Database::get()->querySingle("SELECT id FROM badge_icon WHERE filename = ?s", $filename_no_ext);
+        $existing = Database::get()->querySingle("SELECT id FROM badge_icon WHERE filename = ?s", $filename);
         if ($existing) {
             continue;
         }
 
-        $filename_with_ext = $filename_no_ext . '.svg';
-        $icon_path = $root_dir . "/resources/badges/" . $filename_with_ext;
-        
+        $icon_path = $root_dir . "/resources/badges/" . $filename;
+
         if (file_exists($icon_path)) {
-            if (!copy($icon_path, $root_dir . BADGE_TEMPLATE_PATH . $filename_with_ext)) {
-                die("Error copying badge icon: " . $filename_with_ext);
+            if (!copy($icon_path, $root_dir . BADGE_TEMPLATE_PATH . $filename)) {
+                die("Error copying badge icon: " . $filename);
             }
         }
-        
+
         $category_name = $badge['category'];
         if (!isset($categories_map[$category_name])) {
             $cat_row = Database::get()->querySingle("SELECT id FROM badge_icon_category WHERE name = ?s", $category_name);
@@ -304,10 +303,10 @@ function installBadgeIcons($root_dir) {
         $cat_id = $categories_map[$category_name];
 
         $name_serialized = serialize(['el' => $badge['gr'], 'en' => $badge['en']]);
-        
+
         Database::get()->query("INSERT INTO badge_icon
             (name, category, filename) VALUES (?s, ?d, ?s)",
-            $name_serialized, $cat_id, $filename_no_ext);
+            $name_serialized, $cat_id, $filename);
     }
 }
 
@@ -3412,14 +3411,14 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('course_lti_app', 'visible')) {
         Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
     }
-    
+
     if (DBHelper::fieldExists('tc_attendance', 'id')) {
         Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
     if (!DBHelper::fieldExists('exercise_question', 'options')) {
         Database::get()->query("ALTER TABLE exercise_question ADD options TEXT DEFAULT NULL");
     }
-        
+
     if (!DBHelper::fieldExists('h5p_content', 'creator_id')) {
         Database::get()->query("ALTER TABLE h5p_content ADD `creator_id` INT UNSIGNED NOT NULL DEFAULT 0");
     }
@@ -3856,19 +3855,19 @@ function upgrade_to_4_4($tbl_options) : void
 
     $fields = Database::get()->queryArray("SELECT id, shortname, name, description, datatype, data FROM eportfolio_fields");
     $field_shortnames = [
-        'about_me' => 'langAboutMeDescr', 
-        'personal_website' => 'langePortfolioPersonalWebsiteDescr', 
-        'education' => 'langEducationDescr', 
-        'employment' => 'langePortfolioEmploymentDescr', 
-        'certificates_awards' => 'langePortfolioCertificatesAwardsDescr', 
-        'publications' => 'langePortfolioPublicationsDescr', 
-        'personal_goals' => 'langePortfolioPersonalGoalsDescr', 
-        'academic_goals' => 'langePortfolioAcademicGoalsDescr', 
-        'career_goals' => 'langePortfolioCareerGoalsDescr', 
+        'about_me' => 'langAboutMeDescr',
+        'personal_website' => 'langePortfolioPersonalWebsiteDescr',
+        'education' => 'langEducationDescr',
+        'employment' => 'langePortfolioEmploymentDescr',
+        'certificates_awards' => 'langePortfolioCertificatesAwardsDescr',
+        'publications' => 'langePortfolioPublicationsDescr',
+        'personal_goals' => 'langePortfolioPersonalGoalsDescr',
+        'academic_goals' => 'langePortfolioAcademicGoalsDescr',
+        'career_goals' => 'langePortfolioCareerGoalsDescr',
         'personal_skills' => 'langePortfolioPersonalSkillsDescr',
-        'academic_skills' => 'langePortfolioAcademicSkillsDescr', 
-        'career_skills' => 'langePortfolioCareerSkillsDesc', 
-        'social_activities' => 'langePortfolioSocialActivitiesDescr', 
+        'academic_skills' => 'langePortfolioAcademicSkillsDescr',
+        'career_skills' => 'langePortfolioCareerSkillsDesc',
+        'social_activities' => 'langePortfolioSocialActivitiesDescr',
         'volunteer_activities' => 'langePortfolioVolunteerActivitiesDescr'
     ];
     foreach ($fields as $field) {
@@ -4095,10 +4094,10 @@ function upgrade_to_4_4($tbl_options) : void
 
     if (!DBHelper::tableExists('course_import')) {
         Database::get()->query("CREATE TABLE course_import (
-            id INT NOT NULL AUTO_INCREMENT, 
-            course_id INT NOT NULL, 
-            imported_course_id INT NOT NULL, 
-            imported DATETIME NOT NULL, 
+            id INT NOT NULL AUTO_INCREMENT,
+            course_id INT NOT NULL,
+            imported_course_id INT NOT NULL,
+            imported DATETIME NOT NULL,
             PRIMARY KEY(id)
        ) $tbl_options");
     }
@@ -4159,9 +4158,10 @@ function upgrade_to_4_4($tbl_options) : void
     if (DBHelper::fieldExists('badge_icon', 'description')) {
         Database::get()->query("ALTER TABLE `badge_icon` DROP COLUMN `description`");
     }
-    
+
     if (!DBHelper::fieldExists('badge_icon', 'category')) {
-        Database::get()->query("ALTER TABLE `badge_icon` ADD COLUMN `category` MEDIUMINT not null AFTER `name`");
+        Database::get()->query("ALTER TABLE `badge_icon` ADD COLUMN `category` MEDIUMINT DEFAULT NULL AFTER `name`,
+            ADD CONSTRAINT FOREIGN KEY (category) REFERENCES badge_icon_category(id)");
     }
 
     global $webDir;
@@ -4170,7 +4170,7 @@ function upgrade_to_4_4($tbl_options) : void
 /**
  * @brief OpenBadges Backpack Integration - Database Migration
  * Creates tables and fields for external backpack provider integration
- * 
+ *
  * @param $tbl_options
  * @return void
  */
@@ -4245,48 +4245,48 @@ function upgrade_openbadges_backpack($tbl_options): void
 
     // Add external_assertion_id field to user_badge table (for tracking exported badges)
     if (!DBHelper::fieldExists('user_badge', 'external_assertion_id')) {
-        Database::get()->query("ALTER TABLE `user_badge` 
-            ADD `external_assertion_id` VARCHAR(512) DEFAULT NULL 
+        Database::get()->query("ALTER TABLE `user_badge`
+            ADD `external_assertion_id` VARCHAR(512) DEFAULT NULL
             COMMENT 'External assertion ID if published to backpack'");
-        
+
         // Add index for better query performance
         if (!DBHelper::indexExists('user_badge', 'external_assertion_idx')) {
-            Database::get()->query("CREATE INDEX `external_assertion_idx` 
+            Database::get()->query("CREATE INDEX `external_assertion_idx`
                 ON `user_badge` (`external_assertion_id`(255))");
         }
     }
 
     // Ensure badge table has allow_export field (should exist from 3.6, but double-check)
     if (!DBHelper::fieldExists('badge', 'allow_export')) {
-        Database::get()->query("ALTER TABLE `badge` 
-            ADD `allow_export` TINYINT(1) NOT NULL DEFAULT 1 
+        Database::get()->query("ALTER TABLE `badge`
+            ADD `allow_export` TINYINT(1) NOT NULL DEFAULT 1
             COMMENT 'Controls if badge can be exported to external backpack'");
-        
+
         // Add index for filtering exportable badges
         if (!DBHelper::indexExists('badge', 'idx_allow_export')) {
-            Database::get()->query("CREATE INDEX `idx_allow_export` 
+            Database::get()->query("CREATE INDEX `idx_allow_export`
                 ON `badge` (`allow_export`)");
         }
     }
 
     // Create indexes for better performance on backpack operations
     if (!DBHelper::indexExists('user_backpack_connection', 'user_status_idx')) {
-        Database::get()->query("CREATE INDEX `user_status_idx` 
+        Database::get()->query("CREATE INDEX `user_status_idx`
             ON `user_backpack_connection` (`user_id`, `status`)");
     }
 
     if (!DBHelper::indexExists('user_backpack_connection', 'provider_status_idx')) {
-        Database::get()->query("CREATE INDEX `provider_status_idx` 
+        Database::get()->query("CREATE INDEX `provider_status_idx`
             ON `user_backpack_connection` (`backpack_provider_id`, `status`)");
     }
 
     if (!DBHelper::indexExists('user_badge_external', 'collection_idx')) {
-        Database::get()->query("CREATE INDEX `collection_idx` 
+        Database::get()->query("CREATE INDEX `collection_idx`
             ON `user_badge_external` (`external_collection_id`(255))");
     }
 
     if (!DBHelper::indexExists('user_badge_external', 'created_at_idx')) {
-        Database::get()->query("CREATE INDEX `created_at_idx` 
+        Database::get()->query("CREATE INDEX `created_at_idx`
             ON `user_badge_external` (`created_at`)");
     }
 }
@@ -5281,9 +5281,9 @@ function update_minedu_deps()
 function upgrade_external_repositories()
 {
     global $langUpgExternalRepos;
-    
+
     $tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_bin ENGINE=InnoDB';
-    
+
     // Create external_repository table if it doesn't exist
     Database::get()->query("CREATE TABLE IF NOT EXISTS `external_repository` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -5300,7 +5300,7 @@ function upgrade_external_repositories()
         INDEX `idx_type` (`type`),
         INDEX `idx_enabled` (`enabled`)
     ) $tbl_options");
-    
+
     // Create external_resource table if it doesn't exist
     Database::get()->query("CREATE TABLE IF NOT EXISTS `external_resource` (
         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -5334,7 +5334,7 @@ function upgrade_external_repositories()
             ADD COLUMN `rich_preview` tinyint(1) NOT NULL DEFAULT 0
             COMMENT '1 = rich media preview, 0 = plain link preview'");
     }
-    
+
     // Extend external_repository.type enum with new values on existing installs.
     // Idempotent: only runs when the value is missing from the column definition.
     $col = Database::get()->querySingle("
@@ -5357,24 +5357,24 @@ function upgrade_external_repositories()
         AND TABLE_NAME = 'external_resource'
         AND CONSTRAINT_NAME = 'external_resource_ibfk_1'
     ");
-    
+
     if (!$fk_exists) {
-        Database::get()->query("ALTER TABLE `external_resource` 
-            ADD CONSTRAINT `external_resource_ibfk_1` 
+        Database::get()->query("ALTER TABLE `external_resource`
+            ADD CONSTRAINT `external_resource_ibfk_1`
             FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE");
     }
-    
+
     $fk_exists2 = Database::get()->querySingle("
-        SELECT CONSTRAINT_NAME 
-        FROM information_schema.TABLE_CONSTRAINTS 
-        WHERE CONSTRAINT_TYPE = 'FOREIGN KEY' 
-        AND TABLE_NAME = 'external_resource' 
+        SELECT CONSTRAINT_NAME
+        FROM information_schema.TABLE_CONSTRAINTS
+        WHERE CONSTRAINT_TYPE = 'FOREIGN KEY'
+        AND TABLE_NAME = 'external_resource'
         AND CONSTRAINT_NAME = 'external_resource_ibfk_2'
     ");
-    
+
     if (!$fk_exists2) {
-        Database::get()->query("ALTER TABLE `external_resource` 
-            ADD CONSTRAINT `external_resource_ibfk_2` 
+        Database::get()->query("ALTER TABLE `external_resource`
+            ADD CONSTRAINT `external_resource_ibfk_2`
             FOREIGN KEY (`repository_id`) REFERENCES `external_repository` (`id`) ON DELETE CASCADE");
     }
 }
