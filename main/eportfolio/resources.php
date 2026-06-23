@@ -792,19 +792,36 @@ if ($userdata) {
                 $reflection_comments = (!empty($mycertificate->reflection_comments) && ($mycertificate->user_id == $uid)) ? $langReflectionComment.':"'.q($mycertificate->reflection_comments).'"' : '';
                 $cert_date = format_locale_date(strtotime($data['date_created'] ?? ''), null, false);
                 $cert_url = "{$urlServer}main/out.php?i={$identifier}";
+                
+                $certFilename = '';
+                $cert_file = '';
+                $certTemplate = unserialize($mycertificate->data);
+                if ($certTemplate) {
+                    $certFilename = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $certTemplate['template'])->filename;
+                    if (!str_contains($certFilename, '.html')) { // new way
+                        $cert_file = getFilenames(true, $certTemplate['template'], 'thumbnail');
+                    } else { // old way
+                        $f = explode('.html', $certFilename);
+                        if (count($f) > 0) {
+                            $cert_file = $urlServer . "courses/user_progress_data/cert_templates/" . $f[0] . "_thumbnail.png";
+                        }
+                    }
+                }
 
                 $tool_content .= $vis_modal_form."
                 <div class='reward-list-card'>
-                    <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
-                        <div class='reward-img-col'>
-                            <img src='{$urlServer}resources/img/game/badge.png' alt='certificate'>
+                    <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                        <div class='d-flex justify-content-start align-items-center gap-3'>
+                            <div style='width: 100px; height: 100px;'>
+                                <img style='min-width: 100px; height: 100px;' src='{$cert_file}' alt='" . $data['title'] . "'>
+                            </div>
+                            <div>
+                                <div style='margin-bottom:4px;line-height:1.3;'><strong style='font-size:16px;font-weight:600;'>".q($data['title'])."</strong>".$title_vis_icon."</div>
+                                <div class='text_muted_cl' style='font-size:13px;'>".q($data['issuer'] ?? '')." &bull; {$cert_date}</div>
+                                ".($reflection_comments ? "<div style='font-size:12px;color:#9ca3af;font-style:italic;margin-top:4px;'>{$reflection_comments}</div>" : "")."
+                            </div>
                         </div>
-                        <div class='reward-title-col'>
-                            <div style='margin-bottom:4px;line-height:1.3;'><strong style='font-size:16px;font-weight:600;'>".q($data['title'])."</strong>".$title_vis_icon."</div>
-                            <div class='text_muted_cl' style='font-size:13px;'>".q($data['issuer'] ?? '')." &bull; {$cert_date}</div>
-                            ".($reflection_comments ? "<div style='font-size:12px;color:#9ca3af;font-style:italic;margin-top:4px;'>{$reflection_comments}</div>" : "")."
-                        </div>
-                        <div class='reward-bar-col d-flex align-items-center justify-content-end gap-2' onclick='event.stopPropagation();'>
+                        <div class='d-flex align-items-center justify-content-end gap-2' onclick='event.stopPropagation();'>
                             ".action_button(array(
                                 array(
                                     'title' => $langePortfolioRemoveResource,
@@ -814,7 +831,7 @@ if ($userdata) {
                                     'confirm' => $langePortfolioSureToRemoveResource,
                                     'show' => ($mycertificate->user_id == $uid)
                                 )))."
-                            <a href='{$cert_url}' class='btn btn-sm btn-outline-primary text-decoration-none'>$langSee</a>
+                            <a href='{$cert_url}' target='_blank' class='btn submitAdminBtn text-decoration-none text-nowrap'>$langSee</a>
                         </div>
                     </div>
                 </div>";
@@ -1062,7 +1079,7 @@ if ($userdata) {
         //show assignment submissions
         if ($submissions) {
             $tool_content .= '<div id="works" role="tabpanel" class="'.$work_div_class.'" aria-labelledby="worktab" style="padding-top:20px">';
-            $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
+            $tool_content .= "<div class='row row-cols-1 g-3'>";
 
             foreach ($submissions as $submission) {
                 $tool_content .= "<div class='col'>";
@@ -1127,7 +1144,7 @@ if ($userdata) {
                 $submission_content = " <div class='well panel border-bottom-default mb-3'>
                                             <div class='panel-group group-section' id='accordion_$submission->id' role='tablist' aria-multiselectable='true'>
                                                 <ul class='list-group list-group-flush'>
-                                                    <li class='list-group-item px-0'>";
+                                                    <li class='list-group-item element px-0'>";
                                 $submission_content .= "<a type='button' class='accordion-btn d-flex justify-content-start align-items-start' data-bs-toggle='collapse' href='#header_more_$submission->id' aria-expanded='false' aria-controls='#header_more_$submission->id'>
                                                             <span class='fa-solid fa-chevron-down'></span>
                                                             $langMore
@@ -1149,7 +1166,7 @@ if ($userdata) {
                                         </div>";
 
 
-
+                $submission_content .= "<div class='d-flex justify-content-start align-items-center gap-5 flex-wrap'>";
                 $submission_content .= "<div class='mb-3'><p class='title-default'>$langSubmit</p> " . format_locale_date(strtotime($data['subm_date'])) . "</div>
                                        <div class='mb-3'><p class='title-default'>$langGradebookGrade</p> ".$data['grade']." / ".$data['max_grade']."</div>
                                        <div class='mb-3'><p class='title-default'>".$langAssignmentType."</p> ".$assignment_type."</div>";
@@ -1159,8 +1176,9 @@ if ($userdata) {
                 } else {
                    $submission_content .= "<div class='mb-3'><a class='link-color TextBold' href='resources.php?action=get&amp;token=".$userdata->eportfolio_token."&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }
-
+                $submission_content .= "</div>";
                 $reflection_comments = (!empty($submission->reflection_comments) && ($submission->user_id == $uid)) ? $langReflectionComment.':"'.q($submission->reflection_comments).'"' : '';
+
 
                 $submission_footer = "<div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                         
                                               <div class='small-text'>$submission->course_title</div>                                          
@@ -1168,7 +1186,7 @@ if ($userdata) {
                                       <div class='card-footer border-0 d-flex justify-content-start align-items-center'>                                         
                                               <div class='small-text'><em>$reflection_comments</em></div>                                          
                                       </div>";
-                $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
+                $tool_content .= "<div class='card reward-list-card px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                        
                                             $submission_header_content                                           
                                             <div>
@@ -1305,7 +1323,7 @@ if ($userdata) {
         //show blog_posts
         if ($blog_posts) {
             $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" >';
-            $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
+            $tool_content .= "<div class='row row-cols-1 g-3'>";
 
             foreach ($blog_posts as $post) {
                 $tool_content .= "<div class='col'>";
@@ -1363,7 +1381,7 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
-                $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
+                $tool_content .= "<div class='card reward-list-card px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
                                         <h2 class='text-heading-h3'>".q($data['title']).$title_vis_icon."</h2>"
                                         .$vis_modal_form.                                    
@@ -1400,7 +1418,7 @@ if ($userdata) {
         //show personal notes
         if ($notes) {
             $tool_content .= '<div id="notes" role="tabpanel" class="'.$notes_div_class.'" aria-labelledby="notestab" >';
-            $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
+            $tool_content .= "<div class='row row-cols-1 g-3'>";
 
             foreach ($notes as $note) {
                 $tool_content .= "<div class='col'>";
@@ -1458,7 +1476,7 @@ if ($userdata) {
                     $vis_modal_form = "";
                 }
 
-                $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-3 h-100'>
+                $tool_content .= "<div class='card reward-list-card px-lg-4 py-lg-3 mt-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
                                         <h2 class='text-heading-h3'>".q($data['title']).$title_vis_icon."</h2>"
                                         .$vis_modal_form.                                  
