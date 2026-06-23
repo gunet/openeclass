@@ -4039,13 +4039,8 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 
     $out_primary = $out_secondary = array();
     $i=0;
-    $page_title = "";
 
     $temporary_button_class = "";
-
-    if (isset($pageName) and !empty($pageName) and $page_title_flag) {
-        $page_title = "<div class='form-label TextBold text-capitalize mb-0'><span class='fa-solid fa-check text-success pe-2'></span>".q($pageName)."</div>";
-    }
 
     foreach (array_reverse($options) as $option) {
 
@@ -4200,7 +4195,11 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $pageTitleActive = "";
     if (($action_button || $out) && $i!=0) {
         if(isset($course_code) and $course_code) {
-            $titleHeader = (!empty($pageName) ? q($pageName) : $toolName);
+            if (isset($_SESSION['mobile'])) {
+                $titleHeader = '';
+            } else {
+                $titleHeader = (!empty($pageName) ? q($pageName) : $toolName);
+            }
             if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
                             <div class='col-lg-5 col-md-6 col-12'><div class='action-bar-title mb-0'>$titleHeader</div></div>
