@@ -4157,7 +4157,11 @@ function upgrade_to_4_4($tbl_options) : void
     }
 
     if (DBHelper::fieldExists('badge_icon', 'description')) {
-        Database::get()->query("ALTER TABLE `badge_icon` CHANGE `description` `category` MEDIUMINT not null");
+        Database::get()->query("ALTER TABLE `badge_icon` DROP COLUMN `description`");
+    }
+    
+    if (!DBHelper::fieldExists('badge_icon', 'category')) {
+        Database::get()->query("ALTER TABLE `badge_icon` ADD COLUMN `category` MEDIUMINT not null AFTER `name`");
     }
 
     global $webDir;
