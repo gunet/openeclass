@@ -39,37 +39,39 @@ if (get_config('eportfolio_enable')) {
     $head_content .= 
         '<script>
             $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
-                e.preventDefault();
+                if (!$(this).hasClass("delEportfolioResource")) {
+                    e.preventDefault();
 
-                const href = $(this).attr(\'href\');
-                const url = new URL(href, window.location.origin);
-                const rid = url.searchParams.get(\'rid\');
+                    const href = $(this).attr(\'href\');
+                    const url = new URL(href, window.location.origin);
+                    const rid = url.searchParams.get(\'rid\');
 
-                if (href.includes("my_certificates")) {
-                    const modalId = `modal_certificate_${rid}`;
-                    const modalElement = document.getElementById(modalId);
+                    if (href.includes("my_certificates")) {
+                        const modalId = `modal_certificate_${rid}`;
+                        const modalElement = document.getElementById(modalId);
 
-                    if (modalElement) {
-                        const Modal = new bootstrap.Modal(modalElement);
-                        Modal.show();
+                        if (modalElement) {
+                            const Modal = new bootstrap.Modal(modalElement);
+                            Modal.show();
 
-                        const formSelector = `#vis_form_certificate_${rid}`;
-                        $(formSelector).attr(\'action\', href);
-                    } else {
-                        console.warn(\'Certificate Modal with ID\', modalId, \'not found\');
-                    }
-                } else if (href.includes("my_badges")) {
-                    const modalId = `modal_badge_${rid}`;
-                    const modalElement = document.getElementById(modalId);
+                            const formSelector = `#vis_form_certificate_${rid}`;
+                            $(formSelector).attr(\'action\', href);
+                        } else {
+                            console.warn(\'Certificate Modal with ID\', modalId, \'not found\');
+                        }
+                    } else if (href.includes("my_badges")) {
+                        const modalId = `modal_badge_${rid}`;
+                        const modalElement = document.getElementById(modalId);
 
-                    if (modalElement) {
-                        const Modal = new bootstrap.Modal(modalElement);
-                        Modal.show();
+                        if (modalElement) {
+                            const Modal = new bootstrap.Modal(modalElement);
+                            Modal.show();
 
-                        const formSelector = `#vis_form_badge_${rid}`;
-                        $(formSelector).attr(\'action\', href);
-                    } else {
-                        console.warn(\'Modal with ID\', modalId, \'not found\');
+                            const formSelector = `#vis_form_badge_${rid}`;
+                            $(formSelector).attr(\'action\', href);
+                        } else {
+                            console.warn(\'Modal with ID\', modalId, \'not found\');
+                        }
                     }
                 }
             });
@@ -246,6 +248,12 @@ if (count($courses) > 0) {
             // get cert icon
             $CertThumb = get_cert_template($data->template_id);
 
+            $existsAseportfolioRes = Database::get()->querySingle("SELECT er.id FROM eportfolio_resource er
+                                                                    JOIN certificate c ON c.course_id = er.course_id
+                                                                    WHERE er.user_id = ?d
+                                                                    AND er.resource_id = ?d
+                                                                    AND er.resource_type = ?s", $uid, $data->cert_id, 'my_certificates');
+
             $certificate_content .= "<div class='col'>";
                 $certificate_content .= "<div class='card reward-list-card h-100'>";
                     $certificate_content .=" 
@@ -265,7 +273,14 @@ if (count($courses) > 0) {
                                                             'title' => $langAddResePortfolio,
                                                             'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=my_certificates&amp;rid=".$data->cert_id,
                                                             'icon' => 'fa-star',
-                                                            'show' => (get_config('eportfolio_enable'))
+                                                            'show' => (get_config('eportfolio_enable') && !$existsAseportfolioRes)
+                                                        ),
+                                                        array(
+                                                            'title' => $langDelResePortfolio,
+                                                            'url' => "$urlServer"."main/eportfolio/resources.php?action=remove&type=my_certificates&er_id=".($existsAseportfolioRes->id ?? 0),
+                                                            'icon' => 'fa-solid fa-xmark',
+                                                            'class' => 'Accent-200-cl delEportfolioResource',
+                                                            'show' => (get_config('eportfolio_enable') && $existsAseportfolioRes)
                                                         ),
                                                         array(
                                                             'title' => $langAddToMyProfile,
@@ -436,6 +451,13 @@ if (count($courses) > 0) {
 
                 $iconBadge = get_icon_badge($badge->badge);
 
+                $existsAseportfolioRes = Database::get()->querySingle("SELECT er.id FROM eportfolio_resource er
+                                                                        JOIN badge b ON b.course_id = er.course_id
+                                                                        WHERE er.user_id = ?d
+                                                                        AND er.resource_id = ?d
+                                                                        AND er.resource_type = ?s", $uid, $badge->badge, 'my_badges');
+
+
                 $badge_content .= " <div class='col'>";
                     $badge_content .= " <div class='card reward-list-card h-100'>";
                         $badge_content .= " 
@@ -458,7 +480,14 @@ if (count($courses) > 0) {
                                                                 'title' => $langAddResePortfolio,
                                                                 'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=my_badges&amp;rid=".$badge->badge,
                                                                 'icon' => 'fa-star',
-                                                                'show' => (get_config('eportfolio_enable'))
+                                                                'show' => (get_config('eportfolio_enable') && !$existsAseportfolioRes)
+                                                            ),
+                                                            array(
+                                                                'title' => $langDelResePortfolio,
+                                                                'url' => "$urlServer"."main/eportfolio/resources.php?action=remove&type=my_badges&er_id=".($existsAseportfolioRes->id ?? 0),
+                                                                'icon' => 'fa-solid fa-xmark',
+                                                                'class' => 'Accent-200-cl delEportfolioResource',
+                                                                'show' => (get_config('eportfolio_enable') && $existsAseportfolioRes)
                                                             ),
                                                             array(
                                                                 'title' => $langAddToMyProfile,
