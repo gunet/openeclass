@@ -24,6 +24,7 @@ $helpTopic = 'Gradebook';
 
 require_once '../include/baseTheme.php';
 require_once 'modules/progress/process_functions.php';
+require_once 'modules/progress/PointsGame.php'; 
 require_once 'modules/progress/Game.php';
 
 if (is_module_disable(MODULE_ID_PROGRESS,MODULE_ID_PROGRESS)) {
@@ -46,37 +47,39 @@ if (get_config('eportfolio_enable')) {
     $head_content .= 
         '<script>
             $(document).on(\'click\', \'a.list-group-item[href*="resources.php"]\', function(e) {
-                e.preventDefault();
+                if (!$(this).hasClass("delEportfolioResource")) {
+                    e.preventDefault();
 
-                const href = $(this).attr(\'href\');
-                const url = new URL(href, window.location.origin);
-                const rid = url.searchParams.get(\'rid\');
+                    const href = $(this).attr(\'href\');
+                    const url = new URL(href, window.location.origin);
+                    const rid = url.searchParams.get(\'rid\');
 
-                if (href.includes("my_certificates")) {
-                    const modalId = `modal_certificate_${rid}`;
-                    const modalElement = document.getElementById(modalId);
+                    if (href.includes("my_certificates")) {
+                        const modalId = `modal_certificate_${rid}`;
+                        const modalElement = document.getElementById(modalId);
 
-                    if (modalElement) {
-                        const Modal = new bootstrap.Modal(modalElement);
-                        Modal.show();
+                        if (modalElement) {
+                            const Modal = new bootstrap.Modal(modalElement);
+                            Modal.show();
 
-                        const formSelector = `#vis_form_certificate_${rid}`;
-                        $(formSelector).attr(\'action\', href);
-                    } else {
-                        console.warn(\'Certificate Modal with ID\', modalId, \'not found\');
-                    }
-                } else if (href.includes("my_badges")) {
-                    const modalId = `modal_badge_${rid}`;
-                    const modalElement = document.getElementById(modalId);
+                            const formSelector = `#vis_form_certificate_${rid}`;
+                            $(formSelector).attr(\'action\', href);
+                        } else {
+                            console.warn(\'Certificate Modal with ID\', modalId, \'not found\');
+                        }
+                    } else if (href.includes("my_badges")) {
+                        const modalId = `modal_badge_${rid}`;
+                        const modalElement = document.getElementById(modalId);
 
-                    if (modalElement) {
-                        const Modal = new bootstrap.Modal(modalElement);
-                        Modal.show();
+                        if (modalElement) {
+                            const Modal = new bootstrap.Modal(modalElement);
+                            Modal.show();
 
-                        const formSelector = `#vis_form_badge_${rid}`;
-                        $(formSelector).attr(\'action\', href);
-                    } else {
-                        console.warn(\'Modal with ID\', modalId, \'not found\');
+                            const formSelector = `#vis_form_badge_${rid}`;
+                            $(formSelector).attr(\'action\', href);
+                        } else {
+                            console.warn(\'Modal with ID\', modalId, \'not found\');
+                        }
                     }
                 }
             });
@@ -253,6 +256,12 @@ if (count($courses) > 0) {
             // get cert icon
             $CertThumb = get_cert_template($data->template_id);
 
+            $existsAseportfolioRes = Database::get()->querySingle("SELECT er.id FROM eportfolio_resource er
+                                                                    JOIN certificate c ON c.course_id = er.course_id
+                                                                    WHERE er.user_id = ?d
+                                                                    AND er.resource_id = ?d
+                                                                    AND er.resource_type = ?s", $uid, $data->cert_id, 'my_certificates');
+
             $certificate_content .= "<div class='col'>";
                 $certificate_content .= "<div class='card reward-list-card h-100'>";
                     $certificate_content .="
@@ -272,7 +281,14 @@ if (count($courses) > 0) {
                                                             'title' => $langAddResePortfolio,
                                                             'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=my_certificates&amp;rid=".$data->cert_id,
                                                             'icon' => 'fa-star',
-                                                            'show' => (get_config('eportfolio_enable'))
+                                                            'show' => (get_config('eportfolio_enable') && !$existsAseportfolioRes)
+                                                        ),
+                                                        array(
+                                                            'title' => $langDelResePortfolio,
+                                                            'url' => "$urlServer"."main/eportfolio/resources.php?action=remove&type=my_certificates&er_id=".($existsAseportfolioRes->id ?? 0),
+                                                            'icon' => 'fa-solid fa-xmark',
+                                                            'class' => 'Accent-200-cl delEportfolioResource',
+                                                            'show' => (get_config('eportfolio_enable') && $existsAseportfolioRes)
                                                         ),
                                                         array(
                                                             'title' => $langAddToMyProfile,
@@ -335,7 +351,12 @@ if (count($courses) > 0) {
         if (count($game_certificate) > 0) {
             $counter_game_certificate++;
             foreach ($game_certificate as $key => $certificate) {
-                $cert_content = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0);
+                if ($certificate->completed_criteria == 0) {
+                    $cert_content = 0;
+                } else {
+                    $cert_content = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0);
+                }
+                
                 if ($certificate->completed == 1) {
                     continue;
                 }
@@ -348,9 +369,9 @@ if (count($courses) > 0) {
                                                     <div class='w-75 d-flex justify-content-start align-items-start gap-3 no-completed-cert-col'>
                                                         <img style='width: 50px; height: 50px; margin-top: 5px;' src='{$CertThumb}'>
                                                         <div>
-                                                            <a class='TextBold opacity-help-cert-badges' href= '{$urlServer}modules/progress/index.php?course=$code&amp;certificate_id=$certificate->certificate&amp;u=$uid'>$certificate->title</a> 
-                                                            <p class='small-text text-muted opacity-help-cert-badges'>$course1->title</p>
-                                                            <p class='small-text text-muted opacity-help-cert-badges'>$certificate->issuer</p>
+                                                            <a class='TextBold' href= '{$urlServer}modules/progress/index.php?course=$code&amp;certificate_id=$certificate->certificate&amp;u=$uid'>$certificate->title</a> 
+                                                            <p class='small-text text-muted'>$course1->title</p>
+                                                            <p class='small-text text-muted'>$certificate->issuer</p>
                                                         </div>
                                                     </div>
                                                     <div class='w-25'>
@@ -369,7 +390,12 @@ if (count($courses) > 0) {
         if (count($game_badge) > 0) {
             $counter_game_badge++;
             foreach ($game_badge as $key => $badge) {
-                $cert_content = round($badge->completed_criteria / $badge->total_criteria * 100, 0);
+                if ($badge->completed_criteria == 0) {
+                    $cert_content = 0;
+                } else {
+                    $cert_content = round($badge->completed_criteria / $badge->total_criteria * 100, 0);
+                }
+                
                 if (get_config('eportfolio_enable')) {
                     $badge_modal = '<div class="modal fade" id="modal_badge_'.$badge->badge.'" tabindex="-1" aria-labelledby="badgeModalLabel_'.$badge->badge.'" aria-hidden="true">
                         <div class="modal-dialog">
@@ -431,9 +457,14 @@ if (count($courses) > 0) {
                     ";
                 }
 
-                $opacity = !$badge->completed ? 'opacity-help-cert-badges' : '';
-
                 $iconBadge = get_icon_badge($badge->badge);
+
+                $existsAseportfolioRes = Database::get()->querySingle("SELECT er.id FROM eportfolio_resource er
+                                                                        JOIN badge b ON b.course_id = er.course_id
+                                                                        WHERE er.user_id = ?d
+                                                                        AND er.resource_id = ?d
+                                                                        AND er.resource_type = ?s", $uid, $badge->badge, 'my_badges');
+
 
                 $badge_content .= " <div class='col'>";
                     $badge_content .= " <div class='card reward-list-card h-100'>";
@@ -443,9 +474,9 @@ if (count($courses) > 0) {
                                                 <div class='w-75 d-flex justify-content-start align-items-start gap-3 no-completed-cert-col'>
                                                     <img style='width: 50px; height: 50px; margin-top: 5px;' src='{$iconBadge}'>
                                                     <div>
-                                                        <a class='TextBold $opacity' href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>$badge->title</a> 
-                                                        <p class='small-text text-muted $opacity'>$course1->title</p>
-                                                        <p class='small-text text-muted $opacity'>$badge->issuer</p>
+                                                        <a class='TextBold' href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>$badge->title</a> 
+                                                        <p class='small-text text-muted'>$course1->title</p>
+                                                        <p class='small-text text-muted'>$badge->issuer</p>
                                                     </div>
                                                 </div>
                                                 <div class='w-25'>";
@@ -457,7 +488,14 @@ if (count($courses) > 0) {
                                                                 'title' => $langAddResePortfolio,
                                                                 'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=my_badges&amp;rid=".$badge->badge,
                                                                 'icon' => 'fa-star',
-                                                                'show' => (get_config('eportfolio_enable'))
+                                                                'show' => (get_config('eportfolio_enable') && !$existsAseportfolioRes)
+                                                            ),
+                                                            array(
+                                                                'title' => $langDelResePortfolio,
+                                                                'url' => "$urlServer"."main/eportfolio/resources.php?action=remove&type=my_badges&er_id=".($existsAseportfolioRes->id ?? 0),
+                                                                'icon' => 'fa-solid fa-xmark',
+                                                                'class' => 'Accent-200-cl delEportfolioResource',
+                                                                'show' => (get_config('eportfolio_enable') && $existsAseportfolioRes)
                                                             ),
                                                             array(
                                                                 'title' => $langAddToMyProfile,
@@ -488,25 +526,8 @@ if (count($courses) > 0) {
             }
         }
     }
-    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // edw vazeis to teliko ui me certs kai badges
+    // ui certificates and badges
     if (count($sql) == 0 && $counter_game_certificate == 0 && $counter_game_badge == 0) {
         $tool_content .= "
             <div class='col-12'>
@@ -568,6 +589,8 @@ if (count($courses) > 0) {
         </div>";
         
     }
+
+    u_point_game();
     
 } else {
     $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoCertBadge</span></div>";
@@ -611,5 +634,125 @@ function get_icon_badge($badgeId) {
     }
 
     return $icon;
+
+}
+
+function u_point_game() {
+    global $uid, $langPoints, $langForNextLevel, $tool_content, $langPointsGame, $langCompletion, $urlServer;
+
+    $user_point_games = Database::get()->queryArray("SELECT pg.id,pg.title,pg.course_id FROM points_game pg
+                                                     JOIN user_points_game_points upg ON pg.id = upg.points_game
+                                                     WHERE upg.user = ?d
+                                                     AND pg.active = ?d", $uid, 1);
+
+    if (count($user_point_games) > 0) {
+
+        $tool_content .= "<div class='col-12 mt-4'>
+                <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                <h2 class='text-heading-h3'>$langPointsGame</h2>
+                </div>
+                <div class='card-body'>";
+
+        foreach ($user_point_games as $data) {
+            $element_id = $data->id;      
+            $user_progress = PointsGame::getNextLevelInfo($uid, $element_id);
+            $current_points = $user_progress['current_points'];
+            $pct = $user_progress['progress_percentage'] ?? 0;
+
+            // Resolve current level title: assigned level → highest qualifying level → first defined level → fallback
+            if (!empty($user_progress['current_level_title'])) {
+                $current_level_title = $user_progress['current_level_title'];
+            } else {
+                $qualifying = Database::get()->querySingle(
+                    "SELECT friendly_name FROM points_game_levels
+                    WHERE points_game = ?d AND required_points <= ?d
+                    ORDER BY required_points DESC LIMIT 1",
+                    $element_id, $current_points);
+                if ($qualifying) {
+                    $current_level_title = $qualifying->friendly_name;
+                } else {
+                    $first_level = Database::get()->querySingle(
+                        "SELECT friendly_name FROM points_game_levels
+                        WHERE points_game = ?d
+                        ORDER BY required_points ASC LIMIT 1",
+                        $element_id);
+                    $current_level_title = $first_level ? $first_level->friendly_name : $langStart;
+                }
+            }
+
+            // Find exact leaderboard position using the same sort as the leaderboard
+            $ranked_users = Database::get()->queryArray(
+                "SELECT u.id FROM course_user cu
+                JOIN user u ON u.id = cu.user_id
+                LEFT JOIN user_points_game_points upp ON upp.user = u.id AND upp.points_game = ?d
+                WHERE cu.course_id = ?d AND cu.status != 1 AND cu.editor = 0 AND cu.course_reviewer = 0
+                ORDER BY
+                    CASE WHEN upp.total_points IS NULL OR upp.total_points = 0 THEN 1 ELSE 0 END,
+                    upp.total_points DESC,
+                    u.surname ASC, u.givenname ASC",
+                $element_id, $data->course_id);
+            $user_rank = 1;
+            foreach ($ranked_users as $i => $row) {
+                if ($row->id == $uid) { $user_rank = $i + 1; break; }
+            }
+
+            if (is_null($user_progress['next_level_id'])) {
+                $points_display = "$current_points";
+                $progress_label = $langCompletion;
+                $progress_footer = '';
+            } else {
+                $pts_needed = $user_progress['points_needed_for_next'] ?? 0;
+                $next_level_req = $current_points + $pts_needed;
+                $points_display = "$current_points/$next_level_req";
+                $next_title = htmlspecialchars($user_progress['next_level_title']);
+                $progress_label = "Πρόοδος προς $next_title";
+                $progress_footer = "
+                    <span class='pg-progress-text'>$pts_needed $langPoints $langForNextLevel</span>
+                    <span class='pg-progress-pct'>{$pct}%</span>";
+            }
+
+            $c_code = course_id_to_code($data->course_id);
+
+            $tool_content .= "
+                        <a class='text-decoration-none' href='{$urlServer}modules/progress/index.php?course={$c_code}&points_game_id={$data->id}&tab=points'>
+                            <div class='col-12 mb-4'>
+                                <div class='card reward-list-card h-100'>
+                                    <div class='card-body'>
+                                        <div class='d-flex align-items-center gap-3 flex-wrap'>
+                                            <div class='d-flex justify-content-start align-items-center gap-2'>
+                                                <div class='pg-list-badge'>
+                                                    <span style='background:#e74c3c'></span>
+                                                    <span style='background:#3498db'></span>
+                                                    <span style='background:#2ecc71'></span>
+                                                    <span style='background:#f39c12'></span>
+                                                </div>
+                                                <h2 class='text-heading-h3'>$data->title</h2>
+                                            </div>
+                                            <div class='d-flex flex-grow-1 align-items-center flex-wrap gap-2'>
+                                                <div class='flex-fill text-center pg-stat-col'>
+                                                    <div class='pg-stat-label'>Τρέχον Επίπεδο</div>
+                                                    <div class='pg-stat-val'>$current_level_title</div>
+                                                </div>
+                                                <div class='vr mx-1 d-none d-sm-block' style='height:36px;'></div>
+                                                <div class='flex-fill text-center pg-stat-col'>
+                                                    <div class='pg-stat-label'>Η θέση μου</div>
+                                                    <div class='pg-stat-val'>#$user_rank</div>
+                                                </div>
+                                                <div class='vr mx-1 d-none d-sm-block' style='height:36px;'></div>
+                                                <div class='flex-fill text-center pg-stat-col'>
+                                                    <div class='pg-stat-label'>Οι πόντοι μου</div>
+                                                    <div class='pg-stat-val'>$points_display</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>";
+        }
+
+        $tool_content .= "</div></div></div>";
+    }
 
 }

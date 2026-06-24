@@ -7752,11 +7752,7 @@ th.grade-col a{
     .up-lb-progress-wrap { flex: 1 1 100%; }
 }
 
-.opacity-help-cert-badges {
-  opacity: 0.6;
-}
 @media(max-width:1199px) {
-
   .no-completed-cert-col {
     width: 100% !important;
   }

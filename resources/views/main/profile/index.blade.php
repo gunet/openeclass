@@ -267,7 +267,7 @@
                                             <a href="../out.php?i={{ $certificate->identifier }}"
                                                class="card h-100 p-3 d-flex flex-row align-items-center gap-3 text-decoration-none epf-award-item">
                                                 <img style="height:65px;width:65px;object-fit:contain;flex-shrink:0;"
-                                                     src="{{ $urlServer }}resources/img/game/badge.png"
+                                                     src="{{ $certificate->cert_path }}"
                                                      alt="{{ trans('langCertificate') }}">
                                                 <div class="text-start">
                                                     <div class="fw-semibold mb-1">{!! $certificate->cert_title !!}</div>

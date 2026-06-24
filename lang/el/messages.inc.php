@@ -6372,6 +6372,7 @@ $langePortfolioDisabled = 'Τo e-Portfolio των χρηστών είναι απ
 $langUserePortfolioDisabled = 'Τo e-Portfolio του χρήστη είναι απενεργοποιημένo.';
 $langePortfolioDisableWarning = 'Το e-Portfolio σας είναι απενεργοποιημένο και επομένως δεν είναι ορατό σε άλλους χρήστες και επισκέπτες της πλατφόρμας.';
 $langAddResePortfolio = 'Προσθήκη σε e-Portfolio';
+$langDelResePortfolio = 'Αφαίρεση από e-Portfolio';
 $langAddResePortfolioExternalAchievements = 'Προσθήκη σε e-Portfolio (εξωτερικά επιτεύγματα)';
 $langExternalAchievements = 'Εξωτερικά Επιτεύγματα';
 $langAddGroupWorkSubePortfolio = 'Προσθήκη υποβολής ομάδας "%s" σε e-Portfolio';
