@@ -328,7 +328,12 @@ if (count($courses) > 0) {
         if (count($game_certificate) > 0) {
             $counter_game_certificate++;
             foreach ($game_certificate as $key => $certificate) {
-                $cert_content = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0);
+                if ($certificate->completed_criteria == 0) {
+                    $cert_content = 0;
+                } else {
+                    $cert_content = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0);
+                }
+                
                 if ($certificate->completed == 1) {
                     continue;
                 }
@@ -362,7 +367,12 @@ if (count($courses) > 0) {
         if (count($game_badge) > 0) {
             $counter_game_badge++;
             foreach ($game_badge as $key => $badge) {
-                $cert_content = round($badge->completed_criteria / $badge->total_criteria * 100, 0);
+                if ($badge->completed_criteria == 0) {
+                    $cert_content = 0;
+                } else {
+                    $cert_content = round($badge->completed_criteria / $badge->total_criteria * 100, 0);
+                }
+                
                 if (get_config('eportfolio_enable')) {
                     $badge_modal = '<div class="modal fade" id="modal_badge_'.$badge->badge.'" tabindex="-1" aria-labelledby="badgeModalLabel_'.$badge->badge.'" aria-hidden="true">
                         <div class="modal-dialog">
@@ -506,7 +516,7 @@ if (count($courses) > 0) {
                     </div>";
                 } else {
                     $tool_content .= "    
-                    <div class='row row-cols-md-2 row-cols-1 g-3'>
+                    <div class='row row-cols-md-2 row-cols-1 g-3 w-100'>
                         $certificate_content
                     </div>";
                 }
@@ -531,7 +541,7 @@ if (count($courses) > 0) {
                     </div>";
                 } else {
                     $tool_content .= "      
-                    <div class='row row-cols-md-2 row-cols-1 g-3'>
+                    <div class='row row-cols-md-2 row-cols-1 g-3 w-100'>
                         $badge_content
                     </div>";
                 }
@@ -591,14 +601,14 @@ function get_icon_badge($badgeId) {
 }
 
 function u_point_game() {
-    global $is_editor, $uid, $langPoints, $langForNextLevel, $tool_content, $langPointsGame, $langCompletion, $urlServer;
+    global $uid, $langPoints, $langForNextLevel, $tool_content, $langPointsGame, $langCompletion, $urlServer;
 
     $user_point_games = Database::get()->queryArray("SELECT pg.id,pg.title,pg.course_id FROM points_game pg
                                                      JOIN user_points_game_points upg ON pg.id = upg.points_game
                                                      WHERE upg.user = ?d
                                                      AND pg.active = ?d", $uid, 1);
 
-    if (count($user_point_games) > 0 && !$is_editor) {
+    if (count($user_point_games) > 0) {
 
         $tool_content .= "<div class='col-12 mt-4'>
                 <div class='card panelCard px-lg-4 py-lg-3'>
