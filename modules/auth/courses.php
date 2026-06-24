@@ -28,6 +28,14 @@ require_once 'modules/course_metadata/CourseXML.php';
 load_js('tools.js');
 
 $toolName = $langListCourses;
+
+// Schema upgrade guard: add registration date columns if missing
+if (!Database::get()->querySingle("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'course' AND COLUMN_NAME = 'reg_start_date'")) {
+    Database::get()->query("ALTER TABLE course ADD COLUMN reg_start_date DATE DEFAULT NULL");
+}
+if (!Database::get()->querySingle("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'course' AND COLUMN_NAME = 'reg_end_date'")) {
+    Database::get()->query("ALTER TABLE course ADD COLUMN reg_end_date DATE DEFAULT NULL");
+}
 $countCallback = null;
 $data['isInOpenCoursesMode'] = (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA');
 $tree = new Hierarchy();

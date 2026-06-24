@@ -34,6 +34,14 @@ $toolName = $langPortfolio;
 $pageName = $langMyCertificates;
 $content = false;
 
+// Add missing columns if not present (schema upgrade guard)
+if (!Database::get()->querySingle("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'certified_users' AND COLUMN_NAME = 'add_my_profile'")) {
+    Database::get()->query("ALTER TABLE certified_users ADD COLUMN add_my_profile TINYINT(1) NOT NULL DEFAULT 0");
+}
+if (!Database::get()->querySingle("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'user_badge' AND COLUMN_NAME = 'add_my_profile'")) {
+    Database::get()->query("ALTER TABLE user_badge ADD COLUMN add_my_profile TINYINT(1) NOT NULL DEFAULT 0");
+}
+
 if (get_config('eportfolio_enable')) {
     $head_content .= 
         '<script>
@@ -247,18 +255,18 @@ if (count($courses) > 0) {
 
             $certificate_content .= "<div class='col'>";
                 $certificate_content .= "<div class='card reward-list-card h-100'>";
-                    $certificate_content .=" 
+                    $certificate_content .="
                                             $certificate_modal
-                                            <div class='d-flex justify-content-between align-items-start gap-4'>
-                                                <div class='d-flex justify-content-start align-items-start gap-3'>
-                                                    <div><img style='width: 50px; height: 50px; margin-top: 5px;' src='{$CertThumb}'></div>
-                                                    <div>
+                                            <div class='d-flex justify-content-between align-items-center gap-3 no-completed-cert-div'>
+                                                <div class='w-75 d-flex justify-content-start align-items-start gap-3 no-completed-cert-col'>
+                                                    <img style='width: 50px; height: 50px; margin-top: 5px; flex-shrink:0;' src='{$CertThumb}'>
+                                                    <div style='min-width:0;'>
                                                         <a class='TextBold' target='_blank' href='{$urlServer}main/out.php?i=$data->identifier'>$data->cert_title</a>
                                                         <p class='small-text text-muted'>" . $data->course_title . "</p>
                                                         <p class='small-text text-muted'>" . $data->cert_issuer . "</p>
                                                     </div>
                                                 </div>
-                                                <div>
+                                                <div class='w-25 text-end'>
                                                     ". action_button(array(
                                                         array(
                                                             'title' => $langAddResePortfolio,
@@ -524,7 +532,7 @@ if (count($courses) > 0) {
                     </div>";
                 } else {
                     $tool_content .= "    
-                    <div class='row row-cols-md-2 row-cols-1 g-3'>
+                    <div class='row row-cols-md-2 row-cols-1 g-3 w-100'>
                         $certificate_content
                     </div>";
                 }
@@ -549,7 +557,7 @@ if (count($courses) > 0) {
                     </div>";
                 } else {
                     $tool_content .= "      
-                    <div class='row row-cols-md-2 row-cols-1 g-3'>
+                    <div class='row row-cols-md-2 row-cols-1 g-3 w-100'>
                         $badge_content
                     </div>";
                 }
