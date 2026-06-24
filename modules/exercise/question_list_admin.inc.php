@@ -49,7 +49,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 } else {
                     $new_q_position = 1;
                 }
-                Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria) 
+                Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria)
                                             VALUES (?d, ?d, ?d, ?s)",
                     NULL, $exerciseId, $new_q_position, $random_criteria);
             } else if ($difficultyId > 0) { // random difficulty questions
@@ -60,7 +60,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 } else {
                     $new_q_position = 1;
                 }
-                Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria) 
+                Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria)
                                             VALUES (?d, ?d, ?d, ?s)",
                     NULL, $exerciseId, $new_q_position, $random_criteria);
             } else if ($categoryId > 0) { // random category questions
@@ -71,7 +71,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 } else {
                     $new_q_position = 1;
                 }
-                Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria) 
+                Database::get()->query("INSERT INTO exercise_with_questions (question_id, exercise_id, q_position, random_criteria)
                                             VALUES (?d, ?d, ?d, ?s)",
                     NULL, $exerciseId, $new_q_position, $random_criteria);
             }
@@ -100,13 +100,13 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $qnum = $_POST['qnum'];
         $query_vars[] = $qnum;
         if ($qnum > 0) {
-            $q_ids = Database::get()->queryArray("SELECT id FROM exercise_question 
-                                          WHERE course_id = ?d$extraSql 
-                                          AND id NOT IN   
-                                            (SELECT question_id FROM exercise_with_questions 
-                                              WHERE exercise_id = ?d 
-                                              AND question_id IS NOT NULL) 
-                                          ORDER BY RAND() 
+            $q_ids = Database::get()->queryArray("SELECT id FROM exercise_question
+                                          WHERE course_id = ?d$extraSql
+                                          AND id NOT IN
+                                            (SELECT question_id FROM exercise_with_questions
+                                              WHERE exercise_id = ?d
+                                              AND question_id IS NOT NULL)
+                                          ORDER BY RAND()
                                           LIMIT ?d", $query_vars);
 
             $q_ids_count = count($q_ids);
@@ -174,6 +174,8 @@ if (isset($_GET['deleteQuestion'])) {
     }
     redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
 }
+
+$pageName = $langExerciseManagement;
 
 // exercise info
 $moduleTag = new ModuleElement($exerciseId);
@@ -278,7 +280,6 @@ if ($aiAvailable) {
     );
 }
 
-$pageName = $toolName = '';
 if ($nbrQuestions) {
     $i = 1;
     $limit = 0;
@@ -382,14 +383,14 @@ function questionLegend($id, $exerciseId) {
     } else {
         // check if a question has weight
         if (!$questionWeight) {
-            $question_excl_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
+            $question_excl_legend = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon'
                     data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionWeight'></span>";
         } else {
             $question_excl_legend = '';
         }
         // check if a question has answers
         if ($aType != FREE_TEXT and $aType != ORAL and $aType != MATCHING and (!$objQuestionTmp->hasAnswers())) {
-            $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
+            $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon'
                         data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
         } else {
             $question_excl_legend_2 = '';
@@ -405,7 +406,7 @@ function questionLegend($id, $exerciseId) {
     $content .= "<tr data-id='$ewq_id'>
                     <td class='count-col'>" . $i . ".</td>
                     <td>" . $legend . "</td>
-                    <td class='option-btn-cell'>    
+                    <td class='option-btn-cell'>
                         <div class='d-flex justify-content-end align-items-center gap-2'>
                             <div class='reorder-btn'>
                                 <span class='fa fa-arrows' style='cursor: pointer;' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-titile='$langReorder'></span>
