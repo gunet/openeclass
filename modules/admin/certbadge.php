@@ -23,6 +23,7 @@ $require_help = true;
 $helpTopic = 'course_administration';
 $helpSubTopic = 'course_certbadge';
 require_once '../../include/baseTheme.php';
+load_js('datatables');
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/progress/process_functions.php';
 
@@ -57,7 +58,29 @@ $tenant = getCurrentTenant();
 $tenant_department_id = $tenant ? $tenant->department_id : null;
 
 $head_content .= "<script type='text/javascript'>
-$(document).ready(function() {   
+$(document).ready(function() {
+    $('#cert_table').DataTable();
+    $('#badge_table').DataTable({
+        initComplete: function () {
+            this.api().columns(1).every( function () {
+                var column = this;
+                var select = $('<select class=\"form-select mt-2\"><option value=\"\">- Όλες οι Κατηγορίες -</option></select>')
+                    .appendTo( $(column.header()) )
+                    .on( 'click', function(e) {
+                        e.stopPropagation();
+                    })
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                        column.search( val ? '^'+val+'$' : '', true, false ).draw();
+                    } );
+                column.data().unique().sort().each( function ( d, j ) {
+                    if(d) {
+                        select.append( '<option value=\"'+d+'\">'+d+'</option>' );
+                    }
+                } );
+            } );
+        }
+    });
     slimSelectFun (
         '#select-courses', 
         '" . js_escape(trans('langSearch')) . "', 
@@ -340,17 +363,18 @@ if (isset($_POST['submit_cert_template'])) { // insert certificate template
             unlink($webDir . BADGE_TEMPLATE_PATH . $old_icon); // delete old icon if needed
         }
     }
+    $serialized_name = serialize(['el' => $_POST['name'], 'en' => $_POST['name']]);
     if ($badge_id) {
         Database::get()->querySingle("UPDATE badge_icon SET
             name = ?s,
-            description = ?s,
+            category = ?d,
             filename = ?s
-            WHERE id = ?d", $_POST['name'], $_POST['description'], $new_icon ?? $old_icon, $badge_id);
+            WHERE id = ?d", $serialized_name, $_POST['category'], $new_icon ?? $old_icon, $badge_id);
     } else {
         Database::get()->querySingle("INSERT INTO badge_icon SET
             name = ?s,
-            description = ?s,
-            filename = ?s", $_POST['name'], $_POST['description'], $new_icon);
+            category = ?d,
+            filename = ?s", $serialized_name, $_POST['category'], $new_icon);
     }
     Session::flash('message', $langDownloadEnd);
     Session::flash('alert-class', 'alert-success');
@@ -493,12 +517,12 @@ if (isset($_GET['action'])) {
             redirect_to_home_page('modules/admin/certbadge.php');
         }
 
-        $badge_name = $badge_description = $badge_hidden_id = '';
+        $badge_name = $badge_category = $badge_hidden_id = '';
         if (isset($_GET['bid'])) {
             $badge_id = $_GET['bid'];
             $badge_data = Database::get()->querySingle("SELECT * FROM badge_icon WHERE id = ?d", $badge_id);
-            $badge_name = $badge_data->name;
-            $badge_description = $badge_data->description;
+            $badge_name = getSerializedMessage($badge_data->name);
+            $badge_category = $badge_data->category;
             $badge_hidden_id = "<input type='hidden' name='badge_id' value='$badge_id'>";
         }
 
@@ -533,9 +557,16 @@ if (isset($_GET['action'])) {
                             </div>
 
                             <div class='form-group mt-4'>
-                            <label for='description' class='col-sm-12 control-label-notes'>$langDescription: </label>
+                            <label for='category' class='col-sm-12 control-label-notes'>Κατηγορία: </label>
                                 <div class='col-sm-12'>
-                                    " . rich_text_editor('description', 2, 60, $badge_description, options: array('id' => 'description')) . "
+                                    <select id='category' class='form-select' name='category'>
+                                        <option value=''>- Επιλογή -</option>";
+                                        $categories = Database::get()->queryArray("SELECT * FROM badge_icon_category ORDER BY name");
+                                        foreach ($categories as $cat) {
+                                            $selected = ($badge_category == $cat->id) ? 'selected' : '';
+                                            $tool_content .= "<option value='{$cat->id}' $selected>" . q($cat->name) . "</option>";
+                                        }
+                                    $tool_content .= "</select>
                                 </div>
                             </div>
                             $badge_hidden_id
@@ -558,7 +589,7 @@ if (isset($_GET['action'])) {
     $newThumbnailPath = '';
     $tool_content .= "<h2 class='text-heading-h3'>$langCertificates</h2>";
     $tool_content .= "<div class='table-responsive'>
-                        <table class='table-default'>
+                        <table id='cert_table' class='table-default dataTable'>
                         <thead>
                             <tr>
                                 <th style='width:30%;'>$langTitle</th>
@@ -625,14 +656,14 @@ if (isset($_GET['action'])) {
     $tool_content .= "</table>";
     $tool_content .= "</div>";
 
-    $sql2 = Database::get()->queryArray("SELECT * FROM badge_icon");
+    $sql2 = Database::get()->queryArray("SELECT badge_icon.*, badge_icon_category.name as category_name FROM badge_icon LEFT JOIN badge_icon_category ON badge_icon.category = badge_icon_category.id");
     $tool_content .= "<h2 class='text-heading-h3 mt-5'>$langBadges</h2>";
     $tool_content .= "<div class='table-responsive'>
-                        <table class='table-default'>
+                        <table id='badge_table' class='table-default dataTable'>
                         <thead>
                         <tr>
                             <th style='width:30%;'>$langTitle</th>
-                            <th style='width:60%;'>$langDescription</th>
+                            <th style='width:60%;'>Κατηγορία</th>
                             <th style='width:10%;'>$langIcon</th>
                             <th style='width:10%;' aria-label='$langSettingSelect'></th>
                         </tr>
@@ -641,9 +672,9 @@ if (isset($_GET['action'])) {
                     // NOTE: this check might need to change in the future, so that tenant admins will also be able to configure badges
                     $is_allowed_to_configure_badge = has_full_rights_on_badge();
                     $icon_link = $urlServer . BADGE_TEMPLATE_PATH ."$badge_data->filename";
-                    $tool_content .= "<tr><td style='width:30%;'>$badge_data->name</td>
-                                      <td style='width:50%;'>" . ellipsize_html($badge_data->description, 100) . "</td>
-                                      <td style='width:10%;' ><img src='$icon_link' width='50' height='50' alt='$badge_data->name'></td>";
+                    $tool_content .= "<tr><td style='width:30%;'>" . getSerializedMessage($badge_data->name) . "</td>
+                                      <td style='width:50%;'>" . ($badge_data->category_name ?? $badge_data->category) . "</td>
+                                      <td style='width:10%;' ><img src='$icon_link' width='50' height='50' alt='" . getSerializedMessage($badge_data->name) . "'></td>";
 
                     if ($is_allowed_to_configure_badge) {
                         $tool_content .= "<td style='width:10%;' class='text-end option-btn-cell'>".
