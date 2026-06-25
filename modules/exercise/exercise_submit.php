@@ -30,8 +30,8 @@ $guest_allowed = true;
 if (isset($_GET['uid']) and isset($_GET['token']) and isset($_GET['exerciseId'])) {
     define('COURSE_VISIBILITY_MANUAL_CHECK', true);
     define('SKIP_DOUBLE_LOGIN_LOCK', true);
+    $got_token = true;
 }
-
 require_once '../../include/baseTheme.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/attendance/functions.php';
@@ -41,7 +41,7 @@ require_once 'analytics.php';
 require_once 'include/log.class.php';
 
 // Login the user via token - used when launching the exercise from Safe Exam Browser (SEB)
-if (isset($_GET['uid']) and isset($_GET['token'])) {
+if (isset($got_token)) {
     $uid = intval($_GET['uid']);
     // consider token valid for 100 sec
     if (token_validate($course_code . $uid . $_GET['exerciseId'], $_GET['token'], 100)) {
@@ -65,7 +65,6 @@ if (isset($_GET['uid']) and isset($_GET['token'])) {
         redirect_to_home_page();
     }
 }
-
 
 $unit = $unit ?? null;
 $back_url = $unit?
@@ -233,7 +232,12 @@ if (isSebEnabled($_REQUEST['exerciseId']) && $objExercise->isSeb() && !isset($_G
 
 // Safe Exam Browser intro
 if (isset($_GET['seb'])) {
-    view('modules.exercise.seb', ['course_code' => $course_code, 'eid' => $objExercise->selectId()]);
+    $eid = $objExercise->selectId();
+    $token = token_generate($course_code . $uid . $eid, true);
+    $seb_launch_url = preg_replace('/https/', 'sebs', $urlServer) .
+        "modules/exercise/launch_seb.php?course=$course_code&exerciseId=$eid&uid=$uid&token=$token";
+    view('modules.exercise.seb', [
+        'course_code' => $course_code, 'eid' => $eid, 'seb_launch_url' => $seb_launch_url]);
     exit;
 }
 

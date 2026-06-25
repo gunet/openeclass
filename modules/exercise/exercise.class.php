@@ -1838,13 +1838,10 @@ class Exercise
     {
         global $urlServer, $webDir, $course_code, $uid;
 
-        $start_url = $urlServer . "modules/exercise/exercise_submit.php?course=" . $course_code . "&exerciseId=" . $this->id;
+        $token = token_generate($course_code . $uid . $this->id, true);
+        $start_url = $urlServer . "modules/exercise/exercise_submit.php?course=" . $course_code . "&exerciseId=" . $this->id .
+            "&uid=$uid&token=$token";
         $quit_url = $urlServer . "modules/exercise/index.php?course=" . $course_code;
-
-        if ($uid) {
-            $token = token_generate($course_code . $uid . $this->id, true);
-            $start_url .= "&uid=$uid&token=$token";
-        }
 
         $dom = new DOMImplementation();
         $dtd = $dom->createDocumentType(

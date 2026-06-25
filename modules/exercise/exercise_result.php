@@ -379,8 +379,8 @@ if (!isset($_GET['pdf'])) {
 // Safe Exam Browser quit URL
 if (isSebEnabled($objExercise->selectId()) && $objExercise->isSeb()) { // exercise is SEB enabled?
     if (str_contains($_SERVER['HTTP_USER_AGENT'], 'Open-eClass-Exam')) { // are we in SEB?
-        $tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center gap-4 mt-4'>                            
-                            <a class='btn submitAdminBtnDefault' href='{$urlServer}modules/exercise/index.php?course=$course_code'>$langSafeExamBrowserQuitMessage</a>                      
+        $tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center gap-4 mt-4'>
+                            <a class='btn submitAdminBtnDefault' href='{$urlServer}modules/exercise/index.php?course=$course_code'>$langSafeExamBrowserQuitMessage</a>
                     </div>";
     }
 }
@@ -813,7 +813,7 @@ if (isset($_GET['pdf'])) {
             h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
             h1 { font-size: 16pt; }
             h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
             .text-danger{color: red;}
