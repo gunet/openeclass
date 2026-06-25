@@ -521,19 +521,33 @@ elseif (isset($_GET['forumgodel'])) {
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");
 } elseif (isset($_GET['forumtopicedit'])) {
+
    $topic_id = intval($_GET['topic_id']);
 
    $result = Database::get()->querySingle("SELECT `forum_id` FROM `forum_topic` as ft, `forum` as f
            WHERE ft.`id` = ?d AND ft.`forum_id` = f.`id` AND `f`.course_id = ?d ", $topic_id, $course_id);
    if ($result) {
        $current_forum_id = $result->forum_id;
+       $navigation[] = array('url' => "viewforum.php?forum=$current_forum_id&course=$course_code", 'name' => $langTopics);
+
+       $myrow = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $topic_id);
 
        $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumtopicsave=yes&amp;topic_id=$topic_id' method='post'>
        <fieldset>
        <legend class='mb-0' aria-label='$langForm'></legend>
-       <div class='form-group'>
+       <div class='form-group'>       
+       
+       <div class='form-group mb-4'>
+                <label for='title' class='col-sm-6 control-label-notes'>$langSubject <span class='asterisk Accent-200-cl'>(*)</span></label>
+                <div class='col-sm-12'>
+                    <input id='title' type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='form-control'>
+                </div>
+            </div>
+            
+       <label for='title' class='col-sm-6 control-label-notes'>$langForums <span class='asterisk Accent-200-cl'>(*)</span></label>
+       
         <div class='col-sm-12'>
         <select name='forum_id' class='form-select' aria-label='$langSelect'>";
         $result = Database::get()->queryArray("SELECT f.`id` as `forum_id`, f.`name` as `forum_name`, fc.`cat_title` as `cat_title` FROM `forum` AS `f`, `forum_category` AS `fc` WHERE f.`course_id` = ?d AND f.`cat_id` = fc.`id`", $course_id);
@@ -552,14 +566,14 @@ elseif (isset($_GET['forumgodel'])) {
        <div class='form-group mt-4'>
             <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                 <input class='btn submitAdminBtn' type='submit' value='$langModify'>
-                <a class='btn cancelAdminBtn' href='index.php?course=$course_code'>$langCancel</a>
+                <a class='btn cancelAdminBtn' href='viewforum.php?forum=$current_forum_id&course=$course_code'>$langCancel</a>
             </div>
         </div>
        </fieldset>
        </form></div></div>
        <div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-    </div>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+        </div>
     </div>";
    }
 } elseif (isset($_GET['forumtopicsave'])) {
@@ -568,13 +582,14 @@ elseif (isset($_GET['forumgodel'])) {
 
     if (does_exists($topic_id, 'topic')) {//topic belongs to the course and new forum is not a group forum
 
+        //print_a($_POST);die;
         $result = Database::get()->querySingle("SELECT `forum_id`, `num_replies`, `last_post_id`  FROM `forum_topic` WHERE `id` = ?d", $topic_id);
         $current_forum_id = $result->forum_id;
         $num_replies = $result->num_replies;
         $last_post_id = $result->last_post_id;
 
         if ($current_forum_id != $new_forum) {
-            Database::get()->query("UPDATE `forum_topic` SET `forum_id` = ?d WHERE `id` = ?d", $new_forum, $topic_id);
+            Database::get()->query("UPDATE `forum_topic` SET `forum_id` = ?d, title = ?s WHERE `id` = ?d", $new_forum, $_POST['subject'], $topic_id);
             $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_FORUMTOPIC, $topic_id);
 
             $result = Database::get()->querySingle("SELECT `last_post_id` FROM `forum_topic` WHERE `forum_id` = ?d",$new_forum);
@@ -596,8 +611,11 @@ elseif (isset($_GET['forumgodel'])) {
 
             Database::get()->query("UPDATE `forum` SET `num_topics` = `num_topics`-1, `num_posts` = `num_posts`-?d, `last_post_id` = ?d
                     WHERE id = ?d",$num_replies+1,$last_post_id, $current_forum_id);
-        }//if user selected the current forum do nothing
-       $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langTopicDataChanged</span></div></div>";
+        } else { //if user selected the current forum update only subject title
+            Database::get()->query("UPDATE `forum_topic` SET `forum_id` = ?d, title = ?s WHERE `id` = ?d", $new_forum, $_POST['subject'], $topic_id);
+        }
+        Session::Messages($langTopicDataChanged, 'success');
+        redirect_to_home_page("modules/forum/viewforum.php?forum=$new_forum&course=$course_code");
     }
 
 } elseif (isset($_GET['settings'])) {

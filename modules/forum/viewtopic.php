@@ -286,16 +286,20 @@ if ($topic_locked == 1) {
         $reply_url = "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum";
     }
     $action_bar = action_bar(array(
+                                    array('title' => $langBack,
+                                        'url' => "$back_url",
+                                        'icon' => 'fa-reply',
+                                        'level' => 'primary'),
                                     array('title' => $langReply,
                                         'url' => "$reply_url",
                                         'icon' => 'fa-regular fa-comments',
                                         'level' => 'primary-label',
                                         'button-class' => 'btn-success action-forum-btn'),
                                     array('title' => $langDumpPDF,
-                                           'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&topic=$_GET[topic]&forum=$_GET[forum]&export_ans=true",
-                                           'icon' => 'fa-solid fa-file-pdf',
-                                            'level' => 'primary-label',
-                                            'button-class' => 'btn-success action-forum-btn')
+                                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&topic=$_GET[topic]&forum=$_GET[forum]&export_ans=true",
+                                        'icon' => 'fa-solid fa-file-pdf',
+                                        'level' => 'primary-label',
+                                        'button-class' => 'btn-success action-forum-btn')
                                 )
                             );
     $tool_content .= $action_bar;
