@@ -23,8 +23,7 @@ if (isset($_REQUEST['exerciseId'])) {
         // if the specified exercise is disabled (this only applies to students)
         // or doesn't exist, redirect and show error
         if (!$objExercise->read($exerciseId) || (!$is_editor && $objExercise->selectStatus($exerciseId) == 0)) {
-            Session::flash('message', $langExerciseNotFound);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($langExerciseNotFound, 'alert-warning');
             redirect_to_home_page($back_url);
         }
         // saves the object into the session

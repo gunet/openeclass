@@ -1407,7 +1407,7 @@ class Exercise
                                       is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
 
                 // Get the answer_record_id for AI evaluation
-                $answer_record = Database::get()->querySingle("SELECT answer_record_id FROM exercise_answer_record 
+                $answer_record = Database::get()->querySingle("SELECT answer_record_id FROM exercise_answer_record
                                                              WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                 if ($answer_record && trim($value) !== '') {
                     $this->triggerAIEvaluation($answer_record->answer_record_id, $key, $value);
@@ -1469,10 +1469,10 @@ class Exercise
             } else {
                 $answer_weight = 0;
             }
-            Database::get()->query("UPDATE exercise_answer_record SET 
-                              answer_id = ?d, 
+            Database::get()->query("UPDATE exercise_answer_record SET
+                              answer_id = ?d,
                               weight = ?f,
-                              certainty = ?d, 
+                              certainty = ?d,
                               is_answered = 1
                         WHERE eurid = ?d AND question_id = ?d",
                     $value, $answer_weight, $certainty_value, $eurid, $key);
@@ -1805,14 +1805,14 @@ class Exercise
             }
 
             // Check if AI evaluation is enabled for this specific question
-            $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config 
+            $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config
                                                      WHERE question_id = ?d AND enabled = 1", $question_id);
             if (!$aiConfig) {
                 return false; // AI evaluation not enabled for this question
             }
 
             // Check if evaluation already exists (to avoid duplicates)
-            $existingEval = Database::get()->querySingle("SELECT id FROM exercise_ai_evaluation 
+            $existingEval = Database::get()->querySingle("SELECT id FROM exercise_ai_evaluation
                                                          WHERE answer_record_id = ?d", $answer_record_id);
             if ($existingEval) {
                 return false; // Already evaluated
@@ -1830,16 +1830,21 @@ class Exercise
     }
 
     /**
-     * @brief Generates and saves a Safe Exam Browser (SEB) configuration file in XML format.
+     * @brief Generates and returns a Safe Exam Browser (SEB) configuration file in XML format.
      *
-     * @return void
+     * @return string
      */
-    public function createSafeExamBrowserConfigFile(): void
+    public function createSafeExamBrowserConfigFile(): string
     {
-        global $urlServer, $webDir, $course_code;
+        global $urlServer, $webDir, $course_code, $uid;
 
         $start_url = $urlServer . "modules/exercise/exercise_submit.php?course=" . $course_code . "&exerciseId=" . $this->id;
         $quit_url = $urlServer . "modules/exercise/index.php?course=" . $course_code;
+
+        if ($uid) {
+            $token = token_generate($course_code . $uid . $this->id, true);
+            $start_url .= "&uid=$uid&token=$token";
+        }
 
         $dom = new DOMImplementation();
         $dtd = $dom->createDocumentType(
@@ -1896,24 +1901,18 @@ class Exercise
             }
         }
 
-        if (!file_exists("$webDir/courses/$course_code/exercise_seb_$this->id")) {
-            mkdir("$webDir/courses/$course_code/exercise_seb_$this->id");
-        }
-        $xml->save("$webDir/courses/$course_code/exercise_seb_$this->id/config.seb");
+        return $xml->saveXML();
     }
 
     public function LaunchSafeExamBrowser()
     {
-        global $course_code, $webDir;
-
-        $sebConfigXml = file_get_contents("$webDir/courses/$course_code/exercise_seb_$this->id/config.seb");
+        $sebConfigXML = $this->createSafeExamBrowserConfigFile();
 
         header('Content-Type: application/seb');
         header('Content-Disposition: attachment; filename="config.seb"');
-        header('Content-Length: ' . strlen($sebConfigXml));
-        echo $sebConfigXml;
+        header('Content-Length: ' . strlen($sebConfigXML));
+        echo $sebConfigXML;
         exit;
     }
 
 }
-
