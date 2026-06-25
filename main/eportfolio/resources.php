@@ -473,11 +473,19 @@ if ($userdata) {
                 Database::get()->query("DELETE FROM eportfolio_resource WHERE id = ?d", $er_id);
                 Session::flash('message', $langePortfolioResourceRemoved);
                 Session::flash('alert-class', 'alert-success');
-                redirect_to_home_page("main/eportfolio/resources.php");
+                if (isset($_GET['mycertsview'])) {
+                    redirect_to_home_page("main/mycertificates.php");
+                } else {
+                    redirect_to_home_page("main/eportfolio/resources.php");
+                }
             } else {
                 Session::flash('message', $langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
-                redirect_to_home_page("main/eportfolio/resources.php");
+                if (isset($_GET['mycertsview'])) {
+                    redirect_to_home_page("main/mycertificates.php");
+                } else {
+                    redirect_to_home_page("main/eportfolio/resources.php");
+                }
             }
         }
 
