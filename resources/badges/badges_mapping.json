@@ -3,1080 +3,1260 @@
     "filename": "levels_badge_Medals_Sidiroun.svg",
     "gr": "Σιδηρούν",
     "en": "Iron",
-    "category": "levels badge Medals"
+    "cat_gr": "Σήματα Επιπέδων: Μέταλλα",
+    "cat_en": "Level Badges: Medals "
   },
   {
     "filename": "levels_badge_Medals_Halkino.svg",
     "gr": "Χάλκινο",
     "en": "Bronze",
-    "category": "levels badge Medals"
+    "cat_gr": "Σήματα Επιπέδων: Μέταλλα",
+    "cat_en": "Level Badges: Medals "
   },
   {
     "filename": "levels_badge_Medals_Argyro.svg",
     "gr": "Αργυρό",
     "en": "Silver",
-    "category": "levels badge Medals"
+    "cat_gr": "Σήματα Επιπέδων: Μέταλλα",
+    "cat_en": "Level Badges: Medals "
   },
   {
     "filename": "levels_badge_Medals_Xryso.svg",
     "gr": "Χρυσό",
     "en": "Gold",
-    "category": "levels badge Medals"
+    "cat_gr": "Σήματα Επιπέδων: Μέταλλα",
+    "cat_en": "Level Badges: Medals "
   },
   {
     "filename": "levels_badge_Medals_Platinenio.svg",
     "gr": "Πλατινένιο",
     "en": "Platinum",
-    "category": "levels badge Medals"
+    "cat_gr": "Σήματα Επιπέδων: Μέταλλα",
+    "cat_en": "Level Badges: Medals "
   },
   {
     "filename": "levels_badge_Gems_Zafeiri.svg",
     "gr": "Ζαφείρι",
     "en": "Sapphire",
-    "category": "levels badge Gems"
+    "cat_gr": "Σήματα Επιπέδων: Πολύτιμοι Λίθοι",
+    "cat_en": "Level Badges: Gems "
   },
   {
     "filename": "levels_badge_Gems_Smaragdi.svg",
     "gr": "Σμαράγδι",
     "en": "Emerald",
-    "category": "levels badge Gems"
+    "cat_gr": "Σήματα Επιπέδων: Πολύτιμοι Λίθοι",
+    "cat_en": "Level Badges: Gems "
   },
   {
     "filename": "levels_badge_Gems_Roubini.svg",
     "gr": "Ρουμπίνι",
     "en": "Ruby",
-    "category": "levels badge Gems"
+    "cat_gr": "Σήματα Επιπέδων: Πολύτιμοι Λίθοι",
+    "cat_en": "Level Badges: Gems "
   },
   {
     "filename": "levels_badge_Gems_Diamanti.svg",
     "gr": "Διαμάντι",
     "en": "Diamond",
-    "category": "levels badge Gems"
+    "cat_gr": "Σήματα Επιπέδων: Πολύτιμοι Λίθοι",
+    "cat_en": "Level Badges: Gems "
   },
   {
     "filename": "levels_badge_Gems_Aftokratoriko_Diamanti.svg",
     "gr": "Αυτοκρατορικό Διαμάντι",
     "en": "Crowned Diamond",
-    "category": "levels badge Gems"
+    "cat_gr": "Σήματα Επιπέδων: Πολύτιμοι Λίθοι",
+    "cat_en": "Level Badges: Gems "
   },
   {
     "filename": "levels_badge_Stellar_square_Astroskoni.svg",
     "gr": "Αστρόσκονη",
     "en": "Stardust",
-    "category": "levels badge Stellar square"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Τετράγωνα)",
+    "cat_en": "Level Badges: Stellar (Square) "
   },
   {
     "filename": "levels_badge_Stellar_square_Peftasteri.svg",
     "gr": "Πεφταστέρι",
     "en": "Shooting Star",
-    "category": "levels badge Stellar square"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Τετράγωνα)",
+    "cat_en": "Level Badges: Stellar (Square) "
   },
   {
     "filename": "levels_badge_Stellar_square_Asteroeidis.svg",
     "gr": "Αστεροειδής",
     "en": "Asteroid",
-    "category": "levels badge Stellar square"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Τετράγωνα)",
+    "cat_en": "Level Badges: Stellar (Square) "
   },
   {
     "filename": "levels_badge_Stellar_square_Komitis.svg",
     "gr": "Κομήτης",
     "en": "Comet",
-    "category": "levels badge Stellar square"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Τετράγωνα)",
+    "cat_en": "Level Badges: Stellar (Square) "
   },
   {
     "filename": "levels_badge_Stellar_square_Feggari.svg",
     "gr": "Φεγγάρι",
     "en": "Moon",
-    "category": "levels badge Stellar square"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Τετράγωνα)",
+    "cat_en": "Level Badges: Stellar (Square) "
   },
   {
     "filename": "levels_badge_Stellar_square_Planitis.svg",
     "gr": "Πλανήτης",
     "en": "Planet",
-    "category": "levels badge Stellar square"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Τετράγωνα)",
+    "cat_en": "Level Badges: Stellar (Square) "
   },
   {
     "filename": "levels_badge_Stellar_square_Hlios.svg",
     "gr": "Ήλιος",
     "en": "Sun",
-    "category": "levels badge Stellar square"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Τετράγωνα)",
+    "cat_en": "Level Badges: Stellar (Square) "
   },
   {
     "filename": "levels_badge_Stellar_square_Astriko_Nefeloma.svg",
     "gr": "Αστρικό Νεφέλωμα",
     "en": "Nebula",
-    "category": "levels badge Stellar square"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Τετράγωνα)",
+    "cat_en": "Level Badges: Stellar (Square) "
   },
   {
     "filename": "levels_badge_Stellar_square_Galaxias.svg",
     "gr": "Γαλαξίας",
     "en": "Galaxy",
-    "category": "levels badge Stellar square"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Τετράγωνα)",
+    "cat_en": "Level Badges: Stellar (Square) "
   },
   {
     "filename": "levels_badge_Stellar_square_Sympan.svg",
     "gr": "Σύμπαν",
     "en": "Universe",
-    "category": "levels badge Stellar square"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Τετράγωνα)",
+    "cat_en": "Level Badges: Stellar (Square) "
   },
   {
     "filename": "levels_badge_Stellar_star_Moura.svg",
     "gr": "Αστρόσκονη",
     "en": "Stardust",
-    "category": "levels badge Stellar star"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Κονκάρδες) ",
+    "cat_en": "Level Badges: Stellar (Pins)"
   },
   {
     "filename": "levels_badge_Stellar_star_Peftasteri.svg",
     "gr": "Πεφταστέρι",
     "en": "Shooting Star",
-    "category": "levels badge Stellar star"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Κονκάρδες) ",
+    "cat_en": "Level Badges: Stellar (Pins)"
   },
   {
     "filename": "levels_badge_Stellar_star_Asteroeidis.svg",
     "gr": "Αστεροειδής",
     "en": "Asteroid",
-    "category": "levels badge Stellar star"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Κονκάρδες) ",
+    "cat_en": "Level Badges: Stellar (Pins)"
   },
   {
     "filename": "levels_badge_Stellar_star_Komitis.svg",
     "gr": "Κομήτης",
     "en": "Comet",
-    "category": "levels badge Stellar star"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Κονκάρδες) ",
+    "cat_en": "Level Badges: Stellar (Pins)"
   },
   {
     "filename": "levels_badge_Stellar_star_Feggari.svg",
     "gr": "Φεγγάρι",
     "en": "Moon",
-    "category": "levels badge Stellar star"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Κονκάρδες) ",
+    "cat_en": "Level Badges: Stellar (Pins)"
   },
   {
     "filename": "levels_badge_Stellar_star_Planitis.svg",
     "gr": "Πλανήτης",
     "en": "Planet",
-    "category": "levels badge Stellar star"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Κονκάρδες) ",
+    "cat_en": "Level Badges: Stellar (Pins)"
   },
   {
     "filename": "levels_badge_Stellar_star_Hlios.svg",
     "gr": "Ήλιος",
     "en": "Sun",
-    "category": "levels badge Stellar star"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Κονκάρδες) ",
+    "cat_en": "Level Badges: Stellar (Pins)"
   },
   {
     "filename": "levels_badge_Stellar_star_Astriko_Nefeloma.svg",
     "gr": "Αστρικό Νεφέλωμα",
     "en": "Nebula",
-    "category": "levels badge Stellar star"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Κονκάρδες) ",
+    "cat_en": "Level Badges: Stellar (Pins)"
   },
   {
     "filename": "levels_badge_Stellar_star_Galaxias.svg",
     "gr": "Γαλαξίας",
     "en": "Galaxy",
-    "category": "levels badge Stellar star"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Κονκάρδες) ",
+    "cat_en": "Level Badges: Stellar (Pins)"
   },
   {
     "filename": "levels_badge_Stellar_star_Sympan.svg",
     "gr": "Σύμπαν",
     "en": "Universe",
-    "category": "levels badge Stellar star"
+    "cat_gr": "Σήματα Επιπέδων: Ουράνια Σώματα (Κονκάρδες) ",
+    "cat_en": "Level Badges: Stellar (Pins)"
   },
   {
     "filename": "levels_badge_Plants_Sporos.svg",
     "gr": "Μικρός Σπόρος",
     "en": "Tiny Seed",
-    "category": "levels badge Plants"
+    "cat_gr": "Σήματα Επιπέδων: Φυτά",
+    "cat_en": "Level Badges: Plants"
   },
   {
     "filename": "levels_badge_Plants_Vlastari.svg",
     "gr": "Βλαστάρι",
     "en": "Sprout",
-    "category": "levels badge Plants"
+    "cat_gr": "Σήματα Επιπέδων: Φυτά",
+    "cat_en": "Level Badges: Plants"
   },
   {
     "filename": "levels_badge_Plants_Misxos.svg",
     "gr": "Τρυφερός Μίσχος",
     "en": "Tender Stem",
-    "category": "levels badge Plants"
+    "cat_gr": "Σήματα Επιπέδων: Φυτά",
+    "cat_en": "Level Badges: Plants"
   },
   {
     "filename": "levels_badge_Plants_Fyllo.svg",
     "gr": "Δροσερό Φύλλο",
     "en": " Fresh Leaf",
-    "category": "levels badge Plants"
+    "cat_gr": "Σήματα Επιπέδων: Φυτά",
+    "cat_en": "Level Badges: Plants"
   },
   {
     "filename": "levels_badge_Plants_Boubouki.svg",
     "gr": "Μπουμπούκι",
     "en": "Flower Bud",
-    "category": "levels badge Plants"
+    "cat_gr": "Σήματα Επιπέδων: Φυτά",
+    "cat_en": "Level Badges: Plants"
   },
   {
     "filename": "levels_badge_Plants_Anthos.svg",
     "gr": "Πρώτος Ανθός",
     "en": "First Blossom",
-    "category": "levels badge Plants"
+    "cat_gr": "Σήματα Επιπέδων: Φυτά",
+    "cat_en": "Level Badges: Plants"
   },
   {
     "filename": "levels_badge_Plants_Louloudi.svg",
     "gr": "Ευωδιαστό Λουλούδι",
     "en": "Fragrant Flower",
-    "category": "levels badge Plants"
+    "cat_gr": "Σήματα Επιπέδων: Φυτά",
+    "cat_en": "Level Badges: Plants"
   },
   {
     "filename": "levels_badge_Plants_Klonari.svg",
     "gr": "Ανθισμένο Κλωνάρι",
     "en": "Blooming Sprig",
-    "category": "levels badge Plants"
+    "cat_gr": "Σήματα Επιπέδων: Φυτά",
+    "cat_en": "Level Badges: Plants"
   },
   {
     "filename": "levels_badge_Plants_Livadi.svg",
     "gr": "Ολάνθιστο Λιβάδι",
     "en": "Meadow in Full Bloom",
-    "category": "levels badge Plants"
+    "cat_gr": "Σήματα Επιπέδων: Φυτά",
+    "cat_en": "Level Badges: Plants"
   },
   {
     "filename": "levels_badge_Plants_Kampos.svg",
     "gr": "Ανθοστόλιστος Κάμπος",
     "en": "Flower-Filled Field",
-    "category": "levels badge Plants"
+    "cat_gr": "Σήματα Επιπέδων: Φυτά",
+    "cat_en": "Level Badges: Plants"
   },
   {
     "filename": "levels_badge_Fruits_Moura.svg",
     "gr": "Άγριο Μούρο",
     "en": "Wild Berry",
-    "category": "levels badge Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα",
+    "cat_en": "Level Badges: Fruits"
   },
   {
     "filename": "levels_badge_Fruits_Kerasi.svg",
     "gr": "Γλυκό Κεράσι",
     "en": "Sweet Cherry",
-    "category": "levels badge Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα",
+    "cat_en": "Level Badges: Fruits"
   },
   {
     "filename": "levels_badge_Fruits_Fraoula.svg",
     "gr": "Ζουμερή Φράουλα",
     "en": "Juicy Strawberry",
-    "category": "levels badge Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα",
+    "cat_en": "Level Badges: Fruits"
   },
   {
     "filename": "levels_badge_Fruits_Damaskino.svg",
     "gr": "Ώριμο Δαμάσκηνο",
     "en": "Ripe Plum",
-    "category": "levels badge Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα",
+    "cat_en": "Level Badges: Fruits"
   },
   {
     "filename": "levels_badge_Fruits_Rodakino.svg",
     "gr": "Βελούδινο Ροδάκινο",
     "en": "Velvety Peach",
-    "category": "levels badge Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα",
+    "cat_en": "Level Badges: Fruits"
   },
   {
     "filename": "levels_badge_Fruits_Milo.svg",
     "gr": "Τραγανό Μήλο",
     "en": "Crunchy Apple",
-    "category": "levels badge Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα",
+    "cat_en": "Level Badges: Fruits"
   },
   {
     "filename": "levels_badge_Fruits_Portokali.svg",
     "gr": "Δροσερό Πορτοκάλι",
     "en": "Refreshing Orange",
-    "category": "levels badge Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα",
+    "cat_en": "Level Badges: Fruits"
   },
   {
     "filename": "levels_badge_Fruits_Mango.svg",
     "gr": "Τροπικό Μάνγκο",
     "en": "Tropical Mango",
-    "category": "levels badge Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα",
+    "cat_en": "Level Badges: Fruits"
   },
   {
     "filename": "levels_badge_Fruits_Peponi.svg",
     "gr": "Μυρωδάτο Πεπόνι",
     "en": "Fragrant Melon",
-    "category": "levels badge Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα",
+    "cat_en": "Level Badges: Fruits"
   },
   {
     "filename": "levels_badge_Fruits_Karpouzi.svg",
     "gr": "Λαχταριστό Καρπούζι",
     "en": "Luscious Watermelon",
-    "category": "levels badge Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα",
+    "cat_en": "Level Badges: Fruits"
   },
   {
-    "filename": "levels_badge__Coloured_Fruits_Moura.svg",
+    "filename": "levels_badge_Coloured_Fruits_Moura.svg",
     "gr": "Άγριο Μούρο",
     "en": "Wild Berry",
-    "category": "levels badge Coloured Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα (με χρώμα)",
+    "cat_en": "Level Badges: Coloured Fruits"
   },
   {
-    "filename": "levels_badge__Coloured_Fruits_Kerasi.svg",
+    "filename": "levels_badge_Coloured_Fruits_Kerasi.svg",
     "gr": "Γλυκό Κεράσι",
     "en": "Sweet Cherry",
-    "category": "levels badge Coloured Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα (με χρώμα)",
+    "cat_en": "Level Badges: Coloured Fruits"
   },
   {
-    "filename": "levels_badge__Coloured_Fruits_Fraoula.svg",
+    "filename": "levels_badge_Coloured_Fruits_Fraoula.svg",
     "gr": "Ζουμερή Φράουλα",
     "en": "Juicy Strawberry",
-    "category": "levels badge Coloured Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα (με χρώμα)",
+    "cat_en": "Level Badges: Coloured Fruits"
   },
   {
-    "filename": "levels_badge__Coloured_Fruits_Damaskino.svg",
+    "filename": "levels_badge_Coloured_Fruits_Damaskino.svg",
     "gr": "Ώριμο Δαμάσκηνο",
     "en": "Ripe Plum",
-    "category": "levels badge Coloured Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα (με χρώμα)",
+    "cat_en": "Level Badges: Coloured Fruits"
   },
   {
-    "filename": "levels_badge__Coloured_Fruits_Rodakino.svg",
+    "filename": "levels_badge_Coloured_Fruits_Rodakino.svg",
     "gr": "Βελούδινο Ροδάκινο",
     "en": "Velvety Peach",
-    "category": "levels badge Coloured Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα (με χρώμα)",
+    "cat_en": "Level Badges: Coloured Fruits"
   },
   {
-    "filename": "levels_badge__Coloured_Fruits_Milo.svg",
+    "filename": "levels_badge_Coloured_Fruits_Milo.svg",
     "gr": "Τραγανό Μήλο",
     "en": "Crunchy Apple",
-    "category": "levels badge Coloured Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα (με χρώμα)",
+    "cat_en": "Level Badges: Coloured Fruits"
   },
   {
-    "filename": "levels_badge__Coloured_Fruits_Portokali.svg",
+    "filename": "levels_badge_Coloured_Fruits_Portokali.svg",
     "gr": "Δροσερό Πορτοκάλι",
     "en": "Refreshing Orange",
-    "category": "levels badge Coloured Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα (με χρώμα)",
+    "cat_en": "Level Badges: Coloured Fruits"
   },
   {
-    "filename": "levels_badge__Coloured_Fruits_Mango.svg",
+    "filename": "levels_badge_Coloured_Fruits_Mango.svg",
     "gr": "Τροπικό Μάνγκο",
     "en": "Tropical Mango",
-    "category": "levels badge Coloured Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα (με χρώμα)",
+    "cat_en": "Level Badges: Coloured Fruits"
   },
   {
-    "filename": "levels_badge__Coloured_Fruits_Peponi.svg",
+    "filename": "levels_badge_Coloured_Fruits_Peponi.svg",
     "gr": "Μυρωδάτο Πεπόνι",
     "en": "Fragrant Melon",
-    "category": "levels badge Coloured Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα (με χρώμα)",
+    "cat_en": "Level Badges: Coloured Fruits"
   },
   {
-    "filename": "levels_badge__Coloured_Fruits_Karpouzi.svg",
+    "filename": "levels_badge_Coloured_Fruits_Karpouzi.svg",
     "gr": "Λαχταριστό Καρπούζι",
     "en": "Luscious Watermelon",
-    "category": "levels badge Coloured Fruits"
+    "cat_gr": "Σήματα Επιπέδων: Φρούτα (με χρώμα)",
+    "cat_en": "Level Badges: Coloured Fruits"
   },
   {
     "filename": "levels_badge_Traveler_Arxarios.svg",
     "gr": "Αρχάριος",
     "en": "Rookie",
-    "category": "levels badge Traveler"
+    "cat_gr": "Σήματα Επιπέδων: Εξερεύνηση",
+    "cat_en": "Level Badges: Traveler"
   },
   {
     "filename": "levels_badge_Traveler_Exerevnitis.svg",
     "gr": "Εξερευνητής",
     "en": "Explorer",
-    "category": "levels badge Traveler"
+    "cat_gr": "Σήματα Επιπέδων: Εξερεύνηση",
+    "cat_en": "Level Badges: Traveler"
   },
   {
     "filename": "levels_badge_Traveler_Ploigos.svg",
     "gr": "Πλοηγός",
     "en": "Pathfinder",
-    "category": "levels badge Traveler"
+    "cat_gr": "Σήματα Επιπέδων: Εξερεύνηση",
+    "cat_en": "Level Badges: Traveler"
   },
   {
     "filename": "levels_badge_Traveler_Odoiporos.svg",
     "gr": "Οδοιπόρος",
     "en": "Trail Walker",
-    "category": "levels badge Traveler"
+    "cat_gr": "Σήματα Επιπέδων: Εξερεύνηση",
+    "cat_en": "Level Badges: Traveler"
   },
   {
     "filename": "levels_badge_Traveler_Kynigos_Apostolon.svg",
     "gr": "Κυνηγός Αποστολών",
     "en": "Quest Seeker",
-    "category": "levels badge Traveler"
+    "cat_gr": "Σήματα Επιπέδων: Εξερεύνηση",
+    "cat_en": "Level Badges: Traveler"
   },
   {
     "filename": "levels_badge_Traveler_Kyriarxos_Diadromon.svg",
     "gr": "Κυρίαρχος Διαδρομών",
     "en": "Route Master",
-    "category": "levels badge Traveler"
+    "cat_gr": "Σήματα Επιπέδων: Εξερεύνηση",
+    "cat_en": "Level Badges: Traveler"
   },
   {
     "filename": "levels_badge_Traveler_Protoporos.svg",
     "gr": "Πρωτοπόρος",
     "en": "Trailblazer",
-    "category": "levels badge Traveler"
+    "cat_gr": "Σήματα Επιπέδων: Εξερεύνηση",
+    "cat_en": "Level Badges: Traveler"
   },
   {
     "filename": "levels_badge_Traveler_Epikefalis_Apostolis.svg",
     "gr": "Επικεφαλής Αποστολής",
     "en": "Expedition Leader",
-    "category": "levels badge Traveler"
+    "cat_gr": "Σήματα Επιπέδων: Εξερεύνηση",
+    "cat_en": "Level Badges: Traveler"
   },
   {
     "filename": "levels_badge_Traveler_Erevnitis_Tou_Kosmou.svg",
     "gr": "Εξερευνητής του Κόσμου",
     "en": "World Explorer",
-    "category": "levels badge Traveler"
+    "cat_gr": "Σήματα Επιπέδων: Εξερεύνηση",
+    "cat_en": "Level Badges: Traveler"
   },
   {
     "filename": "levels_badge_Traveler_Thrylos_Tis_Peripetias.svg",
     "gr": "Θρύλος της Περιπέτειας",
     "en": "Adventure Legend",
-    "category": "levels badge Traveler"
+    "cat_gr": "Σήματα Επιπέδων: Εξερεύνηση",
+    "cat_en": "Level Badges: Traveler"
   },
   {
     "filename": "levels_badge_Climber_Mistis.svg",
     "gr": "Μύστης",
     "en": "Initiate",
-    "category": "levels badge Climber"
+    "cat_gr": "Σήματα Επιπέδων: Ανέλιξη",
+    "cat_en": "Level Badges: Ranks"
   },
   {
     "filename": "levels_badge_Climber_Fostiras.svg",
     "gr": "Φωστήρας",
     "en": "Bright Mind",
-    "category": "levels badge Climber"
+    "cat_gr": "Σήματα Επιπέδων: Ανέλιξη",
+    "cat_en": "Level Badges: Ranks"
   },
   {
     "filename": "levels_badge_Climber_Paiktis.svg",
     "gr": "Παίχτης",
     "en": "Player",
-    "category": "levels badge Climber"
+    "cat_gr": "Σήματα Επιπέδων: Ανέλιξη",
+    "cat_en": "Level Badges: Ranks"
   },
   {
     "filename": "levels_badge_Climber_Mastoras.svg",
     "gr": "Μάστορας",
     "en": "Master",
-    "category": "levels badge Climber"
+    "cat_gr": "Σήματα Επιπέδων: Ανέλιξη",
+    "cat_en": "Level Badges: Ranks"
   },
   {
     "filename": "levels_badge_Climber_Astamatitos.svg",
     "gr": "Ασταμάτητος",
     "en": "Unstoppable ",
-    "category": "levels badge Climber"
+    "cat_gr": "Σήματα Επιπέδων: Ανέλιξη",
+    "cat_en": "Level Badges: Ranks"
   },
   {
     "filename": "levels_badge_Climber_Veteranos.svg",
     "gr": "Βετερανός",
     "en": "Veteran",
-    "category": "levels badge Climber"
+    "cat_gr": "Σήματα Επιπέδων: Ανέλιξη",
+    "cat_en": "Level Badges: Ranks"
   },
   {
     "filename": "levels_badge_Climber_Kyriarxos.svg",
     "gr": "Κυρίαρχος",
     "en": "Ruler",
-    "category": "levels badge Climber"
+    "cat_gr": "Σήματα Επιπέδων: Ανέλιξη",
+    "cat_en": "Level Badges: Ranks"
   },
   {
     "filename": "levels_badge_Climber_Hgetis.svg",
     "gr": "Ηγέτης",
     "en": "Leader",
-    "category": "levels badge Climber"
+    "cat_gr": "Σήματα Επιπέδων: Ανέλιξη",
+    "cat_en": "Level Badges: Ranks"
   },
   {
     "filename": "levels_badge_Climber_Thrylos.svg",
     "gr": "Θρύλος",
     "en": "Legend",
-    "category": "levels badge Climber"
+    "cat_gr": "Σήματα Επιπέδων: Ανέλιξη",
+    "cat_en": "Level Badges: Ranks"
   },
   {
     "filename": "levels_badge_Climber_Athanatos.svg",
     "gr": "Αθάνατος",
     "en": "Immortal",
-    "category": "levels badge Climber"
+    "cat_gr": "Σήματα Επιπέδων: Ανέλιξη",
+    "cat_en": "Level Badges: Ranks"
   },
   {
     "filename": "levels_badge_Hipster_Neouras.svg",
     "gr": "Νέουρας",
     "en": "Newbie ",
-    "category": "levels badge Hipster"
+    "cat_gr": "Σήματα Επιπέδων: Χίπστερ",
+    "cat_en": "Level Badges: Hipster "
   },
   {
     "filename": "levels_badge_Hipster_Player.svg",
     "gr": "Player",
     "en": "Player",
-    "category": "levels badge Hipster"
+    "cat_gr": "Σήματα Επιπέδων: Χίπστερ",
+    "cat_en": "Level Badges: Hipster "
   },
   {
     "filename": "levels_badge_Hipster_Main.svg",
     "gr": "Main",
     "en": "Main",
-    "category": "levels badge Hipster"
+    "cat_gr": "Σήματα Επιπέδων: Χίπστερ",
+    "cat_en": "Level Badges: Hipster "
   },
   {
     "filename": "levels_badge_Hipster_Grinder.svg",
     "gr": "Grinder",
     "en": "Grinder",
-    "category": "levels badge Hipster"
+    "cat_gr": "Σήματα Επιπέδων: Χίπστερ",
+    "cat_en": "Level Badges: Hipster "
   },
   {
     "filename": "levels_badge_Hipster_Fostiras.svg",
     "gr": "Φωστήρας",
     "en": "Prodigy",
-    "category": "levels badge Hipster"
+    "cat_gr": "Σήματα Επιπέδων: Χίπστερ",
+    "cat_en": "Level Badges: Hipster "
   },
   {
     "filename": "levels_badge_Hipster_Mastoras.svg",
     "gr": "Μάστορας",
     "en": "Master",
-    "category": "levels badge Hipster"
+    "cat_gr": "Σήματα Επιπέδων: Χίπστερ",
+    "cat_en": "Level Badges: Hipster "
   },
   {
     "filename": "levels_badge_Hipster_Serializer.svg",
     "gr": "Serializer",
     "en": "Serializer",
-    "category": "levels badge Hipster"
+    "cat_gr": "Σήματα Επιπέδων: Χίπστερ",
+    "cat_en": "Level Badges: Hipster "
   },
   {
     "filename": "levels_badge_Hipster_Axastos.svg",
     "gr": "Άχαστος",
     "en": "Invincible",
-    "category": "levels badge Hipster"
+    "cat_gr": "Σήματα Επιπέδων: Χίπστερ",
+    "cat_en": "Level Badges: Hipster "
   },
   {
     "filename": "levels_badge_Hipster_Boss.svg",
     "gr": "Boss",
     "en": "Boss",
-    "category": "levels badge Hipster"
+    "cat_gr": "Σήματα Επιπέδων: Χίπστερ",
+    "cat_en": "Level Badges: Hipster "
   },
   {
     "filename": "levels_badge_Hipster_GOAT.svg",
     "gr": "GOAT",
     "en": "GOAT",
-    "category": "levels badge Hipster"
+    "cat_gr": "Σήματα Επιπέδων: Χίπστερ",
+    "cat_en": "Level Badges: Hipster "
   },
   {
     "filename": "motivational_badge_B_medal_epitixis_oloklirosi.svg",
     "gr": "Επιτυχής Ολοκλήρωση",
     "en": "Completion Hero",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_artia_parousiasi.svg",
     "gr": "Άρτια Παρουσίαση",
     "en": "Presentation Pro",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_asos_stis_ergasies.svg",
     "gr": "Άσος στις Εργασίες",
     "en": "Assignment Ace",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_entatiki_exaskisi.svg",
     "gr": "Εντατική Εξάσκηση",
     "en": "Practice Power",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_asteri_stin_anagnosi.svg",
     "gr": "Αστέρι στην Ανάγνωση ",
     "en": "Reading Rocket",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_mathimatiki_afthentia.svg",
     "gr": "Μαθηματική Αυθεντία",
     "en": "Math Master",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_dynati_pena.svg",
     "gr": "Δυνατή Πένα",
     "en": "Writing Wizard",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_energi_symmetoxi.svg",
     "gr": "Ενεργή Συμμετοχή",
     "en": "Active Participant",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_omadiko_pnevma.svg",
     "gr": "Ομαδικό Πνεύμα",
     "en": "Team Player",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_efstoxes_erotiseis.svg",
     "gr": "Εύστοχες Ερωτήσεις",
     "en": "Question Asker",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_lytis_mistirion.svg",
     "gr": "Λύτης Μυστηρίων",
     "en": "Problem Solver",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_protipo_sygentrosis.svg",
     "gr": "Πρότυπο Συγκέντρωσης",
     "en": "Focus Star",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_ypodeigma_synergati.svg",
     "gr": "Υπόδειγμα Συνεργάτη",
     "en": "Collaboration Pro",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_anodiki_poreia.svg",
     "gr": "Ανοδική Πορεία",
     "en": "High Flyer",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_medal_epomeno_epipedo.svg",
     "gr": "Επόμενο Επίπεδο",
     "en": "Level Up",
-    "category": "motivational badge B medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Μετάλλια",
+    "cat_en": "Motivational Badges: Set B - Medals"
   },
   {
     "filename": "motivational_badge_B_prize_epitixis_oloklirosi.svg",
     "gr": "Επιτυχής Ολοκλήρωση",
     "en": "Completion Hero",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_artia_parousiasi.svg",
     "gr": "Άρτια Παρουσίαση",
     "en": "Presentation Pro",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_asos_stis_ergasies.svg",
     "gr": "Άσος στις Εργασίες",
     "en": "Assignment Ace",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_entatiki_exaskisi.svg",
     "gr": "Εντατική Εξάσκηση",
     "en": "Practice Power",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_asteri_stin_anagnosi.svg",
     "gr": "Αστέρι στην Ανάγνωση ",
     "en": "Reading Rocket",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_mathimatiki_afthentia.svg",
     "gr": "Μαθηματική Αυθεντία",
     "en": "Math Master",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_dynati_pena.svg",
     "gr": "Δυνατή Πένα",
     "en": "Writing Wizard",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_energi_symmetoxi.svg",
     "gr": "Ενεργή Συμμετοχή",
     "en": "Active Participant",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_omadiko_pnevma.svg",
     "gr": "Ομαδικό Πνεύμα",
     "en": "Team Player",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_efstoxes_erotiseis.svg",
     "gr": "Εύστοχες Ερωτήσεις",
     "en": "Question Asker",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_lytis_mistirion.svg",
     "gr": "Λύτης Μυστηρίων",
     "en": "Problem Solver",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_protipo_sygentrosis.svg",
     "gr": "Πρότυπο Συγκέντρωσης",
     "en": "Focus Star",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_ypodeigma_synergati.svg",
     "gr": "Υπόδειγμα Συνεργάτη",
     "en": "Collaboration Pro",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_anodiki_poreia.svg",
     "gr": "Ανοδική Πορεία",
     "en": "High Flyer",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Trophies"
   },
   {
     "filename": "motivational_badge_B_prize_epomeno_epipedo.svg",
     "gr": "Επόμενο Επίπεδο",
     "en": "Level Up",
-    "category": "motivational badge B prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τρόπαια",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_epitixis_oloklirosi.svg",
     "gr": "Επιτυχής Ολοκλήρωση",
     "en": "Completion Hero",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_artia_parousiasi.svg",
     "gr": "Άρτια Παρουσίαση",
     "en": "Presentation Pro",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_asos_stis_ergasies.svg",
     "gr": "Άσος στις Εργασίες",
     "en": "Assignment Ace",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_entatiki_exaskisi.svg",
     "gr": "Εντατική Εξάσκηση",
     "en": "Practice Power",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_asteri_stin_anagnosi.svg",
     "gr": "Αστέρι στην Ανάγνωση ",
     "en": "Reading Rocket",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_mathimatiki_afthentia.svg",
     "gr": "Μαθηματική Αυθεντία",
     "en": "Math Master",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_dynati_pena.svg",
     "gr": "Δυνατή Πένα",
     "en": "Writing Wizard",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_energi_symmetoxi.svg",
     "gr": "Ενεργή Συμμετοχή",
     "en": "Active Participant",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_omadiko_pnevma.svg",
     "gr": "Ομαδικό Πνεύμα",
     "en": "Team Player",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_efstoxes_erotiseis.svg",
     "gr": "Εύστοχες Ερωτήσεις",
     "en": "Question Asker",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_lytis_mistirion.svg",
     "gr": "Λύτης Μυστηρίων",
     "en": "Problem Solver",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_protipo_sygentrosis.svg",
     "gr": "Πρότυπο Συγκέντρωσης",
     "en": "Focus Star",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_ypodeigma_synergati.svg",
     "gr": "Υπόδειγμα Συνεργάτη",
     "en": "Collaboration Pro",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_anodiki_poreia.svg",
     "gr": "Ανοδική Πορεία",
     "en": "High Flyer",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_B_square_epomeno_epipedo.svg",
     "gr": "Επόμενο Επίπεδο",
     "en": "Level Up",
-    "category": "motivational badge B square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Β - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set B - Square"
   },
   {
     "filename": "motivational_badge_A_medal_Nikitis_tis_meras.svg",
     "gr": "Νικητής της ημέρας!",
     "en": "Daily Champ",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Synexise_Etsi.svg",
     "gr": "Συνέχισε έτσι!",
     "en": "Keep It Up",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Doro_prospathias.svg",
     "gr": "Το δώρο της προσπάθειάς σου!",
     "en": "Well-Earned Reward",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Fotises_Tin_Taxi.svg",
     "gr": "Φώτισες την τάξη με τις ιδέες σου!",
     "en": "Bright Spark",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Astronomiki_Proodos.svg",
     "gr": "Αστρονομική πρόοδος!",
     "en": "Stellar Progress",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Xeperases_Ton_Eafto_Sou.svg",
     "gr": "Ξεπέρασες τον εαυτό σου!",
     "en": "You Outdid Yourself",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_H_Korifi_Sou_Aniki.svg",
     "gr": "Η κορυφή σου ανήκει!",
     "en": "Peak Achiever",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_H_Skepsi_Sou_Astrapse.svg",
     "gr": "Η σκέψη σου άστραψε!",
     "en": "Flash of Genius",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Ta_Kataferes_Perifima.svg",
     "gr": "Τα κατάφερες περίφημα!",
     "en": "You Nailed It!",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Trexeis_Me_Xilia.svg",
     "gr": "Τρέχεις με χίλια προς την επιτυχία!",
     "en": "Success Sprinter",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Apoliti_Sigentrosi.svg",
     "gr": "Απόλυτη συγκέντρωση!",
     "en": "Focus Champion",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Isorropia_Kai_Organosi.svg",
     "gr": "Ισορροπία και οργάνωση!",
     "en": "Balanced & Organized",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Lytis_Mystirion.svg",
     "gr": "Λύτης μυστηρίων!",
     "en": "Mystery Solver",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Meta_Ti_Dyskolia_H_Epitixia.svg",
     "gr": "Μετά τη δυσκολία, η επιτυχία!",
     "en": "Challenge Conqueror",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_medal_Epidexiotita.svg",
     "gr": "Επιδεξιότητα!",
     "en": "Skill Master",
-    "category": "motivational badge A medal"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Μετάλλια",
+    "cat_en": "Motivational Badges: Set A - Medals"
   },
   {
     "filename": "motivational_badge_A_prize_Nikitis_tis_meras.svg",
     "gr": "Νικητής της ημέρας!",
     "en": "Daily Champ",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Synexise_Etsi.svg",
     "gr": "Συνέχισε έτσι!",
     "en": "Keep It Up",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Doro_prospathias.svg",
     "gr": "Το δώρο της προσπάθειάς σου!",
     "en": "Well-Earned Reward",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Fotises_Tin_Taxi.svg",
     "gr": "Φώτισες την τάξη με τις ιδέες σου!",
     "en": "Bright Spark",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Astronomiki_Proodos.svg",
     "gr": "Αστρονομική πρόοδος!",
     "en": "Stellar Progress",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Xeperases_Ton_Eafto_Sou.svg",
     "gr": "Ξεπέρασες τον εαυτό σου!",
     "en": "You Outdid Yourself",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_H_Korifi_Sou_Aniki.svg",
     "gr": "Η κορυφή σου ανήκει!",
     "en": "Peak Achiever",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_H_Skepsi_Sou_Astrapse.svg",
     "gr": "Η σκέψη σου άστραψε!",
     "en": "Flash of Genius",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Ta_Kataferes_Perifima.svg",
     "gr": "Τα κατάφερες περίφημα!",
     "en": "You Nailed It!",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Trexeis_Me_Xilia.svg",
     "gr": "Τρέχεις με χίλια προς την επιτυχία!",
     "en": "Success Sprinter",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Apoliti_Sigentrosi.svg",
     "gr": "Απόλυτη συγκέντρωση!",
     "en": "Focus Champion",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Isorropia_Kai_Organosi.svg",
     "gr": "Ισορροπία και οργάνωση!",
     "en": "Balanced & Organized",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Lytis_Mystirion.svg",
     "gr": "Λύτης μυστηρίων!",
     "en": "Mystery Solver",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Meta_Ti_Dyskolia_H_Epitixia.svg",
     "gr": "Μετά τη δυσκολία, η επιτυχία!",
     "en": "Challenge Conqueror",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_prize_Epidexiotita.svg",
     "gr": "Επιδεξιότητα!",
     "en": "Skill Master",
-    "category": "motivational badge A prize"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τρόπαια",
+    "cat_en": "Motivational Badges: Set A - Trophies"
   },
   {
     "filename": "motivational_badge_A_square_Nikitis_tis_meras.svg",
     "gr": "Νικητής της ημέρας!",
     "en": "Daily Champ",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Synexise_Etsi.svg",
     "gr": "Συνέχισε έτσι!",
     "en": "Keep It Up",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Doro_prospathias.svg",
     "gr": "Το δώρο της προσπάθειάς σου!",
     "en": "Well-Earned Reward",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Fotises_Tin_Taxi.svg",
     "gr": "Φώτισες την τάξη με τις ιδέες σου!",
     "en": "Bright Spark",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Astronomiki_Proodos.svg",
     "gr": "Αστρονομική πρόοδος!",
     "en": "Stellar Progress",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Xeperases_Ton_Eafto_Sou.svg",
     "gr": "Ξεπέρασες τον εαυτό σου!",
     "en": "You Outdid Yourself",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_H_Korifi_Sou_Aniki.svg",
     "gr": "Η κορυφή σου ανήκει!",
     "en": "Peak Achiever",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_H_Skepsi_Sou_Astrapse.svg",
     "gr": "Η σκέψη σου άστραψε!",
     "en": "Flash of Genius",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Ta_Kataferes_Perifima.svg",
     "gr": "Τα κατάφερες περίφημα!",
     "en": "You Nailed It!",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Trexeis_Me_Xilia.svg",
     "gr": "Τρέχεις με χίλια προς την επιτυχία!",
     "en": "Success Sprinter",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Apoliti_Sigentrosi.svg",
     "gr": "Απόλυτη συγκέντρωση!",
     "en": "Focus Champion",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Isorropia_Kai_Organosi.svg",
     "gr": "Ισορροπία και οργάνωση!",
     "en": "Balanced & Organized",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Lytis_Mystirion.svg",
     "gr": "Λύτης μυστηρίων!",
     "en": "Mystery Solver",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Meta_Ti_Dyskolia_H_Epitixia.svg",
     "gr": "Μετά τη δυσκολία, η επιτυχία!",
     "en": "Challenge Conqueror",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   },
   {
     "filename": "motivational_badge_A_square_Epidexiotita.svg",
     "gr": "Επιδεξιότητα!",
     "en": "Skill Master",
-    "category": "motivational badge A square"
+    "cat_gr": "Σήματα Παρακίνησης: Συλλογή Α - Τετράγωνα",
+    "cat_en": "Motivational Badges: Set A - Square"
   }
 ]

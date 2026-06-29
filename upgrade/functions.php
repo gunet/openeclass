@@ -291,7 +291,9 @@ function installBadgeIcons($root_dir) {
             }
         }
 
-        $category_name = $badge['category'];
+        $cat_gr = $badge['cat_gr'] ?? ($badge['category'] ?? '');
+        $cat_en = $badge['cat_en'] ?? ($badge['category'] ?? '');
+        $category_name = serialize(['el' => $cat_gr, 'en' => $cat_en]);
         if (!isset($categories_map[$category_name])) {
             $cat_row = Database::get()->querySingle("SELECT id FROM badge_icon_category WHERE name = ?s", $category_name);
             if ($cat_row) {

@@ -196,7 +196,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $BBBEndDate = $end_date->format('d-m-Y H:i');
         $textarea = rich_text_editor('desc', 4, 20, '', options: array('id' => 'desc'));
         $value_title = '';
-        $init_external_users = '';
         if ($tc_type == 'jitsi') {
             $value_session_users = 30; // jitsi recommended value
         } else {
@@ -241,6 +240,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'bbb'
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
             break;
+        default;
+            return;
     }
 
     if (isset($_GET['choice']) and $_GET['choice'] == 'edit') {

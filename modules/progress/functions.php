@@ -3536,7 +3536,7 @@ function points_game_settings($points_game_id = 0) {
     global $tool_content, $head_content, $course_id, $course_code, $langAdd,
         $langPointsGameLevelName, $langPointsGameLevelRequiredPoints,
         $language, $langTitle, $langDescription, $langSubmit, $langPointsGameLevels, $langSettingSelect,
-        $langInsert, $langStartDate, $langEndDate, $langLeaderboard, $langLeaderboardAnonymization, $langDelete;
+        $langInsert, $langStartDate, $langEndDate, $langLeaderboard, $langLeaderboardAnonymization, $langDelete, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
 
@@ -3621,172 +3621,178 @@ function points_game_settings($points_game_id = 0) {
         $display_anon = 'style="display:none;"';
     }
 
-    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
-    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <div class='form-group'>
-                    <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
-                    <div class='col-sm-12'>
-                        <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title' required>
-                    </div>
-                </div>
-                <div class='form-group mt-4'>
-                    <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
-                    <div class='col-sm-12'>
-                        <textarea id='description' class='form-control' name='description' rows='6'>$description</textarea>
-                    </div>
-                </div>
-
-                <div class='form-group mt-4'>
-                    <label for='startdatepicker' class='col-sm-12 control-label-notes'>$langStartDate:</label>
-                    <div class='col-sm-12'>
-                       <div class='input-group'>
-                           <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                           <input class='form-control mt-0' name='startdatepicker' id='startdatepicker' type='text' value='$startdate'>
-                       </div>
-                    </div>
-                    <label for='enddatepicker' class='col-sm-12 control-label-notes'>$langEndDate:</label>
-                    <div class='col-sm-12'>
-                       <div class='input-group'>
-                           <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                           <input class='form-control mt-0' name='enddatepicker' id='enddatepicker' type='text' value='$enddate'>
-                       </div>
-                    </div>
-                </div>
-                <div class='form-group mt-4'>                    
-                    <div class='col-sm-12 mb-3'>
-
-                        <div class='checkbox'>
-                            <label class='label-container' for='enable_leaderboard'>
-                                <input type='checkbox' name='enable_leaderboard' id='enable_leaderboard' value='1' $enable_checked>
-                                <span class='checkmark'></span>
-                                $langLeaderboard
-                            </label>
+    $tool_content .= "
+    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded'>
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                    <div class='form-group'>
+                        <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
+                        <div class='col-sm-12'>
+                            <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title' required>
                         </div>
-
                     </div>
-                    <div class='col-sm-12 mb-3' id='anonymize_area' $display_anon>
-
-                        <div class='checkbox'>
-                            <label class='label-container' for='anonymize_leaderboard'>
-                                <input type='checkbox' name='anonymize_leaderboard' id='anonymize_leaderboard' value='1' $anon_checked>
-                                <span class='checkmark'></span>
-                                $langLeaderboardAnonymization
-                            </label>
+                    <div class='form-group mt-4'>
+                        <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
+                        <div class='col-sm-12'>
+                            <textarea id='description' class='form-control' name='description' rows='6'>$description</textarea>
                         </div>
-
                     </div>
-                </div>
-                $points_game_hidden";
 
-                //Game levels
-                if ($points_game_id > 0) {
-                    $tool_content .= "
-                        <div class='form-group mt-4'>
-                            <div class='col-sm-12 control-label-notes'>$langPointsGameLevels:</div>
-                            <div class='col-sm-12'>
-                                <div class='table-responsive mt-0'>
-                                    <table class='table-default' id='levels_table'>
-                                        <thead>
-                                            <tr>
-                                                <th style='width:47%'>$langPointsGameLevelName</th>
-                                                <th style='width:47%'>$langPointsGameLevelRequiredPoints</th>
-                                                <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>";
-                                        $attr = "required";
-                                        if ($levels_used) {
-                                            $attr = "disabled";
-                                        }
-                                        $level_i = 1;
-                                        foreach ($levels as $level) {
-                                            $tool_content .= "<tr>
-                                                <td class='form-group'>
-                                                    <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='".$level->friendly_name."' $attr>
-                                                </td>
-                                                <td class='form-group'>
-                                                    <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='".$level->required_points."' min='0' $attr>
-                                                </td>";
-                                                if ($level_i == 1 || $levels_used) {
-                                                    $tool_content .= "<td class='text-center'>
+                    <div class='form-group mt-4'>
+                        <label for='startdatepicker' class='col-sm-12 control-label-notes'>$langStartDate:</label>
+                        <div class='col-sm-12'>
+                        <div class='input-group'>
+                            <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                            <input class='form-control mt-0' name='startdatepicker' id='startdatepicker' type='text' value='$startdate'>
+                        </div>
+                        </div>
+                        <label for='enddatepicker' class='col-sm-12 control-label-notes mt-4'>$langEndDate:</label>
+                        <div class='col-sm-12'>
+                        <div class='input-group'>
+                            <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                            <input class='form-control mt-0' name='enddatepicker' id='enddatepicker' type='text' value='$enddate'>
+                        </div>
+                        </div>
+                    </div>
+                    <div class='form-group mt-4'>                    
+                        <div class='col-sm-12 mb-3'>
+
+                            <div class='checkbox'>
+                                <label class='label-container' for='enable_leaderboard'>
+                                    <input type='checkbox' name='enable_leaderboard' id='enable_leaderboard' value='1' $enable_checked>
+                                    <span class='checkmark'></span>
+                                    $langLeaderboard
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class='col-sm-12 mb-3' id='anonymize_area' $display_anon>
+
+                            <div class='checkbox'>
+                                <label class='label-container' for='anonymize_leaderboard'>
+                                    <input type='checkbox' name='anonymize_leaderboard' id='anonymize_leaderboard' value='1' $anon_checked>
+                                    <span class='checkmark'></span>
+                                    $langLeaderboardAnonymization
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    $points_game_hidden";
+
+                    //Game levels
+                    if ($points_game_id > 0) {
+                        $tool_content .= "
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-12 control-label-notes'>$langPointsGameLevels:</div>
+                                <div class='col-sm-12'>
+                                    <div class='table-responsive mt-0'>
+                                        <table class='table-default' id='levels_table'>
+                                            <thead>
+                                                <tr>
+                                                    <th style='width:47%'>$langPointsGameLevelName</th>
+                                                    <th style='width:47%'>$langPointsGameLevelRequiredPoints</th>
+                                                    <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>";
+                                            $attr = "required";
+                                            if ($levels_used) {
+                                                $attr = "disabled";
+                                            }
+                                            $level_i = 1;
+                                            foreach ($levels as $level) {
+                                                $tool_content .= "<tr>
+                                                    <td class='form-group'>
+                                                        <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='".$level->friendly_name."' $attr>
+                                                    </td>
+                                                    <td class='form-group'>
+                                                        <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='".$level->required_points."' min='0' $attr>
                                                     </td>";
-                                                } else {
-                                                    $tool_content .= "<td class='text-center'>
-                                                        <a href='#' aria-label='$langDelete' class='removeLevel'><span class='fa-solid fa-xmark' style='color:red;'></span></a>
-                                                    </td>";
-                                                }
-                                            $tool_content .= "</tr>";
-                                            $level_i ++;
-                                        }
-                    $tool_content .= "</tbody>
-                                    </table>
+                                                    if ($level_i == 1 || $levels_used) {
+                                                        $tool_content .= "<td class='text-center'>
+                                                        </td>";
+                                                    } else {
+                                                        $tool_content .= "<td class='text-center'>
+                                                            <a href='#' aria-label='$langDelete' class='removeLevel'><span class='fa-solid fa-xmark' style='color:red;'></span></a>
+                                                        </td>";
+                                                    }
+                                                $tool_content .= "</tr>";
+                                                $level_i ++;
+                                            }
+                        $tool_content .= "</tbody>
+                                        </table>
+                                    </div>
+                                </div>";
+                        if (!$levels_used) {
+                            $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center'>
+                                    <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
+                                </div>";
+                        }
+                        $tool_content .= "</div>";
+                    } else {
+                        $tool_content .= "
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-12 control-label-notes'>$langPointsGameLevels:</div>
+                                <div class='col-sm-12'>
+                                    <div class='table-responsive mt-0'>
+                                        <table class='table-default' id='levels_table'>
+                                            <thead>
+                                                <tr>
+                                                    <th style='width:47%'>$langPointsGameLevelName</th>
+                                                    <th style='width:47%'>$langPointsGameLevelRequiredPoints</th>
+                                                    <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class='form-group'>
+                                                        <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='' required>
+                                                    </td>
+                                                    <td class='form-group'>
+                                                        <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='' min='0' required>
+                                                    </td>
+                                                    <td class='text-center'>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>";
-                    if (!$levels_used) {
-                        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center'>
-                                <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
+                                <div class='col-12 mt-5 d-flex justify-content-center'>
+                                    <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
+                                </div>
                             </div>";
                     }
-                    $tool_content .= "</div>";
-                } else {
-                    $tool_content .= "
-                        <div class='form-group mt-4'>
-                            <div class='col-sm-12 control-label-notes'>$langPointsGameLevels:</div>
-                            <div class='col-sm-12'>
-                                <div class='table-responsive mt-0'>
-                                    <table class='table-default' id='levels_table'>
-                                        <thead>
-                                            <tr>
-                                                <th style='width:47%'>$langPointsGameLevelName</th>
-                                                <th style='width:47%'>$langPointsGameLevelRequiredPoints</th>
-                                                <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class='form-group'>
-                                                    <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='' required>
-                                                </td>
-                                                <td class='form-group'>
-                                                    <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='' min='0' required>
-                                                </td>
-                                                <td class='text-center'>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class='col-12 mt-5 d-flex justify-content-center'>
-                                <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
-                            </div>
-                        </div>";
-                }
 
-                $tool_content .= "<div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-end align-items-center'>
+                    $tool_content .= "<div class='form-group mt-5'>
+                        <div class='col-12 d-flex justify-content-end align-items-center'>
 
 
-                           ".form_buttons(array(
-                            array(
-                                    'class' => 'submitAdminBtn',
-                                    'text' => $langSubmit,
-                                    'name' => $name,
-                                    'value'=> $langInsert
-                            ),
-                            array(
-                                'class' => 'cancelAdminBtn ms-1',
-                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                )
-                            ))."
+                            ".form_buttons(array(
+                                array(
+                                        'class' => 'submitAdminBtn',
+                                        'text' => $langSubmit,
+                                        'name' => $name,
+                                        'value'=> $langInsert
+                                ),
+                                array(
+                                    'class' => 'cancelAdminBtn ms-1',
+                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                    )
+                                ))."
 
 
 
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div></div>
+                </form>
+            </div>
+        </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+        </div>
     </div>";
 
 }
@@ -4351,6 +4357,23 @@ function display_leaderboard_accordion($points_game_id): void
                                             u.surname ASC,
                                             u.givenname ASC", $points_game_id, $course_id);
 
+
+    $arrLevelColors = [];
+    $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d", $points_game_id);
+    if (count($pointslevels) > 0) {
+        $level_colors = ['#14b8a6','#6366f1','#7c3aed','#ef4444','#f97316','#f59e0b','#10b981','#8b5cf6'];
+        $lc_idx = 0;
+        foreach ($pointslevels as $level) {
+            $lc = $level_colors[$lc_idx % count($level_colors)];
+            $arrLevelColors[] = [
+                'level_title' => $level->friendly_name,
+                'level_point' => $level->required_points,
+                'level_color' => $lc
+            ];
+            $lc_idx++;
+        }
+    }
+    
     $tool_content .= "
         <div class='card rounded-3 mt-4'>
             <div class='card-body p-4'>
@@ -4400,12 +4423,31 @@ function display_leaderboard_accordion($points_game_id): void
             }
 
             if ($current_points > 0 && ($is_editor || $user_data->id == $uid)) {
-                $points_html = "<a href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>$current_points</a>";
+                $points_html = "<a class='fs-6 TextBold' href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>$current_points</a>";
             } else {
                 $points_html = $current_points > 0 ? $current_points : '0';
             }
 
-            $badge_html = "<div class='lb-level-badge-star'><i class='fa fa-star'></i></div>";
+            $levelCounter = 0;
+            $bgLevelStar = '#9fa0a4';
+            if (count($arrLevelColors) > 0) {
+                foreach ($arrLevelColors as $l) {
+
+                    if (isset($arrLevelColors[$levelCounter + 1]) && $current_points >= $l['level_point'] && $current_points < $arrLevelColors[$levelCounter + 1]['level_point']) {
+                        $bgLevelStar = $l['level_color'];
+                        break;
+                    }
+
+                    if (!isset($arrLevelColors[$levelCounter + 1]) && $current_points >= $l['level_point']) {
+                        $bgLevelStar = $l['level_color'];
+                        break;
+                    }
+
+                    $levelCounter++;
+                }
+            }
+
+            $badge_html = "<div class='lb-level-badge-star' style='background: $bgLevelStar;'><i class='fa fa-star'></i></div>";
 
             $tool_content .= "
             <div class='$row_class' data-lb-page='$page'>

@@ -26,7 +26,7 @@ require_once 'exercise.lib.php';
 
 $require_course_reviewer = true;
 $require_current_course = true;
-$require_help = TRUE;
+$require_help = true;
 $helpTopic = 'exercises';
 
 if (isset($_GET['htopic'])) {

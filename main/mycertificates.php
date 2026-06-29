@@ -285,7 +285,7 @@ if (count($courses) > 0) {
                                                         ),
                                                         array(
                                                             'title' => $langDelResePortfolio,
-                                                            'url' => "$urlServer"."main/eportfolio/resources.php?action=remove&type=my_certificates&er_id=".($existsAseportfolioRes->id ?? 0),
+                                                            'url' => "$urlServer"."main/eportfolio/resources.php?action=remove&type=my_certificates&er_id=".($existsAseportfolioRes->id ?? 0)."&mycertsview=1",
                                                             'icon' => 'fa-solid fa-xmark',
                                                             'class' => 'Accent-200-cl delEportfolioResource',
                                                             'show' => (get_config('eportfolio_enable') && $existsAseportfolioRes)
@@ -492,7 +492,7 @@ if (count($courses) > 0) {
                                                             ),
                                                             array(
                                                                 'title' => $langDelResePortfolio,
-                                                                'url' => "$urlServer"."main/eportfolio/resources.php?action=remove&type=my_badges&er_id=".($existsAseportfolioRes->id ?? 0),
+                                                                'url' => "$urlServer"."main/eportfolio/resources.php?action=remove&type=my_badges&er_id=".($existsAseportfolioRes->id ?? 0)."&mycertsview=1",
                                                                 'icon' => 'fa-solid fa-xmark',
                                                                 'class' => 'Accent-200-cl delEportfolioResource',
                                                                 'show' => (get_config('eportfolio_enable') && $existsAseportfolioRes)

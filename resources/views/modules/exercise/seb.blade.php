@@ -25,7 +25,7 @@
 
                     <div class='form-group mt-5'>
                         <div class='col-12 d-flex justify-content-center align-items-center gap-4'>
-                            <a href="{{ preg_replace('/https/', 'sebs', $urlServer) }}modules/exercise/launch_seb.php?course={{ $course_code }}&exerciseId={{ $eid }}" class="btn submitAdminBtnDefault">{{ trans('langLaunchSafeExamBrowser') }}</a>
+                            <a href="{{ $seb_launch_url }}" class="btn submitAdminBtnDefault">{{ trans('langLaunchSafeExamBrowser') }}</a>
                             <a class='btn successAdminBtn' href="https://safeexambrowser.org/download_en.html" target="_blank">{{ trans('langDownloadSafeExamBrowser') }}</a>
                         </div>
                     </div>

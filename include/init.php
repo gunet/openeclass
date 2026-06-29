@@ -268,7 +268,8 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_departmentmanage_user = false;
 }
 
-if ($uid and !isset($_GET['logout']) and !$is_power_user and get_config('double_login_lock')) {
+if ($uid and !isset($_GET['logout']) and !$is_power_user and get_config('double_login_lock')
+        and !(defined('SKIP_DOUBLE_LOGIN_LOCK') or isset($_SESSION['SKIP_DOUBLE_LOGIN_LOCK']))) {
     $sessions = Database::get()->queryArray('SELECT session_id FROM login_lock
         WHERE user_id = ?d ORDER BY ts DESC', $uid);
     if ($sessions and count($sessions) > 1 and $sessions[0]->session_id != session_id()) {
@@ -498,87 +499,93 @@ if (isset($require_current_course) and $require_current_course) {
             }
         }
 
-        // Check for course visibility by current user
-        $status = 0;
-        // The admin and power users can see all courses as adminOfCourse
-        if ($is_admin or $is_power_user) {
-            $status = USER_TEACHER;
-            $is_coordinator = $is_consultant = true;
-        } elseif ($uid) {
-            $stat = Database::get()->querySingle("SELECT status, tutor, editor, course_reviewer FROM course_user
-                                                           WHERE user_id = ?d AND
-                                                           course_id = ?d", $uid, $course_id);
-            if ($stat) {
-                $status = $stat->status;
-                $is_editor = $stat->editor;
-                $is_course_reviewer = $stat->course_reviewer;
-                if ($stat->status == USER_STUDENT && $stat->tutor && !$stat->editor && !$stat->course_reviewer) {
-                    $is_consultant = true;
-                    $is_coordinator = false;
-                } elseif ($stat->status == USER_TEACHER or $is_editor) {
-                    $is_coordinator = $is_consultant = true;
-                } elseif ($stat->status == USER_STUDENT && !$stat->tutor && !$stat->editor && !$stat->course_reviewer) {
-                    $is_simple_user = true;
-                    $is_consultant = false;
-                    $is_coordinator = false;
-                    $is_course_reviewer = false;
-                }
-            }
-            if ($is_departmentmanage_user and isset($course_code)) {
-                // the department manager has rights to the courses of his department(s)
-                require_once 'include/lib/hierarchy.class.php';
-                require_once 'include/lib/course.class.php';
-                require_once 'include/lib/user.class.php';
-
-                $treeObj = new Hierarchy();
-                $courseObj = new Course();
-                $userObj = new User();
-
-                $atleastone = false;
-                $subtrees = $treeObj->buildSubtrees($userObj->getAdminDepartmentIds($uid));
-                $depIds = $courseObj->getDepartmentIds($course_id);
-                foreach ($depIds as $depId) {
-                    if (in_array($depId, $subtrees)) {
-                        $atleastone = true;
-                        break;
+        // Defining COURSE_VISIBILITY_MANUAL_CHECK skips course visibility checks and assumes student visibility
+        if (defined('COURSE_VISIBILITY_MANUAL_CHECK')) {
+            $status = USER_STUDENT;
+        } else {
+            // Check for course visibility by current user
+            $status = 0;
+            // The admin and power users can see all courses as adminOfCourse
+            if ($is_admin or $is_power_user) {
+                $status = USER_TEACHER;
+                $is_coordinator = $is_consultant = true;
+            } elseif ($uid) {
+                $stat = Database::get()->querySingle("SELECT status, tutor, editor, course_reviewer FROM course_user
+                                                               WHERE user_id = ?d AND
+                                                               course_id = ?d", $uid, $course_id);
+                if ($stat) {
+                    $status = $stat->status;
+                    $is_editor = $stat->editor;
+                    $is_course_reviewer = $stat->course_reviewer;
+                    if ($stat->status == USER_STUDENT && $stat->tutor && !$stat->editor && !$stat->course_reviewer) {
+                        $is_consultant = true;
+                        $is_coordinator = false;
+                    } elseif ($stat->status == USER_TEACHER or $is_editor) {
+                        $is_coordinator = $is_consultant = true;
+                    } elseif ($stat->status == USER_STUDENT && !$stat->tutor && !$stat->editor && !$stat->course_reviewer) {
+                        $is_simple_user = true;
+                        $is_consultant = false;
+                        $is_coordinator = false;
+                        $is_course_reviewer = false;
                     }
                 }
+                if ($is_departmentmanage_user and isset($course_code)) {
+                    // the department manager has rights to the courses of his department(s)
+                    require_once 'include/lib/hierarchy.class.php';
+                    require_once 'include/lib/course.class.php';
+                    require_once 'include/lib/user.class.php';
 
-                if ($atleastone) {
-                    $status = USER_TEACHER;
-                    $is_editor = $is_course_admin = $is_course_reviewer = true;
-                    $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
-                    $is_coordinator = $is_consultant = true;
+                    $treeObj = new Hierarchy();
+                    $courseObj = new Course();
+                    $userObj = new User();
+
+                    $atleastone = false;
+                    $subtrees = $treeObj->buildSubtrees($userObj->getAdminDepartmentIds($uid));
+                    $depIds = $courseObj->getDepartmentIds($course_id);
+                    foreach ($depIds as $depId) {
+                        if (in_array($depId, $subtrees)) {
+                            $atleastone = true;
+                            break;
+                        }
+                    }
+
+                    if ($atleastone) {
+                        $status = USER_TEACHER;
+                        $is_editor = $is_course_admin = $is_course_reviewer = true;
+                        $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
+                        $is_coordinator = $is_consultant = true;
+                    }
                 }
             }
-        }
-        if ($visible != COURSE_OPEN) {
-            if (!$uid) {
-                $toolContent_ErrorExists = $langNoAdminAccess;
-            } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !@$course_guest_allowed) {
-                Session::flash('message', $langLoginRequired);
-                Session::flash('alert-class', 'alert-info');
-                redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
-            } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and $visible == COURSE_INACTIVE) { // inactive course
-                $toolContent_ErrorExists = $langCheckProf;
-            } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and (course_has_expired($course_id) or !course_has_started($course_id))) { // expired course
-                $toolContent_ErrorExists = $langCourseHasExpired;
-            }
-
-        }
-
-        // Check for prerequisites completion for students and redirect to registration page if not completed
-        if ($uid and $status != USER_TEACHER and !$is_editor and !$is_course_reviewer) {
-            $missing_prereqs = check_course_prerequisites($uid, $course_id);
-            if (!empty($missing_prereqs)) {
-                if (!str_contains($_SERVER['SCRIPT_NAME'], 'modules/course_home/register.php')) {
-                    $missing_list = implode(', ', $missing_prereqs);
-                    Session::flash('message', $langPrerequisitesNotComplete . ' (' . $missing_list . ')');
-                    Session::flash('alert-class', 'alert-danger');
+            if ($visible != COURSE_OPEN) {
+                if (!$uid) {
+                    $toolContent_ErrorExists = $langNoAdminAccess;
+                } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !@$course_guest_allowed) {
+                    Session::flash('message', $langLoginRequired);
+                    Session::flash('alert-class', 'alert-info');
                     redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
+                } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and $visible == COURSE_INACTIVE) { // inactive course
+                    $toolContent_ErrorExists = $langCheckProf;
+                } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and (course_has_expired($course_id) or !course_has_started($course_id))) { // expired course
+                    $toolContent_ErrorExists = $langCourseHasExpired;
+                }
+
+            }
+
+            // Check for prerequisites completion for students and redirect to registration page if not completed
+            if ($uid and $status != USER_TEACHER and !$is_editor and !$is_course_reviewer) {
+                $missing_prereqs = check_course_prerequisites($uid, $course_id);
+                if (!empty($missing_prereqs)) {
+                    if (!str_contains($_SERVER['SCRIPT_NAME'], 'modules/course_home/register.php')) {
+                        $missing_list = implode(', ', $missing_prereqs);
+                        Session::flash('message', $langPrerequisitesNotComplete . ' (' . $missing_list . ')');
+                        Session::flash('alert-class', 'alert-danger');
+                        redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
+                    }
                 }
             }
         }
+
         $_SESSION['courses'][$course_code] = $courses[$course_code] = $status;
         // Clear session data about polls in course or session mode
         if (!isset($_GET['pid']) && !isset($_GET['from_poll'])) {
