@@ -97,7 +97,7 @@
                                 {{ $userdata->surname }} {{ $userdata->givenname }}
                             </div>
                             <div class="d-flex align-items-center gap-2 mt-1 flex-wrap">
-                                <span class="text-muted" style="font-size:0.9rem;">{{ '@' . $userdata->username }}</span>
+                                <span class="text-muted" style="font-size:0.9rem;">{{ $userdata->username }}</span>
                                 @php
                                     if ($userdata->status == USER_TEACHER) { $dp_role = trans('langTeacher'); }
                                     elseif ($userdata->status == USER_STUDENT) { $dp_role = trans('langStudent'); }

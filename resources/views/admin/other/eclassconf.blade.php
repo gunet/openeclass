@@ -1249,12 +1249,8 @@
                     </form>
                 </div>
 
-
-
-
-
                 {!! modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', trans('langConfirmEnableIndexTitle'), trans('langConfirmEnableIndex'), 'confirmIndexCancel', 'confirmIndexOk') !!}
-                {!! modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', trans('langConfirmEnableMobileAPITitle'), trans('langConfirmEnableMobileAPI'), 'confirmMobileAPICancel', 'confirmMobileAPIOk') !!}
+                {!! modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', trans('langConfirm'), trans('langConfirmEnableMobileAPITitle'), 'confirmMobileAPICancel', 'confirmMobileAPIOk') !!}
 
             </div>
         </div>

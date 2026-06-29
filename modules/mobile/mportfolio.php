@@ -76,25 +76,27 @@ function appendUserDetails ($root, $dom) {
 }
 
 function populateTools($baseurl) {
-    global $langRegCourses, $session;
+    global $langRegCourses, $langCourseCreate, $session;
 
     $toolsArr = array();
-    $toolsArr[] = createNewTool($baseurl, $langRegCourses, 'modules/auth/courses.php', 'coursesubscribe');
+    $toolsArr[] = createNewTool($baseurl, $langRegCourses, 'modules/auth/courses.php?view=mobile', 'coursesubscribe');
     if ($session->status == USER_TEACHER) {
-        $toolsArr[] = createNewTool($baseurl, $GLOBALS['langCourseCreate'], 'modules/create_course/create_course.php', 'createcourse');
+        $toolsArr[] = createNewTool($baseurl, $langCourseCreate, 'modules/create_course/create_course.php', 'createcourse');
     }
     return $toolsArr;
 }
 
 function populateProfileTools($baseurl) {
+    global $langMyCourses, $langMyDropBox, $langMyAnnouncements, $langMyAgenda, $langNotes, $langMyProfile, $langMyStats;
+
     $toolsArr = array();
-    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyCourses'], 'main/my_courses.php', 'mycourses');
-    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyDropBox'], 'modules/message/index.php', 'mymessages');
-    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyAnnouncements'], 'modules/announcements/myannouncements.php', 'myannouncements');
-    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyAgenda'], 'main/personal_calendar/index.php', 'myagenda');
-    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langNotes'], 'main/notes/index.php', 'mynotes');
-    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyProfile'], 'main/profile/display_profile.php', 'myprofile');
-    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyStats'], 'modules/usage/index.php?t=u', 'mystats');
+    $toolsArr[] = createNewTool($baseurl, $langMyCourses, 'main/my_courses.php?view=mobile', 'mycourses');
+    $toolsArr[] = createNewTool($baseurl, $langMyDropBox, 'modules/message/index.php?view=mobile', 'mymessages');
+    $toolsArr[] = createNewTool($baseurl, $langMyAnnouncements, 'modules/announcements/myannouncements.php?view=mobile', 'myannouncements');
+    $toolsArr[] = createNewTool($baseurl, $langMyAgenda, 'main/personal_calendar/index.php?view=mobile', 'myagenda');
+    $toolsArr[] = createNewTool($baseurl, $langNotes, 'main/notes/index.php?view=mobile', 'mynotes');
+    $toolsArr[] = createNewTool($baseurl, $langMyProfile, 'main/profile/display_profile.php?view=mobile', 'myprofile');
+    $toolsArr[] = createNewTool($baseurl, $langMyStats, 'modules/usage/index.php?t=u&view=mobile', 'mystats');
 
     return $toolsArr;
 }
