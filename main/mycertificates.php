@@ -670,6 +670,7 @@ function u_point_game() {
                         ORDER BY required_points ASC LIMIT 1",
                         $element_id);
                     $current_level_title = $first_level ? $first_level->friendly_name : $langStart;
+                    $current_level_title = "-";
                 }
             }
 

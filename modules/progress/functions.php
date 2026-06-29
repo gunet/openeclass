@@ -321,7 +321,12 @@ function display_points_games(): void
                 $user_progress = PointsGame::getNextLevelInfo($uid, $data->id);
                 $current_points = $user_progress['current_points'];
                 $level_num = $user_progress['current_level_num'] ?? '';
-                $pct = $user_progress['progress_percentage'] ?? 0;
+                //$pct = $user_progress['progress_percentage'] ?? 0;
+                $pct = 0;
+                $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d", $data->id);
+                if (!empty($level_num) && count($pointslevels) > 0) {
+                    $pct = round(($level_num/count($pointslevels))*100, 2);
+                }
                 $level_part = $level_num !== '' && $level_num !== null
                     ? "<span class='pg-list-sep'>|</span><span>$langLevel $level_num</span>"
                     : '';
@@ -2010,7 +2015,7 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
             $parentpath = dirname($path);
             $dirname =  htmlspecialchars($dirname->filename);
             $parentlink = $urlbase . $parentpath;
-            $parenthtml = "<span class='float-end'><a href='$parentlink'>$langUp " .
+            $parenthtml = "<span class='float-end'><a class='text-nowrap' href='$parentlink'>$langUp " .
                     icon('fa-level-up') . "</a></span>";
             $colspan = 4;
         }
@@ -2031,7 +2036,7 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
         if( !empty($path)) {
         $tool_content .=
                 "<tr>" .
-                "<th colspan='$colspan'><div>$langDirectory: $dirname$parenthtml</div></th>" .
+                "<th colspan='$colspan'><div>$langDirectory: $dirname</div></th><th>$parenthtml</th>" .
                 "</tr>" ;
         }
         $tool_content .=
@@ -3322,6 +3327,42 @@ function display_points_game_settings($element_id): void
         $current_points = $user_progress['current_points'];
         $pct = $user_progress['progress_percentage'] ?? 0;
 
+
+        // level icon
+        $arrLevelColors = [];
+        $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d", $element_id);
+        if (count($pointslevels) > 0) {
+            $level_colors = ['#14b8a6','#6366f1','#7c3aed','#ef4444','#f97316','#f59e0b','#10b981','#8b5cf6'];
+            $lc_idx = 0;
+            foreach ($pointslevels as $level) {
+                $lc = $level_colors[$lc_idx % count($level_colors)];
+                $arrLevelColors[] = [
+                    'level_title' => $level->friendly_name,
+                    'level_point' => $level->required_points,
+                    'level_color' => $lc
+                ];
+                $lc_idx++;
+            }
+        }
+        $levelCounter = 0;
+        $bgLevelStar = '#9fa0a4';
+        if (count($arrLevelColors) > 0) {
+            foreach ($arrLevelColors as $l) {
+
+                if (isset($arrLevelColors[$levelCounter + 1]) && $current_points >= $l['level_point'] && $current_points < $arrLevelColors[$levelCounter + 1]['level_point']) {
+                    $bgLevelStar = $l['level_color'];
+                    break;
+                }
+
+                if (!isset($arrLevelColors[$levelCounter + 1]) && $current_points >= $l['level_point']) {
+                    $bgLevelStar = $l['level_color'];
+                    break;
+                }
+
+                $levelCounter++;
+            }
+        }
+
         // Resolve current level title: assigned level → highest qualifying level → first defined level → fallback
         if (!empty($user_progress['current_level_title'])) {
             $current_level_title = $user_progress['current_level_title'];
@@ -3340,6 +3381,7 @@ function display_points_game_settings($element_id): void
                      ORDER BY required_points ASC LIMIT 1",
                     $element_id);
                 $current_level_title = $first_level ? $first_level->friendly_name : $langStart;
+                $current_level_title = "-";
             }
         }
 
@@ -3379,8 +3421,8 @@ function display_points_game_settings($element_id): void
                             <div class='card rounded-3 h-100'>
                                 <div class='card-body p-4'>
                                     <div class='d-flex align-items-center gap-3 mb-4 flex-wrap'>
-                                        <div class='pg-level-badge-icon'>
-                                            <i class='fa fa-shield-alt'></i>
+                                        <div class='lb-level-badge-star' style='background: $bgLevelStar; width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;flex-shrink:0;'>
+                                            <i class='fa fa-star'></i>
                                         </div>
                                         <div class='d-flex flex-grow-1 align-items-center flex-wrap gap-2'>
                                             <div class='flex-fill text-center pg-stat-col'>
@@ -4408,7 +4450,7 @@ function display_leaderboard_accordion($points_game_id): void
             $user_progress = PointsGame::getNextLevelInfo($user_data->id, $points_game_id);
             $current_points = $user_progress['current_points'];
             $level_num = $user_progress['current_level_num'] ?? null;
-            $level_text = $langLevel . ($level_num !== null ? " $level_num" : '');
+            $level_text = ($level_num !== null ? "$langLevel $level_num" : '-');
             $pct = $user_progress['progress_percentage'] ?? 0;
 
             if (is_null($user_progress['next_level_id'])) {
