@@ -4450,7 +4450,8 @@ function display_leaderboard_accordion($points_game_id): void
             $user_progress = PointsGame::getNextLevelInfo($user_data->id, $points_game_id);
             $current_points = $user_progress['current_points'];
             $level_num = $user_progress['current_level_num'] ?? null;
-            $level_text = ($level_num !== null ? "$langLevel $level_num" : '-');
+            //$level_text = ($level_num !== null ? "$langLevel $level_num" : '-');
+            $level_text = (($level_num !== null && !empty($user_progress['current_level_title'])) ? $user_progress['current_level_title'] : '-');
             $pct = $user_progress['progress_percentage'] ?? 0;
 
             if (is_null($user_progress['next_level_id'])) {
