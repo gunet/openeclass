@@ -311,7 +311,7 @@ if ($is_editor) {
                     return false;
                 }
         
-                if ($prev !== null && $points < $prev) {
+                if ($prev !== null && $points <= $prev) {
                     return false;
                 }
         
@@ -319,7 +319,7 @@ if ($is_editor) {
             }
         
             return true;
-        });
+        }, $langGamePointsLevelsAscRuleError);
         $v->rule('ascendingLevels', 'level_item_req_points');
         $v->rule('required', array('title', 'startdatepicker', 'enddatepicker'));
         $v->rule('dateFormat', 'startdatepicker', 'd-m-Y H:i');
@@ -337,13 +337,13 @@ if ($is_editor) {
             }
 
             return $end > $start;
-        });
+        }, $langPointsGameEndDateAfterStartDate);
         $v->rule('endAfterStart', 'enddatepicker');
         $v->labels(array(
             'title' => "$langTheField $langTitle",
             'startdatepicker' => "$langTheField $langStartDate",
             'enddatepicker' => "$langTheField $langEndDate",
-            'level_item_req_points' => "$langTheField $langPointsGameLevelRequiredPoints",
+            'level_item_req_points' => "$langPointsGameLevels:"
         ));
         if($v->validate()) {
             $startdate = date_format(date_create_from_format('d-m-Y H:i', $_POST['startdatepicker']), 'Y-m-d H:i');
@@ -393,7 +393,7 @@ if ($is_editor) {
                     return false;
                 }
         
-                if ($prev !== null && $points < $prev) {
+                if ($prev !== null && $points <= $prev) {
                     return false;
                 }
         
@@ -401,7 +401,7 @@ if ($is_editor) {
             }
         
             return true;
-        });
+        }, $langGamePointsLevelsAscRuleError);
         $v->rule('ascendingLevels', 'level_item_req_points');
         $v->rule('required', array('title', 'startdatepicker', 'enddatepicker'));
         $v->rule('dateFormat', 'startdatepicker', 'd-m-Y H:i');
@@ -419,12 +419,13 @@ if ($is_editor) {
             }
 
             return $end > $start;
-        });
+        }, $langPointsGameEndDateAfterStartDate);
         $v->rule('endAfterStart', 'enddatepicker');
         $v->labels(array(
             'title' => "$langTheField $langTitle",
             'startdatepicker' => "$langTheField $langStartDate",
             'enddatepicker' => "$langTheField $langEndDate",
+            'level_item_req_points' => "$langPointsGameLevels:"
         ));
         if($v->validate()) {
             $startdate = date_format(date_create_from_format('d-m-Y H:i', $_POST['startdatepicker']), 'Y-m-d H:i');
