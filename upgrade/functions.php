@@ -3721,6 +3721,34 @@ function upgrade_to_4_4($tbl_options) : void
         $eportfolio[$lang] = load_lang_strings($lang, $eportfolio_strings);
     }
 
+    //custom profile fields
+    $cats = Database::get()->queryArray("SELECT id, `name` FROM custom_profile_fields_category order by id asc");
+    foreach ($cats as $cat) {
+        if (!preg_match('/^a:\d+:\{.*\}$/s', $cat->name)) { //check if stored value doesn't look like serialized array
+            Database::get()->query("UPDATE custom_profile_fields_category SET `name` = ?s WHERE id = ?d",
+                serialize([$default_lang => $cat->name]), $cat->id);
+        }
+    }
+
+    $fields = Database::get()->queryArray("SELECT id, shortname, name, description, datatype, data FROM custom_profile_fields");
+    foreach ($fields as $field) {
+        if (!preg_match('/^a:\d+:\{.*\}$/s', $field->name)) { //if looks like being already serialized do nothing
+            if (!empty($field->description)) {
+                Database::get()->query("UPDATE custom_profile_fields SET name = ?s, description = ?s WHERE id = ?d", serialize([$default_lang => $field->name]),serialize([$default_lang => $field->description]), $field->id);
+            } else {
+                Database::get()->query("UPDATE custom_profile_fields SET name = ?s WHERE id = ?s", serialize([$default_lang => $field->name]), $field->id);
+            }
+            if ($field->datatype == 4) {//select options
+                $data_arr = unserialize($field->data, ["allowed_classes" => false]);
+                Database::get()->query("UPDATE custom_profile_fields SET data = ?s WHERE id = ?s", serialize([$default_lang => $data_arr]), $field->id);
+            }
+        }
+    }
+
+    if (!DBHelper::indexExists('custom_profile_fields', 'shortname')) {
+        Database::get()->query("ALTER TABLE custom_profile_fields ADD UNIQUE (shortname)");
+    }
+
     // E-portfolio
     if (!DBHelper::fieldExists('user', 'eportfolio_token')) {
         Database::get()->query("ALTER TABLE `user` ADD COLUMN eportfolio_token VARCHAR(64) DEFAULT NULL AFTER eportfolio_enable");

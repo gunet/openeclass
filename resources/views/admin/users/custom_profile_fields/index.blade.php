@@ -26,7 +26,7 @@
                             <div id='cat_{{ getIndirectReference($res->id) }}' class='table-responsive'>
                                 <table class='table-default table-custom-profile'>
                                 <caption class='tile__name ps-1 pe-1'>
-                                    <strong>{{ trans('langCategory') }} :</strong> {{ $res->name }}
+                                    <strong>{{ trans('langCategory') }} :</strong> {{ getSerializedMessage($res->name) }}
                                     <div class='float-end'>
                                         {!! action_button(array(
                                             array(
@@ -67,9 +67,9 @@
                                     <tbody class='tile__list'>
                                     @foreach ($form_data_array[$res->id] as $f)
                                         <tr id='field_{{ getIndirectReference($f->id) }}'>
-                                            <td>{{ $f->name }}</td>
+                                            <td>{{ getSerializedMessage($f->name) }}</td>
                                             <td>{{ $f->shortname }}</td>
-                                            <td>{!! standard_text_escape($f->description) !!}</td>
+                                            <td>{!! standard_text_escape(getSerializedMessage($f->description)) !!}</td>
                                             <td>{{ $field_types[$f->datatype] }}</td>
                                             <td>{{ $yes_no[$f->required] }}</td>
                                             <td>{{ $yes_no[$f->registration] }}</td>

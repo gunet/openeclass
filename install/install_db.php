@@ -932,7 +932,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
                 `visibility` TINYINT NOT NULL DEFAULT 0,
                 `user_type` TINYINT NOT NULL,
                 `registration` TINYINT NOT NULL DEFAULT 0,
-                `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL) $tbl_options");
+                `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+                UNIQUE (`shortname`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data` (
                 `user_id` INT UNSIGNED NOT NULL DEFAULT 0,

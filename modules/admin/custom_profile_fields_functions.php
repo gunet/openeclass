@@ -359,7 +359,7 @@ function render_profile_fields_content($context) {
                                             }
 
                                             $return_str .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                                <h2 class='text-heading-h3'>".q($cat->name)."</h2>
+                                                                <h2 class='text-heading-h3'>".q(getSerializedMessage($cat->name))."</h2>
                                                             </div>
 
                                                             <div class='card-body'>";
@@ -377,7 +377,7 @@ function render_profile_fields_content($context) {
 
                                                                             $return_str .= "
                                                                                                 <div class='col-lg-4 col-12'>
-                                                                                                    <div class='title-default'>".q($f->name)."</div>
+                                                                                                    <div class='title-default'>".q(getSerializedMessage($f->name))."</div>
                                                                                                 </div>
 
                                                                                                 <div class='col-lg-8 col-12 title-default-line-height'>
