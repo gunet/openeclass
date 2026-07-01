@@ -35,14 +35,6 @@ $toolName = $langPortfolio;
 $pageName = $langMyCertificates;
 $content = false;
 
-// Add missing columns if not present (schema upgrade guard)
-if (!Database::get()->querySingle("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'certified_users' AND COLUMN_NAME = 'add_my_profile'")) {
-    Database::get()->query("ALTER TABLE certified_users ADD COLUMN add_my_profile TINYINT(1) NOT NULL DEFAULT 0");
-}
-if (!Database::get()->querySingle("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'user_badge' AND COLUMN_NAME = 'add_my_profile'")) {
-    Database::get()->query("ALTER TABLE user_badge ADD COLUMN add_my_profile TINYINT(1) NOT NULL DEFAULT 0");
-}
-
 if (get_config('eportfolio_enable')) {
     $head_content .= 
         '<script>
