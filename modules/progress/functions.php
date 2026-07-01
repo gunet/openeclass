@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /*
  *  ========================================================================
@@ -386,7 +386,7 @@ function display_points_games(): void
                     array(
                         'title' => $langPurge,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_points_game=$data->id",
-                        'icon' => 'fa-trash-can',
+                        'icon' => 'fa-solid fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langConfirmPurgePointsGame
                     )
