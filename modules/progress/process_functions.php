@@ -984,7 +984,7 @@ function get_badge_icon($badge_id) {
 
     $r = Database::get()->querySingle("SELECT name, filename FROM badge_icon WHERE id = ?d", $badge_id);
 
-    return [$r->name => $r->filename];
+    return [getSerializedMessage($r->name) => $r->filename];
 
 }
 
@@ -1006,13 +1006,38 @@ function get_badge_filename($badge_id) {
  * @brief get available badge icons
  * @return string
  */
+function get_badge_categories() {
+    $categories = array();
+    $c = Database::get()->queryArray("SELECT id, name FROM badge_icon_category");
+    foreach ($c as $data) {
+        $categories[$data->id] = getSerializedMessage($data->name);
+    }
+    return $categories;
+}
+
+function get_badge_icon_categories() {
+    $categories = array();
+    $c = Database::get()->queryArray("SELECT id, category FROM badge_icon");
+    foreach ($c as $data) {
+        $categories[$data->id] = $data->category;
+    }
+    return $categories;
+}
+function get_badge_filenames() {
+    $badges = array();
+    $b = Database::get()->queryArray("SELECT id, filename FROM badge_icon");
+    foreach ($b as $data) {
+        $badges[$data->id] = $data->filename;
+    }
+    return $badges;
+}
 function get_badge_icons() {
 
     $badges = array();
 
     $b = Database::get()->queryArray("SELECT id, name FROM badge_icon");
     foreach ($b as $data) {
-        $badges[$data->id] = $data->name;
+        $badges[$data->id] = getSerializedMessage($data->name);
     }
     return $badges;
 }

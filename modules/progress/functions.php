@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /*
  *  ========================================================================
@@ -3363,7 +3363,6 @@ function display_points_game_settings($element_id): void
             }
         }
 
-        // Resolve current level title: assigned level → highest qualifying level → first defined level → fallback
         if (!empty($user_progress['current_level_title'])) {
             $current_level_title = $user_progress['current_level_title'];
         } else {
@@ -3920,17 +3919,18 @@ function certificate_settings($element, $element_id = 0) {
 
                 if ($('#badge_hidden').length > 0) {
                     let data = JSON.parse($('#badge_hidden').val());
+                    let filenames = JSON.parse($('#badge_filenames_hidden').val());
                     select2Data = Object.keys(data).map(key => ({
                         id: key,
                         text: data[key],
-                        image: urlServer + 'courses/user_progress_data/badge_templates/' + data[key] + '.png',
+                        image: urlServer + 'courses/user_progress_data/badge_templates/' + filenames[key],
                         width: 48
                     }));
                     $('#selectWithIcon').select2({
                         data: select2Data,
                         templateResult: formatOption,
                     });
-                    let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
+                    let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + filenames[$('#selectWithIcon').val()];
                     $('#selected_icon').attr('src', imgPath);
                     $('#selected_icon').attr('width', 48);
                 }
@@ -3946,7 +3946,8 @@ function certificate_settings($element, $element_id = 0) {
                         let imgPath = certImage[$('#selectWithIcon').val()];
                         $('#selected_icon').attr('src', imgPath);
                     } else if (dataType === 'badge') {
-                        let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
+                        let filenames = JSON.parse($('#badge_filenames_hidden').val());
+                        let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + filenames[$('#selectWithIcon').val()];
                         $('#selected_icon').attr('src', imgPath);
                     }
                 });
@@ -4004,7 +4005,7 @@ function certificate_settings($element, $element_id = 0) {
                 <div class='form-group'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
-                        <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
+                        <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title' required>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
@@ -4014,34 +4015,127 @@ function certificate_settings($element, $element_id = 0) {
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <label for='selectWithIcon' class='col-sm-6 control-label-notes'>";
+                    <label for='selectWithIcon' class='col-sm-6 control-label-notes pb-2'>";
                     $tool_content .= ($element == 'certificate') ? $langTemplate : $langIcon;
                     $tool_content .= "</label>
                         <div class='col-sm-12'>";
-                            $tool_content .= ($element == 'certificate') ? selection(get_certificate_templates(), 'template', $template, 'id="selectWithIcon" data-type="certificate"',) : selection(get_badge_icons(), 'template', $template, 'id="selectWithIcon"  data-type="badge"');
-//                            if ($element == 'certificate') {
-//                                $tool_content .= "<input id='certificate_hidden' type='hidden' value='".json_encode(get_certificate_templates())."'>";
-//                            }
-//                            if ($element == 'badge') {
-//                                $tool_content .= "<input id='badge_hidden' type='hidden' value='".json_encode(get_badge_icons())."'>";
-//                            }
-                            if ($element == 'certificate' || $element == 'badge') {
+                            if ($element == 'badge') {
+                                $tool_content .= "<style>
+                                    .border-transparent { border-color: transparent !important; }
+                                    @media (min-width: 768px) {
+                                        .col-md-fifth { width: 20%; flex: 0 0 20%; max-width: 20%; }
+                                    }
+                                </style>";
+                                $tool_content .= "<div id='icon_grid' class='border rounded p-2'>";
+                                
+                                $lang_search_str = $GLOBALS['langSearch'] ?? 'Αναζήτηση...';
+                                $cats = get_badge_categories();
+                                $icon_cats = get_badge_icon_categories();
+                                
+                                $tool_content .= "
+                                <div class='row p-2'>
+                                    <div class='d-flex align-items-center flex-row border-bottom pb-3'>
+                                        <img id='selected_badge_preview' src='' alt='Preview' style='max-height: 40px; display: none;'>
+                                        <span id='selected_badge_name' class='ms-2 fw-bold text-primary'></span>
+                                    </div>
+                                </div>
+                                <div class='row mb-3'>
+                                    <div class='col-md-6 mb-2 mb-md-0'>
+                                        <input type='text' id='badgeSearch' class='form-control' placeholder='" . q($lang_search_str) . "'>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <select id='badgeCategoryFilter' class='form-select form-control'>
+                                            <option value=''>Όλες οι κατηγορίες</option>";
+                                            foreach ($cats as $cid => $cname) {
+                                                $tool_content .= "<option value='$cid'>" . q($cname) . "</option>";
+                                            }
+                                $tool_content .= "  </select>
+                                    </div>
+                                </div>
+                                <div class='row m-0' style='height: 300px; overflow-y: auto;'>";
+
+                                $badges = get_badge_icons();
+                                $filenames = get_badge_filenames();
+                                $first = true;
+                                foreach ($badges as $id => $badgeName) {
+                                    $imgPath = $urlServer . "courses/user_progress_data/badge_templates/" . $filenames[$id];
+                                    $checked = ($template == $id || ($template == '' && $first)) ? "checked" : "";
+                                    $first = false;
+                                    $activeClass = $checked ? "border-primary" : "border-transparent";
+                                    $cat_id = isset($icon_cats[$id]) ? $icon_cats[$id] : '';
+                                    $tool_content .= "
+                                    <div class='col-4 col-md-fifth text-center mb-3 badge-icon-container' data-category='$cat_id'>
+                                        <label class='d-block border p-2 rounded cursor-pointer badge-icon-label $activeClass' style='cursor: pointer; height: 100%; transition: all 0.2s;'>
+                                            <input type='radio' name='template' value='$id' class='d-none badge-icon-radio' $checked>
+                                            <img src='$imgPath' alt='".q($badgeName)."' style='max-width: 100%; height: auto; max-height: 60px;'>
+                                            <div class='mt-2 small fw-bold badge-name'>".q($badgeName)."</div>
+                                        </label>
+                                    </div>";
+                                }
+                                $tool_content .= "</div>"; // close inner scrollable div
+                                $tool_content .= "</div>"; // close #icon_grid
+                                $tool_content .= "<script>
+                                    $(document).ready(function() {
+                                        function updateSelectedPreview() {
+                                            let selectedLabel = $('.badge-icon-radio:checked').closest('.badge-icon-label');
+                                            if (selectedLabel.length) {
+                                                let imgSrc = selectedLabel.find('img').attr('src');
+                                                let badgeName = selectedLabel.find('.badge-name').text();
+                                                $('#selected_badge_preview').attr('src', imgSrc).show();
+                                                $('#selected_badge_name').text(badgeName);
+                                            }
+                                        }
+
+                                        $('.badge-icon-radio').on('change', function() {
+                                            $('.badge-icon-label').removeClass('border-primary').addClass('border-transparent');
+                                            $(this).closest('.badge-icon-label').removeClass('border-transparent').addClass('border-primary');
+                                            updateSelectedPreview();
+                                        });
+
+                                        updateSelectedPreview();
+
+                                        function filterIcons() {
+                                            let term = $('#badgeSearch').val().toLowerCase();
+                                            let cat = $('#badgeCategoryFilter').val();
+                                            $('.badge-icon-container').each(function() {
+                                                let name = $(this).find('.badge-name').text().toLowerCase();
+                                                let iconCat = $(this).data('category').toString();
+                                                let matchName = name.includes(term);
+                                                let matchCat = (cat === '' || cat === iconCat);
+                                                
+                                                if (matchName && matchCat) {
+                                                    $(this).removeClass('d-none');
+                                                } else {
+                                                    $(this).addClass('d-none');
+                                                }
+                                            });
+                                        }
+
+                                        $('#badgeSearch').on('keyup', filterIcons);
+                                        $('#badgeCategoryFilter').on('change', filterIcons);
+                                    });
+                                </script>";
+                            } else {
+                                $tool_content .= selection(get_certificate_templates(), 'template', $template, 'id="selectWithIcon" data-type="certificate"');
                                 $inputId = $element . '_hidden';
-                                $value = ($element == 'certificate') ? json_encode(get_certificate_templates()) : json_encode(get_badge_icons());
+                                $value = json_encode(get_certificate_templates());
                                 $tool_content .= "<input id='$inputId' type='hidden' value='$value'>";
                             }
                             $tool_content .= "<input id='urlServer' type='hidden' value='".$urlServer."'>";
 
                         $tool_content .= "</div>
-                </div>
-                <div class='form-group mt-4'>
-                    <div class='col-sm-2'></div>
-                    <div class='col-sm-10'>
-                        <img id='selected_icon' src='' alt=''>
-                    </div>
-                </div>
+                </div>";
+                if ($element == 'certificate') {
+                    $tool_content .= "
+                    <div class='form-group mt-4'>
+                        <div class='col-sm-2'></div>
+                        <div class='col-sm-10'>
+                            <img id='selected_icon' src='' alt=''>
+                        </div>
+                    </div>";
+                }
 
-                <div class='form-group mt-4'>
+                $tool_content .= "<div class='form-group mt-4'>
                     <label for='message_id' class='col-sm-12 control-label-notes'>$langMessage</label>
                     <div class='col-sm-12'>
                         <textarea id='message_id' class='form-control' name='message' rows='3' maxlength='1200'>$message</textarea>
