@@ -199,7 +199,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
     $data['cat_name'] = '';
     if (isset($_GET['edit_cat'])) {
         $data['catid'] = intval(getDirectReference($_GET['edit_cat']));
-        $data['cat_name'] = Database::get()->querySingle("SELECT name FROM custom_profile_fields_category WHERE id = ?d", $data['catid'])->name;
+        $data['cat_name'] = getSerializedMessage(Database::get()->querySingle("SELECT name FROM custom_profile_fields_category WHERE id = ?d", $data['catid'])->name);
     }
 
     $view = 'admin.users.custom_profile_fields.createCategory';
@@ -261,9 +261,9 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
     $result = Database::get()->querySingle("SELECT * FROM custom_profile_fields WHERE id = ?d", $data['fieldid']);
     if ($result) {
 
-        $data['name'] = $name = q($result->name);
+        $data['name'] = $name = q(getSerializedMessage($result->name));
         $data['shortname'] = $shortname = q($result->shortname);
-        $description = standard_text_escape($result->description);
+        $description = standard_text_escape(getSerializedMessage($result->description));
         $data['datatype'] = $datatype = $result->datatype;
         $data['required'] = $result->required;
         $data['vis'] = $vis = $result->visibility;
@@ -271,7 +271,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         $custom_profile_fields_data = $result->data;
 
         if ($data['datatype'] == CPF_MENU) {
-            $custom_profile_fields_data = unserialize($custom_profile_fields_data);
+            $custom_profile_fields_data = unserialize($custom_profile_fields_data, ['allowed_classes' => false]);
             $data['textarea_val'] = '';
             foreach ($custom_profile_fields_data as $line) {
                 $data['textarea_val'] .= $line."\n";
@@ -280,7 +280,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         }
 
         load_js('validation.js');
-        $data['fielddescr_rich_text'] =  rich_text_editor('fielddescr', 8, 20, standard_text_escape($result->description), options: array('id' => 'fielddescr'));
+        $data['fielddescr_rich_text'] =  rich_text_editor('fielddescr', 8, 20, $description, options: array('id' => 'fielddescr'));
 
         $data['field_types'] = $field_types = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langLink);
         $data['yes_no'] = array(0 => $langNo, 1 => $langYes);
@@ -328,5 +328,10 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
     }
   $view = 'admin.users.custom_profile_fields.index';
 }
+
+$default_lang = get_config('default_language');
+//create an array where default language is the first element
+$data['available_langs'] = [$default_lang => $session->native_language_names[$default_lang]]
+        + array_diff_key($session->native_language_names, [$default_lang => true]);
 
 view ($view, $data);

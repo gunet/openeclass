@@ -158,7 +158,7 @@ function render_eportfolio_fields_content($uid) {
                             $row .= standard_text_escape($fdata_res->data);
                             break;
                         case EPF_MENU:
-                            $options = unserialize($f->data);
+                            $options = unserialize($f->data, ['allowed_classes' => false]);
                             if (isset($options[$_SESSION['langswitch']])) {
                                 $options_lang = $options[$_SESSION['langswitch']];
                             } elseif (isset($options[get_config('default_language')])) {
@@ -279,7 +279,7 @@ function render_eportfolio_profile_card($uid, $resources_url = null, $resources_
                 $demographics[] = q($fdata_res->data);
                 break;
             case 'gender':
-                $options = unserialize($f->data);
+                $options = unserialize($f->data, ['allowed_classes' => false]);
                 if (isset($options[$_SESSION['langswitch']])) {
                     $options_lang = $options[$_SESSION['langswitch']];
                 } elseif (isset($options[get_config('default_language')])) {
@@ -572,7 +572,7 @@ function render_eportfolio_fields_form() {
                         } else {
                             $def_selection = 0;
                         }
-                        $options = unserialize($f->data);
+                        $options = unserialize($f->data, ['allowed_classes' => false]);
                         if (isset($options[$_SESSION['langswitch']])) {
                             $options_lang = $options[$_SESSION['langswitch']];
                         } else {
