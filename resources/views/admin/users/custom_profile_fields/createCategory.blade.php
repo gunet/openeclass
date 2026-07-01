@@ -26,13 +26,15 @@
                             @if ($catid)
                             <input type='hidden' name='cat_id' value='{{ getIndirectReference($catid) }}'>
                             @endif
+                            @foreach ($available_langs as $code => $lang)
                             <div class='form-group'>
-                                <label for='catname' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                <label for='catname_{{ $code }}' class='col-sm-12 control-label-notes'>{{ trans('langName') }} ({{ $lang }}) @if ($code == $default_lang) <span class='asterisk Accent-200-cl'>(*)</span> @endif </label>
                                 <div class='col-sm-12'>
-                                    <input id='catname' placeholder="{{ trans('langName') }}" class="form-control" type='text' name='cat_name' value="{{ $cat_name ?: '' }}">
+                                    <input id='catname_{{ $code }}' placeholder="{{ trans('langName') }}" class="form-control" type='text' name='cat_name[{{ $code }}]' value="{{ $cat_name ? getSerializedMessage($cat_name, $code) : '' }}">
                                 </div>
                             </div>
-                     
+                            @endforeach
+
                             <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
                                 {!! showSecondFactorChallenge() !!}
                                 <input class='btn submitAdminBtn' type='submit' name='submit_cat' value='{{ trans('langAdd') }}'>

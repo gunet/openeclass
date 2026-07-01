@@ -31,12 +31,14 @@
                                 <input type='hidden' name='catid' value='{{ $catid }}'>
                             @endif
                             <input type='hidden' name='datatype' value='{{ $datatype }}'>
+                            @foreach ($available_langs as $code => $lang)
                             <div class='form-group'>
-                                <label for='name' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                <label for='name_{{ $code }}' class='col-sm-12 control-label-notes'>{{ trans('langName') }} ({{ $lang }}) @if ($code == $default_lang) <span class='asterisk Accent-200-cl'>(*)</span> @endif </label>
                                 <div class='col-sm-12'>
-                                    <input id='name' type='text' name='field_name' class="form-control" value="{{ isset($name) ? $name : '' }}">
+                                    <input id='name_{{ $code }}' type='text' name='field_name[{{ $code }}]' class="form-control" value="{{ isset($name) ? q(getSerializedMessage($name, $code)) : '' }}">
                                 </div>
                             </div>
+                            @endforeach
 
                             <div class='form-group mt-4'>
                                 <label for='shortname' class='col-sm-12 control-label-notes'>
@@ -47,13 +49,14 @@
                                 </div>
                             </div>
 
-
+                            @foreach ($available_langs as $code => $lang)
                             <div class='form-group mt-4'>
-                                <label for='fielddescr' class='col-sm-12 control-label-notes'>{{ trans('langDescription') }}</label>
+                                <label for='fielddescr_{{ $code }}' class='col-sm-12 control-label-notes'>{{ trans('langDescription') }} ({{ $code }})</label>
                                 <div class='col-sm-12'>
-                                    {!! $fielddescr_rich_text !!}
+                                    {!! $fielddescr_rich_text[$code] !!}
                                 </div>
                             </div>
+                            @endforeach
                             @if (isset($_GET['edit_field']))
 
                                 <div class='form-group mt-4'>
