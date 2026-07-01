@@ -104,7 +104,7 @@ require 'modules/admin/custom_profile_fields_functions.php';
         }
     }
 } elseif (isset($_GET['del_field'])) { //delete fields
-    $fieldid = intval($_GET['del_field']);
+    $fieldid = intval(getDirectReference($_GET['del_field']));
     //delete fields profile data
     Database::get()->query("DELETE custom_profile_fields_data FROM custom_profile_fields_data INNER JOIN custom_profile_fields
                             ON custom_profile_fields_data.field_id = custom_profile_fields.id
