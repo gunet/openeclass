@@ -352,7 +352,7 @@ if ($is_editor) {
                 'enable_leaderboard' => !empty($_POST['enable_leaderboard']) ? 1 : 0,
                 'anonymize_leaderboard' => !empty($_POST['anonymize_leaderboard']) ? 1 : 0
             ];
-            add_points_game($_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $config_arr);
+            add_points_game($_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $config_arr, $_POST['level_item_icon'] ?? []);
             Session::flash('message',$langNewPointsGameSuc);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points");
@@ -434,7 +434,7 @@ if ($is_editor) {
                 'enable_leaderboard' => !empty($_POST['enable_leaderboard']) ? 1 : 0,
                 'anonymize_leaderboard' => !empty($_POST['anonymize_leaderboard']) ? 1 : 0
             ];
-            modify_points_game($_POST['points_game_id'], $_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $config_arr);
+            modify_points_game($_POST['points_game_id'], $_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $config_arr, $_POST['level_item_icon'] ?? []);
             Session::flash('message',$langQuotaSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points");

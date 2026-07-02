@@ -644,107 +644,10 @@ if ($userdata) {
         $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioNoResInCollection</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
     } else {
 
-        $active_class = ' class="nav-item"';
-
-        if ($myCertificates) {
-            $myCertificates_li = '<li class="nav-item" role="presentation"><button id="certificatestab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#mycertificates">'.$langCertificates.'</button></li>';
-            if ($active_class != '') {
-                $myCertificates_div_class = 'tab-pane fade show active';
-            } else {
-                $myCertificates_div_class = 'tab-pane fade';
-            }
-            $active_class = '';
-        } else {
-            $myCertificates_li = '';
-        }
-
-        if ($myBadges) {
-            $myBadges_li = '<li class="nav-item" role="presentation"><button id="badgestab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mybadges">'.$langBadges.'</button></li>';
-            if ($active_class != '') {
-                $myBadges_div_class = 'tab-pane fade show active';
-            } else {
-                $myBadges_div_class = 'tab-pane fade';
-            }
-            $active_class = '';
-        } else {
-            $myBadges_li = '';
-        }
-
-        if ($external_achievements) {
-            $external_achievements_li = '<li class="nav-item" role="presentation"><button id="externalachievementstab" class="nav-link" data-bs-toggle="tab" data-bs-target="#externalachievements">'.$langExternalAchievements.'</button></li>';
-            if ($active_class != '') {
-                $external_achievements_div_class = 'tab-pane fade show active';
-            } else {
-                $external_achievements_div_class = 'tab-pane fade';
-            }
-            $active_class = '';
-        } else {
-            $external_achievements_li = '';
-        }
-
-        if ($submissions) {
-            $work_li = '<li class="nav-item" role="presentation"><button id="worktab" class="nav-link" data-bs-toggle="tab" data-bs-target="#works">'.$langWorks.'</button></li>';
-            if ($active_class != '') {
-                $work_div_class = 'tab-pane fade show active';
-            } else {
-                $work_div_class = 'tab-pane fade';
-            }
-            $active_class = '';
-        } else {
-            $work_li = '';
-        }
-
-        if ($docs) {
-            $mydocs_li = '<li class="nav-item" role="presentation"><button id="docstab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mydocs">'.$langDoc.'</button></li>';
-            if ($active_class != '') {
-                $mydocs_div_class = 'tab-pane fade show active';
-            } else {
-                $mydocs_div_class = 'tab-pane fade';
-            }
-            $active_class = '';
-        } else {
-            $mydocs_li = '';
-        }
-
-        if ($blog_posts) {
-            $blog_li = '<li class="nav-item" role="presentation"><button id="blogtab" class="nav-link" data-bs-toggle="tab" data-bs-target="#blog">'.$langBlogPosts.'</button></li>';
-            if ($active_class != '') {
-                $blog_div_class = 'tab-pane fade show active';
-            } else {
-                $blog_div_class = 'tab-pane fade';
-            }
-            $active_class = '';
-        } else {
-            $blog_li = '';
-        }
-
-        if ($notes) {
-            $notes_li = '<li class="nav-item" role="presentation"><button id="notestab" class="nav-link" data-bs-toggle="tab" data-bs-target="#notes">'.$langNotes.'</button></li>';
-            if ($active_class != '') {
-                $notes_div_class = 'tab-pane fade show active';
-            } else {
-                $notes_div_class = 'tab-pane fade';
-            }
-            $active_class = '';
-        } else {
-            $notes_li = '';
-        }
-
-        $tool_content .= '<div class="col-12"><ul class="nav nav-tabs" role="tablist">
-                            '.$myCertificates_li.'
-                            '.$myBadges_li.'
-                            '.$external_achievements_li.'
-                            '.$work_li.'
-                            '.$mydocs_li.'
-                            '.$blog_li.'
-                            '.$notes_li.'
-                          </ul></div>';
-        $tool_content .= '<div class="col-12"><div class="tab-content pb-4">';
 
         //show my certificates collection
         if ($myCertificates) {
-            $tool_content .= '<div id="mycertificates" role="tabpanel" class="'.$myCertificates_div_class.'" aria-labelledby="mycertificatestab">';
-            $tool_content .= "<div class='mt-3'>";
+            $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'><div class='card-header border-0 d-flex justify-content-between align-items-center'><h2 class='text-heading-h3'>$langCertificates</h2></div><div class='card-body'>";
 
             foreach ($myCertificates as $mycertificate) {
                 $data = unserialize($mycertificate->data);
@@ -844,15 +747,12 @@ if ($userdata) {
                     </div>
                 </div>";
             }
-            $tool_content .= "
-                            </div>
-                          </div>";
+            $tool_content .= "</div></div></div>";
         }
 
         //show mybadges collection
         if ($myBadges) {
-            $tool_content .= '<div id="mybadges" role="tabpanel" class="'.$myBadges_div_class.'" aria-labelledby="mybadgestab">';
-            $tool_content .= "<div class='mt-3'>";
+            $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'><div class='card-header border-0 d-flex justify-content-between align-items-center'><h2 class='text-heading-h3'>$langBadges</h2></div><div class='card-body'>";
 
             foreach ($myBadges as $mybadge) {
                 $data = unserialize($mybadge->data);
@@ -969,16 +869,14 @@ if ($userdata) {
                     </div>
                 </div>";
             }
-            $tool_content .= "
-                            </div>
-                          </div>";
+            $tool_content .= "</div></div></div>";
         }
 
         //show external achievements collection
         if ($external_achievements) {
             $reflection_comment_th = ($id == $uid) ? "<th>$langReflectionComment</th>" : "";
 
-            $tool_content .= '<div id="externalachievements" role="tabpanel" class="'.$external_achievements_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
+            $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'><div class='card-header border-0 d-flex justify-content-between align-items-center'><h2 class='text-heading-h3'>$langExternalAchievements</h2></div><div class='card-body'>";
             $tool_content .= "<div class='table-responsive'>
                                 <table class='table-default'>
                                   <tbody>
@@ -1080,13 +978,12 @@ if ($userdata) {
             }
             $tool_content .= "    </tbody>
                                 </table>
-                              </div>
-                            </div>";
+                              </div></div></div></div>";
         }
 
         //show assignment submissions
         if ($submissions) {
-            $tool_content .= '<div id="works" role="tabpanel" class="'.$work_div_class.'" aria-labelledby="worktab" style="padding-top:20px">';
+            $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'><div class='card-header border-0 d-flex justify-content-between align-items-center'><h2 class='text-heading-h3'>$langWorks</h2></div><div class='card-body'>";
             $tool_content .= "<div class='row row-cols-1 g-3'>";
 
             foreach ($submissions as $submission) {
@@ -1216,15 +1113,14 @@ if ($userdata) {
                                 </div>";
                 $tool_content .= "</div>";
             }
-            $tool_content .= "</div>
-                            </div>";
+            $tool_content .= "</div></div></div></div>";
         }
 
         //show mydocs collection
         if ($docs) {
             $reflection_comment_th = ($id == $uid) ? "<th>$langReflectionComment</th>" : "";
 
-            $tool_content .= '<div id="mydocs" role="tabpanel" class="'.$mydocs_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
+            $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'><div class='card-header border-0 d-flex justify-content-between align-items-center'><h2 class='text-heading-h3'>$langDoc</h2></div><div class='card-body'>";
             $tool_content .= "<div class='table-responsive'>
                                 <table class='table-default'>
                                   <tbody>
@@ -1324,13 +1220,12 @@ if ($userdata) {
             }
             $tool_content .= "    </tbody>
                                 </table>
-                              </div>
-                            </div>";
+                              </div></div></div></div>";
         }
 
         //show blog_posts
         if ($blog_posts) {
-            $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" >';
+            $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'><div class='card-header border-0 d-flex justify-content-between align-items-center'><h2 class='text-heading-h3'>$langBlogPosts</h2></div><div class='card-body'>";
             $tool_content .= "<div class='row row-cols-1 g-3'>";
 
             foreach ($blog_posts as $post) {
@@ -1418,14 +1313,12 @@ if ($userdata) {
                                 </div>";
             $tool_content .= "</div>";
             }
-            $tool_content .= "
-                            </div>
-                          </div>";
+            $tool_content .= "</div></div></div></div>";
         }
 
         //show personal notes
         if ($notes) {
-            $tool_content .= '<div id="notes" role="tabpanel" class="'.$notes_div_class.'" aria-labelledby="notestab" >';
+            $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'><div class='card-header border-0 d-flex justify-content-between align-items-center'><h2 class='text-heading-h3'>$langNotes</h2></div><div class='card-body'>";
             $tool_content .= "<div class='row row-cols-1 g-3'>";
 
             foreach ($notes as $note) {
@@ -1513,9 +1406,7 @@ if ($userdata) {
                                 </div>";
             $tool_content .= "</div>";
             }
-            $tool_content .= "
-                            </div>
-                          </div>";
+            $tool_content .= "</div></div></div></div>";
         }
 
         if ($userdata->eportfolio_enable == 1) {
@@ -1524,7 +1415,7 @@ if ($userdata) {
             $social_share = '';
         }
 
-        $tool_content .= $social_share.'</div></div>';
+        $tool_content .= $social_share;
     }
 }
 

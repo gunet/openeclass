@@ -1117,7 +1117,7 @@ function has_certificate_completed($uid, $element, $element_id) {
  * @param type $config
  * @return type
  */
-function add_points_game($title, $description, $startdate, $enddate, $level_names, $level_required_points, $config) {
+function add_points_game($title, $description, $startdate, $enddate, $level_names, $level_required_points, $config, $level_icons = []) {
     global $course_id;
 
     $new_id = Database::get()->query("INSERT INTO points_game
@@ -1129,12 +1129,16 @@ function add_points_game($title, $description, $startdate, $enddate, $level_name
                                 expires = ?t,
                                 config = ?s", $course_id, $title, $description, 0, $startdate, $enddate, json_encode($config, JSON_UNESCAPED_UNICODE))->lastInsertID;
 
+    $icons = array_values($level_icons);
+    $i = 0;
     foreach ($level_names as $level_name) {
         $level_req_points = current($level_required_points);
         next($level_required_points);
-        Database::get()->query("INSERT INTO points_game_levels (points_game, friendly_name, required_points) VALUES (?d,?s,?d)", 
-                            $new_id, $level_name, $level_req_points);
-    }       
+        $icon = !empty($icons[$i]) ? (int)$icons[$i] : null;
+        Database::get()->query("INSERT INTO points_game_levels (points_game, friendly_name, required_points, icon) VALUES (?d,?s,?d,?d)",
+                            $new_id, $level_name, $level_req_points, $icon);
+        $i++;
+    }
 
     return $new_id;
 }
@@ -1209,7 +1213,7 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
  * @param type $startdate
  * @param type $enddate
  */
-function modify_points_game($points_game_id, $title, $description, $startdate, $enddate, $level_names, $level_required_points, $config) {
+function modify_points_game($points_game_id, $title, $description, $startdate, $enddate, $level_names, $level_required_points, $config, $level_icons = []) {
 
     global $course_id;
     Database::get()->query("UPDATE points_game SET title = ?s,
@@ -1223,11 +1227,15 @@ function modify_points_game($points_game_id, $title, $description, $startdate, $
     $check_levels = Database::get()->querySingle("SELECT count(id) as cnt FROM user_points_game_points WHERE points_game = ?d AND current_level IS NOT NULL", $points_game_id);
     if ($check_levels->cnt == 0) {
         Database::get()->query("DELETE FROM points_game_levels WHERE points_game = ?d", $points_game_id);
+        $icons = array_values($level_icons);
+        $i = 0;
         foreach ($level_names as $level_name) {
             $level_req_points = current($level_required_points);
             next($level_required_points);
-            Database::get()->query("INSERT INTO points_game_levels (points_game, friendly_name, required_points) VALUES (?d,?s,?d)", 
-                $points_game_id, $level_name, $level_req_points);
+            $icon = !empty($icons[$i]) ? (int)$icons[$i] : null;
+            Database::get()->query("INSERT INTO points_game_levels (points_game, friendly_name, required_points, icon) VALUES (?d,?s,?d,?d)",
+                $points_game_id, $level_name, $level_req_points, $icon);
+            $i++;
         }
     }
 }
