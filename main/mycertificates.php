@@ -256,18 +256,18 @@ if (count($courses) > 0) {
 
             $certificate_content .= "<div class='col'>";
                 $certificate_content .= "<div class='card reward-list-card h-100'>";
-                    $certificate_content .="
+                    $certificate_content .=" 
                                             $certificate_modal
-                                            <div class='d-flex justify-content-between align-items-center gap-3 no-completed-cert-div'>
-                                                <div class='w-75 d-flex justify-content-start align-items-start gap-3 no-completed-cert-col'>
-                                                    <img style='width: 50px; height: 50px; margin-top: 5px; flex-shrink:0;' src='{$CertThumb}'>
-                                                    <div style='min-width:0;'>
+                                            <div class='d-flex justify-content-between align-items-start gap-4'>
+                                                <div class='d-flex justify-content-start align-items-start gap-3'>
+                                                    <div><img style='width: 50px; height: 50px; margin-top: 5px;' src='{$CertThumb}'></div>
+                                                    <div>
                                                         <a class='TextBold' target='_blank' href='{$urlServer}main/out.php?i=$data->identifier'>$data->cert_title</a>
                                                         <p class='small-text text-muted'>" . $data->course_title . "</p>
                                                         <p class='small-text text-muted'>" . $data->cert_issuer . "</p>
                                                     </div>
                                                 </div>
-                                                <div class='w-25 text-end'>
+                                                <div>
                                                     ". action_button(array(
                                                         array(
                                                             'title' => $langAddResePortfolio,

@@ -4,7 +4,7 @@ require_once 'PointsGame.php';
 require_once 'Game.php';
 
 function course_points_game_widget($uid, $course_id) {
-    global $is_editor, $is_course_admin, $urlAppend, $course_code, $langPointsGames, $langPoints, $langStart, $langForNextLevel, $langReadMore, $langCompletion, $urlServer;
+    global $is_editor, $is_course_admin, $urlAppend, $course_code, $langPointsGames, $langPoints, $langStart, $langForNextLevel, $langReadMore, $langCompletion;
 
     if (!$uid || $is_editor || $is_course_admin || $_SESSION['status'] != USER_STUDENT) {
         return '';
@@ -44,33 +44,13 @@ function course_points_game_widget($uid, $course_id) {
             $next_level = '';
         }
 
-        // Resolve the icon: use current level's icon, or fall back to the first level's icon
-        $icon_src = null;
-        $icon_level_id = $info['current_level_id'] ?? null;
-        if (!$icon_level_id) {
-            // not yet on any level — use the first level's icon
-            $first_lvl = Database::get()->querySingle(
-                "SELECT id FROM points_game_levels WHERE points_game = ?d ORDER BY required_points ASC LIMIT 1", $game->id);
-            if ($first_lvl) {
-                $icon_level_id = $first_lvl->id;
-            }
-        }
-        if ($icon_level_id) {
-            $lvl_row = Database::get()->querySingle(
-                "SELECT bi.filename FROM points_game_levels pgl JOIN badge_icon bi ON bi.id = pgl.icon WHERE pgl.id = ?d", $icon_level_id);
-            if ($lvl_row) {
-                $icon_src = $urlServer . BADGE_TEMPLATE_PATH . $lvl_row->filename;
-            }
-        }
-
         $games_data[] = [
             'title'      => $game->title,
             'points'     => $total_points,
             'level'      => $current_level,
             'level_num'  => $level_num,
             'next_level' => $next_level,
-            'percent'    => $percent,
-            'icon_src'   => $icon_src
+            'percent'    => $percent
         ];
     }
 
@@ -103,19 +83,16 @@ function course_points_game_widget($uid, $course_id) {
             ? "{$game['percent']}% {$langForNextLevel} ({$game['next_level']})"
             : "{$game['percent']}% $langCompletion";
 
-        $star_html = $game['icon_src']
-            ? "<img src='" . htmlspecialchars($game['icon_src']) . "' style='width:50px;height:50px;object-fit:contain;border-radius:10px;' alt=''>"
-            : "<div class='pg-star-gradient-icon'></div>" .
-              (($game['level_num'] === '' || $game['level_num'] === null || $game['level_num'] == 0)
-                  ? "<i class='fa-solid fa-flag-checkered pg-level-tag pg-flag-icon'></i>"
-                  : "<span class='pg-level-tag'>" . htmlspecialchars($game['level_num']) . "</span>");
-
         $html .= "
             <div class='pg-slide {$active_class}' data-name='" . htmlspecialchars($game['title']) . "'>
                 <div class='pg-inner-card'>
                     <div class='pg-row'>
                         <div class='pg-star-container'>
-                            $star_html
+                            <div class='pg-star-gradient-icon'></div>" .
+                            (($game['level_num'] === '' || $game['level_num'] === null || $game['level_num'] == 0)
+                                ? "<i class='fa-solid fa-flag-checkered pg-level-tag pg-flag-icon'></i>"
+                                : "<span class='pg-level-tag'>" . htmlspecialchars($game['level_num']) . "</span>"
+                            ) . "
                         </div>
                         <div class='pg-stats'>
                             <div class='pg-points-wrap'>

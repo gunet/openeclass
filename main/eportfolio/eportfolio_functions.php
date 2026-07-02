@@ -45,7 +45,7 @@ function render_eportfolio_fields_content($uid) {
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav'>
-    <nav id='navbar-exampleIndexPortfolio' class='card-affixed panelCard flex-column align-items-stretch sticky-top'>
+    <nav id='navbar-exampleIndexPortfolio' class='card-affixed flex-column align-items-stretch sticky-top'>
         <nav class='nav nav-pills flex-column'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
@@ -408,7 +408,7 @@ function render_eportfolio_fields_form() {
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav'>
-    <nav id='navbar-examplePortfolioEdit' class='card-affixed panelCard flex-column align-items-stretch sticky-top'>
+    <nav id='navbar-examplePortfolioEdit' class='card-affixed flex-column align-items-stretch sticky-top'>
         <nav class='nav nav-pills flex-column'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
@@ -573,15 +573,10 @@ function render_eportfolio_fields_form() {
                             $def_selection = 0;
                         }
                         $options = unserialize($f->data, ['allowed_classes' => false]);
-                        if (!is_array($options)) {
-                            $options_lang = [];
-                        } elseif (isset($options[$_SESSION['langswitch']]) && is_array($options[$_SESSION['langswitch']])) {
+                        if (isset($options[$_SESSION['langswitch']])) {
                             $options_lang = $options[$_SESSION['langswitch']];
-                        } elseif (isset($options[get_config('default_language')]) && is_array($options[get_config('default_language')])) {
-                            $options_lang = $options[get_config('default_language')];
                         } else {
-                            $first = reset($options);
-                            $options_lang = is_array($first) ? $first : $options;
+                            $options_lang = $options[get_config('default_language')];
                         }
                         $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
                         $options_lang[0] = "";
@@ -815,71 +810,5 @@ function calculate_eportfolio_completion($user_id) {
     $percentage = ($completed_fields_num / $total_fields) * 100;
     return round($percentage, 2);
 }
-
-// Collapse top-level inline alerts into a single notification button + modal on all ePortfolio pages
-$head_content .= "
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Only target alerts that are direct page-level notifications:
-    // NOT inside a modal, NOT inside a card (those are content, not notifications)
-    var alerts = Array.from(document.querySelectorAll('.alert'))
-        .filter(function (a) {
-            return !a.closest('.modal') && !a.closest('.card');
-        });
-
-    if (alerts.length === 0) return;
-
-    // Build modal
-    var modal = document.createElement('div');
-    modal.className = 'modal fade';
-    modal.id = 'epfNotifModal';
-    modal.setAttribute('tabindex', '-1');
-    modal.innerHTML =
-        '<div class=\"modal-dialog modal-lg\">' +
-            '<div class=\"modal-content\">' +
-                '<div class=\"modal-header\">' +
-                    '<h5 class=\"modal-title\"><i class=\"fa-solid fa-bell me-2\"></i>Ειδοποιήσεις (' + alerts.length + ')</h5>' +
-                    '<button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\"></button>' +
-                '</div>' +
-                '<div class=\"modal-body\" id=\"epfNotifBody\"></div>' +
-            '</div>' +
-        '</div>';
-    document.body.appendChild(modal);
-
-    var modalBody = document.getElementById('epfNotifBody');
-    var firstAlert = null;
-
-    alerts.forEach(function (alert) {
-        if (!firstAlert) firstAlert = alert;
-
-        // Hide only the alert element itself (safe — never touches sibling content)
-        alert.style.display = 'none';
-
-        // Clone into modal, stripping the dismiss button (modal has its own close)
-        var clone = alert.cloneNode(true);
-        clone.classList.remove('alert-dismissible');
-        clone.style.display = '';
-        var closeBtn = clone.querySelector('.btn-close');
-        if (closeBtn) closeBtn.remove();
-        modalBody.appendChild(clone);
-    });
-
-    // Insert the notification button at the very top of the tool_content container
-    // (the col-12 that wraps all page content, right below the page title)
-    var notifBtn = document.createElement('button');
-    notifBtn.type = 'button';
-    notifBtn.className = 'btn btn-warning btn-sm px-3 mt-3 mb-2';
-    notifBtn.setAttribute('data-bs-toggle', 'modal');
-    notifBtn.setAttribute('data-bs-target', '#epfNotifModal');
-    notifBtn.innerHTML = '<i class=\"fa-solid fa-bell me-1\"></i>Προβολή Ειδοποιήσεων (' + alerts.length + ')';
-
-    if (firstAlert) {
-        // firstAlert → col-12 wrapper (PHP) → outer container (blade col-12 with all tool_content)
-        var outerContainer = firstAlert.closest('.col-12').parentElement;
-        outerContainer.insertBefore(notifBtn, outerContainer.firstChild);
-    }
-});
-</script>
-";
 
 

@@ -777,10 +777,7 @@ function theme_initialization() {
                 .lb-progress-pct,
                 .progress-activity-name,
                 .progress-activity-criteria,
-                .progress-activity-criteria,
-                #navbar-exampleIndexPortfolio .nav-link,
-                #navbar-examplePortfolioEdit .nav-link,
-                .epf-nav-icon i {
+                .progress-activity-criteria {
                     color:$theme_options_styles[ColorHyperTexts];
                 }
 
@@ -6056,21 +6053,6 @@ function theme_initialization() {
                     color: $theme_options_styles[linkColor];
                 }
 
-                #navbar-exampleIndexPortfolio .nav-link.active,
-                #navbar-exampleIndexPortfolio .nav-pills .nav-link.active,
-                #navbar-examplePortfolioEdit .nav-link.active,
-                #navbar-examplePortfolioEdit .nav-pills .nav-link.active {
-                    color: $theme_options_styles[linkColor] !important;
-                    background-color: transparent !important;
-                }
-
-                #navbar-exampleIndexPortfolio .nav-link.active .epf-nav-icon i,
-                #navbar-examplePortfolioEdit .nav-link.active .epf-nav-icon i,
-                #navbar-exampleIndexPortfolio .nav-link:hover .epf-nav-icon i,
-                #navbar-examplePortfolioEdit .nav-link:hover .epf-nav-icon i {
-                    color: $theme_options_styles[linkColor] !important;
-                }
-
                 #cal-slide-content a.event-item{
                     color: $theme_options_styles[linkColor] !important;
                 }
@@ -6205,12 +6187,6 @@ function theme_initialization() {
 
                 .nav-link-adminTools:hover{
                     color: $theme_options_styles[linkHoverColor];
-                }
-
-                #navbar-exampleIndexPortfolio .nav-link:hover,
-                #navbar-examplePortfolioEdit .nav-link:hover {
-                    color: $theme_options_styles[linkHoverColor] !important;
-                    background-color: transparent !important;
                 }
 
                 .link-color:hover,

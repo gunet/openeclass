@@ -4565,7 +4565,7 @@ body .delThemeBtn{
 .card{
   border-radius: 4px ;
   background-color: #ffffff;
-  border: solid 1px #e5e7eb;
+  border: solid 1px #EFF6FF;
 }
 .card-course-info{
   background-color: #EFF6FF;
@@ -7485,34 +7485,30 @@ th.grade-col a{
     flex-shrink: 0 !important;
 }
 .epf-nav-icon i {
-    color: inherit;
+    color: #6c757d !important;
     font-size: 0.85rem !important;
-}
-.card-affixed {
-    border-radius: 4px;
-    border: solid 1px #e5e7eb;
 }
 #navbar-exampleIndexPortfolio .nav-link.active,
 #navbar-exampleIndexPortfolio .nav-pills .nav-link.active,
 #navbar-examplePortfolioEdit .nav-link.active,
 #navbar-examplePortfolioEdit .nav-pills .nav-link.active {
-    background-color: rgba(13, 110, 253, 0.08);
-    color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.08) !important;
+    color: #0d6efd !important;
     text-decoration: none !important;
 }
 #navbar-exampleIndexPortfolio .nav-link.active .epf-nav-icon i,
 #navbar-examplePortfolioEdit .nav-link.active .epf-nav-icon i {
-    color: #0d6efd;
+    color: #0d6efd !important;
 }
 #navbar-exampleIndexPortfolio .nav-link:hover,
 #navbar-examplePortfolioEdit .nav-link:hover {
-    background-color: rgba(13, 110, 253, 0.04);
-    color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.04) !important;
+    color: #0d6efd !important;
     text-decoration: none !important;
 }
 #navbar-exampleIndexPortfolio .nav-link:hover .epf-nav-icon i,
 #navbar-examplePortfolioEdit .nav-link:hover .epf-nav-icon i {
-    color: #0d6efd;
+    color: #0d6efd !important;
 }
 
 /* ===================== Reward list cards (progress - point games - leaderboarding / ePortfolio resources) ===================== */

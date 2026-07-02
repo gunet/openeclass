@@ -267,7 +267,7 @@ function display_points_games(): void
            $langActivate, $langDeactivate, $langNewPointsGame,
            $langActive, $langInactive, $langConfirmPurgePointsGame,
            $langPoints, $langLevel, $langReadMore,
-           $uid, $langTotalPercentCompleteness, $urlServer;
+           $uid, $langTotalPercentCompleteness;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, starts, expires FROM points_game WHERE course_id = ?d ORDER BY starts DESC", $course_id);
@@ -289,7 +289,17 @@ function display_points_games(): void
         $msg = $is_editor ? $langNoPointsGames : $langNoPointsGamesStud;
         $tool_content .= "<p class='text-center text-muted py-4'>$msg</p>";
     } else {
+        $badge_palettes = [
+            ['#e74c3c','#3498db','#2ecc71','#f39c12'],
+            ['#9b59b6','#1abc9c','#e67e22','#34495e'],
+            ['#e91e63','#2196f3','#4caf50','#ff9800'],
+            ['#f44336','#00bcd4','#8bc34a','#673ab7'],
+        ];
+
+        $idx = 0;
         foreach ($sql_cer as $data) {
+            $bp = $badge_palettes[$idx % count($badge_palettes)];
+            $idx++;
 
             $start_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->starts), 'd/m/Y');
             $end_date   = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd/m/Y');
@@ -300,8 +310,11 @@ function display_points_games(): void
                 ? "<div class='pg-list-desc' title='" . htmlspecialchars($data->description) . "'>" . htmlspecialchars($data->description) . "</div>"
                 : '';
 
-            $badge_html = "<div class='pg-list-badge' style='display:flex;align-items:center;justify-content:center;background:#2563eb;border-radius:10px;'>
-                <i class='fa-solid fa-puzzle-piece' style='color:#fff;font-size:22px;'></i>
+            $badge_html = "<div class='pg-list-badge'>
+                <span style='background:{$bp[0]}'></span>
+                <span style='background:{$bp[1]}'></span>
+                <span style='background:{$bp[2]}'></span>
+                <span style='background:{$bp[3]}'></span>
             </div>";
 
             if (!$is_editor) {
@@ -310,7 +323,7 @@ function display_points_games(): void
                 $level_num = $user_progress['current_level_num'] ?? '';
                 //$pct = $user_progress['progress_percentage'] ?? 0;
                 $pct = 0;
-                $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d ORDER BY required_points ASC", $data->id);
+                $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d", $data->id);
                 if (!empty($level_num) && count($pointslevels) > 0) {
                     $pct = round(($level_num/count($pointslevels))*100, 2);
                 }
@@ -318,21 +331,6 @@ function display_points_games(): void
                     ? "<span class='pg-list-sep'>|</span><span>$langLevel $level_num</span>"
                     : '';
                 $points_part = "<span class='pg-list-sep'>|</span><span>$current_points $langPoints</span>";
-
-                // Resolve level icon: current level's, or first level's as fallback
-                $icon_level_id = $user_progress['current_level_id'] ?? null;
-                if (!$icon_level_id && isset($pointslevels[0])) {
-                    $icon_level_id = $pointslevels[0]->id;
-                }
-                $level_icon_fn = null;
-                if ($icon_level_id) {
-                    $lbi = Database::get()->querySingle(
-                        "SELECT bi.filename FROM points_game_levels pgl JOIN badge_icon bi ON bi.id = pgl.icon WHERE pgl.id = ?d", $icon_level_id);
-                    if ($lbi) { $level_icon_fn = $lbi->filename; }
-                }
-                if ($level_icon_fn) {
-                    $badge_html = "<img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($level_icon_fn) . "' class='pg-list-badge' style='background:transparent;object-fit:contain;border-radius:10px;' alt=''>";
-                }
 
                 $progress_html = "
                 <div class='mt-3'>
@@ -3262,7 +3260,7 @@ function display_points_game_settings($element_id): void
            $langLeaderboard, $langLeaderboardAnonymization,
            $is_editor, $langPointsGameLevels, $langPointsGameLevelRequiredPoints,
            $langIsActive, $langTypeInactive, $langPoints, $langLevel, $langForNextLevel, $langCompletion,
-           $langStart, $uid, $urlServer;
+           $langStart, $uid;
 
     $data = Database::get()->querySingle("SELECT title, description, active, starts, expires, config
                             FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
@@ -3331,48 +3329,37 @@ function display_points_game_settings($element_id): void
 
 
         // level icon
-        $arrLevels = [];
-        $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d ORDER BY required_points ASC", $element_id);
+        $arrLevelColors = [];
+        $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d", $element_id);
         if (count($pointslevels) > 0) {
             $level_colors = ['#14b8a6','#6366f1','#7c3aed','#ef4444','#f97316','#f59e0b','#10b981','#8b5cf6'];
             $lc_idx = 0;
             foreach ($pointslevels as $level) {
                 $lc = $level_colors[$lc_idx % count($level_colors)];
-                $lc_idx++;
-                $lvl_icon_filename = null;
-                if (!empty($level->icon)) {
-                    $lbi = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = ?d", $level->icon);
-                    if ($lbi) {
-                        $lvl_icon_filename = $lbi->filename;
-                    }
-                }
-                $arrLevels[] = [
-                    'level_title'    => $level->friendly_name,
-                    'level_point'    => $level->required_points,
-                    'level_color'    => $lc,
-                    'icon_filename'  => $lvl_icon_filename,
+                $arrLevelColors[] = [
+                    'level_title' => $level->friendly_name,
+                    'level_point' => $level->required_points,
+                    'level_color' => $lc
                 ];
+                $lc_idx++;
             }
         }
         $levelCounter = 0;
         $bgLevelStar = '#9fa0a4';
-        $currentLevelIconFilename = null;
-        if (count($arrLevels) > 0) {
-            foreach ($arrLevels as $l) {
-                $isLast = !isset($arrLevels[$levelCounter + 1]);
-                $inRange = $isLast
-                    ? $current_points >= $l['level_point']
-                    : ($current_points >= $l['level_point'] && $current_points < $arrLevels[$levelCounter + 1]['level_point']);
-                if ($inRange) {
+        if (count($arrLevelColors) > 0) {
+            foreach ($arrLevelColors as $l) {
+
+                if (isset($arrLevelColors[$levelCounter + 1]) && $current_points >= $l['level_point'] && $current_points < $arrLevelColors[$levelCounter + 1]['level_point']) {
                     $bgLevelStar = $l['level_color'];
-                    $currentLevelIconFilename = $l['icon_filename'];
                     break;
                 }
+
+                if (!isset($arrLevelColors[$levelCounter + 1]) && $current_points >= $l['level_point']) {
+                    $bgLevelStar = $l['level_color'];
+                    break;
+                }
+
                 $levelCounter++;
-            }
-            // No level reached yet — fall back to the first level's icon
-            if ($currentLevelIconFilename === null) {
-                $currentLevelIconFilename = $arrLevels[0]['icon_filename'];
             }
         }
 
@@ -3432,17 +3419,10 @@ function display_points_game_settings($element_id): void
                         <div class='col-md-6'>
                             <div class='card rounded-3 h-100'>
                                 <div class='card-body p-4'>
-                                    <div class='d-flex align-items-center gap-3 mb-4 flex-wrap'>";
-        if ($currentLevelIconFilename) {
-            $tool_content .= "
-                                        <img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($currentLevelIconFilename) . "' style='width:54px;height:54px;object-fit:contain;flex-shrink:0;border-radius:12px;' alt='" . q($current_level_title) . "'>";
-        } else {
-            $tool_content .= "
+                                    <div class='d-flex align-items-center gap-3 mb-4 flex-wrap'>
                                         <div class='lb-level-badge-star' style='background: $bgLevelStar; width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;flex-shrink:0;'>
                                             <i class='fa fa-star'></i>
-                                        </div>";
-        }
-        $tool_content .= "
+                                        </div>
                                         <div class='d-flex flex-grow-1 align-items-center flex-wrap gap-2'>
                                             <div class='flex-fill text-center pg-stat-col'>
                                                 <div class='pg-stat-label'>Τρέχον Επίπεδο</div>
@@ -3489,17 +3469,11 @@ function display_points_game_settings($element_id): void
         foreach ($levels as $level) {
             $lc = $level_colors[$lc_idx % count($level_colors)];
             $lc_idx++;
-            if (!empty($level->icon)) {
-                $lbi = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = ?d", $level->icon);
-                $lvl_img = $lbi
-                    ? "<img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($lbi->filename) . "' class='pg-lvl-icon' style='background:transparent;object-fit:contain;' alt='" . q($level->friendly_name) . "'>"
-                    : "<div class='pg-lvl-icon' style='background:$lc;'><i class='fa fa-star'></i></div>";
-            } else {
-                $lvl_img = "<div class='pg-lvl-icon' style='background:$lc;'><i class='fa fa-star'></i></div>";
-            }
             $tool_content .= "
                                         <div class='text-center' style='min-width:70px;'>
-                                            $lvl_img
+                                            <div class='pg-lvl-icon' style='background:$lc;'>
+                                                <i class='fa fa-star'></i>
+                                            </div>
                                             <div class='pg-lvl-name'>" . htmlspecialchars($level->friendly_name) . "</div>
                                             <div class='pg-lvl-pts'>{$level->required_points} $langPoints</div>
                                         </div>";
@@ -3603,39 +3577,7 @@ function points_game_settings($points_game_id = 0) {
     global $tool_content, $head_content, $course_id, $course_code, $langAdd,
         $langPointsGameLevelName, $langPointsGameLevelRequiredPoints,
         $language, $langTitle, $langDescription, $langSubmit, $langPointsGameLevels, $langSettingSelect,
-        $langInsert, $langStartDate, $langEndDate, $langLeaderboard, $langLeaderboardAnonymization, $langDelete, $langImgFormsDes,
-        $langIcon, $urlServer;
-
-    // Build level badge icon data for the picker
-    $lbi_rows = Database::get()->queryArray(
-        "SELECT bi.id, bi.name, bi.filename, bic.name as cat_name
-         FROM badge_icon bi
-         JOIN badge_icon_category bic ON bic.id = bi.category
-         WHERE bi.filename LIKE 'levels\_badge\_%'
-         ORDER BY bic.id, bi.id"
-    );
-    $icon_opts_html = "<option value=''>—</option>";
-    $level_badge_filenames = [];
-    $current_cat = null;
-    foreach ($lbi_rows as $lbi) {
-        $cat = getSerializedMessage($lbi->cat_name);
-        if ($cat !== $current_cat) {
-            if ($current_cat !== null) {
-                $icon_opts_html .= "</optgroup>";
-            }
-            $icon_opts_html .= "<optgroup label='" . htmlspecialchars($cat) . "'>";
-            $current_cat = $cat;
-        }
-        $iname = htmlspecialchars(getSerializedMessage($lbi->name));
-        $icon_opts_html .= "<option value='{$lbi->id}'>$iname</option>";
-        $level_badge_filenames[$lbi->id] = $lbi->filename;
-    }
-    if ($current_cat !== null) {
-        $icon_opts_html .= "</optgroup>";
-    }
-    $icon_filenames_js = json_encode($level_badge_filenames);
-    $badge_base_url = $urlServer . BADGE_TEMPLATE_PATH;
-    $icon_opts_js   = json_encode($icon_opts_html);
+        $langInsert, $langStartDate, $langEndDate, $langLeaderboard, $langLeaderboardAnonymization, $langDelete, $langImgFormsDes;
 
     load_js('bootstrap-datetimepicker');
 
@@ -3666,30 +3608,9 @@ function points_game_settings($points_game_id = 0) {
             });
         });
 
-        var levelIconFilenames = $icon_filenames_js;
-        var levelIconOptsHtml  = $icon_opts_js;
-        var levelIconBaseUrl   = " . json_encode($badge_base_url) . ";
-
-        function updateLevelIconPreview(select) {
-            var val = $(select).val();
-            var img = $(select).siblings('img.level-icon-preview');
-            if (val && levelIconFilenames[val]) {
-                img.attr('src', levelIconBaseUrl + levelIconFilenames[val]).show();
-            } else {
-                img.hide().attr('src', '');
-            }
-        }
-
         $(function() {
-            // Initialise previews for pre-filled rows
-            \$('select.level-icon-select').each(function() { updateLevelIconPreview(this); });
-
-            \$(document).on('change', 'select.level-icon-select', function() {
-                updateLevelIconPreview(this);
-            });
-
             $('#addLevel').on('click', function() {
-                \$('#levels_table tbody').append(
+                $('#levels_table tbody').append(
                     '<tr>'+
                     '<td class=\'form-group\'>'+
                     '<input aria-label=\'$langPointsGameLevelName\' type=\'text\' name=\'level_item_name[]\' class=\'form-control\' value=\'\' required>'+
@@ -3697,11 +3618,6 @@ function points_game_settings($points_game_id = 0) {
                     '<td class=\'form-group\'>'+
                     '<input aria-label=\'$langPointsGameLevelRequiredPoints\' type=\'number\' name=\'level_item_req_points[]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
                     '</td>'+
-                    '<td class=\'form-group\'>'+
-                    '<div class=\'d-flex align-items-center gap-2\'>'+
-                    '<img class=\'level-icon-preview\' src=\'\' style=\'width:32px;height:32px;object-fit:contain;display:none;\'>'+
-                    '<select name=\'level_item_icon[]\' class=\'form-select form-control level-icon-select\'>' + levelIconOptsHtml + '</select>'+
-                    '</div></td>'+
                     '<td class=\'text-center\'>'+
                     '<a href=\'#\' aria-label=\'$langDelete\' class=\'removeLevel\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
                     '</td>'+
@@ -3816,10 +3732,9 @@ function points_game_settings($points_game_id = 0) {
                                         <table class='table-default' id='levels_table'>
                                             <thead>
                                                 <tr>
-                                                    <th style='width:30%'>$langPointsGameLevelName</th>
-                                                    <th style='width:20%'>$langPointsGameLevelRequiredPoints</th>
-                                                    <th style='width:45%'>$langIcon</th>
-                                                    <th class='text-center option-btn-cell' style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                                                    <th style='width:47%'>$langPointsGameLevelName</th>
+                                                    <th style='width:47%'>$langPointsGameLevelRequiredPoints</th>
+                                                    <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
                                                 </tr>
                                             </thead>
                                             <tbody>";
@@ -3829,22 +3744,12 @@ function points_game_settings($points_game_id = 0) {
                                             }
                                             $level_i = 1;
                                             foreach ($levels as $level) {
-                                                $sel_icon = (int)($level->icon ?? 0);
-                                                $icon_select = "<select name='level_item_icon[]' class='form-select form-control level-icon-select' $attr>" . str_replace("value='$sel_icon'", "value='$sel_icon' selected", $icon_opts_html) . "</select>";
-                                                $icon_preview_src = ($sel_icon && isset($level_badge_filenames[$sel_icon])) ? $badge_base_url . $level_badge_filenames[$sel_icon] : '';
-                                                $icon_preview_style = $icon_preview_src ? 'width:32px;height:32px;object-fit:contain;' : 'width:32px;height:32px;object-fit:contain;display:none;';
                                                 $tool_content .= "<tr>
                                                     <td class='form-group'>
                                                         <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='".$level->friendly_name."' $attr>
                                                     </td>
                                                     <td class='form-group'>
                                                         <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='".$level->required_points."' min='0' $attr>
-                                                    </td>
-                                                    <td class='form-group'>
-                                                        <div class='d-flex align-items-center gap-2'>
-                                                            <img class='level-icon-preview' src='$icon_preview_src' style='$icon_preview_style'>
-                                                            $icon_select
-                                                        </div>
                                                     </td>";
                                                     if ($level_i == 1 || $levels_used) {
                                                         $tool_content .= "<td class='text-center'>
@@ -3876,10 +3781,9 @@ function points_game_settings($points_game_id = 0) {
                                         <table class='table-default' id='levels_table'>
                                             <thead>
                                                 <tr>
-                                                    <th style='width:30%'>$langPointsGameLevelName</th>
-                                                    <th style='width:20%'>$langPointsGameLevelRequiredPoints</th>
-                                                    <th style='width:45%'>$langIcon</th>
-                                                    <th class='text-center option-btn-cell' style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                                                    <th style='width:47%'>$langPointsGameLevelName</th>
+                                                    <th style='width:47%'>$langPointsGameLevelRequiredPoints</th>
+                                                    <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -3889,12 +3793,6 @@ function points_game_settings($points_game_id = 0) {
                                                     </td>
                                                     <td class='form-group'>
                                                         <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='' min='0' required>
-                                                    </td>
-                                                    <td class='form-group'>
-                                                        <div class='d-flex align-items-center gap-2'>
-                                                            <img class='level-icon-preview' src='' style='width:32px;height:32px;object-fit:contain;display:none;'>
-                                                            <select name='level_item_icon[]' class='form-select form-control level-icon-select'>$icon_opts_html</select>
-                                                        </div>
                                                     </td>
                                                     <td class='text-center'>
                                                     </td>
@@ -4562,7 +4460,7 @@ function display_leaderboard_accordion($points_game_id): void
 {
     global $tool_content, $head_content, $course_code, $course_id, $langNoUserList, $langLevel,
            $langLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous,
-           $langForNextLevel, $langPoints, $urlAppend, $urlServer;
+           $langForNextLevel, $langPoints, $urlAppend;
 
     $anon = false;
     if (!$is_editor) {
@@ -4597,25 +4495,17 @@ function display_leaderboard_accordion($points_game_id): void
 
 
     $arrLevelColors = [];
-    $firstLevelIconFilename = null;
-    $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d ORDER BY required_points ASC", $points_game_id);
+    $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d", $points_game_id);
     if (count($pointslevels) > 0) {
         $level_colors = ['#14b8a6','#6366f1','#7c3aed','#ef4444','#f97316','#f59e0b','#10b981','#8b5cf6'];
         $lc_idx = 0;
         foreach ($pointslevels as $level) {
             $lc = $level_colors[$lc_idx % count($level_colors)];
-            $lvl_icon_fn = null;
-            if (!empty($level->icon)) {
-                $lbi = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = ?d", $level->icon);
-                if ($lbi) { $lvl_icon_fn = $lbi->filename; }
-            }
             $arrLevelColors[] = [
-                'level_title'    => $level->friendly_name,
-                'level_point'    => $level->required_points,
-                'level_color'    => $lc,
-                'icon_filename'  => $lvl_icon_fn,
+                'level_title' => $level->friendly_name,
+                'level_point' => $level->required_points,
+                'level_color' => $lc
             ];
-            if ($lc_idx === 0) { $firstLevelIconFilename = $lvl_icon_fn; }
             $lc_idx++;
         }
     }
@@ -4677,32 +4567,24 @@ function display_leaderboard_accordion($points_game_id): void
 
             $levelCounter = 0;
             $bgLevelStar = '#9fa0a4';
-            $userLevelIconFilename = null;
             if (count($arrLevelColors) > 0) {
                 foreach ($arrLevelColors as $l) {
+
                     if (isset($arrLevelColors[$levelCounter + 1]) && $current_points >= $l['level_point'] && $current_points < $arrLevelColors[$levelCounter + 1]['level_point']) {
                         $bgLevelStar = $l['level_color'];
-                        $userLevelIconFilename = $l['icon_filename'];
                         break;
                     }
+
                     if (!isset($arrLevelColors[$levelCounter + 1]) && $current_points >= $l['level_point']) {
                         $bgLevelStar = $l['level_color'];
-                        $userLevelIconFilename = $l['icon_filename'];
                         break;
                     }
+
                     $levelCounter++;
-                }
-                // No level reached yet — show first level's icon as target
-                if ($userLevelIconFilename === null) {
-                    $userLevelIconFilename = $firstLevelIconFilename;
                 }
             }
 
-            if ($userLevelIconFilename) {
-                $badge_html = "<img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($userLevelIconFilename) . "' class='lb-level-badge-star' style='background:transparent;object-fit:contain;' alt='" . q($level_text) . "'>";
-            } else {
-                $badge_html = "<div class='lb-level-badge-star' style='background: $bgLevelStar;'><i class='fa fa-star'></i></div>";
-            }
+            $badge_html = "<div class='lb-level-badge-star' style='background: $bgLevelStar;'><i class='fa fa-star'></i></div>";
 
             $tool_content .= "
             <div class='$row_class' data-lb-page='$page'>
