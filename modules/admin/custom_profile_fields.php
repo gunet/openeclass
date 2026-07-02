@@ -54,9 +54,15 @@ $available_langs = [$default_lang => $session->native_language_names[$default_la
     } else {
         $required = 0;
     }
-    if ($datatype == CPF_MENU && isset($_POST['options'])) {
-        $data = explode(PHP_EOL, $_POST['options']);
-        $data = serialize($data);
+
+    if ($datatype == CPF_MENU && isset($_POST['options'][$default_lang])) {
+        $data_lang_arr = array();
+        foreach ($available_langs as $code => $lang) {
+            if (!empty(trim($_POST['options'][$code]))) {
+                $data_lang_arr[$code] = explode(PHP_EOL, $_POST['options'][$code]);
+            }
+        }
+        $data = serialize($data_lang_arr);
     } else {
         $data = '';
     }
@@ -297,11 +303,14 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
 
         if ($data['datatype'] == CPF_MENU) {
             $custom_profile_fields_data = unserialize($custom_profile_fields_data, ['allowed_classes' => false]);
-            $data['textarea_val'] = '';
-            foreach ($custom_profile_fields_data as $line) {
-                $data['textarea_val'] .= $line."\n";
+            $data['textarea_val'] = array();
+            foreach ($custom_profile_fields_data as $lang => $options) {
+                $data['textarea_val'][$lang] = '';
+                foreach ($options as $line) {
+                    $data['textarea_val'][$lang] .= $line."\n";
+                }
+                $data['textarea_val'][$lang] = substr($data['textarea_val'][$lang], 0, strlen($data['textarea_val'][$lang])-1);
             }
-            $data['textarea_val'] = substr($data['textarea_val'], 0, strlen($data['textarea_val'])-1);
         }
 
         load_js('validation.js');

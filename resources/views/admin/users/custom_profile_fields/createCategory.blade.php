@@ -54,6 +54,6 @@
 <script language="javaScript" type="text/javascript">
 //<![CDATA[
     var chkValidator  = new Validator("catForm");
-    chkValidator.addValidation("catname","req","{{ trans('langCPFCategoryNameAlert') }}");
+    chkValidator.addValidation("catname_{{ $default_lang }}","req","{{ trans('langCPFCategoryNameAlert') }}");
 //]]></script>
 @endsection
