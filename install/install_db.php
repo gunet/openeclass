@@ -2666,6 +2666,7 @@ $db->query("CREATE TABLE `points_game_levels` (
     `points_game` int(11) not null,
     `friendly_name` varchar(255),
     `required_points` int(11) not null,
+    `icon` int(11) default null,
     foreign key (`points_game`) references `points_game`(`id`)
 ) $tbl_options");
 
