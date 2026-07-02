@@ -82,14 +82,15 @@ class PointsGame {
             ];
         }
 
-        //user is in max level
-        if($performance['current_level'] && !$next_q) {
+        //user is in max level or no levels exist
+        if(!$next_q) {
             return [
                 'current_points' => $performance['points'],
                 'current_level_id' => $performance['current_level'],
-                'current_level_num' => PointsGame::get_level_number($performance['current_level'],$gid),
+                'current_level_num' => $performance['current_level'] ? PointsGame::get_level_number($performance['current_level'],$gid) : null,
                 'current_level_title' => $performance['current_level_title'],
                 'next_level_id' => null,
+                'next_level_title' => null,
                 'points_needed_for_next' => null,
                 'progress_percentage' => 100
             ];
