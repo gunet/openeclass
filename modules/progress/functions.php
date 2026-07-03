@@ -267,7 +267,10 @@ function display_points_games(): void
            $langActivate, $langDeactivate, $langNewPointsGame,
            $langActive, $langInactive, $langConfirmPurgePointsGame,
            $langPoints, $langLevel, $langReadMore,
-           $uid, $langTotalPercentCompleteness, $urlServer;
+           $uid, $langTotalPercentCompleteness, $urlServer, 
+           $langInProgress, $langHasExpired, $langHasNotStarted;
+
+    $current_time = date('Y-m-d H:i:s', strtotime('now'));
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, starts, expires FROM points_game WHERE course_id = ?d ORDER BY starts DESC", $course_id);
@@ -293,9 +296,25 @@ function display_points_games(): void
 
             $start_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->starts), 'd/m/Y');
             $end_date   = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd/m/Y');
-            $status_html = $data->active
-                ? "<span class='pg-list-active'>$langActive</span>"
-                : "<span class='pg-list-inactive'>$langInactive</span>";
+            $status_html = '';
+            if ($data->active) {
+                $status_html .= "<span class='badge Primary-600-bg'>$langActive</span>";
+                if ($current_time >= $data->starts && $current_time <= $data->expires) {
+                    $status_html .= "<span class='badge Success-200-bg d-flex align-items-center gap-1'>
+                                        $langInProgress
+                                        <div style='width: 12px; height:12px;' class='spinner-grow text-success' role='status'></div>
+                                        <div style='width: 12px; height:12px;' class='spinner-grow text-danger' role='status'></div>
+                                        <div style='width: 12px; height:12px;' class='spinner-grow text-warning' role='status'></div>
+                                        <div style='width: 12px; height:12px;' class='spinner-grow text-info' role='status'></div>
+                                    </span>";
+                } elseif ($current_time < $data->starts) {
+                    $status_html .= "<span class='badge Warning-200-bg'>$langHasNotStarted</span>";
+                } elseif ($current_time > $data->expires) {
+                    $status_html .= "<span class='badge Accent-200-bg'>$langHasExpired</span>";
+                }
+            } else {
+                $status_html .= "<span class='badge Accent-200-bg'>$langInactive</span>";
+            }
             $desc_html = !empty($data->description)
                 ? "<div class='pg-list-desc' title='" . htmlspecialchars($data->description) . "'>" . htmlspecialchars($data->description) . "</div>"
                 : '';
@@ -351,8 +370,8 @@ function display_points_games(): void
             }
 
             $game_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id";
-            $pg_link_open  = !$is_editor ? "<a href='$game_url' class='pg-list-card-link' style='display:block;text-decoration:none;color:inherit;'>" : '';
-            $pg_link_close = !$is_editor ? "</a>" : '';
+            $pg_link_open  = (!$is_editor && $current_time >= $data->starts) ? "<a href='$game_url' class='pg-list-card-link' style='display:block;text-decoration:none;color:inherit;'>" : '';
+            $pg_link_close = (!$is_editor && $current_time >= $data->starts) ? "</a>" : '';
 
             $tool_content .= "{$pg_link_open}<div class='pg-list-card'>
                 <div class='d-flex align-items-start gap-3'>
@@ -615,16 +634,93 @@ function display_activities($element, $id, $unit_id = 0) {
            $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities,
            $langPointsGameNoOneTimeActivities, $langPoints, $langForumParticipation,
            $langRubricCrit, $head_content, $uid, $langCompleted, $langExport,
-           $langSurveyNotStarted, $urlServer, $langCriteria, $langRefreshProgressInfo;
+           $langSurveyNotStarted, $urlServer, $langCriteria, $langRefreshProgressInfo,
+           $langPrint, $langFullScreen, $langNewTab, $langCancel;
+
+    require_once 'include/lib/modalboxhelper.class.php';
+    ModalBoxHelper::loadModalBox(false);
 
     load_js('bootstrap-table');
     
     //fix for delete confirmation not showing due to bootstrap-table plugin
-    $tool_content .= "<script>
-    $(document).on('post-body.bs.table', function () {
-        $('.confirmAction').off('click');
-        act_confirm();
-    });
+    $tool_content .= "
+    <script>
+        $(document).on('post-body.bs.table', function () {
+            $('.confirmAction').off('click');
+            act_confirm();
+        });
+    </script>
+    
+    <script>
+
+        $(document).on('click', '.colorboxframe', function (e) {
+            $('.colorboxframe').colorbox();
+        });
+
+        $(document).on('click', '.fileModal', function (e) {
+            e.preventDefault();
+            var fileURL = $(this).attr('href');
+            var fileTitle = $(this).attr('title') || '';
+
+            // BUTTONS declare
+            var bts = {
+                print: {
+                    label: '$langPrint',
+                    className: 'submitAdminBtn gap-1',
+                    callback: function () {
+                        var iframe = document.getElementById('fileFrame');
+                        iframe.contentWindow.print();
+                    }
+                }
+            };
+
+            if (screenfull.enabled) {
+                bts.fullscreen = {
+                    label: '$langFullScreen',
+                    className: 'submitAdminBtn gap-1',
+                    callback: function () {
+                        screenfull.request(document.getElementById('fileFrame'));
+                        return false;
+                    }
+                };
+            }
+
+            bts.newtab = {
+                label: '$langNewTab',
+                className: 'submitAdminBtn gap-1',
+                callback: function () {
+                    window.open(fileURL, '_blank');
+                    return false;
+                }
+            };
+
+            bts.cancel = {
+                label: '$langCancel',
+                className: 'cancelAdminBtn'
+            };
+
+            bootbox.dialog({
+                size: 'large',
+                title: fileTitle,
+                onEscape: true,
+                backdrop: true,
+                message:
+                    '<div class=\"row\">' +
+                        '<div class=\"col-12\">' +
+                            '<div class=\"iframe-container\" style=\"height:500px;\">' +
+                                '<iframe ' +
+                                    'title=\"' + fileTitle + '\" ' +
+                                    'id=\"fileFrame\" ' +
+                                    'src=\"' + fileURL + '\" ' +
+                                    'style=\"width:100%; height:500px; border:0;\">' +
+                                '</iframe>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>',
+                buttons: bts
+            });
+        });
+        
     </script>";
 
     if ($unit_id) {
@@ -972,11 +1068,54 @@ function display_activities($element, $id, $unit_id = 0) {
                                             $criteria_text = "";
                                         }
                                         $act_url = $resource_data['url'] ?? null;
+                                        $typeResClass = '';
+                                        $fileTitle = '';
+                                        if ($details->activity_type == 'document') {
+                                            require_once 'include/lib/fileDisplayLib.inc.php';
+                                            require_once 'include/lib/mediaresource.factory.php';
+                                            require_once 'include/lib/multimediahelper.class.php';
+                                            require_once 'modules/document/doc_init.php';
+                                            doc_init();
+                                            $file = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND course_id = ?d", $details->resource, $course_id);
+                                            $file_obj = MediaResourceFactory::initFromDocument($file);
+                                            $file_obj->setAccessURL(file_url($file->path, $file->filename));
+                                            $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+                                            $act_url = $file_obj->getAccessURL() ?? null;
+                                            $typeResClass = 'fileURL fileModal';
+                                            $fileTitle = $file_obj->getTitle() ?? '';
+                                        } elseif ($details->activity_type == 'video') {
+                                            require_once 'include/lib/mediaresource.factory.php';
+                                            require_once 'include/lib/multimediahelper.class.php';
+                                            $video = Database::get()->querySingle("SELECT * FROM video WHERE id = ?d AND course_id = ?d", $details->resource, $course_id);
+                                            $video_obj = MediaResourceFactory::initFromVideo($video);
+                                            $video_url = parse_url($video_obj->getAccessURL());
+                                            if ($video_url) {
+                                                $act_url = $video_url['path'] . '?' . $video_url['query'];
+                                            } else {
+                                                $act_url = null;
+                                            }
+                                            $typeResClass = 'colorbox fileURL cboxElement';
+                                        } elseif ($details->activity_type == 'videolink') {
+                                            require_once 'include/lib/mediaresource.factory.php';
+                                            require_once 'include/lib/multimediahelper.class.php';
+                                            $video = Database::get()->querySingle("SELECT * FROM videolink WHERE id = ?d AND course_id = ?d", $details->resource, $course_id);
+                                            $video_obj = MediaResourceFactory::initFromVideoLink($video);
+                                            $video_url = parse_url($video_obj->getPlayURL());
+                                            if ($video_url) {
+                                                $act_url = $video_url['path'] . '?' . $video_url['query'];
+                                            } else {
+                                                $act_url = null;
+                                            }
+                                            $typeResClass = 'colorboxframe fileURL cboxElement';
+                                        } elseif ($details->activity_type == 'ebook') {
+                                            $act_url = "modules/ebook/show.php?$course_code/$details->resource/";
+                                        }
+
                                         if ($is_editor && $act_url) {
                                             $act_link_open  = "<div onclick=\"window.location.href='{$urlServer}{$act_url}'\" class='progress-activity-card-link' style='cursor:pointer;display:block;height:100%;'>";
                                             $act_link_close = "</div>";
                                         } else {
-                                            $act_link_open  = $act_url ? "<a class='progress-activity-card-link' href='{$urlServer}{$act_url}' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
+                                            $act_link_open  = $act_url ? "<a class='progress-activity-card-link $typeResClass' href='{$urlServer}{$act_url}' title='$fileTitle' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
                                             $act_link_close = $act_url ? "</a>" : '';
                                         }
                                         $editor_btn_one = $is_editor ?
@@ -3262,7 +3401,8 @@ function display_points_game_settings($element_id): void
            $langLeaderboard, $langLeaderboardAnonymization,
            $is_editor, $langPointsGameLevels, $langPointsGameLevelRequiredPoints,
            $langIsActive, $langTypeInactive, $langPoints, $langLevel, $langForNextLevel, $langCompletion,
-           $langStart, $uid, $urlServer;
+           $langStart, $uid, $urlServer, 
+           $langActive, $langInactive, $langInProgress, $langHasExpired, $langHasNotStarted, $langStatus;
 
     $data = Database::get()->querySingle("SELECT title, description, active, starts, expires, config
                             FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
@@ -3273,6 +3413,27 @@ function display_points_game_settings($element_id): void
     $start_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->starts), 'd/m/Y');
     $end_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd/m/Y');
     $config = json_decode($data->config, TRUE);
+
+    $status_game = '';
+    $current_time = date('Y-m-d H:i:s', strtotime('now'));
+    if ($data->active) {
+        $status_game .= "<span class='badge Primary-600-bg'>$langActive</span>";
+        if ($current_time >= $data->starts && $current_time <= $data->expires) {
+            $status_game .= "<span class='badge Success-200-bg d-flex align-items-center gap-1'>
+                                $langInProgress
+                                <div style='width: 12px; height:12px;' class='spinner-grow text-success' role='status'></div>
+                                <div style='width: 12px; height:12px;' class='spinner-grow text-danger' role='status'></div>
+                                <div style='width: 12px; height:12px;' class='spinner-grow text-warning' role='status'></div>
+                                <div style='width: 12px; height:12px;' class='spinner-grow text-info' role='status'></div>
+                            </span>";
+        } elseif ($current_time < $data->starts) {
+            $status_game .= "<span class='badge Warning-200-bg'>$langHasNotStarted</span>";
+        } elseif ($current_time > $data->expires) {
+            $status_game .= "<span class='badge Accent-200-bg'>$langHasExpired</span>";
+        }
+    } else {
+        $status_game .= "<span class='badge Accent-200-bg'>$langInactive</span>";
+    }
 
     $enable_leaderboard = !empty($config['enable_leaderboard']);
     $anonymize_leaderboard = !empty($config['anonymize_leaderboard']);
@@ -3313,9 +3474,14 @@ function display_points_game_settings($element_id): void
                                         </div>
                                     </div>
                                     $desc_html
-                                    <div class='d-flex align-items-center gap-2 mt-2 flex-wrap'>
+                                    <div class='d-flex align-items-center gap-1 flex-wrap mt-3'>
+                                        $status_game
+                                    </div>
+                                    <div class='d-flex align-items-center gap-2 mt-3 flex-wrap'>
                                         <span class='secondary-title' style='font-size:13px; font-weight: bold;'>$langLeaderboard:</span>
                                         $lb_badge
+                                    </div>
+                                    <div class='d-flex align-items-center gap-2 mt-3 flex-wrap'>
                                         <span class='secondary-title' style='font-size:13px; font-weight: bold;'>$langLeaderboardAnonymization:</span>
                                         $anon_badge
                                     </div>

@@ -7601,3 +7601,7 @@ $langCertAddedToMyProfile = "Certificate has been added to your profile";
 $langCertRemovedToMyProfile = "Certificate has been removed from your profile";
 $langExistsInEportofolio = "Added to eportfolio";
 $langExistsInMyProfile = "Added to my profile";
+
+// Point games
+$langHasExpired = "The points game has expired";
+$langHasNotStarted = "The points game has not started yet";
