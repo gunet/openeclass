@@ -67,9 +67,9 @@
                             @endif
                         @endunless
                     </nav>
-                    @unless(isset($_SESSION['safe_exam_browser_view']))
                         <div class='d-flex justify-content-end align-items-center h-100 pe-0 gap-3'>
-                            @if (get_config('enable_search'))
+                            @unless(isset($_SESSION['safe_exam_browser_view']))
+                                @if (get_config('enable_search'))
                                 <div class='h-100 d-flex justify-content-start align-items-center'>
                                     <div class='h-40px'>
                                         @if(isset($course_code) and $course_code)
@@ -97,10 +97,11 @@
                             @if(isset($_SESSION['uid']) && get_config('enable_search'))
                                 <div class='split-content'></div>
                             @endif
+                            @endunless
                             <div class='user-menu-content h-100 d-flex justify-content-start align-items-center'>
                                 <div class='d-flex justify-content-start align-items-center h-80px'>
                                     @if(!isset($_SESSION['uid']) and !get_config('dont_display_login_link'))
-                                        <div class='d-flex justify-content-center align-items-center split-left h-40px'>
+                                        <div class='d-flex justify-content-center align-items-center split-left h-40px @if(isset($_SESSION['safe_exam_browser_view'])) pe-none opacity-50 @endif'>
                                             @if($authCase)
                                                 @if(!empty($authNameEnabled))
                                                     @if($authNameEnabled == 'cas')
@@ -121,7 +122,7 @@
                                         </div>
                                     @elseif(!isset($_SESSION['uid']) and !get_config('dont_display_login_link'))
                                         @if(!empty($authNameEnabled))
-                                            <div class='d-flex justify-content-center align-items-center split-left h-40px'>
+                                            <div class='d-flex justify-content-center align-items-center split-left h-40px @if(isset($_SESSION['safe_exam_browser_view'])) pe-none opacity-50 @endif'>
                                                 @if($authNameEnabled == 'cas')
                                                     <a class='header-login-text' href="{{ $urlServer }}modules/auth/cas.php">
                                                         {{ trans('langUserLogin') }}
@@ -151,7 +152,7 @@
                                                                 <i class="fa-solid fa-chevron-down ms-1"></i>
                                                     </button>
                                                     <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user" aria-labelledby="btnGroupDrop1">
-                                                        <ul class="list-group list-group-flush">
+                                                        <ul class="list-group list-group-flush @if(isset($_SESSION['safe_exam_browser_view'])) pe-none opacity-50 @endif">
 
                                                             <li>
                                                                 <a class="list-group-item d-flex justify-content-start align-items-start gap-2 px-1 pe-none">
@@ -175,7 +176,7 @@
                                                                     </a>
                                                                 </li>
                                                             @endif
-                                                            @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
+                                                            @if ((isset($_SESSION['status']) && $_SESSION['status'] == USER_TEACHER) or $is_power_user or $is_departmentmanage_user)
                                                             <li>
                                                                 <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/create_course/create_course.php">
                                                                     <i class="fa-solid fa-circle-plus settings-icons"></i>
@@ -211,7 +212,7 @@
                                                                     {{ trans('langMyCourses') }}
                                                                 </a>
                                                             </li>
-                                                            @if ($_SESSION['status'] == USER_STUDENT && get_config('eclass_prof_reg'))
+                                                            @if (isset($_SESSION['status']) && $_SESSION['status'] == USER_STUDENT && get_config('eclass_prof_reg'))
                                                                 <li>
                                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/auth/formuser.php">
                                                                         <i class="fa-regular fa-hand"></i>
@@ -348,7 +349,6 @@
                                 </div>
                             </div>
                         </div>
-                    @endunless
                     </div>
                 </div>
 
@@ -381,16 +381,17 @@
 
                     </div>
 
-                    @unless(isset($_SESSION['safe_exam_browser_view']))
                         @if (!isset($_SESSION['uid']))
                             <div class='d-flex justify-content-start align-items-center gap-3'>
-                                {!! lang_selections_Desktop('idLangSelectionMobile') !!}
+                                @unless(isset($_SESSION['safe_exam_browser_view']))
+                                    {!! lang_selections_Desktop('idLangSelectionMobile') !!}
+                                @endunless
                                 @if(!get_config('dont_display_login_link'))
-                                    <a class='header-login-text' href="{{ $urlAppend }}main/login_form.php">
+                                    <a class='header-login-text @if(isset($_SESSION['safe_exam_browser_view'])) pe-none opacity-50 @endif' href="{{ $urlAppend }}main/login_form.php">
                                         {{ trans('langUserLogin') }}
                                     </a>
                                 @elseif(get_config('dont_display_login_link') and !empty($authNameEnabled))
-                                    <a class='header-login-text' href="{{ $urlAppend }}main/login_form.php">
+                                    <a class='header-login-text @if(isset($_SESSION['safe_exam_browser_view'])) pe-none opacity-50 @endif' href="{{ $urlAppend }}main/login_form.php">
                                         {{ trans('langUserLogin') }}
                                     </a>
                                 @endif
@@ -413,7 +414,7 @@
                                 </button>
 
                                 <div class="m-0 py-3 px-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user contextual-border" aria-labelledby="dropdownMenuButton1">
-                                    <ul class="list-group list-group-flush dropdown_menu_user">
+                                    <ul class="list-group list-group-flush dropdown_menu_user @if(isset($_SESSION['safe_exam_browser_view'])) pe-none opacity-50 @endif">
                                         <li>
                                             <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-2 px-2 pe-none">
                                                 <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ trans('langProfileImage') }}:{{ $uname }}">
@@ -433,7 +434,7 @@
                                             </li>
                                         @endif
 
-                                        @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
+                                        @if ((isset($_SESSION['status']) && $_SESSION['status'] == USER_TEACHER) or $is_power_user or $is_departmentmanage_user)
                                             <li><a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/create_course/create_course.php"><i class="fa-solid fa-circle-plus settings-icons"></i>{{ trans('langCourseCreate') }}</a></li>
                                         @endif
                                         <li>
@@ -442,7 +443,7 @@
                                         <li>
                                             <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_courses.php"><i class="fa-solid fa-book-open settings-icons"></i>{{trans('langMyCoursesSide')}}</a>
                                         </li>
-                                        @if ($_SESSION['status'] == USER_STUDENT && get_config('eclass_prof_reg'))
+                                        @if (isset($_SESSION['status']) && $_SESSION['status'] == USER_STUDENT && get_config('eclass_prof_reg'))
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/auth/formuser.php"><i class="fa-regular fa-hand"></i>{{ trans('langMyRequests') }}</a>
                                             </li>
@@ -497,7 +498,7 @@
                                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa-solid fa-award settings-icons"></i> {{ trans('langMyCertificates') }}</a>
                                             </li>
                                         @endif
-                                        @if ($openBadgesEnabledNav2)
+                                        @if ($openBadgesEnabledNav)
                                             <li>
                                                 <a class="list-group-item d-flex
                                                 justify-content-start align-items-start py-3 gap-2"
@@ -521,7 +522,6 @@
                                 </div>
                             </div>
                         @endif
-                    @endunless
 
                 </div>
             </div>
