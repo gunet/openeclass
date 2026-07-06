@@ -109,7 +109,8 @@ abstract class CriterionAbstract {
                         Database::get()->query("insert into user_points_game_points (user, points_game, total_points) values (?d, ?d, ?d)", $uid, $this->points_game, $total_points);
                     }
                     if (!$is_editor && visible_module(MODULE_ID_PROGRESS,$course_id)) {
-                        Session::Messages(sprintf($langPointsWon, $points),'alert-success');
+                        $points_game_title = Database::get()->querySingle("SELECT title FROM points_game WHERE id = ?d", $this->points_game)->title;
+                        Session::Messages(sprintf($langPointsWon, $points_game_title, $points),'alert-success');
                     }
                     PointsGame::levelUpdate($uid, $this->points_game, $total_points, $current_level);
                 }
@@ -139,7 +140,8 @@ abstract class CriterionAbstract {
             Database::get()->query("insert into user_points_game_points (user, points_game, total_points) values (?d, ?d, ?d)", $uid, $this->points_game, $total_points);
         }
         if (!$is_editor && visible_module(MODULE_ID_PROGRESS,$course_id)) {
-            Session::Messages(sprintf($langPointsWon, $this->points),'alert-success');
+            $points_game_title = Database::get()->querySingle("SELECT title FROM points_game WHERE id = ?d", $this->points_game)->title;
+            Session::Messages(sprintf($langPointsWon, $points_game_title, $this->points),'alert-success');
         }
         PointsGame::levelUpdate($uid, $this->points_game, $total_points, $current_level);
     }
