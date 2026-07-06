@@ -696,7 +696,7 @@ function display_assignment_review($id) {
  */
 function display_assignment_submissions($id) {
 
-    global $course_id, $autojudge, $langgrade;
+    global $course_id, $autojudge, $langgrade, $course_code;
 
     $grade_review_field = $condition = $review_message = '';
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
@@ -705,12 +705,12 @@ function display_assignment_submissions($id) {
                                                         auto_judge
                                                     FROM assignment
                                                       WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    $data = display_assignment_details($assign);
-    $count_of_assignments = countSubmissions($id);
-    $data['result'] = [];
-
-    if ($count_of_assignments > 0) {
-        $data['result'] = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
+    if ($assign) {
+        $data = display_assignment_details($assign);
+        $count_of_assignments = countSubmissions($id);
+        $data['result'] = [];
+        if ($count_of_assignments > 0) {
+            $data['result'] = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                 assign.uid uid, assign.group_id group_id,
                                                 assign.submission_date submission_date,
                                                 assign.grade_submission_date grade_submission_date,
@@ -725,55 +725,57 @@ function display_assignment_submissions($id) {
                                                WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
                                                ORDER BY submission_date, surname, uid, id", $id);
 
-        $data['rows_assignment_grading_review'] = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
-    }
-    $data['seen'] = [];
-    $data['start_date_review'] = $assign->start_date_review;
-    $data['due_date_review'] = $assign->due_date_review;
-    $data['reviews_per_assignment'] = $assign->reviews_per_assignment;
-    // disabled grades submit if turnitin
-    $data['disabled'] = ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? ' disabled': '';
-    $data['id'] = $id;
-    $data['autojudge'] = $autojudge;
-    $data['grade_review_field'] = $grade_review_field;
-    $data['condition'] = $condition;
-    $data['review_message'] = $review_message;
-    $data['count_of_assignments'] = $count_of_assignments;
-    $data['row'] = $assign;
-    $data['assign'] = $assign;
-    $data['cdate'] = date('Y-m-d H:i:s');
-    $data['grades_info'] = $grades_info = [];
+            $data['rows_assignment_grading_review'] = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE assignment_id = ?d ", $id);
+        }
+        $data['seen'] = [];
+        $data['start_date_review'] = $assign->start_date_review;
+        $data['due_date_review'] = $assign->due_date_review;
+        $data['reviews_per_assignment'] = $assign->reviews_per_assignment;
+        // disabled grades submit if turnitin
+        $data['disabled'] = ($assign->assignment_type == ASSIGNMENT_TYPE_TURNITIN) ? ' disabled' : '';
+        $data['id'] = $id;
+        $data['autojudge'] = $autojudge;
+        $data['grade_review_field'] = $grade_review_field;
+        $data['condition'] = $condition;
+        $data['review_message'] = $review_message;
+        $data['count_of_assignments'] = $count_of_assignments;
+        $data['row'] = $assign;
+        $data['assign'] = $assign;
+        $data['cdate'] = date('Y-m-d H:i:s');
+        $data['grades_info'] = $grades_info = [];
 
-    if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
-        $users_submissions = Database::get()->queryArray("SELECT user_id FROM assignment_grading_review WHERE assignment_id = ?d", $id);
-        $users_grades = Database::get()->queryArray("SELECT id,assignment_id,user_id,file_name,users_id,grade FROM assignment_grading_review WHERE assignment_id = ?d", $id);
-        if (count($users_submissions) > 0 && count($users_grades) > 0) {
-            foreach ($users_submissions as $u) {
-                $arr = [];
-                $f_g_grade = 0;
-                $g_grade = 0;
-                $grade_counter = 0;
-                foreach ($users_grades as $g) {
-                    if ($u->user_id == $g->user_id) {
-                        if ($g->grade) {
-                            $grade_counter++;
-                            $g_grade = $g_grade + $g->grade;
-                            $f_g_grade = floor(($g_grade / $grade_counter) * 100) / 100; // truncate to 2 decimal places
-                            $arr[] = "<strong>" . uid_to_name($g->users_id) . "</strong> $langgrade -> " . "<span class='TextBold fs-6 Success-200-cl'>" . $g->grade . "</span><br>";
+        if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
+            $users_submissions = Database::get()->queryArray("SELECT user_id FROM assignment_grading_review WHERE assignment_id = ?d", $id);
+            $users_grades = Database::get()->queryArray("SELECT id,assignment_id,user_id,file_name,users_id,grade FROM assignment_grading_review WHERE assignment_id = ?d", $id);
+            if (count($users_submissions) > 0 && count($users_grades) > 0) {
+                foreach ($users_submissions as $u) {
+                    $arr = [];
+                    $f_g_grade = 0;
+                    $g_grade = 0;
+                    $grade_counter = 0;
+                    foreach ($users_grades as $g) {
+                        if ($u->user_id == $g->user_id) {
+                            if ($g->grade) {
+                                $grade_counter++;
+                                $g_grade = $g_grade + $g->grade;
+                                $f_g_grade = floor(($g_grade / $grade_counter) * 100) / 100; // truncate to 2 decimal places
+                                $arr[] = "<strong>" . uid_to_name($g->users_id) . "</strong> $langgrade -> " . "<span class='TextBold fs-6 Success-200-cl'>" . $g->grade . "</span><br>";
+                            }
+                            $str_arr = (count($arr) > 0) ? implode('', $arr) : '-';
+                            $grades_info[$u->user_id] = [
+                                'grade_received' => $str_arr,
+                                'grade_total' => $f_g_grade
+                            ];
                         }
-                        $str_arr = (count($arr) > 0) ? implode('', $arr) : '-';
-                        $grades_info[$u->user_id] = [
-                            'grade_received' => $str_arr,
-                            'grade_total' => $f_g_grade
-                        ];
                     }
                 }
             }
+            $data['grades_info'] = $grades_info;
         }
-        $data['grades_info'] = $grades_info;
+        view('modules.work.assignment_submissions', $data);
+    } else {
+        redirect_to_home_page("modules/work/index.php?course=$course_code");
     }
-
-    view('modules.work.assignment_submissions', $data);
 }
 
 
@@ -2814,7 +2816,7 @@ function notify_for_assignment_submission($title) {
  * @return boolean
  */
 function send_file($id, $file_type) {
-    global $uid, $is_editor, $is_course_reviewer;
+    global $uid, $is_editor, $is_course_reviewer, $course_id;
 
     $files_to_download = [];
     if (!$is_editor and is_module_disable(MODULE_ID_ASSIGN)) {
@@ -2829,7 +2831,7 @@ function send_file($id, $file_type) {
 
     if (isset($file_type)) {
         if ($file_type == 1) {
-            $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+            $info = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
             if (!$info) { // invalid (not found) assignment
                 return false;
             }
@@ -2857,7 +2859,7 @@ function send_file($id, $file_type) {
             return false;
         }
 
-        $a = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $info->assignment_id);
+        $a = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $info->assignment_id);
 
         if ($a->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
             $result = Database:: get()->queryArray("SELECT * FROM assignment_grading_review
@@ -2871,15 +2873,14 @@ function send_file($id, $file_type) {
                 send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, $disposition, true);
             }
         }
-
         if ($info->group_id) {
             initialize_group_info($info->group_id);
         }
         if (!($is_course_reviewer or $info->uid == $uid or $GLOBALS['is_member'])) {
             return false;
         }
-        send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, $disposition, true);
 
+        send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, $disposition, true);
     }
     exit;
 }
