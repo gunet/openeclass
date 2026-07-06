@@ -1071,18 +1071,23 @@ function display_activities($element, $id, $unit_id = 0) {
                                         $typeResClass = '';
                                         $fileTitle = '';
                                         if ($details->activity_type == 'document') {
-                                            require_once 'include/lib/fileDisplayLib.inc.php';
-                                            require_once 'include/lib/mediaresource.factory.php';
-                                            require_once 'include/lib/multimediahelper.class.php';
-                                            require_once 'modules/document/doc_init.php';
-                                            doc_init();
                                             $file = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND course_id = ?d", $details->resource, $course_id);
-                                            $file_obj = MediaResourceFactory::initFromDocument($file);
-                                            $file_obj->setAccessURL(file_url($file->path, $file->filename));
-                                            $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
-                                            $act_url = $file_obj->getAccessURL() ?? null;
-                                            $typeResClass = 'fileURL fileModal';
-                                            $fileTitle = $file_obj->getTitle() ?? '';
+                                            if ($file->format != '.dir') {
+                                                require_once 'include/lib/fileDisplayLib.inc.php';
+                                                require_once 'include/lib/mediaresource.factory.php';
+                                                require_once 'include/lib/multimediahelper.class.php';
+                                                require_once 'modules/document/doc_init.php';
+                                                doc_init();
+                                                $file_obj = MediaResourceFactory::initFromDocument($file);
+                                                $file_obj->setAccessURL(file_url($file->path, $file->filename));
+                                                $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+                                                $fileObjUrl = ltrim($file_obj->getAccessURL(), '/');
+                                                $act_url = $fileObjUrl ?? null;
+                                                $typeResClass = 'fileURL fileModal';
+                                                $fileTitle = $file_obj->getTitle() ?? '';
+                                            } else {
+                                                $act_url = "modules/document/index.php?course=$course_code&openDir=$file->path";
+                                            }
                                         } elseif ($details->activity_type == 'video') {
                                             require_once 'include/lib/mediaresource.factory.php';
                                             require_once 'include/lib/multimediahelper.class.php';
@@ -1090,7 +1095,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                             $video_obj = MediaResourceFactory::initFromVideo($video);
                                             $video_url = parse_url($video_obj->getAccessURL());
                                             if ($video_url) {
-                                                $act_url = $video_url['path'] . '?' . $video_url['query'];
+                                                $act_url = ltrim($video_url['path'], '/') . '?' . $video_url['query'];
                                             } else {
                                                 $act_url = null;
                                             }
@@ -1102,7 +1107,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                             $video_obj = MediaResourceFactory::initFromVideoLink($video);
                                             $video_url = parse_url($video_obj->getPlayURL());
                                             if ($video_url) {
-                                                $act_url = $video_url['path'] . '?' . $video_url['query'];
+                                                $act_url = ltrim($video_url['path'], '/') . '?' . $video_url['query'];
                                             } else {
                                                 $act_url = null;
                                             }
