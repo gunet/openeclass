@@ -5244,7 +5244,7 @@ function update_upload_whitelists() {
         'm2v', 'aac', 'm4a', 'flv', 'f4v', 'm4v', 'mp3', 'swf', 'webm', 'ogv',
         'ogg', 'mid', 'midi', 'aif', 'rm', 'rpm', 'ram', 'wav', 'mp2', 'm3u',
         'qt', 'vsd', 'vss', 'vst', 'cg3', 'ggb', 'psc', 'dir', 'dcr', 'sb',
-        'sb2', 'sb3', 'sbx', 'kodu', 'html', 'htm', 'wlmp', 'mswmm',
+        'sb2', 'sb3', 'sbx', 'kodu', 'wlmp', 'mswmm',
         'apk', 'py', 'ev3', 'psg', 'glo', 'gsp', 'xml', 'a3p', 'ypr',
         'mw2', 'dtd', 'aia', 'hex', 'mscz', 'pages', 'heic', 'piv', 'stk',
         'pptm', 'gfar', 'lab', 'lmsp', 'qrs', 'cpp', 'c', 'h', 'java', 'm', 'opus', 'mka'];
