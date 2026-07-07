@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2026-06-11 10:59:51
+// Generated 2026-07-07 15:45:58
 
 $langEclass = 'Collaboration Platform';
 $langTeacher = "Coordinator";
