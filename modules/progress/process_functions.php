@@ -1897,7 +1897,7 @@ function get_resource_details($element, $resource_id) {
  */
 function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_message = null, $certificate_issuer = null, $certificate_date = null, $certificate_template_id = null, $certificate_identifier = null, bool $preview = false) {
 
-    global $webDir, $urlServer, $langCertAuthenticity, $langpublisher, $siteName;
+    global $webDir, $urlServer, $langCertAuthenticity, $langpublisher, $siteName, $urlAppend, $themeimg;
 
     $newCertificates = false;
     $cert_path = '';
@@ -1968,7 +1968,17 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         $student_name = $user;
     }
 
-    $logo = "<img src='{$webDir}/resources/img/logo-eclass-small-theme.svg'>";
+    $logo_img = $themeimg.'/eclass-new-logo.svg';
+    $theme_id = get_config('theme_options_id');
+    if ($theme_id) {
+        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+        $theme_options_styles = unserialize($theme_options->styles);
+        $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+        if (isset($theme_options_styles['imageUpload'])) {
+            $logo_img = "$urlThemeData/{$theme_options_styles['imageUpload']}";
+        }
+    }
+    $logo = "<img src='{$logo_img}'>";
     $platform_title = $siteName;
 
     if (isset($_SESSION['current_user_tenant'])) {
