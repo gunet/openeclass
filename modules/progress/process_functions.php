@@ -1970,12 +1970,16 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
 
     $logo_img = $themeimg.'/eclass-new-logo.svg';
     $theme_id = get_config('theme_options_id');
+    $logo_bg = 'transparent';
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         if (isset($theme_options_styles['imageUpload'])) {
             $logo_img = "$urlThemeData/{$theme_options_styles['imageUpload']}";
+        }
+        if (isset($theme_options_styles['BgColorWrapperHeader'])) {
+            $logo_bg = $theme_options_styles['BgColorWrapperHeader'];
         }
     }
     $logo = "<img src='{$logo_img}'>";
@@ -2025,6 +2029,7 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     $html_certificate = preg_replace('(%link%)', $cert_link, $html_certificate);
     $html_certificate = preg_replace('(%logo%)', $logo, $html_certificate);
     $html_certificate = preg_replace('(%platform_title%)', $platform_title, $html_certificate);
+    $html_certificate = preg_replace('(%logo_bg%)', $logo_bg, $html_certificate);
 
     $mpdf->WriteHTML($html_certificate);
     $mpdf->Output();
