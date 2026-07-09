@@ -1240,12 +1240,12 @@ function display_activities($element, $id, $unit_id = 0) {
                                     $tool_content .= "
                                         <div class='col'>
                                             {$act_link_open}<div class='progress-activity-card'>
-                                                <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                    <div class='d-flex align-items-center gap-3 mb-2'>
+                                                <div class='d-flex justify-content-between align-items-center gap-3'>
+                                                    <div class='d-flex align-items-center gap-3'>
                                                         <div class='progress-activity-icon' style='background:{$activity_style['color']};'>
                                                             <i class='fa {$activity_style['icon']}'></i>
                                                         </div>
-                                                        <span class='progress-activity-type-label text-nowrap me-4'>$activity_type_label</span>
+                                                        <span class='progress-activity-type-label text-wrap me-4' style='line-height: 16px;' '>$activity_type_label</span>
                                                     </div>
                                                     $editor_btns
                                                 </div>
