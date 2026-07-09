@@ -4197,6 +4197,7 @@ function upgrade_to_4_4($tbl_options) : void
 
     global $webDir;
     installBadgeIcons($webDir);
+    upgrade_active_theme();
 }
 /**
  * @brief OpenBadges Backpack Integration - Database Migration
@@ -5408,4 +5409,214 @@ function upgrade_external_repositories()
             ADD CONSTRAINT `external_resource_ibfk_2`
             FOREIGN KEY (`repository_id`) REFERENCES `external_repository` (`id`) ON DELETE CASCADE");
     }
+}
+
+/**
+ * @upgrade active theme with new options
+ * @return void
+ */
+function upgrade_active_theme() {
+    global $webDir, $urlAppend, $head_content;
+
+    $style = '';
+    $theme_id = get_config('theme_options_id');
+    if ($theme_id) {
+        $cssFile = "$webDir/courses/theme_data/$theme_id/style_str.css";
+        if (file_exists($cssFile)) {
+            $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+            $theme_options_styles = unserialize($theme_options->styles);
+            $theme_options_styles['enable_aside_main_cards'] = 1;
+            $theme_options_styles['enable_aside_main_cards_no_border_radius'] = 1;
+            Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", serialize($theme_options_styles), $theme_id);
+
+            $style .= "
+                .portfolio-profile-container {
+                    background: transparent !important;
+                }
+            ";
+
+            if (isset($theme_options_styles['BorderLeftToRightColumnCourseBgColor'])) {
+                $style .= "
+                    @media(min-width: 992px) {
+                        .portfolio-profile-container .padding-default,
+                        .main-section .main-container, 
+                        .portfolio-courses-container .padding-default,
+                        .col_maincontent_active,
+                        .ContentLeftNav {
+                            border: solid 1px $theme_options_styles[BorderLeftToRightColumnCourseBgColor] !important;
+                        }
+                    }
+                ";
+            }
+
+            //////////////////////////////////////////////////////////////
+            if(isset($theme_options_styles['enable_aside_main_cards'])) {
+                $style .= "
+                    .ContentLeftNav, 
+                    .main-maincontent {
+                        border: solid 1px $theme_options_styles[BorderLeftToRightColumnCourseBgColor] !important;
+                    }
+                    @media(max-width: 991px) {
+                        .ContentLeftNav, 
+                        .main-maincontent {
+                            border: 0px !important;
+                        }
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if(isset($theme_options_styles['enable_aside_main_cards'])) {
+                $style .= "
+                    .main-section .main-container,
+                    .portfolio-courses-container .padding-default {
+                        border: 1px solid $theme_options_styles[clBorderPanels];
+                    }
+                    .main-container.main-container-login {
+                        border: 0px !important;
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if(isset($theme_options_styles['enable_aside_main_cards'])) {
+
+                $style .= "
+                    @media (max-width: 991px) {
+                        .portfolio-profile-container {
+                            padding-top: 56px !important;
+                            padding-left: 0px !important;
+                            padding-bottom: 0px !important;
+                            padding-right: 0px !important;
+                        }
+                        .section-portfolio-profile-container-info .padding-default {
+                            padding-top: 0px !important;
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                            padding-bottom: 0px !important;
+                        }
+                        .section-portfolio-profile-container-btns .padding-default {
+                            padding-top: 0px !important;
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                            padding-bottom: 0px !important;
+                        }
+                        .portfolio-courses-container {
+                            padding: 0px;
+                        }
+                        .brief-profile-container-info,
+                        .brief-profile-container-btns {
+                            padding: 32px 16px 32px 16px;
+                        }
+                    }
+                    
+                    @media (min-width: 992px) {
+                        .portfolio-profile-container .padding-default {
+                            margin-top: 28px !important;
+                            margin-bottom: 28px !important;
+                            padding: 45px 45px !important;
+                            border-radius: 32px !important;
+                        }
+                        .section-portfolio-profile-container-info .padding-default {
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                            padding-bottom: 0px !important;
+                        }
+                        .section-portfolio-profile-container-btns .padding-default {
+                            padding-top: 0px !important;
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                        }
+                        .main-section .main-container {
+                            padding: 45px 45px !important;
+                            border-radius: 32px !important;
+                            margin-bottom: 28px !important;
+                            margin-top: 28px !important;
+                        }
+                        .module-container .col_maincontent_active {
+                            padding: 45px 45px !important;
+                        }
+                        .brief-profile-container-btns {
+                            border-bottom-left-radius: 32px !important;
+                            border-bottom-right-radius: 32px !important;
+                            padding: 25px 55px !important;
+                        }
+                        .brief-profile-container-info {
+                            position: relative !important;
+                            overflow: hidden !important;
+                            padding: 45px 55px !important;
+                            border-top-left-radius: 32px !important;
+                            border-top-right-radius: 32px !important;
+                        }
+                        .brief-profile-container-info::after {
+                            content:'' !important;
+                            position:absolute !important;
+                            right:-80px !important;
+                            bottom:-150px !important;
+                            width:350px !important;
+                            height:350px !important;
+                            filter: blur(60px) !important;
+                            z-index:0 !important;
+                        }
+                        .portfolio-courses-container .padding-default {
+                            padding: 45px 55px !important;
+                            border-radius: 32px !important;
+                            margin-bottom: 28px !important;
+                        } 
+                        body:has(.sidebar-card) .main-maincontent {
+                            border-top-left-radius: 0px;
+                            border-top-right-radius: 32px;
+                            border-bottom-left-radius: 0px;
+                            border-bottom-right-radius: 32px;
+                        }
+                        .sidebar-card .ContentLeftNav {
+                            border-top-left-radius: 32px;
+                            border-top-right-radius: 0px;
+                            border-bottom-left-radius: 32px;
+                            border-bottom-right-radius: 0px;
+                        }
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if(isset($theme_options_styles['enable_aside_main_cards_no_border_radius'])) {
+                $style .= "
+                    @media (min-width: 992px) {
+                        .portfolio-profile-container .padding-default {
+                            border-radius: 4px !important;
+                        }
+                        .main-section .main-container {
+                            border-radius: 4px !important;
+                        }
+                        .brief-profile-container-info {
+                            border-top-left-radius: 4px !important;
+                            border-top-right-radius: 4px !important;
+                        }
+                        .brief-profile-container-btns {
+                            border-bottom-left-radius: 4px !important;
+                            border-bottom-right-radius: 4px !important;
+                        }
+                        .portfolio-courses-container .padding-default {
+                            border-radius: 4px !important;
+                        } 
+                        body:has(.sidebar-card) .main-maincontent {
+                            border-top-right-radius: 4px;
+                            border-bottom-right-radius: 4px;
+                        }
+                        .sidebar-card .ContentLeftNav {
+                            border-top-left-radius: 4px;
+                            border-bottom-left-radius: 4px;
+                        }
+                        .breadcrumbs-init {
+                            border-radius: 4px;
+                        }
+                    }
+                ";
+            }
+
+            if (!empty($style)) {
+                file_put_contents($cssFile, $style, FILE_APPEND);
+            }
+           
+        }
+    }
+
 }

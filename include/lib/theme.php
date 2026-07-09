@@ -10,7 +10,8 @@ function theme_initialization() {
            $head_content, $webDir, $theme_id, $container,
            $leftsideImg, $eclass_banner_value, $PositionFormLogin,
            $logo_img, $image_footer, $loginIMG, $themeimg, $favicon_img,
-           $logo_img_small, $VideoUploadedInJumbotron, $enable_box_logo;
+           $logo_img_small, $VideoUploadedInJumbotron, $enable_box_logo, 
+           $cardView;
 
     // Add Theme Options styles
     $styles_str = '';
@@ -19,6 +20,7 @@ function theme_initialization() {
     $PositionFormLogin = 0;
     $eclass_banner_value = 1;
     $container = 'container';
+    $cardView = false;
 
     $tenant = defined('UPGRADE')? null: getCurrentTenant();
 
@@ -7959,13 +7961,9 @@ function theme_initialization() {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if(!empty($theme_options_styles['enable_aside_main_cards'])){
-            $head_content .= "
-            <script type='text/javascript'>
-                $(document).ready(function () {
-                    setNewCookieSlider('asideBarOn','true',30);
-                });
-            </script>";
+        if(isset($theme_options_styles['enable_aside_main_cards'])){
+            
+            $cardView = true;
 
             $styles_str .= "
 
@@ -8086,13 +8084,6 @@ function theme_initialization() {
                 }
 
             ";
-        } else {
-            $head_content .= "
-            <script type='text/javascript'>
-                $(document).ready(function () {
-                    setNewCookieSlider('asideBarOn','true',0);
-                });
-            </script>";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
@@ -8101,7 +8092,7 @@ function theme_initialization() {
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if(!empty($theme_options_styles['enable_aside_main_cards_no_border_radius'])){
+        if(isset($theme_options_styles['enable_aside_main_cards_no_border_radius'])){
             $styles_str .= "
                 @media (min-width: 992px) {
 
