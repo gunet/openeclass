@@ -3699,7 +3699,7 @@ function upgrade_to_4_3($tbl_options) : void {
 function upgrade_to_4_4($tbl_options) : void
 {
 
-    global $session;
+    global $session, $webDir;
 
     $eportfolio_strings = array(
         'langPersInfo', 'langEduEmpl', 'langAchievements', 'langGoalsSkills', 'langContactInfo', 'langResearchProfiles', 'langLangProfLevel',
@@ -4149,6 +4149,11 @@ function upgrade_to_4_4($tbl_options) : void
     if (!DBHelper::fieldExists('course', 'reg_end_date')) {
         Database::get()->query("ALTER TABLE course ADD reg_end_date DATE DEFAULT NULL AFTER end_date");
     }
+    // ensure that there are no invalid dates in courses
+    Database::get()->query("UPDATE course SET start_date = NULL WHERE start_date = '0000-00-00 00:00:00'");
+
+    // change course unit format in one per line
+    Database::get()->auery("UPDATE course SET view_units = 1 WHERE view_units = 0");
 
     if (!DBHelper::tableExists('suppressed_words')) {
         Database::get()->query("CREATE TABLE `suppressed_words` (
@@ -4195,7 +4200,6 @@ function upgrade_to_4_4($tbl_options) : void
             ADD CONSTRAINT FOREIGN KEY (category) REFERENCES badge_icon_category(id)");
     }
 
-    global $webDir;
     installBadgeIcons($webDir);
     upgrade_active_theme();
 }
@@ -5416,7 +5420,7 @@ function upgrade_external_repositories()
  * @return void
  */
 function upgrade_active_theme() {
-    global $webDir, $urlAppend, $head_content;
+    global $webDir;
 
     $style = '';
     $theme_id = get_config('theme_options_id');
