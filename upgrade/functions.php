@@ -4206,7 +4206,7 @@ function upgrade_to_4_4($tbl_options) : void
 
     installBadgeIcons($webDir);
     upgrade_active_theme();
-    //upgrade_certificates();
+    upgrade_certificates();
 }
 /**
  * @brief OpenBadges Backpack Integration - Database Migration
