@@ -161,7 +161,7 @@ function theme_initialization() {
             }
         }
 
-        if(!empty($theme_options_styles['bgColorContainerPortfolioInfo'])){
+        if(isset($theme_options_styles['bgColorContainerPortfolioInfo'])){
             $styles_str .= "
                 .section-portfolio-profile-container-info {
                     background: $theme_options_styles[bgColorContainerPortfolioInfo] !important;

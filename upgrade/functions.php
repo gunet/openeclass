@@ -5441,6 +5441,14 @@ function upgrade_active_theme() {
             Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", serialize($theme_options_styles), $theme_id);
 
             //////////////////////////////////////////////////////////////
+            if (isset($theme_options_styles['bgColorContainerPortfolioInfo'])) {
+                $style .= "
+                    .portfolio-profile-container {
+                        background: $theme_options_styles[bgColorContainerPortfolioInfo] !important;
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
             if (isset($theme_options_styles['BorderLeftToRightColumnCourseBgColor'])) {
                 $style .= "
                     @media(min-width: 992px) {
@@ -5462,7 +5470,8 @@ function upgrade_active_theme() {
                         .main-section .main-container{
                             border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
                         }
-                        .portfolio-courses-container .padding-default{
+                        .portfolio-courses-container .padding-default,
+                        .portfolio-profile-container .padding-default{
                             border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
                         } 
                         .main-container.main-container-login {
