@@ -4282,7 +4282,7 @@ function certificate_settings($element, $element_id = 0) {
            $langTitle, $langSubmit, $langInsert, $langCertDeadlineHelp,
            $langDescription, $langpublisher, $langIcon, $langCertificateDeadline,
            $urlServer, $langImgFormsDes, $langSelect,
-           $langAllowBadgeExport, $langAllowBadgeExportHelp;
+           $langAllowBadgeExport, $langAllowBadgeExportHelp, $langLogo, $urlAppend, $langDelete;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -4388,12 +4388,33 @@ function certificate_settings($element, $element_id = 0) {
         });
     </script>";
 
+    $logo_html = '';
     if ($element_id > 0) {      // edit
         $field = ($element == 'certificate') ? 'template' : 'icon';
         $allow_export_field = ($element == 'badge') ? ', allow_export' : '';
         $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle, expires $allow_export_field
                                 FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
-                                
+        
+        if ($element == 'certificate') {
+            $certLogo = Database::get()->querySingle("SELECT `logo` FROM $element WHERE id = ?d", $element_id)->logo;
+            if (!is_null($certLogo)) {
+                $logo_html .= "
+                    <p for='filename_id' class='col-sm-12 control-label-notes mb-2'>$langLogo</p>
+                    <div class='form-group d-flex justify-content-start align-items-center gap-3'>
+                        <img style='max-height:100px;max-width:150px;' src='{$urlAppend}courses/{$course_code}/cert_logo/{$certLogo}' alt='{$langLogo}'>
+                        <a class='btn deleteAdminBtn' href='{$urlAppend}modules/progress/index.php?course={$course_code}&cert_id={$element_id}&del_cert_logo={$certLogo}&token=$_SESSION[csrf_token]'>$langDelete</a>
+                    </div>
+                ";
+            } else {
+                $logo_html .= "
+                    <div class='form-group'> 
+                        <label for='filename_id' class='col-sm-12 control-label-notes'>$langLogo</label>
+                        <input id='filename_id' type='file' name='cert_logo'>
+                    </div>
+                ";
+            }
+        }
+                   
         $issuer = $data->issuer ?? '';
         $template = $data->$field ?? '';
         $title = $data->title ?? '';
@@ -4429,11 +4450,22 @@ function certificate_settings($element, $element_id = 0) {
         $statuscertdeadline = '';
         // Default: allow export for new badges
         $check_allow_export = ($element == 'badge') ? " checked" : "";
+
+        if ($element == 'certificate') {
+            $logo_html .= "
+                <div class='form-group'> 
+                    <label for='filename_id' class='col-sm-12 control-label-notes'>$langLogo</label>
+                    <input id='filename_id' type='file' name='cert_logo'>
+                </div>
+            ";
+        }
+
     }
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
-                <div class='form-group'>
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\" enctype='multipart/form-data'>
+                $logo_html
+                <div class='form-group mt-4'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
                         <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title' required>
@@ -4561,7 +4593,7 @@ function certificate_settings($element, $element_id = 0) {
                     <div class='form-group mt-4'>
                         <div class='col-sm-2'></div>
                         <div class='col-sm-10'>
-                            <img id='selected_icon' src='' alt=''>
+                            <img id='selected_icon' src='' alt='' style='max-height:100px;max-width:150px;'>
                         </div>
                     </div>";
                 }

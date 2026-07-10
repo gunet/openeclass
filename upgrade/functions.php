@@ -4200,8 +4200,13 @@ function upgrade_to_4_4($tbl_options) : void
             ADD CONSTRAINT FOREIGN KEY (category) REFERENCES badge_icon_category(id)");
     }
 
+    if (!DBHelper::fieldExists('certificate', 'logo')) {
+        Database::get()->query("ALTER TABLE `certificate` ADD `logo` VARCHAR(255) DEFAULT NULL AFTER `title`");
+    }
+
     installBadgeIcons($webDir);
     upgrade_active_theme();
+    upgrade_certificates();
 }
 /**
  * @brief OpenBadges Backpack Integration - Database Migration
@@ -5623,4 +5628,49 @@ function upgrade_active_theme() {
         }
     }
 
+}
+
+/**
+ * @upgrade certificates
+ * @return void
+ */
+function upgrade_certificates() {
+    global $webDir;
+
+    $zipDir = $webDir . '/template/modern/certificates/';
+    $next = 1;
+    foreach (glob($zipDir . '*.zip') as $filepath) {
+        $filename = basename($filepath);
+        validateUploadedFile($filename, 3);
+        $certificate_directory = safe_filename() . "/";
+        $certificate_path = $webDir . CERT_TEMPLATE_PATH . $certificate_directory;
+        make_dir($certificate_path);
+
+        $files_in_zip = array();
+        $archive = new ZipArchive;
+        if ($archive->open($filepath) === TRUE) {
+            // check for file type in zip contents
+            for ($i = 0; $i < $archive->numFiles; $i++) {
+                $stat = $archive->statIndex($i, ZipArchive::FL_ENC_RAW);
+                $files_in_zip[$i] = $stat['name'];
+                if (!empty(my_basename($files_in_zip[$i]))) {
+                    validateUploadedFile(my_basename($files_in_zip[$i]), 3);
+                }
+            }
+            if ($archive->extractTo($certificate_path)) {
+                copy($filepath, $certificate_path . $filename);
+                $title = 'Πιστοποιητικό' . ' ' . $next;
+                Database::get()->query("INSERT INTO certificate_template SET
+                                                name = ?s,
+                                                description = ?s,
+                                                filename = ?s,
+                                                orientation = ?s,
+                                                all_courses = ?d",
+                                            $title, '', $certificate_directory, 'L', 1);
+            }
+
+            $archive->close();
+        }
+        $next++;
+    }
 }

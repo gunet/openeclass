@@ -1156,7 +1156,7 @@ function add_points_game($title, $description, $startdate, $enddate, $level_name
  * @param type $expiration_day
  * @return type
  */
-function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $unit_id = 0, $session_id = 0, $allow_export = 1) {
+function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day, $unit_id = 0, $session_id = 0, $allow_export = 1, $cert_logo = null) {
 
     global $course_id;
 
@@ -1179,13 +1179,14 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
             $new_id = Database::get()->query("INSERT INTO certificate
                                 SET course_id = ?d,
                                 title = ?s,
+                                logo = ?s,
                                 description = ?s,
                                 message = ?s,
                                 template = ?d,
                                 issuer = ?s,
                                 active = ?d,
                                 bundle = ?d,
-                                expires = ?t", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
+                                expires = ?t", $course_id, $title, $cert_logo, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
         } else {
             $new_id = Database::get()->query("INSERT INTO badge
                                 SET course_id = ?d,
@@ -1250,7 +1251,7 @@ function modify_points_game($points_game_id, $title, $description, $startdate, $
  * @param type $active
  * @param type $allow_export
  */
-function modify($element, $element_id, $title, $description, $message, $value, $issuer, $allow_export = 1) {
+function modify($element, $element_id, $title, $description, $message, $value, $issuer, $allow_export = 1, $cert_logo = null) {
 
     global $course_id;
     $field = ($element == 'certificate')? 'template' : 'icon';
@@ -1266,12 +1267,13 @@ function modify($element, $element_id, $title, $description, $message, $value, $
                                         $title, $description, $message, $value, $issuer, $allow_export, $element_id, $course_id);
     } else {
         Database::get()->query("UPDATE $element SET title = ?s,
+                                                     logo = ?s,
                                                        description = ?s,
                                                        message = ?s,
                                                        $field = ?d,
                                                        issuer = ?s
                                                     WHERE id = ?d AND course_id = ?d",
-                                        $title, $description, $message, $value, $issuer, $element_id, $course_id);
+                                        $title, $cert_logo, $description, $message, $value, $issuer, $element_id, $course_id);
     }
 
 }
@@ -1970,7 +1972,6 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
 
     $logo_img = $themeimg.'/eclass-new-logo.svg';
     $theme_id = get_config('theme_options_id');
-    $logo_bg = 'transparent';
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
@@ -1978,9 +1979,10 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
         if (isset($theme_options_styles['imageUpload'])) {
             $logo_img = "$urlThemeData/{$theme_options_styles['imageUpload']}";
         }
-        if (isset($theme_options_styles['BgColorWrapperHeader'])) {
-            $logo_bg = $theme_options_styles['BgColorWrapperHeader'];
-        }
+    }
+    $logoInfo = Database::get()->querySingle("SELECT course_id,logo FROM `certificate` WHERE id = ?d", $certificate_id);
+    if ($logoInfo && !is_null($logoInfo->logo)) {
+        $logo_img = "$webDir/courses/" . course_id_to_code($logoInfo->course_id) . "/cert_logo/$logoInfo->logo";
     }
     $logo = "<img src='{$logo_img}'>";
     $platform_title = $siteName;
@@ -2029,7 +2031,6 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     $html_certificate = preg_replace('(%link%)', $cert_link, $html_certificate);
     $html_certificate = preg_replace('(%logo%)', $logo, $html_certificate);
     $html_certificate = preg_replace('(%platform_title%)', $platform_title, $html_certificate);
-    $html_certificate = preg_replace('(%logo_bg%)', $logo_bg, $html_certificate);
 
     $mpdf->WriteHTML($html_certificate);
     $mpdf->Output();
