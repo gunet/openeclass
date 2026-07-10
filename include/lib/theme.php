@@ -172,7 +172,7 @@ function theme_initialization() {
             ";
         }
 
-        if(!empty($theme_options_styles['bgColorSectionPortfolioBtns'])){
+        if(isset($theme_options_styles['bgColorSectionPortfolioBtns'])){
             $styles_str .= "
                 .section-portfolio-profile-container-btns {
                     background: $theme_options_styles[bgColorSectionPortfolioBtns] !important;
@@ -8157,7 +8157,8 @@ function theme_initialization() {
                     .main-section .main-container{
                         border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
                     }
-                    .portfolio-courses-container .padding-default{
+                    .portfolio-courses-container .padding-default,
+                    .portfolio-profile-container .padding-default{
                         border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
                     } 
                     .main-container.main-container-login {
