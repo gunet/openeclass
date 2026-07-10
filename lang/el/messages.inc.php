@@ -124,6 +124,8 @@ $langEnableStrongPasswords = "Δημιουργία 'δύσκολων' συνθη
 // index
 $langDisplayPlatformAsCardLayout = "Εμφάνιση της πλατφόρμας σε μορφή καρτών (cards) με εφαρμογή border-radius";
 $langDisplayPlatformAsCardLayoutNoBorderRadius = "Εμφάνιση της πλατφόρμας σε μορφή καρτών (cards) χωρίς εφαρμογή border-radius";
+$langBgColorCardView = "Χρώμα φόντου στην μορφή των καρτών (cards)";
+$langBgBorderColorCardView = "Χρώμα περιγράμματος (border) των καρτών (cards)";
 $langActivateBorder = "Ενεργοποίηση περιγράμματος (border)";
 $langPlatformView = "Βασική εμφάνιση";
 $langComponents = "Συστατικά";

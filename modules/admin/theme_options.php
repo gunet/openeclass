@@ -48,7 +48,7 @@ $defaults = array(
                                                     'clBorderBottomMenuPopoverOption', 'BgHoveredMenuPopoverOption', 'AboutBorderChatContainer', 'AboutChatContainer', 'AboutBorderCourseInfoContainer', 'AboutBorderUnitsContainer'),
                 "rgba(35,82,124,1)" => array('linkHoverColor','clLinkHoveredAlertInfo','clLinkHoveredAlertWarning','clLinkHoveredAlertSuccess','clLinkHoveredAlertDanger'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
-                "rgba(0,0,0,0)" => array('loginTextBgColor','loginTextBgColorSmallScreen','BgColorLinkBanner'),
+                "rgba(0,0,0,0)" => array('loginTextBgColor','loginTextBgColorSmallScreen','BgColorLinkBanner', 'bgBorderColorSectionContainers'),
                 "rgba(180, 190, 209, 1)" => array('BgColorScrollBar', 'BgHoveredColorScrollBar'),
                 "rgba(79, 104, 147, 1)" => array('clContainerImportantAnnouncement'),
                 "rgba(104, 125, 163, 1)" => array('ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clBorderSelect', 'clColorHoveredBodyAgenda', 'BgBorderTextEditor'),
@@ -1628,7 +1628,8 @@ function build_general_settings() {
            $langHelpBoxedWidthInfo, $langViewFluidType, $langHelpFluidWidthInfo, $langLayoutConfig, $langLayout,
            $langBoxed, $langFluid, $langFluidContainerWidth, $langLogoConfig, $langLogo, $langLogoNormal, $logo_field,
            $langLogoSmall, $small_logo_field, $langFavicon, $faviconUpload, $urlServer, $langDisplayOptionsImg, 
-           $langDisplayPlatformAsCardLayout, $langDisplayPlatformAsCardLayoutNoBorderRadius, $head_content;
+           $langDisplayPlatformAsCardLayout, $langDisplayPlatformAsCardLayoutNoBorderRadius, $head_content,
+           $langBgColorCardView, $langBgBorderColorCardView;
 
     $head_content .= "
     <script>
@@ -1636,14 +1637,17 @@ function build_general_settings() {
             if($('#enable_aside_main_cards').is(':checked')){
                 $('.enable_main_card_checkbox').removeClass('d-none').addClass('d-block');
                 $('.bgColorSectionContainersPalette').removeClass('d-none').addClass('d-block');
+                $('.bgBorderColorSectionContainersPalette').removeClass('d-none').addClass('d-block');
             }
             $('#enable_aside_main_cards').on('click', function () {
                 if($('#enable_aside_main_cards').is(':checked')){
                     $('.enable_main_card_checkbox').removeClass('d-none').addClass('d-block');
                     $('.bgColorSectionContainersPalette').removeClass('d-none').addClass('d-block');
+                     $('.bgBorderColorSectionContainersPalette').removeClass('d-none').addClass('d-block');
                 } else {
                     $('.enable_main_card_checkbox').removeClass('d-block').addClass('d-none');
-                $('.bgColorSectionContainersPalette').removeClass('d-block').addClass('d-none');
+                    $('.bgColorSectionContainersPalette').removeClass('d-block').addClass('d-none');
+                    $('.bgBorderColorSectionContainersPalette').removeClass('d-block').addClass('d-none');
                 }
             });
         });
@@ -1696,8 +1700,12 @@ function build_general_settings() {
                                     </div>
                                 </div>
                                 <div class='form-group mt-4 d-none bgColorSectionContainersPalette'>
-                                    <label for='bgColorSectionContainers' class='mb-2 me-2'>Χρώμα φόντου στην μορφή των καρτών (cards):</label>
+                                    <label for='bgColorSectionContainers' class='mb-2 me-2'>$langBgColorCardView:</label>
                                     <input name='bgColorSectionContainers' type='text' class='form-control colorpicker' id='bgColorSectionContainers' value='$theme_options_styles[bgColorSectionContainers]'>
+                                </div>
+                                <div class='form-group mt-4 d-none bgBorderColorSectionContainersPalette'>
+                                    <label for='bgBorderColorSectionContainers' class='mb-2 me-2'>$langBgBorderColorCardView:</label>
+                                    <input name='bgBorderColorSectionContainers' type='text' class='form-control colorpicker' id='bgBorderColorSectionContainers' value='$theme_options_styles[bgBorderColorSectionContainers]'>
                                 </div>
                                 <hr>
                                 <h2 class='theme_options_legend text-decoration-underline text-heading-h3'>$langLayoutConfig</h2>

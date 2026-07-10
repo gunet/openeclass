@@ -8151,6 +8151,23 @@ function theme_initialization() {
             ";
         }
 
+        if(!empty($theme_options_styles['bgBorderColorSectionContainers'])){
+            $styles_str .= "
+                @media(min-width: 992px) {
+                    .main-section .main-container{
+                        border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
+                    }
+                    .portfolio-courses-container .padding-default{
+                        border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
+                    } 
+                    .main-container.main-container-login {
+                        border: 0px !important;
+                        padding: 0 !important;
+                    }
+                }
+            ";
+        }
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         ////////////////////// BACKGROUND COLOR TO THE FORM LOGIN ///////////////////////////

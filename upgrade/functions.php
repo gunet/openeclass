@@ -5434,16 +5434,13 @@ function upgrade_active_theme() {
         if (file_exists($cssFile)) {
             $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
             $theme_options_styles = unserialize($theme_options->styles);
+            $theme_options_styles['bgColorContainerPortfolioInfo'] = 'rgba(0,0,0,0)';
+            $theme_options_styles['bgBorderColorSectionContainers'] = $theme_options_styles['BorderLeftToRightColumnCourseBgColor'] ?? 'rgba(0,0,0,0)';
             $theme_options_styles['enable_aside_main_cards'] = 1;
             $theme_options_styles['enable_aside_main_cards_no_border_radius'] = 1;
             Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", serialize($theme_options_styles), $theme_id);
 
-            $style .= "
-                .portfolio-profile-container {
-                    background: transparent !important;
-                }
-            ";
-
+            //////////////////////////////////////////////////////////////
             if (isset($theme_options_styles['BorderLeftToRightColumnCourseBgColor'])) {
                 $style .= "
                     @media(min-width: 992px) {
@@ -5451,24 +5448,26 @@ function upgrade_active_theme() {
                         .main-section .main-container, 
                         .portfolio-courses-container .padding-default,
                         .col_maincontent_active,
-                        .ContentLeftNav {
+                        .ContentLeftNav,
+                        .main-maincontent {
                             border: solid 1px $theme_options_styles[BorderLeftToRightColumnCourseBgColor] !important;
                         }
                     }
                 ";
             }
-
             //////////////////////////////////////////////////////////////
-            if(isset($theme_options_styles['enable_aside_main_cards'])) {
+            if (isset($theme_options_styles['bgBorderColorSectionContainers'])) {
                 $style .= "
-                    .ContentLeftNav, 
-                    .main-maincontent {
-                        border: solid 1px $theme_options_styles[BorderLeftToRightColumnCourseBgColor] !important;
-                    }
-                    @media(max-width: 991px) {
-                        .ContentLeftNav, 
-                        .main-maincontent {
+                    @media(min-width: 992px) {
+                        .main-section .main-container{
+                            border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
+                        }
+                        .portfolio-courses-container .padding-default{
+                            border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
+                        } 
+                        .main-container.main-container-login {
                             border: 0px !important;
+                            padding: 0 !important;
                         }
                     }
                 ";
@@ -5476,20 +5475,11 @@ function upgrade_active_theme() {
             //////////////////////////////////////////////////////////////
             if(isset($theme_options_styles['enable_aside_main_cards'])) {
                 $style .= "
-                    .main-section .main-container,
-                    .portfolio-courses-container .padding-default {
-                        border: 1px solid $theme_options_styles[clBorderPanels];
-                    }
-                    .main-container.main-container-login {
-                        border: 0px !important;
-                    }
-                ";
-            }
-            //////////////////////////////////////////////////////////////
-            if(isset($theme_options_styles['enable_aside_main_cards'])) {
-
-                $style .= "
                     @media (max-width: 991px) {
+                        .ContentLeftNav, 
+                        .main-maincontent {
+                            border: 0px !important;
+                        }
                         .portfolio-profile-container {
                             padding-top: 56px !important;
                             padding-left: 0px !important;
@@ -5516,7 +5506,7 @@ function upgrade_active_theme() {
                             padding: 32px 16px 32px 16px;
                         }
                     }
-                    
+                
                     @media (min-width: 992px) {
                         .portfolio-profile-container .padding-default {
                             margin-top: 28px !important;
