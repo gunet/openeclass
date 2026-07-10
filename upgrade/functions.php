@@ -4149,11 +4149,11 @@ function upgrade_to_4_4($tbl_options) : void
     if (!DBHelper::fieldExists('course', 'reg_end_date')) {
         Database::get()->query("ALTER TABLE course ADD reg_end_date DATE DEFAULT NULL AFTER end_date");
     }
-    // ensure that there are no invalid dates in courses
-    Database::get()->query("UPDATE course SET start_date = NULL WHERE start_date = '0000-00-00 00:00:00'");
+    // ensure that there are no invalid dates in courses. Type casting is necessary because of the default strict mode in newer mysql versions.
+    Database::get()->query("UPDATE course SET start_date = NULL WHERE CAST(start_date AS CHAR) = '0000-00-00'");
 
     // change course unit format in one per line
-    Database::get()->auery("UPDATE course SET view_units = 1 WHERE view_units = 0");
+    Database::get()->query("UPDATE course SET view_units = 1 WHERE view_units = 0");
 
     if (!DBHelper::tableExists('suppressed_words')) {
         Database::get()->query("CREATE TABLE `suppressed_words` (
