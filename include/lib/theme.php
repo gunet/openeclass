@@ -8137,7 +8137,7 @@ function theme_initialization() {
             ";
         }
 
-        if(!empty($theme_options_styles['bgColorSectionContainers'])){
+        if(isset($theme_options_styles['bgColorSectionContainers'])){
             $styles_str .= "
                 .main-section .main-container{
                     background-color: $theme_options_styles[bgColorSectionContainers] !important;

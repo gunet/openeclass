@@ -4206,7 +4206,7 @@ function upgrade_to_4_4($tbl_options) : void
 
     installBadgeIcons($webDir);
     upgrade_active_theme();
-    upgrade_certificates();
+    //upgrade_certificates();
 }
 /**
  * @brief OpenBadges Backpack Integration - Database Migration
@@ -5436,6 +5436,7 @@ function upgrade_active_theme() {
             $theme_options_styles = unserialize($theme_options->styles);
             $theme_options_styles['bgColorContainerPortfolioInfo'] = 'rgba(0,0,0,0)';
             $theme_options_styles['bgBorderColorSectionContainers'] = $theme_options_styles['BorderLeftToRightColumnCourseBgColor'] ?? 'rgba(0,0,0,0)';
+            $theme_options_styles['bgColorSectionContainers'] = $theme_options_styles['bgColor'] ?? 'rgba(0,0,0,0)';
             $theme_options_styles['enable_aside_main_cards'] = 1;
             $theme_options_styles['enable_aside_main_cards_no_border_radius'] = 1;
             Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", serialize($theme_options_styles), $theme_id);
@@ -5445,6 +5446,20 @@ function upgrade_active_theme() {
                 $style .= "
                     .portfolio-profile-container {
                         background: $theme_options_styles[bgColorContainerPortfolioInfo] !important;
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if (isset($theme_options_styles['bgColorSectionContainers'])) {
+                $style .= "
+                    .main-section .main-container{
+                        background-color: $theme_options_styles[bgColorSectionContainers] !important;
+                    }
+                    .portfolio-courses-container .padding-default{
+                        background-color: $theme_options_styles[bgColorSectionContainers] !important;
+                    } 
+                    .main-container.main-container-login {
+                        background-color: transparent !important;
                     }
                 ";
             }
