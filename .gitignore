@@ -1,0 +1,68 @@
+# Application Directories
+/mentoring_programs/
+/courses/
+/video/
+/secure/
+/html/
+/node_modules/
+
+# Config Files
+/config/*.php
+
+# JavaScript Vendor Libraries
+/js/mathjax/
+/js/h5p-standalone/
+/js/recordrtc/
+/js/video.js/
+
+# Bun
+bun.*
+
+# Composer & PHP Vendor
+/composer.phar
+/vendor/
+
+# Laravel
+/laravel/vendor/
+/laravel/.env
+/laravel/storage/app/
+/laravel/storage/framework/cache/
+/laravel/storage/framework/sessions/
+/laravel/storage/framework/views/
+/laravel/storage/logs/
+/storage/views/
+
+# IDE & Editor Files
+/nbproject/private/
+/.idea
+/.buildpath
+/.project
+/.settings
+.*.swp
+
+# Sass Cache
+.sass-cache/
+/template/default/.sass-cache/
+
+# Merge & Conflict Artifacts
+*.orig.*
+*.orig
+*.chg.*
+*.rej
+*.conflict~
+
+# Source Maps
+*.map
+
+# Version Control
+.travis.yml
+
+# Sensitive Keys
+/modules/drives/plugins/googledrive_key.p12
+
+# Tests
+/tests/phpunit/.cache
+
+# Misc
+.DS_Store
+/.claude/
