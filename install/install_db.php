@@ -3032,63 +3032,82 @@ $db->query("CREATE TABLE `mod_session` (
         `course_id` INT NOT NULL,
         `consent` INT NOT NULL DEFAULT 1,
         PRIMARY KEY(id),
-        FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE) $tbl_options");
+        FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE) 
+    $tbl_options");
 
 $db->query("CREATE TABLE `mod_session_users` (
-            `id` INT NOT NULL AUTO_INCREMENT,
-            `session_id` INT NOT NULL DEFAULT 0,
-            `participants` INT NOT NULL DEFAULT 0,
-            `is_accepted` INT NOT NULL DEFAULT 0,
-            PRIMARY KEY(id),
-            FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
-
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `session_id` INT NOT NULL DEFAULT 0,
+        `participants` INT NOT NULL DEFAULT 0,
+        `is_accepted` INT NOT NULL DEFAULT 0,
+        PRIMARY KEY(id),
+        FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) 
+    $tbl_options");
 
 $db->query("CREATE TABLE `session_resources` (
-                            `id` INT NOT NULL AUTO_INCREMENT,
-                            `session_id` INT NOT NULL DEFAULT 0,
-                            `title` VARCHAR(255) NOT NULL DEFAULT '',
-                            `comments` MEDIUMTEXT,
-                            `res_id` INT NOT NULL DEFAULT 0,
-                            `type` VARCHAR(255) NOT NULL DEFAULT '',
-                            `visible` TINYINT,
-                            `order` INT NOT NULL DEFAULT 0,
-                            `date` DATETIME NOT NULL,
-                            `doc_id` INT NOT NULL DEFAULT 0,
-                            `is_completed` INT NOT NULL DEFAULT 0,
-                            `from_user` INT NOT NULL DEFAULT 0,
-                            `deliverable_comments` TEXT DEFAULT NULL,
-                            `passage` TEXT DEFAULT NULL,
-                            PRIMARY KEY(id),
-                            FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `session_id` INT NOT NULL DEFAULT 0,
+        `title` VARCHAR(255) NOT NULL DEFAULT '',
+        `comments` MEDIUMTEXT,
+        `res_id` INT NOT NULL DEFAULT 0,
+        `type` VARCHAR(255) NOT NULL DEFAULT '',
+        `visible` TINYINT,
+        `order` INT NOT NULL DEFAULT 0,
+        `date` DATETIME NOT NULL,
+        `doc_id` INT NOT NULL DEFAULT 0,
+        `is_completed` INT NOT NULL DEFAULT 0,
+        `from_user` INT NOT NULL DEFAULT 0,
+        `deliverable_comments` TEXT DEFAULT NULL,
+        `passage` TEXT DEFAULT NULL,
+        PRIMARY KEY(id),
+        FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) 
+    $tbl_options");
 
 $db->query("CREATE TABLE `mod_session_completion` (
-                            `id` INT NOT NULL AUTO_INCREMENT,
-                            `course_id` INT NOT NULL,
-                            `session_id` INT NOT NULL,
-                            PRIMARY KEY (`id`),
-                            FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
-                            FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
-
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `course_id` INT NOT NULL,
+        `session_id` INT NOT NULL,
+        PRIMARY KEY (`id`),
+        FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) 
+    $tbl_options");
 
 $db->query("CREATE TABLE `session_user_material` (
-          `id` INT NOT NULL AUTO_INCREMENT,
-          `course_id` INT NOT NULL,
-          `session_id` INT NOT NULL,
-          `user_id` INT NOT NULL,
-          `content` MEDIUMTEXT,
-          PRIMARY KEY (`id`),
-          FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
-          FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
+      `id` INT NOT NULL AUTO_INCREMENT,
+      `course_id` INT NOT NULL,
+      `session_id` INT NOT NULL,
+      `user_id` INT NOT NULL,
+      `content` MEDIUMTEXT,
+      PRIMARY KEY (`id`),
+      FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+      FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) 
+    $tbl_options");
+
+$db->query("CREATE TABLE `session_poll_comments` (
+        `id` int NOT NULL AUTO_INCREMENT,
+        `course_id` INT NOT NULL,
+        `session_id` INT NOT NULL,
+        `poll_id` INT NOT NULL,
+        `user_id` INT NOT NULL,
+        `title` VARCHAR(255) NOT NULL DEFAULT '',
+        `comments` TEXT DEFAULT NULL,
+        `notify_comments` int NOT NULL DEFAULT 0,
+        PRIMARY KEY (`id`),
+        FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`poll_id`) REFERENCES `poll` (`pid`) ON DELETE CASCADE,
+        FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE) 
+    $tbl_options");
 
 // External Repositories
 $db->query("CREATE TABLE `external_repository` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `id` int NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL,
     `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay','islandora') NOT NULL,
     `base_url` varchar(512) DEFAULT NULL,
     `api_key` varchar(255) DEFAULT NULL,
     `auth_type` enum('none','api_key','oauth') NOT NULL DEFAULT 'none',
-    `enabled` tinyint(1) NOT NULL DEFAULT 1,
+    `enabled` tinyint NOT NULL DEFAULT 1,
     `config` text DEFAULT NULL COMMENT 'JSON configuration for additional settings',
     `created` datetime DEFAULT NULL,
     `updated` datetime DEFAULT NULL,
@@ -3098,7 +3117,7 @@ $db->query("CREATE TABLE `external_repository` (
 ) $tbl_options");
 
 $db->query("CREATE TABLE `course_resource_usage` (
-    `course_id` int(11) NOT NULL,
+    `course_id` int NOT NULL,
     `disk_size` bigint DEFAULT NULL,
     PRIMARY KEY (`course_id`),
     KEY `idx_disk_size` (`disk_size`),
@@ -3107,9 +3126,9 @@ $db->query("CREATE TABLE `course_resource_usage` (
     ) $tbl_options");
 
 $db->query("CREATE TABLE `external_resource` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `course_id` int(11) NOT NULL,
-    `repository_id` int(11) NOT NULL,
+    `id` int NOT NULL AUTO_INCREMENT,
+    `course_id` int NOT NULL,
+    `repository_id` int NOT NULL,
     `external_id` varchar(255) DEFAULT NULL COMMENT 'ID in the external system',
     `title` varchar(512) NOT NULL,
     `description` text DEFAULT NULL,
@@ -3128,17 +3147,17 @@ $db->query("CREATE TABLE `external_resource` (
 ) $tbl_options");
 
 $db->query("CREATE TABLE `sticky_notes_topic` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `course_id` int(11) NOT NULL,
+    `id` int NOT NULL AUTO_INCREMENT,
+    `course_id` int NOT NULL,
     `title` varchar(255) NOT NULL,
     `description` text DEFAULT NULL,
-    `allow_edit` tinyint(1) NOT NULL DEFAULT 1,
-    `allow_delete` tinyint(1) NOT NULL DEFAULT 1,
-    `has_categories` tinyint(1) NOT NULL DEFAULT 0,
-    `per_page` int(11) NOT NULL DEFAULT 20,
-    `is_active` tinyint(1) NOT NULL DEFAULT 1,
+    `allow_edit` tinyint NOT NULL DEFAULT 1,
+    `allow_delete` tinyint NOT NULL DEFAULT 1,
+    `has_categories` tinyint NOT NULL DEFAULT 0,
+    `per_page` int NOT NULL DEFAULT 20,
+    `is_active` tinyint NOT NULL DEFAULT 1,
     `created_at` datetime NOT NULL DEFAULT current_timestamp(),
-    `created_by` int(11) NOT NULL,
+    `created_by` int NOT NULL,
     PRIMARY KEY (`id`),
     KEY `fk_sticky_notes_topics_course` (`course_id`),
     KEY `fk_sticky_notes_topics_creator` (`created_by`),
@@ -3147,10 +3166,10 @@ $db->query("CREATE TABLE `sticky_notes_topic` (
     ) $tbl_options");
 
 $db->query("CREATE TABLE `sticky_notes_category` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `topic_id` int(11) NOT NULL,
+    `id` int NOT NULL AUTO_INCREMENT,
+    `topic_id` int NOT NULL,
     `title` varchar(255) NOT NULL,
-    `sort_order` int(11) NOT NULL DEFAULT 0,
+    `sort_order` int NOT NULL DEFAULT 0,
     `created_at` datetime DEFAULT current_timestamp(),
     PRIMARY KEY (`id`),
     KEY `topic_id` (`topic_id`),
@@ -3158,11 +3177,11 @@ $db->query("CREATE TABLE `sticky_notes_category` (
     ) $tbl_options");
 
 $db->query("CREATE TABLE `sticky_notes_post` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `topic_id` int(11) NOT NULL,
-    `category_id` int(11) DEFAULT NULL,
+    `id` int NOT NULL AUTO_INCREMENT,
+    `topic_id` int NOT NULL,
+    `category_id` int DEFAULT NULL,
     `content` varchar(500) NOT NULL,
-    `user_id` int(11) NOT NULL,
+    `user_id` int NOT NULL,
     `color` varchar(10) DEFAULT NULL,
     `created_at` datetime NOT NULL DEFAULT current_timestamp(),
     `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
@@ -3174,6 +3193,12 @@ $db->query("CREATE TABLE `sticky_notes_post` (
     CONSTRAINT `fk_sticky_notes_post_topic` FOREIGN KEY (`topic_id`) REFERENCES `sticky_notes_topic` (`id`) ON DELETE CASCADE,
     CONSTRAINT `sticky_notes_post_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `sticky_notes_category` (`id`) ON DELETE SET NULL
     ) $tbl_options");
+
+$db->query("CREATE TABLE secondfactorauth (
+        id int NOT NULL,
+        secret varchar(100) NOT NULL,
+        FOREIGN KEY (id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE
+      ) $tbl_options");
 
 $_SESSION['theme'] = 'modern';
 

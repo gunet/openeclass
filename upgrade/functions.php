@@ -3930,6 +3930,23 @@ function upgrade_to_4_4($tbl_options) : void
         Database::get()->query("ALTER TABLE eportfolio_resource ADD reflection_comments TEXT NULL");
     }
 
+    if (!DBHelper::tableExists('session_poll_comments')) {
+        Database::get()->query("CREATE TABLE `session_poll_comments` (
+          `id` int NOT NULL AUTO_INCREMENT,
+          `course_id` INT NOT NULL,
+          `session_id` INT NOT NULL,
+          `poll_id` INT NOT NULL,
+          `user_id` INT NOT NULL,
+          `title` VARCHAR(255) NOT NULL DEFAULT '',
+          `comments` TEXT DEFAULT NULL,
+          `notify_comments` INT NOT NULL DEFAULT 0,
+          PRIMARY KEY (`id`),
+          FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+          FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE,
+          FOREIGN KEY (`poll_id`) REFERENCES `poll` (`pid`) ON DELETE CASCADE,
+          FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
+
     // tenant table
     if (!DBHelper::tableExists('tenant')) {
         Database::get()->query("CREATE TABLE `tenant` (
@@ -4176,6 +4193,16 @@ function upgrade_to_4_4($tbl_options) : void
             ('jerk', NOW())");
     }
 
+    if (!DBHelper::tableExists('secondfactorauth')) {
+        Database::get()->query("CREATE TABLE secondfactorauth (
+                    id int NOT NULL,
+                    secret varchar(100) NOT NULL,
+                    FOREIGN KEY (id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE)
+                   $tbl_options"
+          );
+    }
+    
+    
     if (!DBHelper::fieldExists('user_badge', 'add_my_profile')) {
         Database::get()->query("ALTER TABLE user_badge ADD add_my_profile INT NOT NULL DEFAULT 0");
     }
