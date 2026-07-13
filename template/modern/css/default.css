@@ -7987,3 +7987,7 @@ th.grade-col a{
     overflow-x: auto;
   }
 }
+
+.cart_certificate_selected {
+  border: solid 3px red !important;
+}

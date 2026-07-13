@@ -4282,7 +4282,8 @@ function certificate_settings($element, $element_id = 0) {
            $langTitle, $langSubmit, $langInsert, $langCertDeadlineHelp,
            $langDescription, $langpublisher, $langIcon, $langCertificateDeadline,
            $urlServer, $langImgFormsDes, $langSelect,
-           $langAllowBadgeExport, $langAllowBadgeExportHelp, $langLogo, $urlAppend, $langDelete;
+           $langAllowBadgeExport, $langAllowBadgeExportHelp, $langLogo, $urlAppend, $langDelete, 
+           $webDir, $langSelect, $langChooseTemplate, $langSelectedTemplate;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -4385,6 +4386,33 @@ function certificate_settings($element, $element_id = 0) {
 
             }
 
+            $('.chooseCertificate').on('click', function () {
+                const modalCerts = document.getElementById('openCertificateTemplate');
+                const modalC = bootstrap.Modal.getOrCreateInstance(modalCerts);
+                var certID = $(this).attr('id');
+
+                document.querySelectorAll('.cardCert').forEach(div => {
+                    div.classList.remove('cart_certificate_selected');
+                });
+                $('#card_certificate_'+certID).addClass('cart_certificate_selected');
+
+                $('#selected_certificate_template').val(certID);
+                
+                $.ajax({
+                    url: 'ajax_certificate.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        certificate_id: certID
+                    }
+                }).then(response => {
+                    if (response.success) {
+                        $('#selected_certificate_img').attr('src', response.result);
+                        modalC.hide();
+                    }
+                });
+            });
+
         });
     </script>";
 
@@ -4413,6 +4441,23 @@ function certificate_settings($element, $element_id = 0) {
                     </div>
                 ";
             }
+
+            
+            $q = Database::get()->querySingle("SELECT ct.filename,c.template FROM certificate_template ct
+                                               JOIN certificate c ON ct.id = c.template
+                                               AND c.id = ?d
+                                               AND c.course_id = ?d", $element_id, $course_id);
+                                               
+            if ($q) {
+                $selected_template_id = $q->template;
+                if (!str_contains($q->filename, '.html')) { // new way
+                    $certpathtmp = getFilenames(true, $q->template, 'thumbnail');
+                    $certpath = parse_url($certpathtmp, PHP_URL_PATH);
+                } else { // old way
+                    $certpath = $urlAppend . "courses/user_progress_data/cert_templates/" . str_replace('.html', '_thumbnail.png', $q->filename);
+                }
+                $selected_cert_img .= "<img id='selected_certificate_img' src='{$certpath}' alt='' style='max-height:100px;max-width:150px;'>";
+            }
         }
                    
         $issuer = $data->issuer ?? '';
@@ -4438,6 +4483,8 @@ function certificate_settings($element, $element_id = 0) {
             $check_allow_export = "";
         }
     } else {        // add
+        $selected_template_id = 0;
+        $selected_cert_img = '';
         $issuer = q(get_config('institution'));
         $template = '';
         $title = '';
@@ -4459,6 +4506,8 @@ function certificate_settings($element, $element_id = 0) {
                 </div>
             ";
         }
+
+        $selected_cert_img .= "<img id='selected_certificate_img' alt='' style='max-height:100px;max-width:150px;'>";
 
     }
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
@@ -4579,24 +4628,76 @@ function certificate_settings($element, $element_id = 0) {
                                     });
                                 </script>";
                             } else {
-                                $tool_content .= selection(get_certificate_templates(), 'template', $template, 'id="selectWithIcon" data-type="certificate"');
-                                $inputId = $element . '_hidden';
-                                $value = json_encode(get_certificate_templates());
-                                $tool_content .= "<input id='$inputId' type='hidden' value='$value'>";
+                                $cert_body = '';
+                                $cert_body .= "<div class='col-12'><div class='row row-cols-lg-2 row-cols-1 g-3'>";
+                                foreach(get_certificate_templates() as $certId => $cert_name) {
+                                    $q = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $certId);
+                                    if ($q) {
+                                        $borderSelectedCert = ($selected_template_id == $certId) ? 'cart_certificate_selected' : '';
+                                        $cert_body .= "<div class='col'><div class='card cardCert $borderSelectedCert h-100' id='card_certificate_{$certId}'>";
+                                        if (!str_contains($q->filename, '.html')) { // new way
+                                            $cert_path_tmp = getFilenames(true, $certId, 'thumbnail');
+                                            $cert_path = parse_url($cert_path_tmp, PHP_URL_PATH);
+                                        } else { // old way
+                                            $cert_path = $urlAppend . "courses/user_progress_data/cert_templates/" . str_replace('.html', '_thumbnail.png', $q->filename);
+                                        }
+                                        $cert_body .= "<img src='{$cert_path}' class='card-img-top' alt='certificate'>";
+                                        $cert_body .= "<div class='card-body'><a class='btn submitAdminBtnDefault chooseCertificate' id='{$certId}'>$langSelect</a></div>";
+                                        $cert_body .= "</div></div>";
+                                    }
+                                }
+                                $cert_body .= "</div></div>";
+
+                                $tool_content .= "<input id='selected_certificate_template' type='hidden' name='template'>";
+                                $tool_content .= "
+                                    <a class='btn submitAdminBtn d-inline-flex' href='#openCertificateTemplate' data-bs-toggle='modal'>$langChooseTemplate</a>
+                                    <div class='mt-3'>
+                                        <p class='TextBold'>$langSelectedTemplate:</p>
+                                        $selected_cert_img
+                                    </div>
+                                ";
+                                $tool_content .= "
+                                    <div class='modal fade' id='openCertificateTemplate' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='openCertificateTemplateLabel' aria-hidden='true'>
+                                        <div class='modal-dialog modal-lg'>
+                                            <div class='modal-content'>
+                                                <div class='modal-header'>
+                                                    <h5 class='modal-title' id='openCertificateTemplate'>Επιλογή πιστοποιητικού</h5>
+                                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                </div>
+                                                <div class='modal-body'>
+                                                    $cert_body
+                                                </div>
+                                                <div class='modal-footer'>
+                                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+                                                    <button type='button' class='btn btn-primary'>Understood</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ";
+
+                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                // $tool_content .= selection(get_certificate_templates(), 'template', $template, 'id="selectWithIcon" data-type="certificate"');
+                                // $inputId = $element . '_hidden';
+                                // $value = json_encode(get_certificate_templates());
+                                // $tool_content .= "<input id='$inputId' type='hidden' value='$value'>";
+                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                             }
                             $tool_content .= "<input id='urlServer' type='hidden' value='".$urlServer."'>";
 
                         $tool_content .= "</div>
                 </div>";
-                if ($element == 'certificate') {
-                    $tool_content .= "
-                    <div class='form-group mt-4'>
-                        <div class='col-sm-2'></div>
-                        <div class='col-sm-10'>
-                            <img id='selected_icon' src='' alt='' style='max-height:100px;max-width:150px;'>
-                        </div>
-                    </div>";
-                }
+                // if ($element == 'certificate') {
+                //     $tool_content .= "
+                //     <div class='form-group mt-4'>
+                //         <div class='col-sm-2'></div>
+                //         <div class='col-sm-10'>
+                //             <img id='selected_icon' src='' alt='' style='max-height:100px;max-width:150px;'>
+                //         </div>
+                //     </div>";
+                // }
 
                 $tool_content .= "<div class='form-group mt-4'>
                     <label for='message_id' class='col-sm-12 control-label-notes'>$langMessage</label>
