@@ -8166,6 +8166,16 @@ function theme_initialization() {
                         padding: 0 !important;
                     }
                 }
+                @media(max-width: 991px) {
+                    .portfolio-profile-container .padding-default,
+                    .main-section .main-container, 
+                    .portfolio-courses-container .padding-default,
+                    .col_maincontent_active,
+                    .ContentLeftNav,
+                    .main-maincontent {
+                        border: 0px !important;
+                    }
+                }
             ";
         }
 
