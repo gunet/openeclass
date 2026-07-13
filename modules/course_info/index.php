@@ -95,7 +95,6 @@ $isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_cer
 $data['disable_visibility'] = $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 if (isset($_POST['submit'])) {
-    //print_a($_POST);die;
     $view_type = $_POST['view_type'];
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
