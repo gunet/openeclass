@@ -4629,7 +4629,7 @@ function certificate_settings($element, $element_id = 0) {
                                 </script>";
                             } else {
                                 $cert_body = '';
-                                $cert_body .= "<div class='col-12'><div class='row row-cols-lg-2 row-cols-1 g-3'>";
+                                $cert_body .= "<div class='col-12'><div class='row row-cols-lg-3 row-cols-1 g-3'>";
                                 foreach(get_certificate_templates() as $certId => $cert_name) {
                                     $q = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $certId);
                                     if ($q) {
@@ -4641,7 +4641,7 @@ function certificate_settings($element, $element_id = 0) {
                                         } else { // old way
                                             $cert_path = $urlAppend . "courses/user_progress_data/cert_templates/" . str_replace('.html', '_thumbnail.png', $q->filename);
                                         }
-                                        $cert_body .= "<img src='{$cert_path}' class='card-img-top' alt='certificate'>";
+                                        $cert_body .= "<img style='height: 200px;' src='{$cert_path}' class='card-img-top' alt='certificate'>";
                                         $cert_body .= "<div class='card-body'><a class='btn submitAdminBtnDefault chooseCertificate' id='{$certId}'>$langSelect</a></div>";
                                         $cert_body .= "</div></div>";
                                     }
@@ -4666,10 +4666,6 @@ function certificate_settings($element, $element_id = 0) {
                                                 </div>
                                                 <div class='modal-body'>
                                                     $cert_body
-                                                </div>
-                                                <div class='modal-footer'>
-                                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
-                                                    <button type='button' class='btn btn-primary'>Understood</button>
                                                 </div>
                                             </div>
                                         </div>
