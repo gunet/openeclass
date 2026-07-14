@@ -118,7 +118,7 @@ function getUserCourseInfo($uid): string
                     } elseif ($percentage == 100) {
                         $battery_icon = 'fa-battery-full';
                     }
-                    $percentage_html = "<span class='vsmall-text Neutral-900-cl text-end me-3 d-flex flex-column'><i class='fa-solid $battery_icon me-1' style='font-size: 1.3em;'></i><br><span style='font-size: 0.9em; font-weight: bold; line-height: 12px;'>$percentage%</span></span>";
+                    $percentage_html = "<span class='vsmall-text Neutral-900-cl text-end me-3 d-flex flex-column'><i class='fa-solid $battery_icon me-1' style='font-size: 1.3em; line-height: 12px;'></i><br><span style='font-size: 0.9em; font-weight: bold; line-height: 12px;'>$percentage%</span></span>";
                 }
 
                 $lesson_content .= "
