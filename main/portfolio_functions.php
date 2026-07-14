@@ -108,7 +108,17 @@ function getUserCourseInfo($uid): string
                         }
                     }
 //                    $percentage_html = "<span class='badge Neutral-900-cl me-3'>$percentage%</span>";
-                    $percentage_html = "<span class='vsmall-text Neutral-900-cl TextRegular me-3'>$percentage%</span>";
+                    $battery_icon = 'fa-battery-empty';
+                    if ($percentage > 0 && $percentage < 34) {
+                        $battery_icon = 'fa-battery-quarter';
+                    } elseif ($percentage >= 34 && $percentage < 67) {
+                        $battery_icon = 'fa-battery-half';
+                    } elseif ($percentage >= 67 && $percentage < 100) {
+                        $battery_icon = 'fa-battery-three-quarters';
+                    } elseif ($percentage == 100) {
+                        $battery_icon = 'fa-battery-full';
+                    }
+                    $percentage_html = "<span class='vsmall-text Neutral-900-cl badge me-3'><i class='fa-solid fa-1x $battery_icon me-1'></i>$percentage%</span>";
                 }
 
                 $lesson_content .= "
@@ -303,7 +313,17 @@ function getUserCourseInfo($uid): string
                                 $percentage = round($badge_data->completed_criteria / $badge_data->total_criteria * 100, 0);
                             }
                         }
-                        $percentage_html = "<span class='badge Success-200-bg Neutral-900-cl rounded-pill me-3'>$percentage%</span>";
+                        $battery_icon = 'fa-battery-empty';
+                        if ($percentage > 0 && $percentage < 34) {
+                            $battery_icon = 'fa-battery-quarter';
+                        } elseif ($percentage >= 34 && $percentage < 67) {
+                            $battery_icon = 'fa-battery-half';
+                        } elseif ($percentage >= 67 && $percentage < 100) {
+                            $battery_icon = 'fa-battery-three-quarters';
+                        } elseif ($percentage == 100) {
+                            $battery_icon = 'fa-battery-full';
+                        }
+                    $percentage_html = "<span class='badge Success-200-bg Neutral-900-cl rounded-pill me-3'><i class='fa-solid $battery_icon me-1'></i>$percentage%</span>";
                     }
 
                     $lesson_content .= "
