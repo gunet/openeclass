@@ -8265,6 +8265,59 @@ function theme_initialization() {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// BACKGROUND COLOR TO THE LOGIN BUTTON /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (isset($theme_options_styles['bgColorLoginButton'])) {
+            $styles_str .= "
+                @media(min-width: 992px) {
+                    .header-login-text {
+                        border-color: $theme_options_styles[bgColorLoginButton] !important;
+                        background-color: $theme_options_styles[bgColorLoginButton] !important;
+                    }
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// TEXT COLOR TO THE LOGIN BUTTON ////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (isset($theme_options_styles['textColorLoginButton'])) {
+            $styles_str .= "
+                @media (min-width: 992px) {
+                    .header-login-text, 
+                    .header-login-text:hover, 
+                    .header-login-text:focus{
+                        color: $theme_options_styles[textColorLoginButton] !important;
+                    }
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////// BACKGROUND HOVER COLOR TO THE LOGIN BUTTON //////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (isset($theme_options_styles['bgHoverColorLoginButton'])) {
+            $styles_str .= "
+                @media (min-width: 992px) {
+                    .header-login-text:hover, 
+                    .header-login-text:focus {
+                        border-color: $theme_options_styles[bgHoverColorLoginButton] !important;
+                        background-color: $theme_options_styles[bgHoverColorLoginButton] !important;
+                    }
+                }
+            ";
+        }
+
         // Create .css file for the ($theme_id) in order to override the default.css file when it is necessary.
         $fileStyleStr = $webDir . "/courses/theme_data/$theme_id/style_str.css";
         if (!file_exists($fileStyleStr)) {

@@ -41,11 +41,13 @@
                             </a>
                         </div>
                     @endif
-                    <div>
-                        <a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langUsageTerms') }}">
-                            {{ trans('langUsageTerms') }}
-                        </a>
-                    </div>
+                    @if (!get_config('dont_display_terms'))
+                        <div>
+                            <a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langUsageTerms') }}">
+                                {{ trans('langUsageTerms') }}
+                            </a>
+                        </div>
+                    @endif
                     @if (get_config('activate_privacy_policy_text'))
                         <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/privacy_policy.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPrivacyPolicy') }}">
@@ -95,7 +97,9 @@
                         @if (!get_config('dont_display_manual_menu'))
                             <li class="nav-item" aria-label="{{ trans('langManuals') }}"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/manual.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langManuals') }}">{{ trans('langManuals') }}</a></li>
                         @endif
-                        <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/terms.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langUsageTerms') }}">{{ trans('langUsageTerms') }}</a></li>
+                        @if (!get_config('dont_display_terms'))
+                            <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/terms.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langUsageTerms') }}">{{ trans('langUsageTerms') }}</a></li>
+                        @endif
                         @if (get_config('activate_privacy_policy_text'))
                             <li class="nav-item" aria-label="{{ trans('langPrivacyPolicy') }}"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/privacy_policy.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPrivacyPolicy') }}">{{ trans('langPrivacyPolicy') }}</a>
                         @endif
@@ -169,11 +173,13 @@
                             </a>
                         </div>
                     @endif
-                    <div>
-                        <a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langUsageTerms') }}">
-                            {{ trans('langUsageTerms') }}
-                        </a>
-                    </div>
+                    @if (!get_config('dont_display_terms'))
+                        <div>
+                            <a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langUsageTerms') }}">
+                                {{ trans('langUsageTerms') }}
+                            </a>
+                        </div>
+                    @endif
                     @if (get_config('activate_privacy_policy_text'))
                         <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/privacy_policy.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPrivacyPolicy') }}">
