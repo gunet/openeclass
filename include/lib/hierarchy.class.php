@@ -1071,18 +1071,13 @@ jContent;
     public function buildSubtrees($nodes, $allnodes = array()) {
         $subs = array();
         $nodelfts = array();
-        $ids = '';
-
 
         if (count($nodes) <= 0) {
             return $subs;
         }
 
-        foreach ($nodes as $key => $id) {
-            $ids .= $id . ',';
-        }
-        // remove last ',' from $ids
-        $q = substr($ids, 0, -1);
+        // expect each node id as int
+        $q = implode(',', array_map('intval', $nodes));
 
         Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
@@ -1121,17 +1116,13 @@ jContent;
     public function buildSubtreesFull($nodes, $allnodes = array()) {
         $subs = array();
         $nodelfts = array();
-        $ids = '';
 
         if (count($nodes) <= 0) {
             return $subs;
         }
 
-        foreach ($nodes as $key => $id) {
-            $ids .= $id . ',';
-        }
-        // remove last ',' from $ids
-        $q = substr($ids, 0, -1);
+        // expect each node id as int
+        $q = implode(',', array_map('intval', $nodes));
 
         Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
