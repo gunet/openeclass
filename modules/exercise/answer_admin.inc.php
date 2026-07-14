@@ -1763,7 +1763,7 @@ if (isset($_GET['modifyAnswers'])) {
                                     startDrawing: '" . js_escape($langStartDrawing) . "',
                                     startDrawingHelp: '" . js_escape($langStartDrawingHelp) . "'
                                 };
-                                var urlAppend = $urlAppend;
+                                var urlAppend = '" . js_escape($urlAppend) . "';
                             </script>";
             load_js('drag-and-drop-shapes');
 
