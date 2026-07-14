@@ -300,7 +300,7 @@ function display_points_games(): void
             if ($data->active) {
                 $status_html .= "<span class='badge Primary-600-bg'>$langActive</span>";
                 if ($current_time >= $data->starts && $current_time <= $data->expires) {
-                    $status_html .= "<span class='badge Success-200-bg d-flex align-items-center gap-1'>
+                    $status_html .= "<span class='d-flex align-items-center gap-1'>
                                         $langInProgress
                                         <div style='width: 12px; height:12px;' class='spinner-grow text-success' role='status'></div>
                                         <div style='width: 12px; height:12px;' class='spinner-grow text-danger' role='status'></div>
@@ -3424,7 +3424,7 @@ function display_points_game_settings($element_id): void
     if ($data->active) {
         $status_game .= "<span class='badge Primary-600-bg'>$langActive</span>";
         if ($current_time >= $data->starts && $current_time <= $data->expires) {
-            $status_game .= "<span class='badge Success-200-bg d-flex align-items-center gap-1'>
+            $status_game .= "<span class='d-flex align-items-center gap-1'>
                                 $langInProgress
                                 <div style='width: 12px; height:12px;' class='spinner-grow text-success' role='status'></div>
                                 <div style='width: 12px; height:12px;' class='spinner-grow text-danger' role='status'></div>
