@@ -801,7 +801,7 @@ function showLoading() {
   `;
 }
 
-// Call the appropiate function for creating and display shapes. You can remove a shape if you want.
+// Call the appropriate function for creating and display shapes. You can remove a shape if you want.
 function shapesCreationProcess() {
 
     $(function() {
@@ -902,7 +902,7 @@ function shapesCreationProcess() {
                                     formData.append('questionId-image', questionId);
                                     formData.append('markerId-image', number);
                                     formData.append('courseCode-image', courseCode);
-                                    fetch('/modules/exercise/upload_image_as_answer.php', {
+                                    fetch(urlAppend + 'modules/exercise/upload_image_as_answer.php', {
                                         method: 'POST',
                                         body: formData
                                     })

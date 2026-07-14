@@ -1,6 +1,7 @@
 <?php
 
 $require_current_course = TRUE;
+$require_editor = TRUE;
 require_once '../../include/baseTheme.php';
 
 // Path to the JSON file
