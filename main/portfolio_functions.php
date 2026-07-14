@@ -87,6 +87,30 @@ function getUserCourseInfo($uid): string
                 if ($data->course_license > 0){
                     $license = copyright_info($data->course_id);
                 }
+                
+                $percentage_html = '';
+                $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1 AND active = 1 AND unit_id = 0", $data->course_id);
+                if ($badge) {
+                    if ($data->status == USER_TEACHER) {
+                        $student_users = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user WHERE status = " .USER_STUDENT . " AND editor = 0 AND course_id = ?d", $data->course_id)->studentUsers;
+                        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge JOIN course_user ON user_badge.user=course_user.user_id AND status = " .USER_STUDENT . " AND editor = 0 AND course_id = ?d AND completed = 1 AND badge = ?d", $data->course_id, $badge->id)->t;
+                        if ($student_users == 0) {
+                            $percentage = 0;
+                        } else {
+                            $percentage = round($certified_users / $student_users * 100, 0);
+                        }
+                    } else {
+                        $badge_data = Database::get()->querySingle("SELECT completed_criteria, total_criteria FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $badge->id);
+                        if (!$badge_data or !$badge_data->total_criteria) {
+                            $percentage = 0;
+                        } else {
+                            $percentage = round($badge_data->completed_criteria / $badge_data->total_criteria * 100, 0);
+                        }
+                    }
+//                    $percentage_html = "<span class='badge Neutral-900-cl me-3'>$percentage%</span>";
+                    $percentage_html = "<span class='vsmall-text Neutral-900-cl TextRegular me-3'>$percentage%</span>";
+                }
+
                 $lesson_content .= "
                     <tr class='$visclass row-course'>
                         <td class='border-top-0 border-start-0 border-end-0'>
@@ -111,7 +135,8 @@ function getUserCourseInfo($uid): string
                 $lesson_content .= "
                         <td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
                             <div class='col-12 portfolio-tools'>
-                                <div class='d-inline-flex'>";
+                                <div class='d-inline-flex align-items-center'>" . $percentage_html . "
+                                ";
 
                 $lesson_content .= "<a class='ClickCoursePortfolio portfolio-course-links me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse' aria-label='$langPreview&nbsp;$langOfCourse'>
                                     <i class='fa-solid fa-display fa-lg'></i>
@@ -258,6 +283,29 @@ function getUserCourseInfo($uid): string
                     if($data->course_license > 0){
                         $license = copyright_info($data->course_id);
                     }
+                    
+                    $percentage_html = '';
+                    $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1 AND active = 1 AND unit_id = 0", $data->course_id);
+                    if ($badge) {
+                        if ($data->status == USER_TEACHER) {
+                            $student_users = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user WHERE status = " .USER_STUDENT . " AND editor = 0 AND course_id = ?d", $data->course_id)->studentUsers;
+                            $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge JOIN course_user ON user_badge.user=course_user.user_id AND status = " .USER_STUDENT . " AND editor = 0 AND course_id = ?d AND completed = 1 AND badge = ?d", $data->course_id, $badge->id)->t;
+                            if ($student_users == 0) {
+                                $percentage = 0;
+                            } else {
+                                $percentage = round($certified_users / $student_users * 100, 0);
+                            }
+                        } else {
+                            $badge_data = Database::get()->querySingle("SELECT completed_criteria, total_criteria FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $badge->id);
+                            if (!$badge_data or !$badge_data->total_criteria) {
+                                $percentage = 0;
+                            } else {
+                                $percentage = round($badge_data->completed_criteria / $badge_data->total_criteria * 100, 0);
+                            }
+                        }
+                        $percentage_html = "<span class='badge Success-200-bg Neutral-900-cl rounded-pill me-3'>$percentage%</span>";
+                    }
+
                     $lesson_content .= "
                         <tr class='$visclass row-course'>
                             <td class='border-top-0 border-start-0 border-end-0'>
@@ -281,7 +329,8 @@ function getUserCourseInfo($uid): string
                     $lesson_content .= "
                             <td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
                                 <div class='col-12 portfolio-tools'>
-                                    <div class='d-inline-flex'>";
+                                    <div class='d-inline-flex align-items-center'>" . $percentage_html . "
+                                    ";
 
                     $lesson_content .= "<a class='ClickCoursePortfolio portfolio-course-links me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration' aria-label='$langPreview&nbsp;$langOfCourse'>
                                         <i class='fa-solid fa-display fa-lg'></i>
