@@ -46,8 +46,15 @@ if (isset($require_mlogin) && $require_mlogin) {
     }
 
     if (!isset($_SESSION['uid'])) {
-        echo RESPONSE_EXPIRED;
         session_regenerate_id();
+        // Mobile app WebView flow (carries a redirect target): instead of returning the raw
+        // EXPIRED response — which the embedded WebView renders as an error page — redirect to the
+        // session-expired sentinel so the app can silently refresh the session and retry.
+        if (isset($_REQUEST['redirect'])) {
+            header('Location: msession_expired.php?return=' . urlencode($_REQUEST['redirect']));
+            exit();
+        }
+        echo RESPONSE_EXPIRED;
         exit();
     }
 }
