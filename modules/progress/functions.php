@@ -4456,6 +4456,7 @@ function certificate_settings($element, $element_id = 0) {
                 } else { // old way
                     $certpath = $urlAppend . "courses/user_progress_data/cert_templates/" . str_replace('.html', '_thumbnail.png', $q->filename);
                 }
+                $selected_cert_img = '';
                 $selected_cert_img .= "<img id='selected_certificate_img' src='{$certpath}' alt='' style='max-height:100px;max-width:150px;'>";
             }
         }
@@ -4648,7 +4649,7 @@ function certificate_settings($element, $element_id = 0) {
                                 }
                                 $cert_body .= "</div></div>";
 
-                                $tool_content .= "<input id='selected_certificate_template' type='hidden' name='template'>";
+                                $tool_content .= "<input id='selected_certificate_template' type='hidden' name='template' value='{$selected_template_id}'>";
                                 $tool_content .= "
                                     <a class='btn submitAdminBtn d-inline-flex' href='#openCertificateTemplate' data-bs-toggle='modal'>$langChooseTemplate</a>
                                     <div class='mt-3'>
