@@ -448,6 +448,9 @@ $is_consultant = false;
 $is_simple_user = false;
 if (isset($require_current_course) and $require_current_course) {
     if (!isset($_SESSION['dbname'])) {
+        if (isset($_SERVER['HTTP_USER_AGENT']) and str_contains($_SERVER['HTTP_USER_AGENT'], 'eClassMobileApp')) {
+            redirect_to_home_page('modules/mobile/msession_expired.php?return=' . urlencode($urlServer . ltrim($_SERVER['REQUEST_URI'], '/')));
+        }
         $toolContent_ErrorExists = $langSessionIsLost;
     } else {
         $dbname = $_SESSION['dbname'];
