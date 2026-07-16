@@ -43,6 +43,8 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langU
 $up = new Permissions();
 $results = $data['search_surname'] = $data['search_givenname'] = $data['search_username'] = $data['search_am'] = '';
 
+$currentTenant = getCurrentTenant();
+
 if (!$up->has_course_users_permission()) {
     Session::Messages($langCheckCourseAdmin, 'alert-danger');
     redirect_to_home_page('courses/' . $course_code);
@@ -137,7 +139,7 @@ if (isset($_GET['add'])) {
     }
 
     $query = join(' AND ', $search);
-    if ($is_departmentmanage_user && !$is_admin) {
+    if (!is_null($currentTenant) && !$is_admin) {
         // dynamic filters for tenant
         $tenantFilters = [
             'surname' => $_POST['search_surname'] ?? '',
