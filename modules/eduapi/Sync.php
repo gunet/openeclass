@@ -478,7 +478,7 @@ class Sync {
                     $username,
                     'keycloak',
                     $email,
-                    $isTeacher ? SAEK_TEACHER : USER_STUDENT,
+                    $isTeacher ? USER_TEACHER : USER_STUDENT,
                     '',
                     $registeredAt,
                     $expiresAt,
