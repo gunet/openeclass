@@ -149,7 +149,7 @@ if ($fromExercise) {
           'confirm' => $langConfirmQuestionPoolPurge ],
         [ 'title' => $langImportAiken,
             'url' => "admin.php?course=$course_code&amp;importAiken=yes",
-            'icon' => 'fa-upload',
+            'icon' => 'fa-download',
             'button-class' => 'btn-success'
         ],
         [ 'title' => $langImportQTI,
