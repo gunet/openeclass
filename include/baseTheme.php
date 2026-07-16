@@ -98,6 +98,13 @@ if (isset($toolContent_ErrorExists)) {
     Session::flash('message', $toolContent_ErrorExists);
     Session::flash('alert-class', 'alert-warning');
     if (!$uid) {
+        // Mobile app WebView: a session that expired while a page was open would otherwise show the web
+        // "session lost" message, unrelated to the app flow. Redirect to the session-expired sentinel so
+        // the app can silently refresh the session and return the user to the same page.
+        if (isset($_SERVER['HTTP_USER_AGENT']) and str_contains($_SERVER['HTTP_USER_AGENT'], 'eClassMobileApp')) {
+            redirect_to_home_page('modules/mobile/msession_expired.php?return=' . urlencode($urlServer . ltrim($_SERVER['REQUEST_URI'], '/')));
+            exit();
+        }
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI'] ?? '');
         header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
     } elseif ($_SESSION['status'] == USER_GUEST) {
