@@ -3200,6 +3200,46 @@ $db->query("CREATE TABLE secondfactorauth (
         FOREIGN KEY (id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE
       ) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `eduapi_course_offerings` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `sourced_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `course_id` INT NOT NULL,
+    `academic_session_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+    `academic_session_code` VARCHAR(100) DEFAULT NULL,
+    `organization_code` VARCHAR(100) DEFAULT NULL,
+    `title` TEXT DEFAULT NULL,
+    `last_sync` DATETIME DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `sourced_id` (`sourced_id`),
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+        ON DELETE CASCADE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `eduapi_persons` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `sourced_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `user_id` INT NOT NULL,
+    `username` VARCHAR(190) DEFAULT NULL,
+    `email` VARCHAR(255) DEFAULT NULL,
+    `last_sync` DATETIME DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `sourced_id` (`sourced_id`),
+    UNIQUE KEY `user_id` (`user_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+        ON DELETE CASCADE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `eduapi_nodes` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `ref_key` VARCHAR(150) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `hierarchy_id` INT NOT NULL,
+    `last_sync` DATETIME DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `ref_key` (`ref_key`),
+    FOREIGN KEY (`hierarchy_id`) REFERENCES `hierarchy` (`id`)
+        ON DELETE CASCADE
+    ) $tbl_options");
+
 $_SESSION['theme'] = 'modern';
 
 importThemes();
