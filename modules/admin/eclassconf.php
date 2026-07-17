@@ -116,6 +116,11 @@ if (isset($_POST['submit'])) {
         'disable_name_surname_change' => true,
         'disable_email_change' => true,
         'disable_am_change' => true,
+        'dont_display_profile_image' => true,
+        'dont_display_profile_am' => true,
+        'dont_display_profile_phone' => true,
+        'dont_display_profile_about_me' => true,
+        'dont_display_profile_email' => true,
         'block_duration_account' => true,
         'block_duration_alt_account' => true,
         'display_captcha' => true,
@@ -325,6 +330,13 @@ else {     // Display config.php edit form
     $data['cbox_disable_name_surname_change'] = get_config('disable_name_surname_change') ? 'checked' : '';
     $data['cbox_disable_email_change'] = get_config('disable_email_change') ? 'checked' : '';
     $data['cbox_disable_am_change'] = get_config('disable_am_change') ? 'checked' : '';
+
+    $data['cbox_dont_display_profile_image'] = get_config('dont_display_profile_image') ? 'checked' : '';
+    $data['cbox_dont_display_profile_am'] = get_config('dont_display_profile_am') ? 'checked' : '';
+    $data['cbox_dont_display_profile_phone'] = get_config('dont_display_profile_phone') ? 'checked' : '';
+    $data['cbox_dont_display_profile_about_me'] = get_config('dont_display_profile_about_me') ? 'checked' : '';
+    $data['cbox_dont_display_profile_email'] = get_config('dont_display_profile_email') ? 'checked' : '';
+
     $data['cbox_enable_mobileapi'] = get_config('enable_mobileapi') ? 'checked' : '';
     $data['max_glossary_terms'] = get_config('max_glossary_terms');
     $data['cbox_enable_indexing'] = get_config('enable_indexing') ? 'checked' : '';

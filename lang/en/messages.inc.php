@@ -5452,6 +5452,13 @@ $langUnsubscribeCourse = "Disable Course Unsubscription";
 $lang_disable_name_surname_change = 'Do not allow users to modify their name and surname';
 $lang_disable_email_change = 'Do not allow users to modify their e-mail';
 $lang_disable_am_change = 'Do not allow users to modify their student ID';
+
+$lang_dont_display_upload_profile_image = "Do not display image uploads on the user's profile";
+$lang_dont_display_profile_am = "Do not display the registration number in the user's profile";
+$lang_dont_display_profile_phone = "Do not display the phone number in the user's profile";
+$lang_dont_display_profile_about_me = "Do not display about me on the user's profile";
+$lang_dont_display_profile_email = "Do not display the email in the user's profile";
+
 $langMaintenanceOn = 'Activate maintenance mode';
 $langMaintenanceOff = 'Deactivate maintenance mode';
 $langMaintenance = 'Maintenance';
