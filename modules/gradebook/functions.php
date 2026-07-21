@@ -1674,11 +1674,13 @@ function insert_grades($gradebook_id, $actID) {
     global $tool_content, $langGradebookEdit, $gradebook, $langTheField,
            $course_code, $langFormErrors, $langGradebookGrade, $course_id;
 
-    $v = new Valitron\Validator($_POST['usersgrade']);
+    $users_grade = array_map('fix_float', $_POST['usersgrade']);
+
+    $v = new Valitron\Validator($users_grade);
     $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
         if(is_numeric($value) || empty($value)) return true;
     });
-    foreach ($_POST['usersgrade'] as $userID => $userInp) {
+    foreach ($users_grade as $userID => $userInp) {
         $v->rule('emptyOrNumeric', array("$userID"));
         $v->rule('min', array("$userID"), 0);
         $v->rule('max', array("$userID"), $gradebook->range);
@@ -1687,7 +1689,7 @@ function insert_grades($gradebook_id, $actID) {
         ));
     }
     if($v->validate()) {
-        foreach ($_POST['usersgrade'] as $userID => $userInp) {
+        foreach ($users_grade as $userID => $userInp) {
             $uid = getDirectReference($userID);
             if ($userInp == '') {
                 Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $uid);

@@ -3199,6 +3199,13 @@ $lang_disable_log_system_actions = "Απενεργοποίηση καταγρα�
 $lang_disable_name_surname_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το όνομα και το επώνυμο";
 $lang_disable_email_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το e-mail";
 $lang_disable_am_change = "Να μην επιτρέπεται να αλλάζουν τον αριθμό μητρώου";
+
+$lang_dont_display_upload_profile_image = "Να μην εμφανίζεται το ανέβασμα εικόνας στο προφίλ του χρήστη";
+$lang_dont_display_profile_am = "Να μην εμφανίζεται ο αριθμός μητρώου στο προφίλ του χρήστη";
+$lang_dont_display_profile_phone = "Να μην εμφανίζεται ο αριθμός τηλεφώνου στο προφίλ του χρήστη";
+$lang_dont_display_profile_about_me = "Να μην εμφανίζεται το σχετικά με μένα στο προφίλ του χρήστη";
+$lang_dont_display_profile_email = "Να μην εμφανίζεται το email στο προφίλ του χρήστη";
+
 $langPossibleReasons = 'Πιθανοί λόγοι';
 $langTroubleshooting = 'Αντιμετώπιση';
 $langDefaultAdminName = 'Διαχειριστής Πλατφόρμας';

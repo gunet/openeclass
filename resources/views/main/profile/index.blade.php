@@ -157,21 +157,25 @@
                         <div class="card panelCard rounded-3 epf-panel-card px-4 py-3">
                             <h2 class="text-heading-h3 mb-3">{{ trans('langPersInfo') }}</h2>
                             <div class="d-flex flex-column gap-3">
-                                @if(!empty($userdata->email) and allow_access($userdata->email_public))
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="epf-cat-icon flex-shrink-0" style="background:#f97316;">
-                                            <i class="fa-solid fa-envelope"></i>
+                                @if (!get_config('dont_display_profile_email'))
+                                    @if(!empty($userdata->email) and allow_access($userdata->email_public))
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="epf-cat-icon flex-shrink-0" style="background:#f97316;">
+                                                <i class="fa-solid fa-envelope"></i>
+                                            </div>
+                                            <span class="text-muted" style="font-size:0.9rem;">{!! mailto($userdata->email) !!}</span>
                                         </div>
-                                        <span class="text-muted" style="font-size:0.9rem;">{!! mailto($userdata->email) !!}</span>
-                                    </div>
+                                    @endif
                                 @endif
-                                @if(!empty($userdata->phone) and allow_access($userdata->phone_public))
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="epf-cat-icon flex-shrink-0" style="background:#22c55e;">
-                                            <i class="fa-solid fa-phone"></i>
+                                @if (!get_config('dont_display_profile_phone'))
+                                    @if(!empty($userdata->phone) and allow_access($userdata->phone_public))
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="epf-cat-icon flex-shrink-0" style="background:#22c55e;">
+                                                <i class="fa-solid fa-phone"></i>
+                                            </div>
+                                            <span class="text-muted" style="font-size:0.9rem;">{{ $userdata->phone }}</span>
                                         </div>
-                                        <span class="text-muted" style="font-size:0.9rem;">{{ $userdata->phone }}</span>
-                                    </div>
+                                    @endif
                                 @endif
 
                                 @if ($is_user_teacher)
@@ -202,13 +206,15 @@
                                     </div>
                                 @endif
 
-                                @if(!empty($userdata->am) and allow_access($userdata->am_public))
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="epf-cat-icon flex-shrink-0" style="background:#06b6d4;">
-                                            <i class="fa-solid fa-id-card"></i>
+                                @if (!get_config('dont_display_profile_am'))
+                                    @if(!empty($userdata->am) and allow_access($userdata->am_public))
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="epf-cat-icon flex-shrink-0" style="background:#06b6d4;">
+                                                <i class="fa-solid fa-id-card"></i>
+                                            </div>
+                                            <span class="text-muted" style="font-size:0.9rem;">{{ $userdata->am }}</span>
                                         </div>
-                                        <span class="text-muted" style="font-size:0.9rem;">{{ $userdata->am }}</span>
-                                    </div>
+                                    @endif
                                 @endif
                                 @if($id == $uid && !empty($extAuthList))
                                     @foreach($extAuthList as $item)
@@ -248,6 +254,7 @@
                     <div class="col-md-8 d-flex flex-column gap-3">
 
                         {{-- About Me card --}}
+                        @if (!get_config('dont_display_profile_about_me'))
                         <div class="card panelCard rounded-3 epf-panel-card px-4 py-3">
                             <h2 class="text-heading-h3 mb-3">{{ trans('langAboutMe') }}</h2>
                             @if(!empty($userdata->description) && ($userdata->pic_public || $_SESSION['status'] == USER_TEACHER || $uid == $id))
@@ -256,6 +263,7 @@
                                 <p class="text-muted mb-0" style="font-size:0.9rem;">-</p>
                             @endif
                         </div>
+                        @endif
 
                         {{-- Certificates card --}}
                         @if($hasCerts)

@@ -699,6 +699,45 @@
                                                         {{ trans('lang_eportfolio_enable') }}
                                                     </label>
                                                 </div>
+
+
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='dont_display_profile_image' value='1' {{ $cbox_dont_display_profile_image }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('lang_dont_display_upload_profile_image') }}
+                                                    </label>
+                                                </div>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='dont_display_profile_am' value='1' {{ $cbox_dont_display_profile_am }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('lang_dont_display_profile_am') }}
+                                                    </label>
+                                                </div>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='dont_display_profile_phone' value='1' {{ $cbox_dont_display_profile_phone }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('lang_dont_display_profile_phone') }}
+                                                    </label>
+                                                </div>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='dont_display_profile_about_me' value='1' {{ $cbox_dont_display_profile_about_me }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('lang_dont_display_profile_about_me') }}
+                                                    </label>
+                                                </div>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelect') }}">
+                                                        <input type='checkbox' name='dont_display_profile_email' value='1' {{ $cbox_dont_display_profile_email }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('lang_dont_display_profile_email') }}
+                                                    </label>
+                                                </div>
+
+
                                                 <div class='checkbox'>
                                                     <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                         <input type='checkbox' name='block_username_change' value='1' {{ $cbox_block_username_change }}>
