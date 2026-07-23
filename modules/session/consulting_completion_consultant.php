@@ -418,145 +418,149 @@ function pdf_reports_output($uId) {
            $webDir, $course_id, $course_code, $langHasParticipatedInTool, $langHasNotParticipatedInTool;
 
     $pdfTitle = ($uId > 0) ? '(Summary sessions) ' . uid_to_name($uId) : '(Summary sessions) all_users_reports';
+    $pdf_title = $course_code . ' ' . $pdfTitle;
+    $course_title = q("$currentCourseName");
+    $module_type_title = "";
+    html_to_pdf($pdf_title, $course_title, $module_type_title);
 
-    $htmlHeader = "
-        <!DOCTYPE html>
-        <html lang='el'>
-        <head>
-          <meta charset='utf-8'>
-          <title>" . q("$currentCourseName") . "</title>
-          <style>
-            * { font-family: 'opensans'; }
-            body { font-family: 'opensans'; font-size: 10pt; }
-            small, .small { font-size: 8pt; }
-            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-            h1 { font-size: 16pt; }
-            h2 { font-size: 14pt; }
-            h3 { font-size: 14pt; color: #000000; margin-top: 0px; margin-bottom:20px; background-color: #EFF6FF; padding: 10px; }
-            h4 { font-size: 11pt; }
-            th { text-align: left; border-bottom: 1px solid #999; }
-            td { text-align: left; }
-            .criteria_not_completed { 
-                color: #FF0000; 
-            }
-            .criteria_completed { 
-                color: #008000;
-            }
-            .text-success { 
-                color: #228B22; 
-            }
-            .text-danger { 
-                color: #D22B2B; 
-            }
-            .cardReports { 
-                background: #ffffff; 
-                padding: 15px; 
-                border: solid 1px #989ea6; 
-                margin-top:20px; 
-            }
-            .export-pdf-btn,
-            .form-user-report,
-            .docs-pdf-btn,
-            .user-icon-filename,
-            .info_completion,
-            .title_reports,
-            .card-img-top,
-            .link-Update-Percentage,
-            .resource_item {
-                margin-bottom: 25px;
-            }
-          </style>
-        </head>
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
+    // $htmlHeader = "
+    //     <!DOCTYPE html>
+    //     <html lang='el'>
+    //     <head>
+    //       <meta charset='utf-8'>
+    //       <title>" . q("$currentCourseName") . "</title>
+    //       <style>
+    //         * { font-family: 'opensans'; }
+    //         body { font-family: 'opensans'; font-size: 10pt; }
+    //         small, .small { font-size: 8pt; }
+    //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+    //         h1 { font-size: 16pt; }
+    //         h2 { font-size: 14pt; }
+    //         h3 { font-size: 14pt; color: #000000; margin-top: 0px; margin-bottom:20px; background-color: #EFF6FF; padding: 10px; }
+    //         h4 { font-size: 11pt; }
+    //         th { text-align: left; border-bottom: 1px solid #999; }
+    //         td { text-align: left; }
+    //         .criteria_not_completed { 
+    //             color: #FF0000; 
+    //         }
+    //         .criteria_completed { 
+    //             color: #008000;
+    //         }
+    //         .text-success { 
+    //             color: #228B22; 
+    //         }
+    //         .text-danger { 
+    //             color: #D22B2B; 
+    //         }
+    //         .cardReports { 
+    //             background: #ffffff; 
+    //             padding: 15px; 
+    //             border: solid 1px #989ea6; 
+    //             margin-top:20px; 
+    //         }
+    //         .export-pdf-btn,
+    //         .form-user-report,
+    //         .docs-pdf-btn,
+    //         .user-icon-filename,
+    //         .info_completion,
+    //         .title_reports,
+    //         .card-img-top,
+    //         .link-Update-Percentage,
+    //         .resource_item {
+    //             margin-bottom: 25px;
+    //         }
+    //       </style>
+    //     </head>
+    //     <body>
+    //     <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
 
-    // Array contains icons
-    $searchVal = array('&#10004;', '&#x2718;');
-    // Array replaces icons with strings
-    $replaceVal = array('<strong class="text-success">' . $langHasParticipatedInTool . '</strong>', '<strong class="text-danger">' . $langHasNotParticipatedInTool . '</strong>');
-    $output = str_replace($searchVal, $replaceVal, $tool_content);
+    // // Array contains icons
+    // $searchVal = array('&#10004;', '&#x2718;');
+    // // Array replaces icons with strings
+    // $replaceVal = array('<strong class="text-success">' . $langHasParticipatedInTool . '</strong>', '<strong class="text-danger">' . $langHasNotParticipatedInTool . '</strong>');
+    // $output = str_replace($searchVal, $replaceVal, $tool_content);
 
-    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata'];
+    // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    // $fontDirs = $defaultConfig['fontDir'];
+    // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    // $fontData = $defaultFontConfig['fontdata'];
 
-    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header+15,     // mm
-        'margin_bottom' => $image_height_footer+15,  // mm
-        'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-        'fontdata' => $fontData + [
-                'opensans' => [
-                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                ],
-                'roboto' => [
-                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-                ]
-            ]
-    ]);
+    // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // $mpdf = new Mpdf\Mpdf([
+    //     'margin_top' => $image_height_header+15,     // mm
+    //     'margin_bottom' => $image_height_footer+15,  // mm
+    //     'tempDir' => _MPDF_TEMP_PATH,
+    //     'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+    //     'fontdata' => $fontData + [
+    //             'opensans' => [
+    //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+    //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+    //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+    //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+    //             ],
+    //             'roboto' => [
+    //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+    //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+    //             ]
+    //         ]
+    // ]);
 
-    // Performance options
-    $mpdf->simpleTables = true;
-    $mpdf->packTableData = true;
-    $mpdf->shrink_tables_to_fit = 0;
+    // // Performance options
+    // $mpdf->simpleTables = true;
+    // $mpdf->packTableData = true;
+    // $mpdf->shrink_tables_to_fit = 0;
 
-    // Write CSS/header ONCE
-    $mpdf->WriteHTML($htmlHeader, \Mpdf\HTMLParserMode::HEADER_CSS);
-    // Header/Footer
-    $mpdf->SetHTMLHeader(get_platform_logo());
-    $footerHtml = '
-    <div>
-        <table width="100%" style="border: none;">
-            <tr>
-                <td style="text-align: left;">{DATE j-n-Y}</td>
-                <td style="text-align: right;">{PAGENO} / {nb}</td>
-            </tr>
-        </table>
-    </div>
-    ' . get_platform_logo('','footer') . '';
-    $mpdf->SetHTMLFooter($footerHtml);
-    $mpdf->SetCreator(course_id_to_prof($course_id));
-    $mpdf->SetAuthor(course_id_to_prof($course_id));
+    // // Write CSS/header ONCE
+    // $mpdf->WriteHTML($htmlHeader, \Mpdf\HTMLParserMode::HEADER_CSS);
+    // // Header/Footer
+    // $mpdf->SetHTMLHeader(get_platform_logo());
+    // $footerHtml = '
+    // <div>
+    //     <table width="100%" style="border: none;">
+    //         <tr>
+    //             <td style="text-align: left;">{DATE j-n-Y}</td>
+    //             <td style="text-align: right;">{PAGENO} / {nb}</td>
+    //         </tr>
+    //     </table>
+    // </div>
+    // ' . get_platform_logo('','footer') . '';
+    // $mpdf->SetHTMLFooter($footerHtml);
+    // $mpdf->SetCreator(course_id_to_prof($course_id));
+    // $mpdf->SetAuthor(course_id_to_prof($course_id));
 
-    // Parse HTML safely
-    libxml_use_internal_errors(true);
-    $dom = new DOMDocument();
-    $html = mb_convert_encoding(
-        $output,
-        'HTML-ENTITIES',
-        'UTF-8'
-    );
-    $dom->loadHTML($html);
-    $xpath = new DOMXPath($dom);
+    // // Parse HTML safely
+    // libxml_use_internal_errors(true);
+    // $dom = new DOMDocument();
+    // $html = mb_convert_encoding(
+    //     $output,
+    //     'HTML-ENTITIES',
+    //     'UTF-8'
+    // );
+    // $dom->loadHTML($html);
+    // $xpath = new DOMXPath($dom);
 
-    // Find all cards
-    $cards = $xpath->query("
-        //div[contains(concat(' ', normalize-space(@class), ' '), ' cardReports ')]
-    ");
-    if ($cards->length === 0) {
-        $mpdf->WriteHTML($output, \Mpdf\HTMLParserMode::HTML_BODY);
-    } else {
-        foreach ($cards as $card) {
-            $cardHtml = $dom->saveHTML($card);
-            $mpdf->WriteHTML(
-                $cardHtml,
-                \Mpdf\HTMLParserMode::HTML_BODY
-            );
-            $mpdf->WriteHTML('<pagebreak />');
-        }
-    }
+    // // Find all cards
+    // $cards = $xpath->query("
+    //     //div[contains(concat(' ', normalize-space(@class), ' '), ' cardReports ')]
+    // ");
+    // if ($cards->length === 0) {
+    //     $mpdf->WriteHTML($output, \Mpdf\HTMLParserMode::HTML_BODY);
+    // } else {
+    //     foreach ($cards as $card) {
+    //         $cardHtml = $dom->saveHTML($card);
+    //         $mpdf->WriteHTML(
+    //             $cardHtml,
+    //             \Mpdf\HTMLParserMode::HTML_BODY
+    //         );
+    //         $mpdf->WriteHTML('<pagebreak />');
+    //     }
+    // }
 
-    // Close HTML
-    $mpdf->WriteHTML("</body></html>");
+    // // Close HTML
+    // $mpdf->WriteHTML("</body></html>");
 
-    // Output
-    $mpdf->Output("$course_code $pdfTitle.pdf", 'I');
-    exit;
+    // // Output
+    // $mpdf->Output("$course_code $pdfTitle.pdf", 'I');
+    // exit;
 }

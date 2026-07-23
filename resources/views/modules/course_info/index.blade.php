@@ -832,6 +832,14 @@
                                                        value="{{ $print_footer_image_url ? setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER, $course_id) : '' }}">
                                                 <div id="selectedPrintFooterImage" class="mt-2 text-muted"></div>
                                             </div>
+
+                                            <div class='col-sm-12 control-label-notes mt-3'>
+                                                {{ trans('langOrientationPage') }}
+                                                <select class='form-select mt-2' name='type_report_view'>
+                                                    <option value="0" {{ setting_get(SETTING_COURSE_REPORT_VIEW_TYPE, $course_id) == '0' ? 'selected' : '' }}>{{ trans('langPortraitPage') }}</option>
+                                                    <option value="1" {{ setting_get(SETTING_COURSE_REPORT_VIEW_TYPE, $course_id) == '1' ? 'selected' : '' }}>{{ trans('langLandScapePage') }}</option>
+                                                </select>
+                                            </div>
                                         </div>
 
                                         {!! showSecondFactorChallenge() !!}

@@ -169,6 +169,8 @@ function load_js($file, $init='') {
         } elseif ($file == 'slimselect') {
             $head_content .= css_link('slim-select/slimselect.css');
             $file = 'slim-select/slimselect.js';
+        } elseif ($file == 'html2pdf') {
+            $file = 'html2pdf/html2pdf.bundle.min.js';
         } elseif ($file == 'bootstrap-calendar') {
             $file = 'bootstrap-calendar-master/js/calendar.js';
             if ($language != 'en') {
@@ -5124,7 +5126,10 @@ function get_platform_logo($size = 'normal', $position = 'header') {
 
     require_once 'include/course_settings.php';
 
+    $img_class = '';
+
     if ($position == 'footer') {
+        $img_class = 'footer-logo';
         $footer_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_FOOTER, $course_id);
         if (!$footer_path) {
             return '';
@@ -5138,6 +5143,7 @@ function get_platform_logo($size = 'normal', $position = 'header') {
             $image_height = 15;
         }
     } else {
+        $img_class = 'header-logo';
         $header_path = setting_get_print_image_disk_path(SETTING_COURSE_IMAGE_PRINT_HEADER, $course_id);
         $image_height = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
         // for old courses
@@ -5165,7 +5171,7 @@ function get_platform_logo($size = 'normal', $position = 'header') {
     }
 
     $logo = "<div style='clear: right; background-color: $bg_color; padding: 1rem; margin-bottom: 2rem; text-align: $image_align;'>
-                <img style='height: {$image_height}mm;' src='$logo_img'>
+                <img class='$img_class' style='height: {$image_height}mm;' src='$logo_img' data-height='$image_height' data-align='$image_align'>
             </div>";
 
     return $logo;
@@ -5622,4 +5628,268 @@ function load_lang_strings(string $lang, array $strings) : array {
     }
 
     return $arr;
+}
+
+function html_to_pdf($pdf_title, $course_title, $module_type_title, $html = null) {
+    global $urlAppend, $course_id, $tool_content;
+
+    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+
+    $orientation_value = 'portrait';
+    $orientation = setting_get(SETTING_COURSE_REPORT_VIEW_TYPE, $course_id);
+    if ($orientation) {
+        $orientation_value = 'landscape';
+    }
+
+    // Backward compatibility
+    if ($image_height_header > 50) {
+        $image_height_header = 20;
+    }
+
+    if ($image_height_footer > 50) {
+        $image_height_footer = 15;
+    }
+
+    $marginTop = $image_height_header + 20;
+    $marginBottom = $image_height_footer + 10;
+
+    $pdf_content = "
+    <!DOCTYPE html>
+    <html lang='el'>
+        <head>
+            <meta charset='utf-8'>
+            <title>" . q("$course_title - $module_type_title") . "</title>
+            <link href='{$urlAppend}template/modern/css/bootstrap.min.css' rel='stylesheet'>
+            <link href='{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>
+            <link href='{$urlAppend}template/modern/css/fonts_all/typography.css' rel='stylesheet'>
+            <link href='{$urlAppend}template/modern/css/default.css' rel='stylesheet'>
+            <style>
+
+                html,
+                body {
+                    margin: 0;
+                    padding: 0;
+                }
+                #loadingPdf {
+                    position: fixed;
+                    inset: 0;
+                    background: #fff;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    z-index: 999999;
+                    font-family: Arial, sans-serif;
+                    font-size: 18px;
+                }
+                #loadingPdf .spinner {
+                    width: 42px;
+                    height: 42px;
+                    border: 4px solid #ddd;
+                    border-top-color: #0d6efd;
+                    border-radius: 50%;
+                    animation: spin .8s linear infinite;
+                    margin-bottom: 20px;
+                }
+                @keyframes spin {
+                    to {
+                        transform: rotate(360deg);
+                    }
+                }
+
+                #pdf-content{
+                    width:100%;
+                    padding:0;
+                    margin:0;
+                }
+
+                .header-logo,
+                .footer-logo{
+                    position:absolute;
+                    left:-9999px;
+                    top:-9999px;
+                }
+
+                .table-responsive {
+                    overflow: visible !important;
+                }
+
+                .export-pdf-btn,
+                .docs-pdf-btn,
+                .export-excel-btn,
+                .form-user-report,
+                .action_bar,
+                .PollPieChart_div,
+                .table-tc-duration td a:has(.fa-line-chart),
+                .selection_type,
+                .action-bar-title,
+                .actions-post-btns,
+                .selection_type,
+                .ButtonsContent,
+                .div-profile-img,
+                .reply-post-btn,
+                .div-menu-popover {
+                    display: none !important;
+                }
+
+            </style>
+        </head>
+        <body>";
+        $pdf_content .= "
+        <div id='loadingPdf'>
+            <div class='spinner'></div>
+            Δημιουργία PDF...
+        </div>
+        ";
+        $pdf_content .= get_platform_logo('normal', 'header');
+        $pdf_content .= get_platform_logo('normal', 'footer');
+        $pdf_content .= "<div id='pdf-content'>";
+                            $pdf_content .= "
+                                <h2>" . get_config('site_name') . " - " . q($course_title) . "</h2>
+                                <h3>" . q($module_type_title) . "</h3>
+                            ";
+                            $content = $html ?? $tool_content;
+                            $pdf_content .= $content;
+                            $pdf_content .= "
+                        </div>
+
+            <script src='{$urlAppend}js/html2pdf/html2pdf.bundle.min.js'></script>
+            <script>
+                window.onload = async function () {
+
+                    const options = {
+                        margin: [$marginTop, 15, $marginBottom, 15],
+                        filename: '$pdf_title.pdf',
+                        html2canvas: {
+                            scale: 2
+                        },
+                        pagebreak: {
+                            mode: ['avoid-all', 'css', 'legacy']
+                        },
+                        jsPDF: {
+                            unit: 'mm',
+                            format: 'a4',
+                            orientation: '$orientation_value'
+                        }
+                    };
+
+                    const element = document.getElementById('pdf-content');
+                    const headerImg = document.querySelector('.header-logo');
+                    const footerImg = document.querySelector('.footer-logo');
+                    const alignHeaderLogo = headerImg?.dataset.align ?? 'left';
+                    const alignFooterLogo = footerImg?.dataset.align ?? 'left';
+
+                    async function imageToDataURL(img) {
+                        if (!img) {
+                            return null;
+                        }
+                        if (img.src.startsWith('data:')) {
+                            return img.src;
+                        }
+                        try {
+                            await img.decode();
+                        } catch (e) {
+                            // ignore
+                        }
+
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = img.naturalWidth;
+                        canvas.height = img.naturalHeight;
+                        if (!img.naturalWidth || !img.naturalHeight) {
+                            return null;
+                        }
+                        ctx.drawImage(img, 0, 0);
+                        return canvas.toDataURL();
+                    }
+
+                    function getImageFormat(src) {
+                        if (!src) {
+                            return null;
+                        }
+                        const match = src.match(/^data:image\/([a-zA-Z0-9+]+);/);
+                        return match ? match[1].toUpperCase() : 'PNG';
+                    }
+
+                    function getXPosition(align, width, pageWidth, margin = 15) {
+                        switch (align) {
+                            case 'center':
+                                return (pageWidth - width) / 2;
+                            case 'right':
+                                return pageWidth - width - margin;
+                            default:
+                                return margin;
+                        }
+                    }
+
+                    const headerLogo = await imageToDataURL(headerImg);
+                    const footerLogo = await imageToDataURL(footerImg);
+                    const headerFormat = getImageFormat(headerLogo);
+                    const footerFormat = getImageFormat(footerLogo);
+
+                    const startTime = Date.now();
+
+                    html2pdf().set(options).from(element).toPdf().get('pdf').then(function (pdf) {
+
+                        const totalPages = pdf.internal.getNumberOfPages();
+                        const pageWidth = pdf.internal.pageSize.getWidth();
+                        const pageHeight = pdf.internal.pageSize.getHeight();
+
+                        const header = {
+                            align: alignHeaderLogo,
+                            y: 10,
+                            w: 100,
+                            h: $image_height_header
+                        };
+
+                        const footer = {
+                            align: alignFooterLogo,
+                            y: 10,
+                            w: 100,
+                            h: $image_height_footer
+                        };
+
+                        const today = new Date();
+                        const currentDate = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+
+                        for (let i = 1; i <= totalPages; i++) {
+
+                            pdf.setPage(i);
+
+                            if (headerLogo) {
+                                header.w = headerImg.naturalWidth * (header.h / headerImg.naturalHeight);
+                                header.x = getXPosition(header.align, header.w, pageWidth);
+                                pdf.addImage(headerLogo, headerFormat, header.x, header.y, header.w, header.h);
+                            }
+
+                            if (footerLogo) {
+                                footer.w = footerImg.naturalWidth * (footer.h / footerImg.naturalHeight);
+                                footer.x = getXPosition(footer.align, footer.w, pageWidth);
+                                pdf.addImage(footerLogo, footerFormat, footer.x, pageHeight - footer.h - 15, footer.w, footer.h);
+                            }
+
+                            pdf.setFontSize(10);
+                            pdf.text(currentDate, 15, pageHeight - 5);
+                            pdf.text(i + ' / ' + totalPages, pageWidth - 15, pageHeight - 5, { align: 'right' });
+                        }
+
+                    }).save().then(function () {
+                        const minDuration = 800; // ms
+                        const elapsed = Date.now() - startTime;
+                        const remaining = Math.max(0, minDuration - elapsed);
+                        setTimeout(function () {
+                            document.getElementById('loadingPdf').style.display = 'none';
+                            if (window.opener || window.history.length <= 1) {
+                                window.close();
+                            }
+                        }, remaining);
+                    });
+                };
+            </script>
+        </body>
+    </html>";
+
+    echo $pdf_content;
+    exit;
 }

@@ -186,6 +186,7 @@ if (isset($_GET['from_session_view'])) {
                           'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid$export_pdf&amp;from_session_view=true",
                           'icon' => 'fa-solid fa-file-pdf',
                           'level' => 'primary-label',
+                          'link-attrs' => "target='_blank'",
                           'show' => ($is_course_reviewer && isset($_GET['from_session_view']))),
                     array('title' => $langPollPercentResults,
                           'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid$from_session",
@@ -241,6 +242,7 @@ if (isset($_GET['from_session_view'])) {
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;format=poll_pdf$res_per_user",
                         'icon' => 'fa-file-pdf',
                         'level' => 'primary-label',
+                        'link-attrs' => "target='_blank'",
                         'show' => $is_course_reviewer && !isset($_GET['chart'])),
                     array('title' => $langPollFullResults,
                           'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1$res_per_user",
@@ -299,7 +301,7 @@ $tool_content .= "<div class='col-12'>
     </div>
     <div class='card-body'>
         <div class='col-12 d-flex justify-content-center justify-content-md-start align-items-start gap-3 flex-wrap'>
-            <div>
+            <div class='PollPieChart_div'>
                 <canvas width='250' height='250' id='PollPieChart'></canvas>
             </div>
             <div class='flex-fill'>
@@ -1143,91 +1145,96 @@ if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
 function pdf_poll_output() {
     global $tool_content, $currentCourseName, $webDir, $course_id, $course_code;
 
-    $pdf_content = "
-        <!DOCTYPE html>
-        <html lang='el'>
-        <head>
-          <meta charset='utf-8'>
-          <title>" . q("$currentCourseName") . "</title>
-          <style>
-            * { font-family: 'opensans'; }
-            body { font-family: 'opensans'; font-size: 10pt; }
-            small, .small { font-size: 8pt; }
-            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-            h1 { font-size: 16pt; }
-            h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
-            th { text-align: left; border-bottom: 1px solid #999; }
-            td { text-align: left; }
-            .ButtonsContent{ display: none; }
-            .hidden_names{ display: none; }
-            .trigger_names{display: none;}
-            #hide{ display: none; }
-            em{ display: none; }
-            .hidden-element { display: none; }
-            td ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
-            ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
-            li { list-style: none !important; }
-            .card-user-answers { background-color: #eeeeee; padding: 0px 25px 20px 25px; margin-top: 15px; margin-bottom: 10px;}
-          </style>
-        </head>
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
+    $pdf_title = "$course_code poll_results";
+    $course_title = q("$currentCourseName");
+    $module_type_title = "";
+    html_to_pdf($pdf_title, $course_title, $module_type_title);
 
-    $pdf_content .= $tool_content;
+    // $pdf_content = "
+    //     <!DOCTYPE html>
+    //     <html lang='el'>
+    //     <head>
+    //       <meta charset='utf-8'>
+    //       <title>" . q("$currentCourseName") . "</title>
+    //       <style>
+    //         * { font-family: 'opensans'; }
+    //         body { font-family: 'opensans'; font-size: 10pt; }
+    //         small, .small { font-size: 8pt; }
+    //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+    //         h1 { font-size: 16pt; }
+    //         h2 { font-size: 12pt; border-bottom: 1px solid black; }
+    //         h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+    //         th { text-align: left; border-bottom: 1px solid #999; }
+    //         td { text-align: left; }
+    //         .ButtonsContent{ display: none; }
+    //         .hidden_names{ display: none; }
+    //         .trigger_names{display: none;}
+    //         #hide{ display: none; }
+    //         em{ display: none; }
+    //         .hidden-element { display: none; }
+    //         td ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
+    //         ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
+    //         li { list-style: none !important; }
+    //         .card-user-answers { background-color: #eeeeee; padding: 0px 25px 20px 25px; margin-top: 15px; margin-bottom: 10px;}
+    //       </style>
+    //     </head>
+    //     <body>
+    //     <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
 
-    $pdf_content .= "</body></html>";
+    // $pdf_content .= $tool_content;
 
-    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata'];
+    // $pdf_content .= "</body></html>";
 
-    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    // for old courses
-    if ($image_height_header > 50) {
-        $image_height_header = 20;
-    }
-    if ($image_height_footer > 50) {
-        $image_height_footer = 15;
-    }
-    $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header + 20,     // mm
-        'margin_bottom' => $image_height_footer + 10,  // mm
-        'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-        'fontdata' => $fontData + [
-                'opensans' => [
-                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                ],
-                'roboto' => [
-                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-                ]
-            ]
-    ]);
+    // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    // $fontDirs = $defaultConfig['fontDir'];
+    // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    // $fontData = $defaultFontConfig['fontdata'];
 
-    $mpdf->SetHTMLHeader(get_platform_logo());
-    $footerHtml = '
-    <div>
-        <table width="100%" style="border: none;">
-            <tr>
-                <td style="text-align: left;">{DATE j-n-Y}</td>
-                <td style="text-align: right;">{PAGENO} / {nb}</td>
-            </tr>
-        </table>
-    </div>
-    ' . get_platform_logo('','footer') . '';
-    $mpdf->SetHTMLFooter($footerHtml);
-    $mpdf->SetCreator(course_id_to_prof($course_id));
-    $mpdf->SetAuthor(course_id_to_prof($course_id));
-    $mpdf->WriteHTML($pdf_content);
-    $mpdf->Output("$course_code poll_results.pdf", 'I'); // 'D' or 'I' for download / inline display
-    exit;
+    // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // // for old courses
+    // if ($image_height_header > 50) {
+    //     $image_height_header = 20;
+    // }
+    // if ($image_height_footer > 50) {
+    //     $image_height_footer = 15;
+    // }
+    // $mpdf = new Mpdf\Mpdf([
+    //     'margin_top' => $image_height_header + 20,     // mm
+    //     'margin_bottom' => $image_height_footer + 10,  // mm
+    //     'tempDir' => _MPDF_TEMP_PATH,
+    //     'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+    //     'fontdata' => $fontData + [
+    //             'opensans' => [
+    //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+    //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+    //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+    //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+    //             ],
+    //             'roboto' => [
+    //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+    //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+    //             ]
+    //         ]
+    // ]);
+
+    // $mpdf->SetHTMLHeader(get_platform_logo());
+    // $footerHtml = '
+    // <div>
+    //     <table width="100%" style="border: none;">
+    //         <tr>
+    //             <td style="text-align: left;">{DATE j-n-Y}</td>
+    //             <td style="text-align: right;">{PAGENO} / {nb}</td>
+    //         </tr>
+    //     </table>
+    // </div>
+    // ' . get_platform_logo('','footer') . '';
+    // $mpdf->SetHTMLFooter($footerHtml);
+    // $mpdf->SetCreator(course_id_to_prof($course_id));
+    // $mpdf->SetAuthor(course_id_to_prof($course_id));
+    // $mpdf->WriteHTML($pdf_content);
+    // $mpdf->Output("$course_code poll_results.pdf", 'I'); // 'D' or 'I' for download / inline display
+    // exit;
 }
 
 /**
@@ -1240,93 +1247,98 @@ function pdf_session_poll_output($sid) {
 
     $sessionTitle = Database::get()->querySingle("SELECT title FROM mod_session WHERE id = ?d AND course_id = ?d", $sid, $course_id)->title;
 
-    $pdf_content = "
-        <!DOCTYPE html>
-        <html lang='el'>
-        <head>
-          <meta charset='utf-8'>
-          <title>" . q("$currentCourseName") . "</title>
-          <style>
-            * { font-family: 'opensans'; }
-            body { font-family: 'opensans'; font-size: 10pt; }
-            small, .small { font-size: 8pt; }
-            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-            h1 { font-size: 16pt; }
-            h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
-            th { text-align: left; border-bottom: 1px solid #999; }
-            td { text-align: left; }
-            .card-poll-results {border-left: 4px solid rgb(255, 255, 255) !important;}
-            table {min-width:100% !important;}
-            .ButtonsContent{ display: none; }
-            .hidden_names{ display: none; }
-            #hide{ display: none; }
-            em{ display: none; }
-            .hidden-element { display: none; }
-            .pollTotalAnswers{ display: block;}
-            td ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
-            ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
-            li { list-style: none !important; }
-            .card-user-answers { background-color: #eeeeee; padding: 0px 25px 20px 25px; margin-top: 15px; margin-bottom: 10px;}
-          </style>
-        </head>
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-        <h2> " . q($sessionTitle) . "</h2>";
+    $pdf_title = "$course_code poll_results";
+    $course_title = q("$currentCourseName");
+    $module_type_title = q($sessionTitle);
+    html_to_pdf($pdf_title, $course_title, $module_type_title);
 
-    $pdf_content .= $tool_content;
+    // $pdf_content = "
+    //     <!DOCTYPE html>
+    //     <html lang='el'>
+    //     <head>
+    //       <meta charset='utf-8'>
+    //       <title>" . q("$currentCourseName") . "</title>
+    //       <style>
+    //         * { font-family: 'opensans'; }
+    //         body { font-family: 'opensans'; font-size: 10pt; }
+    //         small, .small { font-size: 8pt; }
+    //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+    //         h1 { font-size: 16pt; }
+    //         h2 { font-size: 12pt; border-bottom: 1px solid black; }
+    //         h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+    //         th { text-align: left; border-bottom: 1px solid #999; }
+    //         td { text-align: left; }
+    //         .card-poll-results {border-left: 4px solid rgb(255, 255, 255) !important;}
+    //         table {min-width:100% !important;}
+    //         .ButtonsContent{ display: none; }
+    //         .hidden_names{ display: none; }
+    //         #hide{ display: none; }
+    //         em{ display: none; }
+    //         .hidden-element { display: none; }
+    //         .pollTotalAnswers{ display: block;}
+    //         td ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
+    //         ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
+    //         li { list-style: none !important; }
+    //         .card-user-answers { background-color: #eeeeee; padding: 0px 25px 20px 25px; margin-top: 15px; margin-bottom: 10px;}
+    //       </style>
+    //     </head>
+    //     <body>
+    //     <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+    //     <h2> " . q($sessionTitle) . "</h2>";
 
-    $pdf_content .= "</body></html>";
+    // $pdf_content .= $tool_content;
 
-    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata'];
-    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    // for old courses
-    if ($image_height_header > 50) {
-        $image_height_header = 20;
-    }
-    if ($image_height_footer > 50) {
-        $image_height_footer = 15;
-    }
-    $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header + 20,     // mm
-        'margin_bottom' => $image_height_footer + 10,  // mm
-        'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-        'fontdata' => $fontData + [
-                'opensans' => [
-                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                ],
-                'roboto' => [
-                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-                ]
-            ]
-    ]);
+    // $pdf_content .= "</body></html>";
 
-    $mpdf->SetHTMLHeader(get_platform_logo());
-    $footerHtml = '
-    <div>
-        <table width="100%" style="border: none;">
-            <tr>
-                <td style="text-align: left;">{DATE j-n-Y}</td>
-                <td style="text-align: right;">{PAGENO} / {nb}</td>
-            </tr>
-        </table>
-    </div>
-    ' . get_platform_logo('','footer') . '';
-    $mpdf->SetHTMLFooter($footerHtml);
-    $mpdf->SetCreator(course_id_to_prof($course_id));
-    $mpdf->SetAuthor(course_id_to_prof($course_id));
-    $mpdf->WriteHTML($pdf_content);
-    $mpdf->Output("$course_code poll_results.pdf", 'I'); // 'D' or 'I' for download / inline display
-    exit;
+    // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    // $fontDirs = $defaultConfig['fontDir'];
+    // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    // $fontData = $defaultFontConfig['fontdata'];
+    // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // // for old courses
+    // if ($image_height_header > 50) {
+    //     $image_height_header = 20;
+    // }
+    // if ($image_height_footer > 50) {
+    //     $image_height_footer = 15;
+    // }
+    // $mpdf = new Mpdf\Mpdf([
+    //     'margin_top' => $image_height_header + 20,     // mm
+    //     'margin_bottom' => $image_height_footer + 10,  // mm
+    //     'tempDir' => _MPDF_TEMP_PATH,
+    //     'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+    //     'fontdata' => $fontData + [
+    //             'opensans' => [
+    //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+    //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+    //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+    //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+    //             ],
+    //             'roboto' => [
+    //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+    //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+    //             ]
+    //         ]
+    // ]);
+
+    // $mpdf->SetHTMLHeader(get_platform_logo());
+    // $footerHtml = '
+    // <div>
+    //     <table width="100%" style="border: none;">
+    //         <tr>
+    //             <td style="text-align: left;">{DATE j-n-Y}</td>
+    //             <td style="text-align: right;">{PAGENO} / {nb}</td>
+    //         </tr>
+    //     </table>
+    // </div>
+    // ' . get_platform_logo('','footer') . '';
+    // $mpdf->SetHTMLFooter($footerHtml);
+    // $mpdf->SetCreator(course_id_to_prof($course_id));
+    // $mpdf->SetAuthor(course_id_to_prof($course_id));
+    // $mpdf->WriteHTML($pdf_content);
+    // $mpdf->Output("$course_code poll_results.pdf", 'I'); // 'D' or 'I' for download / inline display
+    // exit;
 }
 
 

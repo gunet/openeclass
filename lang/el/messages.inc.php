@@ -7848,6 +7848,9 @@ $langCoursePrintSetting = "Ρυθμίσεις εμφάνισης αναφορώ�
 $langCoursePrintHeaderImage = "Εικόνα κεφαλίδας";
 $langCoursePrintFooterImage = "Εικόνα υποσέλιδου";
 $langReportImageNotFound = "Οι εικόνες πρέπει να βρίσκονται στον κατάλογο με τίτλο Report_Images στα Εγγραφα";
+$langOrientationPage = "Προσανατολισμός της σελίδας PDF";
+$langPortraitPage = "Portrait (Κατακόρυφος)";
+$langLandScapePage = "Landscape (Οριζόντιος)";
 
 // AI-related language constants - Greek translations
 $langAI = "AI";
