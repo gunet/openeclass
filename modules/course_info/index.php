@@ -324,6 +324,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['footer_image_width'])) {
                 setting_set(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $_POST['footer_image_width'], $course_id);
             }
+            if (isset($_POST['type_report_view'])) {
+                setting_set(SETTING_COURSE_REPORT_VIEW_TYPE, $_POST['type_report_view'], $course_id);
+            }
 
             // Course settings modified, will get a success message after redirect in current course language
             Session::flash('course-modify-success', true);
