@@ -31,7 +31,7 @@ function display_attendances() {
     global $course_id, $tool_content, $course_code,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
            $langAvailableAttendances, $langNoAttendances, $is_editor, $is_course_reviewer,
-           $langViewHide, $langViewShow, $langEditChange, $langStart, $langFinish, $uid, $langSettingSelect;
+           $langViewHide, $langViewShow, $langEditChange, $langStart, $langFinish, $uid, $langSettingSelect, $langExport;
 
     if ($is_course_reviewer) {
         $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
@@ -78,6 +78,9 @@ function display_attendances() {
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;vis=" .
                                                   ($a->active ? '0' : '1'),
                                           'icon' => $a->active ? 'fa-eye-slash' : 'fa-eye'),
+                                    array('title' => "$langExport",
+                                          'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=" . urlencode(getIndirectReference($a->id)),
+                                          'icon' => 'fa-file-excel'),
                                     array('title' => $langCreateDuplicate,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;dup=1",
                                           'icon' => 'fa-copy'),
@@ -240,7 +243,7 @@ function display_attendance_activities($attendance_id) {
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langExercise,
            $langAdd, $langExport, $langBack, $langNoStudentsInAttendance, $langBBB,
            $is_editor, $is_course_reviewer, $is_collaborative_course, $langSettingSelect,
-           $langQRCodePresence;
+           $langQRCodePresence, $langImportAttendances, $langExport;
 
     $attendance_id_ind = getIndirectReference($attendance_id);
     if ($is_editor) {
@@ -371,6 +374,14 @@ function display_attendance_activities($attendance_id) {
                             'icon' => 'fa-solid fa-qrcode',
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;gen_qrcodePr=true&amp;actId=" . getIndirectReference($details->id),
                             'show' => !$details->module_auto_id
+                        ),
+                        array('title' => $langExport,
+                            'icon' => 'fa-solid fa-download',
+                            'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=" . urlencode(getIndirectReference($attendance_id)) . "&activity_id=" . urlencode($details->id),
+                        ),
+                        array('title' => $langImportAttendances,
+                            'icon' => 'fa-solid fa-upload',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . urlencode($attendance_id) . "&imp=" . urlencode($details->id)
                         ),
                         array('title' => $langDelete,
                             'icon' => 'fa-xmark',
