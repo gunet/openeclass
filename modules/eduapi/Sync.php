@@ -184,18 +184,16 @@ class Sync {
                         $courseId = $existing->id;
                         $summary['coursesReused']++;
                     } else {
-                        $newCode = self::newCourseCode($codePrefix);
                         $courseTitle = ($title !== '' ? $title : $sourcedId);
                         $result = create_course(
-                            $newCode,
+                            '', // empty public_code so that create_course() auto sets it
                             $this->language,
                             $courseTitle,
                             '',
                             [$sessionNode->id],
                             0, // Locked
                             $this->creatorName,
-                            '',
-                            $newCode
+                            ''
                         );
                         if (!$result) {
                             throw new Exception('create_course failed');
@@ -779,6 +777,8 @@ class Sync {
             if (!$node) {
                 throw new Exception("Failed to create hierarchy node '$displayName'");
             }
+            // Start course numbering at 100, pre-increment the hierarchy generator
+            Database::get()->query("UPDATE hierarchy SET generator = 99 WHERE id = ?d", $node->id);
             $summary['nodesCreated']++;
         }
 
@@ -865,25 +865,6 @@ class Sync {
         $prefix = trim($prefix, '-');
 
         return trim(substr($prefix, 0, 20), '-');
-    }
-
-    /**
-     * Next free course code for a prefix, e.g. AUTH-22B -> AUTH-22B-100.
-     */
-    private static function newCourseCode($prefix): string {
-        $base = $prefix . '-';
-        $max = Database::get()->querySingle("SELECT MAX(code) AS max_code FROM course WHERE code LIKE ?s", $base . '%');
-        if ($max && $max->max_code) {
-            $counter = intval(preg_replace('/^' . preg_quote($base, '/') . '/', '', $max->max_code)) + 1;
-        } else {
-            $counter = 100;
-        }
-        do {
-            $code = $base . $counter;
-            $counter++;
-        } while (file_exists("courses/$code"));
-
-        return $code;
     }
 
     /**
