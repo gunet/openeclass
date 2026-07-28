@@ -1,4 +1,4 @@
-# The Open eClass Platform 4.4 (under development)
+# The Open eClass Platform 4.4
 
 http://www.openeclass.org/
 
@@ -15,17 +15,17 @@ amount of work and ideas and we would like to express our gratitude to all of
 them for their support. A complete list of contributors can be found in the
 CREDITS.txt file.
 
-Installation of Open eClass requires a web server with support for PHP >= 8.1
+Installation of Open eClass requires a web server with support for PHP >= 8.2
 and a database server (MySQL or MariaDB). You can find detailed installation
 instructions as well as other manuals at the following address:
 
 http://docs.openeclass.org/en/start
 
 GUnet eLearning Group
-April 2026
+July 2026
 
 
-# Πλατφόρμα Open eClass 4.4 (υπό ανάπτυξη)
+# Πλατφόρμα Open eClass 4.4
 
 http://www.openeclass.org/
 
@@ -59,10 +59,10 @@ http://www.openeclass.org/
 και βελτίωση της πλατφόρμας. Στο αρχείο CREDITS.txt θα βρείτε περισσότερες πληροφορίες.
 
 Για την εγκατάσταση της πλατφόρμας απαιτείται ένας εξυπηρετητής web με υποστήριξη
-PHP >= 8.1 και μια βάση δεδομένων (MySQL ή MariaDB). Αναλυτικές οδηγίες εγκατάστασης
+PHP >= 8.2 και μια βάση δεδομένων (MySQL ή MariaDB). Αναλυτικές οδηγίες εγκατάστασης
 και άλλα εγχειρίδια της πλατφόρμας μπορούν να βρεθούν στη διεύθυνση:
 
 http://docs.openeclass.org/el/start
 
 Ομάδα Τηλεκπαίδευσης GUnet
-Απρίλιος 2026
+July 2026
