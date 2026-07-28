@@ -107,7 +107,7 @@ function register_user_presences($attendance_id, $actID) {
 
     global $tool_content, $course_id, $course_code,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
-           $langGroup, $langAttendanceBooking, $langID, $langQuotaSuccess, $langCancel, $langSelect;
+           $langGroup, $langAttendanceBooking, $langID, $langQuotaSuccess, $langCancel, $langSelect, $langGradebookNoTitle;
 
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
@@ -115,7 +115,7 @@ function register_user_presences($attendance_id, $actID) {
 
     $tool_content .= "
     <div class='col-12'>
-        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . q($result->title) . "</span></div></div>";
+        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . q(strlen($result->title) === 0 ? $langGradebookNoTitle : $result->title) . "</span></div></div>";
 
     if (isset($_POST['bookUsersToAct'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
