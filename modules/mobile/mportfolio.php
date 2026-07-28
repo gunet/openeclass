@@ -87,10 +87,9 @@ function populateTools($baseurl) {
 }
 
 function populateProfileTools($baseurl) {
-    global $langMyCourses, $langMyDropBox, $langMyAnnouncements, $langMyAgenda, $langNotes, $langMyProfile, $langMyStats;
+    global $langMyDropBox, $langMyAnnouncements, $langMyAgenda, $langNotes, $langMyProfile, $langMyStats;
 
     $toolsArr = array();
-    $toolsArr[] = createNewTool($baseurl, $langMyCourses, 'main/my_courses.php?view=mobile', 'mycourses');
     $toolsArr[] = createNewTool($baseurl, $langMyDropBox, 'modules/message/index.php?view=mobile', 'mymessages');
     $toolsArr[] = createNewTool($baseurl, $langMyAnnouncements, 'modules/announcements/myannouncements.php?view=mobile', 'myannouncements');
     $toolsArr[] = createNewTool($baseurl, $langMyAgenda, 'main/personal_calendar/index.php?view=mobile', 'myagenda');

@@ -23,7 +23,7 @@
 */
 
 /* version */
-define('ECLASS_VERSION', '4.4-dev');
+define('ECLASS_VERSION', '4.4');
 
 /* course status */
 define('COURSE_CLOSED', 0);
@@ -168,6 +168,7 @@ define('SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT', 31); /* course image foote
 define('SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH', 32); /* course image header width */
 define('SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH', 33); /* course image footer width */
 define('SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE', 34); /* course H5P users uploading enable */
+define('SETTING_COURSE_REPORT_VIEW_TYPE', 200);
 
 // Available user settings
 define('SETTING_FORUM_POST_VIEW', 1);

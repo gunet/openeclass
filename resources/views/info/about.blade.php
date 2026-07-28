@@ -5,22 +5,26 @@
 <main id="main" class="col-12 main-section">
     
             <div class='about-content about-content-1 d-flex flex-column align-items-center'>
-                <div class='{{ $container }} padding-default p-lg-5'>
-                    <div class='about-organization-name text-center'>
-                        <div class="about-title">{{ trans('langInstituteShortNameSecondary') }}</div>
-                        <a href='{{ $institution_url }}' target='_blank' class='mainpage about-value' aria-label='{{ $institution }}'>{{ $institution }}</a>
-                    </div>
-                    <div class='about-site-name text-center mt-5'>
-                        <div class="about-title">{{ trans('langCampusName') }}</div>
-                        <p class='form-label about-value'>{{ $siteName }}</p>
-                    </div>
-                    <div class='about-version text-center mt-5'>
-                        <div class="about-title">{{ trans('langVersion') }}</div>
-                        <a class='about-value' href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank' aria-label='{{ $eclass_version }}'>{{ $eclass_version }}</a>
-                    </div>
-                    <div class='about-support-user text-center mt-5'>
-                        <div class="about-title">{{ trans('langSupportUser') }}</div>
-                        <p class='form-label about-value'>{{ $admin_name }}</p>
+                <div class='{{ $container }} padding-default p-lg-5 d-flex justify-content-center'>
+                    <div class='card panelCard card-default d-inline-flex px-lg-4 py-lg-3'>
+                        <div class='card-body'>
+                            <div class='about-organization-name text-center'>
+                                <div class="about-title">{{ trans('langInstituteShortNameSecondary') }}</div>
+                                <a href='{{ $institution_url }}' target='_blank' class='mainpage about-value' aria-label='{{ $institution }}'>{{ $institution }}</a>
+                            </div>
+                            <div class='about-site-name text-center mt-5'>
+                                <div class="about-title">{{ trans('langCampusName') }}</div>
+                                <p class='form-label about-value'>{{ $siteName }}</p>
+                            </div>
+                            <div class='about-version text-center mt-5'>
+                                <div class="about-title">{{ trans('langVersion') }}</div>
+                                <a class='about-value' href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank' aria-label='{{ $eclass_version }}'>{{ $eclass_version }}</a>
+                            </div>
+                            <div class='about-support-user text-center mt-5'>
+                                <div class="about-title">{{ trans('langSupportUser') }}</div>
+                                <p class='form-label about-value'>{{ $admin_name }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

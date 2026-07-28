@@ -167,8 +167,8 @@ if ($userdata) {
             }
         }
 
-        if (!empty($warning)) {
-           $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+        if (!empty($warning) && !isset($_COOKIE['hide_warning_cvprompt'])) {
+           $tool_content .= "<div class='col-12'><div id='warning_cvprompt' class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
                     $warning</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div>"; 
 
@@ -244,6 +244,15 @@ if ($userdata) {
             \$(window).on('scroll', updateActive);
             updateActive();
         });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+               $('#warning_cvprompt').on('click', function () {
+                    const oneWeek = 7 * 24 * 60 * 60;
+                    document.cookie = 'hide_warning_cvprompt=1; max-age=' + oneWeek + '; path=/; SameSite=Lax';
+               });
+            });
         </script>
     ";
 

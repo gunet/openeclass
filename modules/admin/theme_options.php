@@ -31,7 +31,7 @@ $defaults = array(
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip', 'clDeleteButtonColor',
                                                     'clHoveredDeleteButtonColor', 'clSuccessButtonColor', 'clHoveredSuccessButtonColor', 'clHelpButtonColor', 'clHoveredHelpButtonColor', 'BgBorderForms',
                                                     'BgColorAnnouncementHomepageLink','clBadgeSuccess','clBadgeWarning','clBadgeNeutral','clBadgePrimary','clBadgeAccent', 'BoxShadowPanels', 'AboutChatContainerBoxShadow', 'AboutCourseInfoContainerBoxShadow', 'AboutUnitsContainerBoxShadow', 'FormsBoxShadow',
-                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgColorContainerPortfolioButtons', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate', 'bgColorBreadcrumb', 'BorderColorBreadcrumb', 'boxShadowInputSelect', 'BgColorCardLogin'),
+                                                    'BoxShadowRowTables', 'bgPanelEvents', 'bgColorContainerPortfolioButtons', 'bgBorderHoveredPanels', 'BgColorStatisticsHomepage', 'BgColorPopularCoursesHomepage', 'BgColorTextsHomepage', 'BgColorStatisticsHomepage_gr', 'BgColorPopularCoursesHomepage_gr', 'BgColorTextsHomepage_gr', 'bgCardAnnouncementDate', 'bgColorBreadcrumb', 'BorderColorBreadcrumb', 'boxShadowInputSelect', 'BgColorCardLogin', 'textColorLoginButton'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor', 'bgColorSectionPortfolioBtns', 'BriefProfilePortfolioBgColor_gr', 'loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'BgColorAnnouncementHomepage_gr', 'AboutUnitsContainer', 'AboutCourseInfoContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'bgColorPortfolioButtons', 'whiteButtonTextColor','whiteButtonBorderTextColor', 'whiteButtonHoveredTextColor', 'whiteButtonHoveredBorderTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption', 'clLinkImportantAnnouncement'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername',
@@ -40,7 +40,7 @@ $defaults = array(
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','linkCopyrightColorFooter', 'linkCopyrightHoverColorFooter', 'leftSubMenuHoverFontColor','linkActiveColorHeader',
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption',
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText', 'clLinkImportantAnnouncement',
-                                                'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement', 'ColorBlueText', 'ColorFocus', 'linkColorCardLogin'),
+                                                'clColorAnnouncementHomepageLinkElement','clHoveredColorAnnouncementHomepageLinkElement', 'ColorBlueText', 'ColorFocus', 'linkColorCardLogin', 'bgColorLoginButton'),
                 'rgba(0, 115, 230, 0.7)' => array('buttonHoverBgColor','bgHoverColorPortfolioButtons', 'clHoveredLinkImportantAnnouncement', 'linkHoverColorCardLogin'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBgCommentsPanels', 'clBorderQuestionnairePanels', 'clBorderReportsPanels', 'clBorderProgressActivitiesPanels', 'clBorderExercisesPanels', 'clBorderBottomListMenu',
@@ -48,7 +48,7 @@ $defaults = array(
                                                     'clBorderBottomMenuPopoverOption', 'BgHoveredMenuPopoverOption', 'AboutBorderChatContainer', 'AboutChatContainer', 'AboutBorderCourseInfoContainer', 'AboutBorderUnitsContainer'),
                 "rgba(35,82,124,1)" => array('linkHoverColor','clLinkHoveredAlertInfo','clLinkHoveredAlertWarning','clLinkHoveredAlertSuccess','clLinkHoveredAlertDanger'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
-                "rgba(0,0,0,0)" => array('loginTextBgColor','loginTextBgColorSmallScreen','BgColorLinkBanner'),
+                "rgba(0,0,0,0)" => array('loginTextBgColor','loginTextBgColorSmallScreen','BgColorLinkBanner', 'bgBorderColorSectionContainers'),
                 "rgba(180, 190, 209, 1)" => array('BgColorScrollBar', 'BgHoveredColorScrollBar'),
                 "rgba(79, 104, 147, 1)" => array('clContainerImportantAnnouncement'),
                 "rgba(104, 125, 163, 1)" => array('ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clBorderSelect', 'clColorHoveredBodyAgenda', 'BgBorderTextEditor'),
@@ -63,7 +63,7 @@ $defaults = array(
                 "rgba(225, 225, 225, 1)" => array('bgColorHoveredBodyAgenda'),
                 "rgba(30, 126, 14, 1)" => array('bgSuccessButtonColor','BgBadgeSuccess', 'bgAlertSuccess', 'ColorGreenText', 'borderClAlertSuccess'),
                 "rgba(245, 118, 0, 1)" => array('BgBadgeWarning', 'bgAlertWarning', 'ColorOrangeText', 'borderClAlertWarning'),
-                "rgba(37, 70, 240, 1)" => array('BgBadgePrimary', 'bgAlertInfo', 'borderClAlertInfo'),
+                "rgba(37, 70, 240, 1)" => array('BgBadgePrimary', 'bgAlertInfo', 'borderClAlertInfo', 'bgHoverColorLoginButton'),
                 "rgba(30, 126, 14, 0.81)" => array('bgHoveredSuccessButtonColor'),
                 "rgba(155, 169, 193, 0.82)" => array('bgHoveredHelpButtonColor'),
                 "rgba(255, 255, 255, 0)" => array('bgHoveredBoxShadowPanels', 'borderColorContentPlatformLeftRight', 'bgColorSectionContainers'),
@@ -1628,7 +1628,8 @@ function build_general_settings() {
            $langHelpBoxedWidthInfo, $langViewFluidType, $langHelpFluidWidthInfo, $langLayoutConfig, $langLayout,
            $langBoxed, $langFluid, $langFluidContainerWidth, $langLogoConfig, $langLogo, $langLogoNormal, $logo_field,
            $langLogoSmall, $small_logo_field, $langFavicon, $faviconUpload, $urlServer, $langDisplayOptionsImg, 
-           $langDisplayPlatformAsCardLayout, $langDisplayPlatformAsCardLayoutNoBorderRadius, $head_content;
+           $langDisplayPlatformAsCardLayout, $langDisplayPlatformAsCardLayoutNoBorderRadius, $head_content,
+           $langBgColorCardView, $langBgBorderColorCardView;
 
     $head_content .= "
     <script>
@@ -1636,14 +1637,17 @@ function build_general_settings() {
             if($('#enable_aside_main_cards').is(':checked')){
                 $('.enable_main_card_checkbox').removeClass('d-none').addClass('d-block');
                 $('.bgColorSectionContainersPalette').removeClass('d-none').addClass('d-block');
+                $('.bgBorderColorSectionContainersPalette').removeClass('d-none').addClass('d-block');
             }
             $('#enable_aside_main_cards').on('click', function () {
                 if($('#enable_aside_main_cards').is(':checked')){
                     $('.enable_main_card_checkbox').removeClass('d-none').addClass('d-block');
                     $('.bgColorSectionContainersPalette').removeClass('d-none').addClass('d-block');
+                     $('.bgBorderColorSectionContainersPalette').removeClass('d-none').addClass('d-block');
                 } else {
                     $('.enable_main_card_checkbox').removeClass('d-block').addClass('d-none');
-                $('.bgColorSectionContainersPalette').removeClass('d-block').addClass('d-none');
+                    $('.bgColorSectionContainersPalette').removeClass('d-block').addClass('d-none');
+                    $('.bgBorderColorSectionContainersPalette').removeClass('d-block').addClass('d-none');
                 }
             });
         });
@@ -1696,8 +1700,12 @@ function build_general_settings() {
                                     </div>
                                 </div>
                                 <div class='form-group mt-4 d-none bgColorSectionContainersPalette'>
-                                    <label for='bgColorSectionContainers' class='mb-2 me-2'>Χρώμα φόντου στην μορφή των καρτών (cards):</label>
+                                    <label for='bgColorSectionContainers' class='mb-2 me-2'>$langBgColorCardView:</label>
                                     <input name='bgColorSectionContainers' type='text' class='form-control colorpicker' id='bgColorSectionContainers' value='$theme_options_styles[bgColorSectionContainers]'>
+                                </div>
+                                <div class='form-group mt-4 d-none bgBorderColorSectionContainersPalette'>
+                                    <label for='bgBorderColorSectionContainers' class='mb-2 me-2'>$langBgBorderColorCardView:</label>
+                                    <input name='bgBorderColorSectionContainers' type='text' class='form-control colorpicker' id='bgBorderColorSectionContainers' value='$theme_options_styles[bgBorderColorSectionContainers]'>
                                 </div>
                                 <hr>
                                 <h2 class='theme_options_legend text-decoration-underline text-heading-h3'>$langLayoutConfig</h2>
@@ -1835,7 +1843,8 @@ function build_body() {
 function build_header() {
     global $langConfig, $langBgColor, $theme_options_styles, $langLinkColor, $langLinkHoverColor,
            $langActiveLinkBgColorHeader, $langActiveLinkColorHeader, $langHoveredActiveLinkColorHeader,
-           $langShadowHeader, $langSettingSelect, $langEnableBoxLogo, $langDeactivate, $langActivate;
+           $langShadowHeader, $langSettingSelect, $langEnableBoxLogo, $langDeactivate, $langActivate,
+           $langBgColorLoginButton, $langTextColorLoginButton, $langHoverBgColorLoginButton;
 
     $html = '';
     $html .= "
@@ -1867,6 +1876,18 @@ function build_header() {
                             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                                 <label for='HoveredActiveLinkColorHeader' class='mb-2 me-2'>$langHoveredActiveLinkColorHeader:</label>
                                 <input name='HoveredActiveLinkColorHeader' type='text' class='form-control colorpicker' id='HoveredActiveLinkColorHeader' value='$theme_options_styles[HoveredActiveLinkColorHeader]'>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <label for='bgColorLoginButton' class='mb-2 me-2'>$langBgColorLoginButton:</label>
+                                <input name='bgColorLoginButton' type='text' class='form-control colorpicker' id='bgColorLoginButton' value='$theme_options_styles[bgColorLoginButton]'>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <label for='textColorLoginButton' class='mb-2 me-2'>$langTextColorLoginButton:</label>
+                                <input name='textColorLoginButton' type='text' class='form-control colorpicker' id='textColorLoginButton' value='$theme_options_styles[textColorLoginButton]'>
+                            </div>
+                            <div class='form-group mt-4'>
+                                <label for='bgHoverColorLoginButton' class='mb-2 me-2'>$langHoverBgColorLoginButton:</label>
+                                <input name='bgHoverColorLoginButton' type='text' class='form-control colorpicker' id='bgHoverColorLoginButton' value='$theme_options_styles[bgHoverColorLoginButton]'>
                             </div>
                             <div class='form-group mt-4'>
                                 <div class='col-sm-12'>

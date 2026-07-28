@@ -95,7 +95,6 @@ $isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_cer
 $data['disable_visibility'] = $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 if (isset($_POST['submit'])) {
-    //print_a($_POST);die;
     $view_type = $_POST['view_type'];
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
@@ -324,6 +323,9 @@ if (isset($_POST['submit'])) {
             }
             if (isset($_POST['footer_image_width'])) {
                 setting_set(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $_POST['footer_image_width'], $course_id);
+            }
+            if (isset($_POST['type_report_view'])) {
+                setting_set(SETTING_COURSE_REPORT_VIEW_TYPE, $_POST['type_report_view'], $course_id);
             }
 
             // Course settings modified, will get a success message after redirect in current course language

@@ -29,6 +29,21 @@ require_once 'modules/group/group_functions.php';
 require_once 'modules/sharing/sharing.php';
 require_once 'modules/progress/process_functions.php';
 
+$head_content .= "
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $('#warning_user_collection').on('click', function () {
+            const oneWeek = 7 * 24 * 60 * 60;
+            document.cookie = 'hide_warning_user_collection=1; max-age=' + oneWeek + '; path=/; SameSite=Lax';
+        });
+        $('#warning_user_bio').on('click', function () {
+            const oneWeek = 7 * 24 * 60 * 60;
+            document.cookie = 'hide_warning_user_bio=1; max-age=' + oneWeek + '; path=/; SameSite=Lax';
+        });
+    });
+</script>
+";
+
 $visibility_vars = array(
     EPF_VISIBLE_PUBLIC => array(
         'fa_icon' => 'fa-globe',
@@ -182,12 +197,14 @@ if ($userdata) {
         $tool_content .= $action_bar;
 
 
-        $tool_content .= "<div class='col-12'><div class='alert alert-info alert-dismissible'><i class='fa-solid fa-circle-info fa-lg'></i><span>
+        if (!isset($_COOKIE['hide_warning_user_collection'])) {
+        $tool_content .= "<div class='col-12'><div id='warning_user_collection' class='alert alert-info alert-dismissible'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                             $langePortfolioCollectionUserInfo</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                           </div></div>";
+        }
         
-        if (!file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+        if (!file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf") && !isset($_COOKIE['hide_warning_user_bio'])) {
+            $tool_content .= "<div class='col-12'><div id='warning_user_bio' class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
                     $langePortfolioAddCVPrompt</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div>";
         }

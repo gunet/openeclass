@@ -299,6 +299,7 @@ if ($topic_locked == 1) {
                                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&topic=$_GET[topic]&forum=$_GET[forum]&export_ans=true",
                                         'icon' => 'fa-solid fa-file-pdf',
                                         'level' => 'primary-label',
+                                        'link-attrs' => "target='_blank'",
                                         'button-class' => 'btn-success action-forum-btn')
                                 )
                             );
@@ -765,88 +766,93 @@ function pdf_forum_output($content_m,$topic_id,$forum_id) {
     $newContent2 = str_replace("</a>","</span>",$newContent1);
     $topicName = $res->title;
 
-    $pdf_mcontent = "
-        <!DOCTYPE html>
-        <html lang='$language'>
-        <head>
-          <meta charset='utf-8'>
-          <title>" . q("$currentCourseName") . "</title>
-          <style>
-            * { font-family: 'opensans'; }
-            body { font-family: 'opensans'; font-size: 10pt; }
-            small, .small { font-size: 8pt; }
-            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-            h1 { font-size: 16pt; }
-            h2 { font-size: 12pt; }
-            h3 { font-size: 10pt; color: #158; }
-            .card-default { background: #fafafa; }
-            .panel-title { color: #5d6d7e; }
-            .action-bar-title { display: none; }
-            .actions-post-btns { display: none; }
-            .selection_type { display: none; }
-            .ButtonsContent { display: none; }
-            .div-profile-img { display: none; }
-            .reply-post-btn { display: none; }
-            .div-menu-popover{ display: none; }
-            .card-default {border: solid 1px #000000; padding: 10px; margin-top: 15px; }
-          </style>
-        </head>
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-        <h2> " . q($topicName) . "</h2>";
+    $pdf_title = "forum_topic";
+    $course_title = q("$currentCourseName");
+    $module_type_title = q($topicName);
+    html_to_pdf($pdf_title, $course_title, $module_type_title, $newContent2);
 
-    $pdf_mcontent .= $newContent2;
-    $pdf_mcontent .= "</body></html>";
+    // $pdf_mcontent = "
+    //     <!DOCTYPE html>
+    //     <html lang='$language'>
+    //     <head>
+    //       <meta charset='utf-8'>
+    //       <title>" . q("$currentCourseName") . "</title>
+    //       <style>
+    //         * { font-family: 'opensans'; }
+    //         body { font-family: 'opensans'; font-size: 10pt; }
+    //         small, .small { font-size: 8pt; }
+    //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+    //         h1 { font-size: 16pt; }
+    //         h2 { font-size: 12pt; }
+    //         h3 { font-size: 10pt; color: #158; }
+    //         .card-default { background: #fafafa; }
+    //         .panel-title { color: #5d6d7e; }
+    //         .action-bar-title { display: none; }
+    //         .actions-post-btns { display: none; }
+    //         .selection_type { display: none; }
+    //         .ButtonsContent { display: none; }
+    //         .div-profile-img { display: none; }
+    //         .reply-post-btn { display: none; }
+    //         .div-menu-popover{ display: none; }
+    //         .card-default {border: solid 1px #000000; padding: 10px; margin-top: 15px; }
+    //       </style>
+    //     </head>
+    //     <body>
+    //     <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+    //     <h2> " . q($topicName) . "</h2>";
 
-    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata'];
+    // $pdf_mcontent .= $newContent2;
+    // $pdf_mcontent .= "</body></html>";
 
-    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    // for old courses
-    if ($image_height_header > 50) {
-        $image_height_header = 20;
-    }
-    if ($image_height_footer > 50) {
-        $image_height_footer = 15;
-    }
-    $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header + 20,     // mm
-        'margin_bottom' => $image_height_footer + 10,  // mm
-        'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-        'fontdata' => $fontData + [
-                'opensans' => [
-                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                ],
-                'roboto' => [
-                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-                ]
-            ]
-    ]);
+    // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    // $fontDirs = $defaultConfig['fontDir'];
+    // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    // $fontData = $defaultFontConfig['fontdata'];
+
+    // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // // for old courses
+    // if ($image_height_header > 50) {
+    //     $image_height_header = 20;
+    // }
+    // if ($image_height_footer > 50) {
+    //     $image_height_footer = 15;
+    // }
+    // $mpdf = new Mpdf\Mpdf([
+    //     'margin_top' => $image_height_header + 20,     // mm
+    //     'margin_bottom' => $image_height_footer + 10,  // mm
+    //     'tempDir' => _MPDF_TEMP_PATH,
+    //     'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+    //     'fontdata' => $fontData + [
+    //             'opensans' => [
+    //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+    //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+    //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+    //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+    //             ],
+    //             'roboto' => [
+    //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+    //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+    //             ]
+    //         ]
+    // ]);
 
     
-    $mpdf->SetHTMLHeader(get_platform_logo());
-    $footerHtml = '
-    <div>
-        <table width="100%" style="border: none;">
-            <tr>
-                <td style="text-align: left;">{DATE j-n-Y}</td>
-                <td style="text-align: right;">{PAGENO} / {nb}</td>
-            </tr>
-        </table>
-    </div>
-    ' . get_platform_logo('','footer') . '';
-    $mpdf->SetHTMLFooter($footerHtml);
-    $mpdf->SetCreator(course_id_to_prof($course_id));
-    $mpdf->SetAuthor(course_id_to_prof($course_id));
-    $mpdf->WriteHTML($pdf_mcontent);
-    $mpdf->Output("forum_topic.pdf", 'I'); // 'D' or 'I' for download / inline display
-    exit;
+    // $mpdf->SetHTMLHeader(get_platform_logo());
+    // $footerHtml = '
+    // <div>
+    //     <table width="100%" style="border: none;">
+    //         <tr>
+    //             <td style="text-align: left;">{DATE j-n-Y}</td>
+    //             <td style="text-align: right;">{PAGENO} / {nb}</td>
+    //         </tr>
+    //     </table>
+    // </div>
+    // ' . get_platform_logo('','footer') . '';
+    // $mpdf->SetHTMLFooter($footerHtml);
+    // $mpdf->SetCreator(course_id_to_prof($course_id));
+    // $mpdf->SetAuthor(course_id_to_prof($course_id));
+    // $mpdf->WriteHTML($pdf_mcontent);
+    // $mpdf->Output("forum_topic.pdf", 'I'); // 'D' or 'I' for download / inline display
+    // exit;
 }

@@ -26,6 +26,7 @@ $helpTopic = 'progress';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'process_functions.php';
 require_once 'ExerciseEvent.php';
 require_once 'AssignmentEvent.php';
@@ -49,6 +50,22 @@ require_once 'AttendanceEvent.php';
 $pageName = $langProgress;
 
 load_js('tools.js');
+
+// Delete certificate logo
+if (isset($_GET['del_cert_logo']) && $is_editor) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+    
+    $certFilename = $_GET['del_cert_logo'];
+    $certId = intval($_GET['cert_id']);
+    $del = Database::get()->query("UPDATE `certificate` SET logo = ?s WHERE id = ?d AND logo = ?s", null, $certId, $certFilename);
+    if ($del) {
+        unlink("$webDir/courses/$course_code/cert_logo/$certFilename");
+        Session::flash('message', $langBBBDeleteSuccessful);
+        Session::flash('alert-class', 'alert-success');
+    }
+
+    redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certId&edit=1&tab=certificates");
+}
 
 // Initialize tool_content
 $tool_content = '';
@@ -283,7 +300,23 @@ if ($is_editor) {
             }
             // Get allow_export value (only for badges, default to 1 if checked or not set)
             $allow_export = ($table == 'badge' && isset($_POST['allow_badge_export'])) ? 1 : (($table == 'badge') ? 0 : 1);
-            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0, $expires, 0, 0, $allow_export);
+            // upload certificate logo
+            $cert_logo_filename = null;
+            if (isset($_FILES['cert_logo']) and is_uploaded_file($_FILES['cert_logo']['tmp_name'])) { // upload file
+                $cert_logo = $_FILES['cert_logo']['name'];
+                validateUploadedFile($cert_logo); // check file type
+                $cert_logo = add_ext_on_mime($cert_logo);
+                $safe_cert_logo = safe_filename(get_file_extension($cert_logo));
+                $cert_dir = "$webDir/courses/$course_code/cert_logo/";
+                if (!file_exists($cert_dir)) {
+                    mkdir("$webDir/courses/$course_code/cert_logo/", 0755, true);
+                }
+                $spathfile = "$webDir/courses/$course_code/cert_logo/$safe_cert_logo";
+                if (move_uploaded_file($_FILES['cert_logo']['tmp_name'], $spathfile)) {
+                    $cert_logo_filename = $safe_cert_logo;
+                }
+            }
+            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0, $expires, 0, 0, $allow_export, $cert_logo_filename);
             Session::flash('message',$langNewCertificateSuc);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code".$tab_q);
@@ -375,7 +408,29 @@ if ($is_editor) {
         if($v->validate()) {
             // Get allow_export value (only for badges)
             $allow_export = ($element == 'badge' && isset($_POST['allow_badge_export'])) ? 1 : (($element == 'badge') ? 0 : 1);
-            modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $allow_export);
+            // upload certificate logo
+            $cert_logo_filename = null;
+            if ($element == 'certificate') {
+                $logoInfo = Database::get()->querySingle("SELECT logo FROM $element WHERE id = ?d", $element_id);
+                if ($logoInfo && !is_null($logoInfo->logo)) {
+                    $cert_logo_filename = $logoInfo->logo;
+                }
+                if (isset($_FILES['cert_logo']) and is_uploaded_file($_FILES['cert_logo']['tmp_name'])) { // upload file
+                    $cert_logo = $_FILES['cert_logo']['name'];
+                    validateUploadedFile($cert_logo); // check file type
+                    $cert_logo = add_ext_on_mime($cert_logo);
+                    $safe_cert_logo = safe_filename(get_file_extension($cert_logo));
+                    $cert_dir = "$webDir/courses/$course_code/cert_logo/";
+                    if (!file_exists($cert_dir)) {
+                        mkdir("$webDir/courses/$course_code/cert_logo/", 0755, true);
+                    }
+                    $spathfile = "$webDir/courses/$course_code/cert_logo/$safe_cert_logo";
+                    if (move_uploaded_file($_FILES['cert_logo']['tmp_name'], $spathfile)) {
+                        $cert_logo_filename = $safe_cert_logo;
+                    }
+                }
+            }
+            modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $allow_export, $cert_logo_filename);
             Session::flash('message',$langQuotaSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code$tab_q");

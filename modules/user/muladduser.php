@@ -91,12 +91,12 @@ view('modules.user.muladduser', $data);
 
 function finduser($user, $field)
 {
-    global $is_admin, $is_departmentmanage_user;
+    global $is_admin;
 
     $currentTenant = getCurrentTenant();
     $tenantDepartment = $currentTenant->hierarchy_id ?? null;
 
-    if ($is_departmentmanage_user && !$is_admin) {
+    if (!is_null($tenantDepartment) && !$is_admin) {
         $result = Database::get()->querySingle(
             "SELECT u.id
                          FROM user u

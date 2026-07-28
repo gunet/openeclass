@@ -89,23 +89,9 @@ class secondfaApp extends ExtApp {
         return self::$ServiceNames;
     }
 
-
     /* DB Functions */
-
-/**
- * Get nearest value from specific key of a multidimensional array
- *
- * @param $key integer
- * @param $arr array
- * @return array
- */
-    public static function initializedb(){
-        Database::get()->query("CREATE TABLE IF NOT EXISTS secondfactorauth (id int(11) NOT NULL,secret varchar(100) NOT NULL,FOREIGN KEY (id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE)");
-    }
-
     public static function storeSecret($userid, $sfa_secret){
         $_SESSION['sfakey'] = $sfa_secret;
-        self::initializedb();
         Database::get()->query("INSERT INTO secondfactorauth SET
                                 `id` = ?d,
                                 `secret` = ?s
@@ -117,7 +103,6 @@ class secondfaApp extends ExtApp {
         if (isset($_SESSION['sfakey'])){
             $sfa_secret =  $_SESSION['sfakey'];
         } else{
-            self::initializedb();
             $record = Database::get()->querySingle("SELECT secret FROM secondfactorauth WHERE id = ?s", $userid);
             if($record){
                 $sfa_secret = $record->secret;

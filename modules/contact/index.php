@@ -27,6 +27,7 @@ $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/course_settings.php';
+require_once 'include/lib/hierarchy.class.php';
 
 $toolName = $langLabelCourseUserRequest;
 
@@ -42,6 +43,7 @@ if (isset($_REQUEST['course_id']) and (!empty($_REQUEST['course_id']))) {
 } else {
     redirect_to_home_page();
 }
+$tree = new Hierarchy();
 
 $userdata = Database::get()->querySingle(
     "SELECT u.username, u.givenname, u.surname, u.email, u.am,
@@ -80,8 +82,7 @@ if (empty($userdata->email)) {
             $title = course_id_to_title($course_id);
             $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSendingMessage $title</span></div></div>";
         } else {
-            $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname",
-                $userdata->username, $userdata->email, $userdata->am, $userdata->department_name);
+            $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->username, $userdata->email, $userdata->am, $tree->unserializeLangField($userdata->department_name));
         }
 
         Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
@@ -165,11 +166,6 @@ function form($user) {
 
 /**
  * @brief send emails to course prof
- * @global type $langSendingMessage
- * @global type $langLabelCourseUserRequest
- * @global type $langContactIntro
- * @global type $urlServer
- * @global type $langHere
  * @param type $course_id
  * @param type $content
  * @param type $from_name

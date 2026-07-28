@@ -3391,22 +3391,6 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('exercise_question', 'options')) {
         Database::get()->query("ALTER TABLE exercise_question ADD options TEXT DEFAULT NULL");
     }
-    DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE);
-    if(!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
-        // Use consistent data types before creating the foreign key
-        Database::get()->query('ALTER TABLE `attendance_activities`
-            CHANGE COLUMN `attendance_id` `attendance_id` INT NOT NULL DEFAULT 0,
-            CHANGE COLUMN `module_auto_id` `module_auto_id` INT NOT NULL DEFAULT 0');
-        DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
-    }
-    if(!DBHelper::foreignKeyExists('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id')) {
-        // Use consistent data types before creating the foreign key
-        Database::get()->query('ALTER TABLE `attendance_book` CHANGE COLUMN `attendance_activity_id` `attendance_activity_id` INT NOT NULL DEFAULT 0');
-        DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE);
-    }
-    DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
-    DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
-    DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
@@ -3428,12 +3412,13 @@ function upgrade_to_4_2($tbl_options) : void {
     Database::get()->query("ALTER TABLE attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_activities CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_activities CHANGE attendance_id attendance_id INT NOT NULL");
+    Database::get()->query('ALTER TABLE attendance_activities CHANGE COLUMN `module_auto_id` `module_auto_id` INT NOT NULL DEFAULT 0');
     Database::get()->query("ALTER TABLE attendance_book CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_book CHANGE attendance_activity_id attendance_activity_id INT NOT NULL");
     Database::get()->query("ALTER TABLE attendance_users CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_users CHANGE attendance_id attendance_id INT NOT NULL");
     Database::get()->query("ALTER TABLE attendance_users MODIFY uid INT NOT NULL DEFAULT 0");
-    if (!DBHelper::foreignKeyExists('attendance', 'course_id', 'course', 'id')) {
+    /*if (!DBHelper::foreignKeyExists('attendance', 'course_id', 'course', 'id')) {
         DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
     if (!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
@@ -3450,7 +3435,7 @@ function upgrade_to_4_2($tbl_options) : void {
     }
     if (!DBHelper::foreignKeyExists('attendance_users', 'uid', 'user', 'id')) {
         DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
-    }
+    }*/
 
     if (!DBHelper::tableExists('ai_providers')) {
         Database::get()->query("CREATE TABLE ai_providers (
@@ -3699,7 +3684,7 @@ function upgrade_to_4_3($tbl_options) : void {
 function upgrade_to_4_4($tbl_options) : void
 {
 
-    global $session;
+    global $session, $webDir;
 
     $eportfolio_strings = array(
         'langPersInfo', 'langEduEmpl', 'langAchievements', 'langGoalsSkills', 'langContactInfo', 'langResearchProfiles', 'langLangProfLevel',
@@ -3930,6 +3915,23 @@ function upgrade_to_4_4($tbl_options) : void
         Database::get()->query("ALTER TABLE eportfolio_resource ADD reflection_comments TEXT NULL");
     }
 
+    if (!DBHelper::tableExists('session_poll_comments')) {
+        Database::get()->query("CREATE TABLE `session_poll_comments` (
+          `id` int NOT NULL AUTO_INCREMENT,
+          `course_id` INT NOT NULL,
+          `session_id` INT NOT NULL,
+          `poll_id` INT NOT NULL,
+          `user_id` INT NOT NULL,
+          `title` VARCHAR(255) NOT NULL DEFAULT '',
+          `comments` TEXT DEFAULT NULL,
+          `notify_comments` INT NOT NULL DEFAULT 0,
+          PRIMARY KEY (`id`),
+          FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+          FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE,
+          FOREIGN KEY (`poll_id`) REFERENCES `poll` (`pid`) ON DELETE CASCADE,
+          FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
+
     // tenant table
     if (!DBHelper::tableExists('tenant')) {
         Database::get()->query("CREATE TABLE `tenant` (
@@ -4149,6 +4151,11 @@ function upgrade_to_4_4($tbl_options) : void
     if (!DBHelper::fieldExists('course', 'reg_end_date')) {
         Database::get()->query("ALTER TABLE course ADD reg_end_date DATE DEFAULT NULL AFTER end_date");
     }
+    // ensure that there are no invalid dates in courses. Type casting is necessary because of the default strict mode in newer mysql versions.
+    Database::get()->query("UPDATE course SET start_date = NULL WHERE CAST(start_date AS CHAR) = '0000-00-00'");
+
+    // change course unit format in one per line
+    Database::get()->query("UPDATE course SET view_units = 1 WHERE view_units = 0");
 
     if (!DBHelper::tableExists('suppressed_words')) {
         Database::get()->query("CREATE TABLE `suppressed_words` (
@@ -4171,6 +4178,16 @@ function upgrade_to_4_4($tbl_options) : void
             ('jerk', NOW())");
     }
 
+    if (!DBHelper::tableExists('secondfactorauth')) {
+        Database::get()->query("CREATE TABLE secondfactorauth (
+                    id int NOT NULL,
+                    secret varchar(100) NOT NULL,
+                    FOREIGN KEY (id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE)
+                   $tbl_options"
+          );
+    }
+    
+    
     if (!DBHelper::fieldExists('user_badge', 'add_my_profile')) {
         Database::get()->query("ALTER TABLE user_badge ADD add_my_profile INT NOT NULL DEFAULT 0");
     }
@@ -4195,8 +4212,13 @@ function upgrade_to_4_4($tbl_options) : void
             ADD CONSTRAINT FOREIGN KEY (category) REFERENCES badge_icon_category(id)");
     }
 
-    global $webDir;
+    if (!DBHelper::fieldExists('certificate', 'logo')) {
+        Database::get()->query("ALTER TABLE `certificate` ADD `logo` VARCHAR(255) DEFAULT NULL AFTER `title`");
+    }
+
     installBadgeIcons($webDir);
+    upgrade_active_theme();
+    upgrade_certificates();
 }
 /**
  * @brief OpenBadges Backpack Integration - Database Migration
@@ -5407,5 +5429,284 @@ function upgrade_external_repositories()
         Database::get()->query("ALTER TABLE `external_resource`
             ADD CONSTRAINT `external_resource_ibfk_2`
             FOREIGN KEY (`repository_id`) REFERENCES `external_repository` (`id`) ON DELETE CASCADE");
+    }
+}
+
+/**
+ * @upgrade active theme with new options
+ * @return void
+ */
+function upgrade_active_theme() {
+    global $webDir;
+
+    $style = '';
+    $theme_id = get_config('theme_options_id');
+    if ($theme_id) {
+        $cssFile = "$webDir/courses/theme_data/$theme_id/style_str.css";
+        if (file_exists($cssFile)) {
+            $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+            $theme_options_styles = unserialize($theme_options->styles);
+            $theme_options_styles['bgColorContainerPortfolioInfo'] = 'rgba(0,0,0,0)';
+            $theme_options_styles['bgBorderColorSectionContainers'] = $theme_options_styles['BorderLeftToRightColumnCourseBgColor'] ?? 'rgba(0,0,0,0)';
+            $theme_options_styles['bgColorSectionContainers'] = $theme_options_styles['bgColor'] ?? 'rgba(0,0,0,0)';
+            $theme_options_styles['enable_aside_main_cards'] = 1;
+            $theme_options_styles['enable_aside_main_cards_no_border_radius'] = 1;
+            Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", serialize($theme_options_styles), $theme_id);
+
+            //////////////////////////////////////////////////////////////
+            if (isset($theme_options_styles['bgColorContainerPortfolioInfo'])) {
+                $style .= "
+                    .portfolio-profile-container {
+                        background: $theme_options_styles[bgColorContainerPortfolioInfo] !important;
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if (isset($theme_options_styles['bgColorSectionContainers'])) {
+                $style .= "
+                    .main-section .main-container{
+                        background-color: $theme_options_styles[bgColorSectionContainers] !important;
+                    }
+                    .portfolio-courses-container .padding-default{
+                        background-color: $theme_options_styles[bgColorSectionContainers] !important;
+                    } 
+                    .main-container.main-container-login {
+                        background-color: transparent !important;
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if (isset($theme_options_styles['BorderLeftToRightColumnCourseBgColor'])) {
+                $style .= "
+                    @media(min-width: 992px) {
+                        .portfolio-profile-container .padding-default,
+                        .main-section .main-container, 
+                        .portfolio-courses-container .padding-default,
+                        .col_maincontent_active,
+                        .ContentLeftNav,
+                        .main-maincontent {
+                            border: solid 1px $theme_options_styles[BorderLeftToRightColumnCourseBgColor] !important;
+                        }
+                    }
+                    @media(max-width: 991px) {
+                        .portfolio-profile-container .padding-default,
+                        .main-section .main-container, 
+                        .portfolio-courses-container .padding-default,
+                        .col_maincontent_active,
+                        .ContentLeftNav,
+                        .main-maincontent {
+                            border: 0px !important;
+                        }
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if (isset($theme_options_styles['bgBorderColorSectionContainers'])) {
+                $style .= "
+                    @media(min-width: 992px) {
+                        .main-section .main-container{
+                            border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
+                        }
+                        .portfolio-courses-container .padding-default,
+                        .portfolio-profile-container .padding-default{
+                            border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
+                        } 
+                        .main-container.main-container-login {
+                            border: 0px !important;
+                            padding: 0 !important;
+                        }
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if(isset($theme_options_styles['enable_aside_main_cards'])) {
+                $style .= "
+                    @media (max-width: 991px) {
+                        .ContentLeftNav, 
+                        .main-maincontent {
+                            border: 0px !important;
+                        }
+                        .portfolio-profile-container {
+                            padding-top: 56px !important;
+                            padding-left: 0px !important;
+                            padding-bottom: 0px !important;
+                            padding-right: 0px !important;
+                        }
+                        .section-portfolio-profile-container-info .padding-default {
+                            padding-top: 0px !important;
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                            padding-bottom: 0px !important;
+                        }
+                        .section-portfolio-profile-container-btns .padding-default {
+                            padding-top: 0px !important;
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                            padding-bottom: 0px !important;
+                        }
+                        .portfolio-courses-container {
+                            padding: 0px;
+                        }
+                        .brief-profile-container-info,
+                        .brief-profile-container-btns {
+                            padding: 32px 16px 32px 16px;
+                        }
+                    }
+                
+                    @media (min-width: 992px) {
+                        .portfolio-profile-container .padding-default {
+                            margin-top: 28px !important;
+                            margin-bottom: 28px !important;
+                            padding: 45px 45px !important;
+                            border-radius: 32px !important;
+                        }
+                        .section-portfolio-profile-container-info .padding-default {
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                            padding-bottom: 0px !important;
+                        }
+                        .section-portfolio-profile-container-btns .padding-default {
+                            padding-top: 0px !important;
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                        }
+                        .main-section .main-container {
+                            padding: 45px 45px !important;
+                            border-radius: 32px !important;
+                            margin-bottom: 28px !important;
+                            margin-top: 28px !important;
+                        }
+                        .module-container .col_maincontent_active {
+                            padding: 45px 45px !important;
+                        }
+                        .brief-profile-container-btns {
+                            border-bottom-left-radius: 32px !important;
+                            border-bottom-right-radius: 32px !important;
+                            padding: 25px 55px !important;
+                        }
+                        .brief-profile-container-info {
+                            position: relative !important;
+                            overflow: hidden !important;
+                            padding: 45px 55px !important;
+                            border-top-left-radius: 32px !important;
+                            border-top-right-radius: 32px !important;
+                        }
+                        .brief-profile-container-info::after {
+                            content:'' !important;
+                            position:absolute !important;
+                            right:-80px !important;
+                            bottom:-150px !important;
+                            width:350px !important;
+                            height:350px !important;
+                            filter: blur(60px) !important;
+                            z-index:0 !important;
+                        }
+                        .portfolio-courses-container .padding-default {
+                            padding: 45px 55px !important;
+                            border-radius: 32px !important;
+                            margin-bottom: 28px !important;
+                        } 
+                        body:has(.sidebar-card) .main-maincontent {
+                            border-top-left-radius: 0px;
+                            border-top-right-radius: 32px;
+                            border-bottom-left-radius: 0px;
+                            border-bottom-right-radius: 32px;
+                        }
+                        .sidebar-card .ContentLeftNav {
+                            border-top-left-radius: 32px;
+                            border-top-right-radius: 0px;
+                            border-bottom-left-radius: 32px;
+                            border-bottom-right-radius: 0px;
+                        }
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if(isset($theme_options_styles['enable_aside_main_cards_no_border_radius'])) {
+                $style .= "
+                    @media (min-width: 992px) {
+                        .portfolio-profile-container .padding-default {
+                            border-radius: 4px !important;
+                        }
+                        .main-section .main-container {
+                            border-radius: 4px !important;
+                        }
+                        .brief-profile-container-info {
+                            border-top-left-radius: 4px !important;
+                            border-top-right-radius: 4px !important;
+                        }
+                        .brief-profile-container-btns {
+                            border-bottom-left-radius: 4px !important;
+                            border-bottom-right-radius: 4px !important;
+                        }
+                        .portfolio-courses-container .padding-default {
+                            border-radius: 4px !important;
+                        } 
+                        body:has(.sidebar-card) .main-maincontent {
+                            border-top-right-radius: 4px;
+                            border-bottom-right-radius: 4px;
+                        }
+                        .sidebar-card .ContentLeftNav {
+                            border-top-left-radius: 4px;
+                            border-bottom-left-radius: 4px;
+                        }
+                        .breadcrumbs-init {
+                            border-radius: 4px;
+                        }
+                    }
+                ";
+            }
+
+            if (!empty($style)) {
+                file_put_contents($cssFile, $style, FILE_APPEND);
+            }
+           
+        }
+    }
+
+}
+
+/**
+ * @upgrade certificates
+ * @return void
+ */
+function upgrade_certificates() {
+    global $webDir;
+
+    $zipDir = $webDir . '/template/modern/certificates/';
+    $next = 1;
+    foreach (glob($zipDir . '*.zip') as $filepath) {
+        $filename = basename($filepath);
+        validateUploadedFile($filename, 3);
+        $certificate_directory = safe_filename() . "/";
+        $certificate_path = $webDir . CERT_TEMPLATE_PATH . $certificate_directory;
+        make_dir($certificate_path);
+
+        $files_in_zip = array();
+        $archive = new ZipArchive;
+        if ($archive->open($filepath) === TRUE) {
+            // check for file type in zip contents
+            for ($i = 0; $i < $archive->numFiles; $i++) {
+                $stat = $archive->statIndex($i, ZipArchive::FL_ENC_RAW);
+                $files_in_zip[$i] = $stat['name'];
+                if (!empty(my_basename($files_in_zip[$i]))) {
+                    validateUploadedFile(my_basename($files_in_zip[$i]), 3);
+                }
+            }
+            if ($archive->extractTo($certificate_path)) {
+                copy($filepath, $certificate_path . $filename);
+                $title = 'Πιστοποιητικό' . ' ' . $next;
+                Database::get()->query("INSERT INTO certificate_template SET
+                                                name = ?s,
+                                                description = ?s,
+                                                filename = ?s,
+                                                orientation = ?s,
+                                                all_courses = ?d",
+                                            $title, '', $certificate_directory, 'L', 1);
+            }
+
+            $archive->close();
+        }
+        $next++;
     }
 }
