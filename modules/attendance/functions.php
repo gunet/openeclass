@@ -19,6 +19,8 @@
  */
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Cell\CellRange;
+use PhpOffice\PhpSpreadsheet\Cell\CellAddress;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 require_once 'modules/progress/AttendanceEvent.php';
@@ -1585,40 +1587,86 @@ function get_attendance_limit($attendance_id) {
  * @return void
  */
 function import_attendances($attendance_id, $activity, $import = false) {
-
     global $tool_content, $course_code, $langAttendanceUsers,
            $langWorkFile, $langUpload, $langImportAttendancesHelp,
            $langImportInvalidUsers, $langImportGradesError, $langImportErrorLines,
            $langImportExtraAttendanceUsers, $langAttendancesImported,
-           $langImgFormsDes, $langForm;
+           $langImgFormsDes, $langForm, $langUnwantedFiletype;
 
-    if ($import and isset($_FILES['userfile'])) { // import user attendances
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        $file = IOFactory::load($_FILES['userfile']['tmp_name']);
+    if ($import and isset($_FILES['userfile'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token']))
+            csrf_token_error();
+
+        try {
+            $file = IOFactory::load($_FILES['userfile']['tmp_name']);
+        } catch (Exception $e) {
+            error_log($e);
+            Session::flash('message', $langUnwantedFiletype);
+            Session::flash('alert-class', 'alert-error');
+            redirect_to_home_page('/modules/attendance/index.php?course=' . urlencode($_GET['course']) . '&attendance_id=' . urlencode($attendance_id) . '&imp=' . urlencode($_GET['imp']));
+        }
+
         $sheet = $file->getActiveSheet();
-        $userAttendance = $errorLines = $invalidUsers = $extraUsers = [];
-
         $highestRow = $sheet->getHighestRow();
         $highestColumn = $sheet->getHighestColumn();
         $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+        $userAttendance = $errorLines = $invalidUsers = $extraUsers = [];
 
-        for ($row = 1; $row <= $highestRow; ++$row) {
-            if ($row <= 4) { // first 4 rows are headers
-                continue;
-            } else {
-                for ($col = 4; $col <= $highestColumnIndex; $col = $col + 2) {
-                    $cells = [$col, $row];
-                    $value = trim($sheet->getCell($cells)->getValue());
-                    $data[] = $value;
-                }
-                if (!is_numeric($data[1]) or $data[1] != 1) { // valid attendances have value = 1
-                    $data[1] = 0;
-                }
-                if (preg_match('/\(([^)]+)\)/', $data[0], $matches)) {
-                    $username = $matches[1];
+        $exportVersion = $file->getProperties()->getCustomPropertyValue("OpeneClassExportVer");
+        // Check the version of the file (if it contains the attribute)
+        if ($exportVersion === NULL) { // Compatibility with older exported files
+            for ($row = 1; $row <= $highestRow; ++$row) {
+                if ($row <= 4) { // first 4 rows are headers
+                    continue;
                 } else {
-                    $username = $data[0];
+                    for ($col = 4; $col <= $highestColumnIndex; $col = $col + 2) {
+                        $cells = [$col, $row];
+                        $value = trim($sheet->getCell($cells)->getValue());
+                        $data[] = $value;
+                    }
+                    if (!is_numeric($data[1]) or $data[1] != 1) { // valid attendances have value = 1
+                        $data[1] = 0;
+                    }
+                    if (preg_match('/\(([^)]+)\)/', $data[0], $matches)) {
+                        $username = $matches[1];
+                    } else {
+                        $username = $data[0];
+                    }
+                    $uname_where = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
+                    $user = Database::get()->querySingle("SELECT * FROM user WHERE username $uname_where ?s", $username);
+
+                    if (!$user) {
+                        $invalidUsers[] = $username;
+                    } else {
+                        $submission = Database::get()->querySingle("SELECT id FROM attendance_users WHERE uid = ?d AND attendance_id = ?d",
+                            $user->id, $attendance_id);
+                        if (!$submission) {
+                            $extraUsers[] = $username;
+                        } else {
+                            $userAttendance[$user->id] = $data[1];
+                        }
+                    }
+                    $data = [];
                 }
+            }
+        } else if ($exportVersion === 1 && $highestRow > 0 && $highestColumnIndex === 6) { // Current export/import version
+            for ($row = 5; $row <= $highestRow - 1; $row++) {
+                $username = $sheet->getCell([4, $row])->getValue();
+                $attendance = $sheet->getCell([6, $row])->getValue();
+
+                // Validate the data
+                if (strlen(trim($username)) === 0)
+                    continue;
+
+                // PHPSpreadsheet does the conversion, so is_int() is sufficient
+                if (!is_int($attendance) || $attendance < 0) {
+                    $errorLines[] = $sheet->rangeToArray(new CellRange(CellAddress::fromColumnAndRow(1, $row), CellAddress::fromColumnAndRow($highestColumnIndex, $row)))[0];
+                    continue;
+                }
+
+                // Because the spreadsheet shows a tick mark for > 0, accept it here
+                $attendance = $attendance > 0 ? 1 : 0;
+
                 $uname_where = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
                 $user = Database::get()->querySingle("SELECT * FROM user WHERE username $uname_where ?s", $username);
 
@@ -1630,13 +1678,17 @@ function import_attendances($attendance_id, $activity, $import = false) {
                     if (!$submission) {
                         $extraUsers[] = $username;
                     } else {
-                        $userAttendance[$user->id] = $data[1];
+                        $userAttendance[$user->id] = $attendance;
                     }
                 }
-                $data = [];
             }
+        } else { // Can't import - unknown version
+            Session::flash('message', $langUnwantedFiletype);
+            Session::flash('alert-class', 'alert-error');
+            redirect_to_home_page('/modules/attendance/index.php?course=' . urlencode($_GET['course']) . '&attendance_id=' . urlencode($attendance_id) . '&imp=' . urlencode($_GET['imp']));
         }
 
+        // Import the users to the DB
         if (!($errorLines or $invalidUsers or $extraUsers)) {
             foreach ($userAttendance as $user_id => $attendance) {
                 Database::get()->query("INSERT INTO attendance_book (uid, attendance_activity_id, attend, comments)
