@@ -89,38 +89,30 @@ function getUserCourseInfo($uid): string
                 }
                 
                 $percentage_html = '';
-                $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1 AND active = 1 AND unit_id = 0", $data->course_id);
-                if ($badge) {
-                    if ($data->status == USER_TEACHER) {
-                        $student_users = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user WHERE status = " .USER_STUDENT . " AND editor = 0 AND course_id = ?d", $data->course_id)->studentUsers;
-                        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge JOIN course_user ON user_badge.user=course_user.user_id AND status = " .USER_STUDENT . " AND editor = 0 AND course_id = ?d AND completed = 1 AND badge = ?d", $data->course_id, $badge->id)->t;
-                        if ($student_users == 0) {
-                            $percentage = 0;
-                        } else {
-                            $percentage = round($certified_users / $student_users * 100, 0);
-                        }
-                    } else {
+                if ($data->status == USER_STUDENT) {
+                    $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1 AND active = 1 AND unit_id = 0", $data->course_id);
+                    if ($badge) {
                         $badge_data = Database::get()->querySingle("SELECT completed_criteria, total_criteria FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $badge->id);
                         if (!$badge_data or !$badge_data->total_criteria) {
                             $percentage = 0;
                         } else {
                             $percentage = round($badge_data->completed_criteria / $badge_data->total_criteria * 100, 0);
                         }
-                    }
 
-                    $badgeBattery = 'badge Primary-600-bg py-0 px-2';
-                    $battery_icon = 'fa-battery-empty';
-                    if ($percentage > 0 && $percentage < 34) {
-                        $battery_icon = 'fa-battery-quarter';
-                    } elseif ($percentage >= 34 && $percentage < 67) {
-                        $battery_icon = 'fa-battery-half';
-                    } elseif ($percentage >= 67 && $percentage < 100) {
-                        $battery_icon = 'fa-battery-three-quarters';
-                    } elseif ($percentage == 100) {
-                        $battery_icon = 'fa-battery-full';
-                        $badgeBattery = 'badge Success-200-bg py-0 px-2';
+                        $badgeBattery = 'badge Primary-600-bg py-0 px-2';
+                        $battery_icon = 'fa-battery-empty';
+                        if ($percentage > 0 && $percentage < 34) {
+                            $battery_icon = 'fa-battery-quarter';
+                        } elseif ($percentage >= 34 && $percentage < 67) {
+                            $battery_icon = 'fa-battery-half';
+                        } elseif ($percentage >= 67 && $percentage < 100) {
+                            $battery_icon = 'fa-battery-three-quarters';
+                        } elseif ($percentage == 100) {
+                            $battery_icon = 'fa-battery-full';
+                            $badgeBattery = 'badge Success-200-bg py-0 px-2';
+                        }
+                        $percentage_html = "<span class='$badgeBattery vsmall-text text-end me-3 d-flex flex-row'><span class='me-1' style='font-size: 0.8em; font-weight: bold;'>$percentage%</span><i class='fa-solid $battery_icon' style='font-size: 1.6em;line-height: 24px;'></i></span>";
                     }
-                    $percentage_html = "<span class='$badgeBattery vsmall-text text-end me-3 d-flex flex-row'><span class='me-1' style='font-size: 0.8em; font-weight: bold;'>$percentage%</span><i class='fa-solid $battery_icon' style='font-size: 1.6em;line-height: 24px;'></i></span>";
                 }
 
                 $lesson_content .= "
@@ -297,37 +289,30 @@ function getUserCourseInfo($uid): string
                     }
                     
                     $percentage_html = '';
-                    $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1 AND active = 1 AND unit_id = 0", $data->course_id);
-                    if ($badge) {
-                        if ($data->status == USER_TEACHER) {
-                            $student_users = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user WHERE status = " .USER_STUDENT . " AND editor = 0 AND course_id = ?d", $data->course_id)->studentUsers;
-                            $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge JOIN course_user ON user_badge.user=course_user.user_id AND status = " .USER_STUDENT . " AND editor = 0 AND course_id = ?d AND completed = 1 AND badge = ?d", $data->course_id, $badge->id)->t;
-                            if ($student_users == 0) {
-                                $percentage = 0;
-                            } else {
-                                $percentage = round($certified_users / $student_users * 100, 0);
-                            }
-                        } else {
+                    if ($data->status == USER_STUDENT) {
+                        $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1 AND active = 1 AND unit_id = 0", $data->course_id);
+                        if ($badge) {
                             $badge_data = Database::get()->querySingle("SELECT completed_criteria, total_criteria FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $badge->id);
                             if (!$badge_data or !$badge_data->total_criteria) {
                                 $percentage = 0;
                             } else {
                                 $percentage = round($badge_data->completed_criteria / $badge_data->total_criteria * 100, 0);
                             }
+
+                            $battery_icon = 'fa-battery-empty';
+                            $badgeBattery = 'badge Primary-600-bg py-0 px-2';
+                            if ($percentage > 0 && $percentage < 34) {
+                                $battery_icon = 'fa-battery-quarter';
+                            } elseif ($percentage >= 34 && $percentage < 67) {
+                                $battery_icon = 'fa-battery-half';
+                            } elseif ($percentage >= 67 && $percentage < 100) {
+                                $battery_icon = 'fa-battery-three-quarters';
+                            } elseif ($percentage == 100) {
+                                $battery_icon = 'fa-battery-full';
+                                $badgeBattery = 'badge Success-200-bg py-0 px-2';
+                            }
+                            $percentage_html = "<span class='$badgeBattery vsmall-text text-end me-3 d-flex flex-row'><span class='me-1' style='font-size: 0.8em; font-weight: bold;'>$percentage%</span><i class='fa-solid $battery_icon' style='font-size: 1.6em;line-height: 24px;'></i></span>";
                         }
-                        $battery_icon = 'fa-battery-empty';
-                        $badgeBattery = 'badge Primary-600-bg py-0 px-2';
-                        if ($percentage > 0 && $percentage < 34) {
-                            $battery_icon = 'fa-battery-quarter';
-                        } elseif ($percentage >= 34 && $percentage < 67) {
-                            $battery_icon = 'fa-battery-half';
-                        } elseif ($percentage >= 67 && $percentage < 100) {
-                            $battery_icon = 'fa-battery-three-quarters';
-                        } elseif ($percentage == 100) {
-                            $battery_icon = 'fa-battery-full';
-                            $badgeBattery = 'badge Suceess-200-bg py-0 px-2';
-                        }
-                    $percentage_html = "<span class='$badgeBattery vsmall-text text-end me-3 d-flex flex-row'><span class='me-1' style='font-size: 0.8em; font-weight: bold;'>$percentage%</span><i class='fa-solid $battery_icon' style='font-size: 1.6em;line-height: 24px;'></i></span>";
                     }
 
                     $lesson_content .= "
