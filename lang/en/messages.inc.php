@@ -4802,6 +4802,7 @@ $langQuickLinks = "Quick Links";
 $langCourseOfflineSettings = "$langCourse download";
 $langCourseOfflineLegend = "$langStudents can download $langsCourse in their computer.";
 $langPrivacyPolicy = "Privacy Policy";
+$langAccessibility = 'Accessibility';
 $langPrivacyPolicyLegend = "Modify Privacy Policy";
 $langText = "Text";
 $langCheckGrades = 'Check Grades';

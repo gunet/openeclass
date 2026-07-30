@@ -414,6 +414,11 @@
                                 </a>
                             </li>
                             <li class="list-group-item element">
+                                <a href="{{$urlAppend}}modules/admin/accessibility_conf.php" class='TextBold'>
+                                    {{ trans('langAccessibility') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
                                 <a href="{{$urlAppend}}modules/admin/contact_info.php" class='TextBold'>
                                     {{ trans('langUpgContact') }}
                                 </a>
