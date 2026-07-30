@@ -717,6 +717,7 @@ $langMyDocsQuota = 'Όριο αποθηκευτικού χώρου προσωπ�
 $langEmailAnnounce = "Διεύθυνση κοινοποίησης ανακοινώσεων";
 $langEmailBounces = 'Διεύθυνση λήψης σφαλμάτων (bounces)';
 $langPrivacyPolicy = "Πολιτική Απορρήτου";
+$langAccessibility = 'Προσβασιμότητα';
 $langPrivacyPolicyLegend = "Αλλαγή Πολιτικής Απορρήτου";
 $langText = "Κείμενο";
 $langUserConsent = "Συναίνεση $langsOfStudent";
