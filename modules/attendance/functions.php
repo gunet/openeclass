@@ -73,7 +73,7 @@ function display_attendances() {
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;editSettings=1",
-                                          'icon' => 'fa-cogs'),
+                                          'icon' => 'fa-edit'),
                                     array('title' => $a->active ? $langViewHide : $langViewShow,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;vis=" .
                                                   ($a->active ? '0' : '1'),
@@ -295,12 +295,12 @@ function display_attendance_activities($attendance_id) {
                             'class' => '')),
                     'icon' => 'fa-plus',
                     'show' => (isset($is_collaborative_course) and $is_collaborative_course)),
-                array('title' => $langConfig,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
-                    'icon' => 'fa-cog'),
                 array('title' => "$langExport",
                     'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id_ind",
-                    'icon' => 'fa-file-excel')
+                    'icon' => 'fa-file-excel'),
+                array('title' => $langConfig,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
+                    'icon' => 'fa-cog')
             ),
             true
         );
