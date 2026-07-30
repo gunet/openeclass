@@ -1589,9 +1589,13 @@ function get_attendance_limit($attendance_id) {
 function import_attendances($attendance_id, $activity, $import = false) {
     global $tool_content, $course_code, $langAttendanceUsers,
            $langWorkFile, $langUpload, $langImportAttendancesHelp,
-           $langImportInvalidUsers, $langImportGradesError, $langImportErrorLines,
-           $langImportExtraAttendanceUsers, $langAttendancesImported,
-           $langImgFormsDes, $langForm, $langUnwantedFiletype;
+           $langImportInvalidUsers, $langImportGradesError,
+           $langImportErrorLines, $langImportExtraAttendanceUsers,
+           $langAttendancesImported, $langImgFormsDes, $langForm,
+           $langUnwantedFiletype, $langImportAttendancesStepOne,
+           $langImportAttendancesStepTwo, $langImportAttendancesStepThree,
+           $langImportAttendancesStepFour, $langImportAttendancesStepFive,
+           $langImportAttendancesStepSix, $langExport;
 
     if ($import and isset($_FILES['userfile'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token']))
@@ -1698,7 +1702,7 @@ function import_attendances($attendance_id, $activity, $import = false) {
             }
             Session::flash('message', $langAttendancesImported);
             Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . getIndirectReference($activity));
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . urlencode(getIndirectReference($activity)));
         } else {
             $message = $langImportGradesError;
             if ($invalidUsers) {
@@ -1725,7 +1729,7 @@ function import_attendances($attendance_id, $activity, $import = false) {
             }
             Session::flash('message', $message);
             Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . getIndirectReference($activity));
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . urlencode(getIndirectReference($activity)));
         }
     } else { // import grades form
         enableCheckFileSize();
@@ -1734,19 +1738,29 @@ function import_attendances($attendance_id, $activity, $import = false) {
                 <div class='flex-grow-1'>
                     <div class='form-wrapper'>
                         <form class='form-horizontal' enctype='multipart/form-data' method='post' 
-                            action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance_id . "&amp;imp=$activity&amp;import_attendances=true'>
+                            action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . urlencode($attendance_id) . "&amp;imp=$activity&amp;import_attendances=true'>
                             <fieldset>
                                 <legend class='mb-0' aria-label='$langForm'></legend>
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
                                         <p class='form-control-static'>$langImportAttendancesHelp</p>
-                                        <a href='dumpattendancebook.php?course=$course_code&attendance_id=" . getIndirectReference($attendance_id) . "&activity_id=$activity'>$langAttendanceUsers</a>
-                                    </div>
-                                </div>
-                                <div class='form-group mt-4'>
-                                    <label for='userfile' class='col-sm-12 form-label'>$langWorkFile:</label>
-                                    <div class='col-sm-10'>" . fileSizeHidenInput() . "
-                                        <input type='file' id='userfile' name='userfile'>
+                                        <br>
+                                        <ol>
+                                            <li class='col-sm-10' onclick=\"location.href='dumpattendancebook.php?course=$course_code&attendance_id=" . urlencode(getIndirectReference($attendance_id)) . "&activity_id=$activity'\">
+                                                $langImportAttendancesStepOne
+                                                <button type='button'>
+                                                    $langExport
+                                                </button>
+                                            </li>
+                                            <li>$langImportAttendancesStepTwo</li>
+                                            <li>$langImportAttendancesStepThree</li>
+                                            <li>$langImportAttendancesStepFour</li>
+                                            <li>$langImportAttendancesStepFive</li>
+                                            <li>$langImportAttendancesStepSix</li>
+                                            <div class='col-sm-10'>
+                                                <input type='file' id='userfile' name='userfile'>
+                                            </div>
+                                        </ol>
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
@@ -1760,7 +1774,7 @@ function import_attendances($attendance_id, $activity, $import = false) {
                     ],
                     [
                         'class' => 'btn cancelAdminBtn',
-                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($activity)
+                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . urlencode(getIndirectReference($activity))
                     ]
                 ]) . "
                                     </div>

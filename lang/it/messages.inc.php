@@ -5605,10 +5605,13 @@ $langWallPostsShow = "Posts";
 $langImportAttendances = 'Import attendance records from file';
 $langAttendancesImported = 'The attendances were imported';
 $langImportExtraAttendanceUsers = 'The following users did not participate in the attendance book';
-$langImportAttendancesHelp = 'You can upload an Excel file (e.g. xls, xlsx) with user attendance info.
-    The presence of users must be completed in the last column of the file you can download from the link below.<br><br>
-    <strong>Do not</strong> change the file structure (e.g. number of columns) because the attendance import will fail.<br><br>
-    Also note that to record a presence, enter <strong>1</strong>. Anything else is not considered a presence.';
+$langImportAttendancesHelp = 'Puoi caricare i record di presenza in massa, caricando un file Excel (xlsx) che contenta i file di presenza che vuoi modificare.';
+$langImportAttendancesStepOne = 'Scarica il File cliccandoci sopra.';
+$langImportAttendancesStepTwo = 'Apri il file <strong>SENZA</strong> Cambiare la struttura (e.s numero di colonne), o l\'importo fallirà.';
+$langImportAttendancesStepThree = 'Clicca la cella nell\'ultima colonna che corrisponde alla presenza dell\'utente che vuoi modificare.';
+$langImportAttendancesStepFour = 'Premi il numero <strong>0</strong> per segnare l\'assenza (X Rossa) o il numero <strong>1</strong> per la presenza (Spunta Verde).';
+$langImportAttendancesStepFive = 'Premi il tasto ‘Enter’ e poi salva il file.';
+$langImportAttendancesStepSix = 'Carica il file usando il modulo qui sotto.';
 $langGradebookUsers = 'Gradebook users';
 $langGroupsManagment = "Manage groups";
 $langSearchByCategory = "Search through : ";
