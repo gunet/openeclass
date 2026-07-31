@@ -15,6 +15,21 @@
 
                         <div class="col-12">
                             <h2 class="text-heading-h3">{{ trans('langInstalledWidgets') }}</h2>
+                            <form action="{{ $_SERVER['SCRIPT_NAME'] }}" method="post" class="mb-4">
+                                <input type="hidden" name="submit_widget_settings" value="1">
+                                <div class="form-check form-switch mt-3 mb-2">
+                                    <input class="form-check-input" type="checkbox" role="switch" name="enable_user_widgets" id="enable_user_widgets" value="1" {{ get_config('disable_user_widgets') ? '' : 'checked' }} onchange="this.form.submit();">
+                                    <label class="form-check-label" for="enable_user_widgets">
+                                        {{trans('langWidgetsUser')}}
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" role="switch" name="enable_course_widgets" id="enable_course_widgets" value="1" {{ get_config('disable_course_widgets') ? '' : 'checked' }} onchange="this.form.submit();">
+                                    <label class="form-check-label" for="enable_course_widgets">
+                                        {{trans('langWidgetsCourse')}}
+                                    </label>
+                                </div>
+                            </form>
                             <hr>
                             @if (count($installed_widgets))
                             <div id="widgets">

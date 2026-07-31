@@ -85,12 +85,14 @@
                             {{trans('langCoursePrerequisites')}}
                         </a>
                     </li>
+                    @if(get_config('disable_course_widgets') != 1)
                     <li>
                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_widgets/index.php?course={{$coursePrivateCode}}">
                             <i class="fa-solid fa-wand-magic-sparkles settings-icons"></i>
                             {{trans('langWidgets')}}
                         </a>
                     </li>
+                    @endif
                     <li>
                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/lti_consumer/index.php?course={{$coursePrivateCode}}">
                             <i class="fa-solid fa-link settings-icons"></i>
