@@ -6515,6 +6515,8 @@ $langePortfolioComplBelow60 = "Συνεχίστε να συμπληρώνετε 
   Widgets
  * ***************************************** */
 $langWidgets = "Μικροεφαρμογές";
+$langWidgetsUser = "Μικροεφαρμογές Χρήστη";
+$langWidgetsCourse = "Μικροεφαρμογές Μαθήματος";
 $langMyWidgets = "Οι μικροεφαρμογές μου";
 $langCourseWidgets = "Mικροεφαρμογές $langsOfCourse";
 $langInstalledWidgets = "Εγκατεστημένες Μικροεφαρμογές";

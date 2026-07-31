@@ -292,12 +292,14 @@
                                                                 </a>
                                                             </li>
                                                             @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                                                                @if(get_config('disable_user_widgets') != 1)
                                                                 <li>
                                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/my_widgets.php">
                                                                         <i class="fa-solid fa-layer-group settings-icons"></i>
                                                                         {{ trans('langMyWidgets') }}
                                                                     </a>
                                                                 </li>
+                                                                @endif
                                                                 @if($hasGradebook)
                                                                 <li>
                                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
@@ -511,9 +513,11 @@
                                             </li>
                                         @endif
                                         @if((isset($collaboration_platform) and !$collaboration_platform) or is_null($collaboration_platform))
+                                            @if(get_config('disable_user_widgets') != 1)
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa-solid fa-layer-group settings-icons"></i> {{ trans('langMyWidgets') }}</a>
                                             </li>
+                                            @endif
                                             @if($hasGradebook)
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa-solid fa-a settings-icons"></i> {{ trans('langGradeTotal') }}</a>
