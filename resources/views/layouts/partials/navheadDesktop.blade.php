@@ -1,3 +1,22 @@
+@php
+    $hasGradebook = false;
+    if (isset($_SESSION['uid'])) {
+        $courseWithGradebookCount = Database::get()->querySingle("SELECT COUNT(gradebook.id) as count
+            FROM gradebook_users
+            JOIN gradebook ON gradebook_users.gradebook_id = gradebook.id
+            JOIN course ON gradebook.course_id = course.id
+            JOIN course_user ON course.id = course_user.course_id AND course_user.user_id = gradebook_users.uid
+            JOIN course_module ON course.id = course_module.course_id
+            WHERE gradebook_users.uid = ?d
+              AND gradebook.active = 1
+              AND course.visible <> " . COURSE_INACTIVE . "
+              AND (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") 
+              AND (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+              AND course_module.module_id = " . MODULE_ID_GRADEBOOK . "
+              AND course_module.visible <> 0", $_SESSION['uid'])->count;
+        $hasGradebook = $courseWithGradebookCount > 0;
+    }
+@endphp
 <header>
     <div id="bgr-cheat-header" class="navbar navbar-eclass py-0 fixed-top">
         <div class='{{ $container }} header-container py-0'>
@@ -279,12 +298,14 @@
                                                                         {{ trans('langMyWidgets') }}
                                                                     </a>
                                                                 </li>
+                                                                @if($hasGradebook)
                                                                 <li>
                                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
                                                                         <i class="fa-solid fa-a settings-icons" aria-hidden="true"></i>
                                                                         {{ trans('langGradeTotal') }}
                                                                     </a>
                                                                 </li>
+                                                                @endif
                                                                 <li>
                                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}main/mycertificates.php">
                                                                         <i class="fa-solid fa-award settings-icons"></i>
@@ -493,9 +514,11 @@
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa-solid fa-layer-group settings-icons"></i> {{ trans('langMyWidgets') }}</a>
                                             </li>
+                                            @if($hasGradebook)
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa-solid fa-a settings-icons"></i> {{ trans('langGradeTotal') }}</a>
                                             </li>
+                                            @endif
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa-solid fa-award settings-icons"></i> {{ trans('langMyCertificates') }}</a>
                                             </li>
