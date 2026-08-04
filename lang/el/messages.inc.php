@@ -717,6 +717,7 @@ $langMyDocsQuota = 'Όριο αποθηκευτικού χώρου προσωπ�
 $langEmailAnnounce = "Διεύθυνση κοινοποίησης ανακοινώσεων";
 $langEmailBounces = 'Διεύθυνση λήψης σφαλμάτων (bounces)';
 $langPrivacyPolicy = "Πολιτική Απορρήτου";
+$langAccessibility = 'Προσβασιμότητα';
 $langPrivacyPolicyLegend = "Αλλαγή Πολιτικής Απορρήτου";
 $langText = "Κείμενο";
 $langUserConsent = "Συναίνεση $langsOfStudent";
@@ -6514,6 +6515,8 @@ $langePortfolioComplBelow60 = "Συνεχίστε να συμπληρώνετε 
   Widgets
  * ***************************************** */
 $langWidgets = "Μικροεφαρμογές";
+$langWidgetsUser = "Μικροεφαρμογές Χρήστη";
+$langWidgetsCourse = "Μικροεφαρμογές Μαθήματος";
 $langMyWidgets = "Οι μικροεφαρμογές μου";
 $langCourseWidgets = "Mικροεφαρμογές $langsOfCourse";
 $langInstalledWidgets = "Εγκατεστημένες Μικροεφαρμογές";

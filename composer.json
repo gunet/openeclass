@@ -1,5 +1,6 @@
 {
     "require": {
+        "php": ">8.2",
         "vlucas/valitron": "^1.4.2",
         "apereo/phpcas": "^1.6",
         "ezyang/htmlpurifier": "^4.19",

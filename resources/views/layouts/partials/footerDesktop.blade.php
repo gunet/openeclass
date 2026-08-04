@@ -48,6 +48,13 @@
                             </a>
                         </div>
                     @endif
+                    @if (get_config('activate_accessibility_text'))
+                        <div>
+                            <a class="a_tools_site_footer" href="{{$urlAppend}}info/accessibility.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langAccessibility') }}">
+                                {{ trans('langAccessibility') }}
+                            </a>
+                        </div>
+                    @endif
                     @if (get_config('activate_privacy_policy_text'))
                         <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/privacy_policy.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPrivacyPolicy') }}">
@@ -99,6 +106,9 @@
                         @endif
                         @if (!get_config('dont_display_terms'))
                             <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/terms.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langUsageTerms') }}">{{ trans('langUsageTerms') }}</a></li>
+                        @endif
+                        @if (get_config('activate_accessibility_text'))
+                            <li class="nav-item" aria-label="{{ trans('langAccessibility') }}"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/accessibility.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langAccessibility') }}">{{ trans('langAccessibility') }}</a></li>
                         @endif
                         @if (get_config('activate_privacy_policy_text'))
                             <li class="nav-item" aria-label="{{ trans('langPrivacyPolicy') }}"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/privacy_policy.php"  @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langPrivacyPolicy') }}">{{ trans('langPrivacyPolicy') }}</a>
@@ -177,6 +187,13 @@
                         <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langUsageTerms') }}">
                                 {{ trans('langUsageTerms') }}
+                            </a>
+                        </div>
+                    @endif
+                    @if (get_config('activate_accessibility_text'))
+                        <div>
+                            <a class="a_tools_site_footer" href="{{$urlAppend}}info/accessibility.php" @if($_SESSION['provider'] == 'lti_publish') target="_blank" @endif aria-label="{{ trans('langAccessibility') }}">
+                                {{ trans('langAccessibility') }}
                             </a>
                         </div>
                     @endif

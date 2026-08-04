@@ -2702,6 +2702,7 @@ tinymce.init({
     license_key: 'gpl',
     selector: 'textarea.mceEditor',
     content_css: [
+        '{$urlAppend}template/modern/css/fonts_all/typography.css',
         '{$urlAppend}template/modern/css/bootstrap.min.css',
         '{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css',
         '{$urlAppend}template/modern/css/default.css',
