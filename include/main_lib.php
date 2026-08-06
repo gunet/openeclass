@@ -169,6 +169,8 @@ function load_js($file, $init='') {
         } elseif ($file == 'slimselect') {
             $head_content .= css_link('slim-select/slimselect.css');
             $file = 'slim-select/slimselect.js';
+        } elseif ($file == 'html2pdf') {
+            $file = 'html2pdf/html2pdf.bundle.min.js';
         } elseif ($file == 'bootstrap-calendar') {
             $file = 'bootstrap-calendar-master/js/calendar.js';
             if ($language != 'en') {
@@ -2696,7 +2698,7 @@ function openDocsPicker(field_name, url, type, win) {
 }
 
 tinymce.init({
-    
+
     license_key: 'gpl',
     selector: 'textarea.mceEditor',
     content_css: [
@@ -2757,7 +2759,7 @@ tinymce.init({
     if (isset($options['id'])) {
         $textarea_id = "id=" . $options['id'];
     }
-    
+
     if (!is_null($text)) {
         $textarea_text = q(str_replace('{', '&#123;', $text));
     } else {
@@ -4811,6 +4813,10 @@ function reindex_array_keys_from_one($a) {
  * @return array|string|string[]
  */
 function fix_float($str) {
+    $str = trim($str);
+    if ($str === '') {
+        return null;
+    }
     if (!$str) {
         return 0.0;
     }
@@ -5591,11 +5597,11 @@ function load_lang_strings(string $lang, array $strings) : array {
     $Institution = $GLOBALS['Institution'];
 
     $arr = array();
-    
+
     if (isset($language_codes[$lang])) {
         //add common.inc.php to prevent warnings for variables that are undefined in messages.inc.php
         include "$webDir/lang/$lang/common.inc.php";
-        
+
         $extra_messages = "config/{$language_codes[$lang]}.inc.php";
         if (file_exists($extra_messages)) {
             include $extra_messages;
@@ -5613,13 +5619,13 @@ function load_lang_strings(string $lang, array $strings) : array {
         if ($extra_messages) {
             include $extra_messages;
         }
-            
+
         foreach ($strings as $str) {
             if (isset($$str)) {
                 $arr[$str] = $$str;
             }
         }
-        
+
     }
 
     return $arr;
