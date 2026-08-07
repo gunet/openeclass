@@ -102,8 +102,8 @@ if (isset($_POST['submitPoll'])) {
         $lti_template = $_POST['lti_template'] ?? NULL;
         $launchcontainer = $_POST['lti_launchcontainer'] ?? NULL;
         $display_position = (isset($_POST['display_position'])) ? $_POST['display_position'] : 0;
+        $save_prev_user_answers = (isset($_POST['save_prev_user_answers']) && isset($_POST['MulSubmissions'])) ? $_POST['save_prev_user_answers'] : null;
         //$require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0;
-
         // We have added require answer for a specific question
         $require_answer = 0;
 
@@ -118,6 +118,11 @@ if (isset($_POST['submitPoll'])) {
                     ];
                 }
             }
+        }
+        if (!is_null($save_prev_user_answers)) {
+            $msg_gr_arr[] = [
+                'save_prev_user_answers' => $save_prev_user_answers
+            ];
         }
         $response = (count($msg_gr_arr) > 0 ? serialize($msg_gr_arr) : null);
 
@@ -428,6 +433,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             };
             $(poll_grade(langPoll));
 
+            if ($('#MulSubmissions').is(':checked')) {
+                $('#save_prev_user_answers_on_off').removeClass('d-none').addClass('d-block');
+            } else {
+                $('#save_prev_user_answers_on_off').removeClass('d-block').addClass('d-none');
+            }
+            $('#MulSubmissions').on('change', function () {
+                if ($(this).is(':checked')) {
+                    $('#save_prev_user_answers_on_off').removeClass('d-none').addClass('d-block');
+                } else {
+                    $('#save_prev_user_answers_on_off').removeClass('d-block').addClass('d-none');
+                }
+            });
+
         });
         function ajaxAssignees()
         {
@@ -522,6 +540,18 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
 
+    $savePreviousUserAnswers = false;
+    if (isset($poll) && !is_null($poll->options)) {
+        $pollOptions = unserialize($poll->options);
+        foreach ($pollOptions as $opt) {
+            if (isset($opt['save_prev_user_answers']) && $opt['save_prev_user_answers'] == 1) {
+                $savePreviousUserAnswers = true;
+                break;
+            }
+        }
+    }
+    
+
     $disabledAssign = '';
     if (isset($pid)) {
         $rec_check = Database::get()->querySingle("SELECT id FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, 0);
@@ -609,7 +639,27 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             <span class='checkmark'></span>
                             $langActivateMulSubmissions
                         </label>
+                    </div>";
+                    
+                    $tool_content .= "
+                    <div class='col-12 col-md-9 ms-auto me-auto d-none' id='save_prev_user_answers_on_off'>
+                        <p class='mb-2'><strong>$langPollSavePrevUserAnswers</strong></p>
+                        <div class='radio mb-1'>
+                            <label>
+                                <input type='radio' name='save_prev_user_answers' value='1' " . ($savePreviousUserAnswers ? 'checked' : ''). ">
+                                <span>$langYes</span>
+                            </label>
+                        </div>
+                        <div class='radio'>
+                            <label>
+                                <input type='radio' name='save_prev_user_answers' value='0' " . (!$savePreviousUserAnswers ? 'checked' : ''). ">
+                                <span>$langNo</span>
+                            </label>
+                        </div>
                     </div>
+                    ";
+                    
+                    $tool_content .= "
                     <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='DefaultAnswer' id='DefaultAnswer' value='1'" .

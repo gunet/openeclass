@@ -1318,6 +1318,16 @@ function submitPoll() {
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
+    $savePreviousUserAnswers = false;
+    if (isset($poll) && !is_null($poll->options)) {
+        $pollOptions = unserialize($poll->options);
+        foreach ($pollOptions as $opt) {
+            if (isset($opt['save_prev_user_answers']) && $opt['save_prev_user_answers'] == 1) {
+                $savePreviousUserAnswers = true;
+                break;
+            }
+        }
+    }
     $default_answer = $poll->default_answer;
     $is_complete = true;
     $v = new Valitron\Validator($_POST);
@@ -1414,7 +1424,7 @@ function submitPoll() {
             $eventData->resource = intval($pid);
             ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 
-            if (isset($_REQUEST['update'])) { // if poll has enabled multiple submissions first delete the previous answers
+            if (isset($_REQUEST['update']) && !$savePreviousUserAnswers) { // if poll has enabled multiple submissions first delete the previous answers
                 Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d $sql_u)", $userDefault, $pid);
                 Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d $sql_u", $userDefault, $pid);
             }
@@ -1559,8 +1569,8 @@ function submitPoll() {
                 }
             }
             $_SESSION["poll_answers_$pid"] = $session_answers;
-//            Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
-//            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
+            //Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
+            //Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
             Session::flash('message', $langQFillInAllQs);
             Session::flash('alert-class', 'alert-warning');
             if(isset($_GET['from_session_view'])){
@@ -1636,15 +1646,30 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
             if (isset($_GET['onBehalfOfUser']) && isset($_SESSION['onBehalfOfUserId']) && $userDefault == 0) {
                 unset($_SESSION['data_answers'][$pqid]);
             }
-            if (($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE)) {       
-                $user_answers = Database::get()->queryArray("SELECT a.aid
+            if (($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE)) { 
+                if ($qtype == QTYPE_SINGLE) {
+                    $querySubmitDate = "ORDER BY a.submit_date DESC LIMIT 1";
+                } else {
+                    $querySubmitDate = "
+                    AND a.submit_date = (
+                        SELECT MAX(a2.submit_date)
+                        FROM poll_answer_record a2
+                        JOIN poll_user_record b2
+                            ON a2.poll_user_record_id = b2.id
+                        WHERE a2.qid = $pqid
+                            AND b2.uid = $userDefault
+                    );
+                    ";
+                }   
+                $user_answers = Database::get()->queryArray("SELECT a.aid, a.submit_date
                         FROM poll_user_record b, poll_answer_record a
                         LEFT JOIN poll_question_answer c
                             ON a.aid = c.pqaid
                         WHERE a.poll_user_record_id = b.id
                             AND a.qid = ?d
                             AND b.uid = ?d
-                            $sql_an", $pqid, $userDefault);          
+                            $sql_an
+                            $querySubmitDate", $pqid, $userDefault);          
                 if ($user_answers) {
                     $storeData = [];
                     foreach ($user_answers as $ua) {
@@ -1659,23 +1684,25 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                     }
                 }
             } elseif ($qtype == QTYPE_SCALE) {
-                $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                $user_answers = Database::get()->querySingle("SELECT a.answer_text, a.submit_date
                                     FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
                                     AND a.poll_user_record_id = b.id
                                     AND b.uid = ?d
-                                    $sql_an", $pqid, $userDefault);
+                                    $sql_an
+                                    ORDER BY a.submit_date DESC LIMIT 1", $pqid, $userDefault);
                 if ($user_answers) {
                     $slider_value = $user_answers->answer_text;
                     $_SESSION['data_answers'][$pqid] = $slider_value;
                 }
             } elseif ($qtype == QTYPE_FILL or $qtype == QTYPE_DATETIME or $qtype == QTYPE_SHORT or $qtype == QTYPE_FILE or $qtype == QTYPE_DATE) {
-                $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                $user_answers = Database::get()->querySingle("SELECT a.answer_text, a.submit_date
                                     FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
                                     AND a.poll_user_record_id = b.id
                                     AND b.uid = ?d
-                                    $sql_an", $pqid, $userDefault);
+                                    $sql_an
+                                    ORDER BY a.submit_date DESC LIMIT 1", $pqid, $userDefault);
                 if ($user_answers) {
                     $text = $user_answers->answer_text;
                     $_SESSION['data_answers'][$pqid] = $text;
@@ -1692,14 +1719,15 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                 $length = 1;
                 for ($i = 1; $i <= $q_res->q_row; $i++) {
                     for ($j = 1; $j <= $q_res->q_column; $j++) {
-                        $user_answers = Database::get()->querySingle("SELECT DISTINCT a.sub_qid, a.sub_qid_row, a.answer_text
+                        $user_answers = Database::get()->querySingle("SELECT DISTINCT a.sub_qid, a.sub_qid_row, a.answer_text, a.submit_date
                                         FROM poll_answer_record a, poll_user_record b
-                                        WHERE qid = ?d
+                                        WHERE a.qid = ?d
                                         AND a.poll_user_record_id = b.id
                                         AND b.uid = ?d
                                         AND a.sub_qid = ?d
                                         AND a.sub_qid_row = ?d
-                                        $sql_an", $pqid, $userDefault, $j, $i);
+                                        $sql_an
+                                        ORDER BY a.submit_date DESC LIMIT 1", $pqid, $userDefault, $j, $i);
                         
                         if ($user_answers) {
                             $s_data[$length] = $user_answers->answer_text;
