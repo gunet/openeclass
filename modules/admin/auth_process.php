@@ -34,10 +34,12 @@ $debugCAS = true;
 
 $data['callback_url'] = null;
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
-    $data['auth'] = $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
+    $data['auth'] = $auth = intval($_REQUEST['auth']); // $auth gets the integer id of the auth method if it is set
+    $data['auth_data'] = $auth_data = get_auth_settings($auth);
     if ($auth == 7) {
         load_js('jstree3');
         load_js('select2');
+        load_js('datatables');
         $tree = new Hierarchy();
 
         list($js, $html) = $tree->buildUserNodePicker(['defaults' => [], 'skip_preloaded_defaults' => false]);
@@ -51,7 +53,6 @@ if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
                     JOIN hierarchy AS h ON mda.department_id = h.id
                     LEFT JOIN minedu_departments AS md ON CONVERT(mda.minedu_id, CHAR) = CONVERT(md.MineduID, CHAR)
                     ORDER BY School_Department");
-
 
         $data['minedu_department_association'] = $minedu_department_association = json_encode(array_map(function ($item) {
             return ['minedu_id' => $item->minedu_id ?? 0, 'department_id' => $item->department_id];
@@ -314,7 +315,6 @@ if (isset($_POST['submit'])) {
         ));
 
     $pageName = get_auth_info($auth);
-    $data['auth_data'] = $auth_data = get_auth_settings($auth);
 
     $checked ='';
     if ($auth_data['cas_gunet'] ?? false) {
