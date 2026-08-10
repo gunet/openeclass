@@ -15,9 +15,7 @@ RUN apt-get update && apt-get install -y php-cli
 # Copy composer vendor
 COPY --from=composer_stage /app/vendor ./vendor
 # Copy needed app files
-COPY js js
-COPY include include
-COPY package.json .
+COPY --parents js/ include/ package.json modules/admin/tenant_functions.php .
 # Install JS dependencies and run postinstall script (php ./js/build/build.php)
 RUN bun install --frozen-lockfile
 
@@ -80,10 +78,11 @@ COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh && \
-    # Configure PHP-FPM to listen on 9000 and run as nginx user
+    # Configure PHP-FPM to listen on 9000, run as nginx user, and keep container env vars
     sed -i 's/listen = .*/listen = 127.0.0.1:9000/' /etc/php84/php-fpm.d/www.conf && \
     sed -i 's/user = .*/user = nginx/' /etc/php84/php-fpm.d/www.conf && \
     sed -i 's/group = .*/group = nginx/' /etc/php84/php-fpm.d/www.conf && \
+    sed -i 's/.*clear_env = .*/clear_env = no/' /etc/php84/php-fpm.d/www.conf && \
     # Set permissions and create needed directories
     mkdir -p /var/lib/nginx/tmp && \
     chown -R nginx:nginx /var/lib/nginx && \

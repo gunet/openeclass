@@ -188,6 +188,10 @@ if ($extra_messages) {
 
 // Check if user connected to a tenant URL
 $main_host = parse_url($urlServer, PHP_URL_HOST);
+$main_http_port = parse_url($urlServer, PHP_URL_PORT);
+if ($main_http_port) {
+    $main_host .= ':' . $main_http_port;
+}
 $http_host = isset($_SERVER['HTTP_HOST'])? $_SERVER['HTTP_HOST']: $main_host;
 
 // localhost is used for tenant domain validity check by web server

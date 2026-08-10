@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2026-07-07 15:46:00
+// Generated 2026-08-10 13:56:04
 
 $langYes = "Sì";
 $langNo = "No";
@@ -443,7 +443,7 @@ $langCourseS = "corso";
 $langCourseIden = "Identità del corso";
 $langBackupCourse = "Backup del corso";
 $langModifDone = "L'informazione è modificata";
-$langHome = "Ritornare alla home page";
+$langHome = "Inizio";
 $langCode = "Codice del corso";
 $langDelCourse = "Eliminare tutto il corso";
 $langDelUsers = "Eliminare utenti";
@@ -929,7 +929,7 @@ $langNewAnnounce = "Nuovo!";
 $langUnregUser = "Eliminare conto";
 $langListCourses = "Lista di corsi";
 $langAsynchronous = "Gruppo di E-learning Asincrono";
-$langUserLogin = "Login Utente";
+$langUserLogin = "Accedi";
 $langWelcomeToPortfolio = "Benvenuto al tuo portfolio personale";
 $langUnregCourse = "Cancellarsi dal corso";
 $langUnCourse = "Cancelarsi";
@@ -1472,7 +1472,7 @@ $langManyUsers = "molti utenti";
 $langGUser = "utente ospite";
 $langNoUsersFound = "Non è trovato nessun utente con i dati che hai inserito o l'utente esiste già nel tuo corso.";
 $langNoUsersFound2 = "Non è trovato nessun utente con i dati che hai inserito";
-$langRegister = "Registrare utente nel corso";
+$langRegister = 'Registrare';
 $langAdded = "è aggiunto al tuo corso.";
 $langAddError = "Errore! L'utente non è aggiunto al corso. Prego riprova o contatta il gestore del sistema.";
 $langAddBack = "Ritornare alla pagina di registrazione degli utenti";
@@ -3220,7 +3220,7 @@ $langIndexingOptAlert1 = "Optimizing all data indexing might require some time."
 $langIndexingOptAlert2 = "You can close this window, the indexing process will continue running in the background.";
 $langIndexingRemain = "Remaining $langsCourses for indexing";
 $langIndexingDone = "The indexing was completed successfully, you can now close this window.";
-$langConfirmEnableMobileAPITitle = "Confirmation for enabling Smartphone/Tablet communication support";
+$langConfirmEnableMobileAPITitle = 'Enable mobile app support (Mobile API)';
 $langCommonDocLink = "Common document";
 $langCommonDocLinkInvisible = "Invisible common document";
 $langDelEventConfirm = "Are you sure you want to delete the specifc event?";
@@ -3569,7 +3569,7 @@ $langNoteSaved = "Submitted successfully";
 $langLoginBgGradient = "Login screen background gradient";
 $langLoginImg = "Login screen image in the right side of login page";
 $langThemeOptionsName = "Theme Options Name";
-$langMyCoursesSide = "My $langsCourses";
+$langMyCoursesSide = "I miei corsi";
 $langMyMessagesSide = 'My Messages';
 $langQuickNotesSide = 'Short note';
 $langUsageTerms = "Condizioni d’uso";
@@ -7540,3 +7540,19 @@ $langCertRemovedToMyProfile = "Certificate has been removed from your profile";
 $langExistsInEportofolio = "Added to eportfolio";
 $langExistsInMyProfile = "Added to my profile";
 $langHasNotStarted = "The points game has not started yet";
+$langBgColorCardView = "Background color for cards view";
+$langBgBorderColorCardView = "Cards border color";
+$langAccessibility = 'Accessibility';
+$langChooseTemplate = 'Choose Template';
+$langSelectedTemplate = 'Selected template';
+$lang_dont_display_terms = 'Do not display Terms of Use';
+$lang_dont_display_upload_profile_image = 'Disable avatar (user profile icon) upload';
+$lang_dont_display_profile_am = 'Hide register number in user profile';
+$lang_dont_display_profile_phone = 'Hide phone number in user profile';
+$lang_dont_display_profile_about_me = 'Hide "about me" in user profile';
+$lang_dont_display_profile_email = 'Hide email in user profile';
+$langWidgetsUser = 'User Widgets';
+$langWidgetsCourse = 'Course Widgets';
+$langBgColorLoginButton = 'Login button background color';
+$langTextColorLoginButton = 'Login button text color';
+$langHoverBgColorLoginButton = 'Login button hover background color';

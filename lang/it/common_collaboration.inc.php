@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2026-07-07 15:46:00
+// Generated 2026-08-10 13:56:04
 
 $langEclass = 'Collaboration Platform';
 $langTeacher = "Coordinator";
@@ -45,7 +45,7 @@ $langsOfStudents = "members";
 $langsOfStudentss = "members";
 $langsstudent_acc = "member";
 $langCourse = "Collaboration";
-$langCourses = "Collaborations";
+$langCourses = 'Collaborazioni';
 $langOfCourses = "Collaborations";
 $langOfCourse = "Collaboration";
 $langsCourse = "collaboration";
@@ -53,4 +53,4 @@ $langsCourses = "collaborations";
 $langsOfCourse = "collaboration";
 $langsOfCourses = "collaborations";
 $langCourseS = "collaboration";
-$langMyCourses = "My collaborations";
+$langMyCourses = "Le mie collaborazioni";

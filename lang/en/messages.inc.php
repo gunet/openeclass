@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2026-07-07 15:45:57
+// Generated 2026-08-10 13:56:01
 
 $langYes = "Yes";
 $langNo = "No";
@@ -3261,7 +3261,7 @@ $langIndexingOptAlert1 = "Optimizing all data indexing might require some time."
 $langIndexingOptAlert2 = "You can close this window, the indexing process will continue running in the background.";
 $langIndexingRemain = "Remaining $langsCourses for indexing";
 $langIndexingDone = "The indexing was completed successfully, you can now close this window.";
-$langConfirmEnableMobileAPITitle = "Confirmation for enabling Smartphone/Tablet communication support";
+$langConfirmEnableMobileAPITitle = 'Enable mobile app support (Mobile API)';
 $langCommonDocLink = "Common document";
 $langCommonDocLinkInvisible = "Invisible common document";
 $langDelEventConfirm = "Are you sure you want to delete the specifc event?";
@@ -3587,9 +3587,6 @@ $langSubMenuLinkColor = "Menu Group Item Link Color";
 $langSubMenuLinkHoverColor = "Menu Group Item Link Hover Color";
 $langSubMenuLinkBgHoverColor = "Menu Group Item Link Background Hover Color";
 $langBgColor = 'Background Color';
-$langBgColorLoginButton = "Background color to the login button";
-$langTextColorLoginButton = "Text color to the login button";
-$langHoverBgColorLoginButton = "Background hover color to the login button";
 $langBgImg = "Background Image";
 $langRepeatedImg = 'Repeated Image';
 $langStretchedImg = 'Stretched Image';
@@ -4681,8 +4678,6 @@ $langAttendanceNoActMessageTc = "There are no conferences for automatic registra
 $langSGradebookBook = "Register grade";
 $langCertificate = "Certificate";
 $langCertificates = "Certificates";
-$langChooseTemplate = "Choose template";
-$langSelectedTemplate = "Selected template";
 $langNewCertificateSuc = "Certificate created successfully";
 $langNewCertificate = "New certificate";
 $langNewBadge = "New Badge";
@@ -5461,13 +5456,6 @@ $langUnsubscribeCourse = "Disable Course Unsubscription";
 $lang_disable_name_surname_change = 'Do not allow users to modify their name and surname';
 $lang_disable_email_change = 'Do not allow users to modify their e-mail';
 $lang_disable_am_change = 'Do not allow users to modify their student ID';
-
-$lang_dont_display_upload_profile_image = "Do not display image uploads on the user's profile";
-$lang_dont_display_profile_am = "Do not display the registration number in the user's profile";
-$lang_dont_display_profile_phone = "Do not display the phone number in the user's profile";
-$lang_dont_display_profile_about_me = "Do not display about me on the user's profile";
-$lang_dont_display_profile_email = "Do not display the email in the user's profile";
-
 $langMaintenanceOn = 'Activate maintenance mode';
 $langMaintenanceOff = 'Deactivate maintenance mode';
 $langMaintenance = 'Maintenance';
@@ -5533,7 +5521,6 @@ $langCheckResults = 'Check results';
 $lang_dont_display_courses_menu = "Do not display $langsCourses list";
 $lang_dont_display_contact_menu = "Do not display contact information";
 $lang_dont_display_manual_menu = "Don't display manuals";
-$lang_dont_display_terms = "Don't display usage terms";
 $lang_dont_display_about_menu = "Don't display platform info";
 $lang_allow_rec_video = "Allow creation of video recordings in $langsCourse documents";
 $lang_allow_rec_audio = "Allow creation of audio recordings in $langsCourse documents";
@@ -6978,8 +6965,6 @@ $langIdleStayLoggedIn = "Do you want to stay logged in?";
 $langIdleExtendSession = "Extend session";
 $langDisplayPlatformAsCardLayout = "Enable card view for the platform (includes border-radius)";
 $langDisplayPlatformAsCardLayoutNoBorderRadius = "Card view enabled (does not include border-radius)";
-$langBgColorCardView = "Background color to the cards";
-$langBgBorderColorCardView = "Border color to the cards";
 $langCourseHasAlreadyImported = "Content has already been uploaded to $langsCourse! Would you like to upload it again?";
 $langCourseHasAlreadyImportedExplain = "Note: Importing files will add files that may already exist!";
 $langSSOUsernameAttr = "Profile attribute for user identifier";
@@ -7616,3 +7601,19 @@ $langCertRemovedToMyProfile = "Certificate has been removed from your profile";
 $langExistsInEportofolio = "Added to eportfolio";
 $langExistsInMyProfile = "Added to my profile";
 $langHasNotStarted = "The points game has not started yet";
+$langBgColorCardView = "Background color for cards view";
+$langBgBorderColorCardView = "Cards border color";
+$langAccessibility = 'Accessibility';
+$langChooseTemplate = 'Choose Template';
+$langSelectedTemplate = 'Selected template';
+$lang_dont_display_terms = 'Do not display Terms of Use';
+$lang_dont_display_upload_profile_image = 'Disable avatar (user profile icon) upload';
+$lang_dont_display_profile_am = 'Hide register number in user profile';
+$lang_dont_display_profile_phone = 'Hide phone number in user profile';
+$lang_dont_display_profile_about_me = 'Hide "about me" in user profile';
+$lang_dont_display_profile_email = 'Hide email in user profile';
+$langWidgetsUser = 'User Widgets';
+$langWidgetsCourse = 'Course Widgets';
+$langBgColorLoginButton = 'Login button background color';
+$langTextColorLoginButton = 'Login button text color';
+$langHoverBgColorLoginButton = 'Login button hover background color';
