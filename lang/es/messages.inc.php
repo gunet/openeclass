@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2026-07-07 15:45:57
+// Generated 2026-08-10 13:56:02
 
 $langYes = "Si";
 $langNo = "No";
@@ -3230,7 +3230,7 @@ $langIndexingOptAlert1 = "Optimizing all data indexing might require some time."
 $langIndexingOptAlert2 = "You can close this window, the indexing process will continue running in the background.";
 $langIndexingRemain = "Remaining $langsCourses for indexing";
 $langIndexingDone = "The indexing was completed successfully, you can now close this window.";
-$langConfirmEnableMobileAPITitle = "Confirmation for enabling Smartphone/Tablet communication support";
+$langConfirmEnableMobileAPITitle = 'Enable mobile app support (Mobile API)';
 $langCommonDocLink = "Common document";
 $langCommonDocLinkInvisible = "Invisible common document";
 $langDelEventConfirm = "Are you sure you want to delete the specifc event?";
@@ -7550,3 +7550,19 @@ $langCertRemovedToMyProfile = "Certificate has been removed from your profile";
 $langExistsInEportofolio = "Added to eportfolio";
 $langExistsInMyProfile = "Added to my profile";
 $langHasNotStarted = "The points game has not started yet";
+$langBgColorCardView = "Background color for cards view";
+$langBgBorderColorCardView = "Cards border color";
+$langAccessibility = 'Accessibility';
+$langChooseTemplate = 'Choose Template';
+$langSelectedTemplate = 'Selected template';
+$lang_dont_display_terms = 'Do not display Terms of Use';
+$lang_dont_display_upload_profile_image = 'Disable avatar (user profile icon) upload';
+$lang_dont_display_profile_am = 'Hide register number in user profile';
+$lang_dont_display_profile_phone = 'Hide phone number in user profile';
+$lang_dont_display_profile_about_me = 'Hide "about me" in user profile';
+$lang_dont_display_profile_email = 'Hide email in user profile';
+$langWidgetsUser = 'User Widgets';
+$langWidgetsCourse = 'Course Widgets';
+$langBgColorLoginButton = 'Login button background color';
+$langTextColorLoginButton = 'Login button text color';
+$langHoverBgColorLoginButton = 'Login button hover background color';

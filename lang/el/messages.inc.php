@@ -4186,7 +4186,7 @@ $langUserAlreadyRegistered = "Ενας χρήστης με ίδιο όνομα /
                 Δεν μπορείτε να τον (την) ξαναγράψετε.";
 $langAddedToCourse = "είναι ήδη γραμμένος στην πλατφόρμα αλλά όχι σε αυτό το $langsCourse. Τώρα έγινε.";
 $langGroupUserManagement = "Διαχείριση ομάδας χρηστών";
-$langRegDone = "Οι αλλαγές σας κατοχυρώθηκαν.";
+$langRegDone = "Οι αλλαγές καταχωρήθηκαν.";
 $langPassTooEasy = "Το συνθηματικό σας είναι πολύ απλό. Χρησιμοποιήστε ένα συνθηματικό σαν και αυτό";
 $langChoiceLesson = "Επιλογή $langsOfCourses";
 $langRegCourses = "Εγγραφή σε $langsCourse";
