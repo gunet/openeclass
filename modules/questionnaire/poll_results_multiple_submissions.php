@@ -106,6 +106,56 @@ $head_content .= "
     });
 </script>";
 
+if (isset($_REQUEST['unit_id'])) {
+    $back_link = "../units/index.php?course=$course_code&amp;id=" . intval($_REQUEST['unit_id']);
+} else {
+    $back_link = '';
+}
+
+if (isset($_GET['from_session_view'])) {
+    $action_bar = action_bar(array(
+                    array(
+                        'title' => $langBack,
+                        'url' => "$back_link",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary',
+                        'show' => isset($_REQUEST['unit_id'])
+                    ),
+                    array('title' => $langDumpPDF,
+                          'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;session=$_GET[session]&amp;from_session_view=true&amp;format=poll_pdf",
+                          'icon' => 'fa-solid fa-file-pdf',
+                          'level' => 'primary-label',
+                          'link-attrs' => "target='_blank'",
+                          'show' => $is_course_reviewer),
+                    array('title' => $langPollFullResults,
+                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;dumppoll_session=true&amp;session=$_GET[session]",
+                          'icon' => 'fa-download',
+                          'level' => 'primary-label',
+                          'show' => $is_course_reviewer)
+                ));
+} else {
+    $action_bar = action_bar(array(
+                    array(
+                        'title' => $langBack,
+                        'url' => "$back_link",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary',
+                        'show' => isset($_REQUEST['unit_id'])),
+                    array('title' => "$langPollPercentResults ($langDumpPDF)",
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;format=poll_pdf",
+                        'icon' => 'fa-file-pdf',
+                        'level' => 'primary-label',
+                        'link-attrs' => "target='_blank'",
+                        'show' => $is_course_reviewer),
+                    array('title' => $langPollFullResults,
+                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1",
+                          'icon' => 'fa-download',
+                          'level' => 'primary-label',
+                          'show' => $is_course_reviewer)
+                ));
+}
+$tool_content .= $action_bar;
+
 $tool_content .= "<div class='col-12'>
 <div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>

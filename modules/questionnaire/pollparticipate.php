@@ -1557,6 +1557,12 @@ function submitPoll() {
             }
         }
 
+        // update submission date
+        if (isset($user_record_id)) {
+            $lastSubmissionDate = Database::get()->querySingle("SELECT MAX(submit_date) AS last_submission FROM poll_answer_record WHERE poll_user_record_id = ?d", $user_record_id)->last_submission;
+            Database::get()->query("UPDATE poll_answer_record SET submit_date = ?t WHERE poll_user_record_id = ?d", $lastSubmissionDate, $user_record_id);
+        }
+
         if (!$is_complete) {
             $user_answers = Database::get()->queryArray('SELECT * FROM poll_answer_record
                 WHERE poll_user_record_id = ?d', $user_record_id);
