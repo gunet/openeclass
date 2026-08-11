@@ -5734,7 +5734,8 @@ function html_to_pdf($pdf_title, $course_title, $module_type_title, $html = null
                 .ButtonsContent,
                 .div-profile-img,
                 .reply-post-btn,
-                .div-menu-popover {
+                .div-menu-popover,
+                .form_selection_per_user_or_question {
                     display: none !important;
                 }
 

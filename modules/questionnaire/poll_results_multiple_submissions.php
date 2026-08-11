@@ -299,7 +299,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
     }
 
     $tool_content .= "
-    <div class='col-12 mt-4'>
+    <div class='col-12 form_selection_per_user_or_question mt-4'>
         <form class='d-flex justify-content-start align-items-center gap-3 mb-4' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&pid=$pid$fromSessionView$sessionArg'>
             <div class='w-50'>
                 <label class='form-label' for='question_id'>$langPollPerQuestion</label>
@@ -325,12 +325,16 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
         }
     $tool_content .= "
         </form>
-    ";
+    </div>";
 
     poll_results_per_question_or_user($pid, $questions, $qform, $qform_user, $sID, $thePoll->anonymized);
 }
 
-draw($tool_content, 2, null, $head_content);
+if (isset($_GET['format']) and $_GET['format'] == 'poll_pdf') {
+    pdf_multiple_poll_output($sID);
+} else{
+    draw($tool_content, 2, null, $head_content);
+}
 
 // Results per question
 function poll_results_per_question_or_user($pid, $questions, $form_question = 0, $form_user = 0, $session_id = 0, $pollAnonymized = 0) {
@@ -394,13 +398,24 @@ function poll_results_per_question_or_user($pid, $questions, $form_question = 0,
                 
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>$answerText</td>";
-                $tool_content .= "<td class='text-end'><div class='dropdown'><a class='linkColor TextBold text-nowrap' href='#dropdown_menu_{$aid}' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                                    " . count($arr) . "&nbsp; $langAnswers
-                                </a><ul class='dropdown-menu' id='dropdown_menu_{$aid}'>";
-                foreach ($arr as $val) {
-                    $tool_content .= "<li class='dropdown-item'>" . ((!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($val['user_id'])) . "$showGrade&nbsp;($val[submit_date])</li>";
+                if (!isset($_GET['format'])) { // without exporting to pdf
+                    $tool_content .= "<td class='text-end'><div class='dropdown'><a class='linkColor TextBold text-nowrap' href='#dropdown_menu_{$aid}' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                                        " . count($arr) . "&nbsp; $langAnswers
+                                    </a><ul class='dropdown-menu' id='dropdown_menu_{$aid}'>";
+                    foreach ($arr as $val) {
+                        $submitDate = date('d/m/Y H:i:s', strtotime($val['submit_date']));
+                        $tool_content .= "<li class='dropdown-item'>" . ((!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($val['user_id'])) . "$showGrade&nbsp;($submitDate)</li>";
+                    }
+                    $tool_content .= "</ul></div></td>";
+                } else { // export to pdf
+                    $tool_content .= "<td><ul class='m-0 p-0 list-unstyled'>";
+                    foreach ($arr as $val) {
+                        $submitDate = date('d/m/Y H:i:s', strtotime($val['submit_date']));
+                        $namesStr = (!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($val['user_id']) . "&nbsp;$showGrade&nbsp;($submitDate)";
+                        $tool_content .= "<li class='text-nowrap'>$namesStr</li>";
+                    }
+                    $tool_content .= "</ul></td>";
                 }
-                $tool_content .= "</ul></div></td>";
                 $tool_content .= "</tr>";
             }
             $tool_content .= "</table></div>";
@@ -429,13 +444,24 @@ function poll_results_per_question_or_user($pid, $questions, $form_question = 0,
                         $answerText = Database::get()->querySingle("SELECT answer_text FROM poll_question_answer WHERE pqaid = ?d", $aid)->answer_text; 
                         $tool_content .= "<tr>";
                         $tool_content .= "<td>$answerText</td>";
-                        $tool_content .= "<td class='text-end'><div class='dropdown'><a class='linkColor TextBold text-nowrap' href='#dropdown_menu_{$aid}' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                                            " . count($arr) . "&nbsp; $langAnswers
-                                        </a><ul class='dropdown-menu' id='dropdown_menu_{$aid}'>";
-                        foreach ($arr as $val) {
-                            $tool_content .= "<li class='dropdown-item'>" . ((!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($val['user_id'])) . "&nbsp;($val[submit_date])</li>";
+                        if (!isset($_GET['format'])) { // without exporting to pdf
+                            $tool_content .= "<td class='text-end'><div class='dropdown'><a class='linkColor TextBold text-nowrap' href='#dropdown_menu_{$aid}' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                                                " . count($arr) . "&nbsp; $langAnswers
+                                            </a><ul class='dropdown-menu' id='dropdown_menu_{$aid}'>";
+                            foreach ($arr as $val) {
+                                $submitDate = date('d/m/Y H:i:s', strtotime($val['submit_date']));
+                                $tool_content .= "<li class='dropdown-item'>" . ((!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($val['user_id'])) . "&nbsp;($submitDate)</li>";
+                            }
+                            $tool_content .= "</ul></div></td>";
+                        } else { // export to pdf
+                            $tool_content .= "<td><ul class='m-0 p-0 list-unstyled'>";
+                            foreach ($arr as $val) {
+                                $submitDate = date('d/m/Y H:i:s', strtotime($val['submit_date']));
+                                $namesStr = (!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($val['user_id']) . "&nbsp;($submitDate)";
+                                $tool_content .= "<li class='text-nowrap'>$namesStr</li>";
+                            }
+                            $tool_content .= "</ul></td>";
                         }
-                        $tool_content .= "</ul></div></td>";
                         $tool_content .= "</tr>";
                     }
                     $tool_content .= "</table></div>";
@@ -454,7 +480,8 @@ function poll_results_per_question_or_user($pid, $questions, $form_question = 0,
                         $tool_content .= "<tr>";
                         $tool_content .= "<td>$answer->answer_text</td>";
                         $tool_content .= "<td class='text-end'>";
-                            $tool_content .= "<p>" . ((!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($answer->uid)) . "&nbsp;($answer->submit_date)</p>";
+                        $submitDate = date('d/m/Y H:i:s', strtotime($answer->submit_date));
+                            $tool_content .= "<p>" . ((!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($answer->uid)) . "&nbsp;($submitDate)</p>";
                         $tool_content .= "</td>";
                         $tool_content .= "</tr>";
                     }
@@ -495,7 +522,8 @@ function poll_results_per_question_or_user($pid, $questions, $form_question = 0,
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>$answerText</td>";
                 $tool_content .= "<td class='text-end'>";
-                    $tool_content .= "<p>" . ((!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($answer->uid)) . "&nbsp;($answer->submit_date)</p>";
+                $submitDate = date('d/m/Y H:i:s', strtotime($answer->submit_date));
+                $tool_content .= "<p>" . ((!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($answer->uid)) . "&nbsp;($submitDate)</p>";
                 $tool_content .= "</td>";
                 $tool_content .= "</tr>";
             }
@@ -548,7 +576,8 @@ function poll_results_per_question_or_user($pid, $questions, $form_question = 0,
                         $tool_content .= "</td>";
                     }
                     $tool_content .= "</tr>";
-                    $tool_content .= "<tr><td colspan='$q_dimension->q_column'><strong><i class='fa-solid fa-clock me-2'></i>$key_date</strong></td></tr>";
+                    $submitDate = date('d/m/Y H:i:s', strtotime($key_date));
+                    $tool_content .= "<tr><td colspan='$q_dimension->q_column'><strong><i class='fa-solid fa-clock me-2'></i>$submitDate</strong></td></tr>";
                 }
                 $tool_content .= "</tbody></table></div></div>";
             }
@@ -581,13 +610,24 @@ function poll_results_per_question_or_user($pid, $questions, $form_question = 0,
                 foreach ($result as $scaleId => $arr) {
                     $tool_content .= "<tr>";
                     $tool_content .= "<td>$arrAnsScale[$scaleId]</td>";
-                    $tool_content .= "<td class='text-end'><div class='dropdown'><a class='linkColor TextBold text-nowrap' href='#dropdown_menu_{$scaleId}' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                                        " . count($arr) . "&nbsp; $langAnswers
-                                    </a><ul class='dropdown-menu' id='dropdown_menu_{$scaleId}'>";
-                    foreach ($arr as $val) {
-                        $tool_content .= "<li class='dropdown-item'>" . ((!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($val['user_id'])) . "&nbsp;($val[submit_date])</li>";
+                    if (!isset($_GET['format'])) {
+                        $tool_content .= "<td class='text-end'><div class='dropdown'><a class='linkColor TextBold text-nowrap' href='#dropdown_menu_{$scaleId}' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                                            " . count($arr) . "&nbsp; $langAnswers
+                                        </a><ul class='dropdown-menu' id='dropdown_menu_{$scaleId}'>";
+                        foreach ($arr as $val) {
+                            $submitDate = date('d/m/Y H:i:s', strtotime($val['submit_date']));
+                            $tool_content .= "<li class='dropdown-item'>" . ((!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($val['user_id'])) . "&nbsp;($submitDate)</li>";
+                        }
+                        $tool_content .= "</ul></div></td>";
+                    } else { // export to pdf
+                        $tool_content .= "<td><ul class='m-0 p-0 list-unstyled'>";
+                        foreach ($arr as $val) {
+                            $submitDate = date('d/m/Y H:i:s', strtotime($val['submit_date']));
+                            $namesStr = (!$is_editor && !$is_consultant && $pollAnonymized) ? "$langStudent" : uid_to_name($val['user_id']) . "&nbsp;($submitDate)";
+                            $tool_content .= "<li class='text-nowrap'>$namesStr</li>";
+                        }
+                        $tool_content .= "</ul></td>";
                     }
-                    $tool_content .= "</ul></div></td>";
                     $tool_content .= "</tr>";
                 }
                 $tool_content .= "</table></div></div>";
@@ -660,4 +700,23 @@ function poll_participation() {
     }
 
     return $arr = ['total_users' => $totalSessionParticipants ?? count($allUsers), 'total_participants' => count($polledUsers)];
+}
+
+/**
+ * @brief output to pdf file
+ * @return void
+ * @throws \Mpdf\MpdfException
+ */
+function pdf_multiple_poll_output($sid = 0) {
+    global $tool_content, $currentCourseName, $course_id, $course_code;
+
+    $currentTitle = '';
+    if ($sid > 0) {
+        $currentTitle = Database::get()->querySingle("SELECT title FROM mod_session WHERE id = ?d AND course_id = ?d", $sid, $course_id)->title;
+    }
+    
+    $pdf_title = "$course_code poll_results";
+    $course_title = q("$currentCourseName");
+    $module_type_title = q($currentTitle);
+    html_to_pdf($pdf_title, $course_title, $module_type_title);
 }
