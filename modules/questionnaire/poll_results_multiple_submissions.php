@@ -114,23 +114,29 @@ if (isset($_REQUEST['unit_id'])) {
 
 $qform = 0;
 $qform_param = '';
+$qform_dump_param = '';
 $qform_user = 0;
 $qform_user_param = '';
+$qform_user_dump_param = '';
 if (isset($_POST['qform'])) {
     $qform = intval($_POST['qform']);
     $qform_param = "&amp;forQuestion=$qform";
+    $qform_dump_param = "&amp;forQuestionDump=$qform";
 }
 if (isset($_POST['qformUser'])) {
     $qform_user = intval($_POST['qformUser']);
     $qform_user_param = "&amp;forQuestionUser=$qform_user";
+    $qform_user_dump_param = "&amp;forQuestionUserDump=$qform_user";
 }
 if (isset($_GET['forQuestion'])) {
     $qform = intval($_GET['forQuestion']);
     $qform_param = "&amp;forQuestion=$qform";
+    $qform_dump_param = "&amp;forQuestionDump=$qform";
 }
 if (isset($_GET['forQuestionUser'])) {
     $qform_user = intval($_GET['forQuestionUser']);
     $qform_user_param = "&amp;forQuestionUser=$qform_user";
+    $qform_user_dump_param = "&amp;forQuestionUserDump=$qform_user";
 }
 
 
@@ -150,7 +156,7 @@ if (isset($_GET['from_session_view'])) {
                           'link-attrs' => "target='_blank'",
                           'show' => $is_course_reviewer),
                     array('title' => $langPollFullResults,
-                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;dumppoll_session=true&amp;session=$_GET[session]",
+                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;dumppoll_session=true&amp;session=$_GET[session]$qform_dump_param$qform_user_dump_param",
                           'icon' => 'fa-download',
                           'level' => 'primary-label',
                           'show' => $is_course_reviewer)
@@ -170,7 +176,7 @@ if (isset($_GET['from_session_view'])) {
                         'link-attrs' => "target='_blank'",
                         'show' => $is_course_reviewer),
                     array('title' => $langPollFullResults,
-                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1",
+                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1$qform_dump_param$qform_user_dump_param",
                           'icon' => 'fa-download',
                           'level' => 'primary-label',
                           'show' => $is_course_reviewer)

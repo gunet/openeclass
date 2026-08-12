@@ -86,6 +86,19 @@ if (isset($_GET['dumppoll_session'])) {
     $sqlSession = "AND b.session_id = ?d";
     $args_s = [$_GET['session']];
 }
+$sqlUser = '';
+$sql_user_args = [];
+if (isset($_GET['forQuestionUserDump']) && $_GET['forQuestionUserDump'] > 0) {
+    $sqlUser = "AND b.uid = ?d";
+    $sql_user_args = [$_GET['forQuestionUserDump']];
+}
+
+$sqlPqid = '';
+$sqlPqidArg = [];
+if (isset($_GET['forQuestionDump']) && $_GET['forQuestionDump'] > 0) {
+    $sqlPqid = "AND pqid = ?d";
+    $sqlPqidArg = [$_GET['forQuestionDump']];
+}
 
 if ($full) { // user questions results
     if ($anonymized) {
@@ -94,7 +107,7 @@ if ($full) { // user questions results
         $heading = array($langSurname, $langName, $langAm, $langUsername, $langEmail);
     }
     $heading[] = $langDate;
-    $questions = Database::get()->queryArray('SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d AND has_sub_question != ?d ORDER BY q_position', $pid, 0, -1);
+    $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d AND qtype != ?d AND has_sub_question != ?d $sqlPqid ORDER BY q_position", $pid, 0, -1, $sqlPqidArg);
     $users = Database::get()->queryArray("SELECT uid AS user_identifier
                                             FROM poll_user_record
                                                 WHERE pid = ?d
@@ -150,8 +163,9 @@ if ($full) { // user questions results
                                 WHERE a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
                                 AND a.qid = ?d
+                                $sqlUser
                                 $sqlSession
-                                ORDER BY a.submit_date ASC", $q->pqid, $args_s);
+                                ORDER BY a.submit_date ASC", $q->pqid, $sql_user_args, $args_s);
 
             foreach ($answers as $a) {
                 // Get user answers from sub-question
@@ -206,8 +220,9 @@ if ($full) { // user questions results
             $answers = Database::get()->queryArray("SELECT a.answer_text, a.sub_qid_row, a.sub_qid,  b.uid, b.email, a.submit_date, a.poll_user_record_id FROM poll_answer_record a
                                                     JOIN poll_user_record b ON b.id=a.poll_user_record_id
                                                     WHERE a.qid = ?d
+                                                    $sqlUser
                                                     $sqlSession
-                                                    ORDER BY a.submit_date, a.sub_qid_row, a.sub_qid ASC", $q->pqid, $args_s);
+                                                    ORDER BY a.submit_date, a.sub_qid_row, a.sub_qid ASC", $q->pqid, $sql_user_args, $args_s);
 
             foreach ($answers as $a) {
                 $answer_text = $a->answer_text;
@@ -229,8 +244,9 @@ if ($full) { // user questions results
             $answers = Database::get()->queryArray("SELECT b.uid, a.answer_text, b.email, a.submit_date, a.poll_user_record_id FROM poll_answer_record a
                                                     JOIN poll_user_record b ON b.id=a.poll_user_record_id
                                                     WHERE a.qid = ?d
+                                                    $sqlUser
                                                     $sqlSession
-                                                    ORDER BY a.submit_date ASC", $q->pqid, $args_s);
+                                                    ORDER BY a.submit_date ASC", $q->pqid, $sql_user_args, $args_s);
             foreach ($answers as $a) {
                 $user_identifier = $a->uid ?: $a->email;
                 $qlist[$user_identifier][$a->poll_user_record_id][$q->pqid] = $arrAnsScale[$a->answer_text] ?? '';
@@ -242,8 +258,9 @@ if ($full) { // user questions results
                                 WHERE qid = ?d
                                 AND a.poll_user_record_id = b.id
                                 AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                                $sqlUser
                                 $sqlSession
-                                ORDER BY a.submit_date DESC", $q->pqid, $args_s);
+                                ORDER BY a.submit_date DESC", $q->pqid, $sql_user_args, $args_s);
 
             foreach ($answers as $a) {
                 $user_identifier = $a->uid ?: $a->email;
