@@ -1720,7 +1720,7 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                     $_SESSION['data_answers'][$pqid] = $_SESSION['data_file_answer'][$pqid];
                 }
             } elseif ($qtype == QTYPE_TABLE) {
-                $answers = Database::get()->queryArray("SELECT a.poll_user_record_id, a.answer_text, a.sub_qid, a.sub_qid_row FROM poll_answer_record a
+                $user_answers = Database::get()->queryArray("SELECT a.poll_user_record_id, a.answer_text, a.sub_qid, a.sub_qid_row FROM poll_answer_record a
                                                         JOIN poll_user_record b ON b.id = a.poll_user_record_id
                                                         WHERE b.pid = ?d
                                                         AND b.uid = ?d
@@ -1737,9 +1737,11 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                 $length = 1;
                 for ($i = 1; $i <= $q_res->q_row; $i++) {
                     for ($j = 1; $j <= $q_res->q_column; $j++) {
-                        foreach ($answers as $an) {
-                            if ($an->sub_qid_row == $i && $an->sub_qid == $j) {
-                                $s_data[$length] = $an->answer_text;
+                        if (count($user_answers) > 0) {
+                            foreach ($user_answers as $an) {
+                                if ($an->sub_qid_row == $i && $an->sub_qid == $j) {
+                                    $s_data[$length] = $an->answer_text;
+                                }
                             }
                         }
                         $length++;
