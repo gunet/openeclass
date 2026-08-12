@@ -112,6 +112,28 @@ if (isset($_REQUEST['unit_id'])) {
     $back_link = '';
 }
 
+$qform = 0;
+$qform_param = '';
+$qform_user = 0;
+$qform_user_param = '';
+if (isset($_POST['qform'])) {
+    $qform = intval($_POST['qform']);
+    $qform_param = "&amp;forQuestion=$qform";
+}
+if (isset($_POST['qformUser'])) {
+    $qform_user = intval($_POST['qformUser']);
+    $qform_user_param = "&amp;forQuestionUser=$qform_user";
+}
+if (isset($_GET['forQuestion'])) {
+    $qform = intval($_GET['forQuestion']);
+    $qform_param = "&amp;forQuestion=$qform";
+}
+if (isset($_GET['forQuestionUser'])) {
+    $qform_user = intval($_GET['forQuestionUser']);
+    $qform_user_param = "&amp;forQuestionUser=$qform_user";
+}
+
+
 if (isset($_GET['from_session_view'])) {
     $action_bar = action_bar(array(
                     array(
@@ -122,7 +144,7 @@ if (isset($_GET['from_session_view'])) {
                         'show' => isset($_REQUEST['unit_id'])
                     ),
                     array('title' => $langDumpPDF,
-                          'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;session=$_GET[session]&amp;from_session_view=true&amp;format=poll_pdf",
+                          'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;session=$_GET[session]&amp;from_session_view=true&amp;format=poll_pdf$qform_param$qform_user_param",
                           'icon' => 'fa-solid fa-file-pdf',
                           'level' => 'primary-label',
                           'link-attrs' => "target='_blank'",
@@ -142,7 +164,7 @@ if (isset($_GET['from_session_view'])) {
                         'level' => 'primary',
                         'show' => isset($_REQUEST['unit_id'])),
                     array('title' => "$langPollPercentResults ($langDumpPDF)",
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;format=poll_pdf",
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;format=poll_pdf$qform_param$qform_user_param",
                         'icon' => 'fa-file-pdf',
                         'level' => 'primary-label',
                         'link-attrs' => "target='_blank'",
@@ -218,6 +240,19 @@ $tool_content .= "<div class='col-12'>
                             </div>
                         </div>
                     </li>";
+                    if ($qform_user > 0) {
+                        $tool_content .= "
+                            <li class='list-group-item element'>
+                                <div class='row row-cols-1 row-cols-md-2 g-1'>
+                                    <div class='col-md-3 col-12'>
+                                        <div class='title-default'>$langUser:</div>
+                                    </div>
+                                    <div class='col-md-9 col-12 title-default-line-height'>
+                                        " . uid_to_name($qform_user) . "
+                                    </div>
+                                </div>
+                            </li>";
+                    }
                     if ($sID > 0) {
                         $tool_content .= "
                             <li class='list-group-item element'>
@@ -289,14 +324,6 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
         $sessionArg = "&session=$sID";
     }
 
-    $qform = 0;
-    $qform_user = 0;
-    if (isset($_POST['qform'])) {
-        $qform = intval($_POST['qform']);
-    }
-    if (isset($_POST['qformUser'])) {
-        $qform_user = intval($_POST['qformUser']);;
-    }
 
     $tool_content .= "
     <div class='col-12 form_selection_per_user_or_question mt-4'>
