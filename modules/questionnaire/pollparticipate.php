@@ -1720,23 +1720,27 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                     $_SESSION['data_answers'][$pqid] = $_SESSION['data_file_answer'][$pqid];
                 }
             } elseif ($qtype == QTYPE_TABLE) {
+                $answers = Database::get()->queryArray("SELECT a.poll_user_record_id, a.answer_text, a.sub_qid, a.sub_qid_row FROM poll_answer_record a
+                                                        JOIN poll_user_record b ON b.id = a.poll_user_record_id
+                                                        WHERE b.pid = ?d
+                                                        AND b.uid = ?d
+                                                        $sql_an
+                                                        AND a.qid = ?d
+                                                        AND a.poll_user_record_id = (SELECT MAX(a2.poll_user_record_id) FROM poll_answer_record a2
+                                                                                       JOIN poll_user_record b2 ON b2.id = a2.poll_user_record_id
+                                                                                       WHERE b2.pid = ?d
+                                                                                       AND b2.uid = ?d
+                                                                                       AND a2.qid = ?d)", $theQuestion->pid, $userDefault, $pqid, $theQuestion->pid, $userDefault, $pqid);
+
                 $s_data = [];
                 $q_res = Database::get()->querySingle("SELECT q_row,q_column FROM poll_question WHERE pqid = ?d", $pqid);
                 $length = 1;
                 for ($i = 1; $i <= $q_res->q_row; $i++) {
                     for ($j = 1; $j <= $q_res->q_column; $j++) {
-                        $user_answers = Database::get()->querySingle("SELECT DISTINCT a.sub_qid, a.sub_qid_row, a.answer_text, a.submit_date
-                                        FROM poll_answer_record a, poll_user_record b
-                                        WHERE a.qid = ?d
-                                        AND a.poll_user_record_id = b.id
-                                        AND b.uid = ?d
-                                        AND a.sub_qid = ?d
-                                        AND a.sub_qid_row = ?d
-                                        $sql_an
-                                        ORDER BY a.submit_date DESC LIMIT 1", $pqid, $userDefault, $j, $i);
-                        
-                        if ($user_answers) {
-                            $s_data[$length] = $user_answers->answer_text;
+                        foreach ($answers as $an) {
+                            if ($an->sub_qid_row == $i && $an->sub_qid == $j) {
+                                $s_data[$length] = $an->answer_text;
+                            }
                         }
                         $length++;
                     }
