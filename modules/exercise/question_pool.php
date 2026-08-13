@@ -299,7 +299,7 @@ foreach ($result as $row) {
             $question_excl_legend = '';
         }
         // check if question has answers
-        if ($question_type != FREE_TEXT and $question_type != ORAL and $question_type != MATCHING and (!$question_temp->hasAnswers())) {
+        if ($question_type != FREE_TEXT and $question_type != ORAL and $questionType != UPLOAD_FILE and $question_type != MATCHING and (!$question_temp->hasAnswers())) {
             $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon' 
                     data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
         } else {
@@ -360,6 +360,7 @@ $data['selection_question_types'] = selection([
     CALCULATED => $langCalculated,
     FREE_TEXT => $langFreeText,
     ORAL => $langOral,
+    UPLOAD_FILE => $langUploadFile,
 ], 'answerType', $answerType, "onChange = 'document.qfilter.submit();'class='form-select'");
 $data['action_bar'] = action_bar($action_bar_options);
 

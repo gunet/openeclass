@@ -331,6 +331,9 @@ function question_answer_details($eurid, $qid) {
                 case FREE_TEXT:
                     $content .= html2text($data->answer);
                 break;
+                case UPLOAD_FILE:
+                    $content .= html2text($data->answer);
+                break;    
                 case ORAL:
                     $hyperLink = '';
                     $file = Database::get()->querySingle("SELECT `path` FROM document WHERE course_id = ?d

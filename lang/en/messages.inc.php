@@ -6307,6 +6307,7 @@ $langUsedInSeveralExercises2 = "The question (and its answers) is used in severa
 <li>If you select <i>in the current exercise only</i> the change will be made to the current one only.</li>
 </ul>";
 $langOral = "Oral";
+$langUploadFile = "File upload";
 $langSaveOralMsg = "Your answer will be temporarily saved. The final saving is completed by submitting the exercise. Do you want to proceed?";
 $langDeleteRecordingOk = "The file has been deleted successfully!";
 $langListenToRecordingAudio = "Listen to your recorded response here: ";

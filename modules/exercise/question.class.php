@@ -228,7 +228,7 @@ class Question {
                $langMatching, $langTrueFalse, $langFreeText, $langOrdering,
                $langFillBlanksStrict, $langFillBlanksTolerant, $langCalculated,
                $langFillFromSelectedWords, $langDragAndDropText, $langDragAndDropMarkers,
-               $langOral;
+               $langOral, $langUploadFile;
 
         switch ($answerTypeId) {
             case UNIQUE_ANSWER:
@@ -243,6 +243,8 @@ class Question {
                 return $langTrueFalse;
             case FREE_TEXT:
                 return $langFreeText;
+            case UPLOAD_FILE:
+                return $langUploadFile;
             case ORAL:
                 return $langOral;
             case FILL_IN_BLANKS_TOLERANT:
@@ -537,7 +539,7 @@ class Question {
                     $choice = $row->answer_id;
                 } elseif ($type == MULTIPLE_ANSWER) {
                     $choice[$row->answer_id] = 1;
-                } elseif ($type == FREE_TEXT or $type == ORAL) {
+                } elseif ($type == FREE_TEXT or $type == ORAL or $type == UPLOAD_FILE) {
                     $choice = $row->answer;
                 } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT || $type == FILL_IN_FROM_PREDEFINED_ANSWERS
                             || $type == DRAG_AND_DROP_TEXT || $type == DRAG_AND_DROP_MARKERS || $type == ORDERING) {
@@ -678,7 +680,7 @@ class Question {
             $q_correct_answers_cnt = 0;
         }
         //FIND CORRECT ANSWER ATTEMPTS
-        if ($type == FREE_TEXT or $type == ORAL) {
+        if ($type == FREE_TEXT or $type == ORAL or $type == UPLOAD_FILE) {
             // This query gets answers which where graded with question maximum grade
             $correct_answer_attempts = Database::get()->querySingle("SELECT COUNT(DISTINCT a.eurid) AS count
                     FROM exercise_answer_record a, exercise_user_record b, exercise_question c

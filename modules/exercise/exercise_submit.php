@@ -39,6 +39,7 @@ require_once 'modules/group/group_functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
 require_once 'include/log.class.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 // Login the user via token - used when launching the exercise from Safe Exam Browser (SEB)
 if (isset($got_token)) {
@@ -155,6 +156,123 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             }
         }
     }
+
+    // File has been uploaded from uppy
+    if (isset($_POST['file_uploaded_done'])) {
+        header('Content-Type: application/json');
+        $oldFileId = $_POST['old_file_id'];
+        $questionID = $_POST['question_id'];
+        $currentUser = $_POST['current_user'];
+        $docInfo = [
+            'filename' => basename(trim($_POST['file_name'] ?? '')),
+            'filepath' => trim($_POST['file_path'] ?? '')
+        ];
+        $checkObj = serialize($docInfo);
+        $arrFileObj = unserialize($checkObj, ['allowed_classes' => false]);
+        if (is_array($arrFileObj) && isset($arrFileObj['filename'], $arrFileObj['filepath']) 
+            && is_string($arrFileObj['filename']) && is_string($arrFileObj['filepath'])) {
+            $userInfo = Database::get()->querySingle("SELECT givenname,surname FROM user WHERE id = ?d", $currentUser);
+            $file_creator = "$userInfo->givenname $userInfo->surname";
+            $file_date = date('Y-m-d G:i:s');
+
+            $doc_inserted = Database::get()->query("INSERT INTO document SET
+                course_id = ?d,
+                subsystem = ?d,
+                subsystem_id = ?d,
+                path = ?s,
+                extra_path = '',
+                filename = ?s,
+                visible = 1,
+                comment = ?s,
+                category = 0,
+                title = ?s,
+                creator = ?s,
+                date = ?s,
+                date_modified = ?s,
+                subject = '',
+                description = '',
+                author = ?s,
+                format = ?s,
+                language = ?s,
+                copyrighted = 0,
+                editable = 0,
+                lock_user_id = ?d",
+                    $course_id, UPLOAD_FILE_QUESTION, $questionID, $arrFileObj['filepath'],
+                    $arrFileObj['filename'], null, null, $file_creator,
+                    $file_date, $file_date, $file_creator, get_file_extension($arrFileObj['filepath']),
+                    $language, $currentUser);
+
+            if ($doc_inserted) { // replace old file
+                Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFileId);
+            }
+
+            echo json_encode(['upload_success' => true, 'filePath' => $arrFileObj['filepath']]);
+        }
+    }
+
+    // File has been removed from uppy
+    if (isset($_POST['file_uploaded_remove'])) {
+        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+        $exId = $_GET['exerciseId'];
+        $qId = $_POST['question_id'];
+        $uId = $_POST['current_user'];
+        $oldfilePath = $_POST['old_file_path'];
+        $oldFileId = $_POST['old_file_id'];
+        $file = "$webDir/courses/$course_code/exercise/$uId/$exId/$qId$oldfilePath";
+        if (file_exists($file)) {
+            unlink($file);
+            Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFileId);
+        } 
+    }
+
+    exit;
+}
+
+// Save uploaded file from uppy - only for users
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['new_upload_file'])) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+    header('Content-Type: application/json');
+    
+    $exercise_id = intval($_GET['exerciseId']);
+    $question_id = intval($_GET['questionId']);
+    $currentUser = intval($_GET['u']);
+    $old_file_path = intval($_GET['oldFilePath']);
+    $filename = $_FILES['new_upload_file']['name'];
+    validateUploadedFile($filename); // check file type
+    $filename = add_ext_on_mime($filename);
+    // File name used in file system and path field
+    $safe_filename = safe_filename(get_file_extension($filename));
+    $dir = "$webDir/courses/$course_code/exercise/$currentUser/$exercise_id/$question_id";
+    if (!file_exists($dir)) {
+        mkdir("$webDir/courses/$course_code/exercise/$currentUser/$exercise_id/$question_id/", 0755, true);
+    } 
+    // else {// delete prev file
+    //     if (is_dir($dir)) {
+    //         $files = scandir($dir);
+    //         foreach ($files as $file) {
+    //             $pfile = '/' . $file; 
+    //             if ($file !== '.' && $file !== '..' && $old_file_path == $pfile) {
+    //                 $filePath = $dir . DIRECTORY_SEPARATOR . $file;
+    //                 if (is_file($filePath)) {
+    //                     unlink($filePath); // Delete the file
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    $pathfile = "$webDir/courses/$course_code/exercise/$currentUser/$exercise_id/$question_id/$safe_filename";
+    if (move_uploaded_file($_FILES['new_upload_file']['tmp_name'], $pathfile)) {
+        @chmod($pathfile, 0644);
+        $real_filename = $_FILES['new_upload_file']['name'];
+        $filepath = '/' . $safe_filename;
+        $info_file = pathinfo($filename);
+        echo json_encode(['success' => true, 'fileInfo' => $info_file, 'filePath' => $filepath]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to save uploaded file.']);
+    }
+
     exit;
 }
 
@@ -970,7 +1088,7 @@ foreach ($questionList as $k => $q_id) {
                 }
             }
         }
-    } elseif (($t_question->selectType() == FREE_TEXT or $t_question->selectType() == ORAL)
+    } elseif (($t_question->selectType() == FREE_TEXT or $t_question->selectType() == ORAL or $t_question->selectType() == UPLOAD_FILE)
         and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
         $answered = true;
     } elseif (($t_question->selectType() == MATCHING or $t_question->selectType() == FILL_IN_FROM_PREDEFINED_ANSWERS) and array_key_exists($q_id, $exerciseResult)) {

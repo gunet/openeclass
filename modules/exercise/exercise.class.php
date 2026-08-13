@@ -1011,7 +1011,7 @@ class Exercise
             // reads question information
             $objQuestionTmp->read($row->question_id);
             $question_type = $objQuestionTmp->selectType();
-            if ($question_type == FREE_TEXT or $question_type == ORAL) {
+            if ($question_type == FREE_TEXT or $question_type == ORAL or $question_type == UPLOAD_FILE) {
                 $exerciseResult[$row->question_id] = $row->answer;
             } elseif ($question_type == MATCHING) {
                 $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
@@ -1123,7 +1123,7 @@ class Exercise
                         $value[$i] = '';
                     }
                     unset($objAnswer);
-                } elseif ($question_type == FREE_TEXT or $question_type == ORAL) {
+                } elseif ($question_type == FREE_TEXT or $question_type == ORAL or $question_type == UPLOAD_FILE) {
                     $value = '';
                 } else {
                     $value = 0;
@@ -1149,7 +1149,7 @@ class Exercise
         Database::get()->query("DELETE FROM exercise_answer_record
                         WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
 
-        if ($question_type == FREE_TEXT or $question_type == ORAL) {
+        if ($question_type == FREE_TEXT or $question_type == ORAL or $question_type == UPLOAD_FILE) {
             $answer_record_id = Database::get()->query("INSERT INTO exercise_answer_record
                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                VALUES (?d, ?d, ?s, 0, NULL, ?d, ?d)",
@@ -1401,7 +1401,7 @@ class Exercise
         $id = $this->id;
         $attempt_value = $_POST['attempt_value'];
         $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
-        if ($question_type == FREE_TEXT or $question_type == ORAL) {
+        if ($question_type == FREE_TEXT or $question_type == ORAL or $question_type == UPLOAD_FILE) {
             if (!empty($value)) {
                 Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, weight = NULL,
                                       is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
