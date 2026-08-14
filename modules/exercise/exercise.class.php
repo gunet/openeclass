@@ -1488,9 +1488,9 @@ class Exercise
         global $course_id, $webDir, $course_code;
         $id = $this->id;
 
-        // Remove oral answers from document table and courses folder
-        $userRecords = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d", $id);
+        $userRecords = Database::get()->queryArray("SELECT eurid,uid FROM exercise_user_record WHERE eid = ?d", $id);
 
+        // Remove oral answers from document table and courses folder
         foreach ($userRecords as $rec) {
             $file = Database::get()->queryArray("SELECT id,`path` FROM document WHERE course_id = ?d
                                                   AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $rec->eurid);
@@ -1501,6 +1501,21 @@ class Exercise
                 Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
             }
 
+        }
+
+        // Remove file upload answers from document table and courses folder
+        foreach ($userRecords as $rec) {
+            $user_id = $rec->uid;
+            $file = Database::get()->queryArray("SELECT id,subsystem_id,`path` FROM document WHERE course_id = ?d
+                                                  AND subsystem = ?d AND lock_user_id = ?d", $course_id, UPLOAD_FILE_QUESTION, $rec->eurid);
+            foreach ($file as $f) {
+                $question_id = $rec->subsystem_id;
+                $filePath = $f->path;
+                if (file_exists("$webDir/courses/$course_code/exercise/$user_id/$id/$question_id$filePath")) {
+                    unlink("$webDir/courses/$course_code/exercise/$user_id/$id/$question_id$filePath");
+                }
+                Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
+            }
         }
 
 

@@ -15,9 +15,9 @@ class UploadFileAnswer extends QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $webDir, $langUploadFile, $urlAppend, $language, $course_code, $uid, 
-               $head_content, $urlServer, $course_id, $langDelete, $langAnswer, 
-               $langConfirmDeletePermantly, $eurid;
+        global $webDir, $urlAppend, $language, $course_code, $uid, 
+               $head_content, $urlServer, $course_id, $langDelete, 
+               $langAnswer, $langConfirmDeletePermantly, $eurid;
             
         $exerciseId = intval($_GET['exerciseId']) ?? 0;
         $questionId = $this->question_id;
@@ -31,7 +31,7 @@ class UploadFileAnswer extends QuestionType
 
         if (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] != '') {
             $uploadedFilePath = $exerciseResult[$questionId];
-            $uploadedFile = Database::get()->querySingle("SELECT id,`filename`,`path` FROM document WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND path = ?s AND lock_user_id = ?d", $course_id, UPLOAD_FILE_QUESTION, $questionId, $uploadedFilePath, $uid);
+            $uploadedFile = Database::get()->querySingle("SELECT id,`filename`,`path` FROM document WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND path = ?s", $course_id, UPLOAD_FILE_QUESTION, $questionId, $uploadedFilePath);
             if ($uploadedFile && file_exists("$webDir/courses/$course_code/exercise/$uid/$exerciseId/$questionId$uploadedFile->path")) {
                 $oldFileId = $uploadedFile->id;
                 $oldFilePath = $uploadedFile->path;
@@ -51,6 +51,7 @@ class UploadFileAnswer extends QuestionType
                                 $fileLink
                                 <input type='hidden' id='choice_{$questionId}' name='choice[$questionId]' value='$uploadedFilePath'>
                                 <div id='uppy_{$questionId}'></div>
+                                <div class='text-success mt-4' id='answerFile_{$questionId}'></div>
                             </div>
                           </div>";
 
@@ -100,15 +101,15 @@ class UploadFileAnswer extends QuestionType
                                     try {
                                         const data = JSON.parse(responseText.responseText);
                                         if (data.success) {
-                                            console.log(data);
                                             $.ajax({
                                                 url: '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&exerciseId={$exerciseId}',
                                                 method: 'POST',
-                                                data: { file_uploaded_done: 1, file_name: data.fileInfo.basename, file_path: data.filePath, question_id: $questionId, current_user: $uid, old_file_id: $oldFileId },
+                                                data: { file_uploaded_done: 1, file_name: data.fileInfo.basename, file_path: data.filePath, question_id: $questionId, current_user: $uid, old_file_id: $oldFileId, ex_user_record_id: $eurid },
                                                 success: function(res) {
                                                     if (res.upload_success) {
                                                         setInterval(() => {
                                                             $('#choice_{$questionId}').val(res.filePath);
+                                                            $('#uploadedFile_{$questionId}').addClass('text-decoration-line-through text-danger');
                                                         }, 500);
                                                     }
                                                 }
@@ -184,7 +185,7 @@ class UploadFileAnswer extends QuestionType
                                                         AND subsystem = ?d 
                                                         AND subsystem_id = ?d 
                                                         AND path = ?s 
-                                                        AND lock_user_id = ?d", $course_id, UPLOAD_FILE_QUESTION, $questionId, $results[$questionId], $userId);
+                                                        AND lock_user_id = ?d", $course_id, UPLOAD_FILE_QUESTION, $questionId, $results[$questionId], $eurid);
 
         if ($uploadedFile && file_exists("$webDir/courses/$course_code/exercise/$userId/$exerciseId/$questionId$uploadedFile->path")) {
             $urlLink = $urlServer . "courses/$course_code/exercise/$userId/$exerciseId/$questionId$uploadedFile->path";

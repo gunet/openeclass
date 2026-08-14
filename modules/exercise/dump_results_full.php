@@ -332,7 +332,26 @@ function question_answer_details($eurid, $qid) {
                     $content .= html2text($data->answer);
                 break;
                 case UPLOAD_FILE:
-                    $content .= html2text($data->answer);
+                    $hyperLink = '';
+                    $userDoc = Database::get()->querySingle("SELECT subsystem_id,`filename`,lock_user_id FROM document 
+                                                             WHERE course_id = ?d 
+                                                             AND subsystem = ?d 
+                                                             AND `path` = ?s", $course_id, UPLOAD_FILE_QUESTION, $data->answer);
+
+                    if ($userDoc) {
+                        $filePath = $data->answer;
+                        $fileName = $userDoc->filename;
+                        $user_record_id = $userDoc->lock_user_id;
+                        $question_id = $userDoc->subsystem_id;
+                        $userRecord = Database::get()->querySingle("SELECT eid,`uid` FROM exercise_user_record WHERE eurid = ?d", $user_record_id);
+                        $exercise_id = $userRecord->eid;
+                        $user_id = $userRecord->uid;
+                        if (file_exists("$webDir/courses/$course_code/exercise/$user_id/$exercise_id/$question_id$filePath")) {
+                            $pathUrl = $urlServer . "courses/$course_code/exercise/$user_id/$exercise_id/$question_id$filePath";
+                            $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
+                            $content .= $hyperLink;
+                        }
+                    }
                 break;    
                 case ORAL:
                     $hyperLink = '';

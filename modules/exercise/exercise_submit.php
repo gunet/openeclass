@@ -160,6 +160,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     // File has been uploaded from uppy
     if (isset($_POST['file_uploaded_done'])) {
         header('Content-Type: application/json');
+        $exUserRecordId = $_POST['ex_user_record_id'];
         $oldFileId = $_POST['old_file_id'];
         $questionID = $_POST['question_id'];
         $currentUser = $_POST['current_user'];
@@ -200,7 +201,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     $course_id, UPLOAD_FILE_QUESTION, $questionID, $arrFileObj['filepath'],
                     $arrFileObj['filename'], null, null, $file_creator,
                     $file_date, $file_date, $file_creator, get_file_extension($arrFileObj['filepath']),
-                    $language, $currentUser);
+                    $language, $exUserRecordId);
 
             if ($doc_inserted) { // replace old file
                 Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFileId);
@@ -419,6 +420,7 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                 // Replace eurid of recorded audio with new eurid in document table.
                 // Replace recorded audio of old eurid with new eurid in exercise_answer_record table.
                 // It's a special case for oral question type.
+                // Do the same for the eurid of upload file question
                 $old_answers = Database::get()->queryArray("SELECT answer_record_id, answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
                 if (count($old_answers) > 0) {
                     foreach ($old_answers as $old_an) {
@@ -437,6 +439,14 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                 if (count($old_documents) > 0) {
                     foreach ($old_documents as $old_doc) {
                         Database::get()->query("UPDATE document SET lock_user_id = ?d WHERE id = ?d", $new_eurid, $old_doc->id);
+                    }
+                }
+
+                $oldUploadedFiles = Database::get()->queryArray("SELECT id FROM document WHERE course_id = ?d
+                                                                AND subsystem = ?d AND lock_user_id = ?d", $course_id, UPLOAD_FILE_QUESTION, $eurid);
+                if (count($oldUploadedFiles) > 0) {
+                    foreach ($oldUploadedFiles as $old) {
+                        Database::get()->query("UPDATE document SET lock_user_id = ?d WHERE id = ?d", $new_eurid, $old->id);
                     }
                 }
 
