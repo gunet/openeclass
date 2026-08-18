@@ -1798,6 +1798,7 @@ $langWeekly = "Wöchentlich";
 $langMonthly = "Monatlich";
 $langYearly = "Jährlich";
 $langSummary = "Gesamte Anzahl";
+$langSynopsis = "Zusammenfassung";
 $langDurationVisits = "Zeitliche Dauer der Besuche";
 $langDurationExpl = "Die zeitliche Dauer der Besuche in jedem Subsystem ist in Minuten aufgerundet angegeben";
 $langMonths[1] = "Jan";
@@ -5531,10 +5532,13 @@ $langWallPostsShow = "Posts";
 $langImportAttendances = 'Import attendance records from file';
 $langAttendancesImported = 'The attendances were imported';
 $langImportExtraAttendanceUsers = 'The following users did not participate in the attendance book';
-$langImportAttendancesHelp = 'You can upload an Excel file (e.g. xls, xlsx) with user attendance info.
-    The presence of users must be completed in the last column of the file you can download from the link below.<br><br>
-    <strong>Do not</strong> change the file structure (e.g. number of columns) because the attendance import will fail.<br><br>
-    Also note that to record a presence, enter <strong>1</strong>. Anything else is not considered a presence.';
+$langImportAttendancesHelp = 'Sie können Anwesenheitsnachweise als Massenupload importieren, indem Sie eine Excel Datei (xlsx) mit den entsprechenden Nachweisen, die Sie editieren wollen, hochladen.';
+$langImportAttendancesStepOne = 'Laden Sie die Datei herunter, indem Sie Folgendes klicken:';
+$langImportAttendancesStepTwo = 'Öffnen Sie die Datei, aber ändern Sie <strong>NICHT</strong> die Struktur (z.B. Anzahl der Spalten), da hierdurch der Import fehlschlägt.';
+$langImportAttendancesStepThree = 'Klicken Sie in die Zelle in der letzten Spalte, die zu der Anwesenheit des Nutzers gehört, die Sie ändern wollen.';
+$langImportAttendancesStepFour = 'Geben Sie die Ziffer <strong>0</strong> ein, um eine Abwesenheit zu kennzeichnen (rotes X), oder die Ziffer <strong>1</strong>, um eine Anwesenheit zu kennzeichnen (grüner Haken).';
+$langImportAttendancesStepFive = 'Drücken Sie die "Enter" Taste und speichen Sie dann die Datei.';
+$langImportAttendancesStepSix = 'Laden Sie die Datei über das untenstehende Formular hoch.';
 $langGradebookUsers = 'Gradebook users';
 $langGroupsManagment = "Manage groups";
 $langSearchByCategory = "Search through : ";

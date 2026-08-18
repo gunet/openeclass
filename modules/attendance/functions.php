@@ -19,6 +19,8 @@
  */
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Cell\CellRange;
+use PhpOffice\PhpSpreadsheet\Cell\CellAddress;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 require_once 'modules/progress/AttendanceEvent.php';
@@ -31,7 +33,7 @@ function display_attendances() {
     global $course_id, $tool_content, $course_code,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
            $langAvailableAttendances, $langNoAttendances, $is_editor, $is_course_reviewer,
-           $langViewHide, $langViewShow, $langEditChange, $langStart, $langFinish, $uid, $langSettingSelect;
+           $langViewHide, $langViewShow, $langEditChange, $langStart, $langFinish, $uid, $langSettingSelect, $langExport;
 
     if ($is_course_reviewer) {
         $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
@@ -73,11 +75,14 @@ function display_attendances() {
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;editSettings=1",
-                                          'icon' => 'fa-cogs'),
+                                          'icon' => 'fa-edit'),
                                     array('title' => $a->active ? $langViewHide : $langViewShow,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;vis=" .
                                                   ($a->active ? '0' : '1'),
                                           'icon' => $a->active ? 'fa-eye-slash' : 'fa-eye'),
+                                    array('title' => "$langExport",
+                                          'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=" . urlencode(getIndirectReference($a->id)),
+                                          'icon' => 'fa-file-excel'),
                                     array('title' => $langCreateDuplicate,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;dup=1",
                                           'icon' => 'fa-copy'),
@@ -104,7 +109,7 @@ function register_user_presences($attendance_id, $actID) {
 
     global $tool_content, $course_id, $course_code,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
-           $langGroup, $langAttendanceBooking, $langID, $langQuotaSuccess, $langCancel, $langSelect;
+           $langGroup, $langAttendanceBooking, $langID, $langQuotaSuccess, $langCancel, $langSelect, $langGradebookNoTitle;
 
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
@@ -112,7 +117,7 @@ function register_user_presences($attendance_id, $actID) {
 
     $tool_content .= "
     <div class='col-12'>
-        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . q($result->title) . "</span></div></div>";
+        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . q(strlen($result->title) === 0 ? $langGradebookNoTitle : $result->title) . "</span></div></div>";
 
     if (isset($_POST['bookUsersToAct'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
@@ -240,7 +245,7 @@ function display_attendance_activities($attendance_id) {
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langExercise,
            $langAdd, $langExport, $langBack, $langNoStudentsInAttendance, $langBBB,
            $is_editor, $is_course_reviewer, $is_collaborative_course, $langSettingSelect,
-           $langQRCodePresence;
+           $langQRCodePresence, $langImportAttendances, $langExport;
 
     $attendance_id_ind = getIndirectReference($attendance_id);
     if ($is_editor) {
@@ -292,12 +297,12 @@ function display_attendance_activities($attendance_id) {
                             'class' => '')),
                     'icon' => 'fa-plus',
                     'show' => (isset($is_collaborative_course) and $is_collaborative_course)),
-                array('title' => $langConfig,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
-                    'icon' => 'fa-cog'),
                 array('title' => "$langExport",
                     'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id_ind",
-                    'icon' => 'fa-file-excel')
+                    'icon' => 'fa-file-excel'),
+                array('title' => $langConfig,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
+                    'icon' => 'fa-cog')
             ),
             true
         );
@@ -371,6 +376,14 @@ function display_attendance_activities($attendance_id) {
                             'icon' => 'fa-solid fa-qrcode',
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;gen_qrcodePr=true&amp;actId=" . getIndirectReference($details->id),
                             'show' => !$details->module_auto_id
+                        ),
+                        array('title' => $langExport,
+                            'icon' => 'fa-solid fa-download',
+                            'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=" . urlencode(getIndirectReference($attendance_id)) . "&activity_id=" . urlencode($details->id),
+                        ),
+                        array('title' => $langImportAttendances,
+                            'icon' => 'fa-solid fa-upload',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . urlencode($attendance_id) . "&imp=" . urlencode($details->id)
                         ),
                         array('title' => $langDelete,
                             'icon' => 'fa-xmark',
@@ -1574,40 +1587,90 @@ function get_attendance_limit($attendance_id) {
  * @return void
  */
 function import_attendances($attendance_id, $activity, $import = false) {
-
     global $tool_content, $course_code, $langAttendanceUsers,
            $langWorkFile, $langUpload, $langImportAttendancesHelp,
-           $langImportInvalidUsers, $langImportGradesError, $langImportErrorLines,
-           $langImportExtraAttendanceUsers, $langAttendancesImported,
-           $langImgFormsDes, $langForm;
+           $langImportInvalidUsers, $langImportGradesError,
+           $langImportErrorLines, $langImportExtraAttendanceUsers,
+           $langAttendancesImported, $langImgFormsDes, $langForm,
+           $langUnwantedFiletype, $langImportAttendancesStepOne,
+           $langImportAttendancesStepTwo, $langImportAttendancesStepThree,
+           $langImportAttendancesStepFour, $langImportAttendancesStepFive,
+           $langImportAttendancesStepSix, $langExport;
 
-    if ($import and isset($_FILES['userfile'])) { // import user attendances
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        $file = IOFactory::load($_FILES['userfile']['tmp_name']);
+    if ($import and isset($_FILES['userfile'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token']))
+            csrf_token_error();
+
+        try {
+            $file = IOFactory::load($_FILES['userfile']['tmp_name']);
+        } catch (Exception $e) {
+            error_log($e);
+            Session::flash('message', $langUnwantedFiletype);
+            Session::flash('alert-class', 'alert-error');
+            redirect_to_home_page('/modules/attendance/index.php?course=' . urlencode($_GET['course']) . '&attendance_id=' . urlencode($attendance_id) . '&imp=' . urlencode($_GET['imp']));
+        }
+
         $sheet = $file->getActiveSheet();
-        $userAttendance = $errorLines = $invalidUsers = $extraUsers = [];
-
         $highestRow = $sheet->getHighestRow();
         $highestColumn = $sheet->getHighestColumn();
         $highestColumnIndex = Coordinate::columnIndexFromString($highestColumn);
+        $userAttendance = $errorLines = $invalidUsers = $extraUsers = [];
 
-        for ($row = 1; $row <= $highestRow; ++$row) {
-            if ($row <= 4) { // first 4 rows are headers
-                continue;
-            } else {
-                for ($col = 4; $col <= $highestColumnIndex; $col = $col + 2) {
-                    $cells = [$col, $row];
-                    $value = trim($sheet->getCell($cells)->getValue());
-                    $data[] = $value;
-                }
-                if (!is_numeric($data[1]) or $data[1] != 1) { // valid attendances have value = 1
-                    $data[1] = 0;
-                }
-                if (preg_match('/\(([^)]+)\)/', $data[0], $matches)) {
-                    $username = $matches[1];
+        $exportVersion = $file->getProperties()->getCustomPropertyValue("OpeneClassExportVer");
+        // Check the version of the file (if it contains the attribute)
+        if ($exportVersion === NULL) { // Compatibility with older exported files
+            for ($row = 1; $row <= $highestRow; ++$row) {
+                if ($row <= 4) { // first 4 rows are headers
+                    continue;
                 } else {
-                    $username = $data[0];
+                    for ($col = 4; $col <= $highestColumnIndex; $col = $col + 2) {
+                        $cells = [$col, $row];
+                        $value = trim($sheet->getCell($cells)->getValue());
+                        $data[] = $value;
+                    }
+                    if (!is_numeric($data[1]) or $data[1] != 1) { // valid attendances have value = 1
+                        $data[1] = 0;
+                    }
+                    if (preg_match('/\(([^)]+)\)/', $data[0], $matches)) {
+                        $username = $matches[1];
+                    } else {
+                        $username = $data[0];
+                    }
+                    $uname_where = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
+                    $user = Database::get()->querySingle("SELECT * FROM user WHERE username $uname_where ?s", $username);
+
+                    if (!$user) {
+                        $invalidUsers[] = $username;
+                    } else {
+                        $submission = Database::get()->querySingle("SELECT id FROM attendance_users WHERE uid = ?d AND attendance_id = ?d",
+                            $user->id, $attendance_id);
+                        if (!$submission) {
+                            $extraUsers[] = $username;
+                        } else {
+                            $userAttendance[$user->id] = $data[1];
+                        }
+                    }
+                    $data = [];
                 }
+            }
+        } else if ($exportVersion === 1 && $highestRow > 0 && $highestColumnIndex === 6) { // Current export/import version
+            for ($row = 5; $row <= $highestRow - 1; $row++) {
+                $username = $sheet->getCell([4, $row])->getValue();
+                $attendance = $sheet->getCell([6, $row])->getValue();
+
+                // Validate the data
+                if (strlen(trim($username)) === 0)
+                    continue;
+
+                // PHPSpreadsheet does the conversion, so is_int() is sufficient
+                if (!is_int($attendance) || $attendance < 0) {
+                    $errorLines[] = $sheet->rangeToArray(new CellRange(CellAddress::fromColumnAndRow(1, $row), CellAddress::fromColumnAndRow($highestColumnIndex, $row)))[0];
+                    continue;
+                }
+
+                // Because the spreadsheet shows a tick mark for > 0, accept it here
+                $attendance = $attendance > 0 ? 1 : 0;
+
                 $uname_where = (get_config('case_insensitive_usernames')) ? "COLLATE utf8mb4_general_ci = " : "COLLATE utf8mb4_bin = ";
                 $user = Database::get()->querySingle("SELECT * FROM user WHERE username $uname_where ?s", $username);
 
@@ -1619,13 +1682,17 @@ function import_attendances($attendance_id, $activity, $import = false) {
                     if (!$submission) {
                         $extraUsers[] = $username;
                     } else {
-                        $userAttendance[$user->id] = $data[1];
+                        $userAttendance[$user->id] = $attendance;
                     }
                 }
-                $data = [];
             }
+        } else { // Can't import - unknown version
+            Session::flash('message', $langUnwantedFiletype);
+            Session::flash('alert-class', 'alert-error');
+            redirect_to_home_page('/modules/attendance/index.php?course=' . urlencode($_GET['course']) . '&attendance_id=' . urlencode($attendance_id) . '&imp=' . urlencode($_GET['imp']));
         }
 
+        // Import the users to the DB
         if (!($errorLines or $invalidUsers or $extraUsers)) {
             foreach ($userAttendance as $user_id => $attendance) {
                 Database::get()->query("INSERT INTO attendance_book (uid, attendance_activity_id, attend, comments)
@@ -1635,7 +1702,7 @@ function import_attendances($attendance_id, $activity, $import = false) {
             }
             Session::flash('message', $langAttendancesImported);
             Session::flash('alert-class', 'alert-success');
-            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . getIndirectReference($activity));
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . urlencode(getIndirectReference($activity)));
         } else {
             $message = $langImportGradesError;
             if ($invalidUsers) {
@@ -1662,7 +1729,7 @@ function import_attendances($attendance_id, $activity, $import = false) {
             }
             Session::flash('message', $message);
             Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . getIndirectReference($activity));
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . urlencode(getIndirectReference($activity)));
         }
     } else { // import grades form
         enableCheckFileSize();
@@ -1671,19 +1738,29 @@ function import_attendances($attendance_id, $activity, $import = false) {
                 <div class='flex-grow-1'>
                     <div class='form-wrapper'>
                         <form class='form-horizontal' enctype='multipart/form-data' method='post' 
-                            action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance_id . "&amp;imp=$activity&amp;import_attendances=true'>
+                            action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . urlencode($attendance_id) . "&amp;imp=$activity&amp;import_attendances=true'>
                             <fieldset>
                                 <legend class='mb-0' aria-label='$langForm'></legend>
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
                                         <p class='form-control-static'>$langImportAttendancesHelp</p>
-                                        <a href='dumpattendancebook.php?course=$course_code&attendance_id=" . getIndirectReference($attendance_id) . "&activity_id=$activity'>$langAttendanceUsers</a>
-                                    </div>
-                                </div>
-                                <div class='form-group mt-4'>
-                                    <label for='userfile' class='col-sm-12 form-label'>$langWorkFile:</label>
-                                    <div class='col-sm-10'>" . fileSizeHidenInput() . "
-                                        <input type='file' id='userfile' name='userfile'>
+                                        <br>
+                                        <ol>
+                                            <li class='col-sm-10' onclick=\"location.href='dumpattendancebook.php?course=$course_code&attendance_id=" . urlencode(getIndirectReference($attendance_id)) . "&activity_id=$activity'\">
+                                                $langImportAttendancesStepOne
+                                                <button type='button'>
+                                                    $langExport
+                                                </button>
+                                            </li>
+                                            <li>$langImportAttendancesStepTwo</li>
+                                            <li>$langImportAttendancesStepThree</li>
+                                            <li>$langImportAttendancesStepFour</li>
+                                            <li>$langImportAttendancesStepFive</li>
+                                            <li>$langImportAttendancesStepSix</li>
+                                            <div class='col-sm-10'>
+                                                <input type='file' id='userfile' name='userfile'>
+                                            </div>
+                                        </ol>
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
@@ -1697,7 +1774,7 @@ function import_attendances($attendance_id, $activity, $import = false) {
                     ],
                     [
                         'class' => 'btn cancelAdminBtn',
-                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($activity)
+                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . urlencode(getIndirectReference($activity))
                     ]
                 ]) . "
                                     </div>

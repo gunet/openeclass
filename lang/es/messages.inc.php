@@ -1856,6 +1856,7 @@ $langWeekly = "Semanalmente";
 $langMonthly = "Mensualmente";
 $langYearly = "Anualmente";
 $langSummary = "Sumario";
+$langSynopsis = "Resumen";
 $langDurationVisits = "Tiempo de duración de las visitas";
 $langDurationExpl = "El tiempo de duración de las visitas en cada módulo se computa aproximadamente en minutos.";
 $langMonths[1] = "Ene";
@@ -5614,10 +5615,13 @@ $langWallPostsShow = "Posts";
 $langImportAttendances = 'Import attendance records from file';
 $langAttendancesImported = 'The attendances were imported';
 $langImportExtraAttendanceUsers = 'The following users did not participate in the attendance book';
-$langImportAttendancesHelp = 'You can upload an Excel file (e.g. xls, xlsx) with user attendance info.
-    The presence of users must be completed in the last column of the file you can download from the link below.<br><br>
-    <strong>Do not</strong> change the file structure (e.g. number of columns) because the attendance import will fail.<br><br>
-    Also note that to record a presence, enter <strong>1</strong>. Anything else is not considered a presence.';
+$langImportAttendancesHelp = 'Puedes importar registros de asistencia en masa subiendo un archivo Excel (xlsx) que contenga los registros de asistencia que quieres edita.';
+$langImportAttendancesStepOne = 'Descarga el archivo pulsando en él.';
+$langImportAttendancesStepTwo = 'Abre el archivo, pero <strong>NO</strong> cambia su estructura (por ej. número de columnas), pues la importación fallará.';
+$langImportAttendancesStepThree = 'Pulsa en la celda en la última columna que corresponde a la asistencia del usuario que deseas modificar.';
+$langImportAttendancesStepFour = 'Escribe el número <strong>0</strong> para significar ausencia (rojo X) o el número <strong>1</strong> para asistencia (tick verde).';
+$langImportAttendancesStepFive = 'Pulsa Enter y guarda el archivo.';
+$langImportAttendancesStepSix = 'Sube el archivo usando el formulario inferior.';
 $langGradebookUsers = 'Gradebook users';
 $langGroupsManagment = "Manage groups";
 $langSearchByCategory = "Search through : ";

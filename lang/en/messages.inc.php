@@ -1891,6 +1891,7 @@ $langWeekly = "Weekly";
 $langMonthly = "Montlhy";
 $langYearly = "Yearly";
 $langSummary = "Summary";
+$langSynopsis = "Synopsis";
 $langDurationVisits = "Time Duration of Visits";
 $langDurationExpl = "Duration of visits on each module is computed appoximately in minutes.";
 $langMonths[1] = "Jan";
@@ -5660,10 +5661,13 @@ $langWallPostsShow = "Posts";
 $langImportAttendances = 'Import attendance records from file';
 $langAttendancesImported = 'The attendances were imported';
 $langImportExtraAttendanceUsers = 'The following users did not participate in the attendance book';
-$langImportAttendancesHelp = 'You can upload an Excel file (e.g. xls, xlsx) with user attendance info.
-    The presence of users must be completed in the last column of the file you can download from the link below.<br><br>
-    <strong>Do not</strong> change the file structure (e.g. number of columns) because the attendance import will fail.<br><br>
-    Also note that to record a presence, enter <strong>1</strong>. Anything else is not considered a presence.';
+$langImportAttendancesHelp = 'You can import attendance records in bulk by uploading an Excel (xlsx) file containing the attendance records you want to edit.';
+$langImportAttendancesStepOne = 'Download the file by clicking on';
+$langImportAttendancesStepTwo = 'Open the file but <strong>DO NOT</strong> change its structure (e.g number of columns), as the import will fail.';
+$langImportAttendancesStepThree = 'Click the cell in the last column that corresponds to attendance of the user you wish to modify.';
+$langImportAttendancesStepFour = 'Type the number <strong>0</strong> to signify absence (red X) or the number <strong>1</strong> for attendance (green check mark).';
+$langImportAttendancesStepFive = 'Press the Enter key and then save the file.';
+$langImportAttendancesStepSix = 'Upload the file using the form below.';
 $langGradebookUsers = 'Gradebook users';
 $langGroupsManagment = "Manage groups";
 $langSearchByCategory = "Search through : ";
