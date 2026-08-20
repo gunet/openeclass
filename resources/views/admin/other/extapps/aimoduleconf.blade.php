@@ -21,7 +21,7 @@
                                     <label for="dropdown" class="form-label">{{ trans('langSelectAIProvider') }}</label>
                                     <select id='dropdownprovider' name='provider' class='form-select'>
                                         @foreach ($dropdownOptions as $option)
-                                            <option value='{{ $option['value'] }}' @if (isset($existingConfig->provider_type) && $existingConfig->provider_type == $option['value']) selected @endif> {{ ($option['label']) }}</option>
+                                            <option value='{{ $option['value'] }}' @if (isset($existingConfig->provider_type) && ($existingConfig->provider_type == $option['value'] || ($existingConfig->provider_type == 'custom' && $option['value'] == 'other') || ($existingConfig->provider_type == 'other' && $option['value'] == 'custom'))) selected @endif> {{ ($option['label']) }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -31,7 +31,7 @@
                                     <input type="text" id="api_key" name="api_key" class="form-control" placeholder="Enter API key" value="@if (isset($existingConfig->api_key)) {{ $existingConfig->api_key }} @endif">
                                 </div>
 
-                                <div id='modelDropdownContainer' class='form-group mt-4'>
+                                <div id='modelDropdownContainer' class='form-group mt-4 @if (isset($existingConfig->provider_type) && in_array($existingConfig->provider_type, ['custom', 'other'])) d-none @endif'>
                                     <label for="modelDropdown" class="form-label">{{ trans('langLanguageModel') }}</label>
                                     <select id="modelDropdown" name="model" class="form-select">
                                         <option value="{{ $currentModelName }}">{{ $currentModelName }}</option>
@@ -46,7 +46,7 @@
 
                                 <div id="connectionStatus" class="mt-2"></div>
 
-                                <div id="otherFields" class="mt-4 d-none">
+                                <div id="otherFields" class="mt-4 @if (!isset($existingConfig->provider_type) || !in_array($existingConfig->provider_type, ['custom', 'other'])) d-none @endif">
                                     <div class='form-group'>
                                         <label for="apiType" class="form-label">API Type</label>
                                         <select id="apiType" name="api_type" class="form-control">
@@ -56,12 +56,12 @@
 
                                     <div class='form-group mt-3'>
                                         <label for="endpointUrl" class="form-label">Endpoint URL</label>
-                                        <input type="text" id="endpointUrl" name="endpoint_url" class="form-control" placeholder="Enter custom API URL">
+                                        <input type="text" id="endpointUrl" name="endpoint_url" class="form-control" placeholder="Enter custom API URL" value="@if (isset($existingConfig->endpoint_url)){{ $existingConfig->endpoint_url }}@endif">
                                     </div>
 
                                     <div class='form-group mt-3'>
                                         <label for="modelName" class="form-label">{{ trans('langLanguageModelName') }}</label>
-                                        <input type="text" id="modelName" name="model_name" class="form-control" placeholder="{{ trans('langLanguageModelName') }}">
+                                        <input type="text" id="modelName" name="model_name" class="form-control" placeholder="{{ trans('langLanguageModelName') }}" value="@if (isset($existingConfig->model_name) && in_array($existingConfig->provider_type, ['custom', 'other'])){{ $existingConfig->model_name }}@endif">
                                     </div>
                                 </div>
 
@@ -343,15 +343,18 @@
 
             // Load models for existing provider on page load
             var selectedProvider = $('#dropdownprovider').val();
-            if (selectedProvider && selectedProvider !== 'other') {
+            if (selectedProvider && selectedProvider !== 'other' && selectedProvider !== 'custom') {
                 loadModels(selectedProvider);
+            } else if (selectedProvider === 'other' || selectedProvider === 'custom') {
+                $('#modelDropdownContainer').addClass('d-none');
+                $('#otherFields').removeClass('d-none');
             }
 
             // Handle provider dropdown change
             $('#dropdownprovider').on('change', function () {
                 const provider = $(this).val();
 
-                if (provider === 'other') {
+                if (provider === 'other' || provider === 'custom') {
                     $('#modelDropdownContainer').addClass('d-none');
                     $('#otherFields').removeClass('d-none');
                 } else {
@@ -359,7 +362,7 @@
                     $('#otherFields').addClass('d-none');
                 }
 
-                if (provider && provider !== 'other') {
+                if (provider && provider !== 'other' && provider !== 'custom') {
                     loadModels(provider);
                 }
             });
@@ -378,7 +381,7 @@
                 const originalText = btn.text();
                 const apiKey = $('#api_key').val();
                 const provider = $('#dropdownprovider').val();
-                const model = provider === 'other' ? $('#modelName').val() : $('#modelDropdown').val();
+                const model = (provider === 'other' || provider === 'custom') ? $('#modelName').val() : $('#modelDropdown').val();
                 const endpointUrl = $('#endpointUrl').val();
 
                 if (!apiKey) {

@@ -183,13 +183,13 @@ class OpenAIProvider extends AbstractAIProvider {
     /**
      * Format a single question into an OpenEclass format
      */
-    private function formatSingleQuestion(array $questionData): array {
+    protected function formatSingleQuestion(array $questionData): array {
         $formatted = [
             'question_text' => $questionData['question'] ?? '',
             'question_type' => $this->mapQuestionType($questionData['type'] ?? 'multiple_choice'),
             'difficulty' => $questionData['difficulty'] ?? 3,
             'correct_answer' => $questionData['correct_answer'] ?? '',
-            'correct_answer_index' => $questionData['correct_answer_index'] ?? null,
+            'correct_answer_index' => isset($questionData['correct_answer_index']) && is_numeric($questionData['correct_answer_index']) ? intval($questionData['correct_answer_index']) : ($questionData['correct_answer_index'] ?? null),
             'explanation' => $questionData['explanation'] ?? '',
             'provider' => $this->getProviderType(),
             'created_at' => date('Y-m-d H:i:s')
@@ -202,12 +202,14 @@ class OpenAIProvider extends AbstractAIProvider {
 
         // Handle different question types
         switch ($formatted['question_type']) {
+            case UNIQUE_ANSWER:
             case 'multiple_choice':
                 if (!isset($formatted['options']) || count($formatted['options']) < 2) {
                     $formatted['options'] = ['Option A', 'Option B', 'Option C', 'Option D'];
                 }
                 break;
 
+            case TRUE_FALSE:
             case 'true_false':
                 // Use language-appropriate true/false labels from language files
                 global $langFalse, $langTrue;
@@ -221,16 +223,18 @@ class OpenAIProvider extends AbstractAIProvider {
     /**
      * Map AI question types to OpenEclass question types
      */
-    private function mapQuestionType(string $aiType): string {
+    protected function mapQuestionType(string $aiType): string {
         $mapping = [
             'multiple_choice' => UNIQUE_ANSWER,
             'true_false' => TRUE_FALSE,
             'fill_blank' => FILL_IN_BLANKS_TOLERANT,
+            'fill_in_blanks' => FILL_IN_BLANKS_TOLERANT,
             'essay' => FREE_TEXT,
-            'short_answer' => FREE_TEXT
+            'short_answer' => FREE_TEXT,
+            'free_text' => FREE_TEXT
         ];
 
-        return $mapping[$aiType] ?? 'multiple_choice';
+        return $mapping[strtolower($aiType)] ?? UNIQUE_ANSWER;
     }
 
     /**
@@ -298,7 +302,7 @@ class OpenAIProvider extends AbstractAIProvider {
     /**
      * Build system prompt for course data extraction
      */
-    private function buildCourseExtractionSystemPrompt(string $contentType): string {
+    protected function buildCourseExtractionSystemPrompt(string $contentType): string {
         $basePrompt = "You are an expert educational assistant that extracts structured course information for learning management systems. ";
         
         if ($contentType === 'syllabus') {
@@ -315,7 +319,7 @@ class OpenAIProvider extends AbstractAIProvider {
     /**
      * Build user prompt for course data extraction
      */
-    private function buildCourseExtractionPrompt(string $content, string $contentType, array $options): string {
+    protected function buildCourseExtractionPrompt(string $content, string $contentType, array $options): string {
         if ($contentType === 'syllabus') {
             $prompt = "Extract course information from the following syllabus content:\n\n";
             $prompt .= "SYLLABUS CONTENT:\n" . $content . "\n\n";
@@ -344,7 +348,7 @@ class OpenAIProvider extends AbstractAIProvider {
     /**
      * Get the function/tool definition for course data extraction
      */
-    private function getCourseExtractionToolDefinition(): array {
+    protected function getCourseExtractionToolDefinition(): array {
         return [
             'type' => 'function',
             'function' => [
@@ -449,7 +453,7 @@ class OpenAIProvider extends AbstractAIProvider {
     /**
      * Format course data response from OpenAI function calling
      */
-    private function formatCourseDataFunctionResponse(array $apiResponse, array $options): array {
+    protected function formatCourseDataFunctionResponse(array $apiResponse, array $options): array {
         if (!isset($apiResponse['choices'][0]['message']['tool_calls'][0]['function']['arguments'])) {
             throw new Exception("Invalid function response format from OpenAI");
         }

@@ -49,10 +49,6 @@ if (isset($_GET['edit_provider'])) {
     $data['dropdownOptions'] = array_map(function ($key, $value) {
         return ['value' => $key, 'label' => $value];
     }, array_keys($providerDisplayNames), $providerDisplayNames);
-    $data['dropdownOptions'] = array_merge(
-        $data['dropdownOptions'],
-        [['value' => 'other', 'label' => 'Other']]
-    );
 } else if (isset($_GET['delete_provider'])) {
     Database::get()->query("DELETE FROM ai_providers WHERE id = ?d", $_GET['delete_provider']);
     Session::flash('message', $langAITokenDeleted);
@@ -76,8 +72,8 @@ if (isset($_GET['edit_provider'])) {
 
     if ($provider_type && $api_key) {
         try {
-            // For "another" provider type, use custom values
-            if ($provider_type === 'other') {
+            // For "custom" or "other" provider type, use custom values
+            if ($provider_type === 'other' || $provider_type === 'custom') {
                 $provider_type = 'custom';
                 $model = $model_name;
             }
@@ -157,10 +153,6 @@ if (isset($_GET['edit_provider'])) {
     $data['dropdownOptions'] = array_map(function ($key, $value) {
         return ['value' => $key, 'label' => $value];
     }, array_keys($providerDisplayNames), $providerDisplayNames);
-    $data['dropdownOptions'] = array_merge(
-        $data['dropdownOptions'],
-        [['value' => 'other', 'label' => 'Other']]
-    );
     $data['currentModelName'] = $currentModelName = '';
 } else if (isset($_GET['add_service'])) {
     $toolName = $langAssignAIToModule;
@@ -230,10 +222,6 @@ if (isset($_GET['edit_provider'])) {
     $data['dropdownOptions'] = array_map(function ($key, $value) {
         return ['value' => $key, 'label' => $value];
     }, array_keys($providerDisplayNames), $providerDisplayNames);
-    $data['dropdownOptions'] = array_merge(
-        $data['dropdownOptions'],
-        [['value' => 'other', 'label' => 'Other']]
-    );
 
 // Get the current model name for JavaScript (escaped for security)
     $currentModelName = '';
