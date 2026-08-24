@@ -115,7 +115,7 @@ register_posted_variables([
     'apiBaseUrl' => true, 'authorizePath' => true, 'accessTokenPath' => true, 'profileMethod' => true,
     'apiID' => true, 'apiSecret' => true,
     // Keycloak options
-    'realm' => true, 'userstudentid' => true, 'uid_attr' => true, 'uid_attr_is_username' => true, 'username_prefix' => true,
+    'realm' => true, 'userstudentid' => true, 'uid_attr' => true, 'uid_attr_is_username' => true, 'username_prefix' => true, 'end_session_endpoint' => true,
 ], 'all');
 
 if (empty($ldap_login_attr)) {
@@ -267,6 +267,7 @@ if (isset($_POST['submit'])) {
                 'uid_attr' => $uid_attr,
                 'uid_attr_is_username' => !empty($uid_attr_is_username) ? 1 : 0,
                 'username_prefix' => $username_prefix,
+                'end_session_endpoint' => $end_session_endpoint,
             ];
             break;
         default:

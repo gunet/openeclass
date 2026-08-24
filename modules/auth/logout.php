@@ -32,6 +32,8 @@ require_once 'modules/auth/methods/hybridauth/config.php';
 
 if ($uid and isset($_POST['token']) and validate_csrf_token($_POST['token'])) {
     $login_method = $session->getLoginMethod();
+    $end_session_endpoint = $_SESSION['end_session_endpoint'] ?? null;
+    $id_token_hint = $_SESSION['keycloak_session_id_token'] ?? null;
     Database::get()->query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
                 VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGOUT')", $uid, Log::get_client_ip());
@@ -62,6 +64,19 @@ if ($uid and isset($_POST['token']) and validate_csrf_token($_POST['token'])) {
         $service_base_url = "$url_info[scheme]://$url_info[host]";
         phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], $service_base_url, FALSE);
         phpCAS::logoutWithRedirectService($urlServer);
+    }
+    if ($login_method == 'keycloak' and $end_session_endpoint) {
+        $auth_settings = get_auth_settings(16);
+        $logout_url = $auth_settings['end_session_endpoint'];
+        $params = [
+            'client_id' => $auth_settings['id'],
+	    'id_token_hint' => $id_token_hint,
+        ];
+        $separator = (strpos($logout_url, '?') !== false) ? '&' : '?';
+        $redirect_url = $logout_url . $separator . http_build_query($params);
+        http_response_code(303);
+        header("Location: $redirect_url");
+        exit;
     }
 } elseif ($uid) {
     $pageName = $langLogout;
