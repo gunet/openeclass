@@ -431,7 +431,7 @@
                                 </div>
                             @endif
 
-                            
+                            <div class='table-responsive'>
                                 <table id='ann_table{{ $course_id }}' class='table-default table-announcements-indexes'>
                                     <thead>
                                     <tr>
@@ -449,7 +449,7 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
-                            
+                            </div>
                         </div>
 
 
