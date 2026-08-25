@@ -631,7 +631,7 @@ function display_all_users_grades($gradebook_id) {
                 <tr class='$classvis'>
                 <td class='count-col'>$cnt</td>
                 <td>" . display_user($resultUser->userID). "
-                    <div class='text-muted'><small>$resultUser->am</small></div>
+                    <div class='text-muted'><small>" . q($resultUser->am) . "</small></div>
                 </td>
                 <td>" . user_groups($course_id, $resultUser->userID) . "</td>
                 <td>";
@@ -1236,7 +1236,7 @@ function register_user_grades($gradebook_id, $actID) {
             <tr class='$classvis'>
                 <td class='count-col'>$cnt</td>
                 <td>" . display_user($resultUser->userID). "
-                    <div class='text-muted'><small>$resultUser->am</small></div>
+                    <div class='text-muted'><small>" . q($resultUser->am) . "</small></div>
                 </td>
                 <td>" . user_groups($course_id, $resultUser->userID). "</td>
                 <td>";

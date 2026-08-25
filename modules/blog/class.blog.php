@@ -256,7 +256,8 @@ Class Blog {
                                     'themes': {
                                         'name': 'proton',
                                         'responsive': true
-                                    }
+                                    },
+                                    'force_text': true
                                 }
                             })
                             .bind('select_node.jstree', function (e, data) {

@@ -332,7 +332,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
     }
 
     $token = token_generate($user->id, true);
-    $student_name = $user->surname || $user->givenname ? q($user->surname) . " " .  q($user->givenname) : $user->username;
+    $student_name = q($user->surname || $user->givenname ? $user->surname . " " .  $user->givenname : $user->username);
     if (!empty($code)) {
       $course_code_link = "&amp;course=$GLOBALS[course_code]";
     }
@@ -1190,7 +1190,7 @@ function mailto($address, $alternative = '(e-mail address hidden)') {
     if (empty($address)) {
         return '&nbsp;';
     } else {
-        $prog = urlenc("var a='" . urlenc(str_replace('@', '&#64;', $address)) .
+        $prog = urlenc("var a='" . urlenc(str_replace('@', '&#64;', q($address))) .
                 "';document.write('<a href=\"mailto:'+unescape(a)+'\">'+unescape(a)+'</a>');");
         return "<script type='text/javascript'>eval(unescape('" .
                 q($prog) . "'));</script><noscript>" . q($alternative) . "</noscript>";

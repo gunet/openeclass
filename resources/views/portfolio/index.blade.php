@@ -467,7 +467,7 @@
                     <div>
                         <div class="mb-0 portofolio-text-intro portfolio-username TextBold normal-text">{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}</div>
                         <p class="small-text Neutral-900-cl mb-0 portofolio-text-intro">
-                            {!! $_SESSION['uname'] !!}
+                            {{ $_SESSION['uname'] }}
                         </p>
                     </div>
                 </div>
