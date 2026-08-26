@@ -196,14 +196,13 @@ if ($data['userdata']) {
         }
     }
 
-
     // Check if OpenBadges is enabled
     $openBadgesApp = ExtAppManager::getApp('openbadges');
     $openBadgesEnabled = $openBadgesApp && $openBadgesApp->isEnabled();
     $data['openBadgesEnabled'] = $openBadgesEnabled;
 
     // Personal Info + Academic Info (left) | About Me + Awards (right)
-    $deptIds = $user->getDepartmentIds($id);
+    $data['deptIds'] = $user->getDepartmentIds($id);
     $data['hasCerts'] = count($cert_completed) > 0;
     $data['hasExternal'] = isset($openBadgesEnabled) && $openBadgesEnabled && isset($badge_external) && count($badge_external) > 0;
 
