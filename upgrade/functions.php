@@ -4186,8 +4186,7 @@ function upgrade_to_4_4($tbl_options) : void
                    $tbl_options"
           );
     }
-    
-    
+
     if (!DBHelper::fieldExists('user_badge', 'add_my_profile')) {
         Database::get()->query("ALTER TABLE user_badge ADD add_my_profile INT NOT NULL DEFAULT 0");
     }
@@ -4220,6 +4219,7 @@ function upgrade_to_4_4($tbl_options) : void
     upgrade_active_theme();
     upgrade_certificates();
 }
+
 /**
  * @brief OpenBadges Backpack Integration - Database Migration
  * Creates tables and fields for external backpack provider integration
@@ -5469,7 +5469,7 @@ function upgrade_active_theme() {
                     }
                     .portfolio-courses-container .padding-default{
                         background-color: $theme_options_styles[bgColorSectionContainers] !important;
-                    } 
+                    }
                     .main-container.main-container-login {
                         background-color: transparent !important;
                     }
@@ -5480,7 +5480,7 @@ function upgrade_active_theme() {
                 $style .= "
                     @media(min-width: 992px) {
                         .portfolio-profile-container .padding-default,
-                        .main-section .main-container, 
+                        .main-section .main-container,
                         .portfolio-courses-container .padding-default,
                         .col_maincontent_active,
                         .ContentLeftNav,
@@ -5490,7 +5490,7 @@ function upgrade_active_theme() {
                     }
                     @media(max-width: 991px) {
                         .portfolio-profile-container .padding-default,
-                        .main-section .main-container, 
+                        .main-section .main-container,
                         .portfolio-courses-container .padding-default,
                         .col_maincontent_active,
                         .ContentLeftNav,
@@ -5510,7 +5510,7 @@ function upgrade_active_theme() {
                         .portfolio-courses-container .padding-default,
                         .portfolio-profile-container .padding-default{
                             border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
-                        } 
+                        }
                         .main-container.main-container-login {
                             border: 0px !important;
                             padding: 0 !important;
@@ -5522,7 +5522,7 @@ function upgrade_active_theme() {
             if(isset($theme_options_styles['enable_aside_main_cards'])) {
                 $style .= "
                     @media (max-width: 991px) {
-                        .ContentLeftNav, 
+                        .ContentLeftNav,
                         .main-maincontent {
                             border: 0px !important;
                         }
@@ -5552,7 +5552,7 @@ function upgrade_active_theme() {
                             padding: 32px 16px 32px 16px;
                         }
                     }
-                
+
                     @media (min-width: 992px) {
                         .portfolio-profile-container .padding-default {
                             margin-top: 28px !important;
@@ -5605,7 +5605,7 @@ function upgrade_active_theme() {
                             padding: 45px 55px !important;
                             border-radius: 32px !important;
                             margin-bottom: 28px !important;
-                        } 
+                        }
                         body:has(.sidebar-card) .main-maincontent {
                             border-top-left-radius: 0px;
                             border-top-right-radius: 32px;
@@ -5641,7 +5641,7 @@ function upgrade_active_theme() {
                         }
                         .portfolio-courses-container .padding-default {
                             border-radius: 4px !important;
-                        } 
+                        }
                         body:has(.sidebar-card) .main-maincontent {
                             border-top-right-radius: 4px;
                             border-bottom-right-radius: 4px;
@@ -5660,10 +5660,8 @@ function upgrade_active_theme() {
             if (!empty($style)) {
                 file_put_contents($cssFile, $style, FILE_APPEND);
             }
-           
         }
     }
-
 }
 
 /**
@@ -5690,7 +5688,7 @@ function upgrade_certificates() {
                 $stat = $archive->statIndex($i, ZipArchive::FL_ENC_RAW);
                 $files_in_zip[$i] = $stat['name'];
                 if (!empty(my_basename($files_in_zip[$i]))) {
-                    validateUploadedFile(my_basename($files_in_zip[$i]), 3);
+                    validateUploadedFile(my_basename($files_in_zip[$i]), 3, additional: ['html']);
                 }
             }
             if ($archive->extractTo($certificate_path)) {
