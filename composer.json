@@ -5,7 +5,7 @@
         "apereo/phpcas": "^1.6",
         "ezyang/htmlpurifier": "^4.19",
         "pragmarx/google2fa":"^8.0",
-        "swiftmailer/swiftmailer": "^6.3.0",
+        "symfony/mailer": "^7.4",
         "sabre/dav": "~3.2.0",
         "google/apiclient": "1.0.*@beta",
         "guzzlehttp/guzzle": "^7.9",
