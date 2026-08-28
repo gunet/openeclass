@@ -63,6 +63,11 @@ if (isset($_POST['submit'])) {
                     $prof_not_found = false;
                 }
             }
+            if ($prof_uid) {
+                $prof_name = uid_to_name($prof_uid);
+            } else {
+                $prof_name = '';
+            }
             list($code, $cid) = create_course('', $_POST['lang'], $title, '', $departments, $vis, $prof_name, $_POST['password']);
             if ($cid) {
                 Database::get()->query("UPDATE course SET is_collaborative = ?d WHERE id = ?d",$_POST['courseType'],$cid);
