@@ -139,7 +139,7 @@ function startModule(int $pathId, int $moduleId, int $attempt): false|string {
             unset($_SESSION['exerciseResult']);
             unset($_SESSION['exeStartTime']);
 
-            $moduleStartAssetPage = $urlServer . "modules/learnPath/navigation/showExercise.php?course=$course_code&amp;exerciseId=" . urlencode($assetPath);
+            $moduleStartAssetPage = $urlServer . "modules/learnPath/navigation/showExercise.php?course=$course_code&exerciseId=" . urlencode($assetPath);
             break;
         case CTSCORMASSET_ :
             if ($uid) { // Directly pass this module

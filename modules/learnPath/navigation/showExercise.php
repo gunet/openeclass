@@ -232,11 +232,26 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
         echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
      }
 
-    echo "
-     <script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>
-     
-     <title>$langExercice</title>" . $head_content ."
- </head>
+echo "<script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>";
+echo "<title>$langExercice</title>" . $head_content;
+echo "<script type='text/javascript'>
+    window.MathJax = {
+            loader: {
+                paths: {
+                    '@mathjax': '{$urlAppend}resources/fonts',
+                    'mathjax-newcm': '{$urlAppend}resources/fonts/mathjax-newcm-font',
+                    '@mathjax/mathjax-newcm-font': '{$urlAppend}resources/fonts/mathjax-newcm-font'
+                }
+            },
+            chtml: {
+                fontURL: '{$urlAppend}resources/fonts/mathjax-newcm-font/chtml/woff2',
+                dynamicPrefix: '{$urlAppend}resources/fonts/mathjax-newcm-font/chtml/dynamic'
+            }
+        };
+    </script>";
+echo "<script type='text/javascript' id='MathJax-script' async src='{$urlAppend}js/mathjax/tex-chtml.js'></script>";
+
+ echo "</head>
  <body class='body-learningPath' style='margin: 0px; height: 100% !important;'>
  <div id='content'>";
 
