@@ -122,8 +122,8 @@ body {
 .symbol-panel { display: none; }
 .symbol-panel.active {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
 }
 
 /* Wide Grid for Chemistry */
@@ -136,7 +136,8 @@ body {
 }
 
 .symbol-btn {
-    height: 60px;
+    height: 70px;
+    padding: 0 8px;
     display: flex;
     align-items: center;
     justify-content: center;
