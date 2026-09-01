@@ -52,24 +52,6 @@ if ($is_departmentmanage_user && !$is_admin) {
     }
 }
 
-if (isset($_GET['from_other'])) {
-    if ($is_departmentmanage_user && !$is_admin && !empty($tenantNodeIds)) {
-        $tenantUsers = getTenantUsers([], $tenant->id);
-        $user_opts = "<option value='-1'>$langAllUsers</option>";
-        foreach ($tenantUsers as $row) {
-            $user_opts .= '<option value="' . $row->id . '">' . 
-                          q($row->givenname . ' ' . $row->surname) . '</option>';
-        }
-    } else {
-        $allUsers = Database::get()->queryArray("SELECT id, surname, givenname FROM user ORDER BY surname, givenname");
-        $user_opts = "<option value='-1'>$langAllUsers</option>";
-        foreach ($allUsers as $row) {
-            $user_opts .= '<option value="' . $row->id . '">' . 
-                          q($row->givenname . ' ' . $row->surname) . '</option>';
-        }
-    }
-}
-
 load_js('datatables');
 load_js('bootstrap-datetimepicker');
 
@@ -243,8 +225,8 @@ if (isset($_GET['from_other'])) {
     $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
 }
 
-// if we haven't choose 'system actions'
-if (isset($_GET['from_other'])) {
+// if we haven't chosen 'system actions'
+if (!isset($_GET['from_other'])) {
     $tool_content .= '<div class="row form-group mt-4">  
         <label for="usId" class="col-12 control-label-notes">' . $langUser . ' <span class="asterisk Accent-200-cl">(*)</span></label>
         <div class="col-12"><select name="u_user_id" class="form-select" id="usId">' . $user_opts . '</select></div>
