@@ -25,8 +25,8 @@
                             <form class='form-inline' role='form' name='qfilter' method='get' action='{{ $_SERVER['REQUEST_URI'] }}'>
                                 <input type='hidden' name='course' value='{{ $course_code }}'>
 
-                                @if (isset($fromExercise))_
-                                    <input type='hidden' name='fromExercise' value='{{ $fromExercise }}'>
+                                @if (isset($_GET['fromExercise']))
+                                    <input type='hidden' name='fromExercise' value='{{ $_GET['fromExercise'] }}'>
                                 @endif
 
                                 <div class='form-group'>
