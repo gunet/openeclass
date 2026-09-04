@@ -978,7 +978,9 @@ if (isset($_GET['modifyAnswers'])) {
             $sel = $_POST['sel'];
         }
         if (isset($_POST['weighting'])) {
-            $weighting = fix_float($_POST['weighting']);
+//            $weighting = fix_float($_POST['weighting']);
+            $weighting = array_map('fix_float', $_POST['weighting']);
+
         }
         if ($objAnswer->selectNbrAnswers() == 2) { // new matching question
             $nbrOptions = $nbrMatches = 2; // default options
