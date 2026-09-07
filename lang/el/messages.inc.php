@@ -2255,6 +2255,7 @@ $langMatching = "Αντιστοίχιση";
 $langTrueFalse = "Σωστό / Λάθος";
 $langFreeText = "Ελεύθερου Κειμένου";
 $langOral = "Προφορικά";
+$langUploadFile = "Ανέβασμα αρχείου";
 $langSaveOralMsg = "Η απάντησή σας θα αποθηκευτεί προσωρινά. Η τελική αποθήκευση ολοκληρώνεται με την υποβολή της άσκησης. Θέλετε να προχωρήσετε?";
 $langDeleteRecordingOk = "Το αρχείο διαγράφηκε επιτυχώς!";
 $langListenToRecordingAudio = "Ακούστε την ηχογραφημένη απάντησή σας εδώ: ";
@@ -3934,6 +3935,12 @@ $langPollLocked = "Ο περιορισμός πρόσβασης ενεργοπο
 $langPollUnlocked = "Ο περιορισμός πρόσβασης άρθηκε με επιτυχία!";
 $langPollSubmitted = "Ευχαριστούμε για την συμμετοχή σας!";
 $langPollTotalAnswers = "Συνολικός αριθμός συμμετοχών";
+$langPollPerUser = "Ανά χρήστη";
+$langPollPerQuestion = "Ανά ερώτηση";
+$langPollAllQuestions = "Όλες οι ερωτήσεις";
+$langPollAllUsers = "Όλοι οι χρήστες";
+$langPollUsersResponded = "Απάντησαν";
+$langPollSavePrevUserAnswers = "Διατήρηση απαντήσεων από προηγούμενες υποβολές του εκπαιδευόμενου;";
 $langPollNone = "Δεν υπάρχουν διαθέσιμα Ερωτηματολόγια.";
 $langPollInactive = "Το Ερωτηματολόγιο έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
 $langPollCharts = "Αποτελέσματα Ερωτηματολογίου";
@@ -4186,7 +4193,7 @@ $langUserAlreadyRegistered = "Ενας χρήστης με ίδιο όνομα /
                 Δεν μπορείτε να τον (την) ξαναγράψετε.";
 $langAddedToCourse = "είναι ήδη γραμμένος στην πλατφόρμα αλλά όχι σε αυτό το $langsCourse. Τώρα έγινε.";
 $langGroupUserManagement = "Διαχείριση ομάδας χρηστών";
-$langRegDone = "Οι αλλαγές σας κατοχυρώθηκαν.";
+$langRegDone = "Οι αλλαγές καταχωρήθηκαν.";
 $langPassTooEasy = "Το συνθηματικό σας είναι πολύ απλό. Χρησιμοποιήστε ένα συνθηματικό σαν και αυτό";
 $langChoiceLesson = "Επιλογή $langsOfCourses";
 $langRegCourses = "Εγγραφή σε $langsCourse";
@@ -8331,6 +8338,13 @@ $langExistsInMyProfile = "Προστέθηκε στο προφίλ";
 // Point games
 $langHasExpired = "Έληξε";
 $langHasNotStarted = "Δεν έχει ξεκινήσει";
+
+// Cadmos integration
+$langCadmosPendingCourses = 'Έχετε σχέδια μαθημάτων από το Cadmos έτοιμα προς δημιουργία.';
+$langCadmosCreatingCourse = 'Δημιουργία μαθήματος από σχέδιο Cadmos';
+$langCadmosSelectCourse = 'Επιλογή σχεδίου Cadmos';
+$langCadmosCreatePending = 'Δημιουργία μαθήματος από Cadmos';
+$langCadmosNoPendingCourses = 'Δεν βρέθηκαν σχέδια μαθημάτων από το Cadmos προς δημιουργία.';
 
 // Edu-API (1EdTech) integration
 $langEduApiShortDescription = "Σύνδεση με υπηρεσία 1EdTech Edu-API για ακαδημαϊκές περιόδους, μαθήματα και εγγραφές";

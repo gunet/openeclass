@@ -3200,6 +3200,19 @@ $db->query("CREATE TABLE secondfactorauth (
         FOREIGN KEY (id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE
       ) $tbl_options");
 
+$db->query("CREATE TABLE `cadmos_course` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) DEFAULT NULL,
+    `user_id` int(11) NOT NULL,
+    `source` mediumtext NOT NULL,
+    `created` datetime DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `course_id` (`course_id`),
+    KEY `user_id` (`user_id`),
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS `eduapi_course_offerings` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `sourced_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,

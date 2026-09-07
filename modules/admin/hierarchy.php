@@ -127,7 +127,8 @@ $(function() {
                 "name" : "proton",
                 "dots" : true,
                 "icons" : false
-            }
+            },
+            "force_text": true
         },
         "sort" : function (a, b) {
             priorityA = this.get_node(a).li_attr.tabindex;

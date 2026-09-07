@@ -27,8 +27,6 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 
 use Hybridauth\Provider\Keycloak;
-use Hybridauth\Exception;
-use Hybridauth\Exception\UnexpectedValueException;
 use Hybridauth\Exception\HttpRequestFailedException;
 use Hybridauth\Exception\UnexpectedApiResponseException;
 use Hybridauth\Data;
@@ -40,6 +38,28 @@ final class CustomProvider extends Keycloak
      * Defaults scope to requests
      */
     public $scope = 'openid profile email';
+
+    /**
+     * Intercept token response to persist id_token.
+     */
+    protected function validateAccessTokenExchange($response)
+    {
+        $collection = parent::validateAccessTokenExchange($response);
+
+        if ($collection->exists('id_token')) {
+            $this->storeData('id_token', $collection->get('id_token'));
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Custom getter to retrieve the stored id_token.
+     */
+    public function getIdToken(): ?string
+    {
+        return $this->getStoredData('id_token');
+    }
 
     /**
      * {@inheritdoc}
@@ -122,6 +142,8 @@ if (isset($_SESSION['keycloak_test'])) {
     $_SESSION['auth_surname'] = $userProfile->lastName;
     $_SESSION['auth_givenname'] = $userProfile->firstName;
     $_SESSION['auth_verified_mail'] = $userProfile->emailVerified;
+    $_SESSION['end_session_endpoint'] = $auth_settings['end_session_endpoint'] ?? null;
+    $_SESSION['keycloak_session_id_token'] = $adapter->getIdToken();
 
     if (isset($_GET['next'])) {
         header("Location: $urlServer?next=" . urlencode($_GET['next']));

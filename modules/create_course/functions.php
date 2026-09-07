@@ -179,81 +179,196 @@ function default_modules_collaboration() {
  * @param string $filename CADMOS file path
  * @return boolean
  */
-function import_cadmos_file($course_id, $course_code, $path) {
+/**
+ * @brief Import CADMOS JSON data into course
+ * @param int $course_id course ID
+ * @param string $course_code course code
+ * @param mixed $cadmos CADMOS object or JSON string
+ * @return boolean
+ */
+function import_cadmos_data($course_id, $course_code, $cadmos) {
     global $webDir;
 
     $target = $webDir . "/courses/$course_code/cadmos";
-    mkdir($target, 0755);
-    $zip = new ZipArchive;
-    if ($zip->open($path)) {
-        $zip->extractTo($target);
-        $zip->close();
-        $cadmos = json_decode(file_get_contents("$target/source.json"));
+    if (!is_dir($target)) {
+        @mkdir($target, 0755, true);
+    }
 
-        $activities = [];
-        $FlowSub = $cadmos->data->Flow->FlowSub;
-        $FlowBase = $cadmos->data->Flow->FlowBase;
-        uasort($FlowSub, function ($a, $b) { return $a->top - $b->top; });
+    if (is_string($cadmos)) {
+        $cadmos_json_str = $cadmos;
+        $cadmos = json_decode($cadmos);
+    } else {
+        $cadmos_json_str = json_encode($cadmos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    }
 
-        foreach ($FlowBase as $item) {
+    if (!file_exists("$target/source.json") && !empty($cadmos_json_str)) {
+        @file_put_contents("$target/source.json", $cadmos_json_str);
+    }
+
+    if (!is_object($cadmos) || !isset($cadmos->data)) {
+        return false;
+    }
+
+    // Save learning objectives from LessonInfo->Goals to course_description
+    $goals = $cadmos->data->LessonInfo->Goals ?? [];
+    if (!empty($goals) && is_array($goals)) {
+        $cleaned_goals = [];
+        foreach ($goals as $goal) {
+            $g = trim(preg_replace('/^[•\-\*\s\t]+/u', '', $goal));
+            if (!empty($g)) {
+                $cleaned_goals[] = '<li>' . q($g) . '</li>';
+            }
+        }
+        if (!empty($cleaned_goals)) {
+            $goal_html = '<ul>' . implode('', $cleaned_goals) . '</ul>';
+            $type_info = Database::get()->querySingle("SELECT title FROM course_description_type WHERE id = 2");
+            $section_title = 'Objectives';
+            if ($type_info) {
+                $titles = unserialize($type_info->title);
+                $course_lang = Database::get()->querySingle("SELECT lang FROM course WHERE id = ?d", $course_id)->lang ?? 'el';
+                $section_title = $titles[$course_lang] ?? $titles['en'] ?? $titles['el'] ?? 'Objectives';
+            }
+            $exists = Database::get()->querySingle("SELECT id FROM course_description WHERE course_id = ?d AND type = 2", $course_id);
+            if (!$exists) {
+                Database::get()->query("INSERT INTO course_description SET
+                    course_id = ?d,
+                    title = ?s,
+                    comments = ?s,
+                    type = 2,
+                    visible = 1,
+                    `order` = 1,
+                    update_dt = " . DBHelper::timeAfter(),
+                    $course_id, $section_title, $goal_html);
+            }
+        }
+    }
+
+    $activities = [];
+    $FlowSub = $cadmos->data->Flow->FlowSub ?? [];
+    $FlowBase = $cadmos->data->Flow->FlowBase ?? [];
+    if (!is_array($FlowSub)) {
+        $FlowSub = (array)$FlowSub;
+    }
+    if (!is_array($FlowBase)) {
+        $FlowBase = (array)$FlowBase;
+    }
+    uasort($FlowSub, function ($a, $b) { return ($a->top ?? 0) - ($b->top ?? 0); });
+
+    foreach ($FlowBase as $item) {
+        if (!empty($item->Activities) && is_array($item->Activities)) {
             foreach ($item->Activities as $activity) {
-                $activity->ActorName = $item->ActorName;
+                $activity->ActorName = $item->ActorName ?? '';
                 $activities[] = $activity;
             }
         }
-        uasort($activities, function ($a, $b) { return $b->top - $a->top; });
+    }
+    uasort($activities, function ($a, $b) { return ($b->top ?? 0) - ($a->top ?? 0); });
 
-        for ($i = count($FlowSub) - 1; $i >= 0; $i--) {
-            $FlowSub[$i]->Activities = [];
-            for ($j = 0; $j < count($activities); $j++) {
-                if ($activities[$j] and $activities[$j]->top > $FlowSub[$i]->top) {
-                    $FlowSub[$i]->Activities[] = $activities[$j];
-                    $activities[$j] = null;
-                }
+    for ($i = count($FlowSub) - 1; $i >= 0; $i--) {
+        $FlowSub[$i]->Activities = [];
+        for ($j = 0; $j < count($activities); $j++) {
+            if ($activities[$j] and ($activities[$j]->top ?? 0) > ($FlowSub[$i]->top ?? 0)) {
+                $FlowSub[$i]->Activities[] = $activities[$j];
+                $activities[$j] = null;
             }
         }
+    }
 
-        $widgets = [];
-        foreach ($cadmos->data->Conceptual->ConceptualBase as $item) {
+    $widgets = [];
+    $ConceptualBase = $cadmos->data->Conceptual->ConceptualBase ?? [];
+    if (!is_array($ConceptualBase)) {
+        $ConceptualBase = (array)$ConceptualBase;
+    }
+    foreach ($ConceptualBase as $item) {
+        if (isset($item->id)) {
             $widgets[$item->id] = $item;
         }
+    }
 
-        $order = 0;
-        foreach ($FlowSub as $item) {
-            $unit_id = Database::get()->query('INSERT INTO course_units
-                SET title = ?s, visible = 1, public = 1, `order` = ?d, course_id = ?d, comments = ?s',
-                q($item->text), $order++, $course_id,
-                "<p><span class='badge bg-primary'>{$item->phaseTime} Minutes</span></p>")->lastInsertID;
-            $act_order = 0;
+    $order = 0;
+    foreach ($FlowSub as $item) {
+        $phaseTime = intval($item->phaseTime ?? 0);
+        $time_comment = $phaseTime > 0 ? "<p><span class='badge bg-primary'>{$phaseTime} Minutes</span></p>" : '';
+        $unit_id = Database::get()->query('INSERT INTO course_units
+            SET title = ?s, visible = 1, public = 1, `order` = ?d, course_id = ?d, comments = ?s',
+            q($item->text ?? ''), $order++, $course_id, $time_comment)->lastInsertID;
+        $act_order = 0;
+        if (!empty($item->Activities)) {
             foreach ($item->Activities as $activity) {
                 $widget = $widgets[$activity->id] ?? null;
-                if ($widget) {
-                    if (count($widget->ModalData->LearningGoal) == 1) {
-                        $learningGoal = q($widget->ModalData->LearningGoal[0]);
+                if ($widget && isset($widget->ModalData)) {
+                    $m = $widget->ModalData;
+                    if (isset($m->LearningGoal) && is_array($m->LearningGoal) && count($m->LearningGoal) > 0) {
+                        if (count($m->LearningGoal) == 1) {
+                            $learningGoal = q(trim(preg_replace('/^[•\-\*\s\t]+/u', '', $m->LearningGoal[0])));
+                        } else {
+                            $learningGoal = '<ul>' . implode('',
+                                array_map(function ($g) { return '<li>' . q(trim(preg_replace('/^[•\-\*\s\t]+/u', '', $g))) . '</li>'; },
+                                $m->LearningGoal)) . '</ul>';
+                        }
                     } else {
-                        $learningGoal = '<ul>' . implode('',
-                            array_map(function ($item) { return '<li>' . q($item) . '</li>'; },
-                            $widget->ModalData->LearningGoal)) . '</ul>';
+                        $learningGoal = '';
                     }
+
+                    $badgeType = !empty($m->Type) ? "<span class='badge bg-success me-1'>" . q($m->Type) . "</span>" : "";
+                    $actor = !empty($m->Actor) ? $m->Actor : (!empty($activity->ActorName) ? $activity->ActorName : "");
+                    $badgeActor = !empty($actor) ? "<span class='badge bg-info me-1'>" . q($actor) . "</span>" : "";
+                    $badgeTime = !empty($m->TimeLimit) ? "<span class='badge bg-warning me-1'>" . q($m->TimeLimit) . " m.</span>" : "";
+
+                    $resource_html = '';
+                    if (!empty($widget->children) && is_array($widget->children)) {
+                        $res_items = [];
+                        foreach ($widget->children as $child) {
+                            if (isset($child->ModalData)) {
+                                $cm = $child->ModalData;
+                                $cType = !empty($cm->Type) ? "<span class='badge bg-secondary me-1'>" . q($cm->Type) . "</span>" : "";
+                                $cTitle = !empty($cm->Title) ? "<strong>" . q($cm->Title) . "</strong>" : "";
+                                $cDesc = !empty($cm->Description) ? "<span class='text-muted'> - " . q($cm->Description) . "</span>" : "";
+                                $cLoc = !empty($cm->ResourceLocation) ? " <a href='" . q($cm->ResourceLocation) . "' target='_blank' rel='noopener noreferrer'><i class='fa fa-external-link'></i></a>" : "";
+                                $res_items[] = "<li>$cType $cTitle $cDesc $cLoc</li>";
+                            }
+                        }
+                        if (!empty($res_items)) {
+                            $resource_html = "<hr><p><strong>Resources:</strong></p><ul>" . implode('', $res_items) . "</ul>";
+                        }
+                    }
+
+                    $goal_section = !empty($learningGoal) ? "<hr><p><strong>Learning Goal:</strong> $learningGoal</p>" : "";
+
                     $desc = "
                         <div>
-                            <span class='badge bg-success'>{$widget->ModalData->Type}</span>
-                            <span class='badge bg-info'>{$widget->ModalData->Actor}</span>
-                            <span class='badge bg-warning'>{$widget->ModalData->TimeLimit} m.</span></div>
-                            <h4>" . q($widget->ModalData->Title) . "</h4>
-                            <p>" . q($widget->ModalData->Description) . "</p>
-                            <hr>
-                            <p><strong>Learning Goal:</strong> $learningGoal</p>
+                            <div>{$badgeType}{$badgeActor}{$badgeTime}</div>
+                            <h4 class='mt-2'>" . q($m->Title ?? $activity->title ?? '') . "</h4>
+                            <p>" . nl2br(q($m->Description ?? '')) . "</p>
+                            {$goal_section}
+                            {$resource_html}
                         </div>";
                     Database::get()->query('INSERT INTO unit_resources
                         SET unit_id = ?d, title = ?s, comments = ?s, type = ?s,
                             res_id = 0, visible = 1, `date` = NOW(), `order` = ?d',
-                        $unit_id, q($activity->title), $desc, 'text', $act_order++);
+                        $unit_id, q($activity->title ?? $m->Title ?? ''), $desc, 'text', $act_order++);
                 }
             }
         }
     }
     return true;
+}
+
+function import_cadmos_file($course_id, $course_code, $path) {
+    global $webDir;
+
+    $target = $webDir . "/courses/$course_code/cadmos";
+    if (!is_dir($target)) {
+        mkdir($target, 0755, true);
+    }
+    $zip = new ZipArchive;
+    if ($zip->open($path)) {
+        $zip->extractTo($target);
+        $zip->close();
+        $cadmos = json_decode(file_get_contents("$target/source.json"));
+        return import_cadmos_data($course_id, $course_code, $cadmos);
+    }
+    return false;
 }
 
 function applyMapping($value, $mapping) {

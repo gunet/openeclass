@@ -18,24 +18,39 @@
  *
  */
 
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+
 // Send a mail message - From: address is always the platform administrator
 function send_mail($from, $from_address, $to, $to_address, $subject, $body) {
     if ((is_array($to_address) and !count($to_address)) or empty($to_address)) {
         return true;
     }
 
-    $message = new Swift_Message($subject, $body);
-    $message->setFrom(fromHeader($from, $from_address));
+    $email = (new Email())
+        ->subject($subject)
+        ->text($body);
+
+    $fromHeader = fromHeader($from, $from_address);
+    if ($fromHeader) {
+        $email->from($fromHeader);
+    }
+
     if (is_array($to_address) and count($to_address) > 1) {
-        $message->setBcc($to_address);
+        foreach ($to_address as $address) {
+            $email->addBcc($address);
+        }
     } else {
         if (is_array($to_address)) {
             $to_address = $to_address[0];
         }
-        $message->setTo(array($to_address => $to));
+        $email->to(new Address($to_address, $to));
     }
 
-    return sendMessage($message);
+    return sendMessage($email);
 }
 
 
@@ -51,27 +66,34 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
     $emailAnnounce = get_config('email_announce');
     $body_html = add_host_to_urls($body_html);
 
-    $message = new Swift_Message($subject);
-    $message->setFrom(fromHeader($from, $from_address));
+    $email = (new Email())
+        ->subject($subject);
+
+    $fromHeader = fromHeader($from, $from_address);
+    if ($fromHeader) {
+        $email->from($fromHeader);
+    }
 
     if (is_array($to_address)) {
         if (count($to_address) > 1) {
             if (isset($emailAnnounce) and !empty($emailAnnounce)) {
-                $message->setTo(array($emailAnnounce => $to));
+                $email->to(new Address($emailAnnounce, $to));
             }
-            $message->setBcc($to_address);
+            foreach ($to_address as $address) {
+                $email->addBcc($address);
+            }
         } else {
             $to_address = $to_address[0];
-            $message->setTo(array($to_address => $to));
+            $email->to(new Address($to_address, $to));
         }
     } else {
-        $message->setTo(array($to_address => $to));
+        $email->to(new Address($to_address, $to));
     }
 
-    addReplyTo($message, $from, $from_address);
+    addReplyTo($email, $from, $from_address);
 
-    $message->setBody($body_plain, 'text/plain')
-        ->addPart("<html>
+    $email->text($body_plain)
+        ->html("<html>
 <head>
   <meta http-equiv='Content-Type' content='text/html; charset='UTF-8'>
   <title>message</title>
@@ -105,25 +127,30 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
   <div id='container'>
     $body_html
   </div>
-</body></html>", 'text/html');
+</body></html>");
 
-    return sendMessage($message);
+    return sendMessage($email);
 }
 
-// Try to send a message using Swift Mailer, catching exceptions
-function sendMessage($message) {
+// Try to send a message using Symfony Mailer, catching exceptions
+function sendMessage($email) {
     global $langMailError;
 
     $email_bounces = get_config('email_bounces');
     if ($email_bounces) {
-        $message->setReturnPath($email_bounces);
+        $email->returnPath($email_bounces);
     }
 
     try {
-        return getMailer()->send($message);
+        getMailer()->send($email);
+        return true;
+    } catch (TransportExceptionInterface $e) {
+        Session::flash('message', "$langMailError<p>" . q($e->getMessage()) . '</p>');
+        Session::flash('alert-class', 'alert-danger');
+        return false;
     } catch (Exception $e) {
-            Session::flash('message',"$langMailError<p>" . q($e->getMessage()) . '</p>');
-            Session::flash('alert-class', 'alert-danger');
+        Session::flash('message', "$langMailError<p>" . q($e->getMessage()) . '</p>');
+        Session::flash('alert-class', 'alert-danger');
         return false;
     }
 }
@@ -140,57 +167,66 @@ function fromHeader($from, $from_address) {
     }
 
     if (!valid_email($from_address)) { // check if sender address is valid
-        Session::flash('message',"$langInvalidEmailRecipient");
+        Session::flash('message', "$langInvalidEmailRecipient");
         Session::flash('alert-class', 'alert-danger');
-        return;
+        return null;
     } else {
-        return array($from_address => $from);
+        return new Address($from_address, $from);
     }
 }
 
 
 // Add the correct Reply-To: header if needed
-function addReplyTo($message, $from, $from_address) {
+function addReplyTo($email, $from, $from_address) {
     global $emailAdministrator, $langInvalidEmailRecipient;
 
     // Don't include reply-to if it has been provided by caller
-    if ($message->getReplyTo()) {
+    if ($email->getReplyTo()) {
         return;
     }
 
     if (!get_config('email_from') and $emailAdministrator <> $from_address) {
         if (!valid_email($from_address)) { // check if sender address is valid
-            Session::flash('message',"$langInvalidEmailRecipient");
+            Session::flash('message', "$langInvalidEmailRecipient");
             Session::flash('alert-class', 'alert-danger');
             return;
         } else {
-            $message->setReplyTo(array($from_address => $from));
+            $email->addReplyTo(new Address($from_address, $from));
         }
     }
 }
 
-// Get a Swift Mailer instance depending on configuration
+// Get a Symfony Mailer instance depending on configuration
 function getMailer() {
     static $mailer;
 
     if (!isset($mailer)) {
         $type = get_config('email_transport');
         if ($type == 'smtp') {
-            $transport = new Swift_SmtpTransport(get_config('smtp_server'), get_config('smtp_port'));
-            $username = get_config('smtp_username');
-            if ($username) {
-                $transport->setUsername($username)->setPassword(get_config('smtp_password'));
-            }
+            $host = get_config('smtp_server');
+            $port = get_config('smtp_port');
+            $user = get_config('smtp_username');
+            $pass = get_config('smtp_password');
             $encryption = get_config('smtp_encryption');
-            if ($encryption) {
-                $transport->setEncryption($encryption);
+
+            $userPass = '';
+            if ($user) {
+                $userPass = urlencode($user) . ':' . urlencode($pass) . '@';
             }
+
+            $dsn = ($encryption == 'ssl' ? 'smtps' : 'smtp') . '://' . $userPass . $host . ($port ? ':' . $port : '');
+            $transport = Transport::fromDsn($dsn);
         } elseif ($type == 'sendmail') {
-            $transport = new Swift_SendmailTransport(get_config('sendmail_command'));
+            $command = get_config('sendmail_command');
+            if ($command) {
+                $transport = new Symfony\Component\Mailer\Transport\SendmailTransport($command);
+            } else {
+                $transport = new Symfony\Component\Mailer\Transport\SendmailTransport();
+            }
         } else {
-            $transport = new Swift_MailTransport();
+            $transport = new Symfony\Component\Mailer\Transport\SendmailTransport();
         }
-        $mailer = new Swift_Mailer($transport);
+        $mailer = new Mailer($transport);
     }
     return $mailer;
 }

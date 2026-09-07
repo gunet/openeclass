@@ -387,7 +387,7 @@
                                                                 </div>
                                                                 <div class='col-md-10 mt-md-0 mt-2'>
                                                                     <h2 class='text-heading-h3 mb-0'><a class='TextBold' style='font-size: 16px;' href='{{ $urlAppend }}main/system_announcements.php?an_id={{ $announcement->id }}'>
-                                                                        {!! $announcement->title !!}
+                                                                        {{ $announcement->title }}
                                                                     </a></h2>
                                                                     <div class='truncate-announcement'>{!! $announcement->body !!}</div>
                                                                 </div>

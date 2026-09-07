@@ -51,7 +51,7 @@
                         <div class='col {!! $Position !!}'>
                             @if($auth_enabled_method == 1)
                                 @if (count($authLink) > 0)
-                                    <div class='card form-homepage-login border-card h-100 px-lg-4 py-lg-3 p-3'>
+                                    <div class='card form-homepage-login border-card px-lg-4 py-lg-3 p-3'>
                                         <div class='card-body d-flex justify-content-center align-items-center p-1 p-md-2'>
                                             <div class='w-100 h-100'>
                                                 <div class='col-12 container-pages d-flex align-items-center h-100'>

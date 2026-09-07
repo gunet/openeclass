@@ -4267,6 +4267,31 @@ function upgrade_to_4_4($tbl_options) : void
     upgrade_certificates();
 }
 /**
+ * @brief upgrade queries for 4.5
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_4_5($tbl_options) : void
+{
+    if (!DBHelper::tableExists('cadmos_course')) {
+        Database::get()->query("CREATE TABLE `cadmos_course` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `course_id` int(11) DEFAULT NULL,
+            `user_id` int(11) NOT NULL,
+            `source` mediumtext NOT NULL,
+            `created` datetime DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            KEY `course_id` (`course_id`),
+            KEY `user_id` (`user_id`),
+            FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+        ) $tbl_options");
+    } elseif (!DBHelper::fieldExists('cadmos_course', 'created')) {
+        Database::get()->query("ALTER TABLE `cadmos_course` ADD `created` datetime DEFAULT CURRENT_TIMESTAMP AFTER `source`");
+    }
+}
+
+/**
  * @brief OpenBadges Backpack Integration - Database Migration
  * Creates tables and fields for external backpack provider integration
  *

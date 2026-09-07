@@ -759,6 +759,45 @@
                     </div>
                 </div>
             @endif
+
+            @if (!empty($pending_cadmos_courses))
+                <div class='col-12 mb-4'>
+                    <div class='alert alert-info d-flex align-items-center justify-content-between flex-wrap gap-2'>
+                        <div>
+                            <i class='fa-solid fa-cloud-arrow-down fa-lg me-2'></i>
+                            <strong>{{ trans('langCadmosPendingCourses') }}</strong>
+                            @if (isset($is_cadmos) && $is_cadmos)
+                                <span>({{ trans('langCadmosCreatingCourse') }}: <strong>{{ $title }}</strong>)</span>
+                            @endif
+                        </div>
+                        @if (count($pending_cadmos_courses) > 1 && isset($is_cadmos) && $is_cadmos)
+                            <div class='d-flex align-items-center gap-2'>
+                                <label for='select_cadmos_course' class='text-nowrap mb-0'>{{ trans('langCadmosSelectCourse') }}:</label>
+                                <select id='select_cadmos_course' class='form-select form-select-sm' onchange="window.location.href='cadmos.php?id=' + this.value;">
+                                    @foreach ($pending_cadmos_courses as $pc)
+                                        @php
+                                            $pc_data = json_decode($pc->source);
+                                            $pc_title = $pc_data->data->LessonInfo->StrategyName ?? ('Cadmos #' . $pc->id);
+                                        @endphp
+                                        <option value='{{ $pc->id }}' @if($pc->id == $cadmos_id) selected @endif>{{ $pc_title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @elseif (!isset($is_cadmos) || !$is_cadmos)
+                            <div>
+                                @php
+                                    $first_pc = $pending_cadmos_courses[0];
+                                    $first_data = json_decode($first_pc->source);
+                                    $first_title = $first_data->data->LessonInfo->StrategyName ?? ('Cadmos #' . $first_pc->id);
+                                @endphp
+                                <a href='cadmos.php?id={{ $first_pc->id }}' class='btn btn-sm btn-primary'>
+                                    {{ trans('langCadmosCreatePending') }} ({{ $first_title }})
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
              @if($ai_available)
                  <div class='col-12 mb-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
@@ -895,9 +934,12 @@
                 <div class='form-wrapper form-edit border-0 px-0'>
                   <form class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" enctype="multipart/form-data" onsubmit="return validateNodePickerForm();">
                     <fieldset>
+                    @if (isset($cadmos_id) && $cadmos_id > 0)
+                        <input type='hidden' name='cadmos_id' value='{{ $cadmos_id }}'>
+                    @endif
                     <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                     <div class='form-group'>
-                        <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>{{ trans('langCompulsory') }}</span></label>
+                        <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>{{ trans('langCompulsory') }}</span>@if (isset($is_cadmos) && $is_cadmos) <span class='badge bg-primary ms-2'>Cadmos</span>@endif</label>
                         <div class='col-12'>
                           <input name='title' id='title' type='text' class='form-control' value="{{ $title }}" placeholder="{{ trans('langCourseTitle') }}">
                             <span class='help-block Accent-200-cl'>{{ Session::getError('title') }}</span>

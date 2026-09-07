@@ -396,8 +396,15 @@ function show_edit_form($id, $sid, $assign): void
                                     </div>
 
                                     <div class='row form-group mt-4'>
-                                        <label for='comments_file' class='col-12 control-label-notes'>$langCommentsFile</label>
-                                        <div class='col-12'>
+                                        <label for='comments_file' class='col-12 control-label-notes'>$langCommentsFile</label>";
+
+                                    if (isset($sub->grade_comments_filename)) {
+                                        $tool_content .= "<div class='col-12 p-2 mb-1'>
+                                                <a href='index.php?course=$course_code&getcomment=$sid'>$sub->grade_comments_filename</a>                                                            
+                                          </div>";
+                                    }
+
+                                    $tool_content .= "<div class='col-12'>
                                             <input type='file' name='comments_file' id='comments_file' size='35'>
                                             " . fileSizeHidenInput() . "
                                         </div>

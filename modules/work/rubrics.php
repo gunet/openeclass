@@ -112,6 +112,7 @@ if (isset($_POST['submitRubric'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('name'));
         $v->rule('required', array('title'));
+        $v->rule('required', 'weight');
         $v->rule('required', array('scale_item_value'));
         $v->labels(array(
             'title' => "$langTheField $langTitle",
@@ -334,10 +335,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                             $langGradebookWeight (%)
                         </div>
                         <div class='col-12 d-flex justify-content-start align-items-center'>
-                            <input name='weight[$crit]' class='form-control' id='weight' value='".q($title['crit_weight'])."' type='number'>";
-                            // if ($crit > 0) {
-                            //     $tool_content .= "<a aria-label='$langDelete' href='#' class='removeCrit' id='remCrit$crit'><span class='fa fa-times' style='color:red'></span></a>";
-                            // }
+                            <input name='weight[$crit]' class='form-control' id='weight' value='".q($title['crit_weight'])."' type='number' required>";
                     $tool_content .= "</div></div>";
                 $tool_content .= "</div>";
                 $tool_content .= "
@@ -405,12 +403,12 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     <div class='form-group" . (Session::getError('title') ? " has-error" : "") . "'>
                         <label for='title' class='col-sm-12 control-label-notes'>$langRubricCritTitle</label>
                         <div class='col-sm-12'>
-                          <input name='title[]' type='text' class='form-control' id='title' value='$title'>
+                          <input name='title[]' type='text' class='form-control' id='title' value='$title' required>
                           " . (Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "") . "
                         </div>
                         <label for='weight' class='col-sm-12 control-label-notes mt-4'>$langGradebookWeight (%)</label>
                         <div class='col-sm-12'>
-                            <input name='weight[]' class='form-control' id='weight' value='" . q($title['crit_weight']) . "' type='number'>
+                            <input name='weight[]' class='form-control' id='weight' value='" . q($title['crit_weight']) . "' type='number' required>
                         </div>
                     </div>
                     <div class='form-group mt-4'>

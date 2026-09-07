@@ -3374,6 +3374,7 @@ function submit_grade_comments($args): void
         }
 
         $comment = (isset($args['comments']))? $args['comments'] : '';
+        $comments_filepath = $comments_real_filename = '';
 
         if (isset($_FILES['comments_file']) and is_uploaded_file($_FILES['comments_file']['tmp_name'])) { // upload comments file
             $comments_filename = $_FILES['comments_file']['name'];
@@ -3387,11 +3388,13 @@ function submit_grade_comments($args): void
                 $comments_filepath = $safe_comments_filename;
             }
         } else {
-            $comments_filepath = $comments_real_filename = '';
+            $q = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $sid);
+            $comments_filepath = $q->grade_comments_filepath;
+            $comments_real_filename = $q->grade_comments_filename;
         }
 
         $grade = is_numeric($grade) ? $grade : null;
-        if(isset($args['auto_judge_scenarios_output'])){
+        if (isset($args['auto_judge_scenarios_output'])) {
             Database::get()->query("UPDATE assignment_submit SET auto_judge_scenarios_output = ?s
                                     WHERE id = ?d",serialize($args['auto_judge_scenarios_output']), $sid);
         }
@@ -3400,8 +3403,8 @@ function submit_grade_comments($args): void
                                     grade_comments_filepath = ?s,
                                     grade_comments_filename = ?s,
                                     grade_submission_date = NOW(), grade_submission_ip = ?s
-                                    WHERE id = ?d", $grade, $grade_rubric, $comment, $comments_filepath,
-                $comments_real_filename, Log::get_client_ip(), $sid)->affectedRows>0) {
+                                    WHERE id = ?d",
+                $grade, $grade_rubric, $comment, $comments_filepath, $comments_real_filename, Log::get_client_ip(), $sid)->affectedRows>0) {
             $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
             triggerGame($course_id, $quserid, $id);
             triggerAssignmentAnalytics($course_id, $quserid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);

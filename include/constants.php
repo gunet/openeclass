@@ -187,6 +187,7 @@ define('DRAG_AND_DROP_MARKERS', 10);
 define('CALCULATED', 11);
 define('ORDERING', 12);
 define('ORAL', 13);
+define('UPLOAD_FILE', 14);
 
 // exercise view type
 define('SINGLE_PAGE_TYPE', 1);
@@ -257,6 +258,7 @@ define('MYDOCS', 4);
 define('MYSESSIONS',5);
 define('SESSION_REFERENCE',6);
 define('ORAL_QUESTION',7);
+define('UPLOAD_FILE_QUESTION', 8);
 
 // path for certificates / badges templates
 define('CERT_TEMPLATE_PATH', "/courses/user_progress_data/cert_templates/");

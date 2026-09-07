@@ -240,6 +240,7 @@ if (!isset($_POST['create_course'])) {
         }
 
         $data['enable_activity'] = Database::get()->querySingle('SELECT id FROM activity_content LIMIT 1');
+        $data['pending_cadmos_courses'] = Database::get()->queryArray("SELECT id, source, created FROM cadmos_course WHERE user_id = ?d AND course_id IS NULL ORDER BY id DESC", $uid);
 
         view('modules.create_course.index', $data);
 
@@ -467,7 +468,14 @@ if (!isset($_POST['create_course'])) {
                             SET cat_title = ?s,
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
 
-        if (isset($_FILES['cadmos_file']) && is_uploaded_file($_FILES['cadmos_file']['tmp_name'])) {
+        $cadmos_id = isset($_POST['cadmos_id']) ? intval($_POST['cadmos_id']) : 0;
+        if ($cadmos_id > 0) {
+            $cadmos_record = Database::get()->querySingle("SELECT source FROM cadmos_course WHERE id = ?d AND user_id = ?d", $cadmos_id, $uid);
+            if ($cadmos_record) {
+                import_cadmos_data($new_course_id, $code, $cadmos_record->source);
+                Database::get()->query("UPDATE cadmos_course SET course_id = ?d WHERE id = ?d", $new_course_id, $cadmos_id);
+            }
+        } elseif (isset($_FILES['cadmos_file']) && is_uploaded_file($_FILES['cadmos_file']['tmp_name'])) {
             import_cadmos_file($new_course_id, $code, $_FILES['cadmos_file']['tmp_name']);
         }
 

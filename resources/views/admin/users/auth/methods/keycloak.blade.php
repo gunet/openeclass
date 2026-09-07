@@ -55,6 +55,13 @@
         </div>
     </div>
 
+    <div class='form-group mt-4'>
+        <label for='end_session_endpoint' class='col-sm-12 control-label-notes'>{{ trans('langcas_logout') }}:</label>
+        <div class='col-sm-12'>
+            <input class='form-control' name='end_session_endpoint' id='end_session_endpoint' type='text' value="{{ $auth_data['end_session_endpoint'] ?? '' }}">
+        </div>
+    </div>
+
     <div class='form-group mt-4 {{ $auth_data['uid_attr_is_username']? 'd-none': '' }}' id='UsernamePrefixField'>
         <label for='UsernamePrefix' class='col-sm-12 control-label-notes'>{{ trans('langMultiRegPrefix') }}:</label>
         <div class='col-sm-12'>

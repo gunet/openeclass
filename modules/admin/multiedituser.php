@@ -18,13 +18,12 @@
  *
  */
 
-
 $require_usermanage_user = TRUE;
 $require_help = true;
 $helpTopic = 'users_administration';
 $helpSubTopic = 'mass_user_account_deletion';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
@@ -44,6 +43,8 @@ if (isset($_POST['activate_submit'])) {
 }
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
+$usernames = '';
+$users = array();
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -56,6 +57,7 @@ if (isset($_POST['submit'])) {
 
     $count = 0;
     $line = strtok($_POST['user_names'], "\n");
+
     while ($line !== false) {
         // strip comments
         $line = preg_replace('/#.*/', '', trim($line));
@@ -115,8 +117,6 @@ if (isset($_POST['submit'])) {
     }
    redirect_to_home_page('modules/admin/index.php');
 } else {
-
-    $usernames = '';
     if (isset($_POST['dellall_submit']) or isset($_POST['activate_submit']) or isset($_POST['move_submit'])) {
 
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
         $lname = $_POST['lname'] ?? '';
         $fname = $_POST['fname'] ?? '';
         $uname = isset($_POST['uname']) ? canonicalize_whitespace($_POST['uname']) : '';
-        $am = isset($_POST['am']) ? $_POST['am'] : '';
+        $am = $_POST['am'] ?? '';
         $verified_mail = isset($_POST['verified_mail']) ? intval($_POST['verified_mail']) : 3;
         $user_type = $_POST['user_type'] ?? '';
         $auth_type = $_POST['auth_type'] ?? '';
@@ -257,23 +257,11 @@ if (isset($_POST['submit'])) {
             $qry = 'SELECT DISTINCT username ' . $qry_base . ' ORDER BY username ASC';
         }
 
-        Database::get()->queryFunc($qry
-                , function($users) use(&$usernames) {
-            $usernames .= $users->username . "\n";
-        }, $terms);
+        $users = Database::get()->queryArray($qry, $terms);
     }
 
-    if (isset($_POST['activate_submit'])) {
-        $infoText = $langActivateUserInfo;
-        $monthsField = "
-                <div class='form-group mt-3'>
-                    <label class='col-sm-12 control-label-notes' for='months-id'>$langActivateMonths:</label>
-                    <div class='col-sm-12'>
-                        <input name='months' id='months-id' class='form-control' type='number' min='1' step='1' value='6'>
-                    </div>
-                </div>";
-        $confirm = '';
-    } elseif (isset($_POST['move_submit'])) {
+    $data['users'] = $users;
+    if (isset($_POST['move_submit'])) {
         $nodePickerParams = array(
             'defaults' => $dep,
             'multiple' => false);
@@ -281,54 +269,16 @@ if (isset($_POST['submit'])) {
             $nodePickerParams['allowables'] = $user->getDepartmentIds($uid);
         }
         load_js('jstree3');
+        $data['currentDepartment'] = $tree->getNodeName($dep);
         list($js, $html) = $tree->buildUserNodePicker($nodePickerParams);
         $head_content .= $js;
-        $infoText = sprintf($langMoveUserInfo, '<b>' . q($tree->getNodeName($dep)) . '</b>');
-        $monthsField = "
-                <input type='hidden' name='old_dep' value='$dep'>
-                
-                <div class='form-group mt-3'>
-                    <label class='col-sm-12 control-label-notes' for='dialog-set-value'>$langFaculty:</label>
-                    <div class='col-sm-12'>$html</div>
-                </div>";
-        $confirm = '';
-    } else {
-        $infoText = $langMultiDelUserInfo;
-        $monthsField = "<input type='hidden' name='delete' value='true'>";
-        $confirm = " onclick='return confirmation(\"" . q($langMultiDelUserConfirm) . "\");'";
+        $data['html'] = $html;
+        $data['dep'] = $dep;
     }
-
-    $tool_content .= "
-    <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$infoText</span></div></div>
-    <div class='row'>
-        
-        <div class='col-lg-6 col-12'>
-        <div class='form-wrapper form-edit border-0 px-0'>
-        <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
-            <fieldset>
-                <legend class='mb-0' aria-label='$langForm'></legend>
-                $monthsField
-                
-                <div class='form-group mt-4'>
-                    <label for='user_names' class='col-sm-12 control-label-notes'>$langMultiDelUserData:</label>
-                    <div class='col-sm-12'>
-                        <textarea id='user_names' class='auth_input form-control' name='user_names' rows='30'>$usernames</textarea>
-                    </div>
-                </div>
-                
-                <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
-                    <input class='btn submitAdminBtn' type='submit' name='submit' value='" . $langSubmit . "'$confirm>
-                    <a href='index.php' class='btn cancelAdminBtn'>$langCancel</a>
-                </div>
-            </fieldset>
-            ". generate_csrf_token_form_field() ."
-        </form>
-    </div></div>
-    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-    <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-        </div></div>";
 }
-draw($tool_content, null, '', $head_content);
+$data['usernames'] = $usernames;
+
+view('admin.users.multiedituser', $data);
 
 /**
  * @brief Translate username to uid

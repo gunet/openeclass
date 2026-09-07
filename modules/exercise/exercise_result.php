@@ -632,7 +632,7 @@ if (count($exercise_question_ids) > 0) {
         }
 
         $tool_content .= "</div><div class='col-2 text-end d-flex flex-column'>" . $answer_text;
-        if ($answerType == FREE_TEXT or $answerType == ORAL) {
+        if ($answerType == FREE_TEXT or $answerType == ORAL or $answerType == UPLOAD_FILE) {
             $choice = purify($choice);
             if (!empty($choice)) {
                 if (!$question_graded) {
@@ -673,7 +673,7 @@ if (count($exercise_question_ids) > 0) {
 
         if ($showScore) {
             if (!is_null($choice)) {
-                if (($answerType == FREE_TEXT or $answerType == ORAL) && $is_editor) {
+                if (($answerType == FREE_TEXT or $answerType == ORAL or $answerType == UPLOAD_FILE) && $is_editor) {
                     if (isset($question_graded) && !$question_graded) {
                         $value = '';
                     } else {
