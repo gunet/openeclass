@@ -414,12 +414,33 @@ function eduapi_session_label($session, $language) {
     if ($title === '') {
         $title = $session->sourcedId ?? '';
     }
-    $start = $session->startDate ?? '';
-    $end = $session->endDate ?? '';
+    $start = eduapi_format_date($session->startDate ?? '');
+    $end = eduapi_format_date($session->endDate ?? '');
     if ($start || $end) {
-        $title .= " ($start - $end)";
+        $title .= ' (' . implode(' - ', array_filter([$start, $end], 'strlen')) . ')';
     }
     return $title;
+}
+
+/**
+ * Render the date or datetime string, accepts 'YYYY-MM-DD' or ISO-8601.
+ * Midnight values render as dd/MM/yyyy, else as dd/MM/yyyy HH:mm.
+ */
+function eduapi_format_date($value) {
+    $value = trim((string) $value);
+    if ($value === '') {
+        return '';
+    }
+    try {
+        $dt = new DateTime($value); // retain the string's own offset
+    } catch (Exception $e) {
+        return $value;
+    }
+    if ($dt->format('H:i:s') === '00:00:00') {
+        $day = new DateTime($dt->format('Y-m-d'));
+        return format_locale_date($day->getTimestamp(), null, false, 'dd/MM/yyyy');
+    }
+    return format_locale_date($dt->getTimestamp(), null, true, 'dd/MM/yyyy HH:mm');
 }
 
 /**
@@ -525,7 +546,10 @@ if (isset($data['error'])) {
             'title' => Service::pickTitle($offering->title ?? [], $language),
             'description' => Service::pickTitle($offering->description ?? [], $language),
             'org_name' => $organizationName,
-            'dates' => ($offering->startDate ?? '') . ' - ' . ($offering->endDate ?? ''),
+            'dates' => implode(' - ', array_filter([
+                eduapi_format_date($offering->startDate ?? ''),
+                eduapi_format_date($offering->endDate ?? ''),
+            ], 'strlen')),
             'enrolled' => ($offering->enrolledNumberStudents ?? '-') . ' / ' . ($offering->maxNumberStudents ?? '-'),
             'status' => ($offering->registrationStatus ?? '') . ' / ' . ($offering->recordStatus ?? ''),
             'is_active' => $isActive,
