@@ -132,6 +132,26 @@ if (!$thePoll) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 
+$PollType = $thePoll->type;
+$pollOptions = !is_null($thePoll->options) ? $thePoll->options : '';
+$default_answer = $thePoll->default_answer;
+
+if (!$is_course_reviewer && !$thePoll->show_results) {
+    Session::flash('message',$langPollResultsAccess);
+    Session::flash('alert-class', 'alert-warning');
+    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+}
+
+if (isset($_GET['from_session_view']) && isset($_GET['del_user_answers'])) {
+    // Delete user's answer from a poll in a specific session
+    $del = Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, intval($_GET['session']));
+    if ($del) {
+        Session::flash('message', $langDocCompletionSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".intval($_GET['session'])); 
+    }
+}
+
 // If poll has enabled google form feature, redirect to the new poll results
 $pollResultsAsGoogleForm = false;
 if (!is_null($thePoll->options)) {
@@ -153,15 +173,7 @@ if ($pollResultsAsGoogleForm) {
     redirect_to_home_page("modules/questionnaire/poll_results_multiple_submissions.php?course=$course_code&pid=$pid$fromSessionView$sessionArg");
 }
 
-$PollType = $thePoll->type;
-$pollOptions = !is_null($thePoll->options) ? $thePoll->options : '';
-$default_answer = $thePoll->default_answer;
 
-if (!$is_course_reviewer && !$thePoll->show_results) {
-    Session::flash('message',$langPollResultsAccess);
-    Session::flash('alert-class', 'alert-warning');
-    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
-}
 
 if (isset($_GET['from_session_view'])) {
     $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d 
