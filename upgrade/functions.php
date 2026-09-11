@@ -126,7 +126,7 @@ function is_admin($username, $password) {
         }
 
         if (!password_verify($password, $user->password)) {
-            if (strlen($user->password) < 60 and md5($password) == $user->password) {
+            if (strlen($user->password) < 60 and md5($password) === $user->password) {
                 return true;
             }
             return false;

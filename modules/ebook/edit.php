@@ -340,10 +340,10 @@ if (isset($_GET['delete'])) {
                                   ebook_subsection.title AS subsection_title,
                                   ebook_subsection.file_id as file_id
                            FROM ebook_section, ebook_subsection
-                           WHERE ebook_section.ebook_id = $info->id AND
+                           WHERE ebook_section.ebook_id = ?d AND
                                  ebook_section.id = ebook_subsection.section_id
                                  ORDER BY CONVERT(psid, UNSIGNED), psid,
-                                          CONVERT(pssid, UNSIGNED), pssid");
+                                          CONVERT(pssid, UNSIGNED), pssid", $info->id);
         if (count($files) > 0 || count($q) > 0) {
             $tool_content .= "
       

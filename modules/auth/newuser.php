@@ -473,16 +473,16 @@ if (!isset($_POST['submit'])) {
                 $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
                                      status, am, phone, registered_at, expires_at,
                                      lang, verified_mail, whitelist, description)
-                          VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
+                          VALUES (?s, ?s, ?s, ?s, ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
                                   DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND), ?s, $verified_mail, '', '')",
-                    $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
+                    $surname_form, $givenname_form, $uname, $password_encrypted, $email, $am, $phone, $language);
             } else {
                 $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
                     status, am, phone, registered_at, expires_at,
                     lang, verified_mail, whitelist, description)
-                    VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
+                    VALUES (?s, ?s, ?s, ?s, ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
                                   DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND), ?s, $verified_mail, '', '')",
-                    $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
+                    $surname_form, $givenname_form, $uname, $password_encrypted, $email, $am, $phone, $language);
                 if ($q1) {
                     Database::get()->query('INSERT INTO user_ext_uid
                     SET user_id = ?d, auth_id = ?d, uid = ?s',

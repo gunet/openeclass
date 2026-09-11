@@ -1858,7 +1858,7 @@ function add_units_navigation($entry_page = false) {
         }
 
         $q = Database::get()->querySingle("SELECT title FROM course_units
-                       WHERE id = $unit_id AND course_id = ?d $visibility_check", $course_id);
+                       WHERE id = ?d AND course_id = ?d $visibility_check", $unit_id, $course_id);
         if ($q) {
             $unit_name = $q->title;
             $navigation[] = array('url' => "../units/index.php?course=$course_code&amp;id=$unit_id", 'name' => $unit_name);

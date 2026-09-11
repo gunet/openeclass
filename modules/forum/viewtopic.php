@@ -242,9 +242,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     }
     if ($last_post_in_thread == $this_post_time) {
         $topic_time_fixed = $last_post_in_thread;
-        $sql = "UPDATE forum_topic
-			SET topic_time = '$topic_time_fixed'
-			WHERE id = $topic";
+        Database::get()->query("UPDATE forum_topic SET topic_time = ?s WHERE id = ?d", $topic_time_fixed, $topic);
     }
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langDeletedMessage</span></div></div>";
 }
@@ -756,8 +754,9 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
  * @return void
  * @throws \Mpdf\MpdfException
  */
-function pdf_forum_output($content_m,$topic_id,$forum_id) {
-    global $currentCourseName, $webDir, $course_id, $course_code, $language;
+function pdf_forum_output($content_m,$topic_id,$forum_id): void
+{
+    global $currentCourseName;
 
     $res = Database::get()->querySingle("SELECT * FROM forum_topic WHERE id = ?d AND forum_id = ?d",$topic_id,$forum_id);
 
