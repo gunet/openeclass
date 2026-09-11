@@ -227,10 +227,31 @@ if (isset($_GET['from_other'])) {
 
 // if we haven't chosen 'system actions'
 if (!isset($_GET['from_other'])) {
-    $tool_content .= '<div class="row form-group mt-4">  
-        <label for="usId" class="col-12 control-label-notes">' . $langUser . ' <span class="asterisk Accent-200-cl">(*)</span></label>
-        <div class="col-12"><select name="u_user_id" class="form-select" id="usId">' . $user_opts . '</select></div>
-    </div>';
+        $tool_content .= '<div class="row form-group mt-3">
+            <label for="id_u_module_id" class="col-12 control-label-notes">' . $langLogModules . ' </label>
+            <div class="col-12"><select name="u_module_id" class="form-select" id="id_u_module_id">';
+        $tool_content .= "<option value='-1'>$langAllModules</option>";
+        foreach ($modules as $m => $mid) {
+            $extra = '';
+            if ($u_module_id == $m) {
+                $extra = 'selected';
+            }
+            $tool_content .= "<option value=" . $m . " $extra>" . $mid['title'] . "</option>";
+        }
+        if ($u_module_id == MODULE_ID_USERS) {
+            $extra = 'selected';
+        }
+        if ($u_module_id == MODULE_ID_TOOLADMIN) {
+            $extra = 'selected';
+        }
+        if ($u_module_id == MODULE_ID_ABUSE_REPORT) {
+            $extra = 'selected';
+        }
+        $tool_content .= "<option value = " . MODULE_ID_USERS . " $extra>$langAdminUsers</option>";
+        $tool_content .= "<option value = " . MODULE_ID_COURSEINFO . " $extra>$langConfig</option>";
+        $tool_content .= "<option value = " . MODULE_ID_TOOLADMIN . " $extra>$langExternalLinks</option>";
+        $tool_content .= "<option value = " . MODULE_ID_ABUSE_REPORT . " $extra>$langAbuseReport</option>";
+        $tool_content .= "</select></div></div>";
 }
 
 $tool_content .= '<div class="row form-group mt-4">
