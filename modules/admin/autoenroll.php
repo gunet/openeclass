@@ -85,7 +85,8 @@ if (isset($_GET['delete'])) {
     redirect_to_home_page('modules/admin/autoenroll.php');
 } elseif (isset($_GET['add']) or isset($_GET['edit'])) {
     load_js('jstree3');
-    load_js('select2');
+    load_js('tools.js');
+    load_js('slimselect');
 
     $data['deps'] = $department = array();
     $courses = '';
@@ -131,14 +132,26 @@ if (isset($_GET['delete'])) {
     $head_content .= $jsTree . "
       <script>
         $(function () {
-          $('#courses-select').select2({
-            minimumInputLength: 2,
-            tags: true,
-            ajax: {
-              url: 'coursefeed.php',
-              dataType: 'json'
-            }
-          });
+
+            slimSelectFun(
+                '#courses-select',
+                '$langSearch',
+                '$langWelcomeSelect',
+                '$langSelectAll',
+                '$langCourses',
+                {
+                    url: '{$urlServer}main/coursefeed.php',
+                    dataType: 'json',
+                    minimumInputLength: 2,
+                    params: function(searchValue) {
+                        return {
+                            term: searchValue,
+                            _type: 'query',
+                            q: searchValue
+                        };
+                    }
+                }
+            );
 
           $('#ndAdd2').click(function() {
             $('#treeCourseModal').modal('show');

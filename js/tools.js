@@ -1023,7 +1023,7 @@ function q(str) {
 }
 
 
-function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll, langListChoices) {
+function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll, langListChoices, ajaxOptions = null) {
     var selectIdOption = $(element_id);
     var optionsData = [];
     selectIdOption.find('option').each(function() {
@@ -1034,7 +1034,7 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
             disabled: $(this).is(':disabled')
         });
     });
-    // Wrap all options into a group
+
     var groupedData = [
         {
             label: langListChoices,
@@ -1043,12 +1043,99 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
             options: optionsData
         }
     ];
-    new SlimSelect({
+    var config = {
         select: element_id,
         settings: {
             placeholderText: langWelcomeSelect,
-            searchPlaceholder: langSearch
+            searchPlaceholder: langSearch,
+            searchHighlight: true
         },
         data: groupedData
-    });
+    };
+
+
+    if (ajaxOptions) {
+        config.events = {
+            search: (searchValue, selected, catalog) => {
+                return new Promise((resolve, reject) => {
+                    if (ajaxOptions.minimumInputLength && searchValue.length < ajaxOptions.minimumInputLength) {
+                        return reject('Search must be at least ' + ajaxOptions.minimumInputLength + ' characters');
+                    }
+
+
+                    /*
+                     * Build AJAX parameters
+                     */
+                    var params = {};
+                    if (typeof ajaxOptions.params === 'function') {
+                        params = ajaxOptions.params(searchValue, selected,catalog);
+                    } else if (ajaxOptions.params) {
+                        params = {
+                            ...ajaxOptions.params
+                        };
+                    }
+
+                    /*
+                     * AJAX request
+                     */
+                    $.ajax({
+                        url: ajaxOptions.url,
+                        dataType: ajaxOptions.dataType || 'json',
+                        data: params
+                    }).done(function(resp) {
+                        const data = resp?.results || [];
+                        const options = data.filter(item => {
+                                return !selected.some(
+                                    selectedItem => {
+                                        return String(selectedItem.value) === String(item.id);
+                                    }
+                                );
+                            }).map(item => {
+                                return {
+                                    text: item.text,
+                                    value: String(item.id)
+                                };
+                            });
+
+                        if (!options.length) {
+                            return reject('No results found');
+                        }
+
+                        resolve([
+                            {
+                                label: langListChoices,
+                                selectAll: true,
+                                selectAllText: langSelectAll,
+                                options: options
+                            }
+                        ]);
+
+                    }).fail(function(xhr) {
+                        console.error('SlimSelect AJAX error:', xhr);
+                        reject('Error fetching results');
+                    });
+
+                });
+            }
+        };
+    }
+
+    /*
+    * Tags / createSearchChoice from select2
+    */
+    // if (ajaxOptions.tags) {
+    //     config.events.addable = function(value) {
+    //         value = value.trim();
+    //         if (!value) {
+    //             return false;
+    //         }
+    //         return {
+    //             text: value,
+    //             value: value
+    //         };
+    //     };
+    // }
+
+    return new SlimSelect(config);
 }
+
