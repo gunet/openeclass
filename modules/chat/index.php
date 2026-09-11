@@ -281,8 +281,8 @@ if ($is_editor) {
             $existing_chat_users = explode(',', $conf->user_id);
             foreach ($existing_chat_users as $ecu) {
                 $chat_users = Database::get()->querySingle("SELECT id, CONCAT(surname, ' ', givenname) AS name, username
-                                                        FROM user WHERE id = $ecu
-                                                        ORDER BY surname, givenname");
+                                                        FROM user WHERE id = ?d
+                                                        ORDER BY surname, givenname", $ecu);
 
                 $tool_content .= "<option value='" . q($chat_users->id) . "' selected>" . q($chat_users->name) . " (" . q($chat_users->username) . ")</option>";
             }

@@ -1,9 +1,13 @@
 <?php
 
+$require_admin = true;
+
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 
-if ($uid) {
+$tenant = getCurrentTenant();
+
+if ($tenant) {
     $tenant = getCurrentTenant();
 
     if ($tenant->url) {

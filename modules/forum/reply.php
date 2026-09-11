@@ -61,10 +61,10 @@ if (isset($_GET['parent_post'])) {
 
 $myrow = Database::get()->querySingle("SELECT f.name, t.title, t.locked
             FROM forum f, forum_topic t
-            WHERE f.id = $forum
-            AND t.id = $topic
+            WHERE f.id = ?d
+            AND t.id = ?d
             AND t.forum_id = f.id
-            AND f.course_id = ?d", $course_id);
+            AND f.course_id = ?d", $forum, $topic, $course_id);
 
 $forum_name = $myrow->name;
 $topic_title = $myrow->title;

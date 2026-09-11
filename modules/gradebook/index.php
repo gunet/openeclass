@@ -266,8 +266,8 @@ if ($is_editor) {
                 foreach ($ug as $u) {
                     if (!in_array($u->user_id, $already_inserted_ids)) {
                         Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid)
-                                SELECT $gradebook_id, user_id FROM course_user
-                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u->user_id);
+                                SELECT ?d, user_id FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d", $gradebook_id, $course_id, $u->user_id);
                         update_user_gradebook_activities($gradebook_id, $u->user_id);
                         $distinct_users_count++;
                     }

@@ -71,28 +71,10 @@ function secure_random_bytes($len = 10)
    }
 
    /*
-    * If mcrypt extension is available then we use it to gather entropy from
-    * the operating system's PRNG. This is better than reading /dev/urandom
-    * directly since it avoids reading larger blocks of data than needed.
-    * Older versions of mcrypt_create_iv may be broken or take too much time
-    * to finish so we only use this function with PHP 5.3.7 and above.
-    * @see https://bugs.php.net/bug.php?id=55169
-    */
-   if (function_exists('mcrypt_create_iv') &&
-      (version_compare(PHP_VERSION, '5.3.7') >= 0 ||
-       substr(PHP_OS, 0, 3) !== 'WIN')) {
-      $str = mcrypt_create_iv($len, MCRYPT_DEV_URANDOM);
-      if ($str !== false) {
-         return $str;
-      }
-   }
-
-
-   /*
     * No build-in crypto randomness function found. We collect any entropy
     * available in the PHP core PRNGs along with some filesystem info and memory
-    * stats. To make this data cryptographically strong we add data either from
-    * /dev/urandom or if its unavailable, we gather entropy by measuring the
+    * stats. To make this data cryptographically strong, we add data either from
+    * /dev/urandom or if it's unavailable, we gather entropy by measuring the
     * time needed to compute a number of SHA-1 hashes.
     */
    $str = '';

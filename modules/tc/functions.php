@@ -1182,7 +1182,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 foreach ($_POST['groups'] as $group) {
                     if (preg_match('/^_/', $group)) { // find group users (if any)
                         $g_id = intval((substr($group, 1, strlen($group))));
-                        $q = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = $g_id");
+                        $q = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g_id);
                         if ($q) {
                             foreach ($q as $row) {
                                 $r_group .= "'$row->user_id'" .',';
