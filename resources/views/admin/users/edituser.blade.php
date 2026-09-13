@@ -16,7 +16,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -137,8 +137,8 @@
                                 <label for='user_date_expires_at' class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</label>
                                 <div class='col-sm-12'>
                                     <div class='input-group'>
-                                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                        <input class='form-control mt-0 border-start-0' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $exp_date->format("d-m-Y H:i") }}'>
+                                        <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                        <input class='form-control mt-0' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $exp_date->format("d-m-Y H:i") }}'>
                                     </div>
                                 </div>
                             </div>
@@ -210,7 +210,7 @@
                 <div class='col-lg-6 col-12 mt-lg-0 mt-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                         <div class="card-header border-0 d-flex justify-content-start">
-                            <h3>{{ trans('langStudentParticipation') }}</h3>
+                            <h2 class='text-heading-h3'>{{ trans('langStudentParticipation') }}</h2>
                         </div>
                         <div class='card-body'>
                             <div class='table-responsive mt-0'>
@@ -275,7 +275,7 @@
 
         </div>
     </div>
-</div>
+</main>
 
 @if ($is_admin)
     <script>

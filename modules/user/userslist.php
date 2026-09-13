@@ -112,7 +112,6 @@ $head_content .= "
                 'sScrollX': true,
                 'fnDrawCallback': function( oSettings ) {
                     tooltip_init();
-                    popover_init();
                 },
                 ajax: {
                     url: '$_SERVER[REQUEST_URI]',
@@ -139,11 +138,24 @@ $head_content .= "
                            'sNext':     '&rsaquo;',
                            'sLast':     '&raquo;'
                        }
-                   }
+                   },
+                'tabIndex': -1,
+                initComplete: function() {
+                    $('.dataTable .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                }
             });
             $('.dt-search input').attr({style: 'width:200px', class:'form-control input-sm ms-0 mb-3', placeholder: '$langName'});
             $('.dt-search label').attr('aria-label', '$langName');  
             $('.success').delay(3000).fadeOut(1500);
+        });
+        $('.dataTable').on('order.dt', function() {
+            $('.dataTable thead .dt-column-order').each(function() {
+                $(this).removeAttr('aria-label');
+                $(this).attr('aria-hidden', 'true');
+            });
         });
         </script>";
 

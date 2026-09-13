@@ -337,8 +337,8 @@ if ($is_editor) {
                                                             <label for='startdate' class='col-sm-12 control-label-notes'>$langDate :</label>
                                                             <div class='col-sm-12'>
                                                                 <div class='input-group'>
-                                                                    <div class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
-                                                                    <input class='form-control mt-0 border-start-0' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
+                                                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                    <input class='form-control mt-0' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
                                                                     
                                                                 </div>
                                                             </div>
@@ -348,9 +348,9 @@ if ($is_editor) {
                                                         <div class='input-append bootstrap-timepicker form-group mt-4'>
                                                             <label for='durationcal' class='col-sm-12 control-label-notes'>$langDuration <small>$langInHour</small></label>
                                                             <div class='col-sm-12'>
-                                                                <div class='input-group add-on'>
-                                                                    <div class='input-group-addon add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='fa-solid fa-clock'></span></div>
-                                                                    <input class='form-control mt-0 border-start-0' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
+                                                                <div class='input-group'>
+                                                                    <span class='add-on'><i class='fa-solid fa-clock'></i></span>
+                                                                    <input class='form-control mt-0' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
                                                                     
                                                                 </div>
                                                             </div>
@@ -395,8 +395,8 @@ if ($is_editor) {
                                                                 <label for='enddate' class='col-12 control-label-notes text-capitalize mb-1'>$langUntil</label>
                                                                     <div class='col-12'>
                                                                         <div class='input-group'>
-                                                                            <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                                            <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
+                                                                            <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                            <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
 
                                                                         </div>
                                                                     </div>
@@ -405,7 +405,7 @@ if ($is_editor) {
                                                         /**** end of recursion paramneters *****/
                                                         $tool_content .= "<div class='row form-group mt-4'>
                                                                                 <label for='content' class='col-12 control-label-notes text-capitalize'>$langDetail</label>
-                                                                                <div class='col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
+                                                                                <div class='col-12'>" . rich_text_editor('content', 4, 20, $content, options: array('id' => 'content')) . "</div>
                                                                             </div>
 
 
@@ -637,15 +637,15 @@ if ($is_editor) {
 
                                             <div class='row form-group mt-4'>
                                                 <label for='content' class='col-12 control-label-notes text-capitalize'>$langDetail</label>
-                                                <div class='col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
+                                                <div class='col-12'>" . rich_text_editor('content', 4, 20, $content, options: array('id' => 'content')) . "</div>
                                             </div>";
 
                             $tool_content .="<div class='input-append bootstrap-timepicker form-group mt-4'>
                                                     <label for='durationcalCreate' class='col-sm-12 control-label-notes'>$langDuration <small>$langInHour</small></label>
                                                     <div class='col-sm-12'>
-                                                        <div class='input-group add-on'>
-                                                            <div class='input-group-addon add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='fa-solid fa-clock'></span></div>
-                                                            <input class='form-control mt-0 border-start-0' name='duration' id='durationcalCreate' type='text' class='input-small' value='" . $duration . "'>
+                                                        <div class='input-group'>
+                                                            <span class='add-on'><i class='fa-solid fa-clock Neutral-600-cl'></i></span>
+                                                            <input class='form-control mt-0' name='duration' id='durationcalCreate' type='text' class='input-small' value='" . $duration . "'>
                                                             
                                                         </div>
                                                     </div>
@@ -686,8 +686,8 @@ if ($is_editor) {
                                             <label for='enddate' class='col-12 control-label-notes text-capitalize'>$langUntil</label>
                                                 <div class='col-12'>
                                                     <div class='input-group'>
-                                                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                        <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
+                                                        <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
 
                                                     </div>
                                                 </div>
@@ -860,25 +860,20 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         <div class="col-12 overflow-auto">
            <div id="calendar_wrapper" class="border-card rounded-3">
 
-                   <div class="calendar-header">
-
+                        <div class="calendar-header">
                            <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center">
-
-                                   <div class="btn-group">
-                                           <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev" aria-label="'.$langPrevious.'"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-nav="today">' . $langToday . '</button>
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-nav="next" aria-label="'.$langNext.'">' . '' . ' <span class="fa fa-caret-right"></span> </button>
-                                            </div>
-                                            <div class="btn-group">
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-view="year">' . $langYear . '</button>
-                                                    <button class="btn bg-transparent active text-agenda-title" data-calendar-view="month">' . $langMonth . '</button>
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-view="week">' . $langWeek . '</button>
-                                                    <button class="btn bg-transparent text-agenda-title" data-calendar-view="day">' . $langDay . '</button>
-                                            </div>
-
-                                        
+                                <div class="btn-group">
+                                    <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev" aria-label="'.$langPrevious.'"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
+                                            <button class="btn bg-transparent text-agenda-title" data-calendar-nav="today">' . $langToday . '</button>
+                                            <button class="btn bg-transparent text-agenda-title" data-calendar-nav="next" aria-label="'.$langNext.'">' . '' . ' <span class="fa fa-caret-right"></span> </button>
                                     </div>
-
+                                    <div class="btn-group">
+                                            <button class="btn bg-transparent text-agenda-title" data-calendar-view="year">' . $langYear . '</button>
+                                            <button class="btn bg-transparent active text-agenda-title" data-calendar-view="month">' . $langMonth . '</button>
+                                            <button class="btn bg-transparent text-agenda-title" data-calendar-view="week">' . $langWeek . '</button>
+                                            <button class="btn bg-transparent text-agenda-title" data-calendar-view="day">' . $langDay . '</button>
+                                    </div>
+                                </div>
                             </div>'
                           . '
                                 <div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div>
@@ -888,7 +883,52 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                 </div>';
 
     $tool_content .= "<script type='text/javascript'>" .
-        '$(document).ready(function(){
+        '
+        var events = [];
+
+        function applyCalendarTooltips() {
+            document.querySelectorAll("#cal-slide-content .event.event-info").forEach(function (event) {
+                event.setAttribute("tabindex", "0");
+                event.setAttribute("role","img");
+                event.setAttribute("data-bs-toggle", "tooltip");
+                event.setAttribute("data-bs-original-title", "' . $langAgendaCourseEvent . '");
+                event.setAttribute("aria-label", "' . $langAgendaCourseEvent . '");
+            });
+            document.querySelectorAll("#cal-slide-content .event.event-important").forEach(function (event) {
+                event.setAttribute("tabindex", "0");
+                event.setAttribute("role","img");
+                event.setAttribute("data-bs-toggle", "tooltip");
+                event.setAttribute("data-bs-original-title", "' . $langAgendaDueDay . '");
+                event.setAttribute("aria-label", "' . $langAgendaDueDay . '");
+            });
+            document.querySelectorAll("#cal-slide-content .event.event-success").forEach(function (event) {
+                event.setAttribute("tabindex", "0");
+                event.setAttribute("role","img");
+                event.setAttribute("data-bs-toggle", "tooltip");
+                event.setAttribute("data-bs-original-title", "' . $langAgendaSystemEvent . '");
+                event.setAttribute("aria-label", "' . $langAgendaSystemEvent . '");
+            });
+            document.querySelectorAll("#cal-slide-content .event.event-special").forEach(function (event) {
+                event.setAttribute("tabindex", "0");
+                event.setAttribute("role","img");
+                event.setAttribute("data-bs-toggle", "tooltip");
+                event.setAttribute("data-bs-original-title", "' . $langAgendaPersonalEvent . '");
+                event.setAttribute("aria-label", "' . $langAgendaPersonalEvent . '");
+            });
+            document.querySelectorAll("#cal-slide-content [data-bs-toggle=tooltip]").forEach(function(el){
+                let oldTooltip = bootstrap.Tooltip.getInstance(el);
+                if (oldTooltip) {
+                    oldTooltip.dispose();
+                }
+                new bootstrap.Tooltip(el, {
+                    container: "body",
+                    trigger: "hover focus"
+                });
+            });
+        }
+
+
+        $(document).ready(function(){
             var calendar = $("#bootstrapcalendar").calendar(
             {
                 tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
@@ -899,9 +939,18 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                             $(".btn-group button").removeClass("active");
                             $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                             $("button[data-calendar-nav=\'today\']").text(this.getTitle());
-                            }
+
+                            setTimeout(function() {
+                                $("#bootstrapcalendar .events-list a.event").off("click");
+                                $("#bootstrapcalendar .events-list a.event").on("click", function(e) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                });
+                            }, 200);
+                }
             }
         );
+
         $(".btn-group button[data-calendar-nav]").each(function() {
             var $this = $(this);
             $this.click(function() {
@@ -917,6 +966,33 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                 $("#bootstrapcalendar").show();
             });
         });
+
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType !== 1) {
+                        return;
+                    }
+                    if (
+                        node.id === "cal-slide-content" ||
+                        node.querySelector("#cal-slide-content")
+                    ) {
+                        setTimeout(function(){
+                            applyCalendarTooltips();
+                        }, 0);
+                    }
+                });
+            });
+        });
+
+        observer.observe(
+            document.querySelector("#bootstrapcalendar"),
+                {
+                    childList: true,
+                    subtree: true
+                }
+            );
+
     });
 
     </script>';

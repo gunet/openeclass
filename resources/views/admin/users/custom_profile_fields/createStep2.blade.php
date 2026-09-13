@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
 <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -31,12 +31,14 @@
                                 <input type='hidden' name='catid' value='{{ $catid }}'>
                             @endif
                             <input type='hidden' name='datatype' value='{{ $datatype }}'>
+                            @foreach ($available_langs as $code => $lang)
                             <div class='form-group'>
-                                <label for='name' class='col-sm-12 control-label-notes'>{{ trans('langName') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
+                                <label for='name_{{ $code }}' class='col-sm-12 control-label-notes'>{{ trans('langName') }} ({{ $lang }}) @if ($code == $default_lang) <span class='asterisk Accent-200-cl'>(*)</span> @endif </label>
                                 <div class='col-sm-12'>
-                                    <input id='name' type='text' name='field_name' class="form-control" value="{{ isset($name) ? $name : '' }}">
+                                    <input id='name_{{ $code }}' type='text' name='field_name[{{ $code }}]' class="form-control" value="{{ isset($name) ? q(getSerializedMessage($name, $code)) : '' }}">
                                 </div>
                             </div>
+                            @endforeach
 
                             <div class='form-group mt-4'>
                                 <label for='shortname' class='col-sm-12 control-label-notes'>
@@ -47,13 +49,14 @@
                                 </div>
                             </div>
 
-
+                            @foreach ($available_langs as $code => $lang)
                             <div class='form-group mt-4'>
-                                <label for='fielddescr' class='col-sm-12 control-label-notes'>{{ trans('langDescription') }}</label>
+                                <label for='fielddescr_{{ $code }}' class='col-sm-12 control-label-notes'>{{ trans('langDescription') }} ({{ $code }})</label>
                                 <div class='col-sm-12'>
-                                    {!! $fielddescr_rich_text !!}
+                                    {!! $fielddescr_rich_text[$code] !!}
                                 </div>
                             </div>
+                            @endforeach
                             @if (isset($_GET['edit_field']))
 
                                 <div class='form-group mt-4'>
@@ -71,15 +74,16 @@
                                 </div>
                             </div>
                             @if ($datatype == CPF_MENU)
-
-                                <div class='form-group mt-4'>
-                                    <div class='col-sm-12 control-label-notes'>
-                                        {{ trans('langCPFMenuOptions') }} <small>({{ trans('langCPFMenuOptionsExplan') }})</small>
+                                @foreach ($available_langs as $code => $lang)
+                                    <div class='form-group mt-4'>
+                                        <div class='col-sm-12 control-label-notes'>
+                                            {{ trans('langCPFMenuOptions') }} ({{ $lang }}) <small>({{ trans('langCPFMenuOptionsExplan') }})</small> @if ($code == $default_lang) <span class='asterisk Accent-200-cl'>(*)</span> @endif
+                                        </div>
+                                        <div class='col-sm-12'>
+                                            <textarea aria-label="{{ trans('langCPFMenuOptionsExplan') }}" name='options[{{ $code }}]' rows='8' cols='20' class="form-control">{{ isset($textarea_val[$code]) ? $textarea_val[$code] : '' }}</textarea>
+                                        </div>
                                     </div>
-                                    <div class='col-sm-12'>
-                                        <textarea aria-label="{{ trans('langCPFMenuOptionsExplan') }}" name='options' rows='8' cols='20' class="form-control">{{ isset($textarea_val) ? $textarea_val : '' }}</textarea>
-                                    </div>
-                                </div>
+                                @endforeach
                             @endif
 
                             <div class='form-group mt-4'>
@@ -110,15 +114,15 @@
 
         </div>
 </div>
-</div>
+</main>
 
 <script language="javaScript" type="text/javascript">
     //<![CDATA[
         var chkValidator  = new Validator("fieldForm");
-        chkValidator.addValidation("field_name", "req", "{{ trans('langCPFFieldNameAlert') }}");
+        chkValidator.addValidation("field_name[{{ $default_lang }}]", "req", "{{ trans('langCPFFieldNameAlert') }}");
         chkValidator.addValidation("field_shortname", "req", "{{ trans('langCPFFieldShortNameAlert') }}");
         @if ($datatype == CPF_MENU)
-            chkValidator.addValidation("options", "req", "{{ trans('langCPFMenuOptionsAlert') }}");
+            chkValidator.addValidation("options[{{ $default_lang }}]", "req", "{{ trans('langCPFMenuOptionsAlert') }}");
         @endif
     //]]>
 </script>

@@ -1,13 +1,10 @@
 @extends('layouts.default')
 
 @section('content')
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -39,7 +36,7 @@
                                             <div class='row form-group mt-4'>
                                                 <label for='desc' class='col-12 control-label-notes mb-1'>{{ trans('langDescription') }}</label>
                                                 <div class='col-12'>
-                                                    {!! rich_text_editor('desc', 4, 20, $desc) !!}
+                                                    {!! rich_text_editor('desc', 4, 20, $desc, options: array('id' => 'desc')) !!}
                                                 </div>
                                             </div>
                                             <div class='row form-group mt-4'>
@@ -151,8 +148,8 @@
                                                                      <span class='checkmark'></span>
                                                                 </label>
                                                            </span>
-                                                            <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                            <input class='form-control mt-0 border-start-0' name='WorkStart_review' id='WorkStart_review' type='text' value='{{ $WorkStart_review }}' @if (!$enableWorkStart_review) disabled @endif>
+                                                            <span class='add-on1'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                            <input class='form-control mt-0' name='WorkStart_review' id='WorkStart_review' type='text' value='{{ $WorkStart_review }}' @if (!$enableWorkStart_review) disabled @endif>
                                                         </div>
                                                         <span class='help-block'>
                                                             @if (Session::hasError('WorkStart_review'))
@@ -170,12 +167,13 @@
                                                     <div class='col-12'>
                                                         <div class='input-group'>
                                                            <span class='input-group-addon'>
-                                                           <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                             <input class='mt-0' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1' @if ($enableWorkEnd_review) checked @endif>
-                                                             <span class='checkmark'></span></label>
+                                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                                    <input class='mt-0' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1' @if ($enableWorkEnd_review) checked @endif>
+                                                                    <span class='checkmark'></span>
+                                                                </label>
                                                              </span>
-                                                            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                            <input class='form-control mt-0 border-start-0' name='WorkEnd_review' id='WorkEnd_review' type='text' value='{{ $WorkEnd_review }}' @if (!$enableWorkEnd_review) disabled @endif>
+                                                            <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                            <input class='form-control mt-0' name='WorkEnd_review' id='WorkEnd_review' type='text' value='{{ $WorkEnd_review }}' @if (!$enableWorkEnd_review) disabled @endif>
                                                         </div>
                                                         <span class='help-block'>
                                                             @if (Session::hasError('WorkEnd_review'))
@@ -228,8 +226,8 @@
                                                              <input class='mt-0' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1' @if ($enableWorkStart) checked @endif>
                                                              <span class='checkmark'></span></label>
                                                        </span>
-                                                        <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                        <input class='form-control mt-0 border-start-0' name='WorkStart' id='WorkStart' type='text' value='{{ $WorkStart }}' @if (!$enableWorkStart) disabled @endif>
+                                                        <span class='add-on1'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <input class='form-control mt-0' name='WorkStart' id='WorkStart' type='text' value='{{ $WorkStart }}' @if (!$enableWorkStart) disabled @endif>
                                                     </div>
                                                     <span class='help-block'>
                                                         @if (Session::hasError('WorkStart'))
@@ -250,8 +248,8 @@
                                                                 <input class='mt-0' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1' @if ($enableWorkEnd) checked @endif>
                                                             <span class='checkmark'></span></label>
                                                         </span>
-                                                        <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                        <input class='form-control mt-0 border-start-0' name='WorkEnd' id='WorkEnd' type='text' value='{{ $WorkEnd }}' @if (!$enableWorkEnd) disabled @endif>
+                                                        <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <input class='form-control mt-0' name='WorkEnd' id='WorkEnd' type='text' value='{{ $WorkEnd }}' @if (!$enableWorkEnd) disabled @endif>
                                                     </div>
                                                     <span class='help-block'>
                                                         @if (Session::hasError('WorkEnd'))
@@ -577,10 +575,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+            </main>
         </div>
     </div>
+    
 
     @include('modules.work.lti_app_js_functions')
     <script type='text/javascript'>

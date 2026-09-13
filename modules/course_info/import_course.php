@@ -36,19 +36,11 @@ if (isset($_GET['do_fetch'])) {
     set_time_limit(0);
     $old_course_id = $_POST['import_course_id'];
     $old_course_code = course_id_to_code($old_course_id);
-    // archive the old course
-    doArchive($old_course_id, $old_course_code);
 
-    $backup_date_short = date('Ymd');
-    $backup_file = "$webDir/courses/archive/$_SESSION[csrf_token]/$old_course_code-$backup_date_short.zip";
-
-    $retArr = unpack_zip_inner($backup_file, false);
-    foreach ($retArr as $entry) {
-        $path = $entry['path'];
-        $file = q($entry['file']);
-        $course = q($entry['course']);
-        $restoreThis = q($path);
-    }
+    $restoreThis = $webDir . '/courses/tmpUnzipping/' . $uid . '/' . safe_filename();
+    make_dir($restoreThis);
+    archiveTables($old_course_id, $restoreThis);
+    recurse_copy($webDir . '/courses/' . $old_course_code, $restoreThis . '/html');
     $base = $restoreThis;
 
     if (($data = get_serialized_file('course'))) {
@@ -72,13 +64,6 @@ if (isset($_GET['do_fetch'])) {
         // fetch and create course
         create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, false, true);
     }
-
-    $tool_content .= "<div class='col-12'>
-                        <div class='alert alert-info'>
-                            <i class='fa-solid fa-circle-info fa-lg'></i><span>$langImportCourseCompleted</span>
-                        </div>
-                     </div>";
-
     stop_output_buffering();
 }
 

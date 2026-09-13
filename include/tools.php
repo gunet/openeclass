@@ -56,6 +56,7 @@ function getToolsArray($cat) {
                                           " . MODULE_ID_ATTENDANCE . ",
                                           " . MODULE_ID_GRADEBOOK . ",
                                           " . MODULE_ID_REQUEST . ",
+                                          " . MODULE_ID_STICKY_NOTES . ",
                                           " . MODULE_ID_PROGRESS . ",
                                           " . MODULE_ID_LP . ",
                                           " . MODULE_ID_TC . ") AND
@@ -119,11 +120,12 @@ function getExternalLinks() {
  * @param bool $rich Whether to include rich text notifications in title
  * @return array
  */
-function lessonToolsMenu(bool $rich=true): array
+function lessonToolsMenu(bool $rich=true, $display_admin_menu = false): array
 {
     global $uid, $is_editor, $is_course_admin, $is_course_reviewer,
            $course_code, $modules, $urlAppend, $status, $course_id, $langCourseOptions,
-           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course;
+           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course,
+           $admin_modules, $langAdministrationTools, $langSyllabus;
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 
@@ -199,8 +201,8 @@ function lessonToolsMenu(bool $rich=true): array
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {
-                        $sideMenuText[] = '<b class=>' . q($modules[$mid]['title']) .
-                            " $mail_status<span class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_msgs</span></b>";
+                        $sideMenuText[] = '<b>' . q($modules[$mid]['title']) .
+                            " $mail_status<span tabindex='0' class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_msgs</span></b>";
 
                     } else {
                         $sideMenuText[] = q($modules[$mid]['title']) . ' ' . $mail_status;
@@ -209,8 +211,8 @@ function lessonToolsMenu(bool $rich=true): array
                     $sideMenuText[] = q($modules[$mid]['title']) . ' ' . $mail_status;
                 }
             } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
-                $sideMenuText[] = '<b class=>' . q($modules[$mid]['title']) .
-                    "<span class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_docs</span></b>";
+                $sideMenuText[] = '<b>' . q($modules[$mid]['title']) .
+                    "<span tabindex='0' class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_docs</span></b>";
             } else {
                 $sideMenuText[] = q($modules[$mid]['title']);
             }
@@ -254,6 +256,32 @@ function lessonToolsMenu(bool $rich=true): array
         $sideMenuSubGroup[] = $sideMenuLink;
         $sideMenuSubGroup[] = $sideMenuImg;
         $sideMenuSubGroup[] = $sideMenuID;
+        $sideMenuGroup[] = $sideMenuSubGroup;
+    }
+
+    if ($is_course_admin && $display_admin_menu) {  // display course admin tools
+        $sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
+        $arrMenuType = array('type' => 'text',
+            'text' => $langAdministrationTools,
+            'class' => 'course_admin');
+        $sideMenuSubGroup[] = $arrMenuType;
+
+        $sideMenuText[] = $langSyllabus;
+        $sideMenuLink[] = q($urlAppend . 'modules/course_description/index.php?course=' . $course_code);
+        $sideMenuImg[] = 'fa-pen-to-square';
+
+        foreach ($admin_modules as $adm_mod) {
+            $sideMenuText[] = $adm_mod['title'];
+            $sideMenuLink[] = q($urlAppend . 'modules/' . $adm_mod['link'] . '/?course=' . $course_code);
+            $sideMenuImg[] = $adm_mod['image'];
+        }
+
+        $sideMenuSubGroup[] = $sideMenuText;
+        $sideMenuSubGroup[] = $sideMenuLink;
+        $sideMenuSubGroup[] = $sideMenuImg;
         $sideMenuGroup[] = $sideMenuSubGroup;
     }
 

@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
             <div class="row m-auto">
                 <div class='col-12 mb-3'>
@@ -18,9 +18,9 @@
                                     </li>
                                 @endforeach
                             </ul>
-                            <h1 class="mt-4 mb-4">
+                            <h2 class="text-heading-h1 mt-4 mb-4">
                                 {{ trans('langVideoTutorials') }}
-                            </h1>
+                            </h2>
                             <ul class='list-group list-group-flush'>
                                 <li class="list-group-item element">
                                     <a class='TextBold' href="https://www.youtube.com/playlist?list=PLIy44c1N0HnXskRAp-KXBmZq04yPzKz5H" target='_blank' class='mainpage'>{{ trans('langVideoManS') }}</a>
@@ -41,6 +41,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
 @endsection

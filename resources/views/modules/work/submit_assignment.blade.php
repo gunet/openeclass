@@ -2,13 +2,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+    <div class='{{ $container }} module-container py-lg-0'>
+        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -34,9 +31,9 @@
                                         <div class="col-12">
                                             <div class="card panelCard px-lg-4 py-lg-3" @if($row->due_date_review && ($cdate > $row->due_date_review or $cdate < $row->start_date_review)) style="opacity: 0.65;" @endif>
                                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                                    <h3 class="mb-0" style="line-height: 14px;">
+                                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                                         <em>{{ trans('langGradeReviews') }}</em>
-                                                    </h3>
+                                                    </h2>
                                                 </div>
                                                 <div class="card-body">
                                                     @if ($cdate < $row->start_date_review)
@@ -71,9 +68,9 @@
                                     <div class="col-12">
                                         <div class="card panelCard px-lg-4 py-lg-3" @if($row->due_date_review && ($cdate > $row->due_date_review or $cdate < $row->start_date_review)) style="opacity: 0.65;" @endif>
                                             <div class="card-header d-flex justify-content-between align-items-center">
-                                                <h3 class="mb-0" style="line-height: 14px;">
+                                                <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                                     <em>{{ trans('langGradeReviews') }}</em>
-                                                </h3>
+                                                </h2>
                                             </div>
                                             <div class="card-body">
                                                 <p class="text-warning TextBold small-text" style="line-height:14px;">{{ trans('langGradeReviewHasNotStarted') }}</p>
@@ -106,9 +103,9 @@
                                 <div class="col-12 mt-4">
                                     <div class="card panelCard px-lg-4 py-lg-3" @if($row->deadline && $cdate > $row->deadline) style="opacity: 0.65;" @endif>
                                         <div class="card-header d-flex justify-content-between align-items-center">
-                                            <h3 class="mb-0" style="line-height: 14px;">
+                                            <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                                 <em>{{ trans('langAssignmentsSubmission')}}</em>
-                                            </h3>
+                                            </h2>
                                         </div>
                                         <div class="card-body">
                                             <div class='d-lg-flex gap-4'>
@@ -328,10 +325,13 @@
                                     </div>
                                 </div>
                             @endif
+                        @else
+                            @if ($assignment_type == ASSIGNMENT_TYPE_TURNITIN)
+                                {!! show_turnitin_integration($id) !!}
+                            @endif
                         @endif
                     </div>
-                </div>
-            </div>
+            </main>
         </div>
     </div>
 

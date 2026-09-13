@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2025-12-02 16:31:16
+// Generated 2026-06-11 10:59:50
 
 $langCourse = "Curso";
 $langEclass = "eClass Libre - Sistema de Administración del Curso";
@@ -72,8 +72,6 @@ $langOfCourseReviewer = "Reviewer";
 $langsCourseReviewer = "reviewer";
 $langsOfCourseReviewer = "reviewer";
 $langCTeacher = "INSTRUCTOR";
-$langCStudent = "LEARNER";
-$langCStudent2 = "STUDENT";
 $langAlignment = "Alignment";
 $langWidth = "Width";
 $langAlignLeft = "Left";

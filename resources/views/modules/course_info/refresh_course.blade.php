@@ -24,13 +24,10 @@ $(function() {
 @section('content')
 
 
-<div class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -110,10 +107,11 @@ $(function() {
                                             </div>
                                             <div class='col-12 mt-3'>
                                                 <div class='input-group'>
-                                                    <input aria-label="{{ trans('langDate') }}" class='form-control mt-0 border-end-0' type='text' name='reg_date' id='reg_date' value='{!! date("d-m-Y", time()) !!}'>
-                                                    <div class='input-group-text h-40px bg-input-default input-border-color'>
-                                                        <span class="fa-regular fa-calendar" aria-hidden="true"></span>
-                                                    </div>
+                                                    <span class='add-on'>
+                                                        <i class="fa-regular fa-calendar Neutral-600-cl"></i>
+                                                    </span>
+                                                    <input aria-label="{{ trans('langDate') }}" class='form-control mt-0' type='text' name='reg_date' id='reg_date' value='{!! date("d-m-Y", time()) !!}'>
+                                                    
                                                 </div>
                                             </div>
 
@@ -258,8 +256,7 @@ $(function() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
-</div>
 @endsection

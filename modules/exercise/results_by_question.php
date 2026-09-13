@@ -62,7 +62,7 @@ $pageName = q_math($exerciseTitle) ;
 $questionList = $objExercise->selectQuestionList();
 //display exercise description if there is one
 if($exerciseDescription) {
-    // $tool_content .= "<h3>$langExerciseDescription</h3>
+    // $tool_content .= "<h2 class='text-heading-h3'>$langExerciseDescription</h2>
     //     <div class='table-responsive'>
     //         <table class='table-default'>
     //             <tr>
@@ -73,7 +73,7 @@ if($exerciseDescription) {
 
     $tool_content .= "<div class='panel panel-default mb-4'>
                         <div class='panel-heading'>
-                            <h3 class='mb-0'>$langExerciseDescription</h3>
+                            <h2 class='text-heading-h3 mb-0'>$langExerciseDescription</h2>
                         </div>
                         <div class='panel-body'>
                             " . standard_text_escape($exerciseDescription) . "
@@ -85,7 +85,7 @@ $tool_content .= "
    
     <div class='panel panel-default'>
     <div class='panel-heading'>
-        <h3 class='mb-0'>$langTableFreeText</h3>
+        <h2 class='text-heading-h3 mb-0'>$langTableFreeText</h2>
     </div>
     <div class='panel-body'>
     <div class='table-responsive mt-0'>
@@ -101,7 +101,7 @@ $tool_content .= "
 foreach($questionList as $id) {
     $objQuestionTmp = new Question();
     $objQuestionTmp->read($id);
-    if ($objQuestionTmp->selectType() == FREE_TEXT or $objQuestionTmp->selectType() == ORAL) {
+    if ($objQuestionTmp->selectType() == FREE_TEXT or $objQuestionTmp->selectType() == ORAL or $objQuestionTmp->selectType() == UPLOAD_FILE) {
         // $tool_content .= "
         // <tr>
         //     <td>".q_math($objQuestionTmp->selectTitle())."</th>
@@ -130,7 +130,7 @@ $tool_content .= "
 
 $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-4'>
   <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-    <h3 class='mb-0'>" . $langOpenQuestionPageTitle . "</h3>
+    <h2 class='text-heading-h3 mb-0'>" . $langOpenQuestionPageTitle . "</h2>
   </div>
     <div class='card-body'>";
     $question_types = Database::get()->queryArray("SELECT exq.question, exwq.q_position, exq.id, eur.eid "
@@ -138,7 +138,7 @@ $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3 mt-4'>
             . "JOIN exercise_with_questions AS exwq ON exq.id = exwq.question_id "
             . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
             . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
-            . "WHERE eur.eid = ?d AND ear.weight IS NULL AND exq.type = ". FREE_TEXT . " OR exq.type = ". ORAL . " "
+            . "WHERE eur.eid = ?d AND ear.weight IS NULL AND exq.type = ". FREE_TEXT . " OR exq.type = ". ORAL . " OR exq.type = " . UPLOAD_FILE . " "
             . "GROUP BY exq.id, eur.eid ORDER BY exwq.q_position",$exerciseId);
 
     $questions_table = "<table id=\'my-grade-table\' class='table-default'><thead class='list-header'><tr><th>$langOpenQuestionTitle</th><th>$langChoice</th></tr></thead><tbody>";

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        mix-blend-mode: multiply;
+        opacity: .2;
+      }
+
+      .st1 {
+        isolation: isolate;
+      }
+
+      .st2 {
+        fill: #fff;
+      }
+
+      .st3 {
+        fill: #7ac943;
+      }
+    </style>
+  </defs>
+  <g class="st1">
+    <g id="background">
+      <rect class="st3" width="500" height="500" rx="120" ry="120"/>
+    </g>
+    <g id="icon">
+      <g>
+        <path class="st2" d="M213.08,86.96l-4.06,10.16c-23.43,58.57-35.46,121.07-35.46,184.15v68.41c0,18.1,14.68,32.78,32.78,32.78h140.28c14.11,0,26.64-9.03,31.1-22.41l25.87-77.61c6.87-20.6,10.37-42.17,10.37-63.88h0c0-18.1-14.68-32.78-32.78-32.78h-96.16c-7.68,0-13.9-6.22-13.9-13.9v-52.78c0-23.52-19.07-42.59-42.59-42.59h0c-6.8,0-12.91,4.14-15.43,10.45Z"/>
+        <path class="st0" d="M144.45,220.62h-25.61c-18.1,0-32.78,14.68-32.78,32.78v96.28c0,18.1,14.68,32.78,32.78,32.78h0c18.1,0,32.78-14.68,32.78-32.78v-121.89c0-3.96-3.21-7.17-7.17-7.17Z"/>
+      </g>
+    </g>
+  </g>
+</svg>

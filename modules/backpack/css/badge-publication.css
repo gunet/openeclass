@@ -1,0 +1,287 @@
+/**
+ * Badge Publication Styles
+ */
+
+/* Badge card wrapper */
+.badge-card-wrapper {
+    position: relative;
+}
+
+.badge-card-wrapper:hover {
+    transition: all 0.3s ease;
+}
+
+/* Badge publish button */
+.badge-publish-btn {
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.badge-publish-btn:hover:not(:disabled) {
+    background-color: #f0f0f0;
+    color: #0056b3;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0, 86, 179, 0.15);
+}
+
+.badge-publish-btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.badge-publish-btn:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.badge-publish-btn i {
+    font-size: 18px;
+}
+
+/* Published badge indicator */
+.badge-published .badge-publish-btn {
+    color: #28a745;
+}
+
+.badge-published-icon {
+    animation: pulse-success 0.6s ease-out;
+}
+
+@keyframes pulse-success {
+    0% {
+        transform: scale(1);
+        color: #28a745;
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+        color: #28a745;
+    }
+}
+
+/* No connection message */
+.badge-no-connection {
+    font-size: 12px;
+    color: #dc3545;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.badge-no-connection i {
+    font-size: 14px;
+}
+
+/* Modal styles */
+#publishBadgeModal .modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+#publishBadgeModal .modal-header h5 {
+    color: #333;
+    font-weight: 600;
+}
+
+#publishBadgeModal .modal-body {
+    padding: 20px;
+}
+
+#publishBadgeModal .form-group {
+    margin-bottom: 20px;
+}
+
+#publishBadgeModal .form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+#publishBadgeModal .form-select,
+#publishBadgeModal .form-control {
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    padding: 10px 12px;
+}
+
+#publishBadgeModal .form-select:focus,
+#publishBadgeModal .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Provider info display */
+#selectedProviderInfo {
+    font-weight: 600;
+    color: #007bff;
+    padding: 8px 12px;
+    background-color: #e7f1ff;
+    border-radius: 4px;
+    display: inline-block;
+    min-width: 150px;
+}
+
+/* Modal footer buttons */
+#publishBadgeModal .btn-primary,
+#confirmPublishBadge {
+    background-color: #007bff;
+    border-color: #007bff;
+    border-radius: 4px;
+    font-weight: 500;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+#publishBadgeModal .btn-primary:hover:not(:disabled),
+#confirmPublishBadge:hover:not(:disabled) {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    box-shadow: 0 2px 8px rgba(0, 86, 179, 0.3);
+}
+
+#confirmPublishBadge:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+#confirmPublishBadge .spinner-border-sm {
+    margin-right: 8px;
+}
+
+/* Alert messages */
+.alert {
+    margin-bottom: 20px;
+    border-radius: 4px;
+    padding: 12px 16px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+}
+
+/* Badge card footer with publish button */
+.badge-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+    margin-top: 12px;
+}
+
+.badge-card-footer-text {
+    font-size: 12px;
+    color: #666;
+    flex: 1;
+}
+
+/* Published status indicator */
+.badge-published-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 12px;
+    background-color: #d4edda;
+    border-radius: 4px;
+    width: 100%;
+    justify-content: center;
+}
+
+.badge-published-status i {
+    font-size: 16px;
+}
+
+.badge-published-status span {
+    color: #155724;
+}
+
+.badge-card-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Tooltip for publish button */
+.badge-publish-btn[title] {
+    position: relative;
+}
+
+.badge-publish-btn[data-bs-toggle="tooltip"] {
+    cursor: help;
+}
+
+/* Loading state */
+.badge-publish-btn.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .badge-publish-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .badge-publish-btn i {
+        font-size: 16px;
+    }
+
+    #publishBadgeModal .modal-body {
+        padding: 15px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .badge-publish-btn,
+    .badge-card-footer,
+    .badge-card-actions {
+        display: none;
+    }
+}
+

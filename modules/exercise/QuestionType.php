@@ -43,26 +43,25 @@ abstract class QuestionType {
                 $choice[1] = '';
                 $choice[2] = 'checked';
             }
-            return "<div class='card-footer d-flex flex-wrap bg-light justify-content-center border-0 mt-8 p-0 gap-2'>
-                                <div class='radio d-flex align-items-center mt-1'>
-                                    <span class='pe-4 fw-bold'>
-                                        $langCertainty
-                                    </span>
-                                    <div class='form-check form-check-inline mb-0'>
-                                        <input class='form-check-input' type='radio' name='certainty[$qid]' value='1' $choice[1]>
-                                        <label class='form-check-label'>$langNotKnow</label>
-                                    </div>
-                                    <div class='form-check form-check-inline mb-0'>
-                                        <input class='form-check-input' type='radio' name='certainty[$qid]' value='2' $choice[2]>
-                                        <label class='form-check-label'>$langNotSure</label>
-                                    </div>
-                                    <div class='form-check form-check-inline mb-0'>
-                                        <input class='form-check-input' type='radio' name='certainty[$qid]' value='3' $choice[3]>
-
-                                        <label class='form-check-label'>$langSure</label>
-                                    </div>
-                                </div>
-                             </div>";
+            return "<div class='card-footer d-flex flex-wrap justify-content-start align-items-center gap-3'>
+                        <span class='fw-bold text-nowrap'>
+                            $langCertainty
+                        </span>
+                        <div class='radio d-flex justify-content-start align-items-center gap-2 flex-wrap mt-1'>
+                            <div class='form-check form-check-inline mb-0 d-flex justify-content-start align-items-start'>
+                                <input id='AccessibilityCertaintyCheck_{$qid}_1' class='form-check-input' type='radio' name='certainty[$qid]' value='1' $choice[1]>
+                                <label for='AccessibilityCertaintyCheck_{$qid}_1' class='form-check-label'>$langNotKnow</label>
+                            </div>
+                            <div class='form-check form-check-inline mb-0 d-flex justify-content-start align-items-start'>
+                                <input id='AccessibilityCertaintyCheck_{$qid}_2' class='form-check-input' type='radio' name='certainty[$qid]' value='2' $choice[2]>
+                                <label for='AccessibilityCertaintyCheck_{$qid}_2' class='form-check-label'>$langNotSure</label>
+                            </div>
+                            <div class='form-check form-check-inline mb-0 d-flex justify-content-start align-items-start'>
+                                <input id='AccessibilityCertaintyCheck_{$qid}_3' class='form-check-input' type='radio' name='certainty[$qid]' value='3' $choice[3]>
+                                <label for='AccessibilityCertaintyCheck_{$qid}_3' class='form-check-label'>$langSure</label>
+                            </div>
+                        </div>
+                    </div>";
         } else {
             return '';
         }

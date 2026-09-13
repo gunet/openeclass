@@ -31,10 +31,10 @@ class LearningPathEvent extends BasicEvent {
         $this->on(self::UPDPROGRESS, function($data) {
             $threshold = 0;
 
-            // fetch grade from DB and use it as threshold
-            $grade = get_learnPath_combined_progress($data->resource, $data->uid);
-            if ($grade && floatval($grade) > 0) {
-                $threshold = floatval($grade);
+            // fetch learning path score from DB and use it as threshold
+            list(, , , , , , $score, ) = get_learnPath_progress_details($data->resource, $data->uid, true, null, $data->courseId);
+            if ($score && floatval($score) > 0) {
+                $threshold = floatval($score);
             }
 
             $this->setEventData($data);

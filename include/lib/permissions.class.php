@@ -38,7 +38,8 @@ class Permissions
      * @param int $course_id
      * @return void
      */
-    public function set_course_id(int $course_id): void {
+    public function set_course_id(int $course_id): void
+    {
         $this->course_id = $course_id;
     }
 
@@ -54,11 +55,14 @@ class Permissions
             return true;
         }
 
-        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+        $q = Database::get()->querySingle(
+            "SELECT * FROM user_permissions JOIN permissions 
                                             ON user_permissions.permission_id = permissions.id 
                                             WHERE permissions.permission = 'admin_course_modules' 
                                           AND user_id = ?d AND course_id = ?d",
-                                $this->user_id, $this->course_id);
+            $this->user_id,
+            $this->course_id
+        );
 
         if ($q) {
             return true;
@@ -79,11 +83,14 @@ class Permissions
             return true;
         }
 
-        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+        $q = Database::get()->querySingle(
+            "SELECT * FROM user_permissions JOIN permissions 
                                             ON user_permissions.permission_id = permissions.id 
                                             WHERE permissions.permission = 'admin_course_users' 
                                           AND user_id = ?d AND course_id = ?d",
-                                $this->user_id, $this->course_id);
+            $this->user_id,
+            $this->course_id
+        );
 
         if ($q) {
             return true;
@@ -98,16 +105,27 @@ class Permissions
      */
     public function has_course_clone_permission(): bool
     {
-
-        if (get_config('allow_teacher_clone_course') and $this->course_admin) {
-            return true;
+        $tenant = getCurrentTenant();
+        if ($tenant) {
+            $tenantOptions = $tenant->options ? unserialize($tenant->options) : [];
+            $allow_clone = getTenantOption($tenantOptions, 'allow_teacher_clone_course');
+            return $allow_clone;
+        } else {
+            if (get_config('allow_teacher_clone_course') and $this->course_admin) {
+                return true;
+            }
         }
 
-        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+
+
+        $q = Database::get()->querySingle(
+            "SELECT * FROM user_permissions JOIN permissions 
                                             ON user_permissions.permission_id = permissions.id 
                                             WHERE permissions.permission = 'clone_course' 
                                           AND user_id = ?d AND course_id = ?d",
-                                $this->user_id, $this->course_id);
+            $this->user_id,
+            $this->course_id
+        );
 
         if ($q) {
             return true;
@@ -125,11 +143,14 @@ class Permissions
         if ($this->course_admin) {
             return true;
         }
-        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+        $q = Database::get()->querySingle(
+            "SELECT * FROM user_permissions JOIN permissions 
                                             ON user_permissions.permission_id = permissions.id 
                                             WHERE permissions.permission = 'backup_course' 
                                           AND user_id = ?d AND course_id = ?d",
-                                $this->user_id, $this->course_id);
+            $this->user_id,
+            $this->course_id
+        );
 
         if ($q) {
             return true;
@@ -147,11 +168,14 @@ class Permissions
         if ($this->course_admin) {
             return true;
         }
-        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+        $q = Database::get()->querySingle(
+            "SELECT * FROM user_permissions JOIN permissions 
                                             ON user_permissions.permission_id = permissions.id 
                                             WHERE permissions.permission = 'can_upload_document' 
                                           AND user_id = ?d AND course_id = ?d",
-            $this->user_id, $this->course_id);
+            $this->user_id,
+            $this->course_id
+        );
 
         if ($q) {
             return true;
@@ -169,11 +193,14 @@ class Permissions
         if ($this->course_admin) {
             return true;
         }
-        $q = Database::get()->querySingle("SELECT * FROM user_permissions JOIN permissions 
+        $q = Database::get()->querySingle(
+            "SELECT * FROM user_permissions JOIN permissions 
                                             ON user_permissions.permission_id = permissions.id 
                                             WHERE permissions.permission = 'can_upload_multimedia' 
                                           AND user_id = ?d AND course_id = ?d",
-            $this->user_id, $this->course_id);
+            $this->user_id,
+            $this->course_id
+        );
 
         if ($q) {
             return true;
@@ -189,11 +216,14 @@ class Permissions
     public function get_course_permissions(): array
     {
         $arr_permissions = [];
-        $q = Database::get()->queryArray("SELECT permission 
+        $q = Database::get()->queryArray(
+            "SELECT permission 
                                             FROM user_permissions JOIN permissions 
                                             ON user_permissions.permission_id = permissions.id 
                                         WHERE user_id = ?d AND course_id = ?d",
-            $this->user_id, $this->course_id);
+            $this->user_id,
+            $this->course_id
+        );
         if ($q) {
             foreach ($q as $data) {
                 $arr_permissions[] = $data->permission;
@@ -207,7 +237,8 @@ class Permissions
      * @param $permissions
      * @return void
      */
-    public function update_course_permissions($permissions) {
+    public function update_course_permissions($permissions)
+    {
 
         Database::get()->query("DELETE FROM user_permissions WHERE user_id = ?d AND course_id = ?d", $this->user_id, $this->course_id);
         foreach ($permissions as $permission) {
@@ -221,26 +252,27 @@ class Permissions
      * @param $permission
      * @return string
      */
-    public function get_permissions_legend($permission): string {
+    public function get_permissions_legend($permission): string
+    {
 
         global $langCourseAdminTools, $langAdminUsers, $langArchiveCourse, $langCloneCourse;
 
         switch ($permission) {
-                case 'admin_course_modules':
-                    $msg = $langCourseAdminTools;
-                    break;
-                case 'admin_course_users':
-                    $msg = $langAdminUsers;
-                    break;
-                case 'backup_course':
-                    $msg = $langArchiveCourse;
-                    break;
-                case 'clone_course':
-                    $msg = $langCloneCourse;
-                    break;
-                default:
-                    $msg = '';
-                    break;
+            case 'admin_course_modules':
+                $msg = $langCourseAdminTools;
+                break;
+            case 'admin_course_users':
+                $msg = $langAdminUsers;
+                break;
+            case 'backup_course':
+                $msg = $langArchiveCourse;
+                break;
+            case 'clone_course':
+                $msg = $langCloneCourse;
+                break;
+            default:
+                $msg = '';
+                break;
         }
         return $msg;
     }
@@ -260,6 +292,4 @@ class Permissions
             6 => 'can_upload_multimedia'
         ];
     }
-
-
 }

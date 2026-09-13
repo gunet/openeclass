@@ -1,7 +1,65 @@
 Changelog of phpSysInfo
 =======================
 
-http://phpsysinfo.sourceforge.net/
+http://phpsysinfo.github.io/phpsysinfo/
+
+phpSysInfo 3.4.7
+----------------
+
+ - [FIX] Fixed fatal errors on macOS environments running PHP 8.x (PR #427)
+ - [FIX] Fixed Undefined Array Key notices during network and disk device parsing
+ - [FIX] Fixed simple typo in Russian translation ru.xml (PR #425)
+
+ - [UPD] Updated and improved CPU clock MHz speed detection on Linux/Unix systems
+ - [UPD] Updated the list of recognized Apple Mac hardware models
+ - [UPD] Added input filtering for LANG environment variable to prevent injection anomalies
+ - [UPD] Refactored CommonFunctions class and standardized indentation formatting
+
+phpSysInfo 3.4.6
+----------------
+
+ - [NEW] Themes: catppuccin, tomorrow-night-eighties, tokyo-night-storm
+ - [NEW] TRUSTED_PROXIES option
+
+phpSysInfo 3.4.5
+----------------
+ - [ADD] AnduinOS, Chimera and Mauna Linux to detected distros
+ - [ADD] ThermalZone sensor support for FreeBSD
+ - [ADD] Usage of individual processors on FreeBSD
+
+ - [FIX] Fixed incorrect memory usage on FreeBSD 14.1
+ 
+ - [UPD] Asturian Translation ast.xml
+
+ - [DEL] Removed Bootstrap javascript code
+
+phpSysInfo 3.4.4
+----------------
+ - [ADD] Proxmox to detected distros
+
+ - [NEW] HIDE_SENSORS option
+
+ - [FIX] pmset - UPS support for macOS 10.15
+
+ - [UPD] IPMIcfg sensor program - pminfo
+ - [UPD] SMART Plugin - rebuilt to show the state of any defined attributes IDs
+
+phpSysInfo 3.4.3
+----------------
+ - [ADD] Linux Lite, BigLinux, Linspire, Tuxedo, Armbian, Photon, RebeccaBlackOS, QuemOS, dahliaOS, openEuler, Runtu, risiOS, Nobara, Fatdog, CachyOS, Snal, Feren, Archman, Elive, RoboLinux, ExTiX, Kaisen, LXLE, Neptune, Regata, Archcraft, Kodachi, Bodhi, Siduction, Vanilla, Q4OS, Guix, XeroLinux, OpenWrt, Gnoppix, Uruk, Laclin, Clear, Sparky and Venom Linux to detected distros
+
+ - [NEW] SHOW_NETWORK_BRIDGE option
+ - [NEW] JSONP option for enable JSONP data mode
+ - [NEW] plugin DiskLoad - show Disk Load information on WinNT
+
+phpSysInfo 3.4.2
+----------------
+ - [ADD] RebornOS, Parrot OS, Pop!_OS, Nitrux, Makulu, Absolute, Bluestar, Ultramarine Linux and TrueNAS to detected distros
+ - [ADD] schabau_bootstrap template
+ - [ADD] Raid plugin - storcli and perccli status
+ 
+ - [NEW] Partial support for GNU Hurd
+ - [NEW] Ability to retrieve Linux, GNU Hurd, DrayOS and FortiOS system information via SSH
 
 phpSysInfo 3.4.1
 ----------------
@@ -330,7 +388,8 @@ phpSysInfo 3.1.11
  - [ADD] Generations Linux and SliTaz to detected distros
  - [ADD] IPMI and LMSensors currents information
  - [ADD] Plugin IPMIInfo - added powers and currents values
- - [ADD] Partial support of QNX
+
+ - [NEW] Partial support of QNX
 
  - [FIX] Reduce execution time on Linux systems when showing load average PR#47
 

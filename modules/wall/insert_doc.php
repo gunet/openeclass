@@ -62,7 +62,8 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
                            'data' : function (node) {
                              return { 'id' : node.id };
                            }
-                         }
+                         },
+                         'force_text': true
                        },
                        'plugins' : [ 'checkbox', 'types' ]
                      });";

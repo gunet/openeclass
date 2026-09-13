@@ -17,7 +17,6 @@
  *
  */
 
-
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
@@ -203,16 +202,16 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                         $('table.graded').show('slow');
                     });
                 });
-                
+
                 // AI Evaluation functionality
                 function performAIEvaluation(answerRecordId) {
                     var statusDiv = $('#ai-eval-status-' + answerRecordId);
                     var resultDiv = $('#ai-eval-result-' + answerRecordId);
                     var container = $('#ai-eval-container-' + answerRecordId);
-                    
+
                     // Show loading state
                     statusDiv.html('<div class=\"d-flex align-items-center\"><div class=\"spinner-border spinner-border-sm me-2\" role=\"status\"></div>$langEvaluatingResponseWithAI</div>');
-                    
+
                     // Make AJAX request
                     $.ajax({
                         url: 'ai_evaluate.php?course=' + encodeURIComponent('$course_code'),
@@ -226,14 +225,14 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                             if (response.success && response.status === 'completed') {
                                 var eval = response.evaluation;
                                 var confidencePercent = Math.round(eval.confidence * 100);
-                                var confidenceClass = eval.confidence >= 0.8 ? 'text-success' : 
+                                var confidenceClass = eval.confidence >= 0.8 ? 'text-success' :
                                                     (eval.confidence >= 0.5 ? 'text-warning' : 'text-danger');
-                                var confidenceText = eval.confidence >= 0.8 ? '$langHighConfidence' : 
+                                var confidenceText = eval.confidence >= 0.8 ? '$langHighConfidence' :
                                                     (eval.confidence >= 0.5 ? '$langMediumConfidence' : '$langLowConfidence');
-                                
+
                                 // Hide status, show results
                                 statusDiv.hide();
-                                
+
                                 var resultHtml = '<div class=\"row mb-2\">' +
                                     '<div class=\"col-md-6\">' +
                                     '<strong>$langAISuggestion: ' + eval.suggested_score + '/' + eval.max_score + '</strong>' +
@@ -246,7 +245,7 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                                     '<strong>$langReasoning:</strong><br>' +
                                     eval.reasoning.replace(/\\n/g, '<br>') +
                                     '</div>';
-                                
+
                                 resultDiv.html(resultHtml).show();
                             } else {
                                 showAIEvaluationError(answerRecordId, response.message || 'AI evaluation failed');
@@ -263,35 +262,35 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                         }
                     });
                 }
-                
+
                 function showAIEvaluationError(answerRecordId, errorMessage) {
                     var statusDiv = $('#ai-eval-status-' + answerRecordId);
                     var container = $('#ai-eval-container-' + answerRecordId);
-                    
+
                     // Update container styling to show error
                     container.removeClass('border-info').addClass('border-danger');
                     container.find('h6').removeClass('text-info').addClass('text-danger');
-                    
+
                     var errorHtml = '<div class=\"text-danger mb-2\">' +
                         '<i class=\"fa fa-exclamation-triangle\"></i> ' + errorMessage +
                         '</div>' +
                         '<button type=\"button\" class=\"btn btn-sm btn-outline-primary\" onclick=\"retryAIEvaluation(' + answerRecordId + ')\">' +
                         '<i class=\"fa fa-refresh\"></i> Retry AI Evaluation' +
                         '</button>';
-                    
+
                     statusDiv.html(errorHtml);
                 }
-                
+
                 window.retryAIEvaluation = function(answerRecordId) {
                     var container = $('#ai-eval-container-' + answerRecordId);
                     // Reset styling
                     container.removeClass('border-danger').addClass('border-info');
                     container.find('h6').removeClass('text-danger').addClass('text-info');
-                    
+
                     // Retry the evaluation
                     performAIEvaluation(answerRecordId);
                 };
-                
+
                 // Auto-trigger AI evaluations on page load for pending evaluations
                 $(document).ready(function() {
                     $('.ai-eval-pending').each(function() {
@@ -304,7 +303,7 @@ if ($is_editor && ($exercise_user_record->attempt_status == ATTEMPT_PENDING || $
                         }
                     });
                 });
-                
+
                 </script>";
 }
 
@@ -353,6 +352,7 @@ if (!isset($_GET['pdf'])) {
                 'url' => "../units/view.php?course=$course_code&res_type=exercise_results&eurId=$eurid&unit=$unit&pdf=true",
                 'icon' => 'fa-file-pdf',
                 'level' => 'primary-label',
+                'link-attrs' => "target='_blank'",
                 'button-class' => 'btn-success'
             ]
         ]);
@@ -369,6 +369,7 @@ if (!isset($_GET['pdf'])) {
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&eurId=$eurid&pdf=true",
                 'icon' => 'fa-file-pdf',
                 'level' => 'primary-label',
+                'link-attrs' => "target='_blank'",
                 'button-class' => 'btn-success'
             ]
 
@@ -377,9 +378,18 @@ if (!isset($_GET['pdf'])) {
     $tool_content .= $action_bar;
 }
 
+// Safe Exam Browser quit URL
+if (isSebEnabled($objExercise->selectId()) && $objExercise->isSeb()) { // exercise is SEB enabled?
+    if (str_contains($_SERVER['HTTP_USER_AGENT'], 'Open-eClass-Exam')) { // are we in SEB?
+        $tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center gap-4 mt-4'>
+                            <a class='btn submitAdminBtnDefault' href='{$urlServer}modules/exercise/index.php?course=$course_code'>$langSafeExamBrowserQuitMessage</a>
+                    </div>";
+    }
+}
+
 $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                       <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>" . q_math($exerciseTitle) . "</h3>
+                            <h2 class='text-heading-h3'>" . q_math($exerciseTitle) . "</h2>
                       </div>";
 
 if (!empty($exerciseDescription)) {
@@ -401,27 +411,28 @@ $tool_content .= "
     </div>
   </div>";
 
+
 $tool_content .= "<div class='col-sm-12'>";
 
-    $tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3'>"; //panelCard
+$tool_content .= "<div class='card panelCard card-default px-lg-4 py-lg-3'>"; //panelCard
 
-    $tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>"; //card-header
+$tool_content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>"; //card-header
 
-    if ($user) { // user details
-        $tool_content .= "<h3>" . q($user->surname) . " " . q($user->givenname);
-        if ($user->am) {
-            $tool_content .= " ($langAmShort: " . q($user->am) . ")";
-        }
-        $tool_content .= "</h3>";
+if ($user) { // user details
+    $tool_content .= "<h2 class='text-heading-h3'>" . q($user->surname) . " " . q($user->givenname);
+    if ($user->am) {
+        $tool_content .= " ($langAmShort: " . q($user->am) . ")";
     }
-    $tool_content .= "</div>"; //card-header end
+    $tool_content .= "</h2>";
+}
 
-    $tool_content .= "<div class='card-body row'>"; // card-body
-    $tool_content .= "<div class='col-md-6'>";
+$tool_content .= "</div>"; //card-header end
 
-    $message_range = $grade_icon = '';
-//    $canonicalized_message_range = "<strong>$exercise_user_record->total_score / $exercise_user_record->total_weighting</strong>";
-    $canonicalized_message_range = "
+$tool_content .= "<div class='card-body row'>"; // card-body
+$tool_content .= "<div class='col-md-6'>";
+
+$message_range = $grade_icon = '';
+$canonicalized_message_range = "
         <div class='gauge-container'>
           <div class='gauge-wrap' aria-label='Score gauge'>
             <div class='gauge-clip'>
@@ -439,8 +450,8 @@ $tool_content .= "<div class='col-sm-12'>";
         </div>
     ";
 
-    $canonicalized_message_range .= "
-    
+$canonicalized_message_range .= "
+
     <script>
       const minGaugeValueEl = document.getElementById('minGaugeValue');
       const maxGaugeValueEl = document.getElementById('maxGaugeValue');
@@ -457,11 +468,11 @@ $tool_content .= "<div class='col-sm-12'>";
         const span = max - min;
         const relativeValue = span > 0 ? (value - min) / span : 0.5;
         const needleRatio = Math.min(Math.max(relativeValue, 0), 1);
-        
+
         // The gauge is a semi-circle (180 degrees). We map the value to a rotation
         // from -90 degrees (minimum) to +90 degrees (maximum).
         const needleDeg = -90 + needleRatio * 180;
-        
+
         if (needleGroupEl) {
           needleGroupEl.style.transform = 'translateX(-50%) rotate(' + needleDeg + 'deg)';
         }
@@ -476,10 +487,10 @@ $tool_content .= "<div class='col-sm-12'>";
       function initializeGauge() {
         updateGauge(fixedScore, fixedMin, fixedMax);
       }
-      
+
       initializeGauge();
     </script>
-    
+
     ";
 
     if (!is_null($gradePass) && $gradePass > 0) {
@@ -498,7 +509,7 @@ $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<p><h5>$langTotalScore</h5> $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon</p>";
     }
 
-    $tool_content .= "</div>"; // leftt end
+    $tool_content .= "</div>"; // left end
     $tool_content .= "<div class='col-md-6'>"; // right
     $tool_content .= "
             <p><h5>$langStart</h5><em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em><br><br>
@@ -506,8 +517,8 @@ $tool_content .= "<div class='col-sm-12'>";
         ($user && $exerciseAttemptsAllowed ? "<p>$langAttempt: <em>{$exercise_user_record->attempt}</em></p>" : '');
 
 $tool_content .= "</div>"; // right end
-    $tool_content .= "</div>"; // card-body end
-    $tool_content .= "</div>"; // card end
+$tool_content .= "</div>"; // card-body end
+$tool_content .= "</div>"; // card end
 $tool_content .= "</div>";
 
 if ($is_editor and in_array($exercise_user_record->attempt_status, [ATTEMPT_COMPLETED, ATTEMPT_PENDING]) and isset($_POST['regrade'])) {
@@ -556,6 +567,36 @@ if (count($exercise_question_ids) > 0) {
         $answer_class = ($question_weight == $questionWeighting) ? 'correct_div' : (($question_weight > 0) ? 'partial_div' : 'wrong_div');
         $answer_text = ($question_weight == $questionWeighting) ? $langTrue : (($question_weight > 0) ? $langPartiallyCorrect : $langIncorrect);
 
+        $is_unanswered = false;
+
+        if (is_null($choice) || (is_string($choice) && trim($choice) === '')) {
+            $is_unanswered = true;
+        }
+        elseif ($choice === 0 || $choice === '0') {
+            $is_unanswered = true;
+        }
+        elseif (is_array($choice)) {
+            if (count($choice) === 1 && isset($choice[0]) && $choice[0] == 1) {
+                $is_unanswered = true;
+            }
+            else {
+                $is_unanswered = true;
+
+                foreach ($choice as $value) {
+                    $clean_value = trim((string)$value);
+
+                    if ($clean_value !== '' && $clean_value !== '0') {
+                        $is_unanswered = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if ($answer_text == $langIncorrect && $question_weight == 0 && $is_unanswered) {
+            $answer_text .= " ($langNotAnswered)";
+        }
+
         $tool_content .= "<div class='table-responsive question-container mb-5 $answer_class' style='border-radius: 10px;overflow: hidden;'>";
         $tool_content .= "
             <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise table-exercise-secondary' style='margin: 0;'>
@@ -573,7 +614,6 @@ if (count($exercise_question_ids) > 0) {
             $arithmetic_expression_str = $objAn->replaceItemsBracesWithWildCards($arithmetic_expression, $questionId);
             unset($objAn);
         }
-//        $tool_content .= "<div class='questionName'><p>" . q_math($questionName) . "</p></div><div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
         $tool_content .= "<div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
 
         $classImg = '';
@@ -590,10 +630,9 @@ if (count($exercise_question_ids) > 0) {
                                 <canvas id='drawingCanvas-$row->question_id' class='$classCanvas'></canvas>
                               </div>";
         }
-//        $tool_content .= "<span class='fw-lighter m-2'><small>($questionType$qid_display)</small></span>$edit_link"; // question type
 
         $tool_content .= "</div><div class='col-2 text-end d-flex flex-column'>" . $answer_text;
-        if ($answerType == FREE_TEXT or $answerType == ORAL) {
+        if ($answerType == FREE_TEXT or $answerType == ORAL or $answerType == UPLOAD_FILE) {
             $choice = purify($choice);
             if (!empty($choice)) {
                 if (!$question_graded) {
@@ -611,7 +650,6 @@ if (count($exercise_question_ids) > 0) {
                     $qw_legend1 = "$question_weight";
                     $qw_legend2 = "";
                 }
-//                $tool_content .= " <span class='fw-light m-1'><small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong>$qw_legend2)</small></span>";
                 $tool_content .= " <span class='fw-light m-1'><strong>$qw_legend1 / $questionWeighting</strong></span>";
             }
         }
@@ -621,40 +659,7 @@ if (count($exercise_question_ids) > 0) {
         if ($questionDescription) {
 
         }
-//        $tool_content .= "<tr><td colspan='2' class='question-text d-flex flex-column gap-2'>";
-//        $arithmetic_expression_str = '';
-//        if ($answerType == CALCULATED) {
-//            $des_arr = unserialize($questionDescription);
-//            $questionDescription = $des_arr['question_description'];
-//
-//            $objAn = new Answer($questionId);
-//            $arithmetic_expression = $des_arr['arithmetic_expression'];
-//            $arithmetic_expression_str = $objAn->replaceItemsBracesWithWildCards($arithmetic_expression, $questionId);
-//            unset($objAn);
-//        }
-////        $tool_content .= "<div class='questionName'><p>" . q_math($questionName) . "</p></div><div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
-//        $tool_content .= "<div class='questionDescription'>" . standard_text_escape($questionDescription) . "</div>" . $arithmetic_expression_str;
-//
-//        $classImg = '';
-//        $classContainer = '';
-//        $classCanvas = '';
-//        if ($answerType == DRAG_AND_DROP_MARKERS) {
-//            $classImg = 'drag-and-drop-markers-img';
-//            $classContainer = 'drag-and-drop-markers-container';
-//            $classCanvas = 'drag-and-drop-markers-canvas';
-//        }
-//        if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
-//            $tool_content .= "<div class='$classContainer' id='image-container-$row->question_id' style='position: relative; display: inline-block;'>
-//                                <img class='$classImg' id='img-quiz-$row->question_id' src='../../$picturePath/quiz-$row->question_id' style='width: 100%;'>
-//                                <canvas id='drawingCanvas-$row->question_id' class='$classCanvas'></canvas>
-//                              </div>";
-//        }
-//
-//        $tool_content .= "</td></tr>";
 
-//        if (!is_null($choice)) {
-//            $tool_content .= "<tr class='active'><th colspan='2'><u>$langAnswer</u></th></tr>";
-//        }
         $questionScore = 0;
 
         // display results
@@ -668,7 +673,7 @@ if (count($exercise_question_ids) > 0) {
 
         if ($showScore) {
             if (!is_null($choice)) {
-                if (($answerType == FREE_TEXT or $answerType == ORAL) && $is_editor) {
+                if (($answerType == FREE_TEXT or $answerType == ORAL or $answerType == UPLOAD_FILE) && $is_editor) {
                     if (isset($question_graded) && !$question_graded) {
                         $value = '';
                     } else {
@@ -776,7 +781,7 @@ if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting
         exit;
     } else {
 
-             Session::flash('message',$langScoreDiffers .
+             Session::flash('message', $langScoreDiffers .
              "<form action='exercise_result.php?course=$course_code&eurId=$eurid' method='post'>
                  <button class='btn submitAdminBtn mt-3' type='submit' name='regrade' value='true'>$langRegrade</button>
               </form>");
@@ -797,82 +802,95 @@ if (!isset($_GET['pdf']) and $is_editor) {
 }
 
 if (isset($_GET['pdf'])) {
-    $pdf_content = "
-        <!DOCTYPE html>
-        <html lang='el'>
-        <head>
-          <meta charset='utf-8'>
-          <title>" . q("$currentCourseName - $langExercicesResult") . "</title>
-          <style>
-            * { font-family: 'opensans'; }
-            body { font-family: 'opensans'; font-size: 10pt; }
-            small, .small { font-size: 8pt; }
-            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-            h1 { font-size: 16pt; }
-            h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
-            th { text-align: left; border-bottom: 1px solid #999; }
-            td { text-align: left; padding: 10px 0px 10px 0px;}
-            .text-danger{color: red;}
-            .text-success{color: green;}
-            .table-responsive{
-                padding: 25px;
-                margin: 15px 0px 15px 0px;
-                background-color: #eeeeee;
-                border: solid 1px #eeeeee;
-            }
-          </style>
-        </head>
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-        <h2> " . q($langExercicesResult) . "</h2>";
+    $pdf_title = "$course_code exercise_results";
+    $course_title = q("$currentCourseName - $langExercicesResult");
+    $module_type_title = "$langExercicesResult";
+    html_to_pdf($pdf_title, $course_title, $module_type_title);
 
-    $pdf_content .= $tool_content;
-    $pdf_content .= "</body></html>";
+    
+    // $pdf_content = "
+    //     <!DOCTYPE html>
+    //     <html lang='el'>
+    //     <head>
+    //       <meta charset='utf-8'>
+    //       <title>" . q("$currentCourseName - $langExercicesResult") . "</title>
+    //       <style>
+    //         * { font-family: 'opensans'; }
+    //         body { font-family: 'opensans'; font-size: 10pt; }
+    //         small, .small { font-size: 8pt; }
+    //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+    //         h1 { font-size: 16pt; }
+    //         h2 { font-size: 12pt; border-bottom: 1px solid black; }
+    //         h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+    //         th { text-align: left; border-bottom: 1px solid #999; }
+    //         td { text-align: left; }
+    //         .text-danger{color: red;}
+    //         .text-success{color: green;}
+    //         .table-responsive{
+    //             padding: 25px;
+    //             margin: 15px 0px 15px 0px;
+    //             background-color: #eeeeee;
+    //             border: solid 1px #eeeeee;
+    //         }
+    //       </style>
+    //     </head>
+    //     <body>
+    //     <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+    //     <h2> " . q($langExercicesResult) . "</h2>";
 
-    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata'];
+    // $pdf_content .= $tool_content;
+    // $pdf_content .= "</body></html>";
 
-    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header+15,     // mm
-        'margin_bottom' => $image_height_footer+15,  // mm
-        'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-        'fontdata' => $fontData + [
-                'opensans' => [
-                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                ],
-                'roboto' => [
-                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-                ]
-            ]
-    ]);
+    // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    // $fontDirs = $defaultConfig['fontDir'];
+    // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    // $fontData = $defaultFontConfig['fontdata'];
+
+    // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // // for old courses
+    // if ($image_height_header > 50) {
+    //     $image_height_header = 20;
+    // }
+    // if ($image_height_footer > 50) {
+    //     $image_height_footer = 15;
+    // }
+    // $mpdf = new Mpdf\Mpdf([
+    //     'margin_top' => $image_height_header + 20,     // mm
+    //     'margin_bottom' => $image_height_footer + 10,  // mm
+    //     'tempDir' => _MPDF_TEMP_PATH,
+    //     'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+    //     'fontdata' => $fontData + [
+    //             'opensans' => [
+    //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+    //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+    //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+    //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+    //             ],
+    //             'roboto' => [
+    //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+    //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+    //             ]
+    //         ]
+    // ]);
 
 
-    $mpdf->SetHTMLHeader(get_platform_logo());
-    $footerHtml = '
-    <div>
-        <table width="100%" style="border: none;">
-            <tr>
-                <td style="text-align: left;">{DATE j-n-Y}</td>
-                <td style="text-align: right;">{PAGENO} / {nb}</td>
-            </tr>
-        </table>
-    </div>
-    ' . get_platform_logo('','footer') . '';
-    $mpdf->SetHTMLFooter($footerHtml);
-    $mpdf->SetCreator(course_id_to_prof($course_id));
-    $mpdf->SetAuthor(course_id_to_prof($course_id));
-    $mpdf->WriteHTML($pdf_content);
-    $mpdf->Output("$course_code exercise_results.pdf", 'I'); // 'D' or 'I' for download / inline display
+    // $mpdf->SetHTMLHeader(get_platform_logo());
+    // $footerHtml = '
+    // <div>
+    //     <table width="100%" style="border: none;">
+    //         <tr>
+    //             <td style="text-align: left;">{DATE j-n-Y}</td>
+    //             <td style="text-align: right;">{PAGENO} / {nb}</td>
+    //         </tr>
+    //     </table>
+    // </div>
+    // ' . get_platform_logo('','footer') . '';
+    // $mpdf->SetHTMLFooter($footerHtml);
+    // $mpdf->SetCreator(course_id_to_prof($course_id));
+    // $mpdf->SetAuthor(course_id_to_prof($course_id));
+    // $mpdf->WriteHTML($pdf_content);
+    // $mpdf->Output("$course_code exercise_results.pdf", 'I'); // 'D' or 'I' for download / inline display
 } else {
     draw($tool_content, 2, null, $head_content);
 }

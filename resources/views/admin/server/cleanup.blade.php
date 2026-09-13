@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
@@ -15,7 +15,7 @@
                         @include('layouts.partials.show_alert')
 
                         <div class='col-12'>
-                            <div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>
+                            <div class='alert alert-warning'><i class='fa-solid fa-exclamation-triangle fa-lg'></i><span>
                                 {{ trans('langCleanupInfo') }}</span>
                             </div>
                         </div>
@@ -30,5 +30,5 @@
 
             </div>
     </div>
-</div>
+</main>
 @endsection

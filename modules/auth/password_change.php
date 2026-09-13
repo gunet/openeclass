@@ -44,8 +44,8 @@ if (isset($_POST['submit'])) {
         $myrow = Database::get()->querySingle("SELECT password FROM user WHERE id= ?d", $_SESSION['uid']);
 
         $new_pass = password_hash($_REQUEST['password_form'], PASSWORD_DEFAULT);
-        $options = json_encode(['force_password_change' => 0]);
-        Database::get()->query("UPDATE user SET password = ?s, options = ?s WHERE id = ?d", $new_pass, $options, $_SESSION['uid']);
+        Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $new_pass, $_SESSION['uid']);
+        delete_user_option( $_SESSION['uid'], 'force_password_change');
         Log::record(0, 0, LOG_PROFILE, array('uid' => $_SESSION['uid'], 'pass_change' => 1));
         if (isset($_SESSION['force_password_change'])) {
             unset($_SESSION['force_password_change']);

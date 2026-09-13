@@ -1,13 +1,15 @@
 <?php
 
 $require_current_course = TRUE;
+$require_editor = TRUE;
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 if (isset($_GET['delete_image'])) {
     $course_code = $_GET['course'];
-    $questionId = $_GET['questionId'];
-    $markerId = $_GET['markerId'];
-    $exerciseId = $_GET['exerciseId'];
+    $questionId = intval($_GET['questionId']);
+    $markerId = intval($_GET['markerId']);
+    $exerciseId = intval($_GET['exerciseId']);
     $htopic = DRAG_AND_DROP_MARKERS;
 
     $filePath = "$webDir/courses/$course_code/image/answer-$questionId-$markerId";
@@ -74,18 +76,17 @@ if (isset($_FILES['image_as_answer'])) {
 
     // Full path to save the file
     $targetFilePath = $targetDir . $filename;
-
-    // Validate the file (optional but recommended)
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    if (in_array($file['type'], $allowedTypes)) {
+    // Validate the file
+    if (isWhitelistAllowed($file['name'])) {
         // Move the uploaded file to the target directory
         if (move_uploaded_file($file['tmp_name'], $targetFilePath)) {
             echo "Image uploaded successfully: " . $filename;
         } else {
-            echo "Error: Failed to move uploaded file.";
+            echo "Error uploading image.";
         }
     } else {
-        echo "Error: Only JPG, PNG, and GIF files are allowed.";
+        echo "Not allowed";
+        exit;
     }
 } else {
     echo "No file uploaded.";

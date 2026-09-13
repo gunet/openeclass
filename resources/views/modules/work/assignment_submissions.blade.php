@@ -136,10 +136,12 @@
 
             $('button#transfer_grades').click(function(e) {
                 e.preventDefault();
-                $('input[name=grade_review]').each(function() {
+
+                var table = $('#submissions_table_{{ $course_code }}').DataTable();
+                table.$('input[name=grade_review]').each(function() {
                     if (this.value) {
                         var input_grade_value_name = 'grades[' + this.id + '][grade]';
-                        var input_grade = $('input[name=\"' + input_grade_value_name + '\"]');
+                        var input_grade = table.$('input[name=\"' + input_grade_value_name + '\"]');
                         if (!input_grade.val()) {
                             input_grade.val(this.value);
                         }
@@ -152,13 +154,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -181,9 +180,9 @@
                         <div class="col-12">
                             <div class="card panelCard px-lg-4 py-lg-3" @if($assign->deadline && $cdate > $assign->deadline) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h3 class="mb-0" style="line-height: 14px;">
+                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langAssignmentsSubmission')}}</em>
-                                    </h3>
+                                    </h2>
                                     <small><em>{{ trans('langPhase') }} (1)</em></small>
                                 </div>
                                 <div class="card-body">
@@ -249,9 +248,9 @@
                             </div>
                             <div class="card panelCard px-lg-4 py-lg-3 @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) d-block @else d-none @endif" @if($assign->due_date_review && ($cdate > $assign->due_date_review or $cdate < $assign->start_date_review)) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h3 class="mb-0" style="line-height: 14px;">
+                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langGradeReviews') }}</em>
-                                    </h3>
+                                    </h2>
                                     <small><em>{{ trans('langPhase') }} (2)</em></small>
                                 </div>
                                 <div class="card-body">
@@ -356,9 +355,9 @@
                             </div>
                             <div class="card panelCard px-lg-4 py-lg-3" @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && $cdate <= $assign->due_date_review) style="opacity: 0.65;" @endif>
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h3 class="mb-0" style="line-height: 14px;">
+                                    <h2 class="text-heading-h3 mb-0" style="line-height: 14px;">
                                         <em>{{ trans('langFinalGrade') }}</em>
-                                    </h3>
+                                    </h2>
                                     <small>
                                         @if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE)
                                             <em>{{ trans('langPhase') }} (3)</em>
@@ -578,9 +577,9 @@
 
 
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
+
 
 @endsection

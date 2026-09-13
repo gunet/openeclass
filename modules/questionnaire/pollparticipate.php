@@ -57,6 +57,7 @@ $head_content .= "
                 language: '".$language."',
                 autoclose: true
             });
+            $('.alert-success.submit-ok').focus();
         });
     </script>
 ";
@@ -103,11 +104,21 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if (isset($_POST['file_uploaded'])) {
             header('Content-Type: application/json');
             $questionID = $_POST['question_id'];
-            $docInfo = ['filename' => $_POST['file_name'], 'filepath' => $_POST['file_path']];
-            $_SESSION['data_answers'][$questionID] = serialize($docInfo);
-            $_SESSION['data_file_answer'][$questionID] = serialize($docInfo);
-            echo json_encode(['upload_success' => true]);
-            exit();
+            $docInfo = [
+                'filename' => basename(trim($_POST['file_name'] ?? '')),
+                'filepath' => trim($_POST['file_path'] ?? '')
+            ];
+            $checkObj = serialize($docInfo);
+            $arrFileObj = unserialize($checkObj, ['allowed_classes' => false]);
+            if (is_array($arrFileObj) && isset($arrFileObj['filename'], $arrFileObj['filepath']) 
+                && is_string($arrFileObj['filename']) && is_string($arrFileObj['filepath'])) {
+                $_SESSION['data_answers'][$questionID] = serialize($docInfo);
+                $_SESSION['data_file_answer'][$questionID] = serialize($docInfo);
+                echo json_encode(['upload_success' => true]);
+                exit();
+            } else {
+                exit();
+            }
         }
 
         // File has been removed from uppy
@@ -621,7 +632,7 @@ function printPollForm() {
                 <div class='col-12 mb-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langSubmissionOnBehalfOfUser</h3>
+                            <h2 class='text-heading-h3'>$langSubmissionOnBehalfOfUser</h2>
                         </div>
                         <div class='card-body'>
                             <form id='onBehalfOfSelectionForm' method='post' action='$actionPoll'>
@@ -661,7 +672,7 @@ function printPollForm() {
             $tool_content .= "<div class='col-12 mb-4'>
                                 <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>$langDescription</h3>
+                                        <h2 class='text-heading-h3'>$langDescription</h2>
                                     </div>
                                     <div class='card-body'>
                                         " . standard_text_escape($thePoll->description) . "
@@ -733,7 +744,7 @@ function printPollForm() {
             $tool_content .= "
                 <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3>$langPollParticipantInfo</h3>
+                        <h2 class='text-heading-h3'>$langPollParticipantInfo</h2>
                     </div>
                     <div class='card-body'>
                         <div class='form-group$email_error'>
@@ -836,7 +847,7 @@ function printPollForm() {
                 }
                 $RequiredQuestionHtml = '';
                 if ($theQuestion->require_response) {
-                    $RequiredQuestionHtml = "&nbsp; <span data-bs-toggle='tooltip' data-bs-placement='top' title='$langRequireAnswer'>(<i class='fa-solid fa-asterisk fa-lg text-danger'></i>)</span>";
+                    $RequiredQuestionHtml = "&nbsp; <span tabindex='0' data-bs-toggle='tooltip' data-bs-placement='top' title='$langRequireAnswer' aria-label='$langRequireAnswer'>(<i class='fa-solid fa-asterisk fa-lg text-danger'></i>)</span>";
                 }
 
                 // Highlight to the card question only if is empty.
@@ -848,10 +859,10 @@ function printPollForm() {
                 <div class='col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel mb-4' $emptyQuestionStyle>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$langQuestion $_SESSION[q_counter] $RequiredQuestionHtml</h3>
+                            <h2 class='text-heading-h3'>$langQuestion $_SESSION[q_counter] $RequiredQuestionHtml</h2>
                         </div>
                         <div class='card-body'>";
-                            $tool_content .= "<p class='TextMedium Neutral-900-cl mb-2'>".q_math($theQuestion->question_text)."</p>";
+                            $tool_content .= "<p tabindex='0' class='TextMedium Neutral-900-cl mb-2'>".q_math($theQuestion->question_text)."</p>";
                                             if(!empty($q_description)){
                                                 $tool_content .= "<div class='col-12 my-4'>$q_description</div>";
                                             }
@@ -881,8 +892,8 @@ function printPollForm() {
                                         <div class='form-group'>
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
-                                                    <label class='$class_type_attr' aria-label='$langSelect'>
-                                                        <input class='single_type_answer' type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked data-question-type='$qtype' data-main-question='$pqid'>
+                                                    <label class='$class_type_attr' for='AccessibilityCheck_{$pqid}_{$theAnswer->pqaid}'>
+                                                        <input id='AccessibilityCheck_{$pqid}_{$theAnswer->pqaid}' class='single_type_answer' type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked data-question-type='$qtype' data-main-question='$pqid'>
                                                         $checkMark_class
                                                         ".q_math($theAnswer->answer_text)."
                                                     </label>
@@ -910,7 +921,7 @@ function printPollForm() {
                                         $tool_content .= "<div class='col-12 sub_question_temp_{$pqid} sub_question_{$theAnswer->pqaid} $subQDisplay' style='border-top: solid 1px rgb(30, 43, 52) !important; $borderBottom padding-top: 25px; margin-top: 25px;'>";
                                         if ($qTypeSubQuestion == QTYPE_SINGLE) {
                                             $resSubQAnswers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theAnswer->sub_qid);
-                                            $tool_content .= "<p class='mb-2'>$SubQuestionText</p>";
+                                            $tool_content .= "<p tabindex='0' class='mb-2'>$SubQuestionText</p>";
                                             foreach ($resSubQAnswers as $an) {
                                                 $checkedSubQ = '';
                                                 if (isset($_SESSION['data_answers'][$an->pqid]) && $_SESSION['data_answers'][$an->pqid] == $an->pqaid) {
@@ -920,8 +931,8 @@ function printPollForm() {
                                                 <div class='form-group'>
                                                     <div class='col-sm-offset-1 col-sm-11'>
                                                         <div class='radio QuestionType_{$qTypeSubQuestion} QuestionNumber_{$an->pqid}'>
-                                                            <label class='radio-label' aria-label='$langSelect'>
-                                                                <input type='radio' name='answer[$an->pqid]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
+                                                            <label class='radio-label' for='AccessibilitySubCheck_{$an->pqid}_{$an->pqaid}'>
+                                                                <input id='AccessibilitySubCheck_{$an->pqid}_{$an->pqaid}' type='radio' name='answer[$an->pqid]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
                                                                 ".q_math($an->answer_text)."
                                                             </label>
                                                         </div>
@@ -933,7 +944,7 @@ function printPollForm() {
                                             $resSubQAnswers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theAnswer->sub_qid);
                                             $tool_content .= "<input type='hidden' name='question[$theAnswer->sub_qid]' value='$qTypeSubQuestion'>
                                                               <input type='hidden' name='answer[$theAnswer->sub_qid]' value='-1'>";
-                                            $tool_content .= "<p class='mb-2'>$SubQuestionText</p>";
+                                            $tool_content .= "<p tabindex='0' class='mb-2'>$SubQuestionText</p>";
                                             foreach ($resSubQAnswers as $an) {
                                                 $checkedSubQ = '';
                                                 if (isset($_SESSION['data_answers'][$an->pqid])) {
@@ -946,8 +957,8 @@ function printPollForm() {
                                                 <div class='form-group'>
                                                     <div class='col-sm-offset-1 col-sm-11'>
                                                         <div class='checkbox QuestionType_{$qTypeSubQuestion} QuestionNumber_{$an->pqid}'>
-                                                            <label class='label-container' aria-label='$langSelect'>
-                                                                <input class='single_type_answer' type='checkbox' name='answer[$an->pqid][]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
+                                                            <label class='label-container' for='AccessibilitySubCheck_{$an->pqid}_{$an->pqaid}'>
+                                                                <input id='AccessibilitySubCheck_{$an->pqid}_{$an->pqaid}' class='single_type_answer' type='checkbox' name='answer[$an->pqid][]' value='$an->pqaid' $checkedSubQ data-question-type='$qTypeSubQuestion'>
                                                                 <span class='checkmark'></span>
                                                                 ".q_math($an->answer_text)."
                                                             </label>
@@ -962,7 +973,7 @@ function printPollForm() {
                                                 $text = $_SESSION['data_answers'][$theAnswer->sub_qid];
                                             }
                                             $tool_content .= "
-                                            <p class='TextMedium Neutral-900-cl mb-2'>$QText</p>
+                                            <p tabindex='0' class='TextMedium Neutral-900-cl mb-2'>$QText</p>
                                             <div class='form-group margin-bottom-fat'>
                                                 <div class='col-sm-12 margin-top-thin QuestionType_{$qTypeSubQuestion} QuestionNumber_{$theAnswer->sub_qid}'>
                                                     <textarea class='form-control' name='answer[$theAnswer->sub_qid]' aria-label='$langTypeOutMessage' data-question-type='$qTypeSubQuestion'>$text</textarea>
@@ -985,8 +996,8 @@ function printPollForm() {
                                         <div class='form-group'>
                                             <div class='col-sm-offset-1 col-sm-11'>
                                                 <div class='$type_attr QuestionType_{$qtype} QuestionNumber_{$pqid}'>
-                                                    <label class='$class_type_attr'>
-                                                        <input class='single_type_answer' type='$type_attr' name='answer[$pqid]' value='-1' data-question-type='$qtype' data-main-question='$pqid' $checked>
+                                                    <label class='$class_type_attr' for='AccessibilityChecker_{$pqid}'>
+                                                        <input id='AccessibilityChecker_{$pqid}' class='single_type_answer' type='$type_attr' name='answer[$pqid]' value='-1' data-question-type='$qtype' data-main-question='$pqid' $checked>
                                                         $checkMark_class
                                                         $langPollUnknown
                                                     </label>
@@ -996,7 +1007,7 @@ function printPollForm() {
                                 }
 
                                 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                    <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid' data-sub-question='$sSubQ'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                    <button id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid' data-sub-question='$sSubQ'><i class='fa-regular fa-trash-can'></i>$langCleanup</button>
                                                   </div>";
                             } elseif ($qtype == QTYPE_SCALE) {
                                 $slider_value = 0;
@@ -1034,7 +1045,7 @@ function printPollForm() {
                                     </div>";
 
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                            <button id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</button>
                                                         </div>";
                             } elseif ($qtype == QTYPE_TABLE) {
 
@@ -1056,7 +1067,7 @@ function printPollForm() {
                                                     <thead>
                                                         <tr>";
                                                             foreach ($user_questions as $q) {
-                                                                $tool_content .= "<th style='min-width:250px;'><p>" . q($q->answer_text) . "</p></th>";
+                                                                $tool_content .= "<th style='min-width:250px;'><p tabindex='0'>" . q($q->answer_text) . "</p></th>";
                                                             }
                                     $tool_content .= "</tr>
                                                     </thead>
@@ -1092,7 +1103,7 @@ function printPollForm() {
                                     }
 
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                            <button id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</button>
                                                         </div>";
                                 }
                             } elseif ($qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT || $qtype == QTYPE_DATE) {
@@ -1106,10 +1117,10 @@ function printPollForm() {
                                     <div class='form-group margin-bottom-fat'>
                                         <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                             <div class='input-group'>
-                                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'>
+                                                <span class='add-on1'>
                                                     <i class='fa-regular fa-calendar Neutral-600-cl'></i>
                                                 </span>
-                                                <input id='dateTimeAnswer_$pqid' class='datetimeAnswer form-control mt-0 border-start-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
+                                                <input id='dateTimeAnswer_$pqid' class='datetimeAnswer form-control mt-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
                                             </div>
                                         </div>
                                     </div>";
@@ -1118,10 +1129,10 @@ function printPollForm() {
                                     <div class='form-group margin-bottom-fat'>
                                         <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                             <div class='input-group'>
-                                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'>
+                                                <span class='add-on1'>
                                                     <i class='fa-regular fa-calendar Neutral-600-cl'></i>
                                                 </span>
-                                                <input id='dateAnswer_$pqid' class='dateAnswer form-control mt-0 border-start-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
+                                                <input id='dateAnswer_$pqid' class='dateAnswer form-control mt-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
                                             </div>
                                         </div>
                                     </div>";
@@ -1136,7 +1147,7 @@ function printPollForm() {
                                
 
                                     $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-4'>
-                                                            <a id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</a>
+                                                            <button id='{$qtype}_{$pqid}' class='btn deleteAdminBtn clearUpBtn gap-1' data-question-clean='$pqid'><i class='fa-regular fa-trash-can'></i>$langCleanup</button>
                                                         </div>";
                             } elseif ($qtype == QTYPE_FILE) {
                                 poll_upload_file($pid, $form_link, $qtype, $pqid, $userDefault);
@@ -1307,6 +1318,16 @@ function submitPoll() {
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
+    $savePreviousUserAnswers = false;
+    if (isset($poll) && !is_null($poll->options)) {
+        $pollOptions = unserialize($poll->options);
+        foreach ($pollOptions as $opt) {
+            if (isset($opt['save_prev_user_answers']) && $opt['save_prev_user_answers'] == 1) {
+                $savePreviousUserAnswers = true;
+                break;
+            }
+        }
+    }
     $default_answer = $poll->default_answer;
     $is_complete = true;
     $v = new Valitron\Validator($_POST);
@@ -1403,7 +1424,7 @@ function submitPoll() {
             $eventData->resource = intval($pid);
             ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 
-            if (isset($_REQUEST['update'])) { // if poll has enabled multiple submissions first delete the previous answers
+            if (isset($_REQUEST['update']) && !$savePreviousUserAnswers) { // if poll has enabled multiple submissions first delete the previous answers
                 Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d $sql_u)", $userDefault, $pid);
                 Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d $sql_u", $userDefault, $pid);
             }
@@ -1536,6 +1557,12 @@ function submitPoll() {
             }
         }
 
+        // update submission date
+        if (isset($user_record_id)) {
+            $lastSubmissionDate = Database::get()->querySingle("SELECT MAX(submit_date) AS last_submission FROM poll_answer_record WHERE poll_user_record_id = ?d", $user_record_id)->last_submission;
+            Database::get()->query("UPDATE poll_answer_record SET submit_date = ?t WHERE poll_user_record_id = ?d", $lastSubmissionDate, $user_record_id);
+        }
+
         if (!$is_complete) {
             $user_answers = Database::get()->queryArray('SELECT * FROM poll_answer_record
                 WHERE poll_user_record_id = ?d', $user_record_id);
@@ -1548,8 +1575,8 @@ function submitPoll() {
                 }
             }
             $_SESSION["poll_answers_$pid"] = $session_answers;
-//            Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
-//            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
+            //Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
+            //Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
             Session::flash('message', $langQFillInAllQs);
             Session::flash('alert-class', 'alert-warning');
             if(isset($_GET['from_session_view'])){
@@ -1565,7 +1592,7 @@ function submitPoll() {
             )
         );
         $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langPollSubmitted."</span></div></div>";
+        $tool_content .= "<div class='col-sm-12'><div tabindex='0' class='alert alert-success submit-ok'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langPollSubmitted."</span></div></div>";
         if ($poll->end_message) {
             $tool_content .=  $end_message;
         }
@@ -1625,15 +1652,30 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
             if (isset($_GET['onBehalfOfUser']) && isset($_SESSION['onBehalfOfUserId']) && $userDefault == 0) {
                 unset($_SESSION['data_answers'][$pqid]);
             }
-            if (($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE)) {       
-                $user_answers = Database::get()->queryArray("SELECT a.aid
+            if (($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE)) { 
+                if ($qtype == QTYPE_SINGLE) {
+                    $querySubmitDate = "ORDER BY a.submit_date DESC LIMIT 1";
+                } else {
+                    $querySubmitDate = "
+                    AND a.submit_date = (
+                        SELECT MAX(a2.submit_date)
+                        FROM poll_answer_record a2
+                        JOIN poll_user_record b2
+                            ON a2.poll_user_record_id = b2.id
+                        WHERE a2.qid = $pqid
+                            AND b2.uid = $userDefault
+                    );
+                    ";
+                }   
+                $user_answers = Database::get()->queryArray("SELECT a.aid, a.submit_date
                         FROM poll_user_record b, poll_answer_record a
                         LEFT JOIN poll_question_answer c
                             ON a.aid = c.pqaid
                         WHERE a.poll_user_record_id = b.id
                             AND a.qid = ?d
                             AND b.uid = ?d
-                            $sql_an", $pqid, $userDefault);          
+                            $sql_an
+                            $querySubmitDate", $pqid, $userDefault);          
                 if ($user_answers) {
                     $storeData = [];
                     foreach ($user_answers as $ua) {
@@ -1648,23 +1690,25 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                     }
                 }
             } elseif ($qtype == QTYPE_SCALE) {
-                $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                $user_answers = Database::get()->querySingle("SELECT a.answer_text, a.submit_date
                                     FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
                                     AND a.poll_user_record_id = b.id
                                     AND b.uid = ?d
-                                    $sql_an", $pqid, $userDefault);
+                                    $sql_an
+                                    ORDER BY a.submit_date DESC LIMIT 1", $pqid, $userDefault);
                 if ($user_answers) {
                     $slider_value = $user_answers->answer_text;
                     $_SESSION['data_answers'][$pqid] = $slider_value;
                 }
             } elseif ($qtype == QTYPE_FILL or $qtype == QTYPE_DATETIME or $qtype == QTYPE_SHORT or $qtype == QTYPE_FILE or $qtype == QTYPE_DATE) {
-                $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                $user_answers = Database::get()->querySingle("SELECT a.answer_text, a.submit_date
                                     FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
                                     AND a.poll_user_record_id = b.id
                                     AND b.uid = ?d
-                                    $sql_an", $pqid, $userDefault);
+                                    $sql_an
+                                    ORDER BY a.submit_date DESC LIMIT 1", $pqid, $userDefault);
                 if ($user_answers) {
                     $text = $user_answers->answer_text;
                     $_SESSION['data_answers'][$pqid] = $text;
@@ -1676,22 +1720,29 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                     $_SESSION['data_answers'][$pqid] = $_SESSION['data_file_answer'][$pqid];
                 }
             } elseif ($qtype == QTYPE_TABLE) {
+                $user_answers = Database::get()->queryArray("SELECT a.poll_user_record_id, a.answer_text, a.sub_qid, a.sub_qid_row FROM poll_answer_record a
+                                                        JOIN poll_user_record b ON b.id = a.poll_user_record_id
+                                                        WHERE b.pid = ?d
+                                                        AND b.uid = ?d
+                                                        $sql_an
+                                                        AND a.qid = ?d
+                                                        AND a.poll_user_record_id = (SELECT MAX(a2.poll_user_record_id) FROM poll_answer_record a2
+                                                                                       JOIN poll_user_record b2 ON b2.id = a2.poll_user_record_id
+                                                                                       WHERE b2.pid = ?d
+                                                                                       AND b2.uid = ?d
+                                                                                       AND a2.qid = ?d)", $theQuestion->pid, $userDefault, $pqid, $theQuestion->pid, $userDefault, $pqid);
+
                 $s_data = [];
                 $q_res = Database::get()->querySingle("SELECT q_row,q_column FROM poll_question WHERE pqid = ?d", $pqid);
                 $length = 1;
                 for ($i = 1; $i <= $q_res->q_row; $i++) {
                     for ($j = 1; $j <= $q_res->q_column; $j++) {
-                        $user_answers = Database::get()->querySingle("SELECT DISTINCT a.sub_qid, a.sub_qid_row, a.answer_text
-                                        FROM poll_answer_record a, poll_user_record b
-                                        WHERE qid = ?d
-                                        AND a.poll_user_record_id = b.id
-                                        AND b.uid = ?d
-                                        AND a.sub_qid = ?d
-                                        AND a.sub_qid_row = ?d
-                                        $sql_an", $pqid, $userDefault, $j, $i);
-                        
-                        if ($user_answers) {
-                            $s_data[$length] = $user_answers->answer_text;
+                        if (count($user_answers) > 0) {
+                            foreach ($user_answers as $an) {
+                                if ($an->sub_qid_row == $i && $an->sub_qid == $j) {
+                                    $s_data[$length] = $an->answer_text;
+                                }
+                            }
                         }
                         $length++;
                     }
@@ -1770,10 +1821,13 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     $del_file = '';
     $filename = '';
     $filepath = '';
-    if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
-        $arrFile = unserialize($_SESSION['data_answers'][$pqid]);
-        $filename = $arrFile['filename'];
-        $filepath = $arrFile['filepath'];
+    if (isset($_SESSION['data_answers']) && is_string($_SESSION['data_answers'][$pqid])) {
+        $arrFile = unserialize($_SESSION['data_answers'][$pqid], ['allowed_classes' => false]);
+        if (is_array($arrFile) && isset($arrFile['filename'], $arrFile['filepath']) 
+            && is_string($arrFile['filename']) && is_string($arrFile['filepath'])) {
+            $filename = basename(trim($arrFile['filename']));
+            $filepath = trim($arrFile['filepath']);
+        }
     }
 
     if (!empty($filename) && file_exists("$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid/$sessionID$filepath")) {

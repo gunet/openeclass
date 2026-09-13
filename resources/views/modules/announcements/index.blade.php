@@ -44,33 +44,7 @@
             });
         }
 
-        function popover_init() {
-            $('[data-bs-toggle="popover"]').on('click',function(e){
-                e.preventDefault();
-            }).popover();
-            var click_in_process = false;
-            var hidePopover = function () {
-                if (!click_in_process) {
-                    $(this).popover('hide');
-                }
-            }
-                , togglePopover = function () {
-                $(this).popover('toggle');
-                $('#action_button_menu').parent().parent().addClass('menu-popover');
-            };
-            $('.menu-popover').popover().on('click', togglePopover).on('blur', hidePopover);
-            $('.menu-popover').on('shown.bs.popover', function () {
-                $('.popover').mousedown(function () {
-                    click_in_process = true;
-                });
-                $('.popover').mouseup(function () {
-                    click_in_process = false;
-                    $(this).popover('hide');
-                });
-                act_confirm();
-            });
 
-        }
 
         /*
             Ref: https://datatables.net/forums/discussion/77095/bootstrap-5-tooltips-stay-on-screen-when-datatable-reloads
@@ -200,13 +174,25 @@
                     type: 'POST'
                 },
                 lengthMenu: [10, 15, 20 , -1],
+                tabIndex: -1,
                 @if ($is_editor)
                 initComplete: function() {
                     this.api().column(0).visible(false);
+                    $('.table-announcements-indexes .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                },
+                @endif
+                @if (!$is_editor)
+                initComplete: function() {
+                    $('.table-announcements-indexes .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
                 },
                 @endif
                 fnDrawCallback: function( oSettings ) {
-                    popover_init();
                     tooltip_init();
                     $('.table_td_body').each(function() {
                         $(this).trunk8({
@@ -243,6 +229,13 @@
                         sLast:     '&raquo;'
                     }
                 }
+            });
+
+            $('.table-announcements-indexes').on('order.dt', function() {
+                $('.table-announcements-indexes thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
 
             $(document).on( 'click', '.reorder', function(e) {
@@ -367,13 +360,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container announcement-index py-lg-0'>
+    <div class='{{ $container }} module-container announcement-index py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+                <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+                <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                     <div class="row">
 
@@ -441,7 +431,7 @@
                                 </div>
                             @endif
 
-                            
+                            <div class='table-responsive'>
                                 <table id='ann_table{{ $course_id }}' class='table-default table-announcements-indexes'>
                                     <thead>
                                     <tr>
@@ -459,14 +449,14 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
-                            
+                            </div>
                         </div>
 
 
                     </div>
-                </div>
+                </main>
 
             </div>
         </div>
-    </div>
+
 @endsection

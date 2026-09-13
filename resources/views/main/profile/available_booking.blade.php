@@ -64,7 +64,7 @@
 
 @section('content')
 
-<div class="col-12 main-section" >
+<main id="main" class="col-12 main-section">
 
     <div class="{{ $container }} main-container">
 
@@ -205,7 +205,7 @@
         </div>
 
     </div>
-</div>
+</main>
 
 <div class="modal fade" id="BookingAccept" tabindex="-1" aria-labelledby="BookingAcceptLabel" aria-hidden="true">
     <form method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}?user_id={{ $uid }}">

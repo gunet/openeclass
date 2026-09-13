@@ -135,7 +135,8 @@ if (isset($_GET['show_export_buttons'])) {
 $users_actions = [];
 $sql_consultant = "";
 if($is_consultant && !$is_coordinator){
-    $sql_consultant = "AND creator = ?d";
+    //$sql_consultant = "AND creator = ?d";
+    $sql_consultant = "AND s.creator = ?d";
     $sql_consultant_args = [$uid];
 }
 
@@ -162,7 +163,8 @@ if(isset($_GET['user_rep'])) {
     $user_selected = $_GET['user_rep'];
 
     if ($is_coordinator && isset($_GET['user_consultant_report'])) {
-        $sqlSelectConsultant = "AND creator = ?d";
+        //$sqlSelectConsultant = "AND creator = ?d";
+        $sqlSelectConsultant = "AND s.creator = ?d";
         $sqlSelectConsultantArgs = [$_GET['user_rep']];
         $consultant_selected = $_GET['user_rep'];
         $arr = [];
@@ -204,7 +206,8 @@ if ($is_coordinator && isset($_POST['choose_user_or_consultant']) && $_POST['cho
         unset($_POST['form_user_report']);
     }
     if (isset($_POST['form_consultant_report']) && $_POST['form_consultant_report'] > 0) {
-        $sqlSelectConsultant = "AND creator = ?d";
+        //$sqlSelectConsultant = "AND creator = ?d";
+        $sqlSelectConsultant = "AND s.creator = ?d";
         $sqlSelectConsultantArgs = [$_POST['form_consultant_report']];
         $consultant_selected = $_POST['form_consultant_report'];
         $arrU = [];
@@ -239,11 +242,16 @@ if(isset($_GET['user_docs'])){
         } else {
             $query_vars = [$course_id, $userid, 1];
         }
-        $sessions_user = Database::get()->queryArray("SELECT id,title FROM mod_session
-                                                        WHERE course_id = ?d
+        // $sessions_user = Database::get()->queryArray("SELECT id,title FROM mod_session
+        //                                                 WHERE course_id = ?d
+        //                                                 $sql_consultant
+        //                                                 AND id IN (SELECT session_id FROM mod_session_users
+        //                                                             WHERE participants = ?d AND is_accepted = ?d)", $query_vars);
+        $sessions_user = Database::get()->queryArray("SELECT s.id,s.title FROM mod_session s
+                                                        WHERE s.course_id = ?d
                                                         $sql_consultant
-                                                        AND id IN (SELECT session_id FROM mod_session_users
-                                                                    WHERE participants = ?d AND is_accepted = ?d)", $query_vars);
+                                                        AND s.id IN (SELECT su.session_id FROM mod_session_users su
+                                                                    WHERE su.participants = ?d AND su.is_accepted = ?d)", $query_vars);
 
         if(count($sessions_user) > 0){
             $dload_filename = $webDir . '/courses/temp/' . safe_filename('zip');
@@ -351,22 +359,49 @@ $res = Database::get()->queryFunc("SELECT user_id FROM course_user
                                         }
 
                                         if (!empty($sqlSelectConsultant) && !empty($sql_consultant)) {
-                                            $query_vars = [$course_id, $sqlSelectConsultantArgs, 1, $userID, 1, $course_id, $sql_consultant_args];
+                                            //$query_vars = [$course_id, $sqlSelectConsultantArgs, 1, $userID, 1, $course_id, $sql_consultant_args];
+                                            $query_vars = [$userID, 1, $course_id, $course_id, $sqlSelectConsultantArgs, 1, $sql_consultant_args];
                                         } elseif (!empty($sqlSelectConsultant) && empty($sql_consultant)) {
-                                            $query_vars = [$course_id, $sqlSelectConsultantArgs, 1, $userID, 1, $course_id];
+                                            //$query_vars = [$course_id, $sqlSelectConsultantArgs, 1, $userID, 1, $course_id];
+                                            $query_vars = [$userID, 1, $course_id, $course_id, $sqlSelectConsultantArgs, 1];
                                         } elseif (empty($sqlSelectConsultant) && !empty($sql_consultant)) {
-                                            $query_vars = [$course_id, 1, $userID, 1, $course_id, $sql_consultant_args];
+                                            //$query_vars = [$course_id, 1, $userID, 1, $course_id, $sql_consultant_args];
+                                            $query_vars = [$userID, 1, $course_id, $course_id, 1, $sql_consultant_args];
                                         } else {
-                                            $query_vars = [$course_id, 1, $userID, 1, $course_id];
+                                            //$query_vars = [$course_id, 1, $userID, 1, $course_id];
+                                            $query_vars = [$userID, 1, $course_id, $course_id, 1];
                                         }
 
-                                        $user_badge_sessions = Database::get()->queryArray("SELECT id,title,start,finish,creator FROM mod_session 
-                                                                                     WHERE course_id = ?d $sqlSelectConsultant AND visible = ?d
-                                                                                     AND id IN (SELECT session_id FROM mod_session_users
-                                                                                                    WHERE participants = ?d 
-                                                                                                    AND is_accepted = ?d)
-                                                                                     AND id IN (SELECT session_id FROM badge WHERE course_id = ?d AND session_id > 0)
-                                                                                     $sql_consultant", $query_vars);
+                                        // $user_badge_sessions = Database::get()->queryArray("SELECT id,title,start,finish,creator FROM mod_session 
+                                        //                                              WHERE course_id = ?d $sqlSelectConsultant AND visible = ?d
+                                        //                                              AND id IN (SELECT session_id FROM mod_session_users
+                                        //                                                             WHERE participants = ?d 
+                                        //                                                             AND is_accepted = ?d)
+                                        //                                              AND id IN (SELECT session_id FROM badge WHERE course_id = ?d AND session_id > 0)
+                                        //                                              $sql_consultant", $query_vars);
+
+                                        $user_badge_sessions = Database::get()->queryArray("
+                                            SELECT DISTINCT
+                                                s.id,
+                                                s.title,
+                                                s.start,
+                                                s.finish,
+                                                s.creator
+                                            FROM mod_session s
+                                            INNER JOIN mod_session_users su
+                                                ON su.session_id = s.id
+                                                AND su.participants = ?d
+                                                AND su.is_accepted = ?d
+                                            INNER JOIN badge b
+                                                ON b.session_id = s.id
+                                                AND b.course_id = ?d
+                                                AND b.session_id > 0
+                                            WHERE s.course_id = ?d
+                                            $sqlSelectConsultant
+                                            AND s.visible = ?d
+                                            $sql_consultant
+                                        ", $query_vars);
+
                                         if(count($user_badge_sessions) > 0){
                                             $users_actions[$result->user_id] = $user_badge_sessions;
                                             if(count($users_actions) > 0){
@@ -533,6 +568,7 @@ $tool_content .= "
                                                         </td>
                                                         <td style='vertical-align:top; border:0px !important; background-color: transparent;'>" . participant_name($v->creator) . "</td>
                                                         <td style='vertical-align:top; border:0px !important; background-color: transparent;'>
+                                                            <div> " . session_completed_resources_by_user($v->id, $course_id, $key) . " </div>
                                                             <div>{$v->completion}</div>
                                                         </td>
                                                     </tr>";
@@ -555,7 +591,12 @@ $tool_content .= " </div>
 
 
 if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
-    pdf_reports_output();
+    if (isset($_GET['user_rep'])) {
+        $uId = intval($_GET['user_rep']);
+    } else {
+        $uId = 0;
+    }
+    pdf_reports_output($uId);
 }else{
     $data['tool_content'] = $tool_content;
     view('modules.session.consulting_completion', $data);
@@ -568,114 +609,164 @@ if (isset($_GET['format']) and $_GET['format'] == 'pdf') { // pdf format
  * @return void
  * @throws \Mpdf\MpdfException
  */
-function pdf_reports_output() {
+function pdf_reports_output($uId) {
     global $tool_content, $langUserDuration, $currentCourseName,
            $webDir, $course_id, $course_code, $langHasParticipatedInTool, $langHasNotParticipatedInTool;
 
-    $pdf_content = "
-        <!DOCTYPE html>
-        <html lang='el'>
-        <head>
-          <meta charset='utf-8'>
-          <title>" . q("$currentCourseName") . "</title>
-          <style>
-            * { font-family: 'opensans'; }
-            body { font-family: 'opensans'; font-size: 10pt; }
-            small, .small { font-size: 8pt; }
-            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-            h1 { font-size: 16pt; }
-            h2 { font-size: 14pt; }
-            h3 { font-size: 14pt; color: #000000; margin-top: 0px; margin-bottom:20px; background-color: #EFF6FF; padding: 10px; }
-            h4 { font-size: 11pt; }
-            th { text-align: left; border-bottom: 1px solid #999; }
-            td { text-align: left; }
-            .criteria_not_completed { 
-                color: #FF0000; 
-            }
-            .criteria_completed { 
-                color: #008000;
-            }
-            .text-success { 
-                color: #228B22; 
-            }
-            .text-danger { 
-                color: #D22B2B; 
-            }
-            .cardReports { 
-                background: #ffffff; 
-                padding: 15px; 
-                border: solid 1px #989ea6; 
-                margin-top:20px; 
-            }
-            .export-pdf-btn,
-            .form-user-report,
-            .docs-pdf-btn,
-            .user-icon-filename,
-            .info_completion,
-            .title_reports,
-            .card-img-top,
-            .link-Update-Percentage,
-            .show-calculation-message {
-                display: none;
-            }
-            .resource_item {
-                margin-bottom: 25px;
-            }
-          </style>
-        </head>
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
+    $pdfTitle = ($uId > 0) ? '(Summary sessions) ' . uid_to_name($uId) : '(Summary sessions) all_users_reports';
+    $pdf_title = $course_code . ' ' . $pdfTitle;
+    $course_title = q("$currentCourseName");
+    $module_type_title = "";
+    html_to_pdf($pdf_title, $course_title, $module_type_title);
 
-    // Array containing icons
-    $searchVal = array('&#10004;', '&#x2718;');
-    // Array containing replace icons with strings
-    $replaceVal = array('<strong class="text-success">' . $langHasParticipatedInTool . '</strong>', '<strong class="text-danger">' . $langHasNotParticipatedInTool . '</strong>');
-    $output = str_replace($searchVal, $replaceVal, $tool_content);
-    $pdf_content .= $output;
-    $pdf_content .= "</body></html>";
+    // $htmlHeader = "
+    //     <!DOCTYPE html>
+    //     <html lang='el'>
+    //     <head>
+    //       <meta charset='utf-8'>
+    //       <title>" . q("$currentCourseName") . "</title>
+    //       <style>
+    //         * { font-family: 'opensans'; }
+    //         body { font-family: 'opensans'; font-size: 10pt; }
+    //         small, .small { font-size: 8pt; }
+    //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+    //         h1 { font-size: 16pt; }
+    //         h2 { font-size: 14pt; }
+    //         h3 { font-size: 14pt; color: #000000; margin-top: 0px; margin-bottom:20px; background-color: #EFF6FF; padding: 10px; }
+    //         h4 { font-size: 11pt; }
+    //         th { text-align: left; border-bottom: 1px solid #999; }
+    //         td { text-align: left; }
+    //         .criteria_not_completed { 
+    //             color: #FF0000; 
+    //         }
+    //         .criteria_completed { 
+    //             color: #008000;
+    //         }
+    //         .text-success { 
+    //             color: #228B22; 
+    //         }
+    //         .text-danger { 
+    //             color: #D22B2B; 
+    //         }
+    //         .cardReports { 
+    //             background: #ffffff; 
+    //             padding: 15px; 
+    //             border: solid 1px #989ea6; 
+    //             margin-top:20px; 
+    //         }
+    //         .export-pdf-btn,
+    //         .form-user-report,
+    //         .docs-pdf-btn,
+    //         .user-icon-filename,
+    //         .info_completion,
+    //         .title_reports,
+    //         .card-img-top,
+    //         .link-Update-Percentage,
+    //         .show-calculation-message {
+    //             display: none;
+    //         }
+    //         .resource_item {
+    //             margin-bottom: 25px;
+    //         }
+    //       </style>
+    //     </head>
+    //     <body>
+    //     <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
 
-    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata'];
+    // // Array contains icons
+    // $searchVal = array('&#10004;', '&#x2718;');
+    // // Array replaces icons with strings
+    // $replaceVal = array('<strong class="text-success">' . $langHasParticipatedInTool . '</strong>', '<strong class="text-danger">' . $langHasNotParticipatedInTool . '</strong>');
+    // $output = str_replace($searchVal, $replaceVal, $tool_content);
 
-    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header+15,     // mm
-        'margin_bottom' => $image_height_footer+15,  // mm
-        'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-        'fontdata' => $fontData + [
-                'opensans' => [
-                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                ],
-                'roboto' => [
-                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-                ]
-            ]
-    ]);
+    // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    // $fontDirs = $defaultConfig['fontDir'];
+    // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    // $fontData = $defaultFontConfig['fontdata'];
 
-    
-    $mpdf->SetHTMLHeader(get_platform_logo());
-    $footerHtml = '
-    <div>
-        <table width="100%" style="border: none;">
-            <tr>
-                <td style="text-align: left;">{DATE j-n-Y}</td>
-                <td style="text-align: right;">{PAGENO} / {nb}</td>
-            </tr>
-        </table>
-    </div>
-    ' . get_platform_logo('','footer') . '';
-    $mpdf->SetHTMLFooter($footerHtml);
-    $mpdf->SetCreator(course_id_to_prof($course_id));
-    $mpdf->SetAuthor(course_id_to_prof($course_id));
-    $mpdf->WriteHTML($pdf_content);
-    $mpdf->Output("$course_code users_reports.pdf", 'I'); // 'D' or 'I' for download / inline display
-    exit;
+    // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // // for old courses
+    // if ($image_height_header > 50) {
+    //     $image_height_header = 20;
+    // }
+    // if ($image_height_footer > 50) {
+    //     $image_height_footer = 15;
+    // }
+    // $mpdf = new Mpdf\Mpdf([
+    //     'margin_top' => $image_height_header + 20,     // mm
+    //     'margin_bottom' => $image_height_footer + 10,  // mm
+    //     'tempDir' => _MPDF_TEMP_PATH,
+    //     'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+    //     'fontdata' => $fontData + [
+    //             'opensans' => [
+    //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+    //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+    //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+    //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+    //             ],
+    //             'roboto' => [
+    //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+    //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+    //             ]
+    //         ]
+    // ]);
+
+    // // Performance options
+    // $mpdf->simpleTables = true;
+    // $mpdf->packTableData = true;
+    // $mpdf->shrink_tables_to_fit = 0;
+
+    // // Write CSS/header ONCE
+    // $mpdf->WriteHTML($htmlHeader, \Mpdf\HTMLParserMode::HEADER_CSS);
+    // // Header/Footer
+    // $mpdf->SetHTMLHeader(get_platform_logo());
+    // $footerHtml = '
+    // <div>
+    //     <table width="100%" style="border: none;">
+    //         <tr>
+    //             <td style="text-align: left;">{DATE j-n-Y}</td>
+    //             <td style="text-align: right;">{PAGENO} / {nb}</td>
+    //         </tr>
+    //     </table>
+    // </div>
+    // ' . get_platform_logo('','footer') . '';
+    // $mpdf->SetHTMLFooter($footerHtml);
+    // $mpdf->SetCreator(course_id_to_prof($course_id));
+    // $mpdf->SetAuthor(course_id_to_prof($course_id));
+
+    // // Parse HTML safely
+    // libxml_use_internal_errors(true);
+    // $dom = new DOMDocument();
+    // $html = mb_convert_encoding(
+    //     $output,
+    //     'HTML-ENTITIES',
+    //     'UTF-8'
+    // );
+    // $dom->loadHTML($html);
+    // $xpath = new DOMXPath($dom);
+
+    // // Find all cards
+    // $cards = $xpath->query("
+    //     //div[contains(concat(' ', normalize-space(@class), ' '), ' cardReports ')]
+    // ");
+    // if ($cards->length === 0) {
+    //     $mpdf->WriteHTML($output, \Mpdf\HTMLParserMode::HTML_BODY);
+    // } else {
+    //     foreach ($cards as $card) {
+    //         $cardHtml = $dom->saveHTML($card);
+    //         $mpdf->WriteHTML(
+    //             $cardHtml,
+    //             \Mpdf\HTMLParserMode::HTML_BODY
+    //         );
+    //         $mpdf->WriteHTML('<pagebreak />');
+    //     }
+    // }
+
+    // // Close HTML
+    // $mpdf->WriteHTML("</body></html>");
+
+    // // Output
+    // $mpdf->Output("$course_code $pdfTitle.pdf", 'I');
+    // exit;
 }

@@ -30,7 +30,8 @@ $toolName = $langConfig . ' ' . $app->getDisplayName();
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     function doSelectedCourses() {
@@ -74,7 +75,13 @@ $head_content .= "<script type='text/javascript'>
             }
         });
         
-        $('#select-courses').select2();
+        slimSelectFun (
+            '#select-courses', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             let stringVal = [];
@@ -183,7 +190,7 @@ foreach ($app->getParams() as $param) {
             $selected = in_array($c->id, $selections) ? "selected" : "";
             $tool_content .= "<option value='$c->id' $selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
         }
-        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></div></div>";
+        $tool_content .= "</select></div></div>";
         $tool_content .= "<input type='hidden' id='enabled-courses' name='" . $param->name() . "'>";
     }
 }

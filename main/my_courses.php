@@ -51,7 +51,7 @@ if(isset($_GET['term'])){
   }
 
   //Get all courses which user has registered
-  if(empty($q)){
+  if (empty($q)) {
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                       course.code code,
                       course.public_code,
@@ -66,10 +66,19 @@ if(isset($_GET['term'])){
                 FROM course JOIN course_user
                       ON course.id = course_user.course_id 
                       AND course_user.user_id = ?d 
-                      AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+                      AND (
+                             course_user.status = " . USER_TEACHER . " OR
+                             course_user.course_reviewer = 1 OR
+                             course_user.editor = 1 OR
+                             (
+                              course.visible != " . COURSE_INACTIVE . " AND
+                              (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") AND
+                              (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+                             )
+                         )
                       AND is_collaborative = ?d
                   ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, $typeCourse);
-  }else{//Get all courses from search-component which user has registered
+  } else { //Get all courses from search-component which user has registered
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                    course.code code,
                    course.public_code,
@@ -85,7 +94,16 @@ if(isset($_GET['term'])){
                   ON course.id = course_user.course_id 
                   WHERE title LIKE ?s
                   AND course_user.user_id = ?d 
-                  AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+                  AND (
+                         course_user.status = " . USER_TEACHER . " OR
+                         course_user.course_reviewer = 1 OR
+                         course_user.editor = 1 OR
+                         (
+                          course.visible != " . COURSE_INACTIVE . " AND
+                          (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") AND
+                          (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+                         )
+                     )
                   AND is_collaborative = ?d
               ORDER BY favorite DESC, status ASC, visible ASC, title ASC","%$q%",  $uid, $typeCourse);
   }
@@ -105,6 +123,20 @@ if(isset($_GET['term'])){
                 foreach($myCourses as $course){
                     $temp_pages++;
 
+                    $courseType = '';
+                    if ($course->visible == 1) {
+                        $courseType .= "<span>$langRegCourse</span>";
+                    }
+                    elseif ($course->visible == 2) {
+                        $courseType .= "<span>$langOpenCourse</span>";
+                    }
+                    elseif ($course->visible == 0) {
+                        $courseType .= "<span>$langClosedCourse</span>";
+                    }
+                    elseif ($course->visible == 3){
+                        $courseType .= "<span>$langInactiveCourse</span>";
+                    }
+
                   $html .= "<div class='col cardCourse$pagesPag'>
                         <div class='card h-100 card$pagesPag Borders border-card card-default px-2 py-3'>";
 
@@ -117,26 +149,6 @@ if(isset($_GET['term'])){
 
                       $html .= "<div class='card-header border-0'>
                                 <div class='card-title d-flex justify-content-start align-items-start gap-2 mb-0'>";
-                                    if($course->visible == 1){
-                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langRegCourse' aria-label='$langRegCourse'>
-                                            <i class='fa-solid fa-square-pen title-default fa-lg'></i>
-                                        </button>";
-                                    }
-                                    if($course->visible == 2){
-                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langOpenCourse' aria-label='$langOpenCourse'>
-                                            <i class='fa-solid fa-lock-open title-default fa-lg'></i>
-                                        </button>";
-                                    }
-                                    if($course->visible == 0){
-                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langClosedCourse' aria-label='$langClosedCourse'>
-                                            <i class='fa-solid fa-lock title-default fa-lg'></i>
-                                        </button>";
-                                    }
-                                    if($course->visible == 3){
-                                        $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langInactiveCourse' aria-label='$langInactiveCourse'>
-                                            <i class='fa-solid fa-triangle-exclamation title-default fa-lg'></i>
-                                        </button>";
-                                    }
                                     $invisibleCourse = '';
                                     if($course->visible == 3){
                                       $invisibleCourse = 'InvisibleCourse';
@@ -155,6 +167,10 @@ if(isset($_GET['term'])){
                                 <div class='card-text'>
                                     <p class='d-inline $invisibleCourse mb-0 TextBold'>$langTeacher:</p>
                                     &nbsp;<p class='d-inline $invisibleCourse'>".q($course->professor)."</p>
+                                </div>
+                                <div class='card-text'>
+                                    <p class='d-inline $invisibleCourse mb-0 TextBold'>$langType:</p>
+                                    &nbsp;<p class='d-inline $invisibleCourse'>".$courseType."</p>
                                 </div>
 
                             </div>
@@ -251,7 +267,7 @@ view('main.my_courses.index', $data);
 
 function GroupCardsPagination($allCourses,$pagesPag){
 
-    global $langPreviousPage, $langNextPage;
+    global $langPreviousPage, $langNextPage, $langPagination, $langPage;
 
   $pagination = "";
 
@@ -260,10 +276,10 @@ function GroupCardsPagination($allCourses,$pagesPag){
             <input type='hidden' id='KeypagesCourse' value='$pagesPag'>
 
             <div class='col-12 d-flex justify-content-center Borders p-0 bg-transparent mt-4'>
-                <nav role='navigation' aria-label='Pagination Navigation'>
+                <nav aria-label='$langPagination'>
                     <ul class='pagination mycourses-pagination w-100 mb-0'>
                         <li class='page-item page-item-previous'>
-                            <a class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></a>
+                            <button class='page-link' aria-label='$langPreviousPage'><span class='fa-solid fa-chevron-left'></span></button>
                         </li>";
                         if($pagesPag >=12 ){
                             for($i=1; $i<=$pagesPag; $i++){
@@ -271,16 +287,16 @@ function GroupCardsPagination($allCourses,$pagesPag){
                                 if($i>=1 && $i<=5){
                                     if($i==1){
                                         $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                            <a id='Keypage{$i}' class='page-link'>{$i}</a>
+                                            <button id='Keypage{$i}' class='page-link' aria-label='$langPage {$i}'>{$i}</button>
                                         </li>
 
                                         <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
-                                            <a>...</a>
+                                            <button>...</button>
                                         </li>";
                                     }else{
                                         if($i<$pagesPag){
                                             $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                                <a id='Keypage{$i}' class='page-link'>{$i}</a>
+                                                <button id='Keypage{$i}' class='page-link' aria-label='$langPage {$i}'>{$i}</button>
                                             </li>";
                                         }
                                     }
@@ -288,19 +304,19 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
                                 if($i>=6 && $i<=$pagesPag-1){
                                     $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages d-none'>
-                                        <a id='Keypage{$i}' class='page-link'>{$i}</a>
+                                        <button id='Keypage{$i}' class='page-link' aria-label='$langPage {$i}'>{$i}</button>
                                     </li>";
 
                                     if($i==$pagesPag-1){
                                         $pagination .= "<li id='KeycloseLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-block'>
-                                            <a>...</a>
+                                            <button>...</button>
                                         </li>";
                                     }
                                 }
 
                                 if($i==$pagesPag){
                                     $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                        <a id='Keypage{$i}' class='page-link'>{$i}</a>
+                                        <button id='Keypage{$i}' class='page-link' aria-label='$langPage {$i}'>{$i}</button>
                                     </li>";
                                 }
                             }
@@ -308,13 +324,13 @@ function GroupCardsPagination($allCourses,$pagesPag){
                         }else{
                             for($i=1; $i<=$pagesPag; $i++){
                                 $pagination .= "<li id='KeypageCenter{$i}' class='page-item page-item-pages'>
-                                    <a id='Keypage{$i}' class='page-link'>{$i}</a>
+                                    <button id='Keypage{$i}' class='page-link' aria-label='$langPage {$i}'>{$i}</button>
                                 </li>";
                             }
                         }
 
                         $pagination .=" <li class='page-item page-item-next'>
-                            <a class='page-link' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></a>
+                            <button class='page-link' aria-label='$langNextPage'><span class='fa-solid fa-chevron-right'></span></button>
                         </li>
                     </ul>
                 </nav>

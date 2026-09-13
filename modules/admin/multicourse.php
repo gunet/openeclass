@@ -20,7 +20,7 @@
 
 $require_departmentmanage_user = true;
 $require_help = true;
-$helpTopic = 'users_administration';
+$helpTopic = 'course_administration';
 $helpSubTopic = 'mass_courses_creation';
 
 require_once '../../include/baseTheme.php';
@@ -62,6 +62,11 @@ if (isset($_POST['submit'])) {
                 if ($prof_info and $prof_uid > 0) {
                     $prof_not_found = false;
                 }
+            }
+            if ($prof_uid) {
+                $prof_name = uid_to_name($prof_uid);
+            } else {
+                $prof_name = '';
             }
             list($code, $cid) = create_course('', $_POST['lang'], $title, '', $departments, $vis, $prof_name, $_POST['password']);
             if ($cid) {

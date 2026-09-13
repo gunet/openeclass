@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fff;
+        stroke-width: 5px;
+      }
+
+      .st0, .st1 {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .st2 {
+        fill: #f98d2f;
+      }
+
+      .st1 {
+        fill: none;
+        stroke-width: 13px;
+      }
+    </style>
+  </defs>
+  <g id="background">
+    <rect class="st2" width="500" height="500" rx="120" ry="120"/>
+  </g>
+  <g id="icon">
+    <g>
+      <rect class="st1" x="98.36" y="164.91" width="64.73" height="49.22"/>
+      <path class="st1" d="M103.68,214.13s-17.74,47-8.87,95.33l79.81,2.22s112.62,64.29,211.5,7.54c0,0,12.41-56.31-49.22-62.07-61.63-5.76-118.38-25.27-106.41-129.47,0,0-55.42-21.73-76.71,37.24"/>
+      <line class="st1" x1="297.61" y1="250.58" x2="282.8" y2="278.86"/>
+      <line class="st1" x1="264.43" y1="235.93" x2="243.76" y2="259.35"/>
+      <line class="st1" x1="235.73" y1="198.31" x2="207.43" y2="211.47"/>
+      <path class="st1" d="M94.81,309.46l-7.54,11.08v45.23h86.46v-19.07s143.66,66.51,224.8-2.22v-27.05l-11.81-2.15"/>
+      <polyline class="st1" points="254.1 144.52 297.61 94.41 346.65 149.84 367.05 129.89 408.73 179.54"/>
+    </g>
+  </g>
+  <g id="stars">
+    <path class="st0" d="M111.91,117.09h0c0-18.32-14.99-33.3-33.3-33.3h0c18.32,0,33.3-14.99,33.3-33.3h0c0,18.32,14.99,33.3,33.3,33.3h0c-18.32,0-33.3,14.99-33.3,33.3Z"/>
+    <path class="st0" d="M406.72,461.47h0c0-18.32-14.99-33.3-33.3-33.3h0c18.32,0,33.3-14.99,33.3-33.3h0c0,18.32,14.99,33.3,33.3,33.3h0c-18.32,0-33.3,14.99-33.3,33.3Z"/>
+  </g>
+</svg>

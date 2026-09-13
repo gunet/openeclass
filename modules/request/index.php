@@ -213,7 +213,7 @@ if (isset($_GET['id'])) {
     $data['can_modify'] = $can_modify;
     $data['can_comment'] = $can_comment;
     $data['commenterName'] = $_SESSION['givenname'] . ' ' . $_SESSION['surname'];
-    $data['commentEditor'] = rich_text_editor('requestComment', 4, 20, '');
+    $data['commentEditor'] = rich_text_editor('requestComment', 4, 20, '', options: array('id' => 'requestComment'));
     $data['comments'] = Database::get()->queryArray('SELECT * FROM request_action
         WHERE request_id = ?d
         ORDER BY ts', $id);

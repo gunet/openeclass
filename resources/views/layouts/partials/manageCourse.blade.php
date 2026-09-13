@@ -1,6 +1,5 @@
-
 <div class="dropdown h-40px" style='z-index:2;'>
-    <button class="btn submitAdminBtnDefault manageCourseBtn float-end d-flex justify-content-center align-items-center gap-2" aria-label="{{ trans('langModifyInfo') }}" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" data-bs-display='static' aria-expanded="false" aria-haspopup="true" aria-expanded="false">
+    <button class="btn submitAdminBtnDefault manageCourseBtn float-end d-flex justify-content-center align-items-center gap-2" aria-label="{{ trans('langModifyInfo') }}" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" data-bs-display='static' aria-expanded="false" aria-haspopup="true">
             <i class="fa-solid fa-gear"></i>
             <span class='hidden-lg hidden-md hidden-xs TextBold'>{{trans('langModifyInfo')}}</span>
             <i class="fa-solid fa-chevron-down"></i>
@@ -86,12 +85,14 @@
                             {{trans('langCoursePrerequisites')}}
                         </a>
                     </li>
+                    @if(get_config('disable_course_widgets') != 1)
                     <li>
                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/course_widgets/index.php?course={{$coursePrivateCode}}">
                             <i class="fa-solid fa-wand-magic-sparkles settings-icons"></i>
                             {{trans('langWidgets')}}
                         </a>
                     </li>
+                    @endif
                     <li>
                         <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0" href="{{ $urlAppend }}modules/lti_consumer/index.php?course={{$coursePrivateCode}}">
                             <i class="fa-solid fa-link settings-icons"></i>
@@ -109,6 +110,3 @@
         </ul>
     </div>
 </div>
-
-
-

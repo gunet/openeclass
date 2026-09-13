@@ -28,9 +28,9 @@
                 <div class="body_container p-lg-5 p-md-3 p-2">
                     <div class='panel panel-info'>
                         <div class='panel-heading'>
-                            <h3 class='mt-2'>
+                            <h2 class='text-heading-h3 mt-2'>
                                 {{ trans('langInstallError') }}!
-                            </h3>
+                            </h2>
                         </div>
                         <div class='panel-body'>
                             <ul class='list-group list-group-flush'>

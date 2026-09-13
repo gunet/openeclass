@@ -152,7 +152,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
         $enableEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : ($BBBEndDate ? 1 : 0);
 
-        $textarea = rich_text_editor('desc', 4, 20, $row->description);
+        $textarea = rich_text_editor('desc', 4, 20, $row->description, options: array('id' => 'desc'));
         $value_title = q($row->title);
         $value_session_users = $row->sessionUsers;
         $external_users = trim($row->external_users ?? '');
@@ -194,9 +194,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $start_session = $start_date->format('d-m-Y H:i');
         $end_date = new DateTime;
         $BBBEndDate = $end_date->format('d-m-Y H:i');
-        $textarea = rich_text_editor('desc', 4, 20, '');
+        $textarea = rich_text_editor('desc', 4, 20, '', options: array('id' => 'desc'));
         $value_title = '';
-        $init_external_users = '';
         if ($tc_type == 'jitsi') {
             $value_session_users = 30; // jitsi recommended value
         } else {
@@ -241,6 +240,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'bbb'
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
             break;
+        default;
+            return;
     }
 
     if (isset($_GET['choice']) and $_GET['choice'] == 'edit') {
@@ -352,8 +353,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                         <input class='mt-0' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
                         <span class='checkmark'></span></label>
                     </span>
-                    <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                    <input class='form-control mt-0 border-start-0' name='BBBEndDate' id='BBBEndDate' type='text' value='$BBBEndDate'".($enableEndDate ? '' : ' disabled').">
+                    <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <input class='form-control mt-0' name='BBBEndDate' id='BBBEndDate' type='text' value='$BBBEndDate'".($enableEndDate ? '' : ' disabled').">
                 </div>
                 <span class='help-block'>".(Session::hasError('BBBEndDate') ? Session::getError('BBBEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBEndHelpBlock")."</span>
             </div>
@@ -430,7 +431,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $tool_content .= "<div class='form-group mt-4'>
                 <label for='select-groups' class='col-sm-12 control-label-notes'>$langParticipants</label>
                 <div class='col-sm-12'>
-                <select name='groups[]' multiple='multiple' class='form-select' id='select-groups'>";
+                <select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
 
         if (empty($r_group) or (count($r_group)>=1 and in_array("0", $r_group))) {
             $tool_content .= "<option value='0' selected><h2>$langAllUsers</h2></option>";
@@ -473,7 +474,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             }
         }
 
-        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+        $tool_content .= "</select>
                 </div>
             </div>";
 
@@ -2191,9 +2192,6 @@ function get_enabled_tc_services() {
     if (get_config('ext_microsoftteams_enabled')) {
         $tc_services[] = 'microsoftteams';
     }
-    /* if (get_config('ext_openmeetings_enabled')) {
-        $tc_services = 'om';
-    } */
     return $tc_services;
 }
 

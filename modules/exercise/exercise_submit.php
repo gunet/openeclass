@@ -26,6 +26,12 @@ require_once 'exercise.lib.php';
 $require_current_course = true;
 $guest_allowed = true;
 
+// Got token and uid params - will skip automatic access control and just check the token
+if (isset($_GET['uid']) and isset($_GET['token']) and isset($_GET['exerciseId'])) {
+    define('COURSE_VISIBILITY_MANUAL_CHECK', true);
+    define('SKIP_DOUBLE_LOGIN_LOCK', true);
+    $got_token = true;
+}
 require_once '../../include/baseTheme.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/attendance/functions.php';
@@ -33,6 +39,33 @@ require_once 'modules/group/group_functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
 require_once 'include/log.class.php';
+require_once 'include/lib/fileUploadLib.inc.php';
+
+// Login the user via token - used when launching the exercise from Safe Exam Browser (SEB)
+if (isset($got_token)) {
+    $uid = intval($_GET['uid']);
+    // consider token valid for 100 sec
+    if (token_validate($course_code . $uid . $_GET['exerciseId'], $_GET['token'], 100)) {
+        $user_info = Database::get()->querySingle("SELECT id, surname, givenname, password,
+                username, status, email, lang, verified_mail, am
+            FROM user WHERE id = ?d", $uid);
+        if ($user_info) {
+            $_SESSION['uid'] = $user_info->id;
+            $_SESSION['uname'] = $user_info->username;
+            $_SESSION['surname'] = $user_info->surname;
+            $_SESSION['givenname'] = $user_info->givenname;
+            $_SESSION['email'] = $user_info->email;
+            $_SESSION['SKIP_DOUBLE_LOGIN_LOCK'] = true;
+            $session->setLoginMethod('eclass');
+        } else {
+            Session::Messages($langMailVerifyNoId, 'alert-warning');
+            redirect_to_home_page();
+        }
+    } else {
+        Session::Messages($langMailVerifyNoId, 'alert-warning');
+        redirect_to_home_page();
+    }
+}
 
 $unit = $unit ?? null;
 $back_url = $unit?
@@ -66,7 +99,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     if (isset($_POST['delete-recording'])) {
         $courseCode = $_GET['course'];
         $eurID = $_GET['eurid'];
-        $delPath = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d 
+        $delPath = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d
                                                     AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $_POST['delete-recording'], $eurID);
         unlink("$webDir/courses/$courseCode/image" . $delPath->path);
         Database::get()->query("DELETE FROM document WHERE id = ?d", $delPath->id);
@@ -78,7 +111,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $file_path = '/' . safe_filename('mp3');
         $filename = 'recording-file.mp3';
         $eurID = $_GET['eurid'];
-        $oldFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d 
+        $oldFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d
                                                     AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $eurID);
 
         if ($oldFile && file_exists("$webDir/courses/$courseCode/image" . $oldFile->path)) {
@@ -123,6 +156,124 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             }
         }
     }
+
+    // File has been uploaded from uppy
+    if (isset($_POST['file_uploaded_done'])) {
+        header('Content-Type: application/json');
+        $exUserRecordId = $_POST['ex_user_record_id'];
+        $oldFileId = $_POST['old_file_id'];
+        $questionID = $_POST['question_id'];
+        $currentUser = $_POST['current_user'];
+        $docInfo = [
+            'filename' => basename(trim($_POST['file_name'] ?? '')),
+            'filepath' => trim($_POST['file_path'] ?? '')
+        ];
+        $checkObj = serialize($docInfo);
+        $arrFileObj = unserialize($checkObj, ['allowed_classes' => false]);
+        if (is_array($arrFileObj) && isset($arrFileObj['filename'], $arrFileObj['filepath']) 
+            && is_string($arrFileObj['filename']) && is_string($arrFileObj['filepath'])) {
+            $userInfo = Database::get()->querySingle("SELECT givenname,surname FROM user WHERE id = ?d", $currentUser);
+            $file_creator = "$userInfo->givenname $userInfo->surname";
+            $file_date = date('Y-m-d G:i:s');
+
+            $doc_inserted = Database::get()->query("INSERT INTO document SET
+                course_id = ?d,
+                subsystem = ?d,
+                subsystem_id = ?d,
+                path = ?s,
+                extra_path = '',
+                filename = ?s,
+                visible = 1,
+                comment = ?s,
+                category = 0,
+                title = ?s,
+                creator = ?s,
+                date = ?s,
+                date_modified = ?s,
+                subject = '',
+                description = '',
+                author = ?s,
+                format = ?s,
+                language = ?s,
+                copyrighted = 0,
+                editable = 0,
+                lock_user_id = ?d",
+                    $course_id, UPLOAD_FILE_QUESTION, $questionID, $arrFileObj['filepath'],
+                    $arrFileObj['filename'], null, null, $file_creator,
+                    $file_date, $file_date, $file_creator, get_file_extension($arrFileObj['filepath']),
+                    $language, $exUserRecordId);
+
+            if ($doc_inserted) { // replace old file
+                Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFileId);
+            }
+
+            echo json_encode(['upload_success' => true, 'filePath' => $arrFileObj['filepath']]);
+        }
+    }
+
+    // File has been removed from uppy
+    if (isset($_POST['file_uploaded_remove'])) {
+        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+        $exId = $_GET['exerciseId'];
+        $qId = $_POST['question_id'];
+        $uId = $_POST['current_user'];
+        $oldfilePath = $_POST['old_file_path'];
+        $oldFileId = $_POST['old_file_id'];
+        $file = "$webDir/courses/$course_code/exercise/$uId/$exId/$qId$oldfilePath";
+        if (file_exists($file)) {
+            unlink($file);
+            Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFileId);
+        } 
+    }
+
+    exit;
+}
+
+// Save uploaded file from uppy - only for users
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['new_upload_file'])) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+    header('Content-Type: application/json');
+    
+    $exercise_id = intval($_GET['exerciseId']);
+    $question_id = intval($_GET['questionId']);
+    $currentUser = intval($_GET['u']);
+    $old_file_path = intval($_GET['oldFilePath']);
+    $filename = $_FILES['new_upload_file']['name'];
+    validateUploadedFile($filename); // check file type
+    $filename = add_ext_on_mime($filename);
+    // File name used in file system and path field
+    $safe_filename = safe_filename(get_file_extension($filename));
+    $dir = "$webDir/courses/$course_code/exercise/$currentUser/$exercise_id/$question_id";
+    if (!file_exists($dir)) {
+        mkdir("$webDir/courses/$course_code/exercise/$currentUser/$exercise_id/$question_id/", 0755, true);
+    } 
+    // else {// delete prev file
+    //     if (is_dir($dir)) {
+    //         $files = scandir($dir);
+    //         foreach ($files as $file) {
+    //             $pfile = '/' . $file; 
+    //             if ($file !== '.' && $file !== '..' && $old_file_path == $pfile) {
+    //                 $filePath = $dir . DIRECTORY_SEPARATOR . $file;
+    //                 if (is_file($filePath)) {
+    //                     unlink($filePath); // Delete the file
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+    $pathfile = "$webDir/courses/$course_code/exercise/$currentUser/$exercise_id/$question_id/$safe_filename";
+    if (move_uploaded_file($_FILES['new_upload_file']['tmp_name'], $pathfile)) {
+        @chmod($pathfile, 0644);
+        $real_filename = $_FILES['new_upload_file']['name'];
+        $filepath = '/' . $safe_filename;
+        $info_file = pathinfo($filename);
+        echo json_encode(['success' => true, 'fileInfo' => $info_file, 'filePath' => $filepath]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to save uploaded file.']);
+    }
+
     exit;
 }
 
@@ -158,12 +309,12 @@ if (isset($_COOKIE['inExercise'])) {
     redirect_to_home_page($back_url);
 }
 
-// Check if an exercise ID exists in the URL
-// and if so it gets the exercise object either by the session (if it exists there)
+// Check if an exercise ID exists in the URL,
+// and if so, it gets the exercise object either by the session (if it exists there)
 // or by initializing it using the exercise ID
 if (isset($_REQUEST['exerciseId'])) {
     $exerciseId = intval($_REQUEST['exerciseId']);
-    // Check if exercise object exists in session
+    // Check if an exercise object exists in session
     if (isset($_SESSION['objExercise'][$exerciseId])) {
         $objExercise = $_SESSION['objExercise'][$exerciseId];
     } else {
@@ -172,8 +323,7 @@ if (isset($_REQUEST['exerciseId'])) {
         // if the specified exercise is disabled (this only applies to students)
         // or doesn't exist, redirect and show error
         if (!$objExercise->read($exerciseId) || (!$is_editor && $objExercise->selectStatus($exerciseId) == 0)) {
-            Session::flash('message', $langExerciseNotFound);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($langExerciseNotFound, 'alert-warning');
             redirect_to_home_page($back_url);
         }
         // saves the object into the session
@@ -186,11 +336,28 @@ if (isset($_REQUEST['exerciseId'])) {
 // check if exercise is `exam` type
 if ($objExercise->isExam()) {
     if (!($is_admin or $is_editor or user_is_registered_to_course($uid, $course_id))) {
-        Session::flash('message', $langExerciseRequireLogin);
-        Session::flash('alert-class', 'alert-warning');
+        Session::Messages($langExerciseRequireLogin, 'alert-warning');
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
         header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
     }
+}
+// check if exercise uses SEB (Safe Exam Browser)
+if (isSebEnabled($_REQUEST['exerciseId']) && $objExercise->isSeb() && !isset($_GET['seb'])) {
+    if (!str_contains($_SERVER['HTTP_USER_AGENT'], 'Open-eClass-Exam')) { // User is NOT using SEB
+        Session::Messages($langSEBInfo1, 'alert-warning');
+        redirect_to_home_page($back_url);
+    }
+}
+
+// Safe Exam Browser intro
+if (isset($_GET['seb'])) {
+    $eid = $objExercise->selectId();
+    $token = token_generate($course_code . $uid . $eid, true);
+    $seb_launch_url = preg_replace('/https/', 'sebs', $urlServer) .
+        "modules/exercise/launch_seb.php?course=$course_code&exerciseId=$eid&uid=$uid&token=$token";
+    view('modules.exercise.seb', [
+        'course_code' => $course_code, 'eid' => $eid, 'seb_launch_url' => $seb_launch_url]);
+    exit;
 }
 
 $pageName = $objExercise->selectTitle();
@@ -216,8 +383,7 @@ if ($objExercise->selectAssignToSpecific() and !$is_editor) {
         }
     }
     if (!$accessible) {
-        Session::flash('message',$langNoAccessPrivilages);
-        Session::flash('alert-class', 'alert-warning');
+        Session::Messages($langNoAccessPrivilages, 'alert-warning');
         redirect_to_home_page($back_url);
     }
 }
@@ -254,6 +420,7 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                 // Replace eurid of recorded audio with new eurid in document table.
                 // Replace recorded audio of old eurid with new eurid in exercise_answer_record table.
                 // It's a special case for oral question type.
+                // Do the same for the eurid of upload file question
                 $old_answers = Database::get()->queryArray("SELECT answer_record_id, answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
                 if (count($old_answers) > 0) {
                     foreach ($old_answers as $old_an) {
@@ -267,11 +434,19 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                         }
                     }
                 }
-                $old_documents = Database::get()->queryArray("SELECT id,lock_user_id FROM document WHERE course_id = ?d 
+                $old_documents = Database::get()->queryArray("SELECT id,lock_user_id FROM document WHERE course_id = ?d
                                                                 AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $eurid);
                 if (count($old_documents) > 0) {
                     foreach ($old_documents as $old_doc) {
                         Database::get()->query("UPDATE document SET lock_user_id = ?d WHERE id = ?d", $new_eurid, $old_doc->id);
+                    }
+                }
+
+                $oldUploadedFiles = Database::get()->queryArray("SELECT id FROM document WHERE course_id = ?d
+                                                                AND subsystem = ?d AND lock_user_id = ?d", $course_id, UPLOAD_FILE_QUESTION, $eurid);
+                if (count($oldUploadedFiles) > 0) {
+                    foreach ($oldUploadedFiles as $old) {
+                        Database::get()->query("UPDATE document SET lock_user_id = ?d WHERE id = ?d", $new_eurid, $old->id);
                     }
                 }
 
@@ -306,8 +481,7 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
             if (isset($_POST['password']) && $password === $_POST['password']) {
                 $_SESSION['password'][$exerciseId][$attempt_value] = 1;
             } else {
-                Session::flash('message',$langWrongPassword);
-                Session::flash('alert-class', 'alert-warning');
+                Session::Messagess($langWrongPassword, 'alert-warning');
                 redirect_to_home_page($back_url);
             }
         }
@@ -320,8 +494,7 @@ $ips = $objExercise->selectIPLock();
 if ($ips && !$is_editor){
     $user_ip = Log::get_client_ip();
     if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
-        Session::flash('message',$langIPHasNoAccess);
-        Session::flash('alert-class', 'alert-warning');
+        Session::Messages($langIPHasNoAccess, 'alert-warning');
         redirect_to_home_page($back_url);
     }
 }
@@ -340,8 +513,7 @@ if (isset($_POST['buttonCancel'])) {
         'eurid' => $eurid ]);
     unset_session_variables_of_questions($eurid, 'cancel_exercise');
     unset_exercise_var($exerciseId);
-    Session::flash('message',$langAttemptWasCanceled);
-    Session::flash('alert-class', 'alert-warning');
+    Session::Messages($langAttemptWasCanceled, 'alert-warning');
     redirect_to_home_page($back_url);
 }
 
@@ -444,7 +616,7 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
                     $('.messages_2').removeClass('d-block').addClass('d-none');
                     document.documentElement.requestFullscreen();
                 });
-                
+
                 $('body').on('contextmenu', function(e) {
                     if ($(this).has('.show.modalExCancelOpen').length) {
                         e.preventDefault();
@@ -478,7 +650,7 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
                 // Detect specific key presses (less reliable for system shortcuts)
                 document.addEventListener('keydown', function(e) {
                     if ((e.ctrlKey && e.key === 'n') || (e.altKey && e.key === 'Tab')) {
-                        showCancelWarning(); 
+                        showCancelWarning();
                     }
                 });
 
@@ -532,7 +704,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                     </div>
                 </div>
             </div>
-            <div class='modal fade modalExCancelOpen' id='cancelExModal' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' role='dialog' 
+            <div class='modal fade modalExCancelOpen' id='cancelExModal' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' role='dialog'
                     aria-labelledby='cancelModalLabel' aria-hidden='true'>
                 <div class='modal-dialog' role='document'>
                     <div class='modal-content'>
@@ -581,8 +753,7 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
     if ($is_editor) {
         // Allow editors to test expired or not yet started exercises, but warn them
         if (!isset($_POST['buttonFinish']) and !$autoSubmit) {
-            Session::flash('message',$langExerciseExpired);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($langExerciseExpired, 'alert-warning');
         }
     } else {
         // if that happens during an active attempt
@@ -616,13 +787,11 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
                 'legend' => $langSubmit,
                 'eurid' => $eurid ]);
             unset_exercise_var($exerciseId);
-            Session::flash('message',$langExerciseExpiredTime);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($langExerciseExpiredTime, 'alert-warning');
             redirect_to_home_page($back_url);
         } else {
             unset_exercise_var($exerciseId);
-            Session::flash('message',$langExerciseExpired);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($langExerciseExpired, 'alert-warning');
             redirect_to_home_page($back_url);
         }
     }
@@ -694,8 +863,7 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
     // Check if allowed number of attempts exceeded and if so redirect
     if ($exerciseAllowedAttempts > 0 && $attempt >= $exerciseAllowedAttempts) {
         unset_exercise_var($exerciseId);
-        Session::flash('message',$langExerciseMaxAttemptsReached);
-        Session::flash('alert-class', 'alert-warning');
+        Session::Messages($langExerciseMaxAttemptsReached, 'alert-warning');
         redirect_to_home_page($back_url);
     } else {
         if ($exerciseAllowedAttempts > 0 && !isset($_POST['acceptAttempt'])) {
@@ -735,8 +903,7 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
             'legend' => $langStart,
             'eurid' => $eurid ]);
         if ($exerciseType == ONE_WAY_TYPE) {
-            Session::flash('message',$langWarnOneWayExercise);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($langWarnOneWayExercise, 'alert-warning');
         }
     }
 }
@@ -822,15 +989,12 @@ if (isset($_POST['formSent'])) {
         unset_exercise_var($exerciseId);
         // if time expired set flashdata
         if ($time_expired) {
-            Session::flash('message',$langExerciseExpiredTime);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($langExerciseExpiredTime, 'alert-warning');
         } else {
             if (!empty($exerciseFeedback)) {
-                Session::flash('message', $exerciseFeedback);
-                Session::flash('alert-class', 'alert-success');
+                Session::Messages($exerciseFeedback, 'alert-success');
             } else{
-                Session::flash('message', $langExerciseCompleted);
-                Session::flash('alert-class', 'alert-success');
+                Session::Messages($langExerciseCompleted, 'alert-success');
             }
         }
         if ($unit) {
@@ -883,7 +1047,7 @@ if (isset($timeleft)) { // time remaining
 
 if (!empty($exerciseDescription)) { // description
     $tool_content .= "<div class='col-sm-12 mb-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
-    <div class='card-header border-0 d-flex justify-content-between align-items-center'><h3>$langDescription</h3></div>";
+    <div class='card-header border-0 d-flex justify-content-between align-items-center'><h2 class='text-heading-h3'>$langDescription</h2></div>";
     $tool_content .= "<div class='card-body'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
     $tool_content .= "</div></div>";
 }
@@ -934,7 +1098,7 @@ foreach ($questionList as $k => $q_id) {
                 }
             }
         }
-    } elseif (($t_question->selectType() == FREE_TEXT or $t_question->selectType() == ORAL)
+    } elseif (($t_question->selectType() == FREE_TEXT or $t_question->selectType() == ORAL or $t_question->selectType() == UPLOAD_FILE)
         and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
         $answered = true;
     } elseif (($t_question->selectType() == MATCHING or $t_question->selectType() == FILL_IN_FROM_PREDEFINED_ANSWERS) and array_key_exists($q_id, $exerciseResult)) {
@@ -1096,10 +1260,83 @@ if ($questionList) {
         $questionId = $questionList[$questionNumber];
 
         if ($exerciseType == MULTIPLE_PAGE_TYPE) {
+
+            // Accessibility
+            $head_content .= "
+            <script type='text/javascript'>
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    const tabs = document.querySelectorAll('.exercise-tablist .question-tab');
+
+                    tabs.forEach(tab => {
+                        if (tab.getAttribute('aria-selected') === 'true') {
+                            tab.setAttribute('tabindex', '0');
+                        } else {
+                            tab.setAttribute('tabindex', '-1');
+                        }
+                    });
+
+                    // Function to activate tab
+                    function activateTabs(currentTabs) {
+                        currentTabs.forEach(t => {
+                            t.setAttribute('aria-selected', 'false');
+                            t.setAttribute('tabindex', '-1');
+                            t.classList.remove('tab-active');
+                        });
+                    }
+
+                    tabs.forEach((tab) => {
+                        tab.addEventListener('keydown', (e) => {
+                            const currentTabs = document.querySelectorAll('.exercise-tablist .question-tab');
+                            const currentIndex = Array.prototype.indexOf.call(currentTabs, document.activeElement);
+                            if (currentIndex === -1) return;
+                            if (e.key === 'ArrowRight') {
+                                e.preventDefault();
+                                const nextIndex = (currentIndex + 1) % currentTabs.length;
+                                activateTabs(currentTabs);
+                                currentTabs[nextIndex].setAttribute('aria-selected', 'true');
+                                currentTabs[nextIndex].setAttribute('tabindex', '0');
+                                currentTabs[nextIndex].classList.add('tab-active');
+                                currentTabs[nextIndex].focus();
+                            } else if (e.key === 'ArrowLeft') {
+                                e.preventDefault();
+                                const prevIndex = (currentIndex - 1 + currentTabs.length) % currentTabs.length;
+                                activateTabs(currentTabs);
+                                currentTabs[prevIndex].setAttribute('aria-selected', 'true');
+                                currentTabs[prevIndex].setAttribute('tabindex', '0');
+                                currentTabs[prevIndex].classList.add('tab-active');
+                                currentTabs[prevIndex].focus();
+                            }
+                        });
+                    });
+                });
+
+                $(function() {
+                    $('.question-tab[data-qid=$questionNumber]').focus();
+                    $('.question-tab').on('click keydown', function (e) {
+                        if (e.type === 'click' || (e.type === 'keydown' && e.key === 'Enter')) {
+                            e.preventDefault();
+                            $('#hidden_qid').prop('disabled', false);
+                            var qid = $(this).data('qid');
+                            $('#hidden_qid').val(qid);
+                            document.getElementById('hidden_qid').click();
+                        }
+                    });
+                    $(document).click(function(event) {
+                        if (!$(event.target).hasClass('question-tab')) {
+                            $('#hidden_qid').prop('disabled', true);
+                        }
+                    });
+                });
+            </script>";
+
             // display question numbering buttons
             $tool_content .= "<div class='card panelCard card-transparent p-0 border-0'>";
             $tool_content .= "<div class='card-body p-0 border-0'>";
-            $tool_content .= "<div class='d-flex justify-content-center p-0 flex-wrap gap-2 border-0'>";
+            $tool_content .= "<input type='hidden' id='hidden_qid' name='q_id'>";
+            $tool_content .= "<ul class='nav nav-tabs border-0 exercise-tablist p-2' role='tablist'>";
+            $tab_counter = 1;
+            $ariaSelected = '';
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {
@@ -1114,12 +1351,19 @@ if ($questionList) {
                 } else {
                     $extra_style = '';
                 }
+                if ($tab_counter == 1) {
+                    $ariaSelected = 'true';
+                } else {
+                    $ariaSelected = 'false';
+                }
+                $ariaLabelTitle = q($langQuestion) . ' ' . $k . ' ' . $title;
                 $tool_content .= "
-                    <div class='p-2' style='display: inline-block; margin-right: 10px;'>
-                        <input class='btn $class' $extra_style type='submit' name='q_id' id='q_num$k' value='$k' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$title'>
-                    </div>";
+                    <li class='nav-item' style='display: inline-block; margin-right: 10px; margin-bottom: 10px;' data-bs-toggle='tooltip' data-bs-placement='top' title='$title'>
+                        <a id='tab-link-{$q_id}' aria-controls='qPanel{$q_id}' aria-selected='$ariaSelected' class='btn $class nav-link question-tab' $extra_style type='submit' data-qid='$k' data-bs-toggle='tab' role='tab' aria-label='$ariaLabelTitle'>$k</a>
+                    </li>";
+                $tab_counter++;
             }
-            $tool_content .= "</div></div></div>";
+            $tool_content .= "</ul></div></div>";
         }
 
         $question = $questions[$questionList[$questionNumber]];
@@ -1135,7 +1379,7 @@ if ($questionList) {
 
 // "Temporary save" button
 if ($uid and $exerciseTempSave) {
-    $tempSaveButton = "<input class='btn submitAdminBtn blockUI' type='submit' name='buttonSave' value='$langTemporarySave'>";
+    $tempSaveButton = "<button class='btn submitAdminBtn blockUI' type='submit' name='buttonSave'>$langTemporarySave</button>";
 } else {
     $tempSaveButton = '';
 }
@@ -1188,10 +1432,12 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
 $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap' style='margin-top:100px;'>";
 
 // "Cancel" button
-$tool_content .= "<input class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
+if (!isset($_SESSION['safe_exam_browser_view'])) {
+    $tool_content .= "<button class='btn btn-default' type='submit' name='buttonCancel' id='cancelButton'>$langCancel</button>";
+}
 
 // "Submit" button
-$tool_content .= "<input class='btn successAdminBtn blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";
+$tool_content .= "<button class='btn successAdminBtn blockUI' type='submit' name='buttonFinish'>$langExerciseFinalSubmit</button>";
 if ($exerciseType != SINGLE_PAGE_TYPE) {
     $tool_content .= "<input type='hidden' name='questionId' value='$questionId'>";
 }
@@ -1212,8 +1458,7 @@ if ($exerciseType == MULTIPLE_PAGE_TYPE or $exerciseType == ONE_WAY_TYPE) {
 $attempt = Database::get()->querySingle('SELECT eurid FROM exercise_user_record
         WHERE eurid = ?d AND attempt_status = ?d', $eurid, ATTEMPT_ACTIVE);
 if (!$attempt && !$is_editor) {
-    Session::flash('message',$langExerciseAttemptGone);
-    Session::flash('alert-class', 'alert-danger');
+    Session::Messages($langExerciseAttemptGone, 'alert-danger');
     redirect_to_home_page($back_url);
 }
 
@@ -1292,7 +1537,7 @@ function unset_session_variables_of_questions($eurid, $type = '') {
     $question_ids = [];
     $typeQuestion = [];
     $qids = Database::get()->queryArray("SELECT DISTINCT exercise_question.type,exercise_answer_record.question_id
-                                         FROM exercise_answer_record 
+                                         FROM exercise_answer_record
                                          JOIN exercise_question ON exercise_question.id=exercise_answer_record.question_id
                                          WHERE exercise_answer_record.eurid = ?d", $eurid);
 

@@ -3,13 +3,10 @@
 @section('content')
 
 
-<div class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     
                 <div class="row">
 
@@ -33,7 +30,7 @@
                         @foreach($resource_info as $r)
                             <div class="card panelCard border-card-left-default px-lg-4 py-lg-3">
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                    <h3 class='mb-0'>{{ $r->title }}</h3>
+                                    <h2 class='text-heading-h3 mb-0'>{{ $r->title }}</h2>
                                     @if($is_consultant)
                                         <a class='link-color' href="{{ $urlAppend }}modules/session/edit_resource.php?course={{ $course_code }}&session={{ $sessionID }}&resource_id={{ $resource_id }}">
                                             {{ trans('langModify')}}
@@ -160,13 +157,13 @@
                     <div class="col-12 mt-4 @if($is_consultant && isset($_GET['upload_for_user'])) d-none @endif">
                         <div class="card panelCard border-card-left-default px-lg-4 py-lg-3">
                             <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                <h3 class='mb-0'>
+                                <h2 class='text-heading-h3 mb-0'>
                                     @if($is_consultant or $is_course_reviewer)
                                         {{ trans('langDocSender') }}
                                     @else
                                         {{ trans('langMyUploadedFiles') }}
                                     @endif
-                                </h3>
+                                </h2>
                             </div>
                             <div class='card-body'>
                                 @if(!$is_consultant && !$is_course_reviewer && $is_criterion_completion)
@@ -369,10 +366,10 @@
                     @endif
 
                 </div>
-            </div>
+            </main>
         </div>
     </div>
-</div>
+
 
 <div class='modal fade' id='doUserAward' tabindex='-1' aria-labelledby='doUserAwardLabel' aria-hidden='true'>
     <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&id={{ $sessionID }}&resource_id={{ $resource_id }}&file_id={{ $file_id }}">

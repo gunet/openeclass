@@ -77,6 +77,7 @@ if (!isset($_GET['pdf']) && $is_course_reviewer) {
         array('title' => $langDumpPDF,
             'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$uInfo&amp;path_id=$path_id&amp;pdf=true;",
             'icon' => 'fa-file-pdf',
+            'link-attrs' => "target='_blank'",
             'level' => 'primary-label'),
         array('title' => $langDumpExcel,
             'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$uInfo&amp;path_id=$path_id&amp;xls=true;",
@@ -157,7 +158,7 @@ $maxDeep = 1; // used to compute colspan of <td> cells - only single level depth
 
 $toolName = $LPname;
 
-$tool_content .= "<h3>" . q(uid_to_name($uInfo)) . "</h3>";
+$tool_content .= "<h2 class='text-heading-h3'>" . q(uid_to_name($uInfo)) . "</h2>";
 
 $tool_content .= "<div class='table-responsive'>
     <table class='table-default'>
@@ -260,7 +261,7 @@ foreach ($elementList as $module) {
     $tool_content .= "<td style='width:15%;'>" . disp_lesson_status($module['lesson_status']) . "</td>";
     //-- progression
     $displayScore = ($score === 0 && $module['raw'] <= 0 && $module['scoreMax'] <= 0) ? "-" : $score . "%" ;
-    $displayProgress = ($progress === 0 && is_null($module['progress_measure'])) ? "-" : disp_progress_bar($progress, 1) ;
+    $displayProgress = ((int)$progress === 0 && (is_null($module['progress_measure']) || $module['progress_measure'] <= 0)) ? "-" : disp_progress_bar($progress, 1);
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
         $tool_content .= "<td>" . $displayProgress . "</td><td class='text-end'>" . $displayScore . "</td>";
@@ -302,7 +303,9 @@ if ($moduleNbT == 0) {
     if (is_numeric($nbrOfVisibleModules)) {
         $bestProgress = @round($globalProg[$bestAttempt] / $nbrOfVisibleModules);
     }
-    if ($totalProgressMeasure) {
+    if ($bestProgress) {
+        $lpCombinedProgress = $bestProgress;
+    } else if ($totalProgressMeasure) {
         $lpCombinedProgress = $totalProgressMeasure;
     } else {
         $lpCombinedProgress = get_learnPath_combined_progress($path_id, $uInfo);
@@ -315,14 +318,14 @@ if ($moduleNbT == 0) {
                         <th class='ps-1' colspan='" . ($maxDeep + 4) . "'>" . ($totalTime != "0000:00:00" ? $langTotal : '&nbsp;') . "</></th>
                         <th><small>" . ($totalTime != "0000:00:00" ? $totalTime : '&nbsp;') . "</small></th>
                         <th>&nbsp;</th>
-                        <th class='ms-1 p-2'>" . disp_progress_bar($lpCombinedProgress, 1) . "</th>
+                        <th class='ms-1 p-2'>" . (($lpCombinedProgress <= 0) ? "-" : disp_progress_bar($lpCombinedProgress, 1)) . "</th>
                         <th class='ms-1 p-2 text-end'>$globalScoreDisplay</th>
                     </tr>";
     $data[] = [];
     if ($totalTime != "0000:00:00") {
         $data[] = [ $langTimeInLearnPath, $totalTime ];
     }
-    $data[] = [ $langTotalPercentCompleteness, $lpCombinedProgress . "%" ];
+    $data[] = [ $langTotalPercentCompleteness, (($lpCombinedProgress <= 0) ? "-" : $lpCombinedProgress . "%")];
     $data[] = [ $langMaxScore, $globalScoreDisplay];
 }
 $tool_content .= "</table></div>";
@@ -352,75 +355,88 @@ if ($is_course_reviewer) {
         exit;
 
     } else if (isset($_GET['pdf'])) {
-        $pdf_content = "
-            <!DOCTYPE html>
-            <html lang='el'>
-            <head>
-              <meta charset='utf-8'>
-              <title>" . q("$currentCourseName - $langTracking") . "</title>
-              <style>
-                * { font-family: 'opensans'; }
-                body { font-family: 'opensans'; font-size: 10pt; }
-                small, .small { font-size: 8pt; }
-                h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-                h1 { font-size: 16pt; }
-                h2 { font-size: 12pt; border-bottom: 1px solid black; }
-                h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
-                th { text-align: left; border-bottom: 1px solid #999; }
-                td { text-align: left; }
-              </style>
-            </head>
-            <body>
-            <h2>" . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-            <h2>" . q($LPname) . "</h2>";
+        $pdf_title = "$course_code learning_path_user_report";
+        $course_title = q("$currentCourseName - $langTracking");
+        $module_type_title = q($LPname);
+        html_to_pdf($pdf_title, $course_title, $module_type_title);
+        
+        
+        // $pdf_content = "
+        //     <!DOCTYPE html>
+        //     <html lang='el'>
+        //     <head>
+        //       <meta charset='utf-8'>
+        //       <title>" . q("$currentCourseName - $langTracking") . "</title>
+        //       <style>
+        //         * { font-family: 'opensans'; }
+        //         body { font-family: 'opensans'; font-size: 10pt; }
+        //         small, .small { font-size: 8pt; }
+        //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+        //         h1 { font-size: 16pt; }
+        //         h2 { font-size: 12pt; border-bottom: 1px solid black; }
+        //         h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+        //         th { text-align: left; border-bottom: 1px solid #999; }
+        //         td { text-align: left; }
+        //       </style>
+        //     </head>
+        //     <body>
+        //     <h2>" . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+        //     <h2>" . q($LPname) . "</h2>";
 
-        $pdf_content .= $tool_content;
-        $pdf_content .= "</body></html>";
+        // $pdf_content .= $tool_content;
+        // $pdf_content .= "</body></html>";
 
-        $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-        $fontDirs = $defaultConfig['fontDir'];
-        $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-        $fontData = $defaultFontConfig['fontdata'];
+        // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+        // $fontDirs = $defaultConfig['fontDir'];
+        // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+        // $fontData = $defaultFontConfig['fontdata'];
 
-        $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-        $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-        $mpdf = new Mpdf\Mpdf([
-            'margin_top' => $image_height_header+15,     // mm
-            'margin_bottom' => $image_height_footer+15,  // mm
-            'tempDir' => _MPDF_TEMP_PATH,
-            'fontDir' => array_merge($fontDirs, [$webDir . '/template/modern/fonts']),
-            'fontdata' => $fontData + [
-                    'opensans' => [
-                        'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                        'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                        'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                        'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                    ],
-                    'roboto' => [
-                        'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                        'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-                    ]
-                ]
-        ]);
+        // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+        // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+        // // for old courses
+        // if ($image_height_header > 50) {
+        //     $image_height_header = 20;
+        // }
+        // if ($image_height_footer > 50) {
+        //     $image_height_footer = 15;
+        // }
+        // $mpdf = new Mpdf\Mpdf([
+        //     'margin_top' => $image_height_header + 20,     // mm
+        //     'margin_bottom' => $image_height_footer + 10,  // mm
+        //     'tempDir' => _MPDF_TEMP_PATH,
+        //     'fontDir' => array_merge($fontDirs, [$webDir . '/template/modern/fonts']),
+        //     'fontdata' => $fontData + [
+        //             'opensans' => [
+        //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+        //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+        //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+        //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+        //             ],
+        //             'roboto' => [
+        //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+        //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+        //             ]
+        //         ]
+        // ]);
 
 
-        $mpdf->SetHTMLHeader(get_platform_logo());
-        $footerHtml = '
-        <div>
-            <table width="100%" style="border: none;">
-                <tr>
-                    <td style="text-align: left;">{DATE j-n-Y}</td>
-                    <td style="text-align: right;">{PAGENO} / {nb}</td>
-                </tr>
-            </table>
-        </div>
-        ' . get_platform_logo('','footer') . '';
-        $mpdf->SetHTMLFooter($footerHtml);
-        $mpdf->SetCreator(course_id_to_prof($course_id));
-        $mpdf->SetAuthor(course_id_to_prof($course_id));
-        $mpdf->WriteHTML($pdf_content);
-        $mpdf->Output("$course_code learning_path_user_report.pdf", 'I'); // 'D' or 'I' for download / inline display
-        exit;
+        // $mpdf->SetHTMLHeader(get_platform_logo());
+        // $footerHtml = '
+        // <div>
+        //     <table width="100%" style="border: none;">
+        //         <tr>
+        //             <td style="text-align: left;">{DATE j-n-Y}</td>
+        //             <td style="text-align: right;">{PAGENO} / {nb}</td>
+        //         </tr>
+        //     </table>
+        // </div>
+        // ' . get_platform_logo('','footer') . '';
+        // $mpdf->SetHTMLFooter($footerHtml);
+        // $mpdf->SetCreator(course_id_to_prof($course_id));
+        // $mpdf->SetAuthor(course_id_to_prof($course_id));
+        // $mpdf->WriteHTML($pdf_content);
+        // $mpdf->Output("$course_code learning_path_user_report.pdf", 'I'); // 'D' or 'I' for download / inline display
+        // exit;
     }
 }
 

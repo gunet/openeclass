@@ -25,11 +25,11 @@
                                 <div class="row row-main">
                                     <div class="col-md-12 add-gutter">
                                         <div class='col-sm-12 text-center'>
-                                            <h3 class='mt-3'>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης <strong>Open eClass</strong> δεν λειτουργεί.</h3>
+                                            <h2 class='text-heading-h3 mt-3'>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης <strong>Open eClass</strong> δεν λειτουργεί.</h2>
                                             <div class='col-12 col-md-10 m-auto d-block mt-3'>
                                                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
                                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                        <h3>Πιθανοί λόγοι:</h3>
+                                                        <h2 class='text-heading-h3'>Πιθανοί λόγοι:</h2>
                                                     </div>
                                                     <div class='card-body'>
                                                         <ul class='list-group list-group-flush'>

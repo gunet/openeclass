@@ -18,6 +18,8 @@
  *
  */
 
+require_once 'modules/admin/tenant_functions.php';
+
 /**
  * Eclass Hierarchy Coordinating Object.
  *
@@ -329,16 +331,89 @@ class Hierarchy {
 
     /**
      * Compile an array with the root nodes (nodes of 0 depth).
+     * When a tenant restriction is active, only the tenant's root node and tenant independent root nodes are returned.
      *
      * @return array
      */
     public function buildRootsArray() {
-        $roots = array();
-        $cb = function($row) use (&$roots) {
-            $roots[] = $row;
+        $roots = [];
+        $tenantRoot = $this->getTenantRoot();
+
+        // Fetch department ids that belong to tenants
+        $tenantDeptIds = Database::get()->queryArray("SELECT department_id FROM tenant");
+
+        // Convert array of objects to array of ids
+        $tenantDeptIds = array_map(function($obj) {
+            return $obj->department_id;
+        }, $tenantDeptIds);
+
+        $cb = function($row) use (&$roots, $tenantRoot, $tenantDeptIds) {
+            // Include root nodes that don't belong to any tenant
+            $isTenantIndependentRootNode = !in_array($row->id, $tenantDeptIds);
+
+            if (!$tenantRoot or $isTenantIndependentRootNode or ($row->lft >= $tenantRoot->lft and $row->rgt <= $tenantRoot->rgt)) {
+                $roots[] = $row;
+            }
         };
         $this->getNeighbourNodesByLft(1, $cb);
         return $roots;
+    }
+
+    /**
+     * Get the root node for the currently-active tenant, if any
+     * Power users / admins can see all roots in the hierarchy and aren't bound by tenant restriction
+     *
+     * @return object|null
+     */
+    public function getTenantRoot() {
+        global $uid, $is_power_user;
+
+        $tenant = getCurrentTenant();
+        if ($tenant and !$is_power_user) {
+            $root = Database::get()->querySingle('SELECT lft, rgt
+                FROM hierarchy JOIN tenant ON department_id = hierarchy.id
+                WHERE tenant.id = ?d', $tenant->id);
+            if ($root) {
+                return $root;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get all the nodes of the currently-active tenant, if any
+     *
+     * @return array
+     */
+    public function getTenantNodes($tenant_id = null)
+    {
+        $tenant = $tenant_id ? getTenantById($tenant_id) : getCurrentTenant();
+
+        if (!$tenant) {
+            return [];
+        }
+
+        $tenantNodes = Database::get()->queryArray(
+            'SELECT id, name, lft, rgt FROM hierarchy WHERE lft >= ?d AND rgt <= ?d',
+            $tenant->lft,
+            $tenant->rgt
+        );
+
+        return $tenantNodes;
+    }
+
+    public function getTenantChildren($tenant_id = null)
+    {
+        $tenant = $tenant_id ? getTenantById($tenant_id) : getCurrentTenant();
+
+        if (!$tenant) {
+            return [];
+        }
+
+        $tenantChildren = Database::get()->queryArray('SELECT id, name, lft, rgt FROM hierarchy WHERE lft > ?d AND rgt < ?d', $tenant->lft, $tenant->rgt);
+
+        return $tenantChildren;
     }
 
     /**
@@ -445,7 +520,7 @@ class Hierarchy {
      * @return string $js              - The returned JS code
      */
     private function buildJSNodePicker($options) {
-        global $urlAppend, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
+        global $urlServer, $urlAppend, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
 
         $params = $options['params'];
         $offset = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0; // The number of the parents that the editing child already belongs to (mainly for edit forms)
@@ -529,7 +604,8 @@ $(document).ready(function() {
                 "name" : "proton",
                 "dots" : true,
                 "icons" : false
-            }
+            },
+            "force_text": true
         },
         "sort" : function (a, b) {
             priorityA = this.get_node(a).li_attr.tabindex;
@@ -638,7 +714,10 @@ jContent;
 
             $html .= '<input id="dialog-set-key" type="hidden" ' . $params . ' value="' . $defs[0] . '" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#' . $defs[0] . '\', true, null);' : '';
-            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . js_escape($def) . '" />';
+            $html .= '<input class="form-control" id="dialog-set-value" type="text" '
+                        . 'onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" '
+                        . 'onkeydown="if(event.key === \'Enter\'){ event.preventDefault(); ' . $onclick . ' $( \'#treeModal\' ).modal(\'show\'); }" '
+                        . 'value="' . js_escape($def) . '" />';
         }
 
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
@@ -653,8 +732,8 @@ jContent;
                     <div id="js-tree"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>
                     <button type="button" class="btn submitAdminBtn ms-1" id="treeModalSelect">' . $langSelect . '</button>
+                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>
                 </div>
             </div>
         </div></div>';
@@ -718,7 +797,10 @@ jContent;
 
             $html .= '<input id="dialog-set-key" type="hidden" ' . $params . ' value="' . getIndirectReference($defs[0]) . '" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#' . getIndirectReference($defs[0]) . '\', true, null);' : '';
-            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . js_escape($def) . '" />&nbsp;';
+            $html .= '<input class="form-control" id="dialog-set-value" type="text" '
+                        . 'onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" '
+                        . 'onkeydown="if(event.key === \'Enter\'){ event.preventDefault(); ' . $onclick . ' $( \'#treeModal\' ).modal(\'show\'); }" '
+                        . 'value="' . js_escape($def) . '" />&nbsp;';
         }
 
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
@@ -733,8 +815,8 @@ jContent;
                     <div id="js-tree"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>
                     <button type="button" class="btn submitAdminBtn ms-1" id="treeModalSelect">' . $langSelect . '</button>
+                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>
                 </div>
             </div>
         </div></div>';
@@ -883,7 +965,7 @@ jContent;
      * @param  string  $href      - If provided (and not left empty or null), then the breadcrump is clickable towards the provided href with the node's id appended to it
      * @return string  $ret       - The return HTML output
      */
-    public function getFullPath($id, $skipfirst = true, $href = '') {
+    public function getFullPath($id, $skipfirst = true, $href = '', $accessibility_on = false) {
         $ret = "";
 
         if ($id === null || intval($id) <= 0) {
@@ -906,12 +988,16 @@ jContent;
             }
 
             $ret .= ($c == 0) ? '' : '» ';
-            $ret .= (empty($href)) ? self::unserializeLangField($parent->name) . ' ' : "<a href='" . $href . $parent->id . "'>" . self::unserializeLangField($parent->name) . "</a> ";
+            $ret .= (empty($href)) ? q(self::unserializeLangField($parent->name)) . ' ' : "<a href='" . $href . $parent->id . "'>" . q(self::unserializeLangField($parent->name)) . "</a> ";
             $c++;
         }
 
         $ret .= ($c == 0) ? '' : '» ';
-        $ret .= self::unserializeLangField($node->name) . ' ';
+        if ($c > 0 && $accessibility_on) {
+            $ret .= "<span aria-current='" . q(self::unserializeLangField($node->name)) ."'>".q(self::unserializeLangField($node->name)) . ' '."</span>";
+        } else {
+            $ret .= q(self::unserializeLangField($node->name)) . ' ';
+        }
 
         return $ret;
     }
@@ -986,18 +1072,13 @@ jContent;
     public function buildSubtrees($nodes, $allnodes = array()) {
         $subs = array();
         $nodelfts = array();
-        $ids = '';
-
 
         if (count($nodes) <= 0) {
             return $subs;
         }
 
-        foreach ($nodes as $key => $id) {
-            $ids .= $id . ',';
-        }
-        // remove last ',' from $ids
-        $q = substr($ids, 0, -1);
+        // expect each node id as int
+        $q = implode(',', array_map('intval', $nodes));
 
         Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
@@ -1036,17 +1117,13 @@ jContent;
     public function buildSubtreesFull($nodes, $allnodes = array()) {
         $subs = array();
         $nodelfts = array();
-        $ids = '';
 
         if (count($nodes) <= 0) {
             return $subs;
         }
 
-        foreach ($nodes as $key => $id) {
-            $ids .= $id . ',';
-        }
-        // remove last ',' from $ids
-        $q = substr($ids, 0, -1);
+        // expect each node id as int
+        $q = implode(',', array_map('intval', $nodes));
 
         Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
@@ -1096,6 +1173,9 @@ jContent;
      * @return string   $ret           - The returned HTML output
      */
     public function buildNodesNavigationHtml($nodes, $url, $countCallback = null, $options = array('showEmpty' => true, 'respectVisibility' => true), $subtrees = array()) {
+        if (!isset($options['textIfEmpty'])) {
+            $options['textIfEmpty'] = false;
+        }
         global $langAvCours, $langAvCourses, $urlServer;
         $ret = '';
 
@@ -1173,12 +1253,13 @@ jContent;
                         $f_img = "<img src='$faq_img_path' style='width:80px; height:80px; object-fit:cover; border-radius: 5px;' alt='$faqulty_sql->name'>";
                     }
 
-                    $ret .= "<li class='list-group-item element'>
+                    $ret .= "<li class='list-group-item element category-element'>
                                 <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                     <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                        $f_img
-                                        <a class='TextBold' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
-                                $ret .= (!empty($code)) ? "<span>(" . q($code) . ")</span>" : '';
+                                        $f_img ";
+                    $icon = "<div class='d-flex justify-content-center align-items-center gap-3' style='min-width: 30px;'><i class='fa-solid fa-folder-tree fa-lg'></i></div>";
+                    $ret .= ($options['textIfEmpty'] && $count == 0) ? "<span class='TextBold d-flex gap-3'>$icon " . q($name) . "</span>" : "<a class='TextBold d-flex gap-3' href='$url.php?fc=" . $id . "'>$icon " . q($name) . "</a>";
+                    $ret .= (!empty($code)) ? "<span>(" . q($code) . ")</span>" : "";
                             $ret.="</div>";
                             $ret .= "<div class='vsmall-text text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>
                                 </div>";
@@ -1300,26 +1381,55 @@ jContent;
      * @return boolean $allow
      */
     public function checkVisibilityRestrictions($nodeId, $nodeVisibility, $options = array('respectVisibility' => true)) {
-        global $uid;
+        global $uid, $is_admin, $is_departmentmanage_user;
         $allow = true;
 
         // check access restrictions
-        if ($options['respectVisibility'] && ($uid != 1) && $nodeVisibility != NODE_OPEN) {
-            // hide if anonymous user or eponymous but node is hidden
-            if ($uid < 1 || $nodeVisibility == NODE_CLOSED) {
+        if ($options['respectVisibility'] && (!$is_admin) && $nodeVisibility != NODE_OPEN) {
+            // hide if anonymous user or eponymous but node is hidden and user is not a deparment manage user
+            if ($uid < 1 || ($nodeVisibility == NODE_CLOSED && !$is_departmentmanage_user)) {
                 $allow = false;
             } else {
                 // for eponymous users check subscription status
                 require_once('include/lib/user.class.php');
                 $user = new User();
                 $depIds = $user->getDepartmentIds($uid);
-                if (!in_array($nodeId, $depIds)) {
+                $nodeBelongsToTenant = $this->checkIfNodeBelongsToTenant($nodeId);
+
+                if (!in_array($nodeId, $depIds) && !$nodeBelongsToTenant) {
                     $allow = false;
                 }
             }
         }
 
         return $allow;
+    }
+
+    /**
+     * Check if a node belongs to the current tenant.
+     *
+     * @param  int     $nodeId
+     * @return boolean
+    */
+    public function checkIfNodeBelongsToTenant($nodeId) {
+        $tenantRoot = getCurrentTenant();
+
+        if (!$tenantRoot) {
+            return false;
+        }
+
+        $tenantNodes = $this->getTenantNodes();
+        $node = Database::get()->querySingle("SELECT id, name, lft, rgt FROM hierarchy WHERE id = ?d", $nodeId);
+
+        foreach ($tenantNodes as $tenantNode) {
+            if ($tenantNode->id === $node->id) {
+                return true;
+            }
+
+            continue;
+        }
+
+        return false;
     }
 
 }

@@ -60,13 +60,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
-        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -130,14 +127,14 @@
 
                                                 <div class="col-lg-6 col-12">
                                                     <div class="input-group mb-4">
-                                                        <span class="input-group-text h-40px input-border-color bg-input-default border-end-0" id="basic-addon1"><i class='fa-regular fa-calendar'></i></span>
-                                                        <input type="text" class="form-control mt-0 border-start-0" id='unitdurationfrom' name='unitdurationfrom' value='{{ $start_week }}' aria-label="{{ trans('langStart') }}" aria-describedby="basic-addon1">
+                                                        <span class="add-on" id="basic-addon1"><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <input type="text" class="form-control mt-0" id='unitdurationfrom' name='unitdurationfrom' value='{{ $start_week }}' aria-label="{{ trans('langStart') }}" aria-describedby="basic-addon1">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-12 mt-lg-0 mt-4">
                                                     <div class="input-group mb-4">
-                                                        <span class="input-group-text h-40px input-border-color bg-input-default border-end-0" id="basic-addon2"><i class='fa-regular fa-calendar'></i></span>
-                                                        <input type="text" class="form-control mt-0 border-start-0" id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}' aria-label="{{ trans('langEnd') }}" aria-describedby="basic-addon2">
+                                                        <span class="add-on" id="basic-addon2"><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <input type="text" class="form-control mt-0" id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}' aria-label="{{ trans('langEnd') }}" aria-describedby="basic-addon2">
                                                     </div>
                                                 </div>
                                             </div>
@@ -222,9 +219,8 @@
                     </div>
 
                 </div>
-            </div>
+            </main>
         </div>
 
     </div>
-</div>
 @endsection

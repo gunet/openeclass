@@ -25,7 +25,7 @@
 
 $require_departmentmanage_user = true;
 $require_help = true;
-$helpTopic = 'users_administration';
+$helpTopic = 'course_administration';
 $helpSubTopic = 'course_search';
 
 

@@ -232,17 +232,32 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
         echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
      }
 
-    echo "
-     <script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>
-     
-     <title>$langExercice</title>" . $head_content ."
- </head>
+echo "<script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>";
+echo "<title>$langExercice</title>" . $head_content;
+echo "<script type='text/javascript'>
+    window.MathJax = {
+            loader: {
+                paths: {
+                    '@mathjax': '{$urlAppend}resources/fonts',
+                    'mathjax-newcm': '{$urlAppend}resources/fonts/mathjax-newcm-font',
+                    '@mathjax/mathjax-newcm-font': '{$urlAppend}resources/fonts/mathjax-newcm-font'
+                }
+            },
+            chtml: {
+                fontURL: '{$urlAppend}resources/fonts/mathjax-newcm-font/chtml/woff2',
+                dynamicPrefix: '{$urlAppend}resources/fonts/mathjax-newcm-font/chtml/dynamic'
+            }
+        };
+    </script>";
+echo "<script type='text/javascript' id='MathJax-script' async src='{$urlAppend}js/mathjax/tex-chtml.js'></script>";
+
+ echo "</head>
  <body class='body-learningPath' style='margin: 0px; height: 100% !important;'>
  <div id='content'>";
 
 echo "<div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-        <h3 class='mb-0'>" . q_math($exerciseTitle) . "</h3>
+        <h2 class='text-heading-h3 mb-0'>" . q_math($exerciseTitle) . "</h2>
     </div>";
 if (!empty($exerciseDescription_temp)) {
     echo "<div class='card-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
@@ -286,9 +301,9 @@ foreach ($questionList as $questionId) {
     // shows the question and its answers
     echo "<div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3 class='mb-0'>" . $langQuestion . ": " . $i .
+                <h2 class='text-heading-h3 mb-0'>" . $langQuestion . ": " . $i .
                ($exerciseType == 2 ?  " / $nbrQuestions" : '') .
-            "</h3></div>" .
+            "</h2></div>" .
          "<div class='card-body'>";
     showQuestion($questionId);
     echo "</div></div>";

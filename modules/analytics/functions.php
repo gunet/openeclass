@@ -89,7 +89,7 @@ function display_learning_analytics() {
                     <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                         
                            
-                            <h3>$langLearningAnalytics</h3>
+                            <h2 class='text-heading-h3'>$langLearningAnalytics</h2>
                            
                             <div>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn submitAdminBtn'>
@@ -329,7 +329,7 @@ function display_analytics_elements($analytics_id) {
                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                     
                        
-                        <h3>$langAnalyticsParameters</h3>
+                        <h2 class='text-heading-h3'>$langAnalyticsParameters</h2>
                         
                         <div>
                             $addParametersBtn
@@ -369,9 +369,9 @@ function display_analytics_information($analytics_id) {
             <div class='card panelCard card-default px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                     
-                        <h3>
+                        <h2 class='text-heading-h3'>
                             $title<span class='$active_vis small-text ms-1'>($active_msg)</span>
-                        </h3>
+                        </h2>
                         <div>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn submitAdminBtn'>"
                                     . "<i class='fa-solid fa-pencil settings-icons'></i><span class='hidden-xs TextBold ps-2'>$langModify</span>
@@ -528,7 +528,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
         <div class='col-12 mt-4'>                 
             <div class='card panelCard card-default px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>             
-                    <h3>$analytics_title->title</h3>
+                    <h2 class='text-heading-h3'>$analytics_title->title</h2>
                 </div>
                 <div class='card-body'>
                      $results
@@ -687,7 +687,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                 <div class='col-12 mt-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h3>$analytics_title->title</h3>
+                            <h2 class='text-heading-h3'>$analytics_title->title</h2>
                         </div>
                         <div class='card-body'>
                             $results
@@ -720,9 +720,9 @@ function display_user_info($user_id) {
         <div class='col-12'>
             <div class='card panelCard card-default px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                    <h3>
+                    <h2 class='text-heading-h3'>
                         $givenname $surname
-                    </h3>
+                    </h2>
                 </div>
                 <div class='card-body'>
                     
@@ -901,8 +901,8 @@ function edit_analytics_settings ($analytics_id = 0)
                         <label for='start_date' class='col-sm-12 control-label-notes'>$langStart</label>
                         <div class='col-sm-12'>
                             <div class='input-group'>
-                                <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                <input class='form-control mt-0 border-start-0' name='start_date' id='start_date' type='text' value='$start_date'>
+                                <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0' name='start_date' id='start_date' type='text' value='$start_date'>
                             </div>
                             <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsStartDescription</span>
                         </div>
@@ -911,8 +911,8 @@ function edit_analytics_settings ($analytics_id = 0)
                         <label for='end_date' class='col-sm-12 control-label-notes'>$langFinish</label>
                         <div class='col-sm-12'>
                             <div class='input-group'>
-                                <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                <input class='form-control mt-0 border-start-0' name='end_date' id='end_date' type='text' value='$end_date'>
+                                <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0' name='end_date' id='end_date' type='text' value='$end_date'>
                             </div>
                             <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsEndDescription</span>
                         </div>
@@ -994,7 +994,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
     <div class='flex-grow-1'>
         <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <h3>$elementTypeTitle</h3>
+                <h2 class='text-heading-h3'>$elementTypeTitle</h2>
                 <input type='hidden' name='analytics_id' value='$analytics_id'>
                 <input type='hidden' name='analytics_element_id' value='$analytics_element_id'>
                 <div class='form-group mt-4'>

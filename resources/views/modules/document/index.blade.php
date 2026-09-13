@@ -93,6 +93,9 @@
                         'token'
                     ],
                     shouldRetry: () => false,
+                    getResponseData: (responseText, response) => {
+                        return { url: '' };
+                    }
                 })
 
                 uppy.setMeta({
@@ -249,19 +252,18 @@
 
 </script>
 
-<div class="col-12 main-section">
-<div class='{{ $container }} @if($course_code) module-container document-index py-lg-0 @else main-container @endif'>
-        <div class="@if($course_code) course-wrapper d-lg-flex align-items-lg-strech w-100 @else row m-auto @endif">
 
-            @if($course_code)
-                @include('layouts.partials.left_menu')
-            @endif
-
-            @if($course_code)
-                <div class="col_maincontent_active">
-            @else
-                <div class="col-12">
-            @endif
+@if($course_code)
+<div class="{{ $container }} module-container document-index py-lg-0">
+<div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+<aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+<main id="main" class="col-12 main-maincontent col_maincontent_active">
+@else
+<main id="main" class="col-12 main-section">
+<div class="{{ $container }} main-container">
+<div class="row m-auto">
+<div class="col-12">
+@endif
 
                 <div class="row">
 
@@ -348,7 +350,7 @@
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif'>
 
                             <div class='d-flex justify-content-between gap-lg-5 gap-3 flex-wrap'>
-                                        <div class='d-flex justify-content-start align-items-center flex-wrap'>
+                                        <div class='d-flex justify-content-start align-items-center flex-wrap' aria-label="{{ trans('langNavigationDoc')}} ">
                                             {!! make_clickable_path($curDirPath) !!}
                                             @if ($downloadPath)
                                                 &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
@@ -446,7 +448,7 @@
                                                 </td>
                                                 <td class='fileURL-th' style='width:50%;'>
                                                     <input type='hidden' value='{!! $base_url !!}download={{ getIndirectReference($file->path) }}'>
-
+                                                    {!! $file->eportfolio_modal !!}
                                                     <div class='d-flex justify-content-start align-items-start gap-3'>
                                                         @if($file->visible == 1)
                                                             @if ($file->is_dir)
@@ -575,11 +577,14 @@
                         </div>
                     @endif
                 </div>
-            </div>
-        </div>
 
-</div>
-</div>
+
+@if($course_code)
+</main></div></div>
+@else
+</div></div></div></main>
+@endif
+
 
 
 

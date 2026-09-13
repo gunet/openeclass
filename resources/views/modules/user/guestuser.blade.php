@@ -28,13 +28,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} module-container py-lg-0'>
-            <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-                
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     <div class="row">
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
                         @include('layouts.partials.legend_view')
@@ -77,8 +74,8 @@
                                             <label for='user_date_expires_at' class='col-12 control-label-notes'>{{ trans('langExpirationDate') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
                                             <div class='col-12'>
                                                 <div class='input-group'>
-                                                    <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                    <input class='form-control mt-0 border-start-0' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $expirationDate->format("d-m-Y H:i") }}'>
+                                                    <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                    <input class='form-control mt-0' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $expirationDate->format("d-m-Y H:i") }}'>
                                                 </div>
                                             </div>
                                         </div>
@@ -95,8 +92,7 @@
                             <img class='form-image-modules' src='{!! get_form_image() !!}' alt="{{ trans('langImgFormsDes') }}">
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
 @endsection

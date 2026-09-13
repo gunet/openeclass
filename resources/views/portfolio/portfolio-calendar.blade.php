@@ -5,7 +5,50 @@
 
     <script>
         var events = [];
+
+        function applyCalendarTooltips() {
+            document.querySelectorAll('#cal-slide-content .event.event-info').forEach(function (event) {
+                event.setAttribute('tabindex', '0');
+                event.setAttribute('role','img');
+                event.setAttribute('data-bs-toggle', 'tooltip');
+                event.setAttribute('data-bs-original-title', "{{ js_escape(trans('langAgendaCourseEvent')) }}");
+                event.setAttribute('aria-label', "{{ js_escape(trans('langAgendaCourseEvent')) }}");
+            });
+            document.querySelectorAll('#cal-slide-content .event.event-important').forEach(function (event) {
+                event.setAttribute('tabindex', '0');
+                event.setAttribute('role','img');
+                event.setAttribute('data-bs-toggle', 'tooltip');
+                event.setAttribute('data-bs-original-title', "{{ js_escape(trans('langAgendaDueDay')) }}");
+                event.setAttribute('aria-label', "{{ js_escape(trans('langAgendaDueDay')) }}");
+            });
+            document.querySelectorAll('#cal-slide-content .event.event-success').forEach(function (event) {
+                event.setAttribute('tabindex', '0');
+                event.setAttribute('role','img');
+                event.setAttribute('data-bs-toggle', 'tooltip');
+                event.setAttribute('data-bs-original-title', "{{ js_escape(trans('langAgendaSystemEvent')) }}");
+                event.setAttribute('aria-label', "{{ js_escape(trans('langAgendaSystemEvent')) }}");
+            });
+            document.querySelectorAll('#cal-slide-content .event.event-special').forEach(function (event) {
+                event.setAttribute('tabindex', '0');
+                event.setAttribute('role','img');
+                event.setAttribute('data-bs-toggle', 'tooltip');
+                event.setAttribute('data-bs-original-title', "{{ js_escape(trans('langAgendaPersonalEvent')) }}");
+                event.setAttribute('aria-label', "{{ js_escape(trans('langAgendaPersonalEvent')) }}");
+            });
+            document.querySelectorAll('#cal-slide-content [data-bs-toggle="tooltip"]').forEach(function(el){
+                let oldTooltip = bootstrap.Tooltip.getInstance(el);
+                if (oldTooltip) {
+                    oldTooltip.dispose();
+                }
+                new bootstrap.Tooltip(el, {
+                    container: 'body',
+                    trigger: 'hover focus'
+                });
+            });
+        }
+
         $(function() {
+
             var calendar = $("#bootstrapcalendar").calendar({
                 tmpl_path: "{{ $urlAppend }}js/bootstrap-calendar-master/tmpls/",
                 events_source: function() {
@@ -17,7 +60,19 @@
                     $("#current-month").text(this.getTitle()).attr("aria-label", this.getTitle());
                     $(".btn-group button").removeClass("active");
                     $("button[data-calendar-view='" + view + "']").addClass("active");
+
+                    setTimeout(function() {
+                        // prevent event direct click
+                        $('#bootstrapcalendar .events-list a.event').off('click');
+                        $('#bootstrapcalendar .events-list a.event').on('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        });
+                        // hide default slide
+                    }, 200);
+
                 },
+
                 onBeforeEventsLoad: function(done) {
                     var url = "{{ $urlAppend }}main/calendar_data.php";
                     var params = {
@@ -31,6 +86,16 @@
                             }
                             done();
                             calendar._render();
+
+                            setTimeout(function() {
+                                // prevent event direct click
+                                $('#bootstrapcalendar .events-list a.event').off('click');
+                                $('#bootstrapcalendar .events-list a.event').on('click', function(e) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                });
+                            }, 300);
+
                         }).fail(function() {
                             events = [];
                             done();
@@ -52,6 +117,59 @@
                     calendar.view($this.data("calendar-view"));
                 });
             });
+
+            // After the calendar renders, disable click on cells without .events-link
+            setTimeout(function() {
+                document.querySelectorAll('.cal-month-box .cal-cell1').forEach(day => {
+                    const hasHoliday = day.querySelector('.cal-day-holiday') !== null;
+                    const hasEventsList = day.querySelector('.events-list') !== null;
+                    if (!hasHoliday && !hasEventsList) {
+                        day.style.pointerEvents = 'none'; // disable clickability
+                        day.classList.add('not-clickable');
+                    }
+                });
+            }, 100);
+
+            $('.month-prev-btn, .month-next-btn').on('click', function () {
+                setTimeout(function() {
+                        document.querySelectorAll('.cal-month-box .cal-cell1').forEach(day => {
+                            const hasHoliday = day.querySelector('.cal-day-holiday') !== null;
+                            const hasEventsList = day.querySelector('.events-list') !== null;
+                            if (!hasHoliday && !hasEventsList) {
+                                day.style.pointerEvents = 'none'; // disable clickability
+                                day.classList.add('not-clickable');
+                            }
+                        });
+                }, 100);
+            });
+
+
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType !== 1) {
+                            return;
+                        }
+                        if (
+                            node.id === 'cal-slide-content' ||
+                            node.querySelector('#cal-slide-content')
+                        ) {
+                            setTimeout(function(){
+                                applyCalendarTooltips();
+                            }, 0);
+                        }
+                    });
+                });
+            });
+
+            observer.observe(
+                document.querySelector('#bootstrapcalendar'),
+                {
+                    childList: true,
+                    subtree: true
+                }
+            );
+
         });
 
         function show_month(day,month,year){
@@ -65,7 +183,7 @@
     <link href="{{ $urlAppend }}template/modern/css/new_calendar.css?v={{ CACHE_SUFFIX }}" rel="stylesheet" type="text/css">
 @endpush
 
-<div class='card bg-transparent card-transparent border-0 sticky-column-course-home mb-3'>
+<div class='card bg-transparent card-transparent border-0 mb-3 w-100'>
     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
         <h2 class='text-heading-h3 mb-0'>
             {{ trans('langAgenda') }}
@@ -75,29 +193,6 @@
         </a>
     </div>
 </div>
-<div class='panel panel-admin panel-admin-calendar card-transparent border-0 mt-lg-0 mt-2 sticky-column-course-home'>
-
+<div class='panel panel-admin panel-admin-calendar card-transparent border-0 mt-lg-0 mt-2'>
     {!! $user_personal_calendar !!}
-
-</div>
-
-<div class='card bg-transparent card-transparent border-0 sticky-column-course-home'>
-    <div class='d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
-        <div class='d-flex align-items-center px-2 py-1'>
-            <span class='event event-important'></span>
-            <span class="agenda-comment" aria-label="{{ trans('langAgendaDueDay') }}"> {{ trans('langAgendaDueDay') }}</span>
-        </div>
-        <div class='d-flex align-items-center px-2 py-1'>
-            <span class='event event-info'></span>
-            <span class="agenda-comment" aria-label="{{ trans('langAgendaCourseEvent') }}">{{ trans('langAgendaCourseEvent') }}</span>
-        </div>
-        <div class='d-flex align-items-center px-2 py-1'>
-            <span class='event event-success'></span>
-            <span class="agenda-comment" aria-label="{{ trans('langAgendaSystemEvent') }}">{{ trans('langAgendaSystemEvent') }}</span>
-        </div>
-        <div class='d-flex align-items-center px-2 py-1'>
-            <span class='event event-special'></span>
-            <span class="agenda-comment" aria-label="{{ trans('langAgendaPersonalEvent') }}">{{ trans('langAgendaPersonalEvent') }}</span>
-        </div>
-    </div>
 </div>

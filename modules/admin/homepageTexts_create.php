@@ -76,7 +76,7 @@ if(isset($_GET['homepageText']) and $_GET['homepageText'] == 'modify'){
     $data['id'] = $_GET['id'];
 
     $data['textModify'] = Database::get()->querySingle("SELECT * FROM `homepageTexts` WHERE `id`=?d", $data['id']);
-    $data['editor'] = rich_text_editor('content', 5, 40, $data['textModify']->body );
+    $data['editor'] = rich_text_editor('content', 5, 40, $data['textModify']->body, options: array('id' => 'content'));
     $textLang = $data['textModify']->lang;
     $data['lang_select_options'] = lang_select_options('localize', "class='form-control'", $textLang);
 }
@@ -93,7 +93,7 @@ $data['texts'] = Database::get()->queryArray("SELECT * FROM homepageTexts WHERE 
 $data['new'] = isset($_GET['homepageText']) && $_GET['homepageText'] == 'new';
 
 if ($data['new']) {
-    $data['editor'] = rich_text_editor('content', 5, 40, '' );
+    $data['editor'] = rich_text_editor('content', 5, 40, '', options: array('id' => 'content'));
     $data['lang_select_options'] = lang_select_options('localize', "class='form-control'");
 }
 

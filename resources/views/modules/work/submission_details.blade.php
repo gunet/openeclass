@@ -4,9 +4,9 @@
 <div class='col-12 mt-4'>
     <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-            <h3>
+            <h2 class='text-heading-h3'>
                 {{ trans('langSubmissionWorkInfo') }}
-            </h3>
+            </h2>
         </div>
         <div class='card-body'>
             <ul class='list-group list-group-flush'>

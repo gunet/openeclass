@@ -84,7 +84,7 @@ $tool_content .= "
     </div> 
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'>
-            <h3>$langExercises</h3>
+            <h2 class='text-heading-h3'>$langExercises</h2>
             <div class='form-wrapper form-edit rounded mt-0'>
                 <form class='form-horizontal' name='myform' method='post' role='form' action=''>
                     <div class='form-group'>
@@ -114,7 +114,7 @@ $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='card panelCard card-default px-lg-4 py-lg-3 p-3 w-100'>
             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                <h3>$langCheckResults</h3>
+                <h2 class='text-heading-h3'>$langCheckResults</h2>
             </div>
             <div class='card-body'>
                 <div class='form-wrapper form-edit rounded'>

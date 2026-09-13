@@ -20,8 +20,7 @@
 
 $require_admin = true;
 $require_help = true;
-$helpTopic = 'system_settings';
-$helpSubTopic ='clean_up_proceed';
+$helpTopic ='clean_up_proceed';
 require_once '../../include/baseTheme.php';
 
 $toolName = $langAdmin;
@@ -36,7 +35,7 @@ if (isset($_POST['submit'])) {
         $messages[] = sprintf("$langCleaningUp", "<b>$days</b>", ($days == 1) ? $langDaySing : $langDayPlur, $dir);
         cleanup("$webDir/courses/$dir", $days);
     }
-    Session::flash('message',$messages);
+    Session::flash('message', $messages);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/cleanup.php');
 }

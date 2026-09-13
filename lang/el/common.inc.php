@@ -106,6 +106,7 @@ $langCourse = "Μάθημα";
 $langCourses = "Μαθήματα";
 $langOfCourses = "Μαθημάτων";
 $langOfCourse = "Μαθήματος";
+$langCoursesList = "Λίστα Μαθημάτων";
 
 $langsCourse = "μάθημα";
 $langsCourses = "μαθήματα";

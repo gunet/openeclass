@@ -40,7 +40,8 @@ if(isset($_POST['submit'])){
         'dont_display_about_menu' => true,
         'dont_display_contact_menu' => true,
         'dont_display_manual_menu' => true,
-        'enable_social_sharing_links' => true
+        'enable_social_sharing_links' => true,
+        'dont_display_terms' => true
     ];
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -56,7 +57,7 @@ if(isset($_POST['submit'])){
 }
 
 
-$data['footer_intro'] = rich_text_editor('footer_intro', 5, 20, get_config('footer_intro'));
+$data['footer_intro'] = rich_text_editor('footer_intro', 5, 20, get_config('footer_intro'), options: array('id' => 'footer_intro'));
 $data['link_fb'] = get_config('link_fb') ?? '';
 $data['link_tw'] = get_config('link_tw') ?? '';
 $data['link_ln'] = get_config('link_ln') ?? '';

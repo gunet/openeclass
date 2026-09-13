@@ -174,38 +174,38 @@ function new_gradebook() {
                         <span class='help-block Accent-200-cl'>$title_error</span>
                     </div>
                 </div>
-                
-                   
+
+
                         <div class='form-group".($start_date_error ? " has-error" : "")." mt-4'>
                             <div class='col-12'>
                                 <label for='start_date' class='control-label-notes'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
                             </div>
                             <div class='col-12'>
                                 <div class='input-group'>
-                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                    <input class='form-control mt-0 border-start-0' placeholder='$langStart' type='text' name='start_date' id='start_date' value='$start_date'>
-                                    
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' placeholder='$langStart' type='text' name='start_date' id='start_date' value='$start_date'>
+
                                 </div>
                                 <span class='help-block Accent-200-cl'>$start_date_error</span>
                             </div>
                         </div>
-                   
-                    
+
+
                         <div class='form-group".($end_date_error ? " has-error" : "")." mt-4'>
                             <div class='col-12'>
                                 <label for='end_date' class='control-label-notes'>$langEnd <span class='asterisk Accent-200-cl'>(*)</span></label>
                             </div>
                             <div class='col-12'>
                                 <div class='input-group'>
-                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                    <input class='form-control mt-0 border-start-0' placeholder='$langEnd' type='text' name='end_date' id='end_date' value='$end_date'>
-                                    
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' placeholder='$langEnd' type='text' name='end_date' id='end_date' value='$end_date'>
+
                                 </div>
                                 <span class='help-block Accent-200-cl'>$end_date_error</span>
                             </div>
                         </div>
-                 
-                
+
+
                 <div class='form-group".($degreerange_error ? " has-error" : "")." mt-4'>
                     <label for='degree_range_id' class='col-12 control-label-notes'>$langGradebookRange <span class='asterisk Accent-200-cl'>(*)</span></label>
                     <div class='col-12'>
@@ -369,38 +369,38 @@ function gradebook_settings($gradebook_id) {
                             <span class='help-block Accent-200-cl'>$title_error</span>
                         </div>
                     </div>
-                    
-                       
+
+
                             <div class='form-group".($start_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
                                     <label for='start_date' class='control-label-notes'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
                                 </div>
                                 <div class='col-12'>
                                     <div class='input-group'>
-                                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                        <input class='form-control mt-0 border-start-0' type='text' name='start_date' id='start_date' value='$start_date'>
-                                        
+                                        <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                        <input class='form-control mt-0' type='text' name='start_date' id='start_date' value='$start_date'>
+
                                     </div>
                                     <span class='help-block Accent-200-cl'>$start_date_error</span>
                                 </div>
                             </div>
-                      
-                      
+
+
                             <div class='form-group".($end_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
                                     <label for='end_date' class='control-label-notes'>$langEnd</label>
                                 </div>
                                 <div class='col-12'>
                                     <div class='input-group'>
-                                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                        <input class='form-control mt-0 border-start-0' type='text' name='end_date' id='end_date' value='$end_date'>
-                                        
+                                        <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                        <input class='form-control mt-0' type='text' name='end_date' id='end_date' value='$end_date'>
+
                                     </div>
                                     <span class='help-block Accent-color-cl'>$end_date_error</span>
                                 </div>
                             </div>
-                       
-                    
+
+
                     <div class='form-group".($degreerange_error ? " has-error" : "")." mt-4'><label for='degreerangeid' class='col-12 control-label-notes'>$langGradebookRange</label>
                             <div class='col-12'>
                                 <select name='degreerange' class='form-select' id='degreerangeid'>
@@ -426,7 +426,7 @@ function gradebook_settings($gradebook_id) {
                                         ),
                                         array(
                                             'class' => 'cancelAdminBtn ms-1',
-                                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . ""
+                                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&"
                                         )
                                     ))."
 
@@ -509,9 +509,9 @@ function user_gradebook_settings() {
                             <div class='input-append date form-group' id='startdatepicker'>
                                 <label for='UsersStart' class='col-sm-12 control-label-notes mb-2'>$langRegistrationDate $langFrom2</label>
                                 <div class='input-group'>
-                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                    <input class='form-control mt-0 border-start-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
-                                    
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
+
                                 </div>
                             </div>
                         </div>
@@ -519,9 +519,9 @@ function user_gradebook_settings() {
                             <div class='input-append date form-group mt-md-0 mt-4' id='enddatepicker'>
                                 <label for='UsersEnd' class='col-sm-12 control-label-notes mb-2'>$langTill</label>
                                 <div class='input-group'>
-                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                    <input class='form-control mt-0 border-start-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
-                                    
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
+
                                 </div>
                             </div>
                         </div>
@@ -631,7 +631,7 @@ function display_all_users_grades($gradebook_id) {
                 <tr class='$classvis'>
                 <td class='count-col'>$cnt</td>
                 <td>" . display_user($resultUser->userID). "
-                    <div class='text-muted'><small>$resultUser->am</small></div>
+                    <div class='text-muted'><small>" . q($resultUser->am) . "</small></div>
                 </td>
                 <td>" . user_groups($course_id, $resultUser->userID) . "</td>
                 <td>";
@@ -791,7 +791,7 @@ function display_gradebook($gradebook) {
 
     global $course_code, $urlServer, $tool_content, $langGradebookGradeAlert, $langGradebookNoActMessage1,
            $langTitle, $langViewShow, $langScore, $langHere, $action_bar,
-           $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType,
+           $langGradebookWeight, $langGradebookNoTitle, $langType,
            $langGradebookAutoGrade, $langGradebookNoAutoGrade, $langAttendanceActivity, $langDelete, $langConfirmDelete,
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
@@ -875,7 +875,6 @@ function display_gradebook($gradebook) {
                                 <thead>
                                     <tr class='list-header'>
                                         <th style='width:30%;'>$langTitle</th>
-                                        <th>$langGradebookActivityDate2</th>
                                         <th style='width:30%;'>$langType</th><th>$langGradebookWeight</th>
                                         <th>$langViewShow</th>
                                         <th>$langScore</th>";
@@ -886,7 +885,6 @@ function display_gradebook($gradebook) {
 
         foreach ($result as $details) {
             $activity_id = getIndirectReference($details->id);
-            $content = ellipsize_html($details->description, 50);
             $tool_content .= "<tr><td>";
             if ($is_editor) {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;ins=$activity_id'>" . (!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
@@ -903,10 +901,6 @@ function display_gradebook($gradebook) {
                  default : $tool_content .= "";
              }
             $tool_content .= "</small></div>";
-            $tool_content .= "</td><td>";
-            if (!empty($details->date)) {
-                $tool_content .= "<div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div>";
-            }
             $tool_content .= "</td>";
 
             if ($details->module_auto_id) {
@@ -920,17 +914,18 @@ function display_gradebook($gradebook) {
                     $tool_content .= "<td class='smaller'>$langGradebookActivityAct";
                 }
 
+                $tool_content .= " <div class='help-block'>";
                 if ($details->auto) {
-                    $tool_content .= " <small class='help-block'> ($langGradebookAutoGrade)</small>";
+                    $tool_content .= " ($langGradebookAutoGrade)";
                 } else {
-                    $tool_content .= " <small class='help-block'> ($langGradebookNoAutoGrade)</small>";
-                    }
-                $tool_content .= "</td>";
+                    $tool_content .= " ($langGradebookNoAutoGrade)";
+                }
+                $tool_content .= "</div></td>";
             } else {
                 $tool_content .= "<td class='smaller'>$langAttendanceActivity</td>";
             }
 
-            if (fmod($details->weight, 1) !== 0.00) { // if number doesn't contain `.00`
+            if (fmod($details->weight, 1) !== 0.00) { // if the number doesn't contain `.00`
                 $tool_content .= "<td>" . $details->weight . "%</td>";
             } else {
                 $tool_content .= "<td>" . round($details->weight) . "%</td>";
@@ -945,7 +940,7 @@ function display_gradebook($gradebook) {
             $tool_content .= "</td>";
             $tool_content .= "<td>" . userGradebookTotalActivityStats($details, $gradebook) . "</td>";
             if ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
-                $preview_link = "{$urlServer}modules/exercise/results.php?course=$course_code&amp;exerciseId=$details->module_auto_id";
+                $preview_link = "{$urlServer}modules/exercise/results.php?course=$course_code&amp;exerciseId=" . getIndirectReference($details->module_auto_id);
             } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
                 $preview_link = "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$details->module_auto_id";
             } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
@@ -1007,7 +1002,7 @@ function display_gradebooks() {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'>
-        
+
                             <th style='width:46%;'>$langAvailableGradebooks</th>
                             <th style='width:22%;'>$langStart</th>
                             <th style='width:22%;'>$langFinish</th>";
@@ -1241,7 +1236,7 @@ function register_user_grades($gradebook_id, $actID) {
             <tr class='$classvis'>
                 <td class='count-col'>$cnt</td>
                 <td>" . display_user($resultUser->userID). "
-                    <div class='text-muted'><small>$resultUser->am</small></div>
+                    <div class='text-muted'><small>" . q($resultUser->am) . "</small></div>
                 </td>
                 <td>" . user_groups($course_id, $resultUser->userID). "</td>
                 <td>";
@@ -1557,8 +1552,8 @@ function add_gradebook_other_activity($gradebook_id) {
                             $contentToModify = "";
                         }
                         @$tool_content .= "
-                        
-               
+
+
                                 <div class='form-group'>
                                     <div class='col-sm-6 control-label-notes'>$langType</div>
                                     <div class='col-sm-12'>" . (isset($module_auto_label)? "
@@ -1573,15 +1568,15 @@ function add_gradebook_other_activity($gradebook_id) {
                                         </select>") . "
                                     </div>
                                 </div>
-                    
-                            
+
+
                                 <div class='form-group mt-4'>
                                     <label for='actTitle' class='col-sm-6 control-label-notes'>$langTitle</label>
                                     <div class='col-sm-12'>
                                         <input id='actTitle' type='text' class='form-control' name='actTitle' value='".q($titleToModify)."'/>
                                     </div>
                                 </div>
-                            
+
                         ";
                         if (isset($modifyActivity) and $modifyActivity->module_auto_type == 0) {
                             $tool_content .= "<div class='form-group".($date_error ? " has-error" : "")." mt-4'>
@@ -1600,7 +1595,7 @@ function add_gradebook_other_activity($gradebook_id) {
                             </div>
                         </div>
                         <div class='form-group mt-4'>
-                           
+
                             <div class='col-12'>
                                 <label class='label-container' aria-label='$langSelect'>
                                     <input type='checkbox' id='visible' name='visible' value='1'";
@@ -1611,13 +1606,13 @@ function add_gradebook_other_activity($gradebook_id) {
                                 <span class='checkmark'></span>
                                 $langGradeVisible
                                 </label>
-                            
+
                             </div>
                         </div>
                         <div class='form-group mt-4'>
                             <label for='actDesc' class='col-sm-12 control-label-notes'>$langComments</label>
                             <div class='col-sm-12'>
-                                " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
+                                " . rich_text_editor('actDesc', 4, 20, $contentToModify, options: array('id' => 'actDesc')) . "
                             </div>
                         </div>";
                         if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto booking mechanism
@@ -1679,11 +1674,13 @@ function insert_grades($gradebook_id, $actID) {
     global $tool_content, $langGradebookEdit, $gradebook, $langTheField,
            $course_code, $langFormErrors, $langGradebookGrade, $course_id;
 
-    $v = new Valitron\Validator($_POST['usersgrade']);
+    $users_grade = array_map('fix_float', $_POST['usersgrade']);
+
+    $v = new Valitron\Validator($users_grade);
     $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
         if(is_numeric($value) || empty($value)) return true;
     });
-    foreach ($_POST['usersgrade'] as $userID => $userInp) {
+    foreach ($users_grade as $userID => $userInp) {
         $v->rule('emptyOrNumeric', array("$userID"));
         $v->rule('min', array("$userID"), 0);
         $v->rule('max', array("$userID"), $gradebook->range);
@@ -1691,8 +1688,8 @@ function insert_grades($gradebook_id, $actID) {
             "$userID" => "$langTheField $langGradebookGrade"
         ));
     }
-    if($v->validate()) {
-        foreach ($_POST['usersgrade'] as $userID => $userInp) {
+    if ($v->validate()) {
+        foreach ($users_grade as $userID => $userInp) {
             $uid = getDirectReference($userID);
             if ($userInp == '') {
                 Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $uid);
@@ -1815,11 +1812,11 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
     } else { // import grades form
         enableCheckFileSize();
         $tool_content .= "
-            
+
             <div class='d-lg-flex gap-4 mt-4'>
                 <div class='flex-grow-1'>
                     <div class='form-wrapper'>
-                        <form class='form-horizontal' enctype='multipart/form-data' method='post' 
+                        <form class='form-horizontal' enctype='multipart/form-data' method='post'
                             action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;imp=$activity_id&amp;import_grades=true'>
                             <fieldset>
                                 <legend class='mb-0' aria-label='$langForm'></legend>
@@ -1850,7 +1847,7 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                     </div>
                 </div><div class='d-none d-lg-block'>
                 <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
-                
+
             </div>
             </div>
             ";

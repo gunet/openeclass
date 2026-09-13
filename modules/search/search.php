@@ -97,7 +97,8 @@ $inIds = implode(",", $hitIds);
 $courses = Database::get()->queryArray("select c.*, cd.department "
         . " from course c left "
         . " join (select course, max(department) as department from course_department group by course) cd on (c.id = cd.course) "
-        . " where c.id in (" . $inIds . ") order by field(id," . $inIds . ")");
+        . " where c.id in (" . $inIds . ") 
+        order by field(id," . $inIds . ")");
 $data['count_courses'] = $count_courses = count($courses);
 
 $data['action_bar'] = action_bar(array(
@@ -110,6 +111,15 @@ $data['action_bar'] = action_bar(array(
 $search_result_content = '';
 
 foreach ($courses as $course) {
+    if ($course->visible == COURSE_INACTIVE) { //  inactive courses
+        continue;
+    }
+    if (!course_has_started($course->id) || course_has_expired($course->id)) { // course has not started or has expired
+        continue;
+    }
+    if (!course_reg_date_started($course->id) || course_reg_date_ended($course->id)) { // course registration period has not started or has ended
+        continue;
+    }
     $courseHref = "../../courses/" . q($course->code) . "/";
     $courseUrl = "<span id='cid" . $course->id . "'><a href='$courseHref'>" . q($course->title) . "</a></span> (" . q($course->public_code) . ")";
     $skipincourse = false;
@@ -117,12 +127,18 @@ foreach ($courses as $course) {
 
     // anonymous see only title for reg/closed courses
     if (($course->visible == COURSE_CLOSED || $course->visible == COURSE_REGISTRATION) && $anonymous) {
-        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
+        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span>";
+        if ($course->public_code) {
+            $courseUrl .= "<small> (" . q($course->public_code) . ")</small>";
+        }
     }
 
     // closed courses url displays contact form for logged-in users
     if ($course->visible == COURSE_CLOSED && $uid > 1 && !in_array($course->id, $subscribed)) {
-        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
+        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span>";
+        if ($course->public_code) {
+            $courseUrl .= "<small> (" . q($course->public_code) . ")</small>";
+        }
         $disable_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course->id);
         if (!$disable_course_user_requests) {
             $courseUrl .= "<br/><small><em><a class='text-decoration-underline' href='../contact/index.php?course_id=" . intval($course->id) . "'>$langLabelCourseUserRequest</a></em></small>";
@@ -132,18 +148,16 @@ foreach ($courses as $course) {
 
     // reg courses url displays just title and subscription url for logged in non-subscribed users
     if ($course->visible == COURSE_REGISTRATION && $uid > 1 && !in_array($course->id, $subscribed)) {
-        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
+        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span>";
+        if ($course->public_code) {
+            $courseUrl .= "<small> (" . q($course->public_code) . ")</small>";
+        }
         $skipincourse = true;
     }
 
     // logged-in users have extended search options
     if (!$anonymous && !$skipincourse && isset($_POST['search_terms'])) {
         $courseUrl .= "<br/><small><em><a href='$courseHref?from_search=" . urlencode($_POST['search_terms']) . "'>$langSearchInCourse</a></em></small>";
-    }
-
-    //  inactive courses are hidden from anyone except admin
-    if ($course->visible == COURSE_INACTIVE && $uid != 1) {
-        continue;
     }
     // courses with password
     $requirepassword = '';
@@ -198,7 +212,7 @@ foreach ($courses as $course) {
         $i++;
     }
 
-    $course_faculty = "<div class='text-muted'>$dep</div";
+    $course_faculty = "<div class='text-muted'>$dep</div>";
     $search_result_content .= "<td>" . $courseUrl . $course_faculty . $requirepassword . $coursePrerequisites . "</td>
                       <td>" . q($course->prof_names) . "</td>
                       <td>" . q($course->keywords) . "</td>

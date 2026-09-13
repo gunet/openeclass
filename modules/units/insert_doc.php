@@ -159,7 +159,7 @@ function list_docs() {
             }
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_doc' value='$langAddModulesButton'>                
+        $tool_content .= "<div class='d-flex justify-content-end mt-4 gap-2'><input class='btn submitAdminBtn' type='submit' name='submit_doc' value='$langAddModulesButton'>                
                             <a href='index.php?course=$course_code&id=$id'><input class='btn cancelAdminBtn ms-2' value='$langCancel' /></a>
                         </div>";
         $tool_content .= "$dir_html</form>";

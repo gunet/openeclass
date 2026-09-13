@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -44,6 +44,13 @@
                                             <input type='checkbox' name='dont_display_manual_menu' value='1' {!! get_config('dont_display_manual_menu') ? 'checked' : '' !!}>
                                             <span class='checkmark'></span>
                                             {{trans('lang_dont_display_manual_menu')}}
+                                        </label>
+                                    </div>
+                                    <div class='checkbox'>
+                                        <label class='label-container' aria-label="{{ trans('langSettingSelect') }}">
+                                            <input type='checkbox' name='dont_display_terms' value='1' {!! get_config('dont_display_terms') ? 'checked' : '' !!}>
+                                            <span class='checkmark'></span>
+                                            {{trans('lang_dont_display_terms')}}
                                         </label>
                                     </div>
 
@@ -108,6 +115,6 @@
         </div>
     </div>
 
-</div>
+</main>
 
 @endsection

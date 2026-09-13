@@ -208,7 +208,7 @@ if (isset($_GET['id'])) {
           'icon' => 'fa-reply',
           'level' => 'primary' ]], false);
 
-    $data['descriptionEditor'] = rich_text_editor('requestDescription', 4, 20, $request->description);
+    $data['descriptionEditor'] = rich_text_editor('requestDescription', 4, 20, $request->description, options: array('id' => 'requestDescription'));
 
     load_js('bootstrap-datepicker');
     load_js('bootstrap-combobox');

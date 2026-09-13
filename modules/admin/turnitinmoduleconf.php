@@ -25,7 +25,7 @@ const LTI_TYPE = 'turnitin';
 $require_admin = true;
 $require_help = true;
 $helpTopic = 'external_tools';
-$helpSubTopic = 'turntit_in';
+$helpSubTopic = 'turntitin';
 require_once '../../include/baseTheme.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 require_once 'modules/lti/classes/JwksHelper.php';
@@ -34,14 +34,31 @@ $toolName = $langTurnitinConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
+if (!get_config('third_party_cookies')) {
+    $head_content .= "<style>.tpc-config-link:hover { filter: brightness(0.1); }</style>";
+    $tool_content .= "<div class='alert alert-warning'>" .
+        "<i class='fa-solid fa-triangle-exclamation fa-lg me-2'></i>" .
+        "<span>$langThirdPartyCookiesRequired</span> " .
+        "<a class='tpc-config-link' href='eclassconf.php#eight'>$langEclassConf</a>" .
+        "</div>";
+    draw($tool_content, 3, null, $head_content);
+    exit;
+}
+
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('validation.js');
-load_js('select2');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
-        $('#select-courses').select2();
+        slimSelectFun (
+            '#select-courses', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             var stringVal = [];

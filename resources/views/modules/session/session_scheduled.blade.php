@@ -44,13 +44,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} module-container py-lg-0'>
-        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+<div class='{{ $container }} module-container py-lg-0'>
+    <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
                     
                 <div class="row">
 
@@ -75,7 +72,7 @@
                         @if(count($sessions) > 0)
                             <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                    <h3 class='mb-0'>{{ trans('langSessionsTable')}}</h3>
+                                    <h2 class='text-heading-h3 mb-0'>{{ trans('langSessionsTable')}}</h2>
                                 </div>
                                 <div class='card-body'>
                                     <table class='table-default' id='all_sessions_scheduled'>
@@ -137,11 +134,9 @@
                     </div>
 
                 </div>
-            </div>
+            </main>
 
         </div>
     
     </div>
-</div>
-
 @endsection
