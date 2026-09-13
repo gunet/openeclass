@@ -67,6 +67,9 @@ if ($command_line and getenv('BASE_URL') and getenv('MYSQL_LOCATION')) {
     $_POST['email_transport'] = 'mail';
     $_POST['email_announce'] = '';
     $_POST['email_bounces'] = '';
+    $_POST['dbMyAdmin'] = '';
+    $_POST['theme_selection'] = 0;
+    $_POST['homepage_intro'] = '';
     ini_set('display_errors', '1');
     create_directories();
 }
@@ -281,7 +284,7 @@ if ($autoinstall) {
         die("Error: $langErrorConnectDatabase\n" .
             $e->getMessage() . "\n$langCheckDatabaseSettings\n");
     }
-    $_POST['install7'] = true; // Move to final installation steps
+    $_POST['install8'] = true; // Move to final installation step
 }
 
 if (isset($_POST['install1'])) { // step 1 requirements
