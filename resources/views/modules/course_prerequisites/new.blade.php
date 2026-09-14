@@ -3,14 +3,39 @@
 @push('head_scripts')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#courses-select').select2({
-                minimumInputLength: 2,
-                tags: true,
-                ajax: {
+            // $('#courses-select').select2({
+            //     minimumInputLength: 2,
+            //     tags: true,
+            //     ajax: {
+            //         url: '{{ $urlServer }}modules/course_prerequisites/coursefeed.php',
+            //         dataType: 'json'
+            //     }
+            // });
+
+            slimSelectFun(
+                '#courses-select',
+                '{{ trans('langSearch') }}',
+                '{{ trans('langWelcomeSelect') }}',
+                '{{ trans('langSelectAll') }}',
+                '{{ trans('langListChoices') }}',
+                {
                     url: '{{ $urlServer }}modules/course_prerequisites/coursefeed.php',
-                    dataType: 'json'
+                    dataType: 'json',
+                    dataResponse: 'results',
+                    minimumInputLength: 2,
+                    tags: true,
+                    tokenSeparators: [','],
+                    params: function(searchValue) {
+                        return {
+                            q: searchValue,
+                            _type: 'query',
+                            term: searchValue
+                        };
+                    }
                 }
-            });
+            );
+            
+
         });
     </script>
 @endpush
@@ -45,7 +70,7 @@
                                             <div class='form-group'>
                                                 <label for='courses-select' class='col-sm-12 control-label-notes'>{{ trans('langCourse') }}:</label>
                                                 <div class='col-sm-12'>
-                                                    <select id='courses-select' class='form-select' name='prerequisite_course'></select>
+                                                    <select id='courses-select' class='form-control' name='prerequisite_course'></select>
                                                 </div>
                                             </div>
                                             <div class='form-group mt-4'>
