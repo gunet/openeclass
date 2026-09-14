@@ -1026,7 +1026,6 @@ function q(str) {
 function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll, langListChoices, ajaxOptions = null) {
     var selectIdOption = $(element_id);
     var optionsData = [];
-    var dataRes = ajaxOptions.dataResponse;
     selectIdOption.find('option').each(function() {
         optionsData.push({
             text: $(this).text(),
@@ -1084,6 +1083,7 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
                         data: params
                     }).done(function(resp) {
                         var data = [];
+                        var dataRes = ajaxOptions.dataResponse;
                         if (dataRes == 'items') {
                             data = resp.items;
                         } else if (dataRes == 'results') {
@@ -1178,6 +1178,7 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
                     }).done(function(resp) {
 
                         var data = [];
+                        var dataRes = ajaxOptions.dataResponse;
                         if (dataRes == 'items') {
                             data = resp.items;
                         } else if (dataRes == 'results') {
