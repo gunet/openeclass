@@ -287,8 +287,8 @@ if (isset($_GET['add_course_to_tc'])) {
     $data['enabled'] = true;
 
     if (isset($_GET['add_server'])) {
-        $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course 
-                                            WHERE id NOT IN (SELECT course_id FROM course_external_server) 
+        $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
+                                            WHERE id NOT IN (SELECT course_id FROM course_external_server)
                                             AND visible != " . COURSE_INACTIVE . "
                                             ORDER BY title");
         $data['listcourses'] = "<option value='0' selected><h2>$langToAllCourses</h2></option>";
@@ -305,16 +305,16 @@ if (isset($_GET['add_course_to_tc'])) {
             $data['enabled'] = false;
         }
 
-        $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
-                                                        NOT IN (SELECT course_id FROM course_external_server) 
+        $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id
+                                                        NOT IN (SELECT course_id FROM course_external_server)
                                                         AND visible != " . COURSE_INACTIVE . "
                                                     ORDER BY title");
         $listcourses = '';
         if ($data['server']->all_courses == '1') {
             $listcourses .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
         } else {
-            $tc_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
-                                        IN (SELECT course_id FROM course_external_server WHERE external_server = ?d) 
+            $tc_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id
+                                        IN (SELECT course_id FROM course_external_server WHERE external_server = ?d)
                                         ORDER BY title", $data['bbb_server']);
             if (count($tc_courses_list) > 0) {
                 foreach($tc_courses_list as $c) {
@@ -340,7 +340,7 @@ if (isset($_GET['add_course_to_tc'])) {
 
         if (isset($_POST['del_recording_id'])) {
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-            
+
             $recording_id = $_POST['del_recording_id'];
             $apiMethod = 'deleteRecordings';
 
@@ -370,13 +370,13 @@ if (isset($_GET['add_course_to_tc'])) {
             Session::flash('message', $langLinkDeleted . '&nbsp; record ID: &nbsp;' . $recording_id);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/bbbmoduleconf.php?server_id=$server_id&fetch_recordings=1");
-            
+
         } else {
 
             /////////////////////////////////////////////////////
             // Fetch all recordings for the specific bbb server//
             /////////////////////////////////////////////////////
-            
+
             if (isset($_GET['fetch_recordings']) && !isset($_GET['state'])) {
                 $apiMethod = 'getRecordings';
                 $apiUrl = $bbbServerUrl . "api/" . $apiMethod;
@@ -438,7 +438,7 @@ if (isset($_GET['add_course_to_tc'])) {
     } else {
         view('admin.other.extapps.bbb.create', $data);
     }
-    
+
 } else { //display available BBB servers and running meetings
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
@@ -488,12 +488,11 @@ if (isset($_GET['add_course_to_tc'])) {
         $tc_cron_message = preg_replace('/\{(.*)\}/',
             "<p class='text-center' style='padding-top: 5px'><button class='btn btn-default' data-bs-toggle='modal' data-bs-target='#bbbCronInfoModal'>\\1</button></p>",
             $tc_cron_message);
-
-        $data['tc_cron_icon'] = $tc_cron_icon;
-        $data['tc_cron_class'] = $tc_cron_class;
-        $data['tc_cron_running'] = $tc_cron_running;
-        $data['tc_cron_message'] = $tc_cron_message;
     }
+    $data['tc_cron_icon'] = $tc_cron_icon;
+    $data['tc_cron_class'] = $tc_cron_class;
+    $data['tc_cron_running'] = $tc_cron_running;
+    $data['tc_cron_message'] = $tc_cron_message;
 
     $data['q'] = $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb' ORDER BY weight");
 
