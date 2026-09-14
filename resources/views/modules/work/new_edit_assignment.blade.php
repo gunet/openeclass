@@ -583,9 +583,34 @@
     @include('modules.work.lti_app_js_functions')
     <script type='text/javascript'>
         $(function() {
-            $('#scales').select2({ width: '100%' });
-            $('#rubrics').select2({ width: '100%' });
-            $('#reviews').select2({ width: '100%' });
+            // $('#scales').select2({ width: '100%' });
+            // $('#rubrics').select2({ width: '100%' });
+            // $('#reviews').select2({ width: '100%' });
+
+            slimSelectFun(
+                '#scales',
+                '{{ trans('langSearch') }}',
+                '{{ trans('langWelcomeSelect') }}',
+                '{{ trans('langSelectAll') }}',
+                '{{ trans('langListChoices') }}',
+            );
+
+            slimSelectFun(
+                '#rubrics',
+                '{{ trans('langSearch') }}',
+                '{{ trans('langWelcomeSelect') }}',
+                '{{ trans('langSelectAll') }}',
+                '{{ trans('langListChoices') }}',
+            );
+
+            slimSelectFun(
+                '#reviews',
+                '{{ trans('langSearch') }}',
+                '{{ trans('langWelcomeSelect') }}',
+                '{{ trans('langSelectAll') }}',
+                '{{ trans('langListChoices') }}',
+            );
+
             $('input[name=grading_type]').on('change', function(e){
                 let choice = $(this).val();
                 if (choice == 0) {

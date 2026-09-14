@@ -142,6 +142,7 @@ if (isset($_GET['delete'])) {
                 {
                     url: '{$urlServer}main/coursefeed.php',
                     dataType: 'json',
+                    dataResponse: 'results',
                     minimumInputLength: 2,
                     params: function(searchValue) {
                         return {

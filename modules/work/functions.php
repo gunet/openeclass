@@ -30,6 +30,7 @@ function new_edit_assignment($assignment_id = null) {
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
+    load_js('slimselect');
 
     $assignee_options = '';
     $unassigned_options = '';

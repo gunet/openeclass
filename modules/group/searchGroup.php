@@ -22,18 +22,20 @@
  require_once '../../include/baseTheme.php';
 
  if(isset($_GET['q']['term'])){
-     $q = $_GET['q']['term'];
-     $c_id = $_GET['course'];
+    $q = $_GET['q']['term'];
+    $c_id = $_GET['course'];
 
-     $taglist = Database::get()->queryArray("SELECT id, name FROM `group` WHERE name LIKE ?s AND course_id = ?d ORDER BY name", "%$q%",$c_id);
-     if ($taglist) {
-         foreach ($taglist as $tag) {
-             $tags[] = array('id' => $tag->name, 'text' => $tag->name);
-         }
-     } else {
-         $tags = array();
-     }
-
-     echo json_encode($tags);
+    $taglist = Database::get()->queryArray("SELECT id, name FROM `group` WHERE name LIKE ?s AND course_id = ?d ORDER BY name", "%$q%",$c_id);
+    if ($taglist) {
+        foreach ($taglist as $tag) {
+            $tags[] = array('id' => $tag->name, 'text' => $tag->name);
+        }
+    } else {
+        $tags[] = [];
+    }
+ } else {
+    $tags[] = [];
  }
+
+ echo json_encode(['results' => $tags], JSON_UNESCAPED_UNICODE);
 

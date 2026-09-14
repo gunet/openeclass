@@ -389,23 +389,46 @@ $tool_content .= "<div class='col-12'>
                                 } elseif ($type == 'pm' && $course_id == 0) {//personal messages
                                     $head_content .= "<script type='text/javascript'>
                                                         $(document).ready(function () {
-                                                            $('#recipients').select2({
-                                                                placeholder:'$langSearch',
-                                                                multiple: true,
-                                                                minimumInputLength: 3,
-                                                                ajax: {
-                                                                    url: 'load_recipients.php?autocomplete=1',
+                                                        
+                                                            // $('#recipients').select2({
+                                                            //     placeholder:'$langSearch',
+                                                            //     multiple: true,
+                                                            //     minimumInputLength: 3,
+                                                            //     ajax: {
+                                                            //         url: 'load_recipients.php?autocomplete=1',
+                                                            //         dataType: 'json',
+                                                            //         quietMillis: 250,
+                                                            //         processResults: function (data) { // parse the results into the format expected by Select2.
+                                                            //             // since we are using custom formatting functions we do not need to alter the remote JSON data
+                                                            //             return {
+                                                            //                 results: data.items
+                                                            //             };
+                                                            //         },
+                                                            //         cache: true
+                                                            //     },
+                                                            // });
+
+                                                            slimSelectFun(
+                                                                '#recipients',
+                                                                '$langSearch',
+                                                                '$langWelcomeSelect',
+                                                                '$langSelectAll',
+                                                                '$langUsers',
+                                                                {
+                                                                    url: '{$urlServer}modules/message/load_recipients.php?autocomplete=1',
                                                                     dataType: 'json',
-                                                                    quietMillis: 250,
-                                                                    processResults: function (data) { // parse the results into the format expected by Select2.
-                                                                        // since we are using custom formatting functions we do not need to alter the remote JSON data
+                                                                    dataResponse: 'items',
+                                                                    minimumInputLength: 3,
+                                                                    params: function(searchValue) {
                                                                         return {
-                                                                            results: data.items
+                                                                            term: searchValue,
+                                                                            _type: 'query',
+                                                                            q: searchValue
                                                                         };
-                                                                    },
-                                                                    cache: true
-                                                                },
-                                                            });
+                                                                    }
+                                                                }
+                                                            );
+
                                                         });
                                                     </script>";
 
@@ -426,7 +449,7 @@ $tool_content .= "<div class='col-12'>
                                                         <div class='form-group mt-4'>
                                                             <label for='recipients' class='col-sm-12 control-label-notes'>$langSendTo</label>
                                                             <div class='col-sm-12'>
-                                                                <select name='recipients[]' class='form-select' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
+                                                                <select name='recipients[]' class='form-control' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
                                                             </div>
                                                         </div>";
                                     }

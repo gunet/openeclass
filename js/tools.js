@@ -1026,6 +1026,7 @@ function q(str) {
 function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll, langListChoices, ajaxOptions = null) {
     var selectIdOption = $(element_id);
     var optionsData = [];
+    var dataRes = ajaxOptions.dataResponse;
     selectIdOption.find('option').each(function() {
         optionsData.push({
             text: $(this).text(),
@@ -1034,7 +1035,6 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
             disabled: $(this).is(':disabled')
         });
     });
-
     var groupedData = [
         {
             label: langListChoices,
@@ -1083,7 +1083,12 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
                         dataType: ajaxOptions.dataType || 'json',
                         data: params
                     }).done(function(resp) {
-                        const data = resp?.results || [];
+                        var data = [];
+                        if (dataRes == 'items') {
+                            data = resp.items;
+                        } else if (dataRes == 'results') {
+                            data = resp.results;
+                        }
                         const options = data.filter(item => {
                                 return !selected.some(
                                     selectedItem => {
@@ -1111,31 +1116,102 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
                         ]);
 
                     }).fail(function(xhr) {
-                        console.error('SlimSelect AJAX error:', xhr);
+                        //console.error('error:', xhr);
                         reject('Error fetching results');
                     });
 
                 });
+            },
+            afterChange: (newVal) => {
+                if (!ajaxOptions.tags || !ajaxOptions.tokenSeparators || !ajaxOptions.tokenSeparators.length) {
+                    return;
+                }
+
+                let selectedValues = [];
+                const escapedSeparators = ajaxOptions.tokenSeparators.map(separator => {
+                    return separator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                });
+                const separatorRegex = new RegExp(escapedSeparators.join('|'));
+
+                for (let i = 0; i < newVal.length; i++) {
+                    const values = newVal[i].text.split(separatorRegex);
+                    for (let j = 0; j < values.length; j++) {
+                        const value = values[j].trim();
+                        if (!value || selectedValues.includes(value)) {
+                            continue;
+                        }
+                        selectedValues.push(value);
+                        slimSelectInstance.addOption({
+                            text: value,
+                            value: value
+                        });
+                    }
+                }
+
+                slimSelectInstance.setSelected(selectedValues);
             }
         };
+
+        if (ajaxOptions && (ajaxOptions.tags || ajaxOptions.createSearchChoice)) {
+            config.events.addable = function(value) {
+                value = value.trim();
+
+                if (!value) {
+                    return false;
+                }
+
+                return {
+                    text: value,
+                    value: value
+                };
+            };
+        }
+
+        if (ajaxOptions && ajaxOptions.afterOpen) {
+            config.events.afterOpen = function() {
+                $.ajax({
+                        url: ajaxOptions.url,
+                        dataType: ajaxOptions.dataType || 'json',
+                        data: {
+                            page: 1
+                        }
+                    }).done(function(resp) {
+
+                        var data = [];
+                        if (dataRes == 'items') {
+                            data = resp.items;
+                        } else if (dataRes == 'results') {
+                            data = resp.results;
+                        }
+
+                        if (!data.length) {
+                            return;
+                        }
+
+                        const options = data.map(item => {
+                            return {
+                                text: item.text,
+                                value: String(item.id)
+                            };
+                        });
+
+                        slimSelectInstance.setData([
+                            {
+                                label: langListChoices,
+                                selectAll: true,
+                                selectAllText: langSelectAll,
+                                options: options
+                            }
+                        ]);
+
+                    }).fail(function(xhr) {
+                        console.error('Error fetching:', xhr);
+                    });
+            };
+        }
     }
 
-    /*
-    * Tags / createSearchChoice from select2
-    */
-    // if (ajaxOptions.tags) {
-    //     config.events.addable = function(value) {
-    //         value = value.trim();
-    //         if (!value) {
-    //             return false;
-    //         }
-    //         return {
-    //             text: value,
-    //             value: value
-    //         };
-    //     };
-    // }
-
-    return new SlimSelect(config);
+    var slimSelectInstance = new SlimSelect(config);
+    return slimSelectInstance;
 }
 
