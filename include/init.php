@@ -22,9 +22,7 @@
  * @brief initialisation of variables, includes security checks and serves language switching.
  *        It is included in every file via baseTheme.php
  */
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 /**
  * Escape HTML entities in a string.
  *
@@ -62,8 +60,7 @@ if (file_exists('config/config.php')) { // read config file
 }
 
 // appended to JS and CSS links to break caching - changes per second in debug mode
-//define('CACHE_SUFFIX', ECLASS_VERSION . (defined('DEBUG') && DEBUG ? ('-' . time()): ''));
-define('CACHE_SUFFIX', ECLASS_VERSION . '-' . time());
+define('CACHE_SUFFIX', ECLASS_VERSION . (defined('DEBUG') && DEBUG ? ('-' . time()): ''));
 
 // Initialize global debug mechanism
 require_once 'modules/admin/debug.php';
