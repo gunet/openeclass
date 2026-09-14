@@ -62,7 +62,7 @@ if (isset($_GET['jmpath'])) {
 
 $head_content .= '
 
-<link type="text/css" rel="stylesheet" href="jsmind.css" />
+<link type="text/css" rel="stylesheet" href="' . $urlAppend . 'js/jsmind/jsmind.css" />
     <style type="text/css">
 
         #jsmind_container{
@@ -173,9 +173,9 @@ $tool_content .= "
 
 
 $tool_content .= '
-	<script type="text/javascript" src="jsmind.js"></script>
-	<script type="text/javascript" src="jsmind.draggable-node.js"></script>
-	<script type="text/javascript" src="jsmind.screenshot.js"></script>
+	<script type="text/javascript" src="' . $urlAppend . 'js/jsmind/jsmind.js"></script>	
+	<script type="text/javascript" src="' . $urlAppend . 'js/jsmind/dom-to-image.min.js"></script>
+	<script type="text/javascript" src="' . $urlAppend . 'js/jsmind/jsmind.screenshot.js"></script>
 	<script type="text/javascript">
     var _jm = null;
 	new_node=1;
@@ -264,8 +264,8 @@ $tool_content .= '
 		_jm.show(mind);
 	}
 
-    function screen_shot(){
-        _jm.screenshot.shootDownload();
+    function screen_shot(){            
+        _jm.shoot();
 	}
 
     function show_data(){
@@ -277,43 +277,53 @@ $tool_content .= '
     function save_file(){
         var mind_data = _jm.get_data();
         var mind_name = prompt("'.$langPleaseEnterName.'", "Name");
-	if (mind_name!=null){
-        var mind_str = jsMind.util.json.json2string(mind_data);
-        jsMind.util.file.save(mind_str,"text/jsmind",mind_name+".jm");
-	}
+        if (mind_name!=null){
+            var mind_str = jsMind.util.json.json2string(mind_data);
+            jsMind.util.file.save(mind_str,"text/jsmind",mind_name+".jm");
+        }
     }
 
-	function save_file_in_doc(){
-
-		var x = prompt("'.$langPleaseEnterName.'", "Name");
-		if (x!=null){
-			_jm.screenshot.shootAsDataURL(save_file_as_image);
-			_jm.mind.name=x;
-		}
-
-	}
-
-	function save_file_as_image(){
-		var urldat = _jm.screenshot.canvas_elem.toDataURL();
-		var imagename = _jm.mind.name;
-        //var mind_data = _jm.get_data();
-		//console.log(_jm);
-
-		//image post in document in base64 format//
-			$.ajax({
-			  type: "POST",
-			  url: "../document/index.php",
-			  data: {
-				 imgBase64: urldat,
-				 imgname: imagename
-			  }
-			})
-			.done(function(data, textStatus, jqXHR) {
-			    var mind_data = _jm.get_data();
-				var data = jsMind.util.json.json2string(mind_data);
-				window.location.href = "../document/index.php?mindmap=" + data +"&mindtitle=" + imagename;
-			});
-	}
+    function save_file_in_doc() {
+        var x = prompt("'.$langPleaseEnterName.'", "Name");
+        if (x != null && x.trim() !== "") {
+            _jm.mind.name = x;
+    
+            // Get the jsMind DOM container
+            var node = _jm.view.e_panel || document.querySelector(".jsmind-inner") || _jm.container;
+    
+            domtoimage.toPng(node)
+                .then(function(dataUrl) {
+                    save_file_as_image(dataUrl, x);
+                })
+                .catch(function(error) {
+                    console.error("Failed to generate image:", error);
+                });
+        }
+    }
+    
+    function save_file_as_image(urldat, imagename) {
+        $.ajax({
+            type: "POST",
+            url: "../document/index.php",
+            data: {
+                imgBase64: urldat,
+                imgname: imagename
+            }
+        })
+        .done(function(response, textStatus, jqXHR) {
+            var mind_data = _jm.get_data();
+            var dataString = jsMind.util.json.json2string(mind_data);
+            
+            window.location.href = "../document/index.php?mindmap=" + 
+                encodeURIComponent(dataString) + 
+                "&mindtitle=" + 
+                encodeURIComponent(imagename);
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error("Upload failed:", textStatus, errorThrown);
+        });
+    }
+	
 
     function open_file(){
         var file_input = document.getElementById("file_input");
