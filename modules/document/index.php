@@ -453,7 +453,7 @@ if (isset($_GET['mindmap'])) {
             path = ?s,
             extra_path = '',
             filename = ?s,
-            visible = 1,
+            visible = 0,
             comment = '',
             category = 0,
             title = ?s,
