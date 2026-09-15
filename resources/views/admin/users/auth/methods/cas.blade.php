@@ -43,48 +43,128 @@
                 $(this).closest('tr').remove();
             });
 
-            $('#minedu_School').prop('disabled', true).select2();
 
-            $('#minedu_institution').select2({
-                placeholder: '{{ trans('langWelcomeSelect') }}',
-                allowClear: true,
-            }).on('select2:select', function (e) {
-                $('#minedu_School').val('').trigger('change');
-                var selectedInstitution = $(this).val();
+            // $('#minedu_School').prop('disabled', true).select2();
+            // $('#minedu_institution').select2({
+            //     placeholder: '{{ trans('langWelcomeSelect') }}',
+            //     allowClear: true,
+            // }).on('select2:select', function (e) {
+            //     $('#minedu_School').val('').trigger('change');
+            //     var selectedInstitution = $(this).val();
 
-                if (selectedInstitution) {
-                    $('#minedu_School').prop('disabled', false);
-                    $('#minedu_School').select2({
-                        allowClear: true,
-                        placeholder: '{{ trans('langWelcomeSelect') }}',
-                        ajax: {
-                            url: 'get_minedu_departments.php',
-                            dataType: 'json',
-                            delay: 250,
-                            data: {
+            //     if (selectedInstitution) {
+            //         $('#minedu_School').prop('disabled', false);
+            //         $('#minedu_School').select2({
+            //             allowClear: true,
+            //             placeholder: '{{ trans('langWelcomeSelect') }}',
+            //             ajax: {
+            //                 url: 'get_minedu_departments.php',
+            //                 dataType: 'json',
+            //                 delay: 250,
+            //                 data: {
+            //                     qtype: 'School',
+            //                     Institution: selectedInstitution
+            //                 },
+            //                 processResults: function (data) {
+            //                     console.log('School',data)
+            //                     return {
+            //                         results: [{ text: '{{ trans('langDefaultCategory') }}', id: '0'}].concat(
+            //                             data.map(function (item) {
+            //                                 return { text: item.Department, id: item.MineduID };
+            //                             })
+            //                         )
+            //                     };
+            //                 }
+            //             }
+            //         });
+            //     } else {
+            //         $('#minedu_School').prop('disabled', true).empty();
+            //     }
+            // }).trigger('select2:select');
+
+
+            let mineduSchoolSelect = null;
+            $('#minedu_School').prop('disabled', true);
+
+            mineduSchoolSelect = slimSelectFun(
+                '#minedu_School',
+                '{{ trans('langSearch') }}',
+                '{{ trans('langWelcomeSelect') }}',
+                '{{ trans('langSelectAll') }}',
+                '{{ trans('langDefaultCategory') }}'
+            );
+
+            slimSelectFun(
+                '#minedu_institution',
+                '{{ trans('langSearch') }}',
+                '{{ trans('langWelcomeSelect') }}',
+                '{{ trans('langSelectAll') }}',
+                '{{ trans('langDefaultCategory') }}'
+            );
+
+            $('#minedu_institution').on('change', function () {
+                const selectedInstitution = $(this).val();
+                $('#minedu_School').val('');
+
+                if (mineduSchoolSelect) {
+                    mineduSchoolSelect.destroy();
+                    mineduSchoolSelect = null;
+                }
+
+                if (!selectedInstitution) {
+                    $('#minedu_School').prop('disabled', true);
+                    return;
+                }
+
+                $('#minedu_School').prop('disabled', false);
+                mineduSchoolSelect = slimSelectFun(
+                    '#minedu_School',
+                    '{{ trans('langSearch') }}',
+                    '{{ trans('langWelcomeSelect') }}',
+                    '{{ trans('langSelectAll') }}',
+                    '{{ trans('langDefaultCategory') }}',
+                    {
+                        url: 'get_minedu_departments.php',
+                        dataType: 'json',
+                        dataResponse: 'tags',
+                        delay: 250,
+                        afterOpen: true,
+                        params: function (searchValue) {
+                            return {
                                 qtype: 'School',
                                 Institution: selectedInstitution
-                            },
-                            processResults: function (data) {
-                                console.log('School',data)
-                                return {
-                                    results: [{ text: '{{ trans('langDefaultCategory') }}', id: '0'}].concat(
-                                        data.map(function (item) {
-                                            return { text: item.Department, id: item.MineduID };
-                                        })
-                                    )
-                                };
-                            }
+                            };
+                        },
+                        processResults: function (data) {
+                            return [
+                                {
+                                    text: '{{ trans('langDefaultCategory') }}',
+                                    id: '0'
+                                }
+                            ].concat(
+                                data.map(function (item) {
+                                    return {
+                                        text: item.Department,
+                                        id: item.MineduID
+                                    };
+                                })
+                            );
                         }
-                    });
-                } else {
-                    $('#minedu_School').prop('disabled', true).empty();
-                }
-            }).trigger('select2:select');
+                    }
+                );
+            });
 
             $('#cas_gunet_add').on('click', function(e) {
                 e.preventDefault();
-                let minedu_School = $('#minedu_School').select2('data');
+                //let minedu_School = $('#minedu_School').select2('data');
+                let minedu_School = $('#minedu_School option:selected').map(function () {
+                                        return {
+                                            selected: true,
+                                            disabled: this.disabled,
+                                            text: $(this).text(),
+                                            id: $(this).val()
+                                        };
+                                    }).get();
                 let minedu_School_text = minedu_School[0].text;
                 let minedu_School_id = minedu_School[0].id;
 

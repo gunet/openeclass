@@ -1177,20 +1177,33 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
 
         if (ajaxOptions && ajaxOptions.afterOpen) {
             config.events.afterOpen = function() {
+                var params = {};
+                if (typeof ajaxOptions.params === 'function') {
+                    params = ajaxOptions.params('');
+                } else if (ajaxOptions.params) {
+                    params = {
+                        ...ajaxOptions.params
+                    };
+                }
                 $.ajax({
                         url: ajaxOptions.url,
+                        type: ajaxOptions.type || 'GET',
                         dataType: ajaxOptions.dataType || 'json',
-                        data: {
-                            page: 1
-                        }
+                        data: params
                     }).done(function(resp) {
-
                         var data = [];
                         var dataRes = ajaxOptions.dataResponse;
                         if (dataRes == 'items') {
                             data = resp.items;
                         } else if (dataRes == 'results') {
                             data = resp.results;
+                        } else if (dataRes == 'tags') {
+                            data = resp;
+                        } else if (dataRes == 'aaData') {
+                            data = resp.aaData;
+                        }
+                        if (ajaxOptions.processResults) {
+                            data = ajaxOptions.processResults(data);
                         }
 
                         if (!data.length) {

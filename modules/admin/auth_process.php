@@ -37,8 +37,10 @@ if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $data['auth'] = $auth = intval($_REQUEST['auth']); // $auth gets the integer id of the auth method if it is set
     $data['auth_data'] = $auth_data = get_auth_settings($auth);
     if ($auth == 7) {
+        load_js('tools.js');
+        load_js('slimselect');
         load_js('jstree3');
-        load_js('select2');
+        //load_js('select2');
         load_js('datatables');
         $tree = new Hierarchy();
 
