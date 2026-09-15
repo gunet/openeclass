@@ -2276,8 +2276,10 @@ if (isset($_GET['modifyAnswers'])) {
         if ($answerType == CALCULATED && !$modifyWildCards) {
             $hiddenClass = 'd-none';
         }
-        $tool_content .= "
-            <script>
+
+        if (in_array($answerType, [1, 2, 5])) {
+            $tool_content .= "
+                <script>
 $(document).ready(function() {
     function validateAllWeightings() {
         var hasProblem = false;
@@ -2315,11 +2317,12 @@ $(document).ready(function() {
     validateAllWeightings();
 });
 </script>
-            
-            <div class='negativeAnswer col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap d-none' style='background-color: #fff3cd; color: #856404; padding: 15px; border: 1px solid #ffeeba; border-radius: 4px; margin-top: 10px;'>
-                $langNegativeGrading
-            </div>
-            ";
+                
+                <div class='negativeAnswer col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap d-none' style='background-color: #fff3cd; color: #856404; padding: 15px; border: 1px solid #ffeeba; border-radius: 4px; margin-top: 10px;'>
+                    $langNegativeGrading
+                </div>
+                ";
+        }
 
         $tool_content .= "
                         <div class='col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap $hiddenClass mt-4'>
