@@ -1786,6 +1786,7 @@ $langGoToCoby = 'Μετάβαση στο Coby';
 // Admin mutiple course creation
 $langMultiCourse = "Μαζική δημιουργία $langsOfCourses";
 $langMultiCourseDelete = "Μαζική διαγραφή $langsOfCourses";
+$langMultiCourseEdit = "Μαζική επεξεργασία $langsOfCourses";
 $langMultiCourseInfo = "Εισαγάγετε στην παρακάτω περιοχή μια λίστα με τους
 τίτλους των $langsOfCourses που επιθυμείτε να δημιουργηθούν, με τον κάθε
 τίτλο σε ξεχωριστή γραμμή. Αν επιθυμείτε να προστεθεί αυτόματα

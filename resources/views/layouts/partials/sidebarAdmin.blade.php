@@ -167,6 +167,11 @@
                                 </a>
                             </li>
                             <li class="list-group-item element">
+                                <a class='TextBold' href="{{$urlAppend}}modules/admin/multicoursedit.php">
+                                    {{ trans('langMultiCourseEdit') }}
+                                </a>
+                            </li>
+                            <li class="list-group-item element">
                                 <a class='TextBold' href="{{$urlAppend}}modules/admin/multicoursedel.php">
                                     {{ trans('langMultiCourseDelete') }}
                                 </a>
