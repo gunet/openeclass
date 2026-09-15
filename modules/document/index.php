@@ -884,12 +884,37 @@ if ($can_upload or $user_upload) {
                                   'filename' => $fileName,
                                   'title' => $_POST['file_title']));
                     $title = $_POST['file_title']? $_POST['file_title']: $fileName;
+
+                    $file_content_str = purify($_POST['file_content']);
+                    if (preg_match('/\\\\[\(\[]|\$\$/', $file_content_str)) { // detect latex code and load MathJax>
+                        $mathjax_loader = "<script type='text/javascript'>
+                            window.MathJax = {
+                                    loader: {
+                                        paths: {
+                                            '@mathjax': '{$urlAppend}resources/fonts',
+                                            'mathjax-newcm': '{$urlAppend}resources/fonts/mathjax-newcm-font',
+                                            '@mathjax/mathjax-newcm-font': '{$urlAppend}resources/fonts/mathjax-newcm-font'
+                                        }
+                                    },
+                                    chtml: {
+                                        fontURL: '{$urlAppend}resources/fonts/mathjax-newcm-font/chtml/woff2',
+                                        dynamicPrefix: '{$urlAppend}resources/fonts/mathjax-newcm-font/chtml/dynamic'
+                                    }
+                                };
+                            </script>
+                            <script type='text/javascript' id='MathJax-script' async src='{$urlAppend}js/mathjax/tex-chtml.js'></script>";
+                    } else {
+                        $mathjax_loader = '';
+                    }
+
                     file_put_contents($basedir . $file_path,
                         "<!DOCTYPE html>\n" .
                         "<head>\n" .
                         "  <meta charset='utf-8'>\n" .
-                        '  <title>' . q($title) . "</title>\n</head>\n<body>\n" .
-                        purify($_POST['file_content']) .
+                        '  <title>' . q($title) . "</title>\n
+                        $mathjax_loader                        
+                        </head>\n<body>\n" .
+                        $file_content_str .
                         "\n</body>\n</html>\n");
                     $session->setDocumentTimestamp($course_id);
                     $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_DOCUMENT, $id);
