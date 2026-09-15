@@ -102,7 +102,7 @@ $head_content .= "<script type='text/javascript'>
         });
     </script>";
 
-load_js('select2');
+//load_js('select2');
 load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
@@ -146,9 +146,10 @@ $head_content .= "<script type='text/javascript'>
         alert('Changed a tag: ' + tag);
     }
 
-    $(function() {
-        $('#tags_1').select2({tags:[], formatNoMatches: ''});
-    });
+    // $(function() {
+    //     $('#tags_1').select2({tags:[], formatNoMatches: ''});
+    // });
+    
 </script>
 ";
 

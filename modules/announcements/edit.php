@@ -89,7 +89,7 @@ $antitle_error = Session::getError('antitle', "<span class='help-block Accent-20
 $data['startdate_error'] = Session::getError('startdate', "<span class='help-block Accent-200-cl'>:message</span>");
 $data['enddate_error'] = Session::getError('enddate', "<span class='help-block Accent-200-cl'>:message</span>");
 
-load_js('select2');
+//load_js('select2');
 load_js('tools.js');
 load_js('slimselect');
 load_js('bootstrap-datetimepicker');

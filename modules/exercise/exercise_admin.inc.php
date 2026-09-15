@@ -44,7 +44,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
-load_js('select2');
+load_js('slimselect');
+//load_js('select2');
 
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {

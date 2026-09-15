@@ -1079,6 +1079,7 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
                      */
                     $.ajax({
                         url: ajaxOptions.url,
+                        type: ajaxOptions.type || 'GET',
                         dataType: ajaxOptions.dataType || 'json',
                         data: params
                     }).done(function(resp) {
@@ -1088,6 +1089,13 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
                             data = resp.items;
                         } else if (dataRes == 'results') {
                             data = resp.results;
+                        } else if (dataRes == 'tags') {
+                            data = resp;
+                        } else if (dataRes == 'aaData') {
+                            data = resp.aaData;
+                        }
+                        if (ajaxOptions.processResults) {
+                            data = ajaxOptions.processResults(data);
                         }
                         const options = data.filter(item => {
                                 return !selected.some(

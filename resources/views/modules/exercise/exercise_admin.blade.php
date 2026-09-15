@@ -555,7 +555,7 @@
                                                                     {{ trans('langIPUnlockLegend') }}
                                                                 </div>
                                                                 <div class='col-12'>
-                                                                    <select name='exerciseIPLock[]' class='form-select'
+                                                                    <select name='exerciseIPLock[]' class='form-control'
                                                                             id='exerciseIPLock' multiple>
                                                                         {!! $exerciseIPLockOptions !!}
                                                                     </select>
@@ -650,11 +650,23 @@
                 }
             });
 
-            $('#exerciseIPLock').select2({
-                minimumResultsForSearch: Infinity,
-                tags: true,
-                tokenSeparators: [',', ' ']
-            });
+            // $('#exerciseIPLock').select2({
+            //     minimumResultsForSearch: Infinity,
+            //     tags: true,
+            //     tokenSeparators: [',', ' ']
+            // });
+
+            slimSelectFun(
+                '#exerciseIPLock',
+                '{{ trans('langSearch') }}',
+                '{{ trans('langWelcomeSelect') }}',
+                '{{ trans('langSelectAll') }}',
+                '{{ trans('langListChoices') }}',
+                {
+                    tags: true,
+                    tokenSeparators: [',', ' '],
+                }
+            );
 
             $('#assign_button_all').click(hideAssignees);
             $('#assign_button_user, #assign_button_group').click(ajaxAssignees);

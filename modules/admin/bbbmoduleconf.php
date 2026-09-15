@@ -37,7 +37,7 @@ $course = new Course();
 
 load_js('tools.js');
 load_js('validation.js');
-load_js('select2');
+// load_js('select2');
 load_js('slimselect');
 load_js('datatables');
 

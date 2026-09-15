@@ -4286,7 +4286,7 @@ function certificate_settings($element, $element_id = 0) {
            $webDir, $langSelect, $langChooseTemplate, $langSelectedTemplate;
 
     load_js('bootstrap-datetimepicker');
-    load_js('select2');
+    // load_js('select2');
 
     $head_content .= "
     <script type='text/javascript'>
@@ -4310,81 +4310,81 @@ function certificate_settings($element, $element_id = 0) {
                 }
             });
 
-            if ($('#selectWithIcon').length > 0) {
+            // if ($('#selectWithIcon').length > 0) {
 
-                let urlServer = $('#urlServer').val();
-                let select2Data;
-                let certImage = {};
+            //     let urlServer = $('#urlServer').val();
+            //     let select2Data;
+            //     let certImage = {};
 
-                if ($('#certificate_hidden').length > 0) {
-                    let data = JSON.parse($('#certificate_hidden').val());
+            //     if ($('#certificate_hidden').length > 0) {
+            //         let data = JSON.parse($('#certificate_hidden').val());
                     
-                    let requests = Object.keys(data).map(key => {
-                        return $.ajax({
-                                    url: 'ajax_certificate.php',
-                                    type: 'POST',
-                                    dataType: 'json',
-                                    data: {
-                                        certificate_id: key
-                                    }
-                                }).then(response => {
-                                    if (response.success) {
-                                        certImage[key] = response.result;
-                                    }
-                                });
-                    });
+            //         let requests = Object.keys(data).map(key => {
+            //             return $.ajax({
+            //                         url: 'ajax_certificate.php',
+            //                         type: 'POST',
+            //                         dataType: 'json',
+            //                         data: {
+            //                             certificate_id: key
+            //                         }
+            //                     }).then(response => {
+            //                         if (response.success) {
+            //                             certImage[key] = response.result;
+            //                         }
+            //                     });
+            //         });
 
-                    Promise.all(requests).then(() => {
-                        select2Data = Object.keys(data).map(key => ({
-                            id: key,
-                            text: data[key],
-                            image: certImage[key]
-                        }));
-                        $('#selectWithIcon').select2({
-                            data: select2Data,
-                            templateResult: formatOption,
-                        });
-                        let imgPath = certImage[$('#selectWithIcon').val()];
-                        $('#selected_icon').attr('src', imgPath);
-                    });
-                }
+            //         Promise.all(requests).then(() => {
+            //             select2Data = Object.keys(data).map(key => ({
+            //                 id: key,
+            //                 text: data[key],
+            //                 image: certImage[key]
+            //             }));
+            //             $('#selectWithIcon').select2({
+            //                 data: select2Data,
+            //                 templateResult: formatOption,
+            //             });
+            //             let imgPath = certImage[$('#selectWithIcon').val()];
+            //             $('#selected_icon').attr('src', imgPath);
+            //         });
+            //     }
 
-                if ($('#badge_hidden').length > 0) {
-                    let data = JSON.parse($('#badge_hidden').val());
-                    let filenames = JSON.parse($('#badge_filenames_hidden').val());
-                    select2Data = Object.keys(data).map(key => ({
-                        id: key,
-                        text: data[key],
-                        image: urlServer + 'courses/user_progress_data/badge_templates/' + filenames[key],
-                        width: 48
-                    }));
-                    $('#selectWithIcon').select2({
-                        data: select2Data,
-                        templateResult: formatOption,
-                    });
-                    let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + filenames[$('#selectWithIcon').val()];
-                    $('#selected_icon').attr('src', imgPath);
-                    $('#selected_icon').attr('width', 48);
-                }
+            //     if ($('#badge_hidden').length > 0) {
+            //         let data = JSON.parse($('#badge_hidden').val());
+            //         let filenames = JSON.parse($('#badge_filenames_hidden').val());
+            //         select2Data = Object.keys(data).map(key => ({
+            //             id: key,
+            //             text: data[key],
+            //             image: urlServer + 'courses/user_progress_data/badge_templates/' + filenames[key],
+            //             width: 48
+            //         }));
+            //         $('#selectWithIcon').select2({
+            //             data: select2Data,
+            //             templateResult: formatOption,
+            //         });
+            //         let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + filenames[$('#selectWithIcon').val()];
+            //         $('#selected_icon').attr('src', imgPath);
+            //         $('#selected_icon').attr('width', 48);
+            //     }
 
-                function formatOption(option) {
-                    let dareturn = '<span><img ' + (option.width ? 'width=' + option.width : '') + ' src=' + option.image + ' /> ' + option.text + '</span>';
-                    return $(dareturn);
-                }
+            //     function formatOption(option) {
+            //         let dareturn = '<span><img ' + (option.width ? 'width=' + option.width : '') + ' src=' + option.image + ' /> ' + option.text + '</span>';
+            //         return $(dareturn);
+            //     }
 
-                $('#selectWithIcon').on('change', function (e) {
-                    let dataType = $(this).data('type');
-                    if (dataType == 'certificate') {
-                        let imgPath = certImage[$('#selectWithIcon').val()];
-                        $('#selected_icon').attr('src', imgPath);
-                    } else if (dataType === 'badge') {
-                        let filenames = JSON.parse($('#badge_filenames_hidden').val());
-                        let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + filenames[$('#selectWithIcon').val()];
-                        $('#selected_icon').attr('src', imgPath);
-                    }
-                });
+            //     $('#selectWithIcon').on('change', function (e) {
+            //         let dataType = $(this).data('type');
+            //         if (dataType == 'certificate') {
+            //             let imgPath = certImage[$('#selectWithIcon').val()];
+            //             $('#selected_icon').attr('src', imgPath);
+            //         } else if (dataType === 'badge') {
+            //             let filenames = JSON.parse($('#badge_filenames_hidden').val());
+            //             let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + filenames[$('#selectWithIcon').val()];
+            //             $('#selected_icon').attr('src', imgPath);
+            //         }
+            //     });
 
-            }
+            // }
 
             $('.chooseCertificate').on('click', function () {
                 const modalCerts = document.getElementById('openCertificateTemplate');
@@ -4681,6 +4681,7 @@ function certificate_settings($element, $element_id = 0) {
                                 // $tool_content .= "<input id='$inputId' type='hidden' value='$value'>";
                                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                
                             }
                             $tool_content .= "<input id='urlServer' type='hidden' value='".$urlServer."'>";
 

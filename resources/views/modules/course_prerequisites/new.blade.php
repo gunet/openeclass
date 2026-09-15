@@ -3,6 +3,7 @@
 @push('head_scripts')
     <script type="text/javascript">
         $(document).ready(function () {
+
             // $('#courses-select').select2({
             //     minimumInputLength: 2,
             //     tags: true,
@@ -11,7 +12,7 @@
             //         dataType: 'json'
             //     }
             // });
-
+            
             slimSelectFun(
                 '#courses-select',
                 '{{ trans('langSearch') }}',
@@ -34,8 +35,6 @@
                     }
                 }
             );
-            
-
         });
     </script>
 @endpush

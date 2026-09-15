@@ -781,7 +781,7 @@ function printPolls() {
             <script>
               $(function () {
                 $(document).on('click', '.warnLink', function(e) {
-
+                
 
                     // var pid = $(this).data('pid');
                     // $('#clone_form').attr('action', '" . js_escape($_SERVER['SCRIPT_NAME']) . "?course=$course_code&pid=' + pid);
@@ -843,7 +843,7 @@ function printPolls() {
                 });
               });
             </script>";
-        load_js('select2');
+        //load_js('select2');
         load_js('slimselect');
     }
 }

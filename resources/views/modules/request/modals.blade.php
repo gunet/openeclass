@@ -60,13 +60,39 @@
 
 <script>
     $(function() {
-        $("#assignTo").select2({
-            dropdownParent: $("#assigneesModal"),
-            width: '100%'
+
+        // $("#assignTo").select2({
+        //     dropdownParent: $("#assigneesModal"),
+        //     width: '100%'
+        // });
+        // $("#watchersInput").select2({
+        //     dropdownParent: $("#watchersModal"),
+        //     width: '100%'
+        // });
+        
+        $('#assigneesModal').modal({
+            focus: false
         });
-        $("#watchersInput").select2({
-            dropdownParent: $("#watchersModal"),
-            width: '100%'
+
+        $('#watchersModal').modal({
+            focus: false
         });
+
+        slimSelectFun(
+            '#assignTo',
+            '{{ trans('$langSearch') }}',
+            '{{ trans('$langWelcomeSelect') }}',
+            '{{ trans('$langSelectAll') }}',
+            '{{ trans('$langListChoices') }}'
+        );
+
+        slimSelectFun(
+            '#watchersInput',
+            '{{ trans('$langSearch') }}',
+            '{{ trans('$langWelcomeSelect') }}',
+            '{{ trans('$langSelectAll') }}',
+            '{{ trans('$langListChoices') }}'
+        );
+
     });
 </script>

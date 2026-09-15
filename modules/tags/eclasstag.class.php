@@ -36,14 +36,19 @@ class eClassTag {
         return $this->name;
     }
     public static function tagInput($id = null) {
-        global $langTags, $head_content, $course_code;
+        global $langTags, $head_content, $course_code, $langSearch, $langWelcomeSelect, $langSelectAll;
 
         // initialize the tags
+        $options = '';
         if ($id) {
             require_once 'modules/tags/moduleElement.class.php';
             $moduleTag = new ModuleElement($id);
 
             $tags_init = $moduleTag->getTags();
+            foreach ($tags_init as $tag) {
+                $tag = js_escape($tag);
+                $options .= '<option value="' . $tag . '" selected>' . $tag . '</option>';
+            }
             $answer = implode(',', array_map(function ($tag) {
                 return '{id:"' . js_escape($tag) . '", text:"' . js_escape($tag) . '", selected: true}';
             }, $tags_init));
@@ -53,44 +58,70 @@ class eClassTag {
         $head_content .= "
             <script>
                 $(function () {
-                    $('#tags').select2({
-                            data: [".$answer."],
+
+                    // $('#tags').select2({
+                    //         data: [".$answer."],
+                    //         minimumInputLength: 2,
+                    //         tags: true,
+                    //         tokenSeparators: [','],
+                    //         width: '100%',
+                    //         selectOnClose: true,
+                    //         createSearchChoice: function(term, data) {
+                    //           if ($(data).filter(function() {
+                    //             return this.text.localeCompare(term) === 0;
+                    //           }).length === 0) {
+                    //             return {
+                    //               id: term,
+                    //               text: term
+                    //             };
+                    //           }
+                    //         },
+                    //         ajax: {
+                    //             url: '../tags/feed.php',
+                    //             dataType: 'json',
+                    //             data: function(term, page) {
+                    //                 return {
+                    //                     course: '" . js_escape($course_code) . "',
+                    //                     q: term
+                    //                 };
+                    //             },
+                    //             processResults: function(data, page) {
+                    //                 return {results: data};
+                    //             }
+                    //         }
+                    // });
+
+                    slimSelectFun(
+                        '#tags',
+                        '$langSearch',
+                        '$langWelcomeSelect',
+                        '$langSelectAll',
+                        '$langTags',
+                        {
+                            url: '../tags/feed.php',
+                            dataType: 'json',
+                            dataResponse: 'tags',
                             minimumInputLength: 2,
                             tags: true,
+                            createSearchChoice: true,
                             tokenSeparators: [','],
-                            width: '100%',
-                            selectOnClose: true,
-                            createSearchChoice: function(term, data) {
-                              if ($(data).filter(function() {
-                                return this.text.localeCompare(term) === 0;
-                              }).length === 0) {
+                            params: function(term) {
                                 return {
-                                  id: term,
-                                  text: term
+                                    course: '" . js_escape($course_code) . "',
+                                    'q[term]': term,
+                                    _type: 'query'
                                 };
-                              }
-                            },
-                            ajax: {
-                                url: '../tags/feed.php',
-                                dataType: 'json',
-                                data: function(term, page) {
-                                    return {
-                                        course: '" . js_escape($course_code) . "',
-                                        q: term
-                                    };
-                                },
-                                processResults: function(data, page) {
-                                    return {results: data};
-                                }
                             }
-                    });
+                        }
+                    );
                 });
             </script>";
         $input_field = "
                 <div class='form-group mt-4'>
                     <label for='tags' class='col-12 control-label-notes mb-2'>$langTags</label>
                     <div class='col-12'>
-                        <select id='tags' class='form-select' name='tags[]' multiple>
+                        <select id='tags' class='form-control' name='tags[]' multiple>
+                        $options
                         </select>
                     </div>
                 </div>

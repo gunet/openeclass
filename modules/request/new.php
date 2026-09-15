@@ -226,7 +226,9 @@ if ($data['request_types']) {
     }
 }
 
-load_js('select2');
+//load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 load_js('bootstrap-datepicker');
 load_js('bootstrap-combobox');
 

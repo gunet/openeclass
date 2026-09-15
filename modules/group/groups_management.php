@@ -40,13 +40,13 @@ $pageName = $langGroupsManagment;
 
 load_js('tools.js');
 load_js('slimselect');
-load_js('select2');
+//load_js('select2');
 
 $head_content .= "
 <script>
     $(function () {
-    
-        // $('#group-name').select2({
+
+    // $('#group-name').select2({
         //     minimumInputLength: 2,
         //     tags: true,
         //     tokenSeparators: [','],

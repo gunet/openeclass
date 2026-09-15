@@ -540,7 +540,7 @@
                                             <div class='row form-group  @if (Session::getError('assignmentIPLock')) has-error @endif mt-4'>
                                                 <label for='assignmentIPLock' class='col-12 control-label-notes mb-1'>{{ trans('langIPUnlock') }}</label>
                                                 <div class='col-12'>
-                                                    <select name='assignmentIPLock[]' class='form-select' id='assignmentIPLock' multiple>
+                                                    <select name='assignmentIPLock[]' class='form-control' id='assignmentIPLock' multiple>
                                                         {!! $assignmentIPLockOptions !!}
                                                     </select>
                                                 </div>
@@ -583,10 +583,10 @@
     @include('modules.work.lti_app_js_functions')
     <script type='text/javascript'>
         $(function() {
+
             // $('#scales').select2({ width: '100%' });
             // $('#rubrics').select2({ width: '100%' });
             // $('#reviews').select2({ width: '100%' });
-
             slimSelectFun(
                 '#scales',
                 '{{ trans('langSearch') }}',
@@ -842,12 +842,25 @@
                         .addClass('hidden');
                 }
             });
-            $('#assignmentIPLock').select2({
-                minimumResultsForSearch: Infinity,
-                tags: true,
-                tokenSeparators: [',', ' '],
-                width: '100%'
-            });
+
+            // $('#assignmentIPLock').select2({
+            //     minimumResultsForSearch: Infinity,
+            //     tags: true,
+            //     tokenSeparators: [',', ' '],
+            //     width: '100%'
+            // });
+
+            slimSelectFun(
+                '#assignmentIPLock',
+                '{{ trans('langSearch') }}',
+                '{{ trans('langWelcomeSelect') }}',
+                '{{ trans('langSelectAll') }}',
+                '{{ trans('langListChoices') }}',
+                {
+                    tags: true,
+                    tokenSeparators: [',', ' '],
+                }
+            );
 
             $('input[name=group_submissions]').click(changeAssignLabel);
             $('input[id=assign_button_some]').click(ajaxAssignees);

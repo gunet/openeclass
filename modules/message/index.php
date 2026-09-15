@@ -35,7 +35,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 
 load_js('tools.js');
 load_js('slimselect');
-load_js('select2');
+//load_js('select2');
 
 if ($is_admin and $require_current_course) {
     $require_course_admin = true; // hide role switcher
@@ -263,8 +263,8 @@ $tool_content .= "<div class='col-12'>
                                                                 }
                                                             });
                                                             }
-                                                            $('#select-recipients').select2('destroy');
-                                                            $('#select-recipients').select2();
+                                                            // $('#select-recipients').select2('destroy');
+                                                            // $('#select-recipients').select2();
                                                         });
                                                         });
                                                     </script>";
@@ -389,8 +389,8 @@ $tool_content .= "<div class='col-12'>
                                 } elseif ($type == 'pm' && $course_id == 0) {//personal messages
                                     $head_content .= "<script type='text/javascript'>
                                                         $(document).ready(function () {
-                                                        
-                                                            // $('#recipients').select2({
+
+                                                        // $('#recipients').select2({
                                                             //     placeholder:'$langSearch',
                                                             //     multiple: true,
                                                             //     minimumInputLength: 3,
@@ -407,7 +407,7 @@ $tool_content .= "<div class='col-12'>
                                                             //         cache: true
                                                             //     },
                                                             // });
-
+        
                                                             slimSelectFun(
                                                                 '#recipients',
                                                                 '$langSearch',
