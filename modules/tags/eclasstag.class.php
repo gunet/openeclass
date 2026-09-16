@@ -93,10 +93,10 @@ class eClassTag {
 
                     slimSelectFun(
                         '#tags',
-                        '$langSearch',
-                        '$langWelcomeSelect',
-                        '$langSelectAll',
-                        '$langTags',
+                        '" . js_escape(trans('langSearch')) . "', 
+                        '" . js_escape(trans('langWelcomeSelect')) . "', 
+                        '" . js_escape(trans('langSelectAll')) . "', 
+                        '" . js_escape(trans('langTags')) . "',
                         {
                             url: '../tags/feed.php',
                             dataType: 'json',

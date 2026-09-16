@@ -78,10 +78,10 @@ $head_content .= "
 
         slimSelectFun(
             '#group-name',
-            '$langSearch',
-            '$langWelcomeSelect',
-            '$langSelectAll',
-            '$langGroups',
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langGroups')) . "',
             {
                 url: '{$urlServer}modules/group/searchGroup.php?course={$course_id}',
                 dataType: 'json',

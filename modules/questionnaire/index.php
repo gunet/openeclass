@@ -816,10 +816,10 @@ function printPolls() {
 
                     var courseSelect = slimSelectFun(
                         '#course_id',
-                        '$langSearch',
-                        '$langWelcomeSelect',
-                        '$langSelectAll',
-                        '$langListChoices',
+                        '" . js_escape(trans('langSearch')) . "', 
+                        '" . js_escape(trans('langWelcomeSelect')) . "', 
+                        '" . js_escape(trans('langSelectAll')) . "', 
+                        '" . js_escape(trans('langCourses')) . "',
                         {
                             url: '" . js_escape($urlAppend . 'main/coursefeed.php') . "',
                             dataType: 'json',

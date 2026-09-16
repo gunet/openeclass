@@ -15,10 +15,10 @@
             
             slimSelectFun(
                 '#courses-select',
-                '{{ trans('langSearch') }}',
-                '{{ trans('langWelcomeSelect') }}',
-                '{{ trans('langSelectAll') }}',
-                '{{ trans('langListChoices') }}',
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}',
                 {
                     url: '{{ $urlServer }}modules/course_prerequisites/coursefeed.php',
                     dataType: 'json',

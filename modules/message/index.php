@@ -410,10 +410,10 @@ $tool_content .= "<div class='col-12'>
         
                                                             slimSelectFun(
                                                                 '#recipients',
-                                                                '$langSearch',
-                                                                '$langWelcomeSelect',
-                                                                '$langSelectAll',
-                                                                '$langUsers',
+                                                                '" . js_escape(trans('langSearch')) . "', 
+                                                                '" . js_escape(trans('langWelcomeSelect')) . "', 
+                                                                '" . js_escape(trans('langSelectAll')) . "', 
+                                                                '" . js_escape(trans('langUsers')) . "',
                                                                 {
                                                                     url: '{$urlServer}modules/message/load_recipients.php?autocomplete=1',
                                                                     dataType: 'json',

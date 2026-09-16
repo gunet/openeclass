@@ -118,7 +118,7 @@ $head_content .= "<script type='text/javascript'>
             '" . js_escape(trans('langSearch')) . "', 
             '" . js_escape(trans('langWelcomeSelect')) . "', 
             '" . js_escape(trans('langSelectAll')) . "', 
-            '" . js_escape(trans('langListChoices')) . "'
+            '" . js_escape(trans('langParticipants')) . "'
         );
         $('#selectAll').click(function(e) {
             e.preventDefault();

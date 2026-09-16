@@ -163,18 +163,18 @@
 
     slimSelectFun(
         '#assignTo',
-        '{{ trans('$langSearch') }}',
-        '{{ trans('$langWelcomeSelect') }}',
-        '{{ trans('$langSelectAll') }}',
-        '{{ trans('$langListChoices') }}'
+        '{{ js_escape(trans('langSearch')) }}',
+        '{{ js_escape(trans('langWelcomeSelect')) }}',
+        '{{ js_escape(trans('langSelectAll')) }}',
+        '{{ js_escape(trans('langListChoices')) }}'
     );
 
     slimSelectFun(
         '#requestWatchers',
-        '{{ trans('$langSearch') }}',
-        '{{ trans('$langWelcomeSelect') }}',
-        '{{ trans('$langSelectAll') }}',
-        '{{ trans('$langListChoices') }}'
+        '{{ js_escape(trans('langSearch')) }}',
+        '{{ js_escape(trans('langWelcomeSelect')) }}',
+        '{{ js_escape(trans('langSelectAll')) }}',
+        '{{ js_escape(trans('langListChoices')) }}'
     );
 
     @if ($request_types)

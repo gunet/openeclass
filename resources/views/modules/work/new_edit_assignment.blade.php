@@ -589,26 +589,26 @@
             // $('#reviews').select2({ width: '100%' });
             slimSelectFun(
                 '#scales',
-                '{{ trans('langSearch') }}',
-                '{{ trans('langWelcomeSelect') }}',
-                '{{ trans('langSelectAll') }}',
-                '{{ trans('langListChoices') }}',
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}',
             );
 
             slimSelectFun(
                 '#rubrics',
-                '{{ trans('langSearch') }}',
-                '{{ trans('langWelcomeSelect') }}',
-                '{{ trans('langSelectAll') }}',
-                '{{ trans('langListChoices') }}',
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}',
             );
 
             slimSelectFun(
                 '#reviews',
-                '{{ trans('langSearch') }}',
-                '{{ trans('langWelcomeSelect') }}',
-                '{{ trans('langSelectAll') }}',
-                '{{ trans('langListChoices') }}',
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}',
             );
 
             $('input[name=grading_type]').on('change', function(e){
@@ -852,10 +852,10 @@
 
             slimSelectFun(
                 '#assignmentIPLock',
-                '{{ trans('langSearch') }}',
-                '{{ trans('langWelcomeSelect') }}',
-                '{{ trans('langSelectAll') }}',
-                '{{ trans('langListChoices') }}',
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}',
                 {
                     tags: true,
                     tokenSeparators: [',', ' '],

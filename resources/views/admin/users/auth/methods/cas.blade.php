@@ -88,18 +88,18 @@
 
             mineduSchoolSelect = slimSelectFun(
                 '#minedu_School',
-                '{{ trans('langSearch') }}',
-                '{{ trans('langWelcomeSelect') }}',
-                '{{ trans('langSelectAll') }}',
-                '{{ trans('langDefaultCategory') }}'
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langDefaultCategory')) }}'
             );
 
             slimSelectFun(
                 '#minedu_institution',
-                '{{ trans('langSearch') }}',
-                '{{ trans('langWelcomeSelect') }}',
-                '{{ trans('langSelectAll') }}',
-                '{{ trans('langDefaultCategory') }}'
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langDefaultCategory')) }}'
             );
 
             $('#minedu_institution').on('change', function () {
@@ -119,10 +119,10 @@
                 $('#minedu_School').prop('disabled', false);
                 mineduSchoolSelect = slimSelectFun(
                     '#minedu_School',
-                    '{{ trans('langSearch') }}',
-                    '{{ trans('langWelcomeSelect') }}',
-                    '{{ trans('langSelectAll') }}',
-                    '{{ trans('langDefaultCategory') }}',
+                    '{{ js_escape(trans('langSearch')) }}',
+                    '{{ js_escape(trans('langWelcomeSelect')) }}',
+                    '{{ js_escape(trans('langSelectAll')) }}',
+                    '{{ js_escape(trans('langDefaultCategory')) }}',
                     {
                         url: 'get_minedu_departments.php',
                         dataType: 'json',

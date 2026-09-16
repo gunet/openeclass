@@ -1058,7 +1058,7 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
             search: (searchValue, selected, catalog) => {
                 return new Promise((resolve, reject) => {
                     if (ajaxOptions.minimumInputLength && searchValue.length < ajaxOptions.minimumInputLength) {
-                        return reject('Search must be at least ' + ajaxOptions.minimumInputLength + ' characters');
+                        return reject('Η αναζήτηση θα πρέπει να περιλαμβάνει τουλάχιστον ' + ajaxOptions.minimumInputLength + ' χαρακτήρες');
                     }
 
 
@@ -1111,7 +1111,7 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
                             });
 
                         if (!options.length) {
-                            return reject('No results found');
+                            return reject('Δεν βρέθηκαν αποτελέσματα');
                         }
 
                         resolve([
@@ -1125,7 +1125,7 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
 
                     }).fail(function(xhr) {
                         //console.error('error:', xhr);
-                        reject('Error fetching results');
+                        reject('Σφάλμα κατά τη λήψη αποτελεσμάτων');
                     });
 
                 });
@@ -1227,7 +1227,7 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
                         ]);
 
                     }).fail(function(xhr) {
-                        console.error('Error fetching:', xhr);
+                        console.error('Σφάλμα κατά τη λήψη αποτελεσμάτων:', xhr);
                     });
             };
         }

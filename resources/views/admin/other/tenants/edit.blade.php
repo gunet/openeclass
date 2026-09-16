@@ -40,10 +40,10 @@
 
                 slimSelectFun(
                     '#admin_id',
-                    '{{ trans('langSearch') }}',
-                    '{{ trans('langWelcomeSelect') }}',
-                    '{{ trans('$langSelectAll') }}',
-                    '{{ trans('$langListChoices') }}',
+                    '{{ js_escape(trans('langSearch')) }}',
+                    '{{ js_escape(trans('langWelcomeSelect')) }}',
+                    '{{ js_escape(trans('langSelectAll')) }}',
+                    '{{ js_escape(trans('langListChoices')) }}',
                     {
                         url: 'listusers.php',
                         dataType: 'json',

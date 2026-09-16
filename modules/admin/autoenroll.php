@@ -135,10 +135,10 @@ if (isset($_GET['delete'])) {
 
             slimSelectFun(
                 '#courses-select',
-                '$langSearch',
-                '$langWelcomeSelect',
-                '$langSelectAll',
-                '$langCourses',
+                '" . js_escape(trans('langSearch')) . "', 
+                '" . js_escape(trans('langWelcomeSelect')) . "', 
+                '" . js_escape(trans('langSelectAll')) . "', 
+                '" . js_escape(trans('langCourses')) . "',
                 {
                     url: '{$urlServer}main/coursefeed.php',
                     dataType: 'json',
