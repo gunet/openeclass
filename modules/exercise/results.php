@@ -24,7 +24,7 @@ require_once 'exercise.class.php';
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
-
+require_once 'include/course_settings.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
@@ -111,6 +111,15 @@ $showScore = $displayScore == 1
             'show' => $is_editor
         ],
         [
+            'title' => $langDumpPDF,
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;pdf=true",
+            'icon' => 'fa-file-pdf',
+            'level' => 'primary-label',
+            'link-attrs' => "target='_blank'",
+            'button-class' => 'btn-success',
+            'show' => $is_course_reviewer
+        ],
+        [
             'title' => "$langResults ($langDumpUser)",
             'url' => "dump_results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
             'icon' => 'fa fa-download',
@@ -137,7 +146,7 @@ $tool_content .= "</div></div>";
 
 
 $status = (isset($_GET['status'])) ? intval($_GET['status']) : '';
-$tool_content .= "<div class='col-12 mt-4'><select class='form-select' style='margin:0 0 12px 0;' id='status_filtering' aria-label='$langCurrentStatus'>
+$tool_content .= "<div class='col-12 status_filtering_cl mt-4'><select class='form-select' style='margin:0 0 12px 0;' id='status_filtering' aria-label='$langCurrentStatus'>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect'>--- $langCurrentStatus ---</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_ACTIVE."' ".(($status === ATTEMPT_ACTIVE)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_ACTIVE) . "</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_COMPLETED."' ".(($status === ATTEMPT_COMPLETED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_COMPLETED) . "</option>
@@ -249,9 +258,17 @@ foreach ($result as $row) {
 
                     if ($answersCount) {
                         if ($unit) {
-                            $results_link = "<a href='view.php?course=$course_code&amp;unit=$unit&amp;res_type=exercise_results&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                            if (isset($_GET['pdf'])) {
+                                $results_link = "<span>" . $total_score . "/" . $total_weighting . "</span>";
+                            } else {
+                                $results_link = "<a href='view.php?course=$course_code&amp;unit=$unit&amp;res_type=exercise_results&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                            }
                         } else {
-                            $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                            if (isset($_GET['pdf'])) {
+                                $results_link = "<span>" . $total_score . "/" . $total_weighting . "</span>";
+                            } else {
+                                $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $total_score . "/" . $total_weighting . "</a>";
+                            }
                         }
                     } else {
                         $results_link = $total_score . "/" . $total_weighting;
@@ -295,7 +312,11 @@ foreach ($result as $row) {
             } else if ($row2->attempt_status == ATTEMPT_PENDING) {
                 $grade_icon = '';
                 $results_link = q($row2->total_score) . "/" . q($row2->total_weighting);
-                $status = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $langAttemptPending . "</a>";
+                if (isset($_GET['pdf'])) {
+                    $status = "<span>" . $langAttemptPending . "</span>";
+                } else {
+                    $status = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . $langAttemptPending . "</a>";
+                }
             } else if ($row2->attempt_status == ATTEMPT_CANCELED) {
                 $grade_icon = '';
                 $results_link = "-/-";
@@ -315,37 +336,41 @@ foreach ($result as $row) {
                 $allow_change_status = $row2->attempt_status == ATTEMPT_ACTIVE ||
                     $row2->attempt_status == ATTEMPT_PAUSED ||
                     ($row2->attempt_status == ATTEMPT_CANCELED && $row2->answers_exist);
-                $tool_content .= "
-                    <td class='option-btn-cell text-end'>" . action_button(array(
-                        array(
-                            'title' => $langDelete,
-                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid&" . generate_csrf_token_link_parameter(),
-                            'icon' => "fa-xmark",
-                            'confirm' => $langConfirmPurgeExercises,
-                            'class' => 'delete'
-                        ),
-                        array(
-                            'title' => "$langAuthChangeto $langAttemptCompleted",
-                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_COMPLETED . "",
-                            'icon' => "fa-solid fa-check",
-                            'show' => $allow_change_status,
-                            'class' => 'warning-delete',
-                            'confirm' => $langConfirmModifyAttemptText,
-                            'confirm_title' => $langConfirmModifyAttemptTitle,
-                            'confirm_button' => $langModify
-                        ),
-                        array(
-                            'title' => "$langAuthChangeto $langAttemptPaused",
-                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_PAUSED . "",
-                            'icon' => "fa-solid fa-hourglass-half",
-                            'class' => 'warning-delete',
-                            'show' => $row2->attempt_status == ATTEMPT_ACTIVE ||
-                                ($row2->attempt_status == ATTEMPT_CANCELED && $row2->answers_exist),
-                            'confirm' => $langConfirmModifyAttemptText,
-                            'confirm_title' => $langConfirmModifyAttemptTitle,
-                            'confirm_button' => $langModify
-                        )
-                    )) . "</td>";
+                if (!isset($_GET['pdf'])) {
+                    $tool_content .= "
+                        <td class='option-btn-cell text-end'>" . action_button(array(
+                            array(
+                                'title' => $langDelete,
+                                'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid&" . generate_csrf_token_link_parameter(),
+                                'icon' => "fa-xmark",
+                                'confirm' => $langConfirmPurgeExercises,
+                                'class' => 'delete'
+                            ),
+                            array(
+                                'title' => "$langAuthChangeto $langAttemptCompleted",
+                                'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_COMPLETED . "",
+                                'icon' => "fa-solid fa-check",
+                                'show' => $allow_change_status,
+                                'class' => 'warning-delete',
+                                'confirm' => $langConfirmModifyAttemptText,
+                                'confirm_title' => $langConfirmModifyAttemptTitle,
+                                'confirm_button' => $langModify
+                            ),
+                            array(
+                                'title' => "$langAuthChangeto $langAttemptPaused",
+                                'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_PAUSED . "",
+                                'icon' => "fa-solid fa-hourglass-half",
+                                'class' => 'warning-delete',
+                                'show' => $row2->attempt_status == ATTEMPT_ACTIVE ||
+                                    ($row2->attempt_status == ATTEMPT_CANCELED && $row2->answers_exist),
+                                'confirm' => $langConfirmModifyAttemptText,
+                                'confirm_title' => $langConfirmModifyAttemptTitle,
+                                'confirm_button' => $langModify
+                            )
+                        )) . "</td>";
+                } else {
+                    $tool_content .= "<td></td>";
+                }
             }
             $tool_content .= "</tr>";
         }
@@ -464,4 +489,12 @@ if ($is_editor) {
     </script>";
 }
 
-draw($tool_content, 2, null, $head_content);
+if (isset($_GET['pdf'])) {
+    $pdf_title = "$course_code exercise_results";
+    $course_title = q("$currentCourseName - $langExercicesResult");
+    $module_type_title = "$langExercicesResult";
+    html_to_pdf($pdf_title, $course_title, $module_type_title);
+} else {
+    draw($tool_content, 2, null, $head_content);
+}
+
