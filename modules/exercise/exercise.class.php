@@ -1787,6 +1787,27 @@ class Exercise
         return $totalScore;
     }
 
+
+    /**
+     * @brief calculate feedback depending on user score
+     * @param $score
+     * @return mixed|string
+     */
+    public function calculate_feedback($score)
+    {
+        $message = '';
+        $feedback_data = $this->getFeedback();
+        uasort($feedback_data, function ($a, $b) { // sort by grade in descending order
+            return $b['grade'] <=> $a['grade'];
+        });
+        foreach ($feedback_data as $feedback) {
+            if ($score >= $feedback['grade']) {
+                $message = $feedback['feedback_text'];
+                break;
+            }
+        }
+        return $message;
+    }
     /**
      * Trigger AI evaluation for FREE_TEXT question responses
      */

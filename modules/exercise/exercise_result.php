@@ -316,7 +316,6 @@ $displayScore = $objExercise->selectScore();
 $gradePass = $objExercise->getPassingGrade();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $calc_grade_method = $objExercise->getCalcGradeMethod();
-$exerciseFeedback = $objExercise->getFeedback();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");
@@ -505,6 +504,10 @@ $canonicalized_message_range .= "
 
     if ($showScore) {
         $tool_content .= "<p><h5>$langTotalScore</h5> $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon</p>";
+        // exercise feedback (if any)
+        if (!empty($objExercise->calculate_feedback($canonical_score))) {
+            $tool_content .= "<h5 class='p-0 m-1 text-primary'>" . $objExercise->calculate_feedback($canonical_score) . "</h5>";
+        }
     }
 
     $tool_content .= "</div>"; // left end
