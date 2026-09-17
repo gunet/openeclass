@@ -5714,6 +5714,10 @@ function upgrade_active_theme() {
                     .tox .tox-tbtn {
                         color: $theme_options_styles[buttonTextColor] !important;
                     }
+                    .tox .tox-tbtn svg {
+                        display: block;
+                        fill: $theme_options_styles[buttonTextColor] !important;
+                    }
                 ";
             }
             if(isset($theme_options_styles['BgTextEditor'])) {
