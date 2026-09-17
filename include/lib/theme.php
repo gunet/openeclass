@@ -823,6 +823,13 @@ function theme_initialization() {
                 .showCoursesPics:not(:has(.active)) i {
                     color:$theme_options_styles[ColorHyperTexts] ;
                 }
+
+                .tox .tox-statusbar,
+                .tox .tox-statusbar a, 
+                .tox .tox-statusbar__path-item, 
+                .tox .tox-statusbar__wordcount {
+                    color:$theme_options_styles[ColorHyperTexts] !important;
+                }
             ";
         }
 
@@ -2190,6 +2197,10 @@ function theme_initialization() {
                     border-color: $theme_options_styles[buttonBgColor] !important;
                 }
 
+                .tox .tox-tbtn {
+                    background: $theme_options_styles[buttonBgColor] !important;
+                }
+
             ";
 
             $colorChevronLeftRight = "$theme_options_styles[buttonBgColor]";
@@ -2364,6 +2375,11 @@ function theme_initialization() {
                 .lb-page-btn.lb-page-active:focus{
                     background: $theme_options_styles[buttonHoverBgColor] !important;
                     border-color: $theme_options_styles[buttonHoverBgColor] !important;
+                }
+
+                .tox .tox-tbtn:hover,
+                .tox .tox-tbtn:focus {
+                    background: $theme_options_styles[buttonHoverBgColor] !important;
                 }
 
             ";
@@ -2543,6 +2559,10 @@ function theme_initialization() {
                 }
 
                 .lb-page-btn.lb-page-active{
+                    color: $theme_options_styles[buttonTextColor] !important;
+                }
+
+                .tox .tox-tbtn {
                     color: $theme_options_styles[buttonTextColor] !important;
                 }
 
@@ -5390,6 +5410,28 @@ function theme_initialization() {
                   itox-i-checkbox {
                     background-image: -webkit-linear-gradient(top,#fff,$theme_options_styles[BgTextEditor]) !important;
                   }
+
+                .tox .tox-edit-area__iframe {
+                    background-color: $theme_options_styles[BgTextEditor] !important;
+                }
+
+                .tox:not(.tox-tinymce-inline) .tox-editor-header {
+                    background-color: $theme_options_styles[BgTextEditor] !important;
+                }
+
+                .tox .tox-toolbar-overlord {
+                    background-color: $theme_options_styles[BgTextEditor] !important;
+                }
+
+                .tox .tox-toolbar, .tox .tox-toolbar__overflow, .tox .tox-toolbar__primary {
+                    background-color: $theme_options_styles[BgTextEditor] !important;
+                }
+
+                .tox .tox-statusbar {
+                    background-color: $theme_options_styles[BgTextEditor] !important;
+                    border-top: 1px solid $theme_options_styles[BgTextEditor] !important;
+                }
+
             ";
         }
 
@@ -5403,6 +5445,10 @@ function theme_initialization() {
             $styles_str .= "
                 tox-panel {
                     border: solid 1px $theme_options_styles[BgBorderTextEditor] !important;
+                }
+
+                .tox-tinymce {
+                    border: solid 2px $theme_options_styles[BgBorderTextEditor] !important;
                 }
             ";
         }
