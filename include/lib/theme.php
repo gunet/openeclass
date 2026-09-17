@@ -2566,6 +2566,11 @@ function theme_initialization() {
                     color: $theme_options_styles[buttonTextColor] !important;
                 }
 
+                .tox .tox-tbtn svg {
+                    display: block;
+                    fill: $theme_options_styles[buttonTextColor] !important;
+                }
+
             ";
         }
 
