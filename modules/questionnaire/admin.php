@@ -120,6 +120,25 @@ if (isset($_POST['submitPoll'])) {
             }
         }
         if (!is_null($save_prev_user_answers)) {
+            // Do not change settings for multiple submissions if exist user's answers.
+            if (isset($pid) && isset($_GET['modifyPoll'])) {
+                $checkExAns = Database::get()->querySingle("SELECT pur.id FROM poll_user_record pur
+                                                            JOIN poll_answer_record par ON par.poll_user_record_id=pur.id
+                                                            WHERE pur.pid = ?d", $pid);
+                                                            
+                if ($checkExAns) {
+                    $PollOptions = Database::get()->querySingle("SELECT options FROM poll WHERE pid = ?d AND course_id = ?d", $pid, $course_id);
+                    if (!is_null($PollOptions->options)) {
+                        $optArr = unserialize($PollOptions->options);
+                        foreach ($optArr as $opt) {
+                            if (isset($opt['save_prev_user_answers'])) {
+                                $save_prev_user_answers = $opt['save_prev_user_answers'];
+                            }
+                        }
+                    }
+                }
+            }
+            
             $msg_gr_arr[] = [
                 'save_prev_user_answers' => $save_prev_user_answers
             ];
@@ -550,6 +569,18 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             }
         }
     }
+
+    $disabledMultipleSubmissionCl = '';
+    $disabledMultipleSubmission = '';
+    if (isset($_GET['modifyPoll'])) {
+        $checkExAns = Database::get()->queryArray("SELECT pur.id FROM poll_user_record pur
+                                                    JOIN poll_answer_record par ON par.poll_user_record_id=pur.id
+                                                    WHERE pur.pid = ?d", $pid);
+        if (count($checkExAns) > 0) {
+            $disabledMultipleSubmission = 'disabled';
+            $disabledMultipleSubmissionCl = "style='opacity: 0.5 !important;'";
+        }
+    }
     
 
     $disabledAssign = '';
@@ -644,15 +675,15 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     $tool_content .= "
                     <div class='col-12 col-md-9 ms-auto me-auto d-none' id='save_prev_user_answers_on_off'>
                         <p class='mb-2'><strong>$langPollSavePrevUserAnswers</strong></p>
-                        <div class='radio mb-1'>
+                        <div class='radio mb-1' $disabledMultipleSubmissionCl>
                             <label>
-                                <input type='radio' name='save_prev_user_answers' value='1' " . ($savePreviousUserAnswers ? 'checked' : ''). ">
+                                <input type='radio' name='save_prev_user_answers' value='1' " . ($savePreviousUserAnswers ? 'checked' : ''). " $disabledMultipleSubmission>
                                 <span>$langYes</span>
                             </label>
                         </div>
-                        <div class='radio'>
+                        <div class='radio' $disabledMultipleSubmissionCl>
                             <label>
-                                <input type='radio' name='save_prev_user_answers' value='0' " . (!$savePreviousUserAnswers ? 'checked' : ''). ">
+                                <input type='radio' name='save_prev_user_answers' value='0' " . (!$savePreviousUserAnswers ? 'checked' : ''). " $disabledMultipleSubmission>
                                 <span>$langNo</span>
                             </label>
                         </div>

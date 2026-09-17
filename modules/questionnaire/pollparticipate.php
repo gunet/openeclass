@@ -136,13 +136,23 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $fpath = $_POST['fPath'];
             $file = "$webDir/courses/$c/poll_$pollId/$currentUser/$questionID/$s$fpath";
             if (file_exists($file)) {
-                unlink($file);
-                Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
-                                        INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
-                                        WHERE poll_answer_record.qid = ?d
-                                        AND poll_user_record.uid = ?d
-                                        AND poll_user_record.pid = ?d
-                                        AND poll_user_record.session_id = ?d", $questionID, $currentUser, $pollId, $s);
+                $uidAnswers = Database::get()->queryArray("SELECT par.arid, par.answer_text FROM poll_answer_record par
+                                                           JOIN poll_user_record pur ON pur.id=par.poll_user_record_id
+                                                           WHERE par.qid = ?d
+                                                           AND pur.uid = ?d
+                                                           AND pur.pid = ?d
+                                                           AND pur.session_id = ?d", $questionID, $currentUser, $pollId, $s);
+
+                if (count($uidAnswers) > 0) {
+                    foreach ($uidAnswers as $an) {
+                        $answer_txt = unserialize($an->answer_text);
+                        if (isset($answer_txt['filepath']) && $answer_txt['filepath'] == $fpath) {
+                            unlink($file);
+                            Database::get()->query("DELETE FROM poll_answer_record WHERE arid = ?d", $an->arid);
+                            break;
+                        }
+                    }
+                }
             } 
             exit();
         }
@@ -175,15 +185,28 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['answer'])) {
     $dir = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid/";
     if (!file_exists($dir)) {
         mkdir("$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid/", 0755, true);
-    } else {// delete prev file
-        $folder = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid";
-        if (is_dir($folder)) {
-            $files = scandir($folder);
-            foreach ($files as $file) {
-                if ($file !== '.' && $file !== '..') {
-                    $filePath = $folder . DIRECTORY_SEPARATOR . $file;
-                    if (is_file($filePath)) {
-                        unlink($filePath); // Delete the file
+    } else {// delete prev file only if history of multiple submissions is not enabled.
+        $saveMultipleSubmission = false;
+        $poll = Database::get()->querySingle("SELECT options FROM poll WHERE pid = ?d AND course_id = ?d", $pid, $course_id);
+        if (isset($poll) && !is_null($poll->options)) {
+            $pollOptions = unserialize($poll->options);
+            foreach ($pollOptions as $opt) {
+                if (isset($opt['save_prev_user_answers']) && $opt['save_prev_user_answers'] == 1) {
+                    $saveMultipleSubmission = true;
+                    break;
+                }
+            }
+        }
+        if (!$saveMultipleSubmission) {
+            $folder = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid";
+            if (is_dir($folder)) {
+                $files = scandir($folder);
+                foreach ($files as $file) {
+                    if ($file !== '.' && $file !== '..') {
+                        $filePath = $folder . DIRECTORY_SEPARATOR . $file;
+                        if (is_file($filePath)) {
+                            unlink($filePath); // Delete the file
+                        }
                     }
                 }
             }
@@ -1812,7 +1835,7 @@ function update_submission($pid) {
 function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     global $tool_content, $head_content, $course_code, $urlAppend, $langPleaseWait, 
            $language, $langFileName, $langDelete, $langConfirmDeletePermantly, $urlServer, 
-           $uid, $webDir, $langInfoPollUploadedFile;
+           $uid, $webDir, $langInfoPollUploadedFile, $course_id;
 
     $token = $_SESSION['csrf_token'];
     $is_onBehalfOfUser_mode = isset($_GET['onBehalfOfUser']) ? 1 : 0;
@@ -1841,22 +1864,35 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     } else {
         // If the user has uploaded a file and the user has canceled the poll, 
         // remove the uploaded file for the current question.
-        $folderPath = "$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid/$sessionID";
-        if (is_dir($folderPath)) {
-            $files = scandir($folderPath);
-            foreach ($files as $file) {
-                if ($file === '.' || $file === '..') continue;
-                $fileNPath = $folderPath . DIRECTORY_SEPARATOR . $file;
-                // Delete files
-                if (is_file($fileNPath)) {
-                    unlink($fileNPath);
-                    unset($_SESSION['data_answers'][$pqid]);
-                    Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
-                                            INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
-                                            WHERE poll_answer_record.qid = ?d
-                                            AND poll_user_record.uid = ?d
-                                            AND poll_user_record.pid = ?d
-                                            AND poll_user_record.session_id = ?d", $pqid, $currentUser, $pid, $sessionID);
+        $saveMultipleSubmission = false;
+        $poll = Database::get()->querySingle("SELECT options FROM poll WHERE pid = ?d AND course_id = ?d", $pid, $course_id);
+        if (isset($poll) && !is_null($poll->options)) {
+            $pollOptions = unserialize($poll->options);
+            foreach ($pollOptions as $opt) {
+                if (isset($opt['save_prev_user_answers']) && $opt['save_prev_user_answers'] == 1) {
+                    $saveMultipleSubmission = true;
+                    break;
+                }
+            }
+        }
+        if (!$saveMultipleSubmission) {
+            $folderPath = "$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid/$sessionID";
+            if (is_dir($folderPath)) {
+                $files = scandir($folderPath);
+                foreach ($files as $file) {
+                    if ($file === '.' || $file === '..') continue;
+                    $fileNPath = $folderPath . DIRECTORY_SEPARATOR . $file;
+                    // Delete files
+                    if (is_file($fileNPath)) {
+                        unlink($fileNPath);
+                        unset($_SESSION['data_answers'][$pqid]);
+                        Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
+                                                INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
+                                                WHERE poll_answer_record.qid = ?d
+                                                AND poll_user_record.uid = ?d
+                                                AND poll_user_record.pid = ?d
+                                                AND poll_user_record.session_id = ?d", $pqid, $currentUser, $pid, $sessionID);
+                    }
                 }
             }
         }
