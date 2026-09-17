@@ -34,6 +34,11 @@
             $('#course_registration_date').toggle(isRegistrationSelected);
         }
 
+        function toggleUserRequests() {
+            var isClosedCourse = $('input[name="formvisible"]:checked').val() === '0';
+            $('#course_user_requests').toggle(isClosedCourse);
+        }
+
         function displayImages(images, type, contentId) {
             let html = '<div class="row">';
             images.forEach(function (image) {
@@ -114,6 +119,7 @@
             displayCoursePassword();
             registrationDateVisibility();
             updateVisibility();
+            toggleUserRequests();
 
             $('#coursepassword').keyup(function () {
                 $('#result').html(checkStrength($('#coursepassword').val()))
@@ -214,6 +220,8 @@
                     $('#courseRegStartDate').datepicker('hide');
                 }
             });
+
+            $('input[name="formvisible"]').on('change', toggleUserRequests);
 
             var hasImported = {{ $course_has_import? 'true' : 'false' }};
             $('.importCourse').on('click', function (e) {
@@ -651,14 +659,14 @@
                                             </div>
                                         @endif
 
-                                        @if (course_status($course_id) == COURSE_CLOSED)
-                                            <div class='checkbox mb-2 mt-2'>
+                                        {{-- @if (course_status($course_id) == COURSE_CLOSED) --}}
+                                            <div id = "course_user_requests" class='checkbox mb-2 mt-2' style="display:none;">
                                                 <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                     <input type='checkbox' name='disable_log_course_user_requests' @if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id) == 0) checked @endif>
                                                     <span class='checkmark'></span>{{ trans('langCourseUserRequests') }}
                                                 </label>
                                             </div>
-                                        @endif
+                                        {{-- @endif --}}
 
                                         <div class='checkbox mb-2 mt-2'>
                                             <label class='label-container' aria-label="{{ trans('langSelect') }}">
