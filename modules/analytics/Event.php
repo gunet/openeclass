@@ -17,6 +17,9 @@
  *
  */
 
+require_once 'ElementTypes.php';
+require_once 'PeriodType.php';
+
 class Event implements Sabre\Event\EventEmitterInterface {
     use Sabre\Event\EventEmitterTrait;
 

@@ -33,8 +33,10 @@ if (isset($_POST['insert_analytics'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
     if($_POST['start_date'] and $_POST['end_date']) {
-        $start_date = date_format(date_create_from_format('d-m-Y', $_POST['start_date']), 'Y-m-d');
-        $end_date = date_format(date_create_from_format('d-m-Y', $_POST['end_date']), 'Y-m-d');
+        $d_start = date_create_from_format('d-m-Y', $_POST['start_date']);
+        $d_end = date_create_from_format('d-m-Y', $_POST['end_date']);
+        $start_date = $d_start ? date_format($d_start, 'Y-m-d') : null;
+        $end_date = $d_end ? date_format($d_end, 'Y-m-d') : null;
 
         $v->rule('dateAfter', 'end_date', $start_date);
     } else if ($_POST['start_date'] or $_POST['end_date']){
@@ -66,8 +68,10 @@ if (isset($_POST['insert_analytics'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
     if($_POST['start_date'] and $_POST['end_date']) {
-        $start_date = date_format(date_create_from_format('d-m-Y', $_POST['start_date']), 'Y-m-d');
-        $end_date = date_format(date_create_from_format('d-m-Y', $_POST['end_date']), 'Y-m-d');
+        $d_start = date_create_from_format('d-m-Y', $_POST['start_date']);
+        $d_end = date_create_from_format('d-m-Y', $_POST['end_date']);
+        $start_date = $d_start ? date_format($d_start, 'Y-m-d') : null;
+        $end_date = $d_end ? date_format($d_end, 'Y-m-d') : null;
 
         $v->rule('dateAfter', 'end_date', $start_date);
     } else if ($_POST['start_date'] or $_POST['end_date']){

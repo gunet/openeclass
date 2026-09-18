@@ -851,8 +851,8 @@ function edit_analytics_settings ($analytics_id = 0)
         $title = $result->title;
         $description = $result->description;
         $active = $result->active;
-        $start_date = date_format(date_create_from_format('Y-m-d', $result->start_date), 'd-m-Y');
-        $end_date = date_format(date_create_from_format('Y-m-d', $result->end_date), 'd-m-Y');
+        $start_date = (!empty($result->start_date) && ($d = date_create_from_format('Y-m-d', $result->start_date))) ? date_format($d, 'd-m-Y') : '';
+        $end_date = (!empty($result->end_date) && ($d = date_create_from_format('Y-m-d', $result->end_date))) ? date_format($d, 'd-m-Y') : '';
         $periodType = $result->periodType;
         $action = 'update_analytics';
         $id_input = "<input type='hidden' name='analytics_id' value='$analytics_id'>";
