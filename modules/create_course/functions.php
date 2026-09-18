@@ -75,16 +75,20 @@ function create_course($public_code, $lang, $title, $description, $departments, 
 function course_index($code) {
     global $webDir;
 
-    $fd = fopen($webDir . "/courses/$code/index.php", "w");
-    chmod($webDir . "/courses/$code/index.php", 0644);
-    if (!$fd) {
+    if (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
         return false;
-    }
-    fwrite($fd, "<?php\nsession_start();\n" .
+    } else {
+        $fd = fopen($webDir . "/courses/$code/index.php", "w");
+        chmod($webDir . "/courses/$code/index.php", 0644);
+        if (!$fd) {
+            return false;
+        }
+        fwrite($fd, "<?php\nsession_start();\n" .
             "\$_SESSION['dbname']='$code';\n" .
             "include '../../modules/course_home/course_home.php';\n");
-    fclose($fd);
-    return true;
+        fclose($fd);
+        return true;
+    }
 }
 
 /**

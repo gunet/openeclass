@@ -217,7 +217,7 @@ elseif ($_GET['action'] == 'add') {
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/hierarchy.php?a=1");
         }
-        // Check for greek letters
+        // Check for Greek letters
         elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
             Session::flash('message', $langGreekCode);
             Session::flash('alert-class', 'alert-danger');
@@ -387,8 +387,11 @@ elseif ($_GET['action'] == 'edit') {
             Session::flash('message',$langEmptyNodeName);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/hierarchy.php?action=edit&id=" . $id);
+        } elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
+            Session::flash('message', $langGreekCode);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page("modules/admin/hierarchy.php?a=1");
         } else {
-
             // OK Update the node
             $faculty_image = null;
             if (isset($_FILES['faculty_image']) && is_uploaded_file($_FILES['faculty_image']['tmp_name'])) {
