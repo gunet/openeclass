@@ -55,7 +55,7 @@ class CommentsAnalyticsEvent extends Event {
                         AND wp.course_id = ?d
                         AND DATE(c.time) = CURDATE()", $this->context['user_id'], $this->context['course_id']);
 
-                $this->context['value'] = $record->value;
+                $this->context['value'] = (isset($record) && isset($record->value)) ? $record->value : 0;
 
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
@@ -78,8 +78,9 @@ class CommentsAnalyticsEvent extends Event {
                 $course_id = $data->course_id;
                 $analytics_element_id = $data->analytics_element_id;
                 $element_type = $data->element_type;
+                $comments_records = array();
                 if ($element_type == ANALYTICS_BLOGCOMMENTS)
-                    $comments_records = Database::get()->queryArray("SELECT c.user_id, DATE(c.time), count(c.id) as value 
+                    $comments_records = Database::get()->queryArray("SELECT c.user_id, c.time as time, count(c.id) as value 
                         FROM comments as c INNER JOIN blog_post as bp  ON c.rid = bp.id WHERE 
                             c.rtype = 'blogpost'
                             AND bp.course_id = ?d
@@ -87,7 +88,7 @@ class CommentsAnalyticsEvent extends Event {
                             AND DATE(c.time) <=?t
                             group by DATE(c.time), c.user_id", $course_id, $data->start_date, $data->end_date);
                 else if ($element_type == ANALYTICS_COURSECOMMENTS)
-                    $comments_records = Database::get()->queryArray("SELECT user_id, DATE(time), count(id) as value 
+                    $comments_records = Database::get()->queryArray("SELECT user_id, time as time, count(id) as value 
                         FROM comments WHERE 
                             rtype = 'course'
                             AND rid = ?d
@@ -95,7 +96,7 @@ class CommentsAnalyticsEvent extends Event {
                             AND DATE(time) <=?t
                             group by DATE(time), user_id", $course_id, $data->start_date, $data->end_date);
                 else if ($element_type == ANALYTICS_WALLCOMMENTS)
-                    $comments_records = Database::get()->queryArray("SELECT c.user_id, DATE(c.time), count(c.id) as value 
+                    $comments_records = Database::get()->queryArray("SELECT c.user_id, c.time as time, count(c.id) as value 
                         FROM comments as c INNER JOIN wall_post as wp  ON c.rid = wp.id WHERE 
                             c.rtype = 'wallpost'
                             AND wp.course_id = ?d
