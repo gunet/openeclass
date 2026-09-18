@@ -5682,6 +5682,71 @@ function upgrade_active_theme() {
                 ";
             }
 
+            // Text Editor
+            /////////////////////////////////////////////////////////////
+            if(isset($theme_options_styles['ColorHyperTexts'])) {
+                $style .= "
+                    .tox .tox-statusbar,
+                    .tox .tox-statusbar a, 
+                    .tox .tox-statusbar__path-item, 
+                    .tox .tox-statusbar__wordcount {
+                        color:$theme_options_styles[ColorHyperTexts] !important;
+                    }
+                ";
+            }
+            if (isset($theme_options_styles['buttonBgColor'])) {
+                $style .= "
+                    .tox .tox-tbtn {
+                        background: $theme_options_styles[buttonBgColor] !important;
+                    }
+                ";
+            }
+            if (isset($theme_options_styles['buttonHoverBgColor'])) {
+                $style .= "
+                    .tox .tox-tbtn:hover,
+                    .tox .tox-tbtn:focus {
+                        background: $theme_options_styles[buttonHoverBgColor] !important;
+                    }
+                ";
+            }
+            if (isset($theme_options_styles['buttonTextColor'])) {
+                $style .= "
+                    .tox .tox-tbtn {
+                        color: $theme_options_styles[buttonTextColor] !important;
+                    }
+                    .tox .tox-tbtn svg {
+                        display: block;
+                        fill: $theme_options_styles[buttonTextColor] !important;
+                    }
+                ";
+            }
+            if(isset($theme_options_styles['BgTextEditor'])) {
+                $style .= "
+                    .tox .tox-edit-area__iframe {
+                        background-color: $theme_options_styles[BgTextEditor] !important;
+                    }
+
+                    .tox:not(.tox-tinymce-inline) .tox-editor-header {
+                        background-color: $theme_options_styles[BgTextEditor] !important;
+                    }
+
+                    .tox .tox-toolbar-overlord {
+                        background-color: $theme_options_styles[BgTextEditor] !important;
+                    }
+
+                    .tox .tox-toolbar, .tox .tox-toolbar__overflow, .tox .tox-toolbar__primary {
+                        background-color: $theme_options_styles[BgTextEditor] !important;
+                    }
+
+                    .tox .tox-statusbar {
+                        background-color: $theme_options_styles[BgTextEditor] !important;
+                        border-top: 1px solid $theme_options_styles[BgTextEditor] !important;
+                    }
+                ";
+            }
+
+            // Add css rules
+            ///////////////////////////////////////////////////////////////////////////////////
             if (!empty($style)) {
                 file_put_contents($cssFile, $style, FILE_APPEND);
             }
