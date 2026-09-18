@@ -56,14 +56,6 @@ $pageName = "$langEditUser: " . uid_to_name($u);
 $u_submitted = $_POST['u_submitted'] ?? '';
 
 if ($u) {
-    $is_saek_admin  = $is_departmentmanage_user && !$is_admin;
-    if ($is_saek_admin) {
-        if (!getTenantUserIfBelongs($u)) {
-            Session::flash('message', $langForbidden);
-            Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page('modules/admin/');
-        }
-    }
     if (isDepartmentAdmin())
         validateUserNodes(intval($u), true);
 
