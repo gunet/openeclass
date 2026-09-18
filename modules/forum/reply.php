@@ -102,10 +102,10 @@ if ($topic_locked == 1) {
 }
 
 if (isset($_POST['submit'])) {
-    $message = $_POST['message'];
+    $message = purify(trim($_POST['message']));
     $poster_ip = Log::get_client_ip();
     $parent_post = $_POST['parent_post'];
-    if (trim($message) == '') {
+    if ($message == '') {
         $tool_content .= "<div class='col-sm-12'>
                 <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langEmptyMsg</span></div>
             </div>
