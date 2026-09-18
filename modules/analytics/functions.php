@@ -36,6 +36,8 @@ function display_learning_analytics() {
         $results = "<div class='text-center text-muted'>$langAnalyticsNoAnalytics</div>";
     } else {
         $results = "";
+        $results .= "<div class='table-responsive'>";
+        $results .= "<table class='table-default'><tbody>";
         foreach ($sql_data as $data) {
             $id = $data->id;
             $active = $data->active;
@@ -45,41 +47,40 @@ function display_learning_analytics() {
             $description = $data->description;
 
             $results .= "
-            <div class='row res-table-row border-0 mb-4 g-3'>
-                <div class='col-md-7 col-12'>
-                    <strong>$title</strong> <span class='$active_vis'>($active_msg)</span><br/>
-                    <small class='text-start text-muted'>$description</small>
-                </div>
-                <div class='col-md-5 col-12 text-start'>".
-                action_bar(array(
-                    array('title' => $langAnalyticsTotalAnalytics,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=courseStatistics",
-                        'icon' => 'fa-bar-chart',
-                        'level' => 'primary-label'),
-                    array('title' => $langAnalyticsViewPerUserGeneral,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=perUser",
-                        'icon' => 'fa-users',
-                        'level' => 'primary-label'),
-                    array('title' => $langModify,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;edit_analytics=1",
-                            'icon' => 'fa-edit'),
-                    array('title' => $langEditItems,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showElements",
-                            'icon' => 'fa-edit'),
-                    array('title' => $active ? $langDeactivate : $langActivate,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;activate=" .
-                                ($active ? '0' : '1'),
-                            'icon' => $active ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDelete,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;delete_analytics=1",
-                        'icon' => 'fa-xmark',
-                        'class' => 'delete',
-                        'confirm' => $langAnalyticsConfirm)
-                ))
-                ."</div>
-                
-            </div>";
+            <tr>
+                <td>
+                    <p class='TextBold'>$title&nbsp;<span class='$active_vis text-nowrap'>($active_msg)</span></p>
+                    <p>$description</p>
+                </td>
+                <td class='text-end'>".
+                    action_button(array(
+                        array('title' => $langAnalyticsTotalAnalytics,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=courseStatistics",
+                            'icon' => 'fa-bar-chart'),
+                        array('title' => $langAnalyticsViewPerUserGeneral,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=perUser",
+                            'icon' => 'fa-users'),
+                        array('title' => $langModify,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;edit_analytics=1",
+                                'icon' => 'fa-edit'),
+                        array('title' => $langEditItems,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showElements",
+                                'icon' => 'fa-edit'),
+                        array('title' => $active ? $langDeactivate : $langActivate,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;activate=" .
+                                    ($active ? '0' : '1'),
+                                'icon' => $active ? 'fa-eye-slash' : 'fa-eye'),
+                        array('title' => $langDelete,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;delete_analytics=1",
+                            'icon' => 'fa-xmark',
+                            'class' => 'delete',
+                            'confirm' => $langAnalyticsConfirm)
+                    ))
+                ."</td>
+            </tr>";
         }
+
+        $results .= "</tbody></table></div>";
     }
 
     $tool_content .= "
@@ -146,26 +147,30 @@ function display_general_lists($analytics_id) {
 
         if (count($critical) > 0) {
             $message_critical = $langAnalyticsCriticalLevel;
+            $bad_results .= "<div class='table-responsive'>";
+            $bad_results .= "<table class='table-default'><tbody>";
             foreach ($critical as $crit) {
+                $bad_results .= "<tr>";
                 $userid = $crit['id'];
-                $bad_results .="<div class='res-table-row row pt-2'>
-                    <div class='col-sm-5'>". display_user($userid) ."</div>
-                    <div class='col-sm-7'>".
-                action_bar(
-                    array(
-                        array('title' => $langDetail,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
-                                'icon' => 'fa-regular fa-user',
-                                'level' => 'primary-label'
-                            ),
-                        array('title' => $langMessage,
-                            'url' => "../message/index.php?course=$course_code&upload=1&type=cm&id=$userid",
-                            'icon' => 'fa-envelope',
-                            'level' => 'primary-label')
-                    )
-                ).
-                "</div></div>";
+                $bad_results .= "
+                    <td>". display_user($userid) ."</td>
+                    <td class='text-end'>
+                        " . action_button(
+                            array(
+                                array('title' => $langDetail,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
+                                        'icon' => 'fa-regular fa-user'
+                                ),
+                                array('title' => $langMessage,
+                                    'url' => "../message/index.php?course=$course_code&upload=1&type=cm&id=$userid",
+                                    'icon' => 'fa-envelope'
+                                )
+                            )) 
+                        . "
+                    </td>";
+                $bad_results .= "</tr>";
             }
+            $bad_results .= "</tbody></table></div>";
         }
 
         if (count($advanced) > 0) {
@@ -382,7 +387,7 @@ function display_analytics_information($analytics_id) {
                 <div class='card-body'>
                     
                         <div class='row row-cols-1 row-cols-md-3 g-md-4 g-3'>
-                            <div class='col'>
+                            <div class='col-12'>
                                 <div class='title-default mb-1 pn-info-title-sct'>$langDescription</div>
                                 <div class='pn-info-text-sct'>$description</div>
                             </div>
@@ -458,10 +463,10 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             <thead>
                 <tr class='list-header'>
                     
-                    <th>
+                    <th class='text-nowrap'>
                         $langSurnameName <a aria-label='$langSurnameName' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=surname&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionName fa-fw' aria-hidden='true'></i></a>
                     </th>
-                    <th>
+                    <th class='text-nowrap'>
                         $langPercentage <a aria-label='$langPercentage' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$period&amp;orderby=percentage&amp;reverse=$reverse_op'><i class='fa fa-arrow-$arrowdirectionPercentage fa-fw' aria-hidden='true'></i></a>
                     </th>
                     <th>
@@ -490,8 +495,14 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                                 <div>". display_user($userid). "</div>
                             </td>
                             <td>
-                                
-                                <div class='progress-circle-bar' role='progressbar' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100' style='--value: $percentage; --size: 6rem;'></div>
+                                <div class='lb-progress-wrap'>
+                                    <div class='lb-progress-bar-outer'>
+                                        <div class='lb-progress-bar-inner' style='width:$percentage%'></div>
+                                    </div>
+                                    <div class='lb-progress-footer'>
+                                        <span class='lb-progress-pct'>$percentage%</span>
+                                    </div>
+                                </div>
                             </td>
                             <td>
                                 <div>
@@ -500,17 +511,16 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                                     <span class='text-danger'>$langAnalyticsCriticalLevel: " . $values['text-danger'] . "</span>
                                 </div>
                             </td>
-                            <td>" . action_bar(
+                            <td class='text-end'>" . action_button(
                                 array(
                                     array('title' => $langDetail,
                                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$period",
-                                            'icon' => 'fa-regular fa-user',
-                                            'level' => 'primary-label'
+                                            'icon' => 'fa-regular fa-user'
                                         ),
                                     array('title' => $langMessage,
                                         'url' => "../message/index.php?course=$course_code&upload=1&type=cm&user_id=$userid",
-                                        'icon' => 'fa-envelope',
-                                        'level' => 'primary-label')
+                                        'icon' => 'fa-envelope'
+                                        )
                                 )
                             ) . "</td>
                         </tr>";

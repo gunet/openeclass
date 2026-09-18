@@ -305,6 +305,11 @@ if (isset($_POST['insert_analytics'])) {
 
             $action_bar = action_bar(
                 array(
+                    array('title' => $langBack,
+                        'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label'
+                    ),
                     array('title' => $langAnalyticsTotalAnalytics,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics",
                         'icon' => 'fa-bar-chart',
@@ -322,6 +327,11 @@ if (isset($_POST['insert_analytics'])) {
     } else if ( $mode == 'courseStatistics') {
         $action_bar = action_bar(
             array(
+                array('title' => $langBack,
+                      'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label'
+                ),
                 array('title' => $langAnalyticsViewPerUserGeneral,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser",
                     'icon' => 'fa-users',
@@ -333,6 +343,16 @@ if (isset($_POST['insert_analytics'])) {
         display_analytics_information($analytics_id);
         display_general_lists($analytics_id);
     } else if ($mode == 'showElements'){
+        $action_bar = action_bar(
+            array(
+                array('title' => $langBack,
+                      'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label'
+                )
+            )
+        );
+        $tool_content .= $action_bar;
         display_analytics_elements($analytics_id);
     } else {
         //Should never get here
