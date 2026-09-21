@@ -5020,6 +5020,8 @@ $langColmoocModerator = "Moderator";
 $langColmoocPartner = "Partner";
 $langLearningAnalytics = 'Learning Analytics';
 $langRequiredTitle = 'Field "Tilte" is required.';
+$langRequiredStartDate = 'Field "Start date" is required.';
+$langRequiredEndDate = 'Field "End date" is required.';
 $langAnalyticsUpdateSuccess = 'Analytics have been updated successfully!';
 $langAnalyticsInsertSuccess = 'Analytics have been created successfully!';
 $langAnalyticsDeleteSuccess = "Analytics have been deleted successfully!";
@@ -6368,7 +6370,7 @@ the predefined answer on the image.
 $langRequiresImageUploadedForThisType = "For dragging and dropping to predefined points, an image must be uploaded.";
 $langYourOwnAnswerIs = "The answer you gave is:";
 $langCalculated = "Calculation of arithmetic operations";
-$langEditItems = "Edit items";
+$langEditItems = "Add activities";
 $langItIsNotWildCard = "It is not an item of the exercise";
 $langItIsWildCard = "It is an item of the exercise";
 $langAddCorrectMandatoryWildCrds = "One or more of the question elements does not have a random or fixed value. Please try again.";
