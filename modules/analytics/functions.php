@@ -607,12 +607,12 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
     $backclass = '';
     if (is_null($previous)) {
-        $backclass = 'style="display:none"';
+        $backclass = 'display:none;';
     }
 
     $nextclass = '';
     if (is_null($next)) {
-        $nextclass = 'style="display:none"';
+        $nextclass = 'display:none;';
     }
     $results = "
     <div class='table-responsive mt-0'>
@@ -626,9 +626,11 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                     $langPercentage
                 </th>
                 <th>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$previous'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>"
+                    <div class='d-flex justify-content-end align-items-center gap-2'>
+                        <a style='min-width: 30px; height: 30px; $backclass' class='btn btn-sm submitAdminBtn'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$previous'><i class='fa fa-arrow-circle-left fa-fw' aria-hidden='true'></i></a>"
                         . format_locale_date(strtotime($start), 'short', false) . " &mdash; " . format_locale_date(strtotime($end), 'short', false) .
-                        "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
+                        "<a style='min-width: 30px; height: 30px; $nextclass' class='btn btn-sm submitAdminBtn'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' aria-hidden='true'></i></a>
+                    </div>
                 </th>
             </tr>
         </thead>";
