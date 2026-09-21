@@ -54,18 +54,18 @@ function display_learning_analytics() {
                 </td>
                 <td class='text-end'>".
                     action_button(array(
+                        array('title' => $langModify,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;edit_analytics=1",
+                                'icon' => 'fa-edit'),
+                        array('title' => $langEditItems,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showElements",
+                                'icon' => 'fa-add'),
                         array('title' => $langAnalyticsTotalAnalytics,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=courseStatistics",
                             'icon' => 'fa-bar-chart'),
                         array('title' => $langAnalyticsViewPerUserGeneral,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=perUser",
                             'icon' => 'fa-users'),
-                        array('title' => $langModify,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;edit_analytics=1",
-                                'icon' => 'fa-edit'),
-                        array('title' => $langEditItems,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showElements",
-                                'icon' => 'fa-edit'),
                         array('title' => $active ? $langDeactivate : $langActivate,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;activate=" .
                                     ($active ? '0' : '1'),
@@ -434,11 +434,11 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
     } else {
         $backclass = '';
         if (is_null($previous)) {
-            $backclass = 'style="display:none"';
+            $backclass = 'display:none;';
         }
         $nextclass = '';
         if (is_null($next)) {
-            $nextclass = 'style="display:none"';
+            $nextclass = 'display:none;';
         }
         //translation until here
         $arrowdirection = 'down';
@@ -473,10 +473,10 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                         $langAnalyticsStatus
                     </th>
                     <th>
-                        <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
-                            <a aria-label='$langBack' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
+                        <div class='d-flex justify-content-end align-items-center gap-2'>
+                            <a style='min-width: 30px; height: 30px; $backclass' class='btn btn-sm submitAdminBtn' aria-label='$langBack' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' aria-hidden='true'></i></a>
                             " . format_locale_date(strtotime($startdate), 'short', false) . " &mdash; " . format_locale_date(strtotime($enddate), 'short', false)  . "
-                            <a aria-label='$langNext' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
+                            <a style='min-width: 30px; height: 30px; $nextclass' class='btn btn-sm submitAdminBtn' aria-label='$langNext' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
                         </div>
                     </th>
                    
