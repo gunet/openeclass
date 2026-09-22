@@ -31,10 +31,13 @@ $toolName = $langLearningAnalytics;
 // Validate data and insert a new record to the DB
 if (isset($_POST['insert_analytics'])) {
     $v = new Valitron\Validator($_POST);
+    
     $v->rule('required', array('title'));
     if($_POST['start_date'] and $_POST['end_date']) {
-        $start_date = date_format(date_create_from_format('d-m-Y', $_POST['start_date']), 'Y-m-d');
-        $end_date = date_format(date_create_from_format('d-m-Y', $_POST['end_date']), 'Y-m-d');
+        $d_start = date_create_from_format('d-m-Y', $_POST['start_date']);
+        $d_end = date_create_from_format('d-m-Y', $_POST['end_date']);
+        $start_date = $d_start ? date_format($d_start, 'Y-m-d') : null;
+        $end_date = $d_end ? date_format($d_end, 'Y-m-d') : null;
 
         $v->rule('dateAfter', 'end_date', $start_date);
     } else if ($_POST['start_date'] or $_POST['end_date']){
@@ -45,20 +48,20 @@ if (isset($_POST['insert_analytics'])) {
     }
 
     $v->labels(array(
-        'title' => $langRequiredTitle
+        'title' => $langRequiredTitle,
+        'start_date' => $langRequiredStartDate,
+        'end_date' => $langRequiredEndDate
     ));
 
     if($v->validate()) {
         $created = date('Y-m-d H:i:s');
-
         $analytics_id = insert_analytics($_POST['title'], $_POST['description'], $_POST['active'], $_POST['periodType'], $start_date, $end_date, $created);
-
         Session::flash('message',$langAnalyticsInsertSuccess);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=courseStatistics");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;new=1");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&edit_analytics=1");
     }
 // Validate data and update to DB
 } else if (isset($_POST['update_analytics'])) {
@@ -66,8 +69,10 @@ if (isset($_POST['insert_analytics'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
     if($_POST['start_date'] and $_POST['end_date']) {
-        $start_date = date_format(date_create_from_format('d-m-Y', $_POST['start_date']), 'Y-m-d');
-        $end_date = date_format(date_create_from_format('d-m-Y', $_POST['end_date']), 'Y-m-d');
+        $d_start = date_create_from_format('d-m-Y', $_POST['start_date']);
+        $d_end = date_create_from_format('d-m-Y', $_POST['end_date']);
+        $start_date = $d_start ? date_format($d_start, 'Y-m-d') : null;
+        $end_date = $d_end ? date_format($d_end, 'Y-m-d') : null;
 
         $v->rule('dateAfter', 'end_date', $start_date);
     } else if ($_POST['start_date'] or $_POST['end_date']){
@@ -78,7 +83,9 @@ if (isset($_POST['insert_analytics'])) {
     }
 
     $v->labels(array(
-        'title' => $langRequiredTitle
+        'title' => $langRequiredTitle,
+        'start_date' => $langRequiredStartDate,
+        'end_date' => $langRequiredEndDate
     ));
 
     if($v->validate()) {
@@ -86,10 +93,10 @@ if (isset($_POST['insert_analytics'])) {
 
         Session::flash('message',$langAnalyticsUpdateSuccess);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=courseStatistics");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&edit_analytics=1");
     }
 //Go to edit analytics form
 } else if (isset($_REQUEST['edit_analytics'])) {
@@ -305,6 +312,11 @@ if (isset($_POST['insert_analytics'])) {
 
             $action_bar = action_bar(
                 array(
+                    array('title' => $langBack,
+                        'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label'
+                    ),
                     array('title' => $langAnalyticsTotalAnalytics,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics",
                         'icon' => 'fa-bar-chart',
@@ -322,6 +334,11 @@ if (isset($_POST['insert_analytics'])) {
     } else if ( $mode == 'courseStatistics') {
         $action_bar = action_bar(
             array(
+                array('title' => $langBack,
+                      'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label'
+                ),
                 array('title' => $langAnalyticsViewPerUserGeneral,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser",
                     'icon' => 'fa-users',
@@ -333,6 +350,16 @@ if (isset($_POST['insert_analytics'])) {
         display_analytics_information($analytics_id);
         display_general_lists($analytics_id);
     } else if ($mode == 'showElements'){
+        $action_bar = action_bar(
+            array(
+                array('title' => $langBack,
+                      'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label'
+                )
+            )
+        );
+        $tool_content .= $action_bar;
         display_analytics_elements($analytics_id);
     } else {
         //Should never get here

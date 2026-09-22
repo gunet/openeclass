@@ -196,13 +196,13 @@ class action {
         $data->uid = $uid;
         $data->course_id = $course_id;
 
-        $data->element_type = 8;
+        $data->element_type = ANALYTICS_DAILYLOGINS;
         ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::LOGINRECORDED, $data, true);
 
-        $data->element_type = 9;
+        $data->element_type = ANALYTICS_HITS;
         ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::HITRECORDED, $data, true);
 
-        $data->element_type = 10;
+        $data->element_type = ANALYTICS_DURATION;
         ParticipationAnalyticsEvent::trigger(ParticipationAnalyticsEvent::DURATIONRECORDED, $data, true);
     }
 

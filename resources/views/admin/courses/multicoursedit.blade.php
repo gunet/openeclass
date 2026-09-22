@@ -223,7 +223,7 @@
 
                     <!-- Refresh Options Section (Shown below table when "refresh" action is selected) -->
                     <div id='refresh_options_box' class='col-12 mt-4' style='display: none;'>
-                        <div class='form-wrapper form-edit rounded border'>
+                        <div class='form-wrapper form-edit'>
                             <div class='alert alert-info mb-4'>
                                 <i class='fa-solid fa-circle-info fa-lg me-2'></i>
                                 <span>{{ trans('langRefreshInfo') }} {{ trans('langRefreshInfo_A') }}</span>

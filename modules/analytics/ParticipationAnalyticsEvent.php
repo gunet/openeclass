@@ -81,7 +81,7 @@ class ParticipationAnalyticsEvent extends Event {
                     AND course_id = ?d
                     AND day = CURDATE()", $this->context['user_id'], $this->context['course_id']);
 
-                $this->context['value'] = $record->value;
+                $this->context['value'] = (isset($record) && isset($record->value)) ? $record->value : 0;
 
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
@@ -130,7 +130,7 @@ class ParticipationAnalyticsEvent extends Event {
                     AND course_id = ?d
                     AND day = CURDATE()", $this->context['user_id'], $this->context['course_id']);
 
-                $this->context['value'] = $record->value;
+                $this->context['value'] = (isset($record) && isset($record->value)) ? $record->value : 0;
 
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 

@@ -2361,7 +2361,7 @@ $langRequiresImageUploadedForThisType = "Για την μεταφορά και �
 $langYourOwnAnswerIs = "Η απάντηση που δώσατε είναι";
 $langCorrectAnswerIs = "Η σωστή απάντηση είναι";
 $langCalculated = "Υπολογισμός αριθμητικών πράξεων";
-$langEditItems = "Επεξεργασία στοιχείων";
+$langEditItems = "Προσθήκη δραστηριοτήτων";
 $langItIsNotWildCard = "Δεν αποτελεί στοιχείο της άσκησης";
 $langItIsWildCard = "Αποτελεί στοιχείο της άσκησης";
 $langAddCorrectMandatoryWildCrds = "Ένα ή περισσότερα στοιχεία της ερώτησης δεν διαθέτουν τυχαία ή σταθερή τιμή. Δοκιμάστε πάλι.";
@@ -7277,7 +7277,9 @@ $langColmoocPartner = "Συνομιλητής";
 
 // Learning Analytics
 $langLearningAnalytics = 'Μαθησιακή Αναλυτική';
-$langRequiredTitle = 'Το πεδίο "Τίτλος" είναι υποχρεωτικό.';
+$langRequiredTitle = 'Το πεδίο "Τίτλος" ';
+$langRequiredStartDate = 'Το πεδίο "Έναρξη"';
+$langRequiredEndDate = 'Το πεδίο "Λήξη"';
 $langAnalyticsUpdateSuccess = 'Οι δραστηριότητες ενημερώθηκαν με επιτυχία!';
 $langAnalyticsInsertSuccess = 'Η εισαγωγή της δραστηριότητας έγινε με επιτυχία!';
 $langAnalyticsDeleteSuccess = "Η δραστηριότητα διαγράφηκε με επιτυχία!";
