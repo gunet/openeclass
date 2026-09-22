@@ -433,7 +433,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'icon' => 'fa-key',
                     'url' => 'change_user.php?username=' . urlencode($myrow->username),
                     'class' => 'change-user-link',
-                    'hide' => isDepartmentAdmin()
+                    'show' => change_user_rights($myrow->id)
                 ),
                 array(
                     'title' => $langActions,

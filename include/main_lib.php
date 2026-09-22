@@ -3294,6 +3294,28 @@ function get_admin_rights($user_id) {
 }
 
 /**
+ * @brief check if we have rights to connect as user with uid = $user_id
+ * @param $user_id
+ * @return bool
+ */
+function change_user_rights($user_id): bool
+{
+
+    $admin_rights = get_admin_rights($user_id);
+
+    if (isset($_SESSION['is_power_user']) && $_SESSION['is_power_user'] && $admin_rights == ADMIN_USER) {
+        return false;
+    }
+    if (isset($_SESSION['is_usermanage_user']) && $_SESSION['is_manage_user'] && ($admin_rights == ADMIN_USER || $admin_rights == POWER_USER)) {
+        return false;
+    }
+    if (isset($_SESSION['is_departmentmanage_user']) && $_SESSION['is_departmentmanage_user'] && ($admin_rights == ADMIN_USER || $admin_rights == POWER_USER || $admin_rights == USERMANAGE_USER)) {
+        return false;
+    }
+    return true;
+}
+
+/**
  * @brief query course status
  * @param type $course_id
  * @return course status

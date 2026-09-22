@@ -141,7 +141,7 @@ if ($u) {
                 'icon' => 'fa-sign-in',
                 'level' => 'primary',
                 'button-class' => 'btn-default change-user-link',
-                'show' => $is_admin
+                'show' => change_user_rights($u)
             ),
             array(
                 'title' => $langEditAuth,
