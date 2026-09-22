@@ -765,13 +765,6 @@ function printPollForm() {
             unset($_SESSION["poll_answers_$pid"]);
         }
 
-        if (!isset($_GET['page']) or (isset($_GET['page']) && intval($_GET['page']) == 1)) {
-            $_SESSION['q_counter'] = 1;
-        } else {
-            $totalQuestionsInPrevPages = Database::get()->querySingle("SELECT COUNT(*) as total FROM poll_question 
-                                                                       WHERE pid = ?d AND `page` < ?d AND `page` > ?d", $pid, intval($_GET['page']), 0)->total;
-            $_SESSION['q_counter'] = $totalQuestionsInPrevPages + 1;
-        }
         // Session process
         $sql_an = '';
         $s_id = $_GET['session'] ?? 0;
@@ -803,7 +796,18 @@ function printPollForm() {
             unset($_SESSION['temp_data_answers']);
             unset($_SESSION['unanswered_required_qids']);
         }
-        
+
+        // Question number regarding pagebreak
+        $questionNumberArr = [];
+        $qcounter = 1;
+        foreach ($questions as $q) {
+            if ($q->qtype == QTYPE_LABEL or $q->has_sub_question == -1) {
+                continue;
+            }
+
+            $questionNumberArr[$q->pqid] = $qcounter;
+            $qcounter++;
+        }
 
         foreach ($questions as $theQuestion) {
             if ($temp_IsLime) {
@@ -859,7 +863,7 @@ function printPollForm() {
                 <div class='col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel mb-4' $emptyQuestionStyle>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h2 class='text-heading-h3'>$langQuestion $_SESSION[q_counter] $RequiredQuestionHtml</h2>
+                            <h2 class='text-heading-h3'>$langQuestion $questionNumberArr[$pqid] $RequiredQuestionHtml</h2>
                         </div>
                         <div class='card-body'>";
                             $tool_content .= "<p tabindex='0' class='TextMedium Neutral-900-cl mb-2'>".q_math($theQuestion->question_text)."</p>";
@@ -1156,7 +1160,6 @@ function printPollForm() {
                         </div>
                     </div>
                 </div>";
-                $_SESSION['q_counter'] = $_SESSION['q_counter'] + 1;
             }
         }
 
@@ -1781,7 +1784,7 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     $del_file = '';
     $filename = '';
     $filepath = '';
-    if (isset($_SESSION['data_answers']) && is_string($_SESSION['data_answers'][$pqid])) {
+    if (isset($_SESSION['data_answers']) && isset($_SESSION['data_answers'][$pqid]) && is_string($_SESSION['data_answers'][$pqid])) {
         $arrFile = unserialize($_SESSION['data_answers'][$pqid], ['allowed_classes' => false]);
         if (is_array($arrFile) && isset($arrFile['filename'], $arrFile['filepath']) 
             && is_string($arrFile['filename']) && is_string($arrFile['filepath'])) {
