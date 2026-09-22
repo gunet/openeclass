@@ -524,7 +524,11 @@ function isWhitelistAllowed($filename, $additional = []) {
  */
 function fetchUserWhitelist($uid) {
     $r = Database::get()->querySingle("SELECT whitelist FROM user WHERE id = ?d", $uid);
-    return $r->whitelist;
+    if ($r) {
+        return $r->whitelist;
+    } else {
+        return null;
+    }
 }
 
 /**
