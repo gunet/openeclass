@@ -60,8 +60,8 @@ if (isset($_GET['delete_image'])) {
 if (isset($_FILES['image_as_answer'])) {
     $file = $_FILES['image_as_answer'];
     $course_code = $_POST['courseCode-image'];
-    $qID = $_POST['questionId-image'];
-    $mID = $_POST['markerId-image'];
+    $qID = intval($_POST['questionId-image']);
+    $mID = intval($_POST['markerId-image']);
 
     // Set the directory where you want to save the uploaded images
     $targetDir = "$webDir/courses/$course_code/image/";
