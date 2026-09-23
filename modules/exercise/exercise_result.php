@@ -634,7 +634,7 @@ if (count($exercise_question_ids) > 0) {
                               </div>";
         }
 
-        $tool_content .= "</div><div class='col-2 text-end d-flex flex-column'>" . $answer_text;
+        $tool_content .= "</div><div class='col-2 text-end d-flex flex-column'>";
         if ($answerType == FREE_TEXT or $answerType == ORAL or $answerType == UPLOAD_FILE) {
             $choice = purify($choice);
             if (!empty($choice)) {
@@ -645,6 +645,7 @@ if (count($exercise_question_ids) > 0) {
                 }
             }
         } else {
+            $tool_content .= $answer_text;
             if (($showScore) and (!is_null($choice))) {
                 if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $calc_grade_method == 1) {
                     $qw_legend1 = "<span class='Accent-200-cl'>$question_weight</span>";
