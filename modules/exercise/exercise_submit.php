@@ -157,73 +157,18 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         }
     }
 
-    // File has been uploaded from uppy
-    if (isset($_POST['file_uploaded_done'])) {
-        header('Content-Type: application/json');
-        $exUserRecordId = $_POST['ex_user_record_id'];
-        $oldFileId = $_POST['old_file_id'];
-        $questionID = $_POST['question_id'];
-        $currentUser = $_POST['current_user'];
-        $docInfo = [
-            'filename' => basename(trim($_POST['file_name'] ?? '')),
-            'filepath' => trim($_POST['file_path'] ?? '')
-        ];
-        $checkObj = serialize($docInfo);
-        $arrFileObj = unserialize($checkObj, ['allowed_classes' => false]);
-        if (is_array($arrFileObj) && isset($arrFileObj['filename'], $arrFileObj['filepath']) 
-            && is_string($arrFileObj['filename']) && is_string($arrFileObj['filepath'])) {
-            $userInfo = Database::get()->querySingle("SELECT givenname,surname FROM user WHERE id = ?d", $currentUser);
-            $file_creator = "$userInfo->givenname $userInfo->surname";
-            $file_date = date('Y-m-d G:i:s');
-
-            $doc_inserted = Database::get()->query("INSERT INTO document SET
-                course_id = ?d,
-                subsystem = ?d,
-                subsystem_id = ?d,
-                path = ?s,
-                extra_path = '',
-                filename = ?s,
-                visible = 1,
-                comment = ?s,
-                category = 0,
-                title = ?s,
-                creator = ?s,
-                date = ?s,
-                date_modified = ?s,
-                subject = '',
-                description = '',
-                author = ?s,
-                format = ?s,
-                language = ?s,
-                copyrighted = 0,
-                editable = 0,
-                lock_user_id = ?d",
-                    $course_id, UPLOAD_FILE_QUESTION, $questionID, $arrFileObj['filepath'],
-                    $arrFileObj['filename'], null, null, $file_creator,
-                    $file_date, $file_date, $file_creator, get_file_extension($arrFileObj['filepath']),
-                    $language, $exUserRecordId);
-
-            if ($doc_inserted) { // replace old file
-                Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFileId);
-            }
-
-            echo json_encode(['upload_success' => true, 'filePath' => $arrFileObj['filepath']]);
-        }
-    }
-
     // File has been removed from uppy
     if (isset($_POST['file_uploaded_remove'])) {
         if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
 
-        $exId = $_GET['exerciseId'];
-        $qId = $_POST['question_id'];
-        $uId = $_POST['current_user'];
+        $exId = intval($_GET['exerciseId']);
+        $u_rec_id = intval($_POST['u_record_id']);
+        $qId = intval($_POST['question_id']);
         $oldfilePath = $_POST['old_file_path'];
-        $oldFileId = $_POST['old_file_id'];
-        $file = "$webDir/courses/$course_code/exercise/$uId/$exId/$qId$oldfilePath";
+        $file = "$webDir/courses/$course_code/exercise/{$exId}{$oldfilePath}";
         if (file_exists($file)) {
             unlink($file);
-            Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFileId);
+            Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", null, $u_rec_id, $qId);
         } 
     }
 
@@ -238,38 +183,26 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['new_upload_file'])) {
     
     $exercise_id = intval($_GET['exerciseId']);
     $question_id = intval($_GET['questionId']);
-    $currentUser = intval($_GET['u']);
-    $old_file_path = intval($_GET['oldFilePath']);
+    $u_rec = intval($_GET['exrecid']);
     $filename = $_FILES['new_upload_file']['name'];
     validateUploadedFile($filename); // check file type
     $filename = add_ext_on_mime($filename);
     // File name used in file system and path field
     $safe_filename = safe_filename(get_file_extension($filename));
-    $dir = "$webDir/courses/$course_code/exercise/$currentUser/$exercise_id/$question_id";
+    $dir = "$webDir/courses/$course_code/exercise/{$exercise_id}";
     if (!file_exists($dir)) {
-        mkdir("$webDir/courses/$course_code/exercise/$currentUser/$exercise_id/$question_id/", 0755, true);
+        mkdir("$webDir/courses/$course_code/exercise/{$exercise_id}/", 0755, true);
     } 
-    // else {// delete prev file
-    //     if (is_dir($dir)) {
-    //         $files = scandir($dir);
-    //         foreach ($files as $file) {
-    //             $pfile = '/' . $file; 
-    //             if ($file !== '.' && $file !== '..' && $old_file_path == $pfile) {
-    //                 $filePath = $dir . DIRECTORY_SEPARATOR . $file;
-    //                 if (is_file($filePath)) {
-    //                     unlink($filePath); // Delete the file
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    $pathfile = "$webDir/courses/$course_code/exercise/$currentUser/$exercise_id/$question_id/$safe_filename";
+
+    $pathfile = "$webDir/courses/$course_code/exercise/{$exercise_id}/$safe_filename";
     if (move_uploaded_file($_FILES['new_upload_file']['tmp_name'], $pathfile)) {
         @chmod($pathfile, 0644);
         $real_filename = $_FILES['new_upload_file']['name'];
         $filepath = '/' . $safe_filename;
-        $info_file = pathinfo($filename);
-        echo json_encode(['success' => true, 'fileInfo' => $info_file, 'filePath' => $filepath]);
+        $arrFileInfo = ['filename' => $filename, 'filepath' => $filepath];
+        $info_file = serialize($arrFileInfo);
+        Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", $info_file, $u_rec, $question_id);
+        echo json_encode(['success' => true, 'fileInfo' => $info_file]);
     } else {
         echo json_encode(['success' => false, 'error' => 'Failed to save uploaded file.']);
     }

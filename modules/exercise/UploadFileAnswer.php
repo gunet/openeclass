@@ -15,7 +15,7 @@ class UploadFileAnswer extends QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $webDir, $urlAppend, $language, $course_code, $uid, 
+        global $webDir, $urlAppend, $language, $course_code, 
                $head_content, $urlServer, $course_id, $langDelete, 
                $langAnswer, $langConfirmDeletePermantly, $eurid;
             
@@ -26,17 +26,15 @@ class UploadFileAnswer extends QuestionType
         $html_content = '';
         $uploadedFileName = '';
         $uploadedFilePath = '';
-        $oldFilePath = '';
-        $oldFileId = 0;
+        $valueFile ='';
 
         if (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] != '') {
-            $uploadedFilePath = $exerciseResult[$questionId];
-            $uploadedFile = Database::get()->querySingle("SELECT id,`filename`,`path` FROM document WHERE course_id = ?d AND subsystem = ?d AND subsystem_id = ?d AND path = ?s", $course_id, UPLOAD_FILE_QUESTION, $questionId, $uploadedFilePath);
-            if ($uploadedFile && file_exists("$webDir/courses/$course_code/exercise/$uid/$exerciseId/$questionId$uploadedFile->path")) {
-                $oldFileId = $uploadedFile->id;
-                $oldFilePath = $uploadedFile->path;
-                $uploadedFileName = $uploadedFile->filename;
-                $urlLink = $urlServer . "courses/$course_code/exercise/$uid/$exerciseId/$questionId$oldFilePath";
+            $valueFile = $exerciseResult[$questionId];
+            $fileInfo = unserialize($exerciseResult[$questionId], ['allowed_classes' => false]);
+            $uploadedFileName = $fileInfo['filename'] ?? '';
+            $uploadedFilePath = $fileInfo['filepath'] ?? '';
+            if (file_exists("$webDir/courses/$course_code/exercise/{$exerciseId}{$uploadedFilePath}")) {
+                $urlLink = $urlServer . "courses/$course_code/exercise/{$exerciseId}{$uploadedFilePath}";
                 $fileLink .= "<div class='col-12 d-flex align-items-center gap-2 mb-4'>
                                 <strong class='text-decoration-underline'>$langAnswer:</strong>
                                 <a id='uploadedFile_{$questionId}' class='linkColor TextBold' target='_blank' href='{$urlLink}'>$uploadedFileName</a>
@@ -49,7 +47,7 @@ class UploadFileAnswer extends QuestionType
         $html_content .= "<div class='form-group margin-bottom-fat'>
                             <div class='col-sm-12 margin-top-thin QuestionNumber_{$questionId}'>
                                 $fileLink
-                                <input type='hidden' id='choice_{$questionId}' name='choice[$questionId]' value='$uploadedFilePath'>
+                                <input type='hidden' id='choice_{$questionId}' name='choice[$questionId]' value='{$valueFile}'>
                                 <div id='uppy_{$questionId}'></div>
                                 <div class='text-success mt-4' id='answerFile_{$questionId}'></div>
                             </div>
@@ -94,26 +92,17 @@ class UploadFileAnswer extends QuestionType
                             });
 
                             uppy.use(XHRUpload, {
-                                endpoint: '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&exerciseId={$exerciseId}&questionId={$questionId}&u={$uid}&token={$token}&oldFilePath={$oldFilePath}',
+                                endpoint: '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&exerciseId={$exerciseId}&questionId={$questionId}&exrecid={$eurid}&token={$token}',
                                 fieldName: 'new_upload_file',
                                 formData: true,
                                 getResponseData: (responseText, response) => {
                                     try {
                                         const data = JSON.parse(responseText.responseText);
                                         if (data.success) {
-                                            $.ajax({
-                                                url: '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&exerciseId={$exerciseId}',
-                                                method: 'POST',
-                                                data: { file_uploaded_done: 1, file_name: data.fileInfo.basename, file_path: data.filePath, question_id: $questionId, current_user: $uid, old_file_id: $oldFileId, ex_user_record_id: $eurid },
-                                                success: function(res) {
-                                                    if (res.upload_success) {
-                                                        setInterval(() => {
-                                                            $('#choice_{$questionId}').val(res.filePath);
-                                                            $('#uploadedFile_{$questionId}').addClass('text-decoration-line-through text-danger');
-                                                        }, 500);
-                                                    }
-                                                }
-                                            });
+                                            setInterval(() => {
+                                                $('#choice_{$questionId}').val(data.fileInfo);
+                                                $('#uploadedFile_{$questionId}').addClass('text-decoration-line-through text-danger');
+                                            }, 500);
                                         }
                                         return { url: '' };
                                     } catch(e) {
@@ -141,10 +130,9 @@ class UploadFileAnswer extends QuestionType
                                 method: 'POST',
                                 data: { 
                                     file_uploaded_remove: 1,
-                                    old_file_id: '{$oldFileId}',
-                                    old_file_path: '{$oldFilePath}',
+                                    u_record_id: '{$eurid}',
                                     question_id: '{$questionId}',
-                                    current_user: '{$uid}'
+                                    old_file_path: '{$uploadedFilePath}'
                                 },
                                 success: function(response) {
                                     $('#uploadedFile_{$questionId}').remove();
@@ -165,31 +153,22 @@ class UploadFileAnswer extends QuestionType
     public function QuestionResult($choice, $eurid, $regrade, $extra_type = ''): string
     {
 
-        global $questionScore, $question_weight,
-               $urlServer, $course_code, $webDir, $course_id, $is_editor;
+        global $questionScore, $question_weight, $urlServer, $course_code, $webDir;
 
         $exerciseId = Database::get()->querySingle("SELECT eid FROM exercise_user_record WHERE eurid = ?d", $eurid)->eid;
-        $objExercise = new Exercise();
-        $objExercise->read($exerciseId);
-        $results = $objExercise->get_attempt_results_array($eurid);
-
-        $questionId = $this->question_id;
         $questionScore = $question_weight;
-
         $html_content = $fileLink = '';
-        $user_record = Database::get()->querySingle("SELECT `uid`,eid FROM exercise_user_record WHERE eurid = ?d", $eurid);
-        $userId = $user_record->uid;
-        $exerciseId = $user_record->eid;
-        $uploadedFile = Database::get()->querySingle("SELECT `path`,`filename` FROM document 
-                                                        WHERE course_id = ?d 
-                                                        AND subsystem = ?d 
-                                                        AND subsystem_id = ?d 
-                                                        AND path = ?s 
-                                                        AND lock_user_id = ?d", $course_id, UPLOAD_FILE_QUESTION, $questionId, $results[$questionId], $eurid);
+        $fileName = '';
+        $filePath = '';
+        if (isset($choice)) {
+            $fileInfo = unserialize($choice, ['allowed_classes' => false]);
+            $fileName = $fileInfo['filename'] ?? '';
+            $filePath = $fileInfo['filepath'] ?? '';
+        }
 
-        if ($uploadedFile && file_exists("$webDir/courses/$course_code/exercise/$userId/$exerciseId/$questionId$uploadedFile->path")) {
-            $urlLink = $urlServer . "courses/$course_code/exercise/$userId/$exerciseId/$questionId$uploadedFile->path";
-            $fileLink .= "<a class='linkColor TextBold' target='_blank' href='{$urlLink}'>$uploadedFile->filename</a>";
+        if (file_exists("$webDir/courses/$course_code/exercise/{$exerciseId}{$filePath}")) {
+            $urlLink = $urlServer . "courses/$course_code/exercise/{$exerciseId}{$filePath}";
+            $fileLink .= "<a class='linkColor TextBold' target='_blank' href='{$urlLink}'>$fileName</a>";
         }
         $html_content .= "<tr><td>$fileLink</td></tr>";
 
