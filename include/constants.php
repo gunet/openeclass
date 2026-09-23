@@ -258,7 +258,6 @@ define('MYDOCS', 4);
 define('MYSESSIONS',5);
 define('SESSION_REFERENCE',6);
 define('ORAL_QUESTION',7);
-define('UPLOAD_FILE_QUESTION', 8);
 
 // path for certificates / badges templates
 define('CERT_TEMPLATE_PATH', "/courses/user_progress_data/cert_templates/");

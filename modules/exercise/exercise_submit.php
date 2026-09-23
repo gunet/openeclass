@@ -375,14 +375,6 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                     }
                 }
 
-                $oldUploadedFiles = Database::get()->queryArray("SELECT id FROM document WHERE course_id = ?d
-                                                                AND subsystem = ?d AND lock_user_id = ?d", $course_id, UPLOAD_FILE_QUESTION, $eurid);
-                if (count($oldUploadedFiles) > 0) {
-                    foreach ($oldUploadedFiles as $old) {
-                        Database::get()->query("UPDATE document SET lock_user_id = ?d WHERE id = ?d", $new_eurid, $old->id);
-                    }
-                }
-
                 /////////////////////////////////////////////////////////
                 Database::get()->query('UPDATE exercise_answer_record
                     SET eurid = ?d WHERE eurid = ?d', $new_eurid, $eurid);

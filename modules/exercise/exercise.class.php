@@ -1506,15 +1506,18 @@ class Exercise
         // Remove file upload answers from document table and courses folder
         foreach ($userRecords as $rec) {
             $user_id = $rec->uid;
-            $file = Database::get()->queryArray("SELECT id,subsystem_id,`path` FROM document WHERE course_id = ?d
-                                                  AND subsystem = ?d AND lock_user_id = ?d", $course_id, UPLOAD_FILE_QUESTION, $rec->eurid);
-            foreach ($file as $f) {
-                $question_id = $rec->subsystem_id;
-                $filePath = $f->path;
-                if (file_exists("$webDir/courses/$course_code/exercise/$user_id/$id/$question_id$filePath")) {
-                    unlink("$webDir/courses/$course_code/exercise/$user_id/$id/$question_id$filePath");
+            $u_answers = Database::get()->queryArray("SELECT ear.eurid,ear.answer FROM exercise_answer_record ear
+                                                      JOIN exercise_question eq ON eq.id=ear.question_id
+                                                      WHERE ear.eurid = ?d
+                                                      AND eq.type = ?d", $rec->eurid, UPLOAD_FILE);
+                                                      
+            if (count($u_answers) > 0) {
+                foreach ($u_answers as $an) {
+                    $fileInfo = unserialize($an->answer, ['allowed_classes' => false]);  
+                    if (isset($fileInfo['filepath']) && file_exists("$webDir/courses/$course_code/exercise/$id$fileInfo[filepath]")) {
+                        unlink("$webDir/courses/$course_code/exercise/$id$fileInfo[filepath]");
+                    }
                 }
-                Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
             }
         }
 
