@@ -29,7 +29,7 @@ require_once 'ElementTypes.php';
 function display_learning_analytics() {
     global $course_id, $course_code, $tool_content, $langAnalyticsNoAnalytics, $langActive, $langInactive,
     $langAnalyticsTotalAnalytics, $langAnalyticsViewPerUserGeneral, $langModify, $langEditItems, $langDeactivate,
-    $langActivate, $langDelete, $langAnalyticsConfirm, $langLearningAnalytics, $langAdd;
+    $langActivate, $langDelete, $langAnalyticsConfirm, $langLearningAnalytics, $langAdd, $langDetail;
 
     $sql_data = Database::get()->queryArray("SELECT id, title, description, active, start_date, end_date, created, periodType FROM analytics WHERE courseID= ?d", $course_id);
     if (count($sql_data) == 0) {
@@ -49,11 +49,14 @@ function display_learning_analytics() {
             $results .= "
             <tr>
                 <td>
-                    <p class='TextBold'>$title&nbsp;<span class='$active_vis text-nowrap'>($active_msg)</span></p>
+                    <p class='TextBold'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showDetails'>$title</a>&nbsp;<span class='$active_vis text-nowrap'>($active_msg)</span></p>
                     <p>$description</p>
                 </td>
                 <td class='text-end'>".
                     action_button(array(
+                        array('title' => $langDetail,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showDetails",
+                                'icon' => 'fa-info-circle'),
                         array('title' => $langModify,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;edit_analytics=1",
                                 'icon' => 'fa-edit'),
