@@ -29,7 +29,7 @@ require_once 'ElementTypes.php';
 function display_learning_analytics() {
     global $course_id, $course_code, $tool_content, $langAnalyticsNoAnalytics, $langActive, $langInactive,
     $langAnalyticsTotalAnalytics, $langAnalyticsViewPerUserGeneral, $langModify, $langEditItems, $langDeactivate,
-    $langActivate, $langDelete, $langAnalyticsConfirm, $langLearningAnalytics, $langAdd;
+    $langActivate, $langDelete, $langAnalyticsConfirm, $langLearningAnalytics, $langAdd, $langDetail;
 
     $sql_data = Database::get()->queryArray("SELECT id, title, description, active, start_date, end_date, created, periodType FROM analytics WHERE courseID= ?d", $course_id);
     if (count($sql_data) == 0) {

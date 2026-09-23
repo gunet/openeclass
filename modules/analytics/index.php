@@ -338,6 +338,56 @@ if (isset($_POST['insert_analytics'])) {
         display_general_lists($analytics_id);
     } else if ($mode == 'showElements'){
         display_analytics_elements($analytics_id);
+    } else if ($mode == 'showDetails') {
+        $analytics = Database::get()->querySingle("SELECT * FROM analytics WHERE courseID = ?d AND id = ?d", $course_id, $analytics_id);
+        if ($analytics) {
+            $periodTypes = PeriodType::periodType;
+            $analytics->period_name = isset($periodTypes[$analytics->periodType]) ? $periodTypes[$analytics->periodType]['title'] : '-';
+            $analytics->start_date_formatted = (!empty($analytics->start_date) && ($d = date_create_from_format('Y-m-d', $analytics->start_date))) ? date_format($d, 'd-m-Y') : '';
+            $analytics->end_date_formatted = (!empty($analytics->end_date) && ($d = date_create_from_format('Y-m-d', $analytics->end_date))) ? date_format($d, 'd-m-Y') : '';
+            $analytics->created_formatted = (!empty($analytics->created) && ($d = date_create_from_format('Y-m-d H:i:s', $analytics->created))) ? date_format($d, 'd-m-Y H:i') : $analytics->created;
+
+            $raw_elements = Database::get()->queryArray("SELECT * FROM analytics_element WHERE analytics_id = ?d", $analytics_id);
+            $elements = array();
+            foreach ($raw_elements as $el) {
+                $m_id = $el->module_id;
+                $el_title = isset(ElementTypes::elements[$m_id]) ? ElementTypes::elements[$m_id]['title'] : '';
+                $el_icon = isset(ElementTypes::elements[$m_id]) ? ElementTypes::elements[$m_id]['icon'] : 'fa fa-chart-line';
+                $resource_info = get_resource_info($el->resource, $m_id);
+
+                $elements[] = array(
+                    'id' => $el->id,
+                    'module_id' => $m_id,
+                    'title' => $el_title,
+                    'icon' => $el_icon,
+                    'resource_info' => $resource_info,
+                    'min_value' => $el->min_value,
+                    'lower_threshold' => $el->lower_threshold,
+                    'upper_threshold' => $el->upper_threshold,
+                    'max_value' => $el->max_value,
+                    'weight' => $el->weight
+                );
+            }
+
+            $navigation = array(
+                array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code", 'name' => $langLearningAnalytics),
+                array('url' => '', 'name' => $analytics->title)
+            );
+
+            $action_bar = action_bar(
+                array(
+                    array('title' => $langBack,
+                          'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code",
+                          'icon' => 'fa-reply',
+                          'level' => 'primary-label'
+                    )
+                )
+            );
+
+            $pageName = $analytics->title;
+            view('modules.analytics.show', compact('analytics', 'elements', 'action_bar', 'is_editor', 'course_code'));
+            exit;
+        }
     } else {
         //Should never get here
     }
