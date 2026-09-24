@@ -1408,6 +1408,7 @@ b a {
   border: 0;
   border-radius: 0.25rem;
   opacity: 1;
+  z-index: auto !important;
 }
 
 .alert-dismissible .btn-close:focus, .alert-dismissible .btn-close:hover, .alert-dismissible .btn-close:active{
