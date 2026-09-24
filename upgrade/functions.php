@@ -4215,6 +4215,52 @@ function upgrade_to_4_4($tbl_options) : void
         Database::get()->query("ALTER TABLE `certificate` ADD `logo` VARCHAR(255) DEFAULT NULL AFTER `title`");
     }
 
+    if (!DBHelper::tableExists('eduapi_course_offerings')) {
+        Database::get()->query("CREATE TABLE `eduapi_course_offerings` (
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `sourced_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `course_id` INT NOT NULL,
+            `academic_session_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+            `academic_session_code` VARCHAR(100) DEFAULT NULL,
+            `organization_code` VARCHAR(100) DEFAULT NULL,
+            `title` TEXT DEFAULT NULL,
+            `last_sync` DATETIME DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `sourced_id` (`sourced_id`),
+            FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+                ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('eduapi_persons')) {
+        Database::get()->query("CREATE TABLE `eduapi_persons` (
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `sourced_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `user_id` INT NOT NULL,
+            `username` VARCHAR(190) DEFAULT NULL,
+            `email` VARCHAR(255) DEFAULT NULL,
+            `last_sync` DATETIME DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `sourced_id` (`sourced_id`),
+            UNIQUE KEY `user_id` (`user_id`),
+            FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+                ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('eduapi_nodes')) {
+        Database::get()->query("CREATE TABLE `eduapi_nodes` (
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `ref_key` VARCHAR(150) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `hierarchy_id` INT NOT NULL,
+            `last_sync` DATETIME DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `ref_key` (`ref_key`),
+            FOREIGN KEY (`hierarchy_id`) REFERENCES `hierarchy` (`id`)
+                ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
     installBadgeIcons($webDir);
     upgrade_active_theme();
     upgrade_certificates();

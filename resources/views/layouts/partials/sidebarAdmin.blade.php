@@ -372,6 +372,16 @@
                                     {{ trans('langHierarchy') }}
                                 </a>
                             </li>
+                            @php
+                                $eduApiApp = ExtAppManager::getApp('eduapi');
+                            @endphp
+                            @if ($eduApiApp && $eduApiApp->isEnabled())
+                                <li class="list-group-item element">
+                                    <a href="{{$urlAppend}}modules/eduapi/index.php" class='TextBold'>
+                                        {{ trans('langEduApiSync') }}
+                                    </a>
+                                </li>
+                            @endif
                             @if (get_config('enable_tenant'))
                                 <li class="list-group-item element">
                                     <a href="{{$urlAppend}}modules/admin/tenants.php" class='TextBold'>
