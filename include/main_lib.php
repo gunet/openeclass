@@ -92,22 +92,15 @@ function widget_css_link($file, $folder) {
 }
 
 /**
- * @brief  include a JavaScript file from the main js directory
- * @global type $head_content
- * @global type $theme_settings
- * @global type $language
- * @global type $langReadMore
- * @global type $langReadLess
- * @global type $langViewHide
- * @global type $langViewShow
- * @staticvar boolean $loaded
- * @param type $file
- * @param type $init
- * @return type
+ * @brief load JavaScript file
+ * @param $file
+ * @param $init
+ * @return void
  */
-function load_js($file, $init='') {
+function load_js($file, $init=''): void
+{
     global $head_content, $theme_settings, $language,
-            $langReadMore, $langReadLess, $langViewHide, $langViewShow, $urlAppend, $webDir;
+            $langReadMore, $langReadLess, $langViewHide, $langViewShow, $urlAppend;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -117,123 +110,144 @@ function load_js($file, $init='') {
     }
 
     // Load file only if not provided by template
-    if (!(isset($theme_settings['js_loaded']) and
-          in_array($file, $theme_settings['js_loaded']))) {
-        if ($file == 'jstree') {
-            $head_content .= js_link('jstree/jquery.cookie.min.js');
-            $file = 'jstree/jquery.jstree.min.js';
-        } elseif ($file == 'jstree3') {
-            $head_content .= css_link('jstree3/themes/proton/style.min.css');
-            $file = 'jstree3/jstree.min.js';
-        } elseif ($file == 'jstree3d') {
-            $head_content .= css_link('jstree3/themes/default/style.min.css');
-            $file = 'jstree3/jstree.min.js';
-        } elseif ($file == 'shadowbox') {
-            $head_content .= css_link('shadowbox/shadowbox.css');
-            $file = 'shadowbox/shadowbox.js';
-        } elseif ($file == 'fancybox2') {
-            $head_content .= css_link('fancybox2/jquery.fancybox.css');
-            $file = 'fancybox2/jquery.fancybox.pack.js';
-        } elseif ($file == 'colorbox') {
-            $head_content .= css_link('colorbox/colorbox.css');
-            $file = 'colorbox/jquery.colorbox.min.js';
-        } elseif ($file == 'slick') {
-            $head_content .= css_link('slick-master/slick/slick.css');
-            $file = 'slick-master/slick/slick.min.js';
-        } elseif ($file == 'datatables') {
-            $head_content .= css_link('datatables/datatables.min.css');
-            $file = 'datatables/datatables.min.js';
-        } elseif ($file == 'jszip') {
-            $file = 'jszip/dist/jszip.min.js';
-        } elseif ($file == 'pdfmake') {
-            $file = 'pdfmake/build/pdfmake.js';
-        } elseif ($file == 'vfs_fonts') {
-            $file = 'pdfmake/build/vfs_fonts.js';
-        } elseif ($file == 'RateIt') {
-            $file = 'jquery.rateit.min.js';
-        } elseif ($file == 'autosize') {
-            $file = 'autosize/autosize.min.js';
-        } elseif ($file == 'waypoints-infinite') {
-            $head_content .= js_link('waypoints/jquery.waypoints.min.js');
-            $file = 'waypoints/shortcuts/infinite.min.js';
-        } elseif ($file == 'select2') {
-            $head_content .= css_link('select2-4.0.13/dist/css/select2.min.css') .
-            css_link('select2-4.0.13/dist/css/override_select2_design.css?v=4.0-dev') .
-            js_link('select2-4.0.13/dist/js/select2.full.min.js');
-            $file = "select2-4.0.13/dist/js/i18n/$language.js";
-        } elseif ($file == 'slimselect') {
-            $head_content .= css_link('slim-select/slimselect.css');
-            $file = 'slim-select/slimselect.js';
-        } elseif ($file == 'html2pdf') {
-            $file = 'html2pdf/html2pdf.bundle.min.js';
-        } elseif ($file == 'bootstrap-calendar') {
-            $file = 'bootstrap-calendar-master/js/calendar.js';
-            if ($language != 'en') {
-                switch ($language) {
-                    case 'el': $head_content .= js_link('bootstrap-calendar-master/js/language/el-GR.js'); break;
-                    case 'fr': $head_content .= js_link('bootstrap-calendar-master/js/language/fr-FR.js'); break;
-                    case 'de': $head_content .= js_link('bootstrap-calendar-master/js/language/de-DE.js'); break;
-                    case 'it': $head_content .= js_link('bootstrap-calendar-master/js/language/it-IT.js'); break;
-                    case 'es': $head_content .= js_link('bootstrap-calendar-master/js/language/es-ES.js'); break;
-                    default: break;
+    if (!(isset($theme_settings['js_loaded']) and in_array($file, $theme_settings['js_loaded']))) {
+        switch ($file) {
+            case 'jstree':
+                $head_content .= css_link('jstree/themes/proton/style.min.css');
+                $file = 'jstree/jstree.min.js';
+                break;
+            case 'shadowbox':
+                $head_content .= css_link('shadowbox/shadowbox.css');
+                $file = 'shadowbox/shadowbox.js';
+                break;
+            case 'fancybox2':
+                $head_content .= css_link('fancybox2/jquery.fancybox.css');
+                $file = 'fancybox2/jquery.fancybox.pack.js';
+                break;
+            case 'colorbox':
+                $head_content .= css_link('colorbox/colorbox.css');
+                $file = 'colorbox/jquery.colorbox.min.js';
+                break;
+            case 'slick':
+                $head_content .= css_link('slick-master/slick/slick.css');
+                $file = 'slick-master/slick/slick.min.js';
+                break;
+            case 'datatables':
+                $head_content .= css_link('datatables/datatables.min.css');
+                $file = 'datatables/datatables.min.js';
+                break;
+            case 'jszip':
+                $file = 'jszip/dist/jszip.min.js';
+                break;
+            case 'pdfmake':
+                $file = 'pdfmake/build/pdfmake.js';
+                break;
+            case 'vfs_fonts':
+                $file = 'pdfmake/build/vfs_fonts.js';
+                break;
+            case 'RateIt':
+                $file = 'jquery.rateit.min.js';
+                break;
+            case 'autosize':
+                $file = 'autosize/autosize.min.js';
+                break;
+            case 'waypoints-infinite':
+                $head_content .= js_link('waypoints/jquery.waypoints.min.js');
+                $file = 'waypoints/shortcuts/infinite.min.js';
+                break;
+            case 'select2':
+                $head_content .= css_link('select2-4.0.13/dist/css/select2.min.css') .
+                css_link('select2-4.0.13/dist/css/override_select2_design.css?v=4.0-dev') .
+                js_link('select2-4.0.13/dist/js/select2.full.min.js');
+                $file = "select2-4.0.13/dist/js/i18n/$language.js";
+                break;
+            case 'slimselect':
+                $head_content .= css_link('slim-select/slimselect.css');
+                $file = 'slim-select/slimselect.js';
+                break;
+            case 'html2pdf':
+                $file = 'html2pdf/html2pdf.bundle.min.js';
+                break;
+            case 'bootstrap-calendar':
+                $file = 'bootstrap-calendar-master/js/calendar.js';
+                if ($language != 'en') {
+                    switch ($language) {
+                        case 'el': $head_content .= js_link('bootstrap-calendar-master/js/language/el-GR.js'); break;
+                        case 'fr': $head_content .= js_link('bootstrap-calendar-master/js/language/fr-FR.js'); break;
+                        case 'de': $head_content .= js_link('bootstrap-calendar-master/js/language/de-DE.js'); break;
+                        case 'it': $head_content .= js_link('bootstrap-calendar-master/js/language/it-IT.js'); break;
+                        case 'es': $head_content .= js_link('bootstrap-calendar-master/js/language/es-ES.js'); break;
+                        default: break;
+                    }
                 }
-            }
-            $head_content .= css_link('bootstrap-calendar-master/css/calendar_small.css');
-            $head_content .= "<link href='{$urlAppend}template/modern/css/new_calendar.css' rel='stylesheet' type='text/css'>";
-        } elseif ($file == 'bootstrap-datetimepicker') {
-            $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.css') .
-            js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
-            if ($language != 'en') {
-                $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
-            } else {
-                $file = "bootstrap-datetimepicker/js/bootstrap-datetimepicker.js";
-            }
-        } elseif ($file == 'bootstrap-timepicker') {
-            $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
-            $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
-        } elseif ($file == 'bootstrap-datepicker') {
-            $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
-            js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
-            if ($language == 'en') {
-                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language-GB.min.js";
-            } else {
-                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
-            }
-        } elseif ($file == 'bootstrap-validator') {
-            $file = "bootstrap-validator/validator.js";
-        } elseif ($file == 'bootstrap-slider') {
-            $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
-            $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
-        } elseif ($file == 'bootstrap-colorpicker') {
-            $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
-            $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
-        } elseif ($file == 'bootstrap-combobox') {
-            $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
-            $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
-        } elseif ($file == 'bootstrap-table') {
-            $head_content .= css_link('bootstrap-table/bootstrap-table.min.css');
-            if ($language != 'en') {
-                switch ($language) {
-                    case 'el': $file = 'bootstrap-table/locale/bootstrap-table-el-GR.min.js'; break;
-                    case 'fr': $file = 'bootstrap-table/locale/bootstrap-table-fr-FR.min.js'; break;
-                    case 'de': $file = 'bootstrap-table/locale/bootstrap-table-de-DE.min.js'; break;
-                    case 'it': $file = 'bootstrap-table/locale/bootstrap-table-it-IT.min.js'; break;
-                    case 'es': $file = 'bootstrap-table/locale/bootstrap-table-es-ES.min.js'; break;
-                    default: break;
+                $head_content .= css_link('bootstrap-calendar-master/css/calendar_small.css');
+                $head_content .= "<link href='{$urlAppend}template/modern/css/new_calendar.css' rel='stylesheet' type='text/css'>";
+                break;
+            case 'bootstrap-datetimepicker':
+                $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.css') .
+                js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
+                if ($language != 'en') {
+                    $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
+                } else {
+                    $file = "bootstrap-datetimepicker/js/bootstrap-datetimepicker.js";
                 }
-            }
-            $head_content .= js_link('bootstrap-table/bootstrap-table.min.js');
-            $head_content .= js_link('bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js');
-        } elseif ($file == 'spectrum') {
-            $head_content .= css_link('spectrum/spectrum.css');
-            $file = 'spectrum/spectrum.js';
-        } elseif ($file == 'sortable') {
-            $file = "sortable/Sortable.min.js";
-        } elseif ($file == 'filetree') {
-            $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
-            $file = 'jquery_filetree/jqueryFileTree.js';
-        } elseif ($file == 'trunk8') {
-            $head_content .= "
+                break;
+            case 'bootstrap-timepicker':
+                $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
+                $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
+                break;
+            case 'bootstrap-datepicker':
+                $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
+                js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
+                if ($language == 'en') {
+                    $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language-GB.min.js";
+                } else {
+                    $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
+                }
+                break;
+            case 'bootstrap-validator':
+                $file = "bootstrap-validator/validator.js";
+                break;
+            case 'bootstrap-slider':
+                $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
+                $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
+                break;
+            case 'bootstrap-colorpicker':
+                $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+                $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
+                break;
+            case 'bootstrap-combobox':
+                $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
+                $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
+                break;
+            case 'bootstrap-table':
+                $head_content .= css_link('bootstrap-table/bootstrap-table.min.css');
+                if ($language != 'en') {
+                    switch ($language) {
+                        case 'el': $file = 'bootstrap-table/locale/bootstrap-table-el-GR.min.js'; break;
+                        case 'fr': $file = 'bootstrap-table/locale/bootstrap-table-fr-FR.min.js'; break;
+                        case 'de': $file = 'bootstrap-table/locale/bootstrap-table-de-DE.min.js'; break;
+                        case 'it': $file = 'bootstrap-table/locale/bootstrap-table-it-IT.min.js'; break;
+                        case 'es': $file = 'bootstrap-table/locale/bootstrap-table-es-ES.min.js'; break;
+                        default: break;
+                    }
+                }
+                $head_content .= js_link('bootstrap-table/bootstrap-table.min.js');
+                $head_content .= js_link('bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js');
+                break;
+            case 'spectrum':
+                $head_content .= css_link('spectrum/spectrum.css');
+                $file = 'spectrum/spectrum.js';
+                break;
+            case 'sortable':
+                $file = "sortable/Sortable.min.js";
+                break;
+            case 'filetree':
+                $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
+                $file = 'jquery_filetree/jqueryFileTree.js';
+                break;
+            case 'trunk8':
+                $head_content .= "
 <script>
     var readMore = '".js_escape($langReadMore)."';
     var readLess = '".js_escape($langReadLess)."';
@@ -254,15 +268,20 @@ function load_js($file, $init='') {
 
 });
 </script>";
-            $file = 'trunk8.js';
-        } elseif ($file == 'clipboard.js') {
-            $file = 'clipboard.js/clipboard.min.js';
-        } elseif ($file == 'jquery-ui') {
-            $file = 'jquery-ui.min.js';
-        } elseif ($file == 'jquery-touch') {
-            $file = 'jquery.ui.touch-punch.min.js';
-        } elseif ($file == 'drag-and-drop-shapes') {
-            $file = 'drag-and-drop-shapes.js';
+                $file = 'trunk8.js';
+                break;
+            case 'clipboard.js':
+                $file = 'clipboard.js/clipboard.min.js';
+                break;
+            case 'jquery-ui':
+                $file = 'jquery-ui.min.js';
+                break;
+            case 'jquery-touch':
+                $file = 'jquery.ui.touch-punch.min.js';
+                break;
+            case 'drag-and-drop-shapes':
+                $file = 'drag-and-drop-shapes.js';
+                break;
         }
 
         $head_content .= js_link($file);

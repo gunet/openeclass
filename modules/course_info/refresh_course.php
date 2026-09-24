@@ -57,7 +57,7 @@ if (isset($_POST['reg_flag'])) {
     $reg_flag = 'before';
 }
 
-load_js('jstree3');
+load_js('jstree');
 $tree = new Hierarchy();
 list($js, $html) = $tree->buildUserNodePicker(array('multiple' => true));
 $head_content .= $js;

@@ -45,7 +45,7 @@ $pageName = $langStatOfFaculty;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "index.php?t=a", "name" => $langUsage);
 
-load_js('jstree3');
+load_js('jstree');
 
 if (isDepartmentAdmin()) {
     list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));

@@ -29,7 +29,7 @@ require_once 'modules/auth/auth.inc.php';
 
 $tree = new Hierarchy();
 $user = new User();
-load_js('jstree3');
+load_js('jstree');
 
 $pageName = $langReqRegProf;
 

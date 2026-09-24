@@ -1,5 +1,5 @@
 @push('head_styles')
-    <link  rel="stylesheet" type="text/css" href="{{ $urlServer }}/js/jstree3/themes/proton/style.min.css?v={{ CACHE_SUFFIX }}">
+    <link  rel="stylesheet" type="text/css" href="{{ $urlServer }}/js/jstree/themes/proton/style.min.css?v={{ CACHE_SUFFIX }}">
     <link rel="stylesheet" type="text/css" href="{{ $urlServer }}/modules/rating/style.css?v={{ CACHE_SUFFIX }}">
 @endpush
 
@@ -8,7 +8,7 @@
     <script type="text/javascript" src="{{ $urlServer }}/js/waypoints/shortcuts/infinite.min.js?v={{ CACHE_SUFFIX }}"></script>
     <script src="{{ $urlServer }}/js/autosize/autosize.min.js?v={{ CACHE_SUFFIX }}"></script>
     <script src="{{ $urlServer }}/modules/rating/js/thumbs_up/rating.js?v={{ CACHE_SUFFIX }}" type="text/javascript"></script>
-    <script src="{{ $urlServer }}/js/jstree3/jstree.js"></script>
+    <script src="{{ $urlServer }}/js/jstree/jstree.js"></script>
     <script src="{{ $urlServer }}/js/screenfull/screenfull.min.js"></script>
 
     <script type='text/javascript'>

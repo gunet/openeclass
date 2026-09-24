@@ -45,7 +45,7 @@ $navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 $tree = new Hierarchy();
 $userObj = new User();
 $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
-load_js('jstree3');
+load_js('jstree');
 load_js('tools.js');
 
 $myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,

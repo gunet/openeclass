@@ -35,7 +35,7 @@ require_once 'hierarchy_validations.php';
 
 $user = new User();
 
-load_js('jstree3');
+load_js('jstree');
 load_js('bootstrap-datepicker');
 
 $navigation[] = ['url' => 'index.php', 'name' => $langAdmin];

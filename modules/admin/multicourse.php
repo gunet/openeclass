@@ -106,7 +106,7 @@ $tree = new hierarchy();
 $course = new course();
 $user = new user();
 
-load_js('jstree3');
+load_js('jstree');
 
 $options = $is_admin ? array() : array('allowables' => $user->getDepartmentIds($uid));
 list($js, $html) = $tree->buildCourseNodePicker($options);
