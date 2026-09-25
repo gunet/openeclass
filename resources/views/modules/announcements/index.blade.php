@@ -193,6 +193,7 @@
                 },
                 @endif
                 fnDrawCallback: function( oSettings ) {
+                    typeof MathJax !== 'undefined' && MathJax.typeset();
                     tooltip_init();
                     $('.table_td_body').each(function() {
                         $(this).trunk8({
