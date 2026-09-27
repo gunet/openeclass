@@ -2930,6 +2930,8 @@ $db->query("CREATE TABLE api_token (
     `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `read_only` BOOLEAN NOT NULL DEFAULT 0,
+    `all_courses` BOOLEAN NOT NULL DEFAULT 1,
     CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
     PRIMARY KEY (`id`)) $tbl_options");
 
