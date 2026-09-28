@@ -19,563 +19,695 @@
 
                     <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
-                            <div class='form-wrapper form-edit rounded'>
-                                <form class='form-horizontal' role='form' method='post'
-                                      action='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}{{ $form_string }}'>
+                            <div class='form-wrapper form-edit rounded' style="padding: 0px !important; border: 0px !important; background-color: transparent !important;">
+                                <form id="exerciseForm" class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}{{ $form_string }}'>
                                     <fieldset>
                                         <legend class='mb-0' aria-label='{{ trans('langForm') }}'></legend>
-                                        <div class='row form-group @if (Session::getError('exerciseTitle')) ? has-error @endif '>
-                                            <label for='exerciseTitle' class='col-12 control-label-notes mb-1'>
-                                                {{ trans('langExerciseName') }}
-                                                <span class='asterisk Accent-200-cl'>(*)</span>
-                                            </label>
-                                            <div class='col-12'>
-                                                <input name='exerciseTitle' type='text' class='form-control'
-                                                       id='exerciseTitle' value='{{  $exerciseTitle }}'
-                                                       placeholder='{{ trans('langExerciseName') }}'>
-                                                <span class='help-block Accent-200-cl'>{{ Session::getError('exerciseTitle') }}</span>
-                                            </div>
-                                        </div>
-                                        <div class='row form-group mt-4'>
-                                            <label for='exerciseDescription'
-                                                   class='col-12 control-label-notes mb-1'>{{ trans('langDescription') }}</label>
-                                            <div class='col-12'>
-                                                {!! rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription, options: array('id' => 'exerciseDescription')) !!}
-                                            </div>
-                                        </div>
 
-                                        <div class='row form-group mt-4'>
-                                            <label for='exerciseEndMessage'
-                                                   class='col-12 control-label-notes mb-1'>{{ trans('langEndMessage') }}
-                                                <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip'
-                                                      data-bs-placement='top' title='{{ trans('langEndMessageInfo') }}'
-                                                      style='margin-bottom: 10px;'></span>
-                                            </label>
-                                            <div class='col-12'>
-                                                {!! rich_text_editor('exerciseEndMessage', 4, 30, $exerciseEndMessage, options: array('id' => 'exerciseEndMessage')) !!}
-                                            </div>
-                                        </div>
+                                            <div class="accordion exercise-accordion" id="exerciseReviewAccordion">
 
-                                        <div class='col-12 d-flex justify-content-start align-items-center gap-3 flex-wrap my-4'>
-                                            <button class='btn submitAdminBtn'
-                                                    id='add-feedback-btn'>{{ trans('langAddFeedback') }}</button>
-                                        </div>
-                                        <div id='feedback-container'>
-                                            @if (count($exerciseFeedback) > 0)
-                                                @foreach ($exerciseFeedback as $counter => $feedback)
-                                                    <div class='feedback-row d-flex align-items-center justify-content-between border-bottom mb-1 gap-3'>
-                                                        <input class='form-control' type='text' name='feedback_text[{{ $counter }}]'
-                                                               size='60' maxlength='200'
-                                                               value="{{ $feedback['feedback_text'] }}">
-                                                        <input class='form-control' type='text' name='feedback_grade[{{ $counter }}]'
-                                                               size='4' maxlength='4' value="{{ $feedback['grade'] }}">
-                                                        <a class='delete-feedback-btn'><span class='fa-solid fa-xmark'
-                                                                                             style='color:red;'></span></a>
-                                                    </div>
-                                                @endforeach
-                                            @endif
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <label class='col-12 control-label-notes mb-1'>{{ trans('langViewShow') }}</label>
-                                            <div class='col-12'>
-                                                <select name='exerciseType' class='form-select'>
-                                                    <option value='{{ SINGLE_PAGE_TYPE }}'
-                                                            @if ($exerciseType == SINGLE_PAGE_TYPE) selected @endif>{{ trans('langSimpleExercise') }}</option>
-                                                    <option value='{{ MULTIPLE_PAGE_TYPE }}'
-                                                            @if ($exerciseType == MULTIPLE_PAGE_TYPE) selected @endif>{{ trans('langSequentialExercise') }}</option>
-                                                    <option value='{{ ONE_WAY_TYPE }}'
-                                                            @if ($exerciseType == ONE_WAY_TYPE)?
-                                                            selected @endif> {{ trans('langOneWayExercise') }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>
-                                                {{ trans('langAnswers') }}
-                                                <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip'
-                                                      data-bs-placement='top'
-                                                      title='{{ trans('langShuffleAnswersLegend') }}'
-                                                      style='margin-bottom: 10px;'></span>
-                                            </label>
-                                            <div class='col-12'>
-                                                <div class='checkbox'>
-                                                    <label class='label-container'
-                                                           aria-label='{{ trans('langSelect') }}'>
-                                                        <input name='shuffle_answers' type='checkbox'
-                                                               @if ($hasShuffleAnswers) checked @endif>
-                                                        <span class='checkmark'></span>
-                                                        {{ trans('langShuffleAnswers') }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <label for='exerciseRangeId'
-                                                   class='col-12 control-label-notes mb-1'>{{ trans('langExerciseScaleGrade') }}</label>
-                                            <div class='col-12'>
-                                                <select name='exerciseRange' class='form-select' id='exerciseRangeId'>
-                                                    <option value='' @if ($exerciseRange == 0) selected @endif>
-                                                        -- {{ trans('langExerciseNoScaleGrade') }} --
-                                                    </option>
-                                                    <option value='10' @if ($exerciseRange == 10) selected @endif>0-10
-                                                    </option>
-                                                    <option value='20' @if ($exerciseRange == 20) selected @endif>0-20
-                                                    </option>
-                                                    <option value='5' @if ($exerciseRange == 5) selected @endif>0-5
-                                                    </option>
-                                                    <option value='100' @if ($exerciseRange == 100) selected @endif>
-                                                        0-100
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>
-                                                {{ trans('langExerciseCBCalcGradeMethod') }}
-                                                <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip'
-                                                      data-bs-placement='top'
-                                                      title='{{ trans('langExerciseCBCalcGradeMethodLegend') }}'
-                                                      style='margin-bottom: 10px;'></span>
-                                            </label>
-                                            <div class='col-12'>
-                                                <div class='checkbox'>
-                                                    <label class='label-container'
-                                                           aria-label='{{ trans('langSelect') }}'>
-                                                        <input type="checkbox" name="exerciseCalcGradeMethod"
-                                                               @if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) checked @endif>
-                                                        <span class='checkmark'></span>
-                                                        {{ trans('langActivate') }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <div class='col-12'>
-                                                  
-                                                        <label for='exerciseTimeConstraint'
-                                                               class='col-12 control-label-notes mb-1'>
-                                                            <strong id='legend_grade_pass'>
-                                                                @if ($exerciseRange == 0)
-                                                                    {{ trans('langSuccessPercentage') }}
-                                                                @else
-                                                                    {{ trans('langExerciseGradePass') }}
-                                                                @endif
-                                                            </strong>
-                                                            <span class='fa-solid fa-circle-info ps-1'
-                                                                  data-bs-toggle='tooltip' data-bs-placement='top'
-                                                                  title='{{ trans('langExerciseGradePassLegend') }}'
-                                                                  style='margin-bottom: 10px;'></span>
-                                                        </label>
-                                                        <input type='text' class='form-control' name='exerciseGradePass'
-                                                               id='exerciseGradePass' value='{{ $exerciseGradePass }}'
-                                                               size='4' maxlength='4'>
-                                                   
-                                            </div>
-                                        </div>
-
-                                        <div class='row input-append date form-group @if (Session::getError('exerciseStartDate')) has-error @endif mt-4'
-                                             id='startdatepicker' data-date='{{ $exerciseStartDate }}'
-                                             data-date-format='dd-mm-yyyy'>
-                                            <label for='exerciseStartDate' class='col-12 control-label-notes mb-1'>{{ trans('langStart') }}</label>
-                                            <div class='col-12'>
-                                                <div class='input-group'>
-                                                    <span class='input-group-addon'>
-                                                        <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                            <input class='mt-0' type='checkbox' id='enableStartDate'
-                                                                name='enableStartDate' value='1'
-                                                                @if ($enableStartDate) checked @endif>
-                                                            <span class='checkmark'></span>
-                                                        </label>
-                                                    </span>
-                                                    <span class='add-on1'>
-                                                        <i class='fa-regular fa-calendar Neutral-600-cl'></i>
-                                                    </span>
-                                                    <input class='form-control mt-0'
-                                                           name='exerciseStartDate' id='exerciseStartDate' type='text'
-                                                           value='{{ $exerciseStartDate }}'
-                                                           @if (!$enableStartDate) disabled @endif>
-                                                </div>
-                                                <span class='help-block'>
-                                                    @if (Session::hasError('exerciseStartDate'))
-                                                        {{ Session::getError('exerciseStartDate') }}
-                                                    @else
-                                                        &nbsp;&nbsp;&nbsp;
-                                                    @endif
-                                                    <i class='fa fa-share fa-rotate-270'></i>{{ trans('langExerciseStartHelpBlock') }}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class='row input-append date form-group @if (Session::getError('exerciseEndDate')) has-error @endif mt-4'
-                                             id='enddatepicker' data-date='{{ $exerciseEndDate }}'
-                                             data-date-format='dd-mm-yyyy'>
-                                            <label for='exerciseEndDate' class='col-12 control-label-notes mb-1'>
-                                                {{ trans('langFinish') }}
-                                            </label>
-                                            <div class='col-12'>
-                                                <div class='input-group'>
-                                                    <span class='input-group-addon'>
-                                                        <label class='label-container'
-                                                            aria-label='{{ trans('langSelect') }}'>
-                                                            <input class='mt-0' type='checkbox' id='enableEndDate'
-                                                                    name='enableEndDate' value='1'
-                                                                    @if ($enableEndDate) checked @endif>
-                                                            <span class='checkmark'></span>
-                                                        </label>
-                                                    </span>
-                                                    <span class='add-on2'>
-                                                        <i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                    <input class='form-control mt-0'
-                                                           name='exerciseEndDate' id='exerciseEndDate' type='text'
-                                                           value='{{ $exerciseEndDate }}'
-                                                           @if (!$enableEndDate) disabled @endif>
-                                                </div>
-                                                <span class='help-block'>
-                                                    @if (Session::hasError('exerciseEndDate'))
-                                                        {{ Session::getError('exerciseEndDate') }}
-                                                    @else
-                                                        &nbsp;&nbsp;&nbsp;
-                                                    @endif
-                                                    <i class='fa fa-share fa-rotate-270'></i>{{ trans('langExerciseEndHelpBlock') }}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4' id='exerciseTempSaveDiv'>
-                                            <div class='col-12 control-label-notes mb-1'>
-                                                {{ trans('langTemporarySave') }}
-                                            </div>
-                                            <div class='col-12'>
-                                                <div class='row'>
-                                                    <div class='col-md-6 col-12 radio'>
-                                                        <label>
-                                                            <input type='radio' name='exerciseTempSave' value='0'
-                                                                   @if ($exerciseTempSave == 0) checked @endif>
-                                                            {{ trans('langDeactivate') }}
-                                                        </label>
-                                                    </div>
-                                                    <div class='col-md-6 col-12 radio'>
-                                                        <label>
-                                                            <input type='radio' name='exerciseTempSave' value='1'
-                                                                   @if ($exerciseTempSave == 1) checked @endif>
-                                                            {{ trans('langActivate') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group @if (Session::getError('exerciseTimeConstraint') or Session::getError('exerciseAttemptsAllowed')) has-error @endif mt-4'>
-                                            <div class='col-12'>
-                                                <div class='row'>
-                                                    <div class='col-md-6'>
-                                                        <label for='exerciseTimeConstraint'
-                                                               class='col-12 control-label-notes mb-1'>
-                                                            {{ trans('langExerciseConstrain') }}
-                                                            <span class='fa-solid fa-circle-info ps-1'
-                                                                  data-bs-toggle='tooltip' data-bs-placement='top'
-                                                                  title='{{ trans('langExerciseConstrainExplanation') }}'
-                                                                  style='margin-bottom: 10px;'></span>
-                                                        </label>
-                                                        <input type='text' class='form-control'
-                                                               name='exerciseTimeConstraint' id='exerciseTimeConstraint'
-                                                               value='{{ $exerciseTimeConstraint }}'
-                                                               placeholder='{{ trans('langExerciseConstrain') }}'>
-                                                        <span class='help-block'>
-                                                            @if (Session::getError('exerciseTimeConstraint'))
-                                                                {{ Session::getError('exerciseTimeConstraint') }}
-                                                            @else
-                                                                {{ trans('langExerciseConstrainUnit') }}
-                                                            @endif
-                                                        </span>
-                                                    </div>
-                                                    <div class='col-md-6'>
-                                                        <label for='exerciseAttemptsAllowed'
-                                                               class='col-12 control-label-notes mb-1'>
-                                                            {{ trans('langExerciseAttemptsAllowed') }}
-                                                            <span class='fa-solid fa-circle-info ps-1'
-                                                                  data-bs-toggle='tooltip' data-bs-placement='top'
-                                                                  title='{{ trans('langExerciseAttemptsAllowedExplanation') }}'
-                                                                  style='margin-bottom: 10px;'></span>
-                                                        </label>
-                                                        <input type='text' class='form-control'
-                                                               name='exerciseAttemptsAllowed'
-                                                               id='exerciseAttemptsAllowed'
-                                                               value='{{ $exerciseAttemptsAllowed  }}'
-                                                               placeholder='{{ trans('langExerciseConstrain') }}'>
-                                                        <span class='help-block'>
-                                                            @if (Session::getError('exerciseAttemptsAllowed'))
-                                                                {{ Session::getError('exerciseAttemptsAllowed') }}
-                                                            @else
-                                                                {{ trans('langExerciseAttemptsAllowedUnit') }}
-                                                            @endif
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <label class='col-12 control-label-notes mb-1'>{{ trans('langAnswers') }}</label>
-                                            <div class='col-12'>
-                                                <select name='dispresults' class='form-select'>
-                                                    <option value='1'
-                                                            @if ($displayResults == 1) selected @endif >{{ trans('langAnswersDisp') }}</option>
-                                                    <option value='0'
-                                                            @if ($displayResults == 0) selected @endif >{{ trans('langAnswersNotDisp') }}</option>
-                                                    <option value='3'
-                                                            @if ($displayResults == 3) selected @endif>{{ trans('langAnswersDispLastAttempt') }}</option>
-                                                    <option value='4'
-                                                            @if ($displayResults == 4) selected @endif>{{ trans('langAnswersDispEndDate') }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <label class='col-12 control-label-notes mb-1'>{{ trans('langScore') }}</label>
-                                            <div class='col-12'>
-                                                <select name='dispscore' class='form-select'>
-                                                    <option value='1'
-                                                            @if ($displayScore == 1) selected @endif>{{ trans('langScoreDisp') }}</option>
-                                                    <option value='0'
-                                                            @if ($displayScore == 0) selected @endif>{{ trans('langScoreNotDisp') }}</option>
-                                                    <option value='3'
-                                                            @if ($displayScore == 3) selected @endif>{{ trans('langScoreDispLastAttempt') }}</option>
-                                                    <option value='4'
-                                                            @if ($displayScore == 4) selected @endif>{{ trans('langScoreDispEndDate') }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <div class='control-label-notes mb-1'>{{ trans('langWorkAssignTo') }}</div>
-                                            <div class='col-12'>
-                                                <div class='radio'>
-                                                    <label>
-                                                        <input type='radio' id='assign_button_all'
-                                                               name='assign_to_specific' value='0'
-                                                               @if ($exerciseAssignToSpecific == 0) checked @endif>
-                                                        {{ trans('langWorkToAllUsers') }}
-                                                    </label>
-                                                </div>
-                                                <div class='radio'>
-                                                    <label>
-                                                        <input type='radio' id='assign_button_user'
-                                                               name='assign_to_specific' value='1'
-                                                               @if ($exerciseAssignToSpecific == 1) checked @endif>
-                                                        {{ trans('langWorkToUser') }}
-                                                    </label>
-                                                </div>
-                                                <div class='radio'>
-                                                    <label>
-                                                        <input type='radio' id='assign_button_group'
-                                                               name='assign_to_specific' value='2'
-                                                               @if ($exerciseAssignToSpecific == 2) checked @endif>
-                                                        {{ trans('langWorkToGroup') }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <div class='col-12'>
-                                                <div class='table-responsive mt-0'>
-                                                    <table id='assignees_tbl'
-                                                           class='table-default @unless (in_array($exerciseAssignToSpecific, [1, 2])) hide @endunless'>
-                                                        <thead>
-                                                        <tr class='title1 list-header'>
-                                                            <td class='form-label'
-                                                                id='assignees'>{{ trans('langStudents') }}</td>
-                                                            <td class='form-label text-center'>{{ trans('langMove') }}</td>
-                                                            <td class='form-label'>{{ trans('langWorkAssignTo') }}</td>
-                                                        </tr>
-                                                        </thead>
-                                                        <tr>
-                                                            <td>
-                                                                <select aria-label='{{ trans('langStudent') }}'
-                                                                        class='form-select h-100' id='assign_box'
-                                                                        size='10' multiple>
-                                                                    @if (isset($unassigned_options))
-                                                                        {!! $unassigned_options !!}
-                                                                    @endif
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <div class='d-flex align-items-center flex-column gap-2'>
-                                                                    <input aria-label='{{ trans('langMove') }}'
-                                                                           class='btn submitAdminBtn submitAdminBtnClassic'
-                                                                           type='button'
-                                                                           onClick="move('assign_box','assignee_box')"
-                                                                           value='   &gt;&gt;   '/>
-                                                                    <input aria-label='{{ trans('langMove') }}'
-                                                                           class='btn submitAdminBtn submitAdminBtnClassic'
-                                                                           type='button'
-                                                                           onClick="move('assignee_box','assign_box')"
-                                                                           value='   &lt;&lt;   '/>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <select aria-label='{{ trans('langWorkAssignTo') }}'
-                                                                        class='form-select h-100' id='assignee_box'
-                                                                        name='ingroup[]' size='10' multiple>
-                                                                    @if (isset($assignee_options))
-                                                                        {!! $assignee_options !!}
-                                                                    @endif
-                                                                </select>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <div class='col-12'>
-                                                <div class='checkbox'>
-                                                    <label class='label-container'
-                                                           aria-label='{{ trans('langSelect') }}'>
-                                                        <input id='isExam_' name='isExam' type='checkbox'
-                                                               @if ($isExam) checked @endif>
-                                                        <span class='checkmark'></span>
-                                                        {{ trans('langActivateExamMode') }}
-                                                    </label>
-                                                    <div class='help-block'>
-                                                        {{ trans('langRequireCourseUserLogin') }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4 d-none' id='stricter_exam'>
-                                            <div class='col-12'>
-                                                <div class='checkbox'>
-                                                    <label class='label-container'
-                                                           aria-label='{{ trans('langSelect') }}'>
-                                                        <input name='stricterExamRestriction' type='checkbox'
-                                                               @if($exerciseStricterExamRestriction) checked @endif>
-                                                        <span class='checkmark'></span>
-                                                        {{ trans('langExerciseWillBeCanceledInStrictMode') }}
-                                                    </label>
-                                                </div>
-                                            </div>
-
-                                            @if (CourseHasSafeExamBrowserEnabled())
-                                                <div class='col-12'>
-                                                    <div class='checkbox'>
-                                                        <label class='label-container'
-                                                               aria-label='{{ trans('langSelect') }}'>
-                                                            <input name='useSafeExamBrowser' type='checkbox'
-                                                                   id='useSafeExamBrowser'
-                                                                   @if($exerciseUseSafeExamBrowser) checked @endif>
-                                                            <span class='checkmark'></span>
-                                                            {{ trans('langSafeExamBrowserInfo') }}
-                                                            <span class='fa-solid fa-circle-info ps-1'
-                                                                  data-bs-toggle='tooltip' data-bs-placement='right'
-                                                                  title='{{ trans('langSafeExamBrowserLegend') }}'
-                                                                  style='margin-top: 5px;'></span>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            @endif
-
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <div class='col-12 control-label-notes mb-1'>
-                                                {{ trans('langContinueAttempt') }}
-                                            </div>
-                                            <div class='col-12'>
-                                                <div class='checkbox'>
-                                                    <label class='label-container'
-                                                           aria-label='{{ trans('langSelect') }}'>
-                                                        <input id='continueAttempt' name='continueAttempt'
-                                                               type='checkbox' @if ($continueTimeLimit) checked @endif>
-                                                        <span class='checkmark'></span>
-                                                        {{ trans('langContinueAttemptExplanation') }}
-                                                    </label>
-                                                </div>
-                                                <div id='continueTimeField' class='form-inline'
-                                                     style='margin-top: 15px; @unless ($continueTimeLimit) display: none @endunless'>
-                                                    {!! $continueTimeField !!}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class='row form-group mt-4'>
-                                            <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langExercisePreventCopy') }}
-                                                :
-                                            </div>
-                                            <div class='col-12'>
-                                                <div class='checkbox'>
-                                                    <label class='label-container'
-                                                           aria-label='{{ trans('langSelect') }}'>
-                                                        <input id='jsPreventCopy' name='jsPreventCopy' type='checkbox'
-                                                               @if ($exercisePreventCopy) checked @endif>
-                                                        <span class='checkmark'></span>
-                                                        {{ trans('langExercisePreventCopyExplanation') }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class='panel-group group-section mt-4' id='accordionEx' role='tablist'
-                                             aria-multiselectable='true'>
-                                            <ul class='list-group list-group-flush'>
-                                                <li class='list-group-item px-0 mb-4 bg-transparent'>
-                                                    <a class='accordion-btn d-flex justify-content-start align-items-start'
-                                                       role='button' data-bs-toggle='collapse' href='#CheckAccess'
-                                                       aria-expanded='false' aria-controls='CheckAccess'>
-                                                        <span class='fa-solid fa-chevron-down'></span>
-                                                        {{ trans('langCheckAccess') }}
-                                                    </a>
-                                                    <div id='CheckAccess'
-                                                         class='panel-collapse accordion-collapse collapse border-0 rounded-0'
-                                                         role='tabpanel' data-bs-parent='#accordionEx'>
-                                                        <div class='panel-body bg-transparent Neutral-900-cl p-0'>
-                                                            <div class='form-group  @if (Session::getError('exercisePasswordLock')) has-error @endif mt-4'>
-                                                                <label for='exercisePasswordLock'
-                                                                       class='col-12 control-label-notes mb-1'>{{ trans('langPassCode') }}</label>
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#reviewBasic"
+                                                                aria-expanded="false"
+                                                                aria-controls="reviewBasic">
+                                                            <span class="accordion-icon">
+                                                                <i class="fa-solid fa-file-lines"></i>
+                                                            </span>
+                                                            <span class="accordion-title">
+                                                                <span class="accordion-title-text">
+                                                                    Βασικά στοιχεία
+                                                                </span>
+                                                                <small class="accordion-subtitle">
+                                                                    Τίτλος, Περιγραφή, Μήνυμα ολοκλήρωσης
+                                                                </small>
+                                                            </span>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="reviewBasic" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                        <div class="accordion-body">
+                                                            <div class='form-group @if (Session::getError('exerciseTitle')) ? has-error @endif '>
+                                                                <label for='exerciseTitle' class='col-12 control-label-notes mb-1'>
+                                                                    {{ trans('langExerciseName') }}
+                                                                    <span class='asterisk Accent-200-cl'>(*)</span>
+                                                                </label>
+                                                                <input name='exerciseTitle' type='text' class='form-control' id='exerciseTitle' value='{{ $exerciseTitle }}' placeholder='{{ trans('langExerciseName') }}'>
+                                                                <span class='help-block Accent-200-cl'>{{ Session::getError('exerciseTitle') }}</span>
+                                                            </div>
+                                                            <div class='form-group mt-4'>
+                                                                <label for='exerciseDescription' class='col-12 control-label-notes mb-2'>{{ trans('langDescription') }}</label>
                                                                 <div class='col-12'>
-                                                                    <input name='exercisePasswordLock' type='text'
-                                                                           class='form-control'
-                                                                           id='exercisePasswordLock'
-                                                                           value='{{ $exercisePasswordLock }}'
-                                                                           placeholder=''>
-                                                                    <span class='help-block Accent-200-cl'> {{ Session::getError('exercisePasswordLock') }}</span>
+                                                                    {!! rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription, options: array('id' => 'exerciseDescription')) !!}
                                                                 </div>
                                                             </div>
-                                                            <div class='form-group @if (Session::getError('exerciseIPLock')) has-error @endif mt-4'>
-                                                                <label for='exerciseIPLock'
-                                                                       class='col-12 control-label-notes mb-1'>{{ trans('langIPUnlock') }}</label>
-                                                                <div class='help-block'>
-                                                                    {{ trans('langIPUnlockLegend') }}
-                                                                </div>
+                                                            <div class='form-group mt-4'>
+                                                                <label for='exerciseEndMessage' class='col-12 control-label-notes mb-1'>{{ trans('langEndMessage') }}
+                                                                    <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEndMessageInfo') }}' style='margin-bottom: 10px;'></span>
+                                                                </label>
                                                                 <div class='col-12'>
-                                                                    <select name='exerciseIPLock[]' class='form-control'
-                                                                            id='exerciseIPLock' multiple>
-                                                                        {!! $exerciseIPLockOptions !!}
-                                                                    </select>
-                                                                    <span class='help-block Accent-200-cl'>{{ Session::getError('exerciseIPLock') }}</span>
+                                                                    {!! rich_text_editor('exerciseEndMessage', 4, 30, $exerciseEndMessage, options: array('id' => 'exerciseEndMessage')) !!}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                                </div>
 
-                                        {!! $tags_list !!}
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#reviewTime"
+                                                                aria-expanded="false"
+                                                                aria-controls="reviewTime">
+                                                            <span class="accordion-icon">
+                                                                <i class="fa-regular fa-clock"></i>
+                                                            </span>
+                                                            <span class="accordion-title">
+                                                                <span class="accordion-title-text">
+                                                                    Χρόνος & Περιορισμός
+                                                                </span>
+                                                                <small class="accordion-subtitle">
+                                                                    Χρονική διάρκεια, Χρονικός περιορισμός
+                                                                </small>
+                                                            </span>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="reviewTime" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                        <div class="accordion-body">
+                                                            <div class='input-append date form-group @if (Session::getError('exerciseStartDate')) has-error @endif'
+                                                                id='startdatepicker' data-date='{{ $exerciseStartDate }}'
+                                                                data-date-format='dd-mm-yyyy'>
+                                                                <label for='exerciseStartDate' class='col-12 control-label-notes mb-1'>{{ trans('langStart') }}</label>
+                                                                <div class='col-12'>
+                                                                    <div class='input-group'>
+                                                                        <span class='input-group-addon'>
+                                                                            <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                                                <input class='mt-0' type='checkbox' id='enableStartDate'
+                                                                                    name='enableStartDate' value='1'
+                                                                                    @if ($enableStartDate) checked @endif>
+                                                                                <span class='checkmark'></span>
+                                                                            </label>
+                                                                        </span>
+                                                                        <span class='add-on1'>
+                                                                            <i class='fa-regular fa-calendar Neutral-600-cl'></i>
+                                                                        </span>
+                                                                        <input class='form-control mt-0'
+                                                                            name='exerciseStartDate' id='exerciseStartDate' type='text'
+                                                                            value='{{ $exerciseStartDate }}'
+                                                                            @if (!$enableStartDate) disabled @endif>
+                                                                    </div>
+                                                                    <span class='help-block'>
+                                                                        @if (Session::hasError('exerciseStartDate'))
+                                                                            {{ Session::getError('exerciseStartDate') }}
+                                                                        @else
+                                                                            &nbsp;&nbsp;&nbsp;
+                                                                        @endif
+                                                                        <i class='fa fa-share fa-rotate-270'></i>{{ trans('langExerciseStartHelpBlock') }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class='input-append date form-group @if (Session::getError('exerciseEndDate')) has-error @endif mt-4'
+                                                                id='enddatepicker' data-date='{{ $exerciseEndDate }}'
+                                                                data-date-format='dd-mm-yyyy'>
+                                                                <label for='exerciseEndDate' class='col-12 control-label-notes mb-1'>
+                                                                    {{ trans('langFinish') }}
+                                                                </label>
+                                                                <div class='col-12'>
+                                                                    <div class='input-group'>
+                                                                        <span class='input-group-addon'>
+                                                                            <label class='label-container'
+                                                                                aria-label='{{ trans('langSelect') }}'>
+                                                                                <input class='mt-0' type='checkbox' id='enableEndDate'
+                                                                                        name='enableEndDate' value='1'
+                                                                                        @if ($enableEndDate) checked @endif>
+                                                                                <span class='checkmark'></span>
+                                                                            </label>
+                                                                        </span>
+                                                                        <span class='add-on2'>
+                                                                            <i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                        <input class='form-control mt-0'
+                                                                            name='exerciseEndDate' id='exerciseEndDate' type='text'
+                                                                            value='{{ $exerciseEndDate }}'
+                                                                            @if (!$enableEndDate) disabled @endif>
+                                                                    </div>
+                                                                    <span class='help-block'>
+                                                                        @if (Session::hasError('exerciseEndDate'))
+                                                                            {{ Session::getError('exerciseEndDate') }}
+                                                                        @else
+                                                                            &nbsp;&nbsp;&nbsp;
+                                                                        @endif
+                                                                        <i class='fa fa-share fa-rotate-270'></i>{{ trans('langExerciseEndHelpBlock') }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class='row form-group @if (Session::getError('exerciseTimeConstraint')) has-error @endif mt-4'>
+                                                                <div class='col-12'>
+                                                                    <label for='exerciseTimeConstraint'
+                                                                        class='col-12 control-label-notes mb-0'>
+                                                                        {{ trans('langExerciseConstrain') }}
+                                                                        <span class='fa-solid fa-circle-info ps-1'
+                                                                            data-bs-toggle='tooltip' data-bs-placement='top'
+                                                                            title='{{ trans('langExerciseConstrainExplanation') }}'
+                                                                            style='margin-bottom: 10px;'></span>
+                                                                    </label>
+                                                                    <input type='text' class='form-control'
+                                                                        name='exerciseTimeConstraint' id='exerciseTimeConstraint'
+                                                                        value='{{ $exerciseTimeConstraint }}'
+                                                                        placeholder='{{ trans('langExerciseConstrain') }}'>
+                                                                    <span class='help-block'>
+                                                                        @if (Session::getError('exerciseTimeConstraint'))
+                                                                            {{ Session::getError('exerciseTimeConstraint') }}
+                                                                        @else
+                                                                            {{ trans('langExerciseConstrainUnit') }}
+                                                                        @endif
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                        <div class='row form-group mt-5'>
-                                            <div class='col-12 d-flex justify-content-end align-items-center'>
-                                                {!! $form_buttons !!}
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#reviewAssessment"
+                                                                aria-expanded="false"
+                                                                aria-controls="reviewAssessment">
+                                                            <span class="accordion-icon">
+                                                                <i class="fa-solid fa-chart-column"></i>
+                                                            </span>
+                                                            <span class="accordion-title">
+                                                                <span class="accordion-title-text">
+                                                                    Αξιολόγηση
+                                                                </span>
+
+                                                                <small class="accordion-subtitle">
+                                                                    Βαθμολογία, Κλίμακα, Βαθμός βεβαιότητας
+                                                                </small>
+                                                            </span>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="reviewAssessment" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                        <div class="accordion-body">
+                                                            <div class='form-group'>
+                                                                <label for='exerciseRangeId'
+                                                                    class='col-12 control-label-notes mb-1'>{{ trans('langExerciseScaleGrade') }}</label>
+                                                                <div class='col-12'>
+                                                                    <select name='exerciseRange' class='form-select' id='exerciseRangeId'>
+                                                                        <option value='' @if ($exerciseRange == 0) selected @endif>
+                                                                            -- {{ trans('langExerciseNoScaleGrade') }} --
+                                                                        </option>
+                                                                        <option value='10' @if ($exerciseRange == 10) selected @endif>0-10
+                                                                        </option>
+                                                                        <option value='20' @if ($exerciseRange == 20) selected @endif>0-20
+                                                                        </option>
+                                                                        <option value='5' @if ($exerciseRange == 5) selected @endif>0-5
+                                                                        </option>
+                                                                        <option value='100' @if ($exerciseRange == 100) selected @endif>
+                                                                            0-100
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class='form-group mt-4'>
+                                                                <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>
+                                                                    {{ trans('langExerciseCBCalcGradeMethod') }}
+                                                                    <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip'
+                                                                        data-bs-placement='top'
+                                                                        title='{{ trans('langExerciseCBCalcGradeMethodLegend') }}'
+                                                                        style='margin-bottom: 10px;'></span>
+                                                                </label>
+                                                                <div class='col-12'>
+                                                                    <div class='checkbox'>
+                                                                        <label class='label-container'
+                                                                            aria-label='{{ trans('langSelect') }}'>
+                                                                            <input type="checkbox" name="exerciseCalcGradeMethod"
+                                                                                @if ($exerciseCalcGradeMethod == CALC_GRADE_METHOD_CERTAINTY_BASED) checked @endif>
+                                                                            <span class='checkmark'></span>
+                                                                            {{ trans('langActivate') }}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class='form-group mt-4'>
+                                                                <div class='col-12'>
+                                                                    <label for='exerciseTimeConstraint'
+                                                                        class='col-12 control-label-notes mb-1'>
+                                                                        <strong id='legend_grade_pass'>
+                                                                            @if ($exerciseRange == 0)
+                                                                                {{ trans('langSuccessPercentage') }}
+                                                                            @else
+                                                                                {{ trans('langExerciseGradePass') }}
+                                                                            @endif
+                                                                        </strong>
+                                                                        <span class='fa-solid fa-circle-info ps-1'
+                                                                            data-bs-toggle='tooltip' data-bs-placement='top'
+                                                                            title='{{ trans('langExerciseGradePassLegend') }}'
+                                                                            style='margin-bottom: 10px;'></span>
+                                                                    </label>
+                                                                    <input type='text' class='form-control' name='exerciseGradePass'
+                                                                        id='exerciseGradePass' value='{{ $exerciseGradePass }}'
+                                                                        size='4' maxlength='4'>
+                                                                </div>
+                                                            </div>
+                                                            <div class='form-group mt-4'>
+                                                                <label class='col-12 control-label-notes mb-1'>{{ trans('langGradeVisible') }}</label>
+                                                                <div class='col-12'>
+                                                                    <select name='dispscore' class='form-select'>
+                                                                        <option value='1'
+                                                                                @if ($displayScore == 1) selected @endif>{{ trans('langScoreDisp') }}</option>
+                                                                        <option value='0'
+                                                                                @if ($displayScore == 0) selected @endif>{{ trans('langScoreNotDisp') }}</option>
+                                                                        <option value='3'
+                                                                                @if ($displayScore == 3) selected @endif>{{ trans('langScoreDispLastAttempt') }}</option>
+                                                                        <option value='4'
+                                                                                @if ($displayScore == 4) selected @endif>{{ trans('langScoreDispEndDate') }}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>    
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#reviewComments"
+                                                                aria-expanded="false"
+                                                                aria-controls="reviewComments">
+                                                            <span class="accordion-icon">
+                                                                <i class="fa-solid fa-comment exercise-card-icon"></i>
+                                                            </span>
+                                                            <span class="accordion-title">
+                                                                <span class="accordion-title-text">
+                                                                    Ανατροφοδότηση
+                                                                </span>
+                                                                <small class="accordion-subtitle">
+                                                                    Μηνύματα, Εμφάνιση αποτελεσμάτων
+                                                                </small>
+                                                            </span>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="reviewComments" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                        <div class="accordion-body">
+                                                            <div class='col-12 d-flex justify-content-start align-items-center gap-3 flex-wrap'>
+                                                                <button class='btn submitAdminBtn' id='add-feedback-btn'><i class="fa-solid fa-plus"></i> {{ trans('langAddFeedback') }}</button>
+                                                            </div>
+                                                            <div id='feedback-container' class='col-12 mt-3'>
+                                                                @if (count($exerciseFeedback) > 0)
+                                                                    @foreach ($exerciseFeedback as $counter => $feedback)
+                                                                        <div class='feedback-row d-flex align-items-center justify-content-between mb-2 gap-2'>
+                                                                            <div class='w-75 flex-fill'>
+                                                                                <label for='text_{{ $counter }}' class='form-label'>Κείμενο ανατροφοδότησης</label>
+                                                                                <input id='text_{{ $counter }}' class='form-control' type='text' name='feedback_text[{{ $counter }}]' size='60' maxlength='200' value="{{ $feedback['feedback_text'] }}">
+                                                                            </div>
+                                                                            <div class='flex-fill'>
+                                                                                <label for='grade_{{ $counter }}' class='form-label'>Βαθμός</label>
+                                                                                <input id='grade_{{ $counter }}' class='form-control' type='text' name='feedback_grade[{{ $counter }}]' size='4' maxlength='4' value="{{ $feedback['grade'] }}">
+                                                                            </div>
+                                                                            <a class='delete-feedback-btn accordion-delete-icon mt-4'>
+                                                                                <i class='fa-solid fa-trash-can'></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    @endforeach
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#reviewAccess"
+                                                                aria-expanded="false"
+                                                                aria-controls="reviewAccess">
+                                                            <span class="accordion-icon">
+                                                                <i class="fa-solid fa-unlock-keyhole exercise-card-icon"></i>
+                                                            </span>
+                                                            <span class="accordion-title">
+                                                                <span class="accordion-title-text">
+                                                                    Πρόσβαση & Ανάθεση
+                                                                </span>
+                                                                <small class="accordion-subtitle">
+                                                                    Χρήστες, Ομάδες, Έλεγχος πρόσβασης
+                                                                </small>
+                                                            </span>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="reviewAccess" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                        <div class="accordion-body">
+                                                            <div class='form-group'>
+                                                                <div class='control-label-notes mb-1'>{{ trans('langWorkAssignTo') }}</div>
+                                                                <div class='col-12'>
+                                                                    <div class='radio'>
+                                                                        <label>
+                                                                            <input type='radio' id='assign_button_all'
+                                                                                name='assign_to_specific' value='0'
+                                                                                @if ($exerciseAssignToSpecific == 0) checked @endif>
+                                                                            {{ trans('langWorkToAllUsers') }}
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class='radio'>
+                                                                        <label>
+                                                                            <input type='radio' id='assign_button_user'
+                                                                                name='assign_to_specific' value='1'
+                                                                                @if ($exerciseAssignToSpecific == 1) checked @endif>
+                                                                            {{ trans('langWorkToUser') }}
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class='radio'>
+                                                                        <label>
+                                                                            <input type='radio' id='assign_button_group'
+                                                                                name='assign_to_specific' value='2'
+                                                                                @if ($exerciseAssignToSpecific == 2) checked @endif>
+                                                                            {{ trans('langWorkToGroup') }}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class='form-group mt-4'>
+                                                                <div class='col-12'>
+                                                                    <div class='table-responsive mt-0'>
+                                                                        <table id='assignees_tbl'
+                                                                            class='table-default @unless (in_array($exerciseAssignToSpecific, [1, 2])) hide @endunless'>
+                                                                            <thead>
+                                                                            <tr class='title1 list-header'>
+                                                                                <td class='form-label'
+                                                                                    id='assignees'>{{ trans('langStudents') }}</td>
+                                                                                <td class='form-label text-center'>{{ trans('langMove') }}</td>
+                                                                                <td class='form-label'>{{ trans('langWorkAssignTo') }}</td>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <select aria-label='{{ trans('langStudent') }}'
+                                                                                            class='form-select h-100' id='assign_box'
+                                                                                            size='10' multiple>
+                                                                                        @if (isset($unassigned_options))
+                                                                                            {!! $unassigned_options !!}
+                                                                                        @endif
+                                                                                    </select>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div class='d-flex align-items-center flex-column gap-2'>
+                                                                                        <input aria-label='{{ trans('langMove') }}'
+                                                                                            class='btn submitAdminBtn submitAdminBtnClassic'
+                                                                                            type='button'
+                                                                                            onClick="move('assign_box','assignee_box')"
+                                                                                            value='   &gt;&gt;   '/>
+                                                                                        <input aria-label='{{ trans('langMove') }}'
+                                                                                            class='btn submitAdminBtn submitAdminBtnClassic'
+                                                                                            type='button'
+                                                                                            onClick="move('assignee_box','assign_box')"
+                                                                                            value='   &lt;&lt;   '/>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <select aria-label='{{ trans('langWorkAssignTo') }}'
+                                                                                            class='form-select h-100' id='assignee_box'
+                                                                                            name='ingroup[]' size='10' multiple>
+                                                                                        @if (isset($assignee_options))
+                                                                                            {!! $assignee_options !!}
+                                                                                        @endif
+                                                                                    </select>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group mt-4">
+                                                                <div class='form-group  @if (Session::getError('exercisePasswordLock')) has-error @endif'>
+                                                                    <label for='exercisePasswordLock'
+                                                                        class='col-12 control-label-notes mb-1'>{{ trans('langPassCode') }}</label>
+                                                                    <div class='col-12'>
+                                                                        <input name='exercisePasswordLock' type='text'
+                                                                            class='form-control'
+                                                                            id='exercisePasswordLock'
+                                                                            value='{{ $exercisePasswordLock }}'
+                                                                            placeholder=''>
+                                                                        <span class='help-block Accent-200-cl'> {{ Session::getError('exercisePasswordLock') }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class='form-group @if (Session::getError('exerciseIPLock')) has-error @endif mt-4'>
+                                                                    <label for='exerciseIPLock'
+                                                                        class='col-12 control-label-notes mb-1'>{{ trans('langIPUnlock') }}</label>
+                                                                    <div class='help-block'>
+                                                                        {{ trans('langIPUnlockLegend') }}
+                                                                    </div>
+                                                                    <div class='col-12'>
+                                                                        <select name='exerciseIPLock[]' class='form-control'
+                                                                                id='exerciseIPLock' multiple>
+                                                                            {!! $exerciseIPLockOptions !!}
+                                                                        </select>
+                                                                        <span class='help-block Accent-200-cl'>{{ Session::getError('exerciseIPLock') }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                {!! $tags_list !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#reviewAttempt"
+                                                                aria-expanded="false"
+                                                                aria-controls="reviewAttempt">
+                                                            <span class="accordion-icon">
+                                                                <i class="fa-solid fa-recycle"></i>
+                                                            </span>
+                                                            <span class="accordion-title">
+                                                                <span class="accordion-title-text">
+                                                                    Προσπάθειες χρηστών
+                                                                </span>
+                                                                <small class="accordion-subtitle">
+                                                                    Προσωρινή αποθήκευση, Περιορισμός προσπαθειών, Εμφάνιση αποτελεσμάτων
+                                                                </small>
+                                                            </span>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="reviewAttempt" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                        <div class="accordion-body">
+                                                            <div class='form-group' id='exerciseTempSaveDiv'>
+                                                                <div class='col-12 control-label-notes mb-2'>
+                                                                    {{ trans('langTemporarySave') }}
+                                                                </div>
+                                                                <div class='col-12'>
+                                                                    <div class='row'>
+                                                                        <div class='col-12 radio'>
+                                                                            <label>
+                                                                                <input type='radio' name='exerciseTempSave' value='0'
+                                                                                    @if ($exerciseTempSave == 0) checked @endif>
+                                                                                {{ trans('langDeactivate') }}
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class='col-12 radio'>
+                                                                            <label>
+                                                                                <input type='radio' name='exerciseTempSave' value='1'
+                                                                                    @if ($exerciseTempSave == 1) checked @endif>
+                                                                                {{ trans('langActivate') }}
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class='form-group @if (Session::getError('exerciseAttemptsAllowed')) has-error @endif mt-4'>
+                                                                <div class='col-12'>
+                                                                    <label for='exerciseAttemptsAllowed'
+                                                                        class='col-12 control-label-notes mb-1'>
+                                                                        {{ trans('langExerciseAttemptsAllowed') }}
+                                                                        <span class='fa-solid fa-circle-info ps-1'
+                                                                            data-bs-toggle='tooltip' data-bs-placement='top'
+                                                                            title='{{ trans('langExerciseAttemptsAllowedExplanation') }}'
+                                                                            style='margin-bottom: 10px;'></span>
+                                                                    </label>
+                                                                    <input type='text' class='form-control'
+                                                                        name='exerciseAttemptsAllowed'
+                                                                        id='exerciseAttemptsAllowed'
+                                                                        value='{{ $exerciseAttemptsAllowed  }}'
+                                                                        placeholder='{{ trans('langExerciseConstrain') }}'>
+                                                                    <span class='help-block'>
+                                                                        @if (Session::getError('exerciseAttemptsAllowed'))
+                                                                            {{ Session::getError('exerciseAttemptsAllowed') }}
+                                                                        @else
+                                                                            {{ trans('langExerciseAttemptsAllowedUnit') }}
+                                                                        @endif
+                                                                    </span> 
+                                                                </div>
+                                                            </div>
+                                                            <div class='form-group mt-4'>
+                                                                <div class='col-12 control-label-notes mb-1'>
+                                                                    {{ trans('langContinueAttempt') }}
+                                                                </div>
+                                                                <div class='col-12'>
+                                                                    <div class='checkbox'>
+                                                                        <label class='label-container'
+                                                                            aria-label='{{ trans('langSelect') }}'>
+                                                                            <input id='continueAttempt' name='continueAttempt'
+                                                                                type='checkbox' @if ($continueTimeLimit) checked @endif>
+                                                                            <span class='checkmark'></span>
+                                                                            {{ trans('langContinueAttemptExplanation') }}
+                                                                        </label>
+                                                                    </div>
+                                                                    <div id='continueTimeField' class='form-inline'
+                                                                        style='margin-top: 15px; @unless ($continueTimeLimit) display: none @endunless'>
+                                                                        {!! $continueTimeField !!}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class='form-group mt-4'>
+                                                                <label class='col-12 control-label-notes mb-1'>{{ trans('langViewShow') }}</label>
+                                                                <div class='col-12'>
+                                                                    <select name='dispresults' class='form-select'>
+                                                                        <option value='1'
+                                                                                @if ($displayResults == 1) selected @endif >{{ trans('langAnswersDisp') }}</option>
+                                                                        <option value='0'
+                                                                                @if ($displayResults == 0) selected @endif >{{ trans('langAnswersNotDisp') }}</option>
+                                                                        <option value='3'
+                                                                                @if ($displayResults == 3) selected @endif>{{ trans('langAnswersDispLastAttempt') }}</option>
+                                                                        <option value='4'
+                                                                                @if ($displayResults == 4) selected @endif>{{ trans('langAnswersDispEndDate') }}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button"
+                                                                type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#reviewSettings"
+                                                                aria-expanded="false"
+                                                                aria-controls="reviewSettings">
+                                                            <span class="accordion-icon">
+                                                                <i class="fa-solid fa-gear"></i>
+                                                            </span>
+                                                            <span class="accordion-title">
+                                                                <span class="accordion-title-text">
+                                                                   Προχωρημένες ρυθμίσεις
+                                                                </span>
+                                                                <small class="accordion-subtitle">
+                                                                    Εμφάνιση ερωτήσεων, Ενεργοποίηση εξέτασης
+                                                                </small>
+                                                            </span>
+                                                        </button>
+                                                    </h2>
+                                                    <div id="reviewSettings" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                        <div class="accordion-body">    
+                                                            <div class='form-group'>
+                                                                <label class='col-12 control-label-notes mb-1'>{{ trans('langViewShow') }}</label>
+                                                                <div class='col-12'>
+                                                                    <select name='exerciseType' class='form-select'>
+                                                                        <option value='{{ SINGLE_PAGE_TYPE }}'
+                                                                                @if ($exerciseType == SINGLE_PAGE_TYPE) selected @endif>{{ trans('langSimpleExercise') }}</option>
+                                                                        <option value='{{ MULTIPLE_PAGE_TYPE }}'
+                                                                                @if ($exerciseType == MULTIPLE_PAGE_TYPE) selected @endif>{{ trans('langSequentialExercise') }}</option>
+                                                                        <option value='{{ ONE_WAY_TYPE }}'
+                                                                                @if ($exerciseType == ONE_WAY_TYPE)?
+                                                                                selected @endif> {{ trans('langOneWayExercise') }}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class='form-group mt-4'>
+                                                                <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>
+                                                                    Ερωτήσεις πολλαπλής επιλογής
+                                                                    <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langShuffleAnswersLegend') }}' style='margin-bottom: 10px;'></span>
+                                                                </label>
+                                                                <div class='col-12'>
+                                                                    <div class='checkbox'>
+                                                                        <label class='label-container'
+                                                                            aria-label='{{ trans('langSelect') }}'>
+                                                                            <input name='shuffle_answers' type='checkbox'
+                                                                                @if ($hasShuffleAnswers) checked @endif>
+                                                                            <span class='checkmark'></span>
+                                                                            {{ trans('langShuffleAnswers') }}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class='row form-group'>
+                                                                <div class='col-12'>
+                                                                    <div class='checkbox'>
+                                                                        <label class='label-container'
+                                                                            aria-label='{{ trans('langSelect') }}'>
+                                                                            <input id='isExam_' name='isExam' type='checkbox'
+                                                                                @if ($isExam) checked @endif>
+                                                                            <span class='checkmark'></span>
+                                                                            {{ trans('langActivateExamMode') }}
+                                                                        </label>
+                                                                        <div class='help-block'>
+                                                                            {{ trans('langRequireCourseUserLogin') }}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class='row form-group mt-4 d-none' id='stricter_exam'>
+                                                                <div class='col-12'>
+                                                                    <div class='checkbox'>
+                                                                        <label class='label-container'
+                                                                            aria-label='{{ trans('langSelect') }}'>
+                                                                            <input name='stricterExamRestriction' type='checkbox'
+                                                                                @if($exerciseStricterExamRestriction) checked @endif>
+                                                                            <span class='checkmark'></span>
+                                                                            {{ trans('langExerciseWillBeCanceledInStrictMode') }}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                @if (CourseHasSafeExamBrowserEnabled())
+                                                                    <div class='col-12'>
+                                                                        <div class='checkbox'>
+                                                                            <label class='label-container'
+                                                                                aria-label='{{ trans('langSelect') }}'>
+                                                                                <input name='useSafeExamBrowser' type='checkbox'
+                                                                                    id='useSafeExamBrowser'
+                                                                                    @if($exerciseUseSafeExamBrowser) checked @endif>
+                                                                                <span class='checkmark'></span>
+                                                                                {{ trans('langSafeExamBrowserInfo') }}
+                                                                                <span class='fa-solid fa-circle-info ps-1'
+                                                                                    data-bs-toggle='tooltip' data-bs-placement='right'
+                                                                                    title='{{ trans('langSafeExamBrowserLegend') }}'
+                                                                                    style='margin-top: 5px;'></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                            <div class='row form-group mt-4'>
+                                                                <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langExercisePreventCopy') }}</div>
+                                                                <div class='col-12'>
+                                                                    <div class='checkbox'>
+                                                                        <label class='label-container'
+                                                                            aria-label='{{ trans('langSelect') }}'>
+                                                                            <input id='jsPreventCopy' name='jsPreventCopy' type='checkbox'
+                                                                                @if ($exercisePreventCopy) checked @endif>
+                                                                            <span class='checkmark'></span>
+                                                                            {{ trans('langExercisePreventCopyExplanation') }}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
-                                        </div>
-
                                     </fieldset>
                                     {!! generate_csrf_token_form_field() !!}
                                 </form>
@@ -650,12 +782,6 @@
                 }
             });
 
-            // $('#exerciseIPLock').select2({
-            //     minimumResultsForSearch: Infinity,
-            //     tags: true,
-            //     tokenSeparators: [',', ' ']
-            // });
-
             slimSelectFun(
                 '#exerciseIPLock',
                 '{{ js_escape(trans('langSearch')) }}',
@@ -700,10 +826,16 @@
                 e.preventDefault();
                 count++;
                 var feedbackRow = `
-                  <div class='feedback-row d-flex align-items-center justify-content-between border-bottom mb-1 gap-3'>
-                        <input class='form-control' type='text' name='feedback_text[${count}]' size='60' maxlength='200' placeholder='{{ trans('langText') }}'>
-                        <input class='form-control' type='text' name='feedback_grade[${count}]' size='4' maxlength='4' placeholder='{{ trans('langGradebookGrade') }}'>
-                        <a class='delete-feedback-btn'><span class='fa-solid fa-xmark' style='color:red;'></span></a>
+                  <div class='feedback-row d-flex align-items-center justify-content-between mb-2 gap-2'>
+                        <div class='w-75 flex-fill'>
+                            <label for='text_${count}' class='form-label mb-0'>Κείμενο ανατροφοδότησης</label>
+                            <input id='text_${count}' class='form-control' type='text' name='feedback_text[${count}]' size='60' maxlength='200' placeholder='{{ trans('langText') }}'>
+                        </div>
+                        <div class='flex-fill'>
+                            <label for='grade_${count}' class='form-label mb-0'>Βαθμός</label>
+                            <input id='grade_${count}' class='form-control' type='text' name='feedback_grade[${count}]' size='4' maxlength='4' placeholder='{{ trans('langGradebookGrade') }}'>
+                        </div>
+                        <a class='delete-feedback-btn accordion-delete-icon mt-4'><i class='fa-solid fa-trash-can'></i></a>
                   </div>`;
                 $('#feedback-container').append(feedbackRow);
             });
@@ -756,6 +888,7 @@
             $('#assignees_tbl').addClass('hide');
             $('#assignee_box').find('option').remove();
         }
+
     </script>
 
 @endsection

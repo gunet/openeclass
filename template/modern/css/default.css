@@ -7990,3 +7990,250 @@ th.grade-col a{
 .cart_certificate_selected {
   border: solid 3px red !important;
 }
+
+
+
+/* ==========================================================================================================================================
+   Exercise Accordion
+   Modern Campus Blue
+============================================================================================================================================ */
+
+.exercise-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ========================================
+   Accordion Item
+======================================== */
+
+.exercise-accordion .accordion-item {
+    border: 1px solid #DBEAFE;
+    border-radius: 12px !important;
+    overflow: hidden;
+    background-color: #FFFFFF;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* ========================================
+   Accordion Header
+======================================== */
+
+.exercise-accordion .accordion-button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.15rem 1.35rem;
+    background-color: #FFFFFF;
+    color: #1E293B;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    border: 0;
+    box-shadow: none;
+    text-align: left;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+/* Ανοιχτό accordion */
+.exercise-accordion .accordion-button:not(.collapsed) {
+    background-color: #EFF6FF;
+    color: #1E40AF;
+    box-shadow: none;
+}
+
+/* ========================================
+   Accordion Icon
+======================================== */
+
+.exercise-accordion .accordion-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 10px;
+    background-color: #DBEAFE;
+    color: #1D4ED8;
+    font-size: 1rem;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+/* Icon όταν το accordion είναι ανοιχτό */
+.exercise-accordion
+.accordion-button:not(.collapsed)
+.accordion-icon {
+    background-color: #DBEAFE;
+    color: #1E40AF;
+}
+
+.accordion-delete-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  background-color: #DBEAFE;
+  color: #1D4ED8;
+  font-size: 1rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+background-color: #FFE6E6;
+  color: #FF5C5C;
+}
+.accordion-delete-icon i{
+  color: #FF5C5C;
+}
+
+/* ========================================
+   Title & Subtitle
+======================================== */
+
+.exercise-accordion .accordion-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+/* Βασικός τίτλος */
+.exercise-accordion .accordion-title-text {
+    color: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* Βοηθητικό λεκτικό */
+.exercise-accordion .accordion-subtitle {
+    color: #64748B;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+/* ========================================
+   Accordion Chevron
+======================================== */
+
+/* Το βελάκι του Bootstrap */
+.exercise-accordion .accordion-button::after {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    margin-left: auto;
+    background-size: 1rem;
+    opacity: 0.75;
+    transition: transform 0.2s ease;
+}
+
+/* Βελάκι όταν είναι ανοιχτό */
+.exercise-accordion
+.accordion-button:not(.collapsed)::after {
+    opacity: 1;
+}
+
+/* ========================================
+   Accordion Body
+======================================== */
+
+.exercise-accordion .accordion-body {
+    padding: 1.25rem 1.35rem;
+    background-color: #FFFFFF;
+    color: #475569;
+    border-top: 1px solid #DBEAFE;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* Κείμενο μέσα στο body */
+.exercise-accordion .accordion-body p {
+    margin-bottom: 0.75rem;
+}
+
+.exercise-accordion .accordion-body p:last-child {
+    margin-bottom: 0;
+}
+
+/* ========================================
+   Status Badge (Optional)
+======================================== */
+
+.exercise-accordion .accordion-status {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 0.75rem;
+    padding: 0.25rem 0.65rem;
+    border: 1px solid #BFDBFE;
+    border-radius: 999px;
+    background-color: #EFF6FF;
+    color: #1D4ED8;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+/* ========================================
+   Responsive
+======================================== */
+
+@media (max-width: 576px) {
+
+    .exercise-accordion {
+        gap: 0.75rem;
+    }
+
+    .exercise-accordion .accordion-button {
+        gap: 0.65rem;
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .exercise-accordion .accordion-icon {
+        width: 2.2rem;
+        height: 2.2rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+
+    .exercise-accordion .accordion-title-text {
+        font-size: 0.95rem;
+    }
+
+    .exercise-accordion .accordion-subtitle {
+        font-size: 0.75rem;
+    }
+
+    .exercise-accordion .accordion-body {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .exercise-accordion .accordion-status {
+        display: none;
+    }
+}
+
+/* ========================================
+   Reduced Motion / Accessibility
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .exercise-accordion .accordion-item,
+    .exercise-accordion .accordion-button,
+    .exercise-accordion .accordion-icon,
+    .exercise-accordion .accordion-button::after {
+        transition: none;
+    }
+}
