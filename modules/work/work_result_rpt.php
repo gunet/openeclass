@@ -27,40 +27,49 @@ require_once 'modules/group/group_functions.php';
 $nameTools = $langAutoJudgeDetailedReport;
 
 if (isset($_GET['assignment']) && isset($_GET['submission'])) {
-    $as_id = intval($_GET['assignment']);
-    $sub_id = intval($_GET['submission']);
-    $assign = get_assignment_details($as_id);
-    $sub = get_assignment_submit_details($sub_id);
+    $q = Database::get()->querySingle("SELECT id FROM assignment WHERE id = ?d AND course_id = ?d", $_GET['assignment'], $course_id); // additional security check
+    if ($q) {
+        $as_id = intval($_GET['assignment']);
+        $q = Database::get()->querySingle("SELECT id FROM assignment_submit WHERE id = ?d AND assignment_id = ?d", $_GET['submission'], $_GET['assignment']); // additional security check
+        if ($q) {
+            $sub_id = intval($_GET['submission']);
+            $assign = get_assignment_details($as_id);
+            $sub = get_assignment_submit_details($sub_id);
 
-    if ($sub==null || $assign==null) {
-        redirect_to_home_page('modules/work/index.php?course='.$course_code);
-    }
+            if ($sub == null || $assign == null) {
+                redirect_to_home_page('modules/work/index.php?course=' . $course_code);
+            }
 
-    $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langWorks);
-    $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$as_id", 'name' => q($assign->title));
+            $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langWorks);
+            $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$as_id", 'name' => q($assign->title));
 
-    if ($sub) {
-        if($assign->auto_judge){ // auto_judge enable
-            $auto_judge_scenarios = unserialize($assign->auto_judge_scenarios);
-            $auto_judge_scenarios_output = unserialize($sub->auto_judge_scenarios_output);
+            if ($sub) {
+                if ($assign->auto_judge) { // auto_judge enable
+                    $auto_judge_scenarios = unserialize($assign->auto_judge_scenarios);
+                    $auto_judge_scenarios_output = unserialize($sub->auto_judge_scenarios_output);
 
-            if (!isset($_GET['downloadpdf'])){
-                show_report($as_id, $sub_id, $assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output);
-                draw($tool_content, 2);
+                    if (!isset($_GET['downloadpdf'])) {
+                        show_report($sub_id, $assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output);
+                        draw($tool_content, 2);
+                    } else {
+                        download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output);
+                    }
+                } else {
+                    Session::flash('message', $langAutoJudgeNotEnabledForReport);
+                    Session::flash('alert-class', 'alert-danger');
+                    draw($tool_content, 2);
+                }
             } else {
-                download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output);
+                Session::flash('message', $langWorkNoSubmission);
+                Session::flash('alert-class', 'alert-danger');
+                redirect_to_home_page('modules/work/index.php?course=' . $course_code . '&id=' . $id);
             }
         } else {
-            Session::flash('message',$langAutoJudgeNotEnabledForReport);
-            Session::flash('alert-class', 'alert-danger');
-            draw($tool_content, 2);
+            redirect_to_home_page('modules/work/index.php?course='.$course_code);
         }
     } else {
-        Session::flash('message', $langWorkNoSubmission);
-        Session::flash('alert-class', 'alert-danger');
-        redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
+        redirect_to_home_page('modules/work/index.php?course='.$course_code);
     }
-
 } else {
     redirect_to_home_page('modules/work/index.php?course='.$course_code);
 }
@@ -82,27 +91,14 @@ function get_submission_rank($assign_id,$grade, $submission_date) {
 
 /**
  *
- * @global type $course_code
- * @global string $tool_content
- * @global type $langAutoJudgeInput
- * @global type $langAutoJudgeOutput
- * @global type $langAutoJudgeExpectedOutput
- * @global type $langOperator
- * @global type $langAutoJudgeWeight
- * @global type $langAutoJudgeResult
- * @global type $langAutoJudgeResultsFor
- * @global type $langAutoJudgeRank
- * @global type $langAutoJudgeDownloadPdf
- * @global type $langBack
- * @global type $langGradebookGrade
- * @param type $id
  * @param type $sid
  * @param type $assign
  * @param type $sub
  * @param type $auto_judge_scenarios
  * @param type $auto_judge_scenarios_output
  */
-function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
+function show_report($sid, $assign,$sub, $auto_judge_scenarios, $auto_judge_scenarios_output): void
+{
     global $course_code,$tool_content, $langAutoJudgeInput, $langAutoJudgeOutput,
         $langAutoJudgeExpectedOutput, $langOperator, $langAutoJudgeWeight,
         $langAutoJudgeResult, $langAutoJudgeResultsFor, $langAutoJudgeRank,
@@ -128,7 +124,8 @@ function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge
 }
 
 
-function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, $max_grade) {
+function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, $max_grade): string
+{
 
     global $langAutoJudgeAssertions;
 
@@ -154,24 +151,13 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
 
 /**
  * @brief download report as pdf file
- * @global type $langAutoJudgeInput
- * @global type $langAutoJudgeOutput
- * @global type $langAutoJudgeExpectedOutput
- * @global type $langOperator
- * @global type $langAutoJudgeWeight
- * @global type $langAutoJudgeResult
- * @global type $langGradebookGrade
- * @global type $langCourse
- * @global type $langAssignment
- * @global type $langStudent
- * @global type $langAutoJudgeRank
- * @global type $course_id
  * @param type $assign
  * @param type $sub
  * @param type $auto_judge_scenarios
  * @param type $auto_judge_scenarios_output
  */
-function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
+function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output): void
+{
     global $langAutoJudgeInput, $langAutoJudgeOutput, $course_id,
         $langAutoJudgeExpectedOutput, $langOperator,
         $langAutoJudgeWeight, $langAutoJudgeResult, $langGradebookGrade,
