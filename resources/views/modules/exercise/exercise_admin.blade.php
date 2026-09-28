@@ -708,6 +708,11 @@
                                                 </div>
 
                                             </div>
+
+                                             
+                                            <div class='col-12 d-flex justify-content-end align-items-center mt-4'>
+                                                {!! $form_buttons !!}
+                                            </div>
                                     </fieldset>
                                     {!! generate_csrf_token_form_field() !!}
                                 </form>
