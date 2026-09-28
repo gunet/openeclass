@@ -270,9 +270,6 @@ function load_js($file, $init=''): void
 </script>";
                 $file = 'trunk8.js';
                 break;
-            case 'clipboard.js':
-                $file = 'clipboard.js/clipboard.min.js';
-                break;
             case 'jquery-ui':
                 $file = 'jquery-ui.min.js';
                 break;
