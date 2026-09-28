@@ -18,17 +18,14 @@
  *
  */
 
-
-$require_login = TRUE;
-
-$require_valid_uid = true;
 if (!session_id()) {
     session_start();
 }
 if (isset($_GET['course'])){
+
     $require_current_course = true;
 }
-require_once '../include/init.php';
+require_once '../include/baseTheme.php';
 require_once 'personal_calendar/calendar_events.class.php';
 
 if (isset($uid)) {
