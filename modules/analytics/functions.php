@@ -968,7 +968,7 @@ function edit_analytics_settings ($analytics_id = 0)
                             ),
                             array(
                                 'class' => 'cancelAdminBtn ms-1',
-                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code" . ($analytics_id > 0 ? "&amp;analytics_id=$analytics_id&amp;mode=showDetails" : "")
                                 )
 
                             ))."

@@ -58,7 +58,7 @@ if (isset($_POST['insert_analytics'])) {
         $analytics_id = insert_analytics($_POST['title'], $_POST['description'], $_POST['active'], $_POST['periodType'], $start_date, $end_date, $created);
         Session::flash('message',$langAnalyticsInsertSuccess);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=courseStatistics");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/analytics/index.php?course=$course_code&edit_analytics=1");
@@ -93,7 +93,7 @@ if (isset($_POST['insert_analytics'])) {
 
         Session::flash('message',$langAnalyticsUpdateSuccess);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=courseStatistics");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&edit_analytics=1");
@@ -104,7 +104,7 @@ if (isset($_POST['insert_analytics'])) {
         $analytics_id = $_REQUEST['analytics_id'];
         $action_bar = action_bar(array(
             array('title' => $langBack,
-                    'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics",
+                    'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showDetails",
                     'icon' => 'fa fa-reply',
                     'level' => 'primary')
             ));
@@ -393,8 +393,7 @@ if (isset($_POST['insert_analytics'])) {
             }
 
             $navigation = array(
-                array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code", 'name' => $langLearningAnalytics),
-                array('url' => '', 'name' => $analytics->title)
+                array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code", 'name' => $langLearningAnalytics)
             );
 
             $action_bar = action_bar(
