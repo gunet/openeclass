@@ -68,7 +68,8 @@ if (!$res2) {
     exit();
 }
 
-$valid = $uid || course_status($course_id) == COURSE_OPEN || (isset($_GET['token']) && token_validate($file_info->path, $_GET['token'], 30));
+$valid = isset($_GET['token']) && token_validate($res2->path, $_GET['token'], 30);
+
 if (!$valid) {
     header("Location: $urlServer");
     exit();

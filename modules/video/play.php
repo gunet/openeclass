@@ -33,7 +33,11 @@ $action->record(MODULE_ID_VIDEO);
 // ----------------------
 // play video
 // ----------------------
-$row = Database::get()->querySingle("SELECT * FROM video WHERE course_id = ?d AND id = ?d", $course_id, $_GET['id']);
+if ($is_editor) {
+    $row = Database::get()->querySingle("SELECT * FROM video WHERE course_id = ?d AND id = ?d", $course_id, $_GET['id']);
+} else {
+    $row = Database::get()->querySingle("SELECT * FROM video WHERE course_id = ?d AND id = ?d AND visible = 1", $course_id, $_GET['id']);
+}
 
 if ($row) {
     // trigger gamification
@@ -47,7 +51,7 @@ if ($row) {
 
     $vObj = MediaResourceFactory::initFromVideo($row);
     $token = token_generate($row->path, true);                         // generate new token
-    $vObj->setAccessURL($vObj->getAccessURL() . '&amp;token=' . $token); // append token to accessurl
+    $vObj->setAccessURL($vObj->getAccessURL() . '&amp;token=' . $token); // append token to access url
     echo MultimediaHelper::mediaHtmlObject($vObj);
 } else {
     header("Location: {$urlServer}modules/video/index.php?course=$course_code");
