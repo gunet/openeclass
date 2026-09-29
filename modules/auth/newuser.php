@@ -43,14 +43,13 @@ if ($display_captcha) {
 $tree = new Hierarchy();
 $userObj = new User();
 
-$data['action_bar'] = action_bar(
-                                [[
-                                    'title' => $langBack,
-                                    'url' => 'registration.php',
-                                    'icon' => 'fa-reply',
-                                    'level' => 'primary',
-                                    'button-class' => 'btn-secondary'
-                                ]], false);
+$data['action_bar'] = action_bar([[
+        'title' => $langBack,
+        'url' => 'registration.php',
+        'icon' => 'fa-reply',
+        'level' => 'primary',
+        'button-class' => 'btn-secondary'
+    ]], false);
 
 $data['user_registration'] = get_config('user_registration');
 $data['eclass_stud_reg'] = $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
@@ -140,6 +139,8 @@ if (!empty($provider_name)) {
     }
 }
 
+$student_registration = get_config('eclass_stud_reg');
+
 // display form
 if (!isset($_POST['submit'])) {
     if (get_config('email_required')) {
@@ -184,6 +185,21 @@ if (!isset($_POST['submit'])) {
     view('modules.auth.newuser', $data);
 
 } else { // submit
+    if (!get_config('user_registration')) {
+        forbidden();
+    }
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+        csrf_token_error();
+    }
+    if (empty($provider) && empty($_POST['provider_id'])) {
+        if (!$student_registration) {
+            forbidden();
+        }
+    } else {
+        if (!get_config('alt_auth_stud_reg')) {
+            forbidden();
+        }
+    }
     if (get_config('email_required')) {
         $email_arr_value = true;
     } else {
@@ -196,34 +212,36 @@ if (!isset($_POST['submit'])) {
     }
 
     if (isset($_POST['account_request'])) {
-        $var_arr = array('uname' => true,
+        $var_arr = [
+            'uname' => true,
             'surname_form' => true,
             'givenname_form' => true,
             'email' => $email_arr_value,
             'phone' => false,
-            'am' => $am_arr_value);
+            'am' => $am_arr_value];
     } else {
         if (empty($provider) && empty($_POST['provider_id'])) {
-            $var_arr = array('uname' => true,
+            $var_arr = [
+                'uname' => true,
                 'surname_form' => true,
                 'givenname_form' => true,
                 'password' => true,
                 'password1' => true,
                 'email' => $email_arr_value,
                 'phone' => false,
-                'am' => $am_arr_value);
+                'am' => $am_arr_value];
         } else {
-            $var_arr = array(
+            $var_arr = [
                 'uname' => true,
                 'surname_form' => true,
                 'givenname_form' => true,
                 'email' => $email_arr_value,
                 'phone' => false,
-                'am' => $am_arr_value);
+                'am' => $am_arr_value];
         }
     }
 
-    //add custom profile fields required variables
+    // add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
 
     $missing = register_posted_variables($var_arr);
@@ -243,7 +261,10 @@ if (!isset($_POST['submit'])) {
     } else {
         $uname = canonicalize_whitespace($uname);
         if (isset($_POST['account_request'])) {
-            // check if exists user request with the same username
+            if ($student_registration != 1) {
+                forbidden();
+            }
+            // check for existing user request with the same username
             if (user_app_exists($uname)) {
                 Session::flash('message', $langUserFree3);
                 Session::flash('alert-class', 'alert-warning');
@@ -261,18 +282,6 @@ if (!isset($_POST['submit'])) {
             // check if the username is already in use
             $username_check = Database::get()->querySingle("SELECT username, email FROM user WHERE username = ?s", $uname);
             if ($username_check) {
-                if (isset($_POST['toolbox'])) {
-                    $login_details = array();
-                    foreach ($var_arr as $var => $req) {
-                        $login_details[$var] = $GLOBALS[$var];
-                    }
-                    Session::flash('login-details', $login_details);
-                    Session::flash('username-exists', true);
-                    if ($username_check->email === $email) {
-                        Session::flash('email-correct', true);
-                    }
-                    redirect_to_home_page('main/toolbox.php');
-                }
                 $registration_errors[] = $langUserFree;
             }
         }
@@ -292,7 +301,7 @@ if (!isset($_POST['submit'])) {
         }
     }
 
-    //check for validation errors in custom profile fields
+    // check for validation errors in custom profile fields
     $cpf_check = cpf_validate_format();
     if ($cpf_check[0] === false) {
         unset($cpf_check[0]);
@@ -370,6 +379,9 @@ if (!isset($_POST['submit'])) {
 
         // user account request
         if (isset($_POST['account_request'])) {
+            if ($student_registration != 1) {
+                forbidden();
+            }
             $res = Database::get()->query("INSERT INTO user_request SET
                     givenname = ?s,
                     surname = ?s,
@@ -463,6 +475,15 @@ if (!isset($_POST['submit'])) {
 
         } else { // new user account
             if (empty($provider) && empty($_POST['provider_id'])) {
+                if ($student_registration != 2) {
+                    forbidden();
+                }
+            } else {
+                if (!get_config('alt_auth_stud_reg')) {
+                    forbidden();
+                }
+            }
+            if (empty($provider) && empty($_POST['provider_id'])) {
                 $password_encrypted = password_hash($password, PASSWORD_DEFAULT);
             } else {
                 $password_encrypted = $provider;
@@ -497,7 +518,7 @@ if (!isset($_POST['submit'])) {
             $userObj->refresh($last_id, $departments);
             user_hook($last_id);
 
-            //fill custom profile fields
+            // fill custom profile fields
             process_profile_fields_data(array('uid' => $last_id, 'origin' => 'student_register'));
 
             if ($vmail) {

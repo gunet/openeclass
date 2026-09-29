@@ -31,6 +31,7 @@
                         <div class='col-lg-6 col-12'>
                             <div class='form-wrapper form-edit rounded px-0 border-0'>
                                 <form role='form' class='form-horizontal' action='altsearch.php' method='post'>
+                                    {!! generate_csrf_token_form_field() !!}
 
                                     <div class='col-lg-6 col-12 px-3'>
                                         <div class='form-group mt-lg-0 mt-4'>
