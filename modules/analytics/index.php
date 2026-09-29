@@ -273,6 +273,7 @@ if (isset($_POST['insert_analytics'])) {
 
 
     if ($mode == 'perUser') {
+        load_js('datatables');
         if(isset($_REQUEST['user_id'])) {
             $user_id = $_REQUEST['user_id'];
             $action_bar = action_bar(
@@ -324,6 +325,7 @@ if (isset($_POST['insert_analytics'])) {
             display_analytics_peruser($analytics_id, $dates[$period]['start'], $dates[$period]['end'], $previous, $next, $orderby, $reverse, $period, $download);
         }
     } else if ( $mode == 'courseStatistics') {
+        load_js('datatables');
         $action_bar = action_bar(
             array(
                 array('title' => $langAnalyticsViewPerUserGeneral,
@@ -355,6 +357,21 @@ if (isset($_POST['insert_analytics'])) {
                 $el_icon = isset(ElementTypes::elements[$m_id]) ? ElementTypes::elements[$m_id]['icon'] : 'fa fa-chart-line';
                 $resource_info = get_resource_info($el->resource, $m_id);
 
+                $element_actions = action_button(array(
+                    array(
+                        'title' => $langModify ?? trans('langModify'),
+                        'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&amp;analytics_id={$analytics_id}&amp;analytics_element_id={$el->id}&amp;edit_analytics_element=true",
+                        'icon' => 'fa-edit'
+                    ),
+                    array(
+                        'title' => $langDelete ?? trans('langDelete'),
+                        'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&amp;analytics_id={$analytics_id}&amp;analytics_element_id={$el->id}&amp;delete_analytics_element=true",
+                        'icon' => 'fa-xmark',
+                        'class' => 'delete',
+                        'confirm' => $langAnalyticsConfirm ?? trans('langAnalyticsConfirm')
+                    )
+                ));
+
                 $elements[] = array(
                     'id' => $el->id,
                     'module_id' => $m_id,
@@ -365,7 +382,8 @@ if (isset($_POST['insert_analytics'])) {
                     'lower_threshold' => $el->lower_threshold,
                     'upper_threshold' => $el->upper_threshold,
                     'max_value' => $el->max_value,
-                    'weight' => $el->weight
+                    'weight' => $el->weight,
+                    'action_button' => $element_actions
                 );
             }
 

@@ -200,14 +200,8 @@
 
                                                     <!-- Actions -->
                                                     @if ($is_editor)
-                                                        <td class="text-center p-2 pe-3" style="border-bottom: 1px solid #e2e8f0 !important;">
-                                                            <a href="{{ $urlAppend }}modules/analytics/index.php?course={{ $course_code }}&amp;analytics_id={{ $analytics->id }}&amp;analytics_element_id={{ $element['id'] }}&amp;edit_analytics_element=true" 
-                                                               class="d-inline-flex align-items-center justify-content-center rounded-3 text-dark bg-white shadow-sm border text-decoration-none" 
-                                                               style="width: 42px; height: 42px; border-color: #e2e8f0; transition: all 0.2s ease-in-out;" 
-                                                               title="{{ trans('langModify') }}" 
-                                                               data-bs-toggle="tooltip">
-                                                                <i class="fa-solid fa-gear" style="color: #334155; font-size: 1.1rem;"></i>
-                                                            </a>
+                                                        <td class="text-end p-2 pe-3" style="border-bottom: 1px solid #e2e8f0 !important;">
+                                                            {!! $element['action_button'] !!}
                                                         </td>
                                                     @endif
                                                 </tr>

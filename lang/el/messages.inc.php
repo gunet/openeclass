@@ -7271,7 +7271,10 @@ $langColmoocPartner = "Συνομιλητής";
 
 // Learning Analytics
 $langLearningAnalytics = 'Μαθησιακή Αναλυτική';
-$langRequiredTitle = 'Το πεδίο "Τίτλος" είναι υποχρεωτικό.';
+$langMonitoringScenarios = "Σενάρια Παρακολούθησης";
+$langRequiredTitle = 'Το πεδίο "Τίτλος" ';
+$langRequiredStartDate = 'Το πεδίο "Έναρξη"';
+$langRequiredEndDate = 'Το πεδίο "Λήξη"';
 $langAnalyticsUpdateSuccess = 'Οι δραστηριότητες ενημερώθηκαν με επιτυχία!';
 $langAnalyticsInsertSuccess = 'Η εισαγωγή της δραστηριότητας έγινε με επιτυχία!';
 $langAnalyticsDeleteSuccess = "Η δραστηριότητα διαγράφηκε με επιτυχία!";
@@ -7310,8 +7313,13 @@ $langAnalyticsEndDescription = 'Ημερομηνία μέχρι την οποί�
 $langAnalyticsMinValue = 'Κατώτερη τιμή';
 $langAnalyticsMaxValue = 'Ανώτερη τιμή';
 $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμες πηγές.';
+<<<<<<< local
 $langAnalyticsStatus = 'Επίπεδο';
 $langAnalyticsDifficultyLevel = "Επίπεδα Δυσκολίας";
+=======
+$langAnalyticsStatus = 'Επίπεδο';
+$langAnalyticsDifficultyLevel = "Κριτήρια";
+>>>>>>> graft
 $langAnalyticsDifficultyLevelInfo = "Ρυθμίστε τα όρια δυσκολίας για κάθε τύπο περιεχομένου.";
 
 // h5p
