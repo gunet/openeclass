@@ -959,6 +959,7 @@ $langFirst = "Πρώτη";
 $langTotalResults = "συνολικά αποτελέσματα";
 $langDisplayed = "Εμφανίζονται";
 $langTill = "έως";
+$langTill2 = "Έως";
 $langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
 $langAnnHasPublished = "Έχει δημοσιευθεί ανακοίνωση στο $langsCourse";
 $langInvalidEmailRecipients = 'Παραλήπτες με μη έγκυρη διεύθυνση e-mail';

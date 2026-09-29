@@ -61,7 +61,7 @@ function display_learning_analytics() {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;edit_analytics=1",
                                 'icon' => 'fa-edit'),
                         array('title' => $langEditItems,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showElements",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showDetails",
                                 'icon' => 'fa-add'),
                         array('title' => $langAnalyticsTotalAnalytics,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=courseStatistics",
@@ -991,7 +991,8 @@ function edit_analytics_settings ($analytics_id = 0)
 function analytics_element_form($analytics_id, $type=null, $analytics_element_id=0) {
 
     global $tool_content, $course_code, $langAnalyticsCriticalLevel, $langAnalyticsMinValue,
-           $langAnalyticsWeight, $langAnalyticsMaxValue, $langAnalyticsAdvancedLevel, $langSave, $langAdd, $urlAppend, $langImgFormsDes;
+           $langAnalyticsWeight, $langAnalyticsMaxValue, $langAnalyticsAdvancedLevel, $langSave, $langAdd, $urlAppend, $langImgFormsDes,
+           $langFrom, $langTill2;
 
     if ($analytics_element_id==0) {
         $resource = '';
@@ -1035,13 +1036,13 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                     <div class='row'>
                         <div class='col-sm-12 control-label-notes mb-2'>$langAnalyticsCriticalLevel</div>
                         <div class='col-md-6 col-12'>
-                            <label for='title' class='col-sm-12 control-label'>$langAnalyticsMinValue</label>
+                            <label for='title' class='col-sm-12 control-label'>$langFrom</label>
                             <div class='col-sm-12'>
                                 <input id='title' class='form-control' type='number' name='min_value' value='$min_value'>
                             </div>
                         </div>
                         <div class='col-md-6 col-12'>
-                            <label for='analyticsMaxValueId' class='col-sm-12 control-label'>$langAnalyticsMaxValue</label>
+                            <label for='analyticsMaxValueId' class='col-sm-12 control-label'>$langTill2</label>
                             <div class='col-sm-12'>
                                 <input id='analyticsMaxValueId' class='form-control' type='number' name='lower_threshold' value='$lower_threshold'>
                             </div>
@@ -1052,13 +1053,13 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                     <div class='row'>
                         <div class='col-sm-12 control-label-notes mb-2'>$langAnalyticsAdvancedLevel</div>
                         <div class='col-md-6 col-12'>
-                            <label for='new_title' class='col-sm-12 control-label'>$langAnalyticsMinValue</label>
+                            <label for='new_title' class='col-sm-12 control-label'>$langFrom</label>
                             <div class='col-sm-12'>
                                 <input id='new_title' class='form-control' type='number' name='upper_threshold' value='$upper_threshold'>
                             </div>
                         </div>
                         <div class='col-md-6 col-12'>
-                            <label for='analyticsMaxValueNewId' class='col-sm-12 control-label'>$langAnalyticsMaxValue</label>
+                            <label for='analyticsMaxValueNewId' class='col-sm-12 control-label'>$langTill2</label>
                             <div class='col-sm-12'>
                                 <input id='analyticsMaxValueNewId' class='form-control' type='number' name='max_value' value='$max_value'>
                             </div>
@@ -1087,7 +1088,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                             ),
                             array(
                                 'class' => 'cancelAdminBtn ms-1',
-                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements"
+                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showDetails"
                                 )
                             ))."
                         
