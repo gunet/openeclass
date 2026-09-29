@@ -74,6 +74,14 @@ if (!isset($_SESSION['was_validated']) or $_SESSION['was_validated']['auth'] != 
         $_SESSION['auth_user_info'] = get_shibboleth_user_info();;
         $is_valid = true;
     } elseif ($is_submit or ($auth == 7 and !$submit)) {
+        if ($is_submit) {
+            if (!$user_registration || !$alt_auth_stud_reg || !in_array($auth, get_auth_active_methods())) {
+                forbidden();
+            }
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+                csrf_token_error();
+            }
+        }
         unset($_SESSION['was_validated']);
         if ($auth != 7 and $auth != 6 and ($uname === '' or $passwd === '')) {
             Session::flash('message', "$ldapempty $errormessage");
@@ -159,6 +167,12 @@ if ($is_valid) { // user credentials successful check
             $data['emailClass'] = $emailClass;
             $data['emailInput'] = $emailInput;
     } else {
+        if (!$user_registration || !$alt_auth_stud_reg || !in_array($auth, get_auth_active_methods())) {
+            forbidden();
+        }
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+            csrf_token_error();
+        }
         $ip = Log::get_client_ip();
         $ext_info = !isset($_SESSION['auth_user_info']);
         $ext_mail = !(!empty($_SESSION['auth_user_info']['email']));
