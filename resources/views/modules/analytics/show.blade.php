@@ -29,7 +29,7 @@
                 <!-- Analytics Details Card -->
                 <div class="col-12 mb-4">
                     <div class="card panelCard card-default px-lg-4 py-lg-3">
-                        <div class="card-header border-0">
+                        <div class="card-header border-0 p-0">
                             <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
                                 <h2 class="text-heading-h3 mb-0 d-flex align-items-center flex-wrap gap-2">
                                     <span class="action-bar-title">{{ $analytics->title }}</span>
@@ -51,7 +51,7 @@
                                 <p class="text-muted mb-0 mt-2">{{ $analytics->description }}</p>
                             @endif
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-0 mt-3">
                             <div class="row g-3">
                                 <div class="col-md-3 col-sm-6">
                                     <div class="p-3 bg-light rounded-3">
@@ -85,7 +85,7 @@
                 <!-- Criteria & Elements Section -->
                 <div class="col-12">
                     <div class="card panelCard border-0 shadow-sm rounded-4 px-lg-4 py-lg-3 bg-white mb-4">
-                        <div class="card-header border-0 bg-transparent px-3 py-3">
+                        <div class="card-header border-0 bg-transparent p-0 mb-3">
                             <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="rounded-3 p-2 d-flex align-items-center justify-content-center" style="background-color: #f1f5f9; color: #334155; width: 48px; height: 48px;">
@@ -93,17 +93,20 @@
                                     </div>
                                     <div>
                                         <h3 class="text-heading-h3 mb-0 fw-bold" style="color: #0f172a; font-size: 1.4rem;">
-                                            Επίπεδα Δυσκολίας
+                                            {{ trans('langAnalyticsDifficultyLevel') }}
                                         </h3>
                                         <p class="text-muted small mb-0 mt-1" style="color: #64748b;">
-                                            Ρυθμίστε τα όρια δυσκολίας για κάθε τύπο περιεχομένου.
+                                            {{ trans('langAnalyticsDifficultyLevelInfo') }}
                                         </p>
                                     </div>
                                 </div>
+                                @if ($is_editor)
+                                    {!! $add_element_button !!}
+                                @endif
                             </div>
                         </div>
 
-                        <div class="card-body px-0 px-md-3">
+                        <div class="card-body p-0">
                             @if (count($elements) == 0)
                                 <div class="text-center text-muted py-5">
                                     <i class="fa-solid fa-folder-open fa-3x mb-3 text-secondary d-block"></i>
@@ -124,7 +127,7 @@
                                                     <i class="fa-solid fa-arrow-up me-1"></i> {{ trans('langAnalyticsAdvancedLevel') }}
                                                 </th>
                                                 <th rowspan="2" class="text-center align-middle border-0 py-3 fw-bold" style="color: #475569; font-size: 0.95rem;">
-                                                    Τρέχουσα Βαρύτητα
+                                                    {{ trans('langAnalyticsWeight') }}
                                                 </th>
                                                 @if ($is_editor)
                                                     <th rowspan="2" class="text-center align-middle border-0 py-3 pe-4 fw-bold" style="color: #475569; font-size: 0.95rem;">
