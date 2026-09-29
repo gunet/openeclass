@@ -384,7 +384,24 @@ if (isset($_POST['insert_analytics'])) {
             );
 
             $pageName = $analytics->title;
-            view('modules.analytics.show', compact('analytics', 'elements', 'action_bar', 'is_editor', 'course_code'));
+            $add_buttons = array();
+            foreach (ElementTypes::elements as $elementType) {
+                $type = $elementType['link'];
+                $add_buttons[] = array(
+                    'title' => $elementType['title'],
+                    'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&analytics_id={$analytics_id}&edit_analytics_element=true&elementType={$type}",
+                    'icon' => $elementType['icon'],
+                    'class' => ''
+                );
+            }
+
+            $add_element_button = action_button($add_buttons, array(
+                'secondary_title' => '',
+                'secondary_icon' => 'fa-plus',
+                'secondary_btn_class' => 'submitAdminBtn'
+            ));
+
+            view('modules.analytics.show', compact('analytics', 'elements', 'add_element_button', 'action_bar', 'is_editor', 'course_code'));
             exit;
         }
     } else {

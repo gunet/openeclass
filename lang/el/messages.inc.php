@@ -7311,6 +7311,8 @@ $langAnalyticsMinValue = 'Κατώτερη τιμή';
 $langAnalyticsMaxValue = 'Ανώτερη τιμή';
 $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμες πηγές.';
 $langAnalyticsStatus = 'Επίπεδο';
+$langAnalyticsDifficultyLevel = "Επίπεδα Δυσκολίας";
+$langAnalyticsDifficultyLevelInfo = "Ρυθμίστε τα όρια δυσκολίας για κάθε τύπο περιεχομένου.";
 
 // h5p
 $langH5p = "Περιεχόμενο H5P";
