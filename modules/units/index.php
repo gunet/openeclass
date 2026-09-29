@@ -38,6 +38,8 @@ require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/tc/functions.php';
+require_once 'modules/admin/extconfig/externals.php';
+require_once 'modules/admin/extconfig/externalreposapp.php';
 
 if ($is_editor or $is_course_reviewer) {
     $helpSubTopic = 'units_actions';
@@ -111,6 +113,11 @@ if ($is_editor) {
     $editUrl =  "info.php?course=$course_code&edit=$id&next=1";
     $manageUrl = "manage.php?course=$course_code&manage=1&unit_id=$id";
     $insertBaseUrl = $urlAppend . "modules/units/insert.php?course=$course_code&id=$id&type=";
+
+    // Check if external repositories are available
+    $externalReposApp = new ExternalReposApp();
+    $hasExternalRepos = $externalReposApp->isConfigured();
+
     $visibility_check = $check_start_week = '';
     $query = "SELECT id, title, comments, start_week, finish_week, visible, public FROM course_units "
         . "WHERE course_id = ?d ";
@@ -286,6 +293,11 @@ if ($is_editor and $q->flipped_flag != 2) {
             'icon' => 'fa fa-tablet',
             'level' => 'secondary',
             'show' => !is_module_disable(MODULE_ID_H5P)),
+        array('title' => trans('langAdd') . ' ' . trans('langInsertExternalRepo'),
+            'url' => $insertBaseUrl . 'extrepo',
+            'icon' => 'fa fa-globe',
+            'level' => 'secondary',
+            'show' => $hasExternalRepos ?? false),
         array('title' => trans('langAdd') . ' ' . trans('langInsertForum'),
             'url' => $insertBaseUrl . 'forum',
             'icon' => 'fa-regular fa-comment',

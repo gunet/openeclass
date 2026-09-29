@@ -44,7 +44,7 @@ if (defined('EXTERNAL_FILE')) { // accessed via ext.php
         define('COMMON_DOCUMENTS', true);
     } elseif ($course == 'user') {
         define('MY_DOCUMENTS', true);
-        $mydocs_uid = $_GET['uid'] ?? null;
+        $mydocs_uid = intval($_GET['uid']) ?? null;
         if (!$mydocs_uid) {
             http_response_code(400); // Bad request
             exit;
@@ -216,7 +216,7 @@ if (file_exists($disk_path)) {
         if ($is_in_lpmode && $is_android) {
             require_once 'include/lib/fileDisplayLib.inc.php';
             //$dl_url = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;
-            $dl_url = file_url($course_code, $file_info->path);
+            $dl_url = file_url($file_info->path, courseCode: $course_code);
             echo $langMailVerificationClick . " " . "<a href='" . $dl_url . "'>". $langDownload . "</a>";
             unset($_SESSION['FILE_PHP__LP_MODE']);
             exit();
@@ -227,7 +227,7 @@ if (file_exists($disk_path)) {
         require_once 'include/lib/fileDisplayLib.inc.php';
         require_once 'include/lib/multimediahelper.class.php';
 
-        $mediaPath = file_url($course_code, $file_info->path, $file_info->filename);
+        $mediaPath = file_url($file_info->path, courseCode: $course_code, filename: $file_info->filename);
         $mediaURL = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;
         if (defined('GROUP_DOCUMENTS')) {
             $mediaURL = $urlServer . 'modules/group/index.php?course=' . $course_code . '&amp;group_id=' . $group_id . '&amp;download=' . $file_info->path;

@@ -88,6 +88,19 @@
     <script type="text/javascript" src="{{ $urlAppend }}js/viewStudentTeacher.js?v={{ $cache_suffix }}"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/sidebar_slider_action.js?v={{ $cache_suffix }}"></script>
 
+    {{-- This script below runs before any datatables are initialized --}}
+    <script>
+        $(document).ready(function() {
+            $(document).on('init.dt', function(e, settings) {
+                $('.dt-paging nav').attr('aria-label', '{{ js_escape(trans('langPagination')) }}');
+                $('li.dt-paging-button button.first').attr('aria-label', '{{ js_escape(trans('langDtFirstPage')) }}');
+                $('li.dt-paging-button button.previous').attr('aria-label', '{{ js_escape(trans('langDtPrevPage')) }}');
+                $('li.dt-paging-button button.next').attr('aria-label', '{{ js_escape(trans('langDtNextPage')) }}');
+                $('li.dt-paging-button button.last').attr('aria-label', '{{ js_escape(trans('langDtLastPage')) }}');
+            });
+        });
+    </script>
+
     {!! $head_content !!}
 
     @stack('head_scripts')
@@ -101,6 +114,21 @@
     @endif
 
     @if (file_exists('js/mathjax/tex-chtml.js'))
+        <script>
+          window.MathJax = {
+            loader: {
+              paths: {
+                '@mathjax': '{{ $urlAppend }}resources/fonts',
+                'mathjax-newcm': '{{ $urlAppend }}resources/fonts/mathjax-newcm-font',
+                '@mathjax/mathjax-newcm-font': '{{ $urlAppend }}resources/fonts/mathjax-newcm-font'
+              }
+            },
+            chtml: {
+              fontURL: '{{ $urlAppend }}resources/fonts/mathjax-newcm-font/chtml/woff2',
+              dynamicPrefix: '{{ $urlAppend }}resources/fonts/mathjax-newcm-font/chtml/dynamic'
+            }
+          };
+        </script>
         <script type="text/javascript" id="MathJax-script" async src="{{ $urlAppend }}js/mathjax/tex-chtml.js"></script>
     @endif
 
@@ -111,8 +139,11 @@
 
     <script>
         $(function() {
-            $('.action-button-dropdown').on('click', function () {
-                // Close all other open dropdowns except the one being opened
+            $(document).on('click', '.action-button-dropdown', function() {
+                $(this).find('.fa-gear').removeClass('fa-gear').addClass('fa-chevron-left');
+                if (!$(this).hasClass('show')) {
+                    $(this).find('.fa-chevron-left').removeClass('fa-chevron-left').addClass('fa-gear');
+                }
                 $('.action-button-dropdown.show').not(this).each(function() {
                     $(this).dropdown('hide');
                 });
@@ -120,8 +151,8 @@
                 $('.dt-scroll-head').addClass('no-overflow');
                 $('.dt-scroll-body').addClass('no-overflow');
             });
-
-            $('.action-button-dropdown').on('hide.bs.dropdown', function () {
+            $(document).on('hide.bs.dropdown', '.action-button-dropdown', function() {
+                $(this).find('.fa-chevron-left').removeClass('fa-chevron-left').addClass('fa-gear');
                 $('.table-responsive').removeClass('no-overflow');
                 $('.dt-scroll-head').removeClass('no-overflow');
                 $('.dt-scroll-body').removeClass('no-overflow');
@@ -131,7 +162,7 @@
 
 </head>
 
-<body>
+<body @if(isset($_SESSION['mobile'])) class='mobile' @endif>
     <div class="ContentEclass d-flex flex-column min-vh-100 @if ($pinned_announce) fixed-announcement @endif">
         @if ($pinned_announce)
             <div class="notification-top-bar d-flex justify-content-center align-items-center px-3">
@@ -149,56 +180,98 @@
                 </div>
             </div>
         @endif
-        @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
-        <main id="main">@yield('content')</main>
-        @include('layouts.partials.footerDesktop')
+
+        @if(isset($_SESSION['safe_exam_browser_view']) || !isset($_SESSION['mobile']))
+            @include('layouts.partials.navheadDesktop', ['logo_img' => $logo_img])
+        @endif
+
+        @yield('content')
+
+        @unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
+            @include('layouts.partials.footerDesktop')
+        @endunless
     </div>
 
-    @if(isset($_SESSION['uid']) && get_config('enable_quick_note'))
-        <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote" aria-label="{{ trans('langQuickNotesSide') }}">
-            <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip'
-                    data-bs-placement='bottom' data-bs-title="{{ trans('langQuickNotesSide') }}"></span>
-        </a>
-        <div class="modal fade" id="quickNote" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <div class='modal-title'>
-                            <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
-                            <h2 class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</h2>
+    {{-- Quick note button --}}
+    @unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
+        @if(isset($_SESSION['uid']) && get_config('enable_quick_note'))
+            <a type="button" class="btn btn-quick-note submitAdminBtnDefault" data-bs-toggle="modal" href="#quickNote" aria-label="{{ trans('langQuickNotesSide') }}">
+                <span class="fa-solid fa-paperclip" data-bs-toggle='tooltip'
+                        data-bs-placement='bottom' data-bs-title="{{ trans('langQuickNotesSide') }}"></span>
+            </a>
+            <div class="modal fade" id="quickNote" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class='modal-title'>
+                                <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
+                                <h2 class='modal-title-default text-center mb-0'>{{ trans('langQuickNotesSide') }}</h2>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class='form-wrapper form-edit'>
-                            <form action='{{ $urlAppend }}main/notes/index.php' method='post'>
-                                <div class="mb-3">
-                                    <label for="title-note" class="control-label-notes">{{ trans('langTitle') }}&nbsp<span class='text-danger'>(*)</span></label>
-                                    <input type="text" class="form-control" name='newTitle' id="title-note">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="content-note" class="control-label-notes">{{ trans('langContent') }}</label>
-                                    <textarea class="form-control" id="content-note" name='newContent'></textarea>
-                                </div>
-                                <div class="mb-5">
-                                    <a class='small-text text-decoration-underline' href='{{ $urlAppend }}main/notes/index.php'>{{ trans('langAllNotes') }}</a>
-                                </div>
-                                {!! generate_csrf_token_form_field() !!}
-                                <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
-                                    <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">{{ trans('langClose') }}</button>
-                                    <button type="submit" class="btn submitAdminBtn" name='submitNote'>{{ trans('langSubmit') }}</button>
-                                </div>
-                            </form>
+                        <div class="modal-body">
+                            <div class='form-wrapper form-edit'>
+                                <form action='{{ $urlAppend }}main/notes/index.php' method='post'>
+                                    <div class="mb-3">
+                                        <label for="title-note" class="control-label-notes">{{ trans('langTitle') }}&nbsp;<span class='text-danger'>(*)</span></label>
+                                        <input type="text" class="form-control" name='newTitle' id="title-note">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="content-note" class="control-label-notes">{{ trans('langContent') }}</label>
+                                        <textarea class="form-control" id="content-note" name='newContent'></textarea>
+                                    </div>
+                                    <div class="mb-5">
+                                        <a class='small-text text-decoration-underline' href='{{ $urlAppend }}main/notes/index.php'>{{ trans('langAllNotes') }}</a>
+                                    </div>
+                                    {!! generate_csrf_token_form_field() !!}
+                                    <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
+                                        <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">{{ trans('langClose') }}</button>
+                                        <button type="submit" class="btn submitAdminBtn" name='submitNote'>{{ trans('langSubmit') }}</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    @endif
+        @endif
+    @endunless
+
     <button class="btnScrollToTop" data-bs-scroll="up" aria-label="{{ trans('langScrollToTop') }}">
         <i class="fa-solid fa-arrow-up-from-bracket"></i>
     </button>
     <script>
         $(function() {
+
+            $('.focusable-alert').focus();
+
+            var inputTreeModal = document.getElementById('dialog-set-value');
+            if (inputTreeModal) {
+                $('#treeModal').on('hidden.bs.modal', function () {
+                    inputTreeModal.focus();
+                });
+            }
+
+            document.addEventListener('keydown', function(event) {
+                const activeElement = document.activeElement;
+                const modalBootBox = document.querySelector('.bootbox.show');
+                const modal = document.querySelector('.modal.show');
+                if (activeElement && (activeElement.type === 'checkbox' || activeElement.type === 'radio')) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        activeElement.checked = !activeElement.checked;
+                        activeElement.dispatchEvent(new Event('change'));
+                    }
+                }
+                if (event.key === 'Escape' || event.key === 'Esc') {
+                    if (modalBootBox) {
+                        $(modalBootBox).modal('hide');
+                    }
+                    if (modal) {
+                        $(modal).modal('hide');
+                    }
+                }
+            });
+
             $(".datetimepicker table > thead > tr").find("th.prev").each(function() {
                 if ($(this).find('.visually-hidden').length === 0) {
                     $(this).append('<span class="visually-hidden">{{ trans("langPrevious") }}</span>');
@@ -274,6 +347,37 @@
                     $('.notification-top-bar').hide();
                 });
             @endif
+
+            document.addEventListener('click', (event) => {
+                const dropdownsActionButtons = document.querySelectorAll('.contextual-menu-action-button');
+                const dropdownsActionBars = document.querySelectorAll('.contextual-menu-action-bar');
+                let isAnyOpenActionButton = false;
+                let isAnyOpenActionBar = false;
+
+                dropdownsActionButtons.forEach((dropdownActionButton) => {
+                    if (dropdownActionButton.classList.contains('show')) {
+                        isAnyOpenActionButton = true;
+                    }
+                });
+                dropdownsActionBars.forEach((dropdownActionBar) => {
+                    if (dropdownActionBar.classList.contains('show')) {
+                        isAnyOpenActionBar = true;
+                    }
+                });
+
+                if (isAnyOpenActionButton) {
+                    $('.col_maincontent_active').addClass('action-button-on');
+                } else {
+                    $('.col_maincontent_active').removeClass('action-button-on');
+                }
+
+                if (isAnyOpenActionBar) {
+                    $('.col_maincontent_active').addClass('action-bar-on');
+                } else {
+                    $('.col_maincontent_active').removeClass('action-bar-on');
+                }
+            });
+
         });
     </script>
     @stack('bottom_scripts')
@@ -384,5 +488,155 @@
             })();
         </script>
     @endif
+    {{-- Navigation to hierarchy tree using keyboard for accessibility --}}
+    <script type="text/javascript">
+        (function () {
+            $('#js-tree').on(
+                'keydown',
+                '.jstree-anchor',
+                function (event) {
+                    if (event.key !== 'Enter') {
+                        return;
+                    }
+                    const $anchor = $(this);
+                    const $li = $anchor.closest('li.jstree-node');
+
+                    if ($li.hasClass('jstree-leaf')) {
+                        return;
+                    }
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const tree = $('#js-tree').jstree(true);
+                    const nodeId = $li.attr('id');
+
+                    if (tree.is_open(nodeId)) {
+                        tree.close_node(nodeId);
+                    } else {
+                        tree.open_node(nodeId);
+                    }
+                }
+            );
+        })();
+    </script>
+    {{-- Navigation to blog tree using keyboard for accessibility --}}
+    <script>
+        (function () {
+            $('#blog_tree').on(
+                'keydown',
+                '.jstree-anchor',
+                function (event) {
+                    if (event.key !== 'Enter') {
+                        return;
+                    }
+
+                    const $anchor = $(this);
+                    const $li = $anchor.closest('li.jstree-node');
+
+                    if ($li.hasClass('jstree-leaf')) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const tree = $('#blog_tree').jstree(true);
+                    const nodeId = $li.attr('id');
+
+                    if (tree.is_open(nodeId)) {
+                        tree.close_node(nodeId);
+                    } else {
+                        tree.open_node(nodeId);
+                    }
+                }
+            );
+        })();
+        </script>
+        {{-- Add aria-label to the delete button of slimSelect item for accessibility --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                function fixSlimSelectAccessibility() {
+                    document.querySelectorAll('.ss-value-delete').forEach(function (element) {
+                        element.setAttribute('role', 'button');
+                        element.setAttribute(
+                            "aria-label",
+                            "{{ trans('langDelete') }}"
+                        );
+
+                        element.setAttribute(
+                            "title",
+                            "{{ trans('langDelete') }}"
+                        );
+
+                        let svg = element.querySelector('svg');
+
+                        if (svg) {
+                            svg.setAttribute(
+                                'aria-hidden',
+                                'true'
+                            );
+                        }
+                    });
+                }
+
+                fixSlimSelectAccessibility();
+                const observer = new MutationObserver(function () {
+                    fixSlimSelectAccessibility();
+                });
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        </script>
+        {{-- Navigation with prev-next buttons in the exercise using keyboard for accessibility --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.addEventListener('keydown', function (event) {
+
+                    const focusedButton = document.activeElement;
+                    if (!focusedButton.matches || !focusedButton.matches('input.btn-exercise-nav[type="submit"]')) {
+                        return;
+                    }
+
+                    const buttons = Array.from(
+                        document.querySelectorAll(
+                            'input.btn-exercise-nav[type="submit"]'
+                        )
+                    );
+
+                    if (buttons.length === 0) {
+                        return;
+                    }
+
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        focusedButton.click();
+                        return;
+                    }
+
+                    if (event.key === 'ArrowRight') {
+                        event.preventDefault();
+                        let index = buttons.indexOf(focusedButton);
+                        let next = index + 1;
+                        if (next >= buttons.length) {
+                            next = 0;
+                        }
+                        buttons[next].focus();
+                        return;
+                    }
+
+                    if (event.key === 'ArrowLeft') {
+                        event.preventDefault();
+                        let index = buttons.indexOf(focusedButton);
+                        let previous = index - 1;
+                        if (previous < 0) {
+                            previous = buttons.length - 1;
+                        }
+                        buttons[previous].focus();
+                    }
+                });
+            });
+        </script>
  </body>
 </html>

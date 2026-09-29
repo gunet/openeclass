@@ -44,7 +44,7 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 $navigation[] = array('url' => 'session_space.php?course=' . $course_code . "&session=" . $_GET['session'] , 'name' => $sessionTitle);
 
 load_js('tools.js');
-load_js('select2');
+load_js('slimselect');
 load_js('bootstrap-datetimepicker');
 
 if(isset($_POST['modify'])){
@@ -91,6 +91,18 @@ if(isset($_POST['modify'])){
       Session::flash('alert-class', 'alert-danger');
       redirect_to_home_page("modules/session/new.php?course=".$course_code);
     }
+
+    // By default the duration has to be at least 45 min
+    $startSessionDate = date('d-m-Y H:i:s', strtotime($_POST['start_session']));
+    $endSessionDate = date('d-m-Y H:i:s', strtotime($_POST['end_session']));
+    $duration_text = '+45 minutes';
+    $endSessionDateDefaultDuration = date('d-m-Y H:i:s', strtotime($startSessionDate . $duration_text));
+    if ($endSessionDate < $endSessionDateDefaultDuration) {
+      Session::flash('message', 'Η συνεδρία δεν ενημερώθηκε. Η διάρκεια της πρέπει να είναι τουλάχιστον 45 λεπτά.');
+      Session::flash('alert-class', 'alert-warning');
+      redirect_to_home_page("modules/session/index.php?course=$course_code");
+    }
+
     $creator = isset($_POST['creators']) ? $_POST['creators'] : 0;
     // Not allow consultant changes user ids
     if ($is_consultant && !$is_coordinator && $creator != $uid) {
@@ -369,7 +381,7 @@ $data['session_info'] = $session_info = Database::get()->querySingle("SELECT * F
 $data['title'] = $session_info->title;
 $data['creator'] = $session_info->creator;
 $data['modifyStartDateEvent'] = date('Y-m-d',strtotime($session_info->start));
-$data['comments'] = rich_text_editor('comments', 5, 40, $session_info->comments);
+$data['comments'] = rich_text_editor('comments', 5, 40, $session_info->comments, options: array('id' => 'comments'));
 $data['session_type'] = $session_info->type;
 $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $session_info->start);
 $data['start'] = q($startDate_obj->format('d-m-Y H:i'));

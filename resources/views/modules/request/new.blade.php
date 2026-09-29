@@ -2,13 +2,10 @@
 
 @section('content')
 
-<div class="col-12 main-section">
 <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -86,7 +83,7 @@
                                         <div class='form-group mt-4'>
                                             <label for='assignTo' class='col-sm-12 control-label-notes'>{{ trans('langWorkAssignTo') }}:</label>
                                             <div class='col-sm-12'>
-                                                <select class='form-select' name='assignTo[]' multiple id='assignTo'>
+                                                <select class='form-control' name='assignTo[]' multiple id='assignTo'>
                                                     @foreach ($course_users as $cu)
                                                         <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
                                                     @endforeach
@@ -98,7 +95,7 @@
                                         <div class='form-group mt-4'>
                                             <label for='requestWatchers' class='col-sm-12 control-label-notes'>{{ trans('langWatchers') }}:</label>
                                             <div class='col-sm-12'>
-                                                <select class='form-select' name='requestWatchers[]' multiple id='requestWatchers'>
+                                                <select class='form-control' name='requestWatchers[]' multiple id='requestWatchers'>
                                                     @foreach ($course_users as $cu)
                                                         @if ($uid != $cu->user_id)
                                                             <option value='{{ $cu->user_id }}'>{{$cu->name}} ({{$cu->email}})</option>
@@ -152,18 +149,34 @@
 
 
                 </div>
-            </div>
+            </main>
 
 
         </div>
-
-</div>
 </div>
 
 
 <script>$(function () {
-    $('#requestWatchers').select2();
-    $('#assignTo').select2();
+
+    // $('#requestWatchers').select2();
+    // $('#assignTo').select2();
+
+    slimSelectFun(
+        '#assignTo',
+        '{{ js_escape(trans('langSearch')) }}',
+        '{{ js_escape(trans('langWelcomeSelect')) }}',
+        '{{ js_escape(trans('langSelectAll')) }}',
+        '{{ js_escape(trans('langListChoices')) }}'
+    );
+
+    slimSelectFun(
+        '#requestWatchers',
+        '{{ js_escape(trans('langSearch')) }}',
+        '{{ js_escape(trans('langWelcomeSelect')) }}',
+        '{{ js_escape(trans('langSelectAll')) }}',
+        '{{ js_escape(trans('langListChoices')) }}'
+    );
+
     @if ($request_types)
         $('#requestType').change(function () {
             var type_id = $(this).val();

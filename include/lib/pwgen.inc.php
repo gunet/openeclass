@@ -65,7 +65,7 @@ function genPassPronouncable() {
  * @return string
  */
 function genPassRandom($length = 8, $requireNum = false) {
-    $allowable_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    $allowable_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890$?#!";
     $pass = "";
     $hasNum = false;
 
@@ -90,15 +90,15 @@ function genPassRandom($length = 8, $requireNum = false) {
  * @return type
  */
 function create_pass() {
-    $parts = array('a', 'ba', 'fa', 'ga', 'ka', 'la', 'ma', 'xa',
-        'e', 'be', 'fe', 'ge', 'ke', 'le', 'me', 'xe',
-        'i', 'bi', 'fi', 'gi', 'ki', 'li', 'mi', 'xi',
-        'o', 'bo', 'fo', 'go', 'ko', 'lo', 'mo', 'xo',
-        'u', 'bu', 'fu', 'gu', 'ku', 'lu', 'mu', 'xu',
+    $parts = array('as', 'ba', 'fa', 'ga', 'ka', 'la', 'ma', 'xa',
+        'em', 'be', 'fe', 'ge', 'ke', 'le', 'me', 'xe',
+        'iz', 'bi', 'fi', 'gi', 'ki', 'li', 'mi', 'xi',
+        'os', 'bo', 'fo', 'go', 'ko', 'lo', 'mo', 'xo',
+        'ux', 'bu', 'fu', 'gu', 'ku', 'lu', 'mu', 'xu',
         'ru', 'bur', 'fur', 'gur', 'kur', 'lur', 'mur',
         'sy', 'zy', 'gy', 'ky', 'tri', 'kro', 'pra');
     $max = count($parts) - 1;
-    $num = crypto_rand_secure(10, 499);
+    $num = crypto_rand_secure(1000, 9999);
     return $parts[crypto_rand_secure(0, $max)] . $parts[crypto_rand_secure(0, $max)] . $num;
 }
 

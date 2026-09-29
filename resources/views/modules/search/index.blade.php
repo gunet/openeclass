@@ -3,13 +3,13 @@
 @section('content')
 
     @if(isset($course_code))
-        <div class="col-12 main-section">
+        <main id="main" class="col-12 main-section">
             <div class='{{ $container }} module-container py-lg-0'>
                 <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
                     <div class="col_maincontent_active @if(!isset($course_code)) search-content @endif">
                         <div class="row">
     @else
-        <div class="col-12 main-section">
+        <main id="main" class="col-12 main-section">
             <div class='{{ $container }} main-container'>
                 <div class="row m-auto">
     @endif
@@ -83,9 +83,9 @@
         @endif
 
     @if(isset($course_code))
-        </div></div></div></div></div>
+        </div></div></div></div></main>
     @else
-        </div></div></div>
+        </div></div></main>
     @endif
 @endsection
 

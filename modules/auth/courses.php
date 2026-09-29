@@ -41,13 +41,25 @@ if (isset($_SESSION['fc_memo'])) {
     $fc = $_SESSION['fc_memo'];
 }
 
+if (isset($_GET['fc'])) { // fetch specific department
+    $fc = intval($_GET['fc']);
+    $_SESSION['fc_memo'] = $fc; // needed in case the user decides to switch language.
+} elseif (isset($_SESSION['uid'])) { // fetch user department (default) if user logged in
+    $fc = getfcfromuid($_SESSION['uid']);
+    if (!$fc) { // if user does not belong to department
+        list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
+        $fc = intval($roots[0]->id);
+    }
+    $_SESSION['fc_memo'] = $fc; // needed in case the user decides to switch language.
+}
+
 if (isset($_SESSION['uid'])) {
     if ($is_power_user) {
         $unlock_all_courses = true;
     } elseif ($is_departmentmanage_user) {
         $user = new User();
         $subtrees = $tree->buildSubtrees($user->getAdminDepartmentIds($uid));
-        $unlock_all_courses = in_array($facid, $subtrees);
+        $unlock_all_courses = in_array($fc, $subtrees);
     }
 
     $restrictedCourses = array();
@@ -114,19 +126,6 @@ foreach ($subs as $node) {
     $user_faculty_ids[] = $node->id;
 }
 
-
-if (isset($_GET['fc'])) { // fetch specific department
-    $fc = intval($_GET['fc']);
-    $_SESSION['fc_memo'] = $fc; // needed in case the user decides to switch language.
-} else if (isset($_SESSION['uid'])) { // fetch user department (default) if user logged in
-    $fc = getfcfromuid($_SESSION['uid']);
-    if (!$fc) { // if user does not belong to department
-        list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
-        $fc = intval($roots[0]->id);
-    }
-    $_SESSION['fc_memo'] = $fc; // needed in case the user decides to switch language.
-}
-
 $fac = Database::get()->querySingle("SELECT id, name, visible FROM hierarchy WHERE id = ?d", $fc);
 if (!$fac) { // faculty doesn't exist
     redirect_to_home_page();
@@ -140,10 +139,11 @@ if (count($tree->buildRootsArray()) > 1) {
 }
 
 if ($data['isInOpenCoursesMode']) {
-    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true, 'textIfEmpty' => true));
 } else {
-    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true, 'textIfEmpty' => true));
 }
+$data['childCount'] = $childCount;
 
 $queryCourseIds = '';
 $queryExtraSelect = '';
@@ -208,6 +208,8 @@ if ($runQuery) {
                                course.popular_course p,
                                course.is_collaborative clb,
                                course.password password,
+                               course.reg_start_date reg_start_date,
+                               course.reg_end_date reg_end_date,
                                course.id id
                                $queryExtraSelect
                           FROM course, course_department $queryExtraJoin
@@ -215,6 +217,8 @@ if ($runQuery) {
                            $queryExtraJoinWhere
                            AND course_department.department = ?d
                            AND course.visible != " . COURSE_INACTIVE . "
+                           AND (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") 
+                           AND (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
                            $queryCourseIds
                       ORDER BY course.title, course.prof_names", $fc);
 }

@@ -62,8 +62,8 @@ class MultipleChoiceUniqueAnswer extends QuestionType
             $checked = (isset($exerciseResult[$this->question_id]) && $exerciseResult[$this->question_id] == $answerId) ? 'checked="checked"' : '';
             $html_content .= "
                 <div class='radio mb-1'>
-                    <label>
-                        <input type='radio' name='choice[$this->question_id]' value='$answerId' $checked onClick='updateQuestionNavButton(" . $question_number . ");'>                        
+                    <label for='AccessibilityUniqueCheck_{$this->question_id}_{$answerId}'>
+                        <input id='AccessibilityUniqueCheck_{$this->question_id}_{$answerId}' type='radio' name='choice[$this->question_id]' value='$answerId' $checked onClick='updateQuestionNavButton(" . $question_number . ");'>                        
                         " . standard_text_escape($answerTitle) . "
                     </label>
                 </div>";

@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
 <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -115,11 +115,10 @@
                         </div>
                         @elseif  ($_GET['stats'] == 'vmusers')
                                 <div class='col-12'>
-                                    
+                                        <h2 class='text-heading-h3'>
+                                            {{ trans('langUsers') }}
+                                        </h2>
                                         <ul class='list-group list-group-flush'>
-                                            <li class='list-group-item list-group-item-action'>
-                                                <div>{{ trans('langUsers') }}</div>
-                                            </li>
                                             <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                 <a class='TextBold' href='listusers.php?search=yes&verified_mail=1'>{{ trans('langMailVerificationYes') }}</a>
                                                 <div>{{ $verifiedEmailUserCnt }}</div>
@@ -180,6 +179,6 @@
                 
         </div>
 </div>
-</div>
+</main>
 
 @endsection

@@ -54,6 +54,7 @@ if (isset($_GET['mid'])) {
                                   'url' => "outbox.php".$urlstr,
                                   'icon' => 'fa-reply',
                                   'button-class' => 'back_index btn-secondary',
+                                  'link-attrs' => "aria-label='$langBack' role='button'",
                                   'level' => 'primary'),
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
@@ -75,7 +76,7 @@ if (isset($_GET['mid'])) {
                                     <div class='col'>
                                         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                <h3>$langMessageInfo</h3>
+                                                <h2 class='text-heading-h3'>$langMessageInfo</h2>
                                             </div>
                                             <div class='card-body'>
                                                 <ul class='list-group list-group-flush'>
@@ -141,7 +142,7 @@ if (isset($_GET['mid'])) {
                                     <div class='col'>
                                         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                             <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                 <h3>$langMessageContent</h3>
+                                                 <h2 class='text-heading-h3'>$langMessageContent</h2>
                                             </div>
                                             <div class='card-body'>
                                                             <div class='d-flex justify-content-start align-items-center flex-wrap gap-2 mb-4'>
@@ -191,7 +192,7 @@ if (isset($_GET['mid'])) {
            
             bootbox.confirm({
                 closeButton: false,
-                title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h2 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h2>",
+                title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><div class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</div>",
                 message: "<p class=\"text-center\">'.js_escape($langConfirmDelete).'</p>",
                 buttons: {
                     cancel: {
@@ -324,7 +325,7 @@ if (isset($_GET['mid'])) {
                         var string = 'mid='+id+'&". generate_csrf_token_link_parameter() ."';                        
                         bootbox.confirm({
                             closeButton: false,
-                            title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h2 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h2>',
+                            title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
                             message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
                             buttons: {
                                 cancel: {
@@ -361,7 +362,7 @@ if (isset($_GET['mid'])) {
                     $('.delete_all_out').click(function() {                        
                         bootbox.confirm({
                             closeButton: false,
-                            title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h2 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h2>',
+                            title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><div class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</div>',
                             message: '<p class=\'text-center\'>".js_escape($langConfirmDeleteAllMsgs)."</p>',
                             buttons: {
                                 cancel: {

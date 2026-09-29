@@ -53,6 +53,7 @@ $auth_ids = [
     13 => 'linkedin',
     14 => 'lti_publish',
     15 => 'oauth2',
+    16 => 'keycloak',
 ];
 
 $authFullName = [
@@ -63,9 +64,10 @@ $authFullName = [
     12 => 'Yahoo!',
     13 => 'LinkedIn',
     15 => 'OAuth 2.0',
+    16 => 'Keycloak (OIDC)',
 ];
 
-$extAuthMethods = ['cas', 'shibboleth', 'oauth2'];
+$extAuthMethods = ['cas', 'shibboleth', 'oauth2', 'keycloak'];
 $hybridAuthMethods = ['facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin'];
 
 
@@ -188,7 +190,11 @@ function get_auth_info($auth)
             break;
             case '13': $m = $GLOBALS['langViaLinkedIn'];
             break;
+            case '14': $m = $GLOBALS['langViaLTI'];
+            break;
             case '15': $m = $GLOBALS['langViaOAuth2'];
+            break;
+            case '16': $m = $GLOBALS['langViaKeycloak'];
             break;
             default: $m = 0;
             break;
@@ -212,7 +218,7 @@ function get_auth_settings($auth) {
     $auth = intval($auth);
     $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_id = ?d", $auth);
     if (!$result) {
-        return 0;
+        return [];
     }
 
     $settings['auth_id'] = $result->auth_id;
@@ -278,7 +284,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             if ($result) {
                 if (password_verify($test_password, $result->password)) {
                     $testauth = true;
-                } else if (strlen($result->password) < 60 && md5($test_password) == $result->password) {
+                } else if (strlen($result->password) < 60 && md5($test_password) === $result->password) {
                     $testauth = true;
                     // password is in old md5 format, update transparently
                     $password_encrypted = password_hash($test_password, PASSWORD_DEFAULT);
@@ -611,7 +617,7 @@ function get_cas_attrs($phpCASattrs, $settings) {
 function process_login() {
     global $warning, $session, $langInvalidId, $langAccountInactive1, $langInvalidAuth,
         $langAccountInactive2, $langNoCookies, $langEnterPlatform, $urlServer,
-        $langHere, $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
+        $langHere, $auth_ids, $inactive_uid, $langTooManyFails;
 
     if (isset($_POST['uname'])) {
         $posted_uname = canonicalize_whitespace($_POST['uname']);
@@ -643,9 +649,55 @@ function process_login() {
             } else {
                 $sqlLogin = "COLLATE utf8mb4_bin = ?s";
             }
-            $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
-                                    username, status, email, lang, verified_mail, am, options
-                                FROM user WHERE username $sqlLogin", $posted_uname);
+
+            if (isset($_SESSION['current_user_tenant'])) {
+                // We are at a tenant's custom domain - allow only users from that tenant
+                $node = Database::get()->querySingle(
+                    'SELECT lft, rgt FROM hierarchy WHERE id = ?d',
+                    $_SESSION['current_user_tenant']->department_id
+                );
+
+                $myrow = Database::get()->querySingle(
+                    "SELECT user.id, surname, givenname, password,
+                            username, status, email, lang, verified_mail, am, options
+                        FROM user, user_department, hierarchy
+                        WHERE username $sqlLogin AND
+                              user.id = user_department.user AND
+                              user_department.department = hierarchy.id AND
+                              hierarchy.lft BETWEEN ?d AND ?d",
+                    $posted_uname,
+                    $node->lft,
+                    $node->rgt
+                );
+
+
+                if (!$myrow) {
+                    $myrow = Database::get()->querySingle(
+                        "SELECT user.id, surname, givenname, password,
+                            username, status, email, lang, verified_mail, am, options
+                        FROM user, user_department, hierarchy
+                        WHERE email = ?s AND
+                            user.id = user_department.user AND
+                            user_department.department = hierarchy.id AND
+                            hierarchy.lft BETWEEN ?d AND ?d",
+                        $posted_uname,
+                        $node->lft,
+                        $node->rgt
+                    );
+                    $posted_uname = $myrow ? $myrow->username : '';
+                }
+            } else {
+                $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
+                                                        username, status, email, lang, verified_mail, am, options
+                                                    FROM user WHERE username $sqlLogin", $posted_uname);
+                if (!$myrow) {
+                    $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
+                                                                username, status, email, lang, verified_mail, am, options
+                                                            FROM user WHERE email = ?s", $posted_uname);
+                    $posted_uname = $myrow ? $myrow->username : '';
+                }
+            }
+
             $guest_user = get_config('course_guest') != 'off' && $myrow && $myrow->status == USER_GUEST;
 
             // cas might have alternative authentication defined
@@ -729,22 +781,20 @@ function process_login() {
                     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')", $_SESSION['uid'], $ip);
             $session->setLoginTimestamp();
 
-            if (!is_null($myrow->options)) {
-                $options = json_decode($myrow->options, true);
-                $option_force_password_change = $options['force_password_change'];
-                if ($option_force_password_change == 1) {
-                    $_SESSION['force_password_change'] = 1;
-                    $next = 'modules/auth/password_change.php';
-                }
-            } elseif (get_config('email_verification_required') and
-                    get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
+            $next = '';
+            if (get_config('email_verification_required') and
+                get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
                 $_SESSION['mail_verification_required'] = 1;
                 $next = 'modules/auth/mail_verify_change.php';
-            } elseif (isset($_POST['next'])) {
-                $next = $_POST['next'];
-            } else {
-                $next = '';
+            } elseif (isset($_REQUEST['next'])) {
+                $next = $_REQUEST['next'];
             }
+
+            if (get_user_option($_SESSION['uid'], 'force_password_change') == 1) {
+                $_SESSION['force_password_change'] = 1;
+                $next = 'modules/auth/password_change.php';
+            }
+
             resetLoginFailure();
             redirect_to_home_page($next);
         }
@@ -1054,7 +1104,7 @@ function hybridauth_login() {
  * @return int
  */
 function login($user_info_object, $posted_uname, $pass, $provider=null, $user_data=null) {
-    global $session, $auth_ids;
+    global $session, $auth_ids, $urlServer;
 
     $_SESSION['canChangePassword'] = false;
     $_SESSION['provider'] = $provider;
@@ -1147,6 +1197,20 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
             user_hook($user_info_object->id);
             $session->setLoginTimestamp();
             $session->setLoginMethod('eclass');
+
+            $tenant = getCurrentTenant();
+
+            // Check whether user belongs to a tenant with custom URL
+            if (!isset($_SESSION['current_user_tenant'])) {
+                $GLOBALS['uid'] = $_SESSION['uid'];
+                $tenant = getUserTenant($_SESSION['uid']);
+
+                if ($tenant and $tenant->url and $tenant->url_active and $tenant->url != $urlServer) {
+                    header("HTTP/1.1 303 See Other");
+                    header("Location: {$tenant->url}modules/auth/redirect.php?token=" . session_id());
+                    exit;
+                }
+            }
         } else {
             $auth_allow = 3;
             $GLOBALS['inactive_uid'] = $user_info_object->id;
@@ -1189,6 +1253,11 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
         } else {
             return 7; // Redirect to CAS login
         }
+    }
+
+    // keycloak
+    if ($auth == 16) {
+        return 16; // Redirect to Keycloak
     }
 
     if ($auth == 6) {
@@ -1289,8 +1358,8 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 }
 
 /**
- * @brief Authenticate user via Shibboleth, CAS or OAuth 2.0
- * @param $type is 'shibboleth', 'cas' or 'oauth2'
+ * @brief Authenticate user via Shibboleth, CAS, OAuth 2.0 or Keycloak
+ * @param $type is 'shibboleth', 'cas', 'oauth2' or 'keycloak'
  */
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
@@ -1326,10 +1395,24 @@ function shib_cas_login($type) {
         $givenname = $_SESSION['auth_givenname'] ?? '';
         $email = $_SESSION['auth_email'] ?? '';
         $am = $_SESSION['auth_studentid'] ?? '';
+    } elseif ($type == 'keycloak') {
+        $uname = $_SESSION['keycloak_uname'] ?? '';
+        $surname = $_SESSION['auth_surname'] ?? '';
+        $givenname = $_SESSION['auth_givenname'] ?? '';
+        $email = $_SESSION['auth_email'] ?? '';
+        $am = $_SESSION['auth_studentid'] ?? '';
+        // get mail verification status from provider
+        $auth_verified_mail = $_SESSION['auth_verified_mail'];
+        $auth_settings = get_auth_settings(16);
     }
     if ($email) {
         // Email is considered verified if it came from CAS or Shibboleth
         $verified_mail = EMAIL_VERIFIED;
+    }
+
+    if (isset($auth_verified_mail) && empty($auth_verified_mail)) {
+        // Email verification status set by identity provider
+        $verified_mail = EMAIL_UNVERIFIED;
     }
 
     // Attributes passed to login_hook()
@@ -1357,17 +1440,31 @@ function shib_cas_login($type) {
     } else {
         $sqlLogin = "COLLATE utf8mb4_bin = ?s";
     }
-    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
+
+    $uid_attr_is_username = true;
+    // Keycloak auth may use username as external uid
+    if ($type == 'keycloak' and !$auth_settings['uid_attr_is_username']) {
+        $uid_attr_is_username = false;
+        $ext_uid = $uname;
+        $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
+                            status, email, lang, verified_mail, am
+                        FROM user WHERE id = (SELECT user_id FROM user_ext_uid
+                            WHERE auth_id = 16 AND uid = ?s)", $uname);
+        if ($info) {
+            $uname = $info->username;
+        }
+    } else {
+        $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
                             status, email, lang, verified_mail, am
                         FROM user WHERE username $sqlLogin", $uname);
+    }
 
     if ($info) {
         if (!is_active_account($info->id, false)) { // check if user is active
             unset_shib_cas_session();
             $message = "$langAccountInactive1 <a href='modules/auth/contactadmin.php?userid=$info->id&amp;h=" .
                             token_generate("userid=$info->id") . "'>$langAccountInactive2</a>";
-            Session::flash('message', $message);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($message, 'alert-warning');
             redirect_to_home_page();
         }
 
@@ -1376,8 +1473,7 @@ function shib_cas_login($type) {
             // has different auth method - redirect to home page
             unset_shib_cas_session();
             $message = $langUserAltAuth;
-            Session::flash('message', $langUserAltAuth);
-            Session::flash('alert-class', 'alert-warning');
+            Session::Messages($langUserAltAuth, 'alert-warning');
             redirect_to_home_page();
         } else {
             // don't force email address from CAS/Shibboleth.
@@ -1396,6 +1492,9 @@ function shib_cas_login($type) {
                 'departments' => $userObj->getDepartmentIds($info->id),
                 'am' => $am]);
 
+            if ($options['am'] !== '' and $options['am'] !== $am) {
+                $am = $options['am'];
+            }
             if ($type == 'cas') {
                 $cas_settings = @unserialize(get_auth_settings(7)['auth_settings']);
                 if ($cas_settings['cas_gunet'] ?? false) {
@@ -1472,6 +1571,19 @@ function shib_cas_login($type) {
         }
 
         $status = $options['status'];
+
+        if (!$uid_attr_is_username) {
+            $last_user = Database::get()->querySingle('SELECT MAX(username) AS username
+                FROM user WHERE username REGEXP ?s',
+                '^' . preg_quote($auth_settings['username_prefix']) . '\d\d\d\d$');
+            if ($last_user && !is_null($last_user->username)) {
+                $user_num = intval(str_replace($auth_settings['username_prefix'], '', $last_user->username)) + 1;
+            } else {
+                $user_num = 1000;
+            }
+            $uname = $auth_settings['username_prefix'] . sprintf('%04d', $user_num);
+        }
+
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
                         username = ?s, email = ?s, status = ?d, lang = ?s,
@@ -1481,6 +1593,12 @@ function shib_cas_login($type) {
                         whitelist = ''",
                 $surname, $givenname, $type, $uname, $email, $status,
                 $language, $options['am'], $verified_mail)->lastInsertID;
+
+        if (!$uid_attr_is_username) {
+            Database::get()->query('INSERT INTO user_ext_uid
+                SET user_id = ?d, auth_id = ?d, uid = ?s',
+                $_SESSION['uid'], $auth_settings['auth_id'], $ext_uid);
+        }
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
         Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $_SESSION['uid']);

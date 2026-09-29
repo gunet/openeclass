@@ -36,7 +36,7 @@ $MY_URI = substr($MY_URI, 0, $pos) . '/oai2.php';
     </head>
     <body>
 
-        <h3>php-oai2 Data Provider</h3>
+        <h2>php-oai2 Data Provider</h2>
         <p>This is an implementation of an <a href="http://www.openarchives.org/OAI/openarchivesprotocol.html" target="_blank">OAI-PMH 2.0 Data Provider</a>, written in <a href="http://www.php.net" title="PHP's website" target="_blank">PHP</a>.</p>
 
         <p>This implementation completely complies to <a href="http://www.openarchives.org/OAI/openarchivesprotocol.html" target="_blank">OAI-PMH 2.0</a>, including the support of on-the-fly output compression which may significantly

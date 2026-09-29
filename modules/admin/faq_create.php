@@ -20,8 +20,7 @@
 
 $require_admin = TRUE;
 $require_help = true;
-$helpTopic = 'system_settings';
-$helpSubTopic = 'faq_creation';
+$helpTopic = 'faq_creation';
 
 require_once '../../include/baseTheme.php';
 
@@ -107,12 +106,12 @@ $data['modify'] = isset($_GET['faq']) && $_GET['faq'] == 'modify';
 if ($data['modify']) {
     $data['id'] = $_GET['id'];
     $data['faq_mod'] = Database::get()->querySingle("SELECT * FROM `faq` WHERE `id`=?d", $_GET['id']);
-    $data['editor'] = rich_text_editor('answer', 5, 40, $data['faq_mod']->body );
+    $data['editor'] = rich_text_editor('answer', 5, 40, $data['faq_mod']->body, options: array('id' => 'answer'));
 }
 
 if ($data['new']) {
     $data['id'] = '';
-    $data['editor'] = rich_text_editor('answer', 5, 40, '' );
+    $data['editor'] = rich_text_editor('answer', 5, 40, '', options: array('id' => 'answer'));
 }
 
 view('admin.other.faq_create', $data);

@@ -13,6 +13,7 @@ syntax: regexp
 ^js/h5p-standalone
 ^js/recordrtc
 ^js/video.js
+^resources/fonts/mathjax-newcm-font
 
 ^composer\.phar
 ^storage/views/
@@ -48,3 +49,6 @@ syntax: regexp
 \.sass-cache
 
 ^modules/drives/plugins/googledrive_key.p12
+
+.DS_Store
+^\.claude/

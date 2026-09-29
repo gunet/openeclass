@@ -283,7 +283,7 @@ if (isset($_GET['delete'])) {
         <div class='col-12 mb-3'>
             <div class='card panelCard card-default px-lg-4 py-lg-3'>
                 <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                    <h3>$langEBookInfo</h3>
+                    <h2 class='text-heading-h3'>$langEBookInfo</h2>
                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1' aria-label='$langEdit'>
                         <i class='fa-solid fa-edit fa-lg' title='$langEdit' data-bs-toggle='tooltip'></i>
                     </a>
@@ -340,10 +340,10 @@ if (isset($_GET['delete'])) {
                                   ebook_subsection.title AS subsection_title,
                                   ebook_subsection.file_id as file_id
                            FROM ebook_section, ebook_subsection
-                           WHERE ebook_section.ebook_id = $info->id AND
+                           WHERE ebook_section.ebook_id = ?d AND
                                  ebook_section.id = ebook_subsection.section_id
                                  ORDER BY CONVERT(psid, UNSIGNED), psid,
-                                          CONVERT(pssid, UNSIGNED), pssid");
+                                          CONVERT(pssid, UNSIGNED), pssid", $info->id);
         if (count($files) > 0 || count($q) > 0) {
             $tool_content .= "
       

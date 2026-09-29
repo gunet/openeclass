@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2025-12-02 16:31:16
+// Generated 2026-06-11 10:59:51
 
 $langCourse = "Cours";
 $langEclass = "Open eClass - Plateforme de Télé-enseignement Asynchrone"
@@ -86,8 +86,6 @@ $langOfCourseReviewer = "Superviseur";
 $langsCourseReviewer = "superviseur";
 $langsOfCourseReviewer = "superviseur";
 $langCTeacher = "ENSEIGNANT";
-$langCStudent = "APPRENANT";
-$langCStudent2 = "UTILISATEUR";
 $langAlignment = "Alignment";
 $langWidth = "Width";
 $langAlignLeft = "A gauche";

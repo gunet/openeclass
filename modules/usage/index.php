@@ -30,7 +30,8 @@ if (!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c') { // course statistics
     $stats_type = 'course';
 } elseif(isset($_REQUEST['t'])) { // admin statistics
     if ($_REQUEST['t'] == 'a') {
-        $require_admin = true;
+        $require_departmentmanage_user = true;
+        $require_login = true;
         $stats_type = 'admin';
         $helpTopic = 'course_stats';
     } else if ($_REQUEST['t'] == 'u') { // user statistics
@@ -108,7 +109,7 @@ $toolName = $langPortfolio;
 $pageName = $langUsage;
 
 if (isset($_REQUEST['u'])) {
-    if (!$is_admin) { // security check
+    if (!$is_admin && !$is_departmentmanage_user) { // security check
         redirect_to_home_page();
     } else {
         $uid_stats = intval($_REQUEST['u']);
@@ -152,7 +153,7 @@ if (isset($_GET['per_course_dur'])) {
         } else {
             require_once 'modules/usage/course.php';
         }
-    } elseif($stats_type == 'admin' && $is_admin) { // admin statistics
+    } elseif($stats_type == 'admin' ) { // admin statistics
         $toolName = $langAdmin;
         if (isset($_REQUEST['g_stats'])) {
             $pageName = $langCharts;

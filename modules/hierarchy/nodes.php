@@ -23,6 +23,8 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 header('Content-Type: application/json; charset=utf-8');
 
+global $is_power_user;
+
 $tree = new Hierarchy();
 $user = new User();
 $requestId = 0;
@@ -103,15 +105,18 @@ if ($requestId <= 0) {
 
 foreach ($nodes as $node) {
     $disabled = false;
-    if (($mark_allow_course && !$node->allow_course) ||
-        ($mark_allow_user && !$node->allow_user) ||
-        ($allow_only_defaults && !in_array($node->id, $subdefs)) ||
-        ($suballowed != null && !in_array($node->id, $suballowed))) {
-        $disabled = true;
-    }
-    // exclude
-    if ($node->lft >= $excludeLft && $node->rgt <= $excludeRgt) {
-        $disabled = true;
+
+    if (!$is_power_user) {
+        if (($mark_allow_course && !$node->allow_course) ||
+            ($mark_allow_user && !$node->allow_user) ||
+            ($allow_only_defaults && !in_array($node->id, $subdefs)) ||
+            ($suballowed != null && !in_array($node->id, $suballowed))) {
+            $disabled = true;
+        }
+        // exclude
+        if ($node->lft >= $excludeLft && $node->rgt <= $excludeRgt) {
+            $disabled = true;
+        }
     }
 
     $class1 = $disabled ? 'nosel' : '';

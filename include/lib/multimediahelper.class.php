@@ -142,7 +142,7 @@ class MultimediaHelper {
         }
         $extension = get_file_extension($mediaPath);
 
-        $ret = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+        $ret = '<!DOCTYPE HTML>
                 <html><head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
 
@@ -199,41 +199,6 @@ class MultimediaHelper {
             case "opus":
                 $mime = get_mime_type("." . $extension);
                 $ret .= self::serveAudio($mime, $mediaPlay, $startdiv, $enddiv);
-                break;
-            case "f4v":
-            case "flv":
-                $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.13.min.js'></script>";
-                if (self::isUsingIOS()) {
-                    $ret .= $startdiv;
-                    $ret .= '<br/><br/><a href="' . $mediaDL . '">Download or Stream media</a>';
-                    $ret .= $enddiv;
-                } else {
-                    $ret .= self::serveFlowplayerFlash($mediaPlay, $startdiv, $enddiv, $extension);
-                }
-                break;
-            case "swf":
-                $ret .= $startdiv;
-                if (self::isUsingIE()) {
-                    $ret .= '<object width="' . self::getObjectWidth() . '" height="' . self::getObjectHeight() . '"
-                                 classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
-                                 <param name="movie" value="' . $mediaPlay . '"/>
-                                 <param name="bgcolor" value="#000000">
-                                 <param name="allowfullscreen" value="true">
-                                 <param name="wmode" value="transparent">
-                                 <a href="http://www.adobe.com/go/getflash">
-                                    <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player"/>
-                                 </a>
-                             </object>';
-                } else {
-                    $ret .= '<object width="' . self::getObjectWidth() . '" height="' . self::getObjectHeight() . '"
-                                 data="' . $mediaPlay . '"
-                                 type="application/x-shockwave-flash">
-                                 <param name="bgcolor" value="#000000">
-                                 <param name="allowfullscreen" value="true">
-                                 <param name="wmode" value="transparent">
-                             </object>';
-                }
-                $ret .= $enddiv;
                 break;
             default:
                 $ret .= $startdiv;
@@ -324,73 +289,6 @@ class MultimediaHelper {
     }
 
     /**
-     * Serve HTML5 Flowplayer.
-     *
-     * @global string $urlAppend
-     * @param  string $mime
-     * @param  string $mediaPlay
-     * @param  string $startdiv
-     * @param  string $enddiv
-     * @return string
-     */
-    public static function serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv) {
-        global $urlAppend;
-        $ret = '';
-        $ret .= "<link rel='stylesheet' href='{$urlAppend}js/flowplayer/html5/skin/skin.css'>";
-        $ret .= "<script type='text/javascript' src='{$urlAppend}js/jquery" . JQUERY_VERSION . ".min.js'></script>";
-        $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/html5/flowplayer.min.js'></script>";
-        $ret .= $startdiv;
-        $ret .= '<div class="flowplayer"
-                      data-swf="' . $urlAppend . 'js/flowplayer/html5/flowplayer.swf"
-                      data-fullscreen="true"
-                      data-embed="false"
-                      data-share="false"
-                      style="max-width: ' . (self::getObjectWidth() - 4) . 'px;">
-                    <video autoplay><source type="' . $mime . '" src="' . $mediaPlay . '"></video></div>';
-        $ret .= $enddiv;
-        return $ret;
-    }
-
-    /**
-     * Server Flowplayer Flash.
-     *
-     * @global string $urlAppend
-     * @param  string $mediaPlay
-     * @param  string $startdiv
-     * @param  string $enddiv
-     * @param  string $extension
-     * @return string
-     */
-    public static function serveFlowplayerFlash($mediaPlay, $startdiv, $enddiv, $extension) {
-        global $urlAppend;
-        $ret = '';
-        $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.13.min.js'></script>";
-        $ret .= $startdiv;
-        $ret .= '<div id="flowplayer" style="display: block; width: ' . self::getObjectWidth() . 'px; height: ' . self::getObjectHeight() . 'px;"></div>
-                 <script type="text/javascript">
-                     flowplayer("flowplayer", {
-                         src: "' . $urlAppend . 'js/flowplayer/flowplayer-3.2.18.swf",
-                         wmode: "transparent"
-                         }, {
-                         clip: {
-                             url: "' . $mediaPlay . '",';
-        // flowplayer needs to see a pattern of name.mp3 in order to stream it
-        if ($extension == 'mp3') {
-            $ret .= '        type: "audio",';
-        }
-        $ret .= '            scaling: "fit"
-                         },
-                         canvas: {
-                             backgroundColor: "#000000",
-                             backgroundGradient: "none"
-                         }
-                     });
-                 </script>';
-        $ret .= $enddiv;
-        return $ret;
-    }
-
-    /**
      * Construct a proper <iframe> html tag for each type of medialink.
      *
      * @param  MediaResource $mediaRsrc
@@ -398,46 +296,20 @@ class MultimediaHelper {
      */
     public static function medialinkIframeObject($mediaRsrc) {
         $mediaURL = q(urldecode(self::makeEmbeddableMedialink($mediaRsrc->getAccessURL())));
-        $ret = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-                <html><head>
-                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-                </head>
-                <body style="font-weight: bold">
-                <div align="center">';
-
-        $needEmbed = array_merge(self::getGooglePatterns(), self::getMetacafePatterns(), self::getMyspacePatterns());
-
-        $gotEmbed = false;
-        foreach ($needEmbed as $pattern) {
-            if (preg_match($pattern, $mediaURL)) {
-                $ret .= '<object width="' . self::getObjectWidth() . '" height="' . self::getObjectHeight() . '">
-                             <param name="allowFullScreen" value="true"/>
-                             <param name="wmode" value="transparent"/>
-                             <param name="movie" value="' . $mediaURL . '"/>
-                             <embed flashVars="playerVars=autoPlay=yes"
-                                 src="' . $mediaURL . '"
-                                 width="' . self::getObjectWidth() . '" height="' . self::getObjectHeight() . '"
-                                 allowFullScreen="true"
-                                 allowScriptAccess="always"
-                                 type="application/x-shockwave-flash"
-                                 wmode="transparent">
-                             </embed>
-                         </object>';
-                $gotEmbed = true;
-            }
-        }
-
-        if (!$gotEmbed) {
-            $ret .='<iframe width="' . self::getObjectWidth() . '" height="' . self::getObjectHeight() . '"
-                        src="' . $mediaURL . '"
-                        frameborder="0"
-                        scrolling="no"
-                        webkitallowfullscreen="true"
-                        mozallowfullscreen="true"
-                        allowfullscreen="true"></iframe>';
-        }
-
-        $ret .='</div></body></html>';
+        $ret = '<!DOCTYPE HTML>
+            <html><head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            </head>
+            <body style="font-weight: bold">
+            <div align="center">
+            <iframe width="' . self::getObjectWidth() . '" height="' . self::getObjectHeight() . '"
+                    src="' . $mediaURL . '"
+                    frameborder="0"
+                    scrolling="no"
+                    webkitallowfullscreen="true"
+                    mozallowfullscreen="true"
+                    allowfullscreen="true"></iframe>
+            </div></body></html>';
 
         return $ret;
     }
@@ -521,7 +393,7 @@ class MultimediaHelper {
      * @return boolean
      */
     public static function isEmbeddableMedialink($medialink) {
-        $supported = array_merge(self::getYoutubePatterns(), self::getVimeoPatterns(), self::getGooglePatterns(), self::getMetacafePatterns(), self::getMyspacePatterns(), self::getDailymotionPatterns(), self::getNineSlidesPatterns(), self::getVokiPatterns());
+        $supported = array_merge(self::getYoutubePatterns(), self::getVimeoPatterns(), self::getDailymotionPatterns(), self::getNineSlidesPatterns(), self::getVokiPatterns());
         $ret = false;
 
         foreach ($supported as $pattern) {
@@ -564,27 +436,6 @@ class MultimediaHelper {
             }
         }
 
-        foreach (self::getGooglePatterns() as $pattern) {
-            if (preg_match($pattern, $medialink, $matches)) {
-                $sanitized = strip_tags($matches[1]);
-                $medialink = 'http://video.google.com/googleplayer.swf?docid=' . $sanitized . '&hl=en&fs=true&autoplay=true';
-            }
-        }
-
-        foreach (self::getMetacafePatterns() as $pattern) {
-            if (preg_match($pattern, $medialink, $matches)) {
-                $sanitized = strip_tags($matches[1]) . "/" . urlencode(strip_tags($matches[2]));
-                $medialink = 'http://www.metacafe.com/fplayer/' . $sanitized . '.swf';
-            }
-        }
-
-        foreach (self::getMyspacePatterns() as $pattern) {
-            if (preg_match($pattern, $medialink, $matches)) {
-                $sanitized = strip_tags($matches[1]);
-                $medialink = 'http://mediaservices.myspace.com/services/media/embed.aspx/m=' . $sanitized . ',t=1,mt=video,ap=1';
-            }
-        }
-
         foreach (self::getDailymotionPatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
@@ -623,9 +474,8 @@ class MultimediaHelper {
     public static function getSupportedMedia() {
         return array("asf", "avi", "wm", "wmv", "wma",
             "dv", "mov", "moov", "movie", "mp4", "mpg", "mpeg",
-            "3gp", "3g2", "m2v", "aac", "m4a",
-            "flv", "f4v", "m4v", "mp3",
-            "swf", "webm", "ogv", "ogg", "mka");
+            "3gp", "3g2", "m2v", "aac", "m4a", "m4v",
+            "mp3", "webm", "ogv", "ogg", "mka");
     }
 
     public static function getSupportedImages() {
@@ -646,22 +496,6 @@ class MultimediaHelper {
     public static function getVimeoPatterns() {
         return array('/http:\/\/vimeo\.com\/([^&^\?]+)/i',
             '/player\.vimeo\.com\/video\/([^&^\?]+)/i');
-    }
-
-    public static function getGooglePatterns() {
-        return array('/video\.google\.com\/googleplayer\.swf\?docid=([^&]+)/i',
-            '/video\.google\.com\/videoplay\?docid=([^&]+)/i');
-    }
-
-    public static function getMetacafePatterns() {
-        return array('/metacafe\.com\/watch\/([^\/]+)\/([^\/]+)/i',
-            '/metacafe\.com\/fplayer\/([^\/]+)\/([^\/]+)\.swf/i');
-    }
-
-    public static function getMyspacePatterns() {
-        return array('/myspace\.com.*\/video.*\/([0-9]+)/i',
-            '/mediaservices\.myspace\.com\/services\/media\/embed\.aspx\/m=([0-9]+)/i',
-            '/lads\.myspace\.com\/videos\/MSVideoPlayer\.swf\?m=([0-9]+)/i');
     }
 
     public static function getDailymotionPatterns() {

@@ -27,7 +27,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -37,39 +37,44 @@
 
             @include('layouts.partials.show_alert')
 
-            <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
-                <h1>{{ $toolName }}</h1>
-            </div>
+            @if (!isset($_SESSION['mobile']))
+                <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
+                    <h1>{{ $toolName }}</h1>
+                </div>
+            @endif
 
             <div class='col-12 mt-4'>
+
                 @if (isset($buildRoots))
                     {!! $buildRoots !!}
                 @endif
                 <div class='col-12'>
-                    <ul class='list-group list-group-flush'>
-                        <li class="list-group-item list-group-item-action d-flex justify-content-start align-items-center flex-wrap gap-2">
-                            {!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}
-                        </li>
-                        {!! $childHTML !!}
-                    </ul>
+                    <h2 tabindex='0' class='text-heading-h3 mb-2' aria-label="{{ trans('NavCatCourses') }}">{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=', true) !!}</h2>
+                    @if ($childCount > 0)
+                        <div class='d-flex justify-content-between align-items-center mt-4'>
+                            <h2 class='text-heading-h3 mb-2'>{{ trans('langFaculties') }}</h2>
+                        </div>
+                        <ul class='list-group list-group-flush'>
+                            {!! $childHTML !!}
+                        </ul>
+                    @endif
                 </div>
             </div>
 
             @if (count($courses) > 0)
                 <div class='col-12 mt-4'>
+                    <div class='d-flex justify-content-between align-items-center'>
+                        <h2 class='text-heading-h3 mb-2'>{{ trans('langCoursesList') }}</h2>
+                    </div>
                     <ul class='list-group list-group-flush'>
-                        <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center'>
-                            <div>{{ trans('langCourse') }}</div>
-                            <div>{{ trans('langGroupAccess') }}</div>
-                        </li>
                         @foreach($courses as $mycourse)
                             <li class="list-group-item element d-flex justify-content-between align-items-center gap-5">
-                                <div class='d-flex justify-content-start align-items-start gap-3'>
+                                <div class='d-flex justify-content-start align-items-start gap-3' tabindex='0'>
                                     @if (isset($_SESSION['uid'])) {{-- logged in user --}}
                                         <div class="d-flex justify-content-center align-items-center gap-3" style="min-width: 30px;">
                                             @if (isset($myCourses[$mycourse->id]))
                                                 @if ($myCourses[$mycourse->id]->status != 1) {{-- display registered courses --}}
-                                                    <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                    <label class='label-container' aria-label='{{ trans('langUnRegister') }}'>
                                                         <input type='checkbox' name='selectCourse[]' value='{{ $mycourse->id }}' checked='checked' @if ($mycourse->visible == COURSE_CLOSED) class='reg_closed' @endif @if (get_config('disable_student_unregister_cours')) 'disabled' @endif>
                                                         <span class='checkmark'></span>
                                                     </label>
@@ -77,11 +82,12 @@
                                                     <i class='fa-solid fa-user fa-lg mt-3'></i>
                                                 @endif
                                             @else {{-- display unregistered courses--}}
-                                                    <label class='label-container gap-0' aria-label='{{ trans('langSelect') }}'>
+                                                    <label class='label-container gap-0' aria-label='{{ trans('langRegister') }}'>
                                                         <input type='checkbox' name='selectCourse[]' value='{{ $mycourse->id }}'
                                                                @if ((($mycourse->visible == COURSE_REGISTRATION or $mycourse->visible == COURSE_OPEN)
                                                                         and setting_get(SETTING_FACULTY_USERS_REGISTRATION, $mycourse->id) == 1
                                                                         and !in_array($fc, $user_faculty_ids))
+                                                                    or ($mycourse->visible == COURSE_REGISTRATION && (!course_reg_date_started($mycourse->id) || course_reg_date_ended($mycourse->id)))
                                                                     or (!is_enabled_course_registration($_SESSION['uid']))
                                                                     or $mycourse->visible == COURSE_CLOSED)
                                                                    disabled
@@ -97,12 +103,15 @@
                                             <div>
                                                 @if ($mycourse->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$mycourse->id])) {{-- open course or user is registered to it --}}
                                                     <a class='TextBold' href="../../courses/{{ urlencode($mycourse->k) }}/">{{ $mycourse->i }}</a>
-                                                    &nbsp;<small>({{ $mycourse->c }})</small>
                                                 @else
-                                                    <span @if (isset($_SESSION['uid'])) id='cid{{ $mycourse->id }}' @endif class='TextBold'>
+                                                    <span @if (isset($_SESSION['uid'])) id='cid{{ $mycourse->id }}' @endif class='TextBold' tabindex='0'>
                                                         {{ $mycourse->i }}
                                                     </span>
-                                                    &nbsp;<small>({{ $mycourse->c }})</small>
+                                                @endif
+                                                @if ($mycourse->c)
+                                                    &nbsp;<small>
+                                                        ({{ $mycourse->c }})
+                                                    </small>
                                                 @endif
                                                 <div>
                                                     <small class='vsmall-text TextRegular'>{{ $mycourse->t }}</small>
@@ -129,6 +138,21 @@
                                                                 <span class='badge Warning-200-bg'>{{ trans('langPassword') }}</span>
                                                                 <input class='form-control' type='password' name='pass{{ $mycourse->id }}' autocomplete='off' />
                                                             @endif
+                                                        @endif
+                                                        {{-- course has registration period --}}
+                                                        @if (!isset($myCourses[$mycourse->id]) && $mycourse->visible == COURSE_REGISTRATION && (!course_reg_date_started($mycourse->id) || course_reg_date_ended($mycourse->id)))
+                                                            <div class="mt-1">
+                                                                <small class="badge Warning-200-bg">{{ trans('langCourseRegPeriod') }}
+                                                                    @if (!is_null($mycourse->reg_start_date))
+                                                                        {{ trans('langFrom2') }}
+                                                                        {{ DateTime::createFromFormat('Y-m-d', $mycourse->reg_start_date)->format('d-m-Y') }}
+                                                                    @endif
+                                                                    @if (!is_null($mycourse->reg_end_date))
+                                                                        {{ trans('langTill') }}
+                                                                        {{ DateTime::createFromFormat('Y-m-d', $mycourse->reg_end_date)->format('d-m-Y') }}
+                                                                    @endif
+                                                                </small>
+                                                            </div>
                                                         @endif
                                                         {{-- course has prerequisites --}}
                                                         {!! getCoursePrerequisites($mycourse->id) !!}
@@ -239,7 +263,7 @@
             @endif
         </div>
     </div>
-</div>
+</main>
 
 <script type="text/javascript">
     $(course_list_init);

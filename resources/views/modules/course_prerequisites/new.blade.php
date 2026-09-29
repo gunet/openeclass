@@ -3,14 +3,38 @@
 @push('head_scripts')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#courses-select').select2({
-                minimumInputLength: 2,
-                tags: true,
-                ajax: {
+
+            // $('#courses-select').select2({
+            //     minimumInputLength: 2,
+            //     tags: true,
+            //     ajax: {
+            //         url: '{{ $urlServer }}modules/course_prerequisites/coursefeed.php',
+            //         dataType: 'json'
+            //     }
+            // });
+            
+            slimSelectFun(
+                '#courses-select',
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}',
+                {
                     url: '{{ $urlServer }}modules/course_prerequisites/coursefeed.php',
-                    dataType: 'json'
+                    dataType: 'json',
+                    dataResponse: 'results',
+                    minimumInputLength: 2,
+                    tags: true,
+                    tokenSeparators: [','],
+                    params: function(searchValue) {
+                        return {
+                            q: searchValue,
+                            _type: 'query',
+                            term: searchValue
+                        };
+                    }
                 }
-            });
+            );
         });
     </script>
 @endpush
@@ -18,13 +42,10 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
         <div class='{{ $container }} module-container py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-                @include('layouts.partials.left_menu')
-
-                <div class="col_maincontent_active">
+                <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+                <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                     <div class="row">
 
@@ -48,7 +69,7 @@
                                             <div class='form-group'>
                                                 <label for='courses-select' class='col-sm-12 control-label-notes'>{{ trans('langCourse') }}:</label>
                                                 <div class='col-sm-12'>
-                                                    <select id='courses-select' class='form-select' name='prerequisite_course'></select>
+                                                    <select id='courses-select' class='form-control' name='prerequisite_course'></select>
                                                 </div>
                                             </div>
                                             <div class='form-group mt-4'>
@@ -67,10 +88,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
         </div>
-    </div>
 @endsection
 
 

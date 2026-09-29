@@ -108,7 +108,7 @@ $data['cbox_dont_display_contact_menu'] = get_config('dont_display_contact_menu'
 $data['total_courses'] = get_config('total_courses');
 $data['visits_per_week'] = get_config('visits_per_week');
 
-$data['homepage_intro'] = rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro'));
+$data['homepage_intro'] = rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro'), options: array('id' => 'homepage_intro'));
 $data['priorities'] = Database::get()->queryArray("SELECT * FROM homepagePriorities ORDER BY `order` ASC");
 
 $data['action_bar'] = action_bar(

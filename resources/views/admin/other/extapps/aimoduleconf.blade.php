@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
@@ -21,7 +21,7 @@
                                     <label for="dropdown" class="form-label">{{ trans('langSelectAIProvider') }}</label>
                                     <select id='dropdownprovider' name='provider' class='form-select'>
                                         @foreach ($dropdownOptions as $option)
-                                            <option value='{{ $option['value'] }}' @if (isset($existingConfig->provider_type) && $existingConfig->provider_type == $option['value']) selected @endif> {{ ($option['label']) }}</option>
+                                            <option value='{{ $option['value'] }}' @if (isset($existingConfig->provider_type) && ($existingConfig->provider_type == $option['value'] || ($existingConfig->provider_type == 'custom' && $option['value'] == 'other') || ($existingConfig->provider_type == 'other' && $option['value'] == 'custom'))) selected @endif> {{ ($option['label']) }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -31,7 +31,7 @@
                                     <input type="text" id="api_key" name="api_key" class="form-control" placeholder="Enter API key" value="@if (isset($existingConfig->api_key)) {{ $existingConfig->api_key }} @endif">
                                 </div>
 
-                                <div id='modelDropdownContainer' class='form-group mt-4'>
+                                <div id='modelDropdownContainer' class='form-group mt-4 @if (isset($existingConfig->provider_type) && in_array($existingConfig->provider_type, ['custom', 'other'])) d-none @endif'>
                                     <label for="modelDropdown" class="form-label">{{ trans('langLanguageModel') }}</label>
                                     <select id="modelDropdown" name="model" class="form-select">
                                         <option value="{{ $currentModelName }}">{{ $currentModelName }}</option>
@@ -46,7 +46,7 @@
 
                                 <div id="connectionStatus" class="mt-2"></div>
 
-                                <div id="otherFields" class="mt-4 d-none">
+                                <div id="otherFields" class="mt-4 @if (!isset($existingConfig->provider_type) || !in_array($existingConfig->provider_type, ['custom', 'other'])) d-none @endif">
                                     <div class='form-group'>
                                         <label for="apiType" class="form-label">API Type</label>
                                         <select id="apiType" name="api_type" class="form-control">
@@ -56,12 +56,12 @@
 
                                     <div class='form-group mt-3'>
                                         <label for="endpointUrl" class="form-label">Endpoint URL</label>
-                                        <input type="text" id="endpointUrl" name="endpoint_url" class="form-control" placeholder="Enter custom API URL">
+                                        <input type="text" id="endpointUrl" name="endpoint_url" class="form-control" placeholder="Enter custom API URL" value="@if (isset($existingConfig->endpoint_url)){{ $existingConfig->endpoint_url }}@endif">
                                     </div>
 
                                     <div class='form-group mt-3'>
                                         <label for="modelName" class="form-label">{{ trans('langLanguageModelName') }}</label>
-                                        <input type="text" id="modelName" name="model_name" class="form-control" placeholder="{{ trans('langLanguageModelName') }}">
+                                        <input type="text" id="modelName" name="model_name" class="form-control" placeholder="{{ trans('langLanguageModelName') }}" value="@if (isset($existingConfig->model_name) && in_array($existingConfig->provider_type, ['custom', 'other'])){{ $existingConfig->model_name }}@endif">
                                     </div>
                                 </div>
 
@@ -132,10 +132,9 @@
                                     <label for='select-courses' class='col-12 control-label-notes'>{{ trans('langUseOfService') }}&nbsp;&nbsp;
                                     <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='{{ trans('langUseOfServiceInfo') }}'></span></label>
                                     <div class='col-12'>
-                                        <select id='select-courses' class='form-select' name='ai_courses[]' multiple>
+                                        <select id='select-courses' class='form-control' name='ai_courses[]' multiple>
                                             {!! $courses_content !!}
                                         </select>
-                                        <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
                                     </div>
                                 </div>
 
@@ -168,12 +167,12 @@
 
                 @else
                 {{-- list of AI providers --}}
-                    <h3>
+                    <h2 class='text-heading-h3'>
                         {{ trans('langProviders') }}
                         <a href="{{ $_SERVER['SCRIPT_NAME'] }}?add_provider">
                             <span class="fa-solid fa-circle-plus fa-lg" title="{{ trans('langAddProvider') }}" data-bs-original-title="{{ trans('langAddProvider') }}" data-bs-toggle="tooltip" data-bs-placement="top"></span>
                         </a>
-                    </h3>
+                    </h2>
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead>
@@ -212,12 +211,12 @@
 
 
                     {{-- list of AI modules --}}
-                    <h3 class='mt-4'>
+                    <h2 class='text-heading-h3 mt-4'>
                         {{ trans('langAIServices') }}
                         <a href="{{ $_SERVER['SCRIPT_NAME'] }}?add_service">
                             <span class="fa-solid fa-circle-plus fa-lg" title="{{ trans('langAssignAIToModule') }}" data-bs-original-title="{{ trans('langAssignAIToModule') }}" data-bs-toggle="tooltip" data-bs-placement="top"></span>
                         </a>
-                    </h3>
+                    </h2>
                     <div class='table-responsive'>
                         <table class='table-default'>
                             <thead>
@@ -270,7 +269,7 @@
 
             </div>
         </div>
-    </div>
+    </main>
 
     <script type='text/javascript'>
         function doSelectedCourses() {
@@ -344,15 +343,18 @@
 
             // Load models for existing provider on page load
             var selectedProvider = $('#dropdownprovider').val();
-            if (selectedProvider && selectedProvider !== 'other') {
+            if (selectedProvider && selectedProvider !== 'other' && selectedProvider !== 'custom') {
                 loadModels(selectedProvider);
+            } else if (selectedProvider === 'other' || selectedProvider === 'custom') {
+                $('#modelDropdownContainer').addClass('d-none');
+                $('#otherFields').removeClass('d-none');
             }
 
             // Handle provider dropdown change
             $('#dropdownprovider').on('change', function () {
                 const provider = $(this).val();
 
-                if (provider === 'other') {
+                if (provider === 'other' || provider === 'custom') {
                     $('#modelDropdownContainer').addClass('d-none');
                     $('#otherFields').removeClass('d-none');
                 } else {
@@ -360,7 +362,7 @@
                     $('#otherFields').addClass('d-none');
                 }
 
-                if (provider && provider !== 'other') {
+                if (provider && provider !== 'other' && provider !== 'custom') {
                     loadModels(provider);
                 }
             });
@@ -379,7 +381,7 @@
                 const originalText = btn.text();
                 const apiKey = $('#api_key').val();
                 const provider = $('#dropdownprovider').val();
-                const model = provider === 'other' ? $('#modelName').val() : $('#modelDropdown').val();
+                const model = (provider === 'other' || provider === 'custom') ? $('#modelName').val() : $('#modelDropdown').val();
                 const endpointUrl = $('#endpointUrl').val();
 
                 if (!apiKey) {
@@ -421,7 +423,13 @@
                 });
             });
 
-            $('#select-courses').select2();
+            slimSelectFun (
+                    '#select-courses', 
+                    '{{ js_escape(trans('langSearch')) }}', 
+                    '{{ js_escape(trans('langWelcomeSelect')) }}', 
+                    '{{ js_escape(trans('langSelectAll')) }}', 
+                    '{{ js_escape(trans('langListChoices')) }}'
+                );
             $('#selectAll').click(function(e) {
                 e.preventDefault();
                 let stringVal = [];

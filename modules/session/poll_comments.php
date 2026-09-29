@@ -183,7 +183,7 @@ if (isset($_GET['add']) or isset($_GET['modify'])) {
 
     // add comment
     if (!isset($_GET['modify'])) {
-        $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, '');
+        $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, '', options: array('id' => 'comments'));
         $data['participants'] = $participants = Database::get()->queryArray("SELECT user.givenname,user.surname,mod_session_users.participants FROM mod_session_users
                                                                              LEFT JOIN user ON mod_session_users.participants=user.id
                                                                              WHERE mod_session_users.session_id = ?d
@@ -192,7 +192,7 @@ if (isset($_GET['add']) or isset($_GET['modify'])) {
         if (isset($_GET['comment'])) {
             $comment = Database::get()->querySingle("SELECT * FROM session_poll_comments WHERE id = ?d", $_GET['comment']);
             if ($comment) {
-                $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, $comment->comments);
+                $data['rich_text_editor_comments'] = rich_text_editor('comments', 5, 40, $comment->comments, options: array('id' => 'comments'));
                 $data['comment_id'] = $comment->id;
                 $data['title'] = $comment->title;
                 $data['user_u'] = $comment->user_id;
@@ -220,7 +220,7 @@ if (isset($_GET['view_comment'])) {
             <div class='col-12'>
                 <div class='card panelCard card-default px-lg-4 py-lg-3'>
                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                        <h3> " . q($info_comment->title) . "</h3>
+                        <h2 class='text-heading-h3'> " . q($info_comment->title) . "</h2>
                     </div>
                     <div class='card-body'>
                         <p>" . purify($info_comment->comments) . "</p>
@@ -261,6 +261,7 @@ $data['action_bar'] = action_bar([
       'icon' => 'fa-solid fa-file-pdf',
       'button-class' => 'btn-success',
       'level' => 'primary-label',
+      'link-attrs' => "target='_blank'",
       'show' => isset($_GET['view_comment'])],
     [ 'title' => $langAdd,
       'url' => $_SERVER['SCRIPT_NAME'] .'?course=' . $course_code . '&amp;session=' . $sessionID . '&amp;pid=' . $_GET['pid'] . '&amp;add=1',
@@ -289,71 +290,83 @@ function pdf_comment_output($sid,$content_m) {
 
     $sessionTitle = title_session($course_id,$sid);
 
-    $pdf_mcontent = "
-        <!DOCTYPE html>
-        <html lang='el'>
-        <head>
-          <meta charset='utf-8'>
-          <title>" . q("$currentCourseName") . "</title>
-          <style>
-            * { font-family: 'opensans'; }
-            body { font-family: 'opensans'; font-size: 10pt; }
-            small, .small { font-size: 8pt; }
-            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-            h1 { font-size: 16pt; }
-            h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; margin-top: 20px;}
-          </style>
-        </head>
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-        <h2> " . q($sessionTitle) . "</h2>";
+    $pdf_title = "$course_code user_comments";
+    $course_title = q("$currentCourseName");
+    $module_type_title = q($sessionTitle);
+    html_to_pdf($pdf_title, $course_title, $module_type_title, $content_m);
 
-    $pdf_mcontent .= $content_m;
+    // $pdf_mcontent = "
+    //     <!DOCTYPE html>
+    //     <html lang='el'>
+    //     <head>
+    //       <meta charset='utf-8'>
+    //       <title>" . q("$currentCourseName") . "</title>
+    //       <style>
+    //         * { font-family: 'opensans'; }
+    //         body { font-family: 'opensans'; font-size: 10pt; }
+    //         small, .small { font-size: 8pt; }
+    //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+    //         h1 { font-size: 16pt; }
+    //         h2 { font-size: 12pt; border-bottom: 1px solid black; }
+    //         h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; margin-top: 20px;}
+    //       </style>
+    //     </head>
+    //     <body>
+    //     <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+    //     <h2> " . q($sessionTitle) . "</h2>";
 
-    $pdf_mcontent .= "</body></html>";
+    // $pdf_mcontent .= $content_m;
 
-    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata'];
+    // $pdf_mcontent .= "</body></html>";
 
-    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header+15,     // mm
-        'margin_bottom' => $image_height_footer+15,  // mm
-        'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-        'fontdata' => $fontData + [
-                'opensans' => [
-                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                ],
-                'roboto' => [
-                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-                ]
-            ]
-    ]);
+    // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    // $fontDirs = $defaultConfig['fontDir'];
+    // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    // $fontData = $defaultFontConfig['fontdata'];
 
-    $mpdf->SetHTMLHeader(get_platform_logo());
-    $footerHtml = '
-    <div>
-        <table width="100%" style="border: none;">
-            <tr>
-                <td style="text-align: left;">{DATE j-n-Y}</td>
-                <td style="text-align: right;">{PAGENO} / {nb}</td>
-            </tr>
-        </table>
-    </div>
-    ' . get_platform_logo('','footer') . '';
-    $mpdf->SetHTMLFooter($footerHtml);
-    $mpdf->SetCreator(course_id_to_prof($course_id));
-    $mpdf->SetAuthor(course_id_to_prof($course_id));
-    $mpdf->WriteHTML($pdf_mcontent);
-    $mpdf->Output("$course_code user_comments.pdf", 'I'); // 'D' or 'I' for download / inline display
-    exit;
+    // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // // for old courses
+    // if ($image_height_header > 50) {
+    //     $image_height_header = 20;
+    // }
+    // if ($image_height_footer > 50) {
+    //     $image_height_footer = 15;
+    // }
+    // $mpdf = new Mpdf\Mpdf([
+    //     'margin_top' => $image_height_header + 20,     // mm
+    //     'margin_bottom' => $image_height_footer + 10,  // mm
+    //     'tempDir' => _MPDF_TEMP_PATH,
+    //     'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+    //     'fontdata' => $fontData + [
+    //             'opensans' => [
+    //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+    //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+    //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+    //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+    //             ],
+    //             'roboto' => [
+    //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+    //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+    //             ]
+    //         ]
+    // ]);
+
+    // $mpdf->SetHTMLHeader(get_platform_logo());
+    // $footerHtml = '
+    // <div>
+    //     <table width="100%" style="border: none;">
+    //         <tr>
+    //             <td style="text-align: left;">{DATE j-n-Y}</td>
+    //             <td style="text-align: right;">{PAGENO} / {nb}</td>
+    //         </tr>
+    //     </table>
+    // </div>
+    // ' . get_platform_logo('','footer') . '';
+    // $mpdf->SetHTMLFooter($footerHtml);
+    // $mpdf->SetCreator(course_id_to_prof($course_id));
+    // $mpdf->SetAuthor(course_id_to_prof($course_id));
+    // $mpdf->WriteHTML($pdf_mcontent);
+    // $mpdf->Output("$course_code user_comments.pdf", 'I'); // 'D' or 'I' for download / inline display
+    // exit;
 }

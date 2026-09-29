@@ -95,6 +95,14 @@ if (isset($_POST['widgetAction'])) {
     }
     redirect_to_home_page('modules/admin/widgets.php');
 }
+
+if (isset($_POST['submit_widget_settings'])) {
+    $disable_user = isset($_POST['enable_user_widgets']) ? 0 : 1;
+    $disable_course = isset($_POST['enable_course_widgets']) ? 0 : 1;
+    set_config('disable_user_widgets', $disable_user);
+    set_config('disable_course_widgets', $disable_course);
+    redirect_to_home_page('modules/admin/widgets.php');
+}
 $head_content .=
         "
         <script type='text/javascript'>

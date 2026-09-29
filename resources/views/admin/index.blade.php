@@ -66,7 +66,7 @@
 
 @section('content')
 
-<div class="col-12 main-section">
+<main id="main" class="col-12 main-section">
     <div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
@@ -178,7 +178,13 @@
                                                     <div class='form-label'>{{ trans('langLastUpdate') }}</div>
                                                 </div>
                                                 <div class='col-lg-6 col-12'>
-                                                    <div>{!! format_locale_date((new DateTime($coreStats['lastModified']))->getTimestamp()) !!}</div>
+                                                    <div>
+                                                        @if (!empty($coreStats['lastModified']))
+                                                            {!! format_locale_date((new DateTime($coreStats['lastModified']))->getTimestamp()) !!}
+                                                        @else
+                                                            &mdash;
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class='row p-2 margin-bottom-thin'>
@@ -272,7 +278,9 @@
                                     <div class='col-lg-6 col-12'>
                                         <div>
                                             @if ($lastCreatedCourse)
-                                                <b>{{ $lastCreatedCourse->title }}</b>
+                                                <strong>
+                                                    {{ $lastCreatedCourse->title }}
+                                                </strong>
                                                 ({{ $lastCreatedCourse->code }}, {{ $lastCreatedCourse->prof_names }})
                                             @else
                                                 {{ trans('langNoCourses') }}
@@ -286,8 +294,14 @@
                                     </div>
                                     <div class='col-lg-6 col-12'>
                                         <div>
-                                            <b>{{ $lastProfReg->givenname . " " . $lastProfReg->surname }}</b>
-                                            ({{ $lastProfReg->username }}, {{ date("j/n/Y H:i", strtotime($lastProfReg->registered_at)) }})
+                                            @if ($lastProfReg)
+                                                <strong>
+                                                    {{ $lastProfReg->givenname . " " . $lastProfReg->surname }}
+                                                </strong>
+                                                ({{ $lastProfReg->username }}, {{ date("j/n/Y H:i", strtotime($lastProfReg->registered_at)) }})
+                                            @else
+                                                {{ trans('langLastStudNone') }}
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -298,7 +312,9 @@
                                     <div class='col-lg-6 col-12'>
                                         <div>
                                             @if ($lastStudReg)
-                                                <b>{{ $lastStudReg->givenname . " " . $lastStudReg->surname }}</b>
+                                                <strong>
+                                                    {{ $lastStudReg->givenname . " " . $lastStudReg->surname }}
+                                                </strong>
                                                 ({{ $lastStudReg->username . ", " . date("j/n/Y H:i", strtotime($lastStudReg->registered_at)) }})
                                             @else
                                                 {{ trans('langLastStudNone') }}
@@ -315,11 +331,11 @@
                                             {{ trans('langAfterLastLogin') }}
                                             <ul class='custom_list'>
                                                 <li>
-                                                    <b>{{ $lastregisteredprofs }}</b>
+                                                    <strong>{{ $lastregisteredprofs }}</strong>
                                                     {{ trans('langTeachers') }}
                                                 </li>
                                                 <li>
-                                                    <b>{{ $lastregisteredstuds }}</b>
+                                                    <strong>{{ $lastregisteredstuds }}</strong>
                                                     {{ trans('langStudents') }}
                                                 </li>
                                             </ul>
@@ -377,7 +393,269 @@
 
                 </div>
             </div>
+
+            {{-- OpenBadges Statistics Section --}}
+            @php
+                $openBadgesApp = ExtAppManager::getApp('openbadges');
+                $openBadgesEnabled = $openBadgesApp && $openBadgesApp->isEnabled();
+            @endphp
+            @if ($is_admin && isset($badge_stats) && $openBadgesEnabled)
+                <div class='col-12 mt-4'>
+                    <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 px-0'>
+                            <h3 class='mb-0'>
+                                <i class='fa-solid fa-certificate pe-2 Accent-200-cl'></i>
+                                {{ trans('langOpenBadgesStatistics') }}
+                            </h3>
+                        </div>
+                        <div class='card-body px-0'>
+                            
+                            {{-- Primary Statistics Grid --}}
+                            <div class='row row-cols-2 row-cols-sm-4 g-3 g-lg-4 mb-4'>
+                                
+                                {{-- Users with Connected Backpack --}}
+                                <div class='col'>
+                                    <div class='card statistics-card drop-shadow card-default h-100'>
+                                        <div class='card-body d-flex justify-content-center align-items-center'>
+                                            <div class='text-center w-100'>
+                                                <div class='d-flex justify-content-center align-items-center mb-2'>
+                                                    <i class='fa-solid fa-users fa-2x text-primary'></i>
+                                                    <h2 class='mb-0 ms-3'>{{ $badge_stats['users_with_backpack'] }}</h2>
+                                                </div>
+                                                <p class='form-label text-center mb-0'>{{ trans('langUsersWithBackpack') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Active Backpack Users --}}
+                                <div class='col'>
+                                    <div class='card statistics-card drop-shadow card-default h-100'>
+                                        <div class='card-body d-flex justify-content-center align-items-center'>
+                                            <div class='text-center w-100'>
+                                                <div class='d-flex justify-content-center align-items-center mb-2'>
+                                                    <i class='fa-solid fa-user-check fa-2x text-success'></i>
+                                                    <h2 class='mb-0 ms-3'>{{ $badge_stats['active_backpack_users'] }}</h2>
+                                                </div>
+                                                <p class='form-label text-center mb-0'>{{ trans('langActiveBackpackUsers') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Exported Badges --}}
+                                <div class='col'>
+                                    <div class='card statistics-card drop-shadow card-default h-100'>
+                                        <div class='card-body d-flex justify-content-center align-items-center'>
+                                            <div class='text-center w-100'>
+                                                <div class='d-flex justify-content-center align-items-center mb-2'>
+                                                    <i class='fa-solid fa-upload fa-2x text-info'></i>
+                                                    <h2 class='mb-0 ms-3'>{{ $badge_stats['exported_badges'] }}</h2>
+                                                </div>
+                                                <p class='form-label text-center mb-0'>{{ trans('langExportedBadges') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Imported Badges --}}
+                                <div class='col'>
+                                    <div class='card statistics-card drop-shadow card-default h-100'>
+                                        <div class='card-body d-flex justify-content-center align-items-center'>
+                                            <div class='text-center w-100'>
+                                                <div class='d-flex justify-content-center align-items-center mb-2'>
+                                                    <i class='fa-solid fa-download fa-2x text-warning'></i>
+                                                    <h2 class='mb-0 ms-3'>{{ $badge_stats['imported_badges'] }}</h2>
+                                                </div>
+                                                <p class='form-label text-center mb-0'>{{ trans('langImportedBadges') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{-- Secondary Statistics Grid --}}
+                            <div class='row row-cols-2 row-cols-sm-4 g-3 g-lg-4 mb-4'>
+                                
+                                {{-- Total Local Badges --}}
+                                <div class='col'>
+                                    <div class='card statistics-card drop-shadow card-default h-100'>
+                                        <div class='card-body d-flex justify-content-center align-items-center'>
+                                            <div class='text-center w-100'>
+                                                <div class='d-flex justify-content-center align-items-center mb-2'>
+                                                    <i class='fa-solid fa-award fa-2x Accent-200-cl'></i>
+                                                    <h2 class='mb-0 ms-3'>{{ $badge_stats['total_local_badges'] }}</h2>
+                                                </div>
+                                                <p class='form-label text-center mb-0'>{{ trans('langTotalLocalBadges') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Total Badge Awards --}}
+                                <div class='col'>
+                                    <div class='card statistics-card drop-shadow card-default h-100'>
+                                        <div class='card-body d-flex justify-content-center align-items-center'>
+                                            <div class='text-center w-100'>
+                                                <div class='d-flex justify-content-center align-items-center mb-2'>
+                                                    <i class='fa-solid fa-star fa-2x text-success'></i>
+                                                    <h2 class='mb-0 ms-3'>{{ $badge_stats['total_badge_awards'] }}</h2>
+                                                </div>
+                                                <p class='form-label text-center mb-0'>{{ trans('langTotalBadgeAwards') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Users with Badges --}}
+                                <div class='col'>
+                                    <div class='card statistics-card drop-shadow card-default h-100'>
+                                        <div class='card-body d-flex justify-content-center align-items-center'>
+                                            <div class='text-center w-100'>
+                                                <div class='d-flex justify-content-center align-items-center mb-2'>
+                                                    <i class='fa-solid fa-user-graduate fa-2x text-primary'></i>
+                                                    <h2 class='mb-0 ms-3'>{{ $badge_stats['users_with_badges'] }}</h2>
+                                                </div>
+                                                <p class='form-label text-center mb-0'>{{ trans('langUsersWithBadges') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Active Providers --}}
+                                <div class='col'>
+                                    <div class='card statistics-card drop-shadow card-default h-100'>
+                                        <div class='card-body d-flex justify-content-center align-items-center'>
+                                            <div class='text-center w-100'>
+                                                <div class='d-flex justify-content-center align-items-center mb-2'>
+                                                    <i class='fa-solid fa-server fa-2x text-info'></i>
+                                                    <h2 class='mb-0 ms-3'>{{ $badge_stats['active_providers'] }}</h2>
+                                                </div>
+                                                <p class='form-label text-center mb-0'>{{ trans('langActiveBackpackProviders') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{-- Additional Information --}}
+                            <div class='row g-3 g-lg-4'>
+                                
+                                {{-- Most Exported Badge --}}
+                                <div class='col-lg-3 col-md-6 col-12'>
+                                    <div class='card border-card-left-success px-3 py-3 h-100'>
+                                        <div class='card-body d-flex flex-column p-0 pt-2'>
+                                            <div class='d-flex align-items-center mb-2 px-3'>
+                                                <i class='fa-solid fa-trophy fa-lg text-warning me-2'></i>
+                                                <h6 class='mb-0'>{{ trans('langMostExportedBadge') }}</h6>
+                                            </div>
+                                            <div class='flex-grow-1 d-flex align-items-center justify-content-center px-3'>
+                                                @if($badge_stats['most_exported_badge_title'])
+                                                    <div class='d-flex align-items-center gap-2 w-100'>
+                                                        @if($badge_stats['most_exported_badge_icon'])
+                                                            <img src='{{ $urlServer }}courses/user_progress_data/badge_templates/{{ $badge_stats['most_exported_badge_icon'] }}' 
+                                                                 alt='{{ $badge_stats['most_exported_badge_title'] }}'
+                                                                 style='width: 50px; height: 50px; object-fit: contain;'
+                                                                 onerror="this.src='{{ $urlServer }}resources/img/game/badge.png'">
+                                                        @else
+                                                            <img src='{{ $urlServer }}resources/img/game/badge.png' 
+                                                                 alt='badge'
+                                                                 style='width: 50px; height: 50px; object-fit: contain;'>
+                                                        @endif
+                                                        <div class='flex-grow-1'>
+                                                            <p class='mb-0 small fw-bold'>{{ $badge_stats['most_exported_badge_title'] }}</p>
+                                                            <p class='mb-0 text-muted small'>{{ $badge_stats['most_exported_badge_count'] }} {{ trans('langExports') }}</p>
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    <p class='mb-0 text-muted small'>-</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Course with Most Exports --}}
+                                <div class='col-lg-3 col-md-6 col-12'>
+                                    <div class='card border-card-left-success px-3 py-3 h-100'>
+                                        <div class='card-body d-flex flex-column p-0 pt-2'>
+                                            <div class='d-flex align-items-center mb-2 px-3'>
+                                                <i class='fa-solid fa-book-open fa-lg Accent-200-cl me-2'></i>
+                                                <h6 class='mb-0'>{{ trans('langCourseMostExports') }}</h6>
+                                            </div>
+                                            <div class='flex-grow-1 d-flex align-items-center justify-content-center px-3'>
+                                                @if($badge_stats['course_most_exports_title'])
+                                                    <div class='text-center w-100'>
+                                                        <a href='{{ $urlServer }}courses/{{ $badge_stats['course_most_exports_code'] }}/' 
+                                                           class='text-decoration-none'>
+                                                            <p class='mb-0 small fw-bold text-primary'>
+                                                                {{ $badge_stats['course_most_exports_title'] }}
+                                                            </p>
+                                                            <p class='mb-0 text-muted small'>({{ $badge_stats['course_most_exports_code'] }})</p>
+                                                        </a>
+                                                        <p class='mb-0 text-muted small mt-1'>
+                                                            {{ $badge_stats['course_most_exports_count'] }} {{ trans('langExports') }}
+                                                        </p>
+                                                    </div>
+                                                @else
+                                                    <p class='mb-0 text-muted small'>-</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Recent Sync Activity --}}
+                                <div class='col-lg-3 col-md-6 col-12'>
+                                    <div class='card border-card-left-info px-3 py-3 h-100'>
+                                        <div class='card-body d-flex flex-column p-0 pt-2'>
+                                            <div class='d-flex align-items-center mb-2 px-3'>
+                                                <i class='fa-solid fa-sync-alt fa-lg text-info me-2'></i>
+                                                <h6 class='mb-0'>{{ trans('langRecentSyncActivity') }}</h6>
+                                            </div>
+                                            <div class='flex-grow-1 d-flex align-items-center justify-content-center px-3'>
+                                                <p class='mb-0 text-muted'>
+                                                    {{ $badge_stats['recent_syncs'] }} {{ trans('langUsersLast30Days') }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Last Activity --}}
+                                <div class='col-lg-3 col-md-12 col-12'>
+                                    <div class='card border-card-left-warning px-3 py-3 h-100'>
+                                        <div class='card-body d-flex flex-column p-0 pt-2'>
+                                            <div class='d-flex align-items-center mb-2 px-3'>
+                                                <i class='fa-solid fa-clock fa-lg text-secondary me-2'></i>
+                                                <h6 class='mb-0'>{{ trans('langLastActivity') }}</h6>
+                                            </div>
+                                            <div class='flex-grow-1 d-flex align-items-center justify-content-center px-3'>
+                                                <div class='small w-100'>
+                                                    <div class='mb-1'>
+                                                        <strong>{{ trans('langLastImport') }}:</strong> 
+                                                        <span class='text-muted'>{{ $badge_stats['last_import'] }}</span>
+                                                    </div>
+                                                    <div>
+                                                        <strong>{{ trans('langLastExport') }}:</strong> 
+                                                        <span class='text-muted'>{{ $badge_stats['last_export'] }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            @endif
+
         </div>
     </div>
-</div>
+</main>
 @endsection

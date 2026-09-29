@@ -173,7 +173,7 @@
 
     <div class="row">
         <div class="badge-container">
-            <h4>{{  trans('langBadges') }}</h4>
+            <div class='text-heading-h4'>{{  trans('langBadges') }}</div>
             <div class="form-wrapper">
             @if (count($game_badge) > 0)
                 <div class="clearfix">
@@ -192,7 +192,7 @@
                                 </p>
                             @if ($badge->completed != 1)
                                 <div class="not_completed">
-                                    <div class="certificate_panel_percentage_compact center-block">{{ round($badge->completed_criteria / $badge->total_criteria * 100, 0) }}%</div>
+                                    <div class="certificate_panel_percentage_compact center-block">{{ $badge->total_criteria > 0 ? round($badge->completed_criteria / $badge->total_criteria * 100, 0) : 0 }}%</div>
                                 </div>
                             @endif
                             </a>
@@ -218,7 +218,7 @@
 
     <div class="row">
         <div class="badge-container">
-            <h4>{{  trans('langCertificates') }}</h4>
+            <div class='text-heading-h4'>{{  trans('langCertificates') }}</div>
             <div class="form-wrapper">
             @if (count($game_certificate) > 0)
                 <div class="clearfix">
@@ -230,7 +230,7 @@
                         <div class="col-xs-12 col-sm-6 col-xl-4">
                         <a style="display:inline-block; width: 100%" href="index.php?course={{$course_code}}&amp;certificate_id={{$certificate->certificate}}&amp;u={{$certificate->user}}">
                             <div class="certificate_panel">
-                                <h4 class="certificate_panel_title">{{ $certificate->title }}</h4>
+                                <div class="certificate_panel_title text-heading-h4">{{ $certificate->title }}</div>
                                 <div class="certificate_panel_date">{{ $dateAssigned }}</div>
                                 <div class="certificate_panel_issuer">{{ $certificate->issuer }}</div>
                                 <div class="certificate_panel_viewdetails">
@@ -249,7 +249,7 @@
                                         {{-- <img class="badge_waiting" src="{{ $template_base }}/img/game/badge.png"> --}}
                                     </div>
                                 @else
-                                    <div class="certificate_panel_percentage">{{ round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) }}%</div>
+                                    <div class="certificate_panel_percentage">{{ $certificate->total_criteria > 0 ? round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) : 0 }}%</div>
                                 @endif
                             </div>
                         </a>

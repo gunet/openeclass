@@ -17,7 +17,7 @@
 @if ($theQuestion)
     <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
         <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
-            <h3 class='mb-0'>{{ trans('langQuickSurvey') }}</h3>
+            <h2 class='text-heading-h3 mb-0'>{{ trans('langQuickSurvey') }}</h2>
         </div>
         <div class='card-body card-body-default px-0'>
             <div class='card panelCard card-default px-lg-4 py-lg-3 p-3'>
@@ -103,7 +103,7 @@
                         </script>
 
                         <div class='btn submitAdminBtn' tabindex='0'>
-                            <i class='fa-solid fa-chart-bar showResults'></i> 
+                            <i class='fa-solid fa-chart-bar showResults'></i>
                             <i class='fa-regular fa-rectangle-list showPoll'></i>
                         </div>
                 </div>
@@ -119,7 +119,7 @@
                     <div class='panel-body p-0 mt-3 bg-transparent'>{{ trans('langPollAlreadyParticipated') }}</div>
                 @else
                     <div class='panel-body pollQuestionDiv p-0 mt-3 bg-transparent'>
-                        <form id='homePollForm' class='form-horizontal' role='form' action='' id='poll' method='post'>
+                        <form id='poll' class='form-horizontal' role='form' action='' method='post'>
                             {!! $quick_poll_answers_content !!}
                             <input name='qtype' type='hidden' value='{{ $qtype }}'>
                             <input name='pid' type='hidden' value='{{ $pid }}'>
@@ -133,6 +133,6 @@
 
         </div>
     </div>
-    
+
 
 @endif

@@ -54,7 +54,8 @@ if ($q) {
         if (count($prereq1) > 0) {
             $completion = true;
 
-            foreach ($prereq1 as $prereqCourseId) {
+            foreach ($prereq1 as $prereqRow) {
+                $prereqCourseId = $prereqRow->prerequisite_course;
                 $prereq2 = Database::get()->queryArray("SELECT id
                                   FROM user_badge
                                   WHERE user = ?d

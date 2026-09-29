@@ -1,5 +1,6 @@
 <?php
 
+
 /*
  *  ========================================================================
  *  * Open eClass
@@ -18,40 +19,55 @@
  *
  */
 
-function api_method($access) {
+
+function api_method($access)
+{
     global $webDir;
+
 
     if (!$access->isValid) {
         Access::error(100, "Authentication required");
     }
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!isset($_POST['course_id'])) {
-            Access::error(2, 'Required parameter user_id missing');
+            Access::error(2, 'Required parameter course_id missing');
         }
         if (!isset($_POST['groupname'])) {
             Access::error(2, 'Required parameter groupname missing');
         }
-        $course = Database::get()->querySingle('SELECT id, code, visible FROM course
+        $course = Database::get()->querySingle(
+            'SELECT id, code, visible FROM course
             WHERE code = ?s AND visible <> ?d',
-            $_POST['course_id'], COURSE_INACTIVE);
+            $_POST['course_id'],
+            COURSE_INACTIVE
+        );
         if (!$course) {
-            Access::error(3, "Course with id '$_GET[course_id]' not found");
+            Access::error(3, "Course with id '$_POST[course_id]' not found");
         }
+
+        // Check if course belongs to allowed departments
+        if (!Access::checkCourseDepartmentAccess($course->id, $access->allowedDepartments)) {
+            Access::error(403, 'Error: course is not in an allowed department', 403);
+        }
+
         $secret_directory = uniqid('');
         $secret_path = "$webDir/courses/{$course->code}/group/$secret_directory";
         make_dir("$secret_path");
         touch("$secret_path/index.php");
-        $group = Database::get()->query('INSERT INTO `group` SET
+        $group = Database::get()->query(
+            'INSERT INTO `group` SET
             course_id = ?d, name = ?s, description = \'\', secret_directory = ?s',
-            $course->id, canonicalize_whitespace($_POST['groupname']),
-            $secret_directory);
+            $course->id,
+            canonicalize_whitespace($_POST['groupname']),
+            $secret_directory
+        );
         if ($group) {
             header('Content-Type: application/json');
             header('X-Content-Type-Options: nosniff');
             echo json_encode(['id' => $group->lastInsertID]);
             exit();
         } else {
-            Access::error(10, "Error creating group in course '$_GET[course_id]'");
+            Access::error(10, "Error creating group in course '$_POST[course_id]'");
         }
     } else {
         if (isset($_GET['group_id'])) {
@@ -59,23 +75,37 @@ function api_method($access) {
                 WHERE id = ?d', $_GET['group_id']);
             if (!$group) {
                 Access::error(3, "Group with id '$_GET[group_id]' not found");
-            } else {
-                $group_data = [
-                        'id' => $group->id,
-                        'name' => $group->name,
-                ];
             }
+
+            // Check if the group's course belongs to allowed departments
+            if (!Access::checkCourseDepartmentAccess($group->course_id, $access->allowedDepartments)) {
+                Access::error(403, 'Error: course is not in an allowed department', 403);
+            }
+
+            $group_data = [
+                'id' => $group->id,
+                'name' => $group->name,
+            ];
             header('Content-Type: application/json');
             header('X-Content-Type-Options: nosniff');
             echo json_encode($group_data, JSON_UNESCAPED_UNICODE);
             exit();
         } elseif (isset($_GET['course_id'])) {
-            $course = Database::get()->querySingle('SELECT id, code, visible FROM course
+            $course = Database::get()->querySingle(
+                'SELECT id, code, visible FROM course
                 WHERE code = ?s AND visible <> ?d',
-                $_GET['course_id'], COURSE_INACTIVE);
+                $_GET['course_id'],
+                COURSE_INACTIVE
+            );
             if (!$course) {
                 Access::error(3, "Course with id '$_GET[course_id]' not found");
             }
+
+            // Check if course belongs to allowed departments
+            if (!Access::checkCourseDepartmentAccess($course->id, $access->allowedDepartments)) {
+                Access::error(403, 'Error: course is not in an allowed department', 403);
+            }
+
             $groups = Database::get()->queryArray('SELECT * FROM `group`
                 WHERE course_id = ?d', $course->id);
             if (!$groups) {
@@ -97,6 +127,7 @@ function api_method($access) {
         }
     }
 }
+
 
 chdir('..');
 require_once 'apiCall.php';

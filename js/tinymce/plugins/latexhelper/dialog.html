@@ -6,7 +6,18 @@
     <title>LaTeX Editor</title>
 
     <link rel="stylesheet" href="dialog.css">
+    <style>
+        .symbol-btn {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
 
+        .mj-render-target {
+            pointer-events: none;
+        }
+    </style>
     <!-- Security Checks -->
     <script>
         (function() {
@@ -111,39 +122,40 @@
     rightBtn.addEventListener('mouseleave', stopScroll);
 
     // Initialization
+    window.addEventListener('message', (event) => {
+        const data = event.data;
+
+        if (data.mceAction === 'latexhelper-initial-data') {
+            const initialCode = data.content || '';
+            const lang = data.latexLang || {};
+
+            inputArea.value = initialCode;
+
+            const labelInput = document.getElementById('label-latex-input');
+            const labelPreview = document.getElementById('label-preview');
+            const btnInsert = document.getElementById('btn-insert');
+            const btnCancel = document.getElementById('btn-cancel');
+
+            if (labelInput) labelInput.textContent = lang.latexInput || 'LaTeX Input:';
+            if (labelPreview) labelPreview.textContent = lang.preview || 'Preview';
+            if (btnInsert) btnInsert.textContent = lang.insert || 'Insert';
+            if (btnCancel) btnCancel.textContent = lang.cancel || 'Cancel';
+
+            if (typeof latexSymbols !== 'undefined') {
+                buildInterface(latexSymbols, lang.categories);
+            } else {
+                console.error("latex_codes.js loaded but no symbol data found.");
+                panelsContainer.innerHTML = '<div style="padding:10px; color:red">Error loading symbols.</div>';
+            }
+
+            if (inputArea.value) {
+                updatePreview();
+            }
+        }
+    });
+
     window.addEventListener('load', () => {
-        var args = {};
-        try {
-            args = top.tinymce.activeEditor.windowManager.getParams() || {};
-        } catch(e) {
-            console.log("Could not retrieve dialog params.");
-        }
-
-        if (args.initialCode) {
-            inputArea.value = args.initialCode;
-        }
-
-        // Apply translations (from messages.inc.php via plugin)
-        var lang = args.latexLang || {};
-        document.getElementById('label-latex-input').textContent = lang.latexInput || 'LaTeX Input:';
-        document.getElementById('label-preview').textContent = lang.preview || 'Preview';
-        document.getElementById('btn-insert').textContent = lang.insert || 'Insert';
-        document.getElementById('btn-cancel').textContent = lang.cancel || 'Cancel';
-
-        // Load Symbols (Check both variable names just in case)
-        const data = latexSymbols;
-
-        if (data) {
-            buildInterface(data, lang.categories);
-        } else {
-            console.error("latex_codes.js loaded but no symbol data found.");
-            panelsContainer.innerHTML = '<div style="padding:10px; color:red">Error loading symbols.</div>';
-        }
-
-        // Initial Preview
-        if (inputArea.value) {
-            updatePreview();
-        }
+        window.parent.postMessage({ mceAction: 'ready' }, '*');
     });
 
     // Interface Builder (categoryLabels: optional map of category key -> translated name)

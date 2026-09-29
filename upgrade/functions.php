@@ -126,7 +126,7 @@ function is_admin($username, $password) {
         }
 
         if (!password_verify($password, $user->password)) {
-            if (strlen($user->password) < 60 and md5($password) == $user->password) {
+            if (strlen($user->password) < 60 and md5($password) === $user->password) {
                 return true;
             }
             return false;
@@ -175,39 +175,6 @@ function touch_or_error($filename) {
         } else {
             echo "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langErrorCreatingDirectory $filename</span></div>";
         }
-    }
-}
-
-// We need some messages from all languages to upgrade course accueil table
-function load_global_messages() {
-    global $global_messages, $session, $webDir, $language_codes;
-    // these may seem unused, but they are needed when including messages.inc.php
-    global $siteName, $InstitutionUrl, $Institution;
-
-    foreach ($session->native_language_names as $code => $name) {
-        // include_messages
-        include "$webDir/lang/$code/common.inc.php";
-        $extra_messages = "config/{$language_codes[$code]}.inc.php";
-        if (file_exists($extra_messages)) {
-            include $extra_messages;
-        } else {
-            $extra_messages = false;
-        }
-        include "$webDir/lang/$code/messages.inc.php";
-        if (file_exists('config/config.php')) {
-            if(get_config('show_always_collaboration') and get_config('show_collaboration')){
-              include "$webDir/lang/$code/messages_collaboration.inc.php";
-            }
-        }
-        if ($extra_messages) {
-            include $extra_messages;
-        }
-        $global_messages['langCourseDescription'][$code] = $langCourseDescription;
-        $global_messages['langCourseUnits'][$code] = $langCourseUnits;
-        $global_messages['langGlossary'][$code] = $langGlossary;
-        $global_messages['langEBook'][$code] = $langEBook;
-        $global_messages['langVideo'][$code] = $langVideo;
-        $global_messages['langDropBox'][$code] = $langDropBox;
     }
 }
 
@@ -293,16 +260,55 @@ function installCertTemplates($root_dir) {
  * install ready to use badge icons
  */
 function installBadgeIcons($root_dir) {
-    $cert_default_dir = $root_dir . "/resources/img/game";
-    foreach (glob("$cert_default_dir/*.png") as $icon) {
-        $iconname = preg_replace('|.*/(.*)\.png|', '$1', $icon);
-        $filename = $iconname . '.png';
-        if (!copy($icon, $root_dir . BADGE_TEMPLATE_PATH . $filename)) {
-            die("Error copying badge icon!");
+
+    $mapping_file = $root_dir . '/resources/badges/badges_mapping.json';
+    if (!file_exists($mapping_file)) {
+        return;
+    }
+
+    $json_data = file_get_contents($mapping_file);
+    $badges = json_decode($json_data, true);
+
+    if (empty($badges)) {
+        return;
+    }
+
+    $categories_map = [];
+
+    foreach ($badges as $badge) {
+        $filename = $badge['filename'];
+
+        $existing = Database::get()->querySingle("SELECT id FROM badge_icon WHERE filename = ?s", $filename);
+        if ($existing) {
+            continue;
         }
+
+        $icon_path = $root_dir . "/resources/badges/" . $filename;
+
+        if (file_exists($icon_path)) {
+            if (!copy($icon_path, $root_dir . BADGE_TEMPLATE_PATH . $filename)) {
+                die("Error copying badge icon: " . $filename);
+            }
+        }
+
+        $cat_gr = $badge['cat_gr'] ?? ($badge['category'] ?? '');
+        $cat_en = $badge['cat_en'] ?? ($badge['category'] ?? '');
+        $category_name = serialize(['el' => $cat_gr, 'en' => $cat_en]);
+        if (!isset($categories_map[$category_name])) {
+            $cat_row = Database::get()->querySingle("SELECT id FROM badge_icon_category WHERE name = ?s", $category_name);
+            if ($cat_row) {
+                $categories_map[$category_name] = $cat_row->id;
+            } else {
+                $categories_map[$category_name] = Database::get()->query("INSERT INTO badge_icon_category (name) VALUES (?s)", $category_name)->lastInsertID;
+            }
+        }
+        $cat_id = $categories_map[$category_name];
+
+        $name_serialized = serialize(['el' => $badge['gr'], 'en' => $badge['en']]);
+
         Database::get()->query("INSERT INTO badge_icon
-            (name, description, filename) VALUES (?s, '', ?s)",
-            $iconname, $filename);
+            (name, category, filename) VALUES (?s, ?d, ?s)",
+            $name_serialized, $cat_id, $filename);
     }
 }
 
@@ -779,12 +785,11 @@ set_config('ext_bigbluebutton_enabled',
 
 /**
  * @brief upgrade queries to 3.3
- * @param $tbl_options
  * @return void
  */
-function upgrade_to_3_3($tbl_options): void
+function upgrade_to_3_3(): void
 {
-
+    global $webDir;
 // Remove '0000-00-00' default dates and fix exercise weight fields
     Database::get()->query('ALTER TABLE `announcement`
             MODIFY `date` DATETIME NOT NULL,
@@ -1425,7 +1430,9 @@ function upgrade_to_3_6($tbl_options): void
             `created` datetime,
             `expires` datetime,
             `bundle` int(11) not null default 0,
+            `allow_export` tinyint(1) not null default 1 COMMENT 'Controls if badge can be exported to external backpack',
             index `badge_course` (`course_id`),
+            index `idx_allow_export` (`allow_export`),
             foreign key (`course_id`) references `course` (`id`)
           ) $tbl_options");
 
@@ -3366,12 +3373,14 @@ function upgrade_to_4_1($tbl_options) : void {
  * @return void
  */
 function upgrade_to_4_2($tbl_options) : void {
-
     if (!DBHelper::fieldExists('forum_topic', 'pin_time')) {
         Database::get()->query("ALTER TABLE forum_topic ADD pin_time DATETIME DEFAULT NULL");
     }
     if (!DBHelper::fieldExists('forum_topic', 'visible')) {
         Database::get()->query("ALTER TABLE forum_topic ADD visible TINYINT NOT NULL DEFAULT 1");
+    }
+    if (!DBHelper::fieldExists('forum', 'visible')) {
+        Database::get()->query("ALTER TABLE forum ADD visible TINYINT NOT NULL DEFAULT 1");
     }
     if (DBHelper::fieldExists('tc_attendance', 'id')) {
         Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
@@ -3382,55 +3391,34 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('exercise_question', 'options')) {
         Database::get()->query("ALTER TABLE exercise_question ADD options TEXT DEFAULT NULL");
     }
-
-    DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE);
-
-    if(!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
-        // Use consistent data types before creating the foreign key
-        Database::get()->query('ALTER TABLE `attendance_activities`
-            CHANGE COLUMN `attendance_id` `attendance_id` INT NOT NULL DEFAULT 0,
-            CHANGE COLUMN `module_auto_id` `module_auto_id` INT NOT NULL DEFAULT 0');
-        DBHelper::createForeignKey('attendance_activities', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
-    }
-
-    if(!DBHelper::foreignKeyExists('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id')) {
-        // Use consistent data types before creating the foreign key
-        Database::get()->query('ALTER TABLE `attendance_book` CHANGE COLUMN `attendance_activity_id` `attendance_activity_id` INT NOT NULL DEFAULT 0');
-
-        DBHelper::createForeignKey('attendance_book', 'attendance_activity_id', 'attendance_activities', 'id', DBHelper::FKRefOption_CASCADE);
-    }
-    DBHelper::createForeignKey('attendance_book', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
-
-    DBHelper::createForeignKey('attendance_users', 'attendance_id', 'attendance', 'id', DBHelper::FKRefOption_CASCADE);
-    DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE);
-
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
     if (!DBHelper::fieldExists('course_lti_app', 'visible')) {
         Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
     }
+
     if (DBHelper::fieldExists('tc_attendance', 'id')) {
         Database::get()->query("ALTER TABLE tc_attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
     }
     if (!DBHelper::fieldExists('exercise_question', 'options')) {
         Database::get()->query("ALTER TABLE exercise_question ADD options TEXT DEFAULT NULL");
     }
+
     if (!DBHelper::fieldExists('h5p_content', 'creator_id')) {
         Database::get()->query("ALTER TABLE h5p_content ADD `creator_id` INT UNSIGNED NOT NULL DEFAULT 0");
     }
-
     // Use consistent data types before creating the foreign key in attendance
     Database::get()->query("ALTER TABLE attendance CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_activities CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_activities CHANGE attendance_id attendance_id INT NOT NULL");
+    Database::get()->query('ALTER TABLE attendance_activities CHANGE COLUMN `module_auto_id` `module_auto_id` INT NOT NULL DEFAULT 0');
     Database::get()->query("ALTER TABLE attendance_book CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_book CHANGE attendance_activity_id attendance_activity_id INT NOT NULL");
     Database::get()->query("ALTER TABLE attendance_users CHANGE id id INT NOT NULL AUTO_INCREMENT");
     Database::get()->query("ALTER TABLE attendance_users CHANGE attendance_id attendance_id INT NOT NULL");
     Database::get()->query("ALTER TABLE attendance_users MODIFY uid INT NOT NULL DEFAULT 0");
-
-    if (!DBHelper::foreignKeyExists('attendance', 'course_id', 'course', 'id')) {
+    /*if (!DBHelper::foreignKeyExists('attendance', 'course_id', 'course', 'id')) {
         DBHelper::createForeignKey('attendance', 'course_id', 'course', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
     }
     if (!DBHelper::foreignKeyExists('attendance_activities', 'attendance_id', 'attendance', 'id')) {
@@ -3447,7 +3435,7 @@ function upgrade_to_4_2($tbl_options) : void {
     }
     if (!DBHelper::foreignKeyExists('attendance_users', 'uid', 'user', 'id')) {
         DBHelper::createForeignKey('attendance_users', 'uid', 'user', 'id', DBHelper::FKRefOption_CASCADE, DBHelper::FKRefOption_CASCADE);
-    }
+    }*/
 
     if (!DBHelper::tableExists('ai_providers')) {
         Database::get()->query("CREATE TABLE ai_providers (
@@ -3463,7 +3451,6 @@ function upgrade_to_4_2($tbl_options) : void {
             `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`)) $tbl_options");
     }
-
     if (!DBHelper::tableExists('ai_modules')) {
         Database::get()->query("CREATE TABLE ai_modules (
             `id` SMALLINT NOT NULL AUTO_INCREMENT,
@@ -3479,7 +3466,6 @@ function upgrade_to_4_2($tbl_options) : void {
             `ai_module` int NOT NULL,
             PRIMARY KEY (`id`), KEY (`ai_module`, `course_id`))  $tbl_options");
     }
-
     // AI Evaluation Configuration Table for Exercise Questions
     if (!DBHelper::tableExists('exercise_ai_config')) {
         Database::get()->query("CREATE TABLE exercise_ai_config (
@@ -3499,7 +3485,6 @@ function upgrade_to_4_2($tbl_options) : void {
             FOREIGN KEY (`course_id`) REFERENCES `course`(`id`) ON DELETE CASCADE
         ) $tbl_options");
     }
-
     if (!DBHelper::tableExists('exercise_ai_evaluation')) {
         Database::get()->query("CREATE TABLE exercise_ai_evaluation (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3525,13 +3510,11 @@ function upgrade_to_4_2($tbl_options) : void {
             FOREIGN KEY (`student_record_id`) REFERENCES `exercise_user_record`(`eurid`) ON DELETE CASCADE
         ) $tbl_options");
     }
-
     if (!DBHelper::tableExists('permissions')) {
         Database::get()->query("CREATE TABLE `permissions` (
             `id` tinyint NOT NULL AUTO_INCREMENT,
             `permission` VARCHAR(255),
              PRIMARY KEY (`id`)) $tbl_options");
-
         Database::get()->query("INSERT INTO permissions(permission) VALUE('admin_course_users'),
              ('admin_course_modules'),
              ('backup_course'),
@@ -3539,7 +3522,6 @@ function upgrade_to_4_2($tbl_options) : void {
              ('can_upload_document'),
              ('can_upload_multimedia')");
     }
-
     if (!DBHelper::tableExists('user_permissions')) {
         Database::get()->query("CREATE TABLE user_permissions (
             `course_id` int NOT NULL DEFAULT '0',
@@ -3548,7 +3530,6 @@ function upgrade_to_4_2($tbl_options) : void {
             PRIMARY KEY (`course_id`,`user_id`,`permission_id`)
         ) $tbl_options");
     }
-
     if (!DBHelper::fieldExists('lp_user_module_progress', 'progress_measure')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `progress_measure` FLOAT DEFAULT NULL AFTER `session_time`");
     }
@@ -3556,7 +3537,6 @@ function upgrade_to_4_2($tbl_options) : void {
     // flipped classroom: index and seed data
     Database::get()->query("ALTER TABLE course_activities ADD UNIQUE KEY(activity_id, activity_type)");
     Database::get()->query("INSERT IGNORE INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18', 1, 0, 0, 0)");
-
     // course_user_request rejected fields
     if (!DBHelper::fieldExists('course_user_request', 'comment_rejected')) {
         Database::get()->query("ALTER TABLE course_user_request ADD `comment_rejected` TEXT DEFAULT NULL AFTER `comments`");
@@ -3564,23 +3544,18 @@ function upgrade_to_4_2($tbl_options) : void {
     if (!DBHelper::fieldExists('course_user_request', 'ts_update')) {
         Database::get()->query("ALTER TABLE course_user_request ADD `ts_update` DATETIME DEFAULT NULL AFTER `ts`");
     }
-
     if (!DBHelper::fieldExists('course', 'uuid')) {
         Database::get()->query("ALTER TABLE course ADD `uuid` VARCHAR(40) NOT NULL DEFAULT 0 AFTER `id`");
     }
-
     if (!DBHelper::fieldExists('user', 'uuid')) {
         Database::get()->query("ALTER TABLE user ADD `uuid` VARCHAR(40) NOT NULL DEFAULT 0 AFTER `id`");
     }
-
     if (!DBHelper::fieldExists('poll_user_record', 'session_id')) {
         Database::get()->query("ALTER TABLE poll_user_record ADD `session_id` INT NOT NULL DEFAULT 0");
     }
-
     if (!DBHelper::fieldExists('exercise', 'results_date')) {
         Database::get()->query("ALTER TABLE exercise ADD results_date DATETIME DEFAULT NULL AFTER results");
     }
-
     if (!DBHelper::fieldExists('assignment', 'results_date')) {
         Database::get()->query("ALTER TABLE assignment ADD results_date DATETIME DEFAULT NULL AFTER submission_date;");
     }
@@ -3592,7 +3567,7 @@ function upgrade_to_4_2($tbl_options) : void {
  * @param $tbl_options
  * @return void
  */
-function upgrade_to_4_3() : void {
+function upgrade_to_4_3($tbl_options) : void {
 
     // Exercises
     if (DBHelper::fieldExists('exercise', 'general_feedback')) {
@@ -3700,6 +3675,746 @@ function upgrade_to_4_3() : void {
         Database::get()->query("ALTER TABLE `course_lti_app` ADD `visible` TINYINT(1) NOT NULL DEFAULT 1");
     }
 }
+
+/**
+ * @brief upgrade queries for 4.4
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_4_4($tbl_options) : void
+{
+
+    global $session, $webDir;
+
+    $eportfolio_strings = array(
+        'langPersInfo', 'langEduEmpl', 'langAchievements', 'langGoalsSkills', 'langContactInfo', 'langResearchProfiles', 'langLangProfLevel',
+        'langVolontSocialAct', 'langMale', 'langFemale', 'langLangCEFRA1', 'langLangCEFRA2', 'langLangCEFRB1', 'langLangCEFRB2', 'langLangCEFRC1',
+        'langLangCEFRC2', 'langBirthDate', 'langBirthPlace', 'langGender', 'langAboutMe', 'langAboutMeDescr', 'langPersWebsite', 'langePortfolioPersonalWebsiteDescr',
+        'langEducation', 'langEducationDescr', 'langEmployment', 'langePortfolioEmploymentDescr', 'langCertAwards', 'langePortfolioCertificatesAwardsDescr',
+        'langPublications', 'langePortfolioPublicationsDescr', 'langPersGoals', 'langePortfolioPersonalGoalsDescr', 'langAcademicGoals', 'langePortfolioAcademicGoalsDescr',
+        'langCareerGoals', 'langePortfolioCareerGoalsDescr', 'langPersSkills', 'langePortfolioPersonalSkillsDescr', 'langAcademicSkills', 'langePortfolioAcademicSkillsDescr',
+        'langCareerSkills', 'langePortfolioCareerSkillsDesc', 'langEmail', 'langPhone', 'langAddress', 'langFBProfile', 'langTwitterAccount', 'langLinkedInProfile',
+        'langGoogleScholarProfile', 'langScopusID', 'langOrcid', 'langGreek', 'langEnglish', 'langAlbanian', 'langArabic', 'langFrench', 'langGerman', 'langItalian',
+        'langSpanish', 'langChinese', 'langRussian', 'langTurkish', 'langOtherLanguages', 'langePortfolioOtherLanguagesDescr', 'langSocialActivities',
+        'langePortfolioSocialActivitiesDescr', 'langVolunteerActivities', 'langePortfolioVolunteerActivitiesDescr'
+    );
+
+    $default_lang = get_config('default_language');
+    $active_langs = $session->active_ui_languages;
+    $eportfolio = array();
+    foreach ($session->active_ui_languages as $lang) {
+        $eportfolio[$lang] = load_lang_strings($lang, $eportfolio_strings);
+    }
+
+    //custom profile fields
+    $cats = Database::get()->queryArray("SELECT id, `name` FROM custom_profile_fields_category order by id asc");
+    foreach ($cats as $cat) {
+        if (!preg_match('/^a:\d+:\{.*\}$/s', $cat->name)) { //check if stored value doesn't look like serialized array
+            Database::get()->query("UPDATE custom_profile_fields_category SET `name` = ?s WHERE id = ?d",
+                serialize([$default_lang => $cat->name]), $cat->id);
+        }
+    }
+
+    $fields = Database::get()->queryArray("SELECT id, shortname, name, description, datatype, data FROM custom_profile_fields");
+    foreach ($fields as $field) {
+        if (!preg_match('/^a:\d+:\{.*\}$/s', $field->name)) { //if looks like being already serialized do nothing
+            if (!empty($field->description)) {
+                Database::get()->query("UPDATE custom_profile_fields SET name = ?s, description = ?s WHERE id = ?d", serialize([$default_lang => $field->name]),serialize([$default_lang => $field->description]), $field->id);
+            } else {
+                Database::get()->query("UPDATE custom_profile_fields SET name = ?s WHERE id = ?s", serialize([$default_lang => $field->name]), $field->id);
+            }
+            if ($field->datatype == 4) {//select options
+                $data_arr = unserialize($field->data, ["allowed_classes" => false]);
+                Database::get()->query("UPDATE custom_profile_fields SET data = ?s WHERE id = ?s", serialize([$default_lang => $data_arr]), $field->id);
+            }
+        }
+    }
+
+    if (!DBHelper::indexExists('custom_profile_fields', 'shortname')) {
+        Database::get()->query("ALTER TABLE custom_profile_fields ADD UNIQUE (shortname)");
+    }
+
+    // E-portfolio
+    if (!DBHelper::fieldExists('user', 'eportfolio_token')) {
+        Database::get()->query("ALTER TABLE `user` ADD COLUMN eportfolio_token VARCHAR(64) DEFAULT NULL AFTER eportfolio_enable");
+
+        $eportf_users = Database::get()->queryArray("SELECT id FROM `user` WHERE eportfolio_enable = ?d", 1);
+        foreach ($eportf_users as $eportf_user) {
+            Database::get()->query("UPDATE `user` SET eportfolio_token = ?s WHERE id = ?d", rtrim(strtr(base64_encode(random_bytes(16)), '+/', '-_'), '='), $eportf_user->id);
+        }
+    }
+
+    $min_eportf_cat_order = Database::get()->querySingle("SELECT MIN(sortorder) AS min_order FROM eportfolio_fields_category");
+    if ($min_eportf_cat_order) {
+        $min_eportf_cat_order = $min_eportf_cat_order->min_order - 1;
+    } else {
+        $min_eportf_cat_order = 0;
+    }
+
+    $cats = Database::get()->queryArray("SELECT id, `name` FROM eportfolio_fields_category order by id asc");
+    $research_profiles_found = $lang_prof_level_found = $volont_social_act_found = false;
+    foreach ($cats as $cat) {
+        if (!preg_match('/^a:\d+:\{.*\}$/s', $cat->name)) { //check if stored value doesn't look like serialized array
+            if ($cat->name == $eportfolio[$default_lang]['langResearchProfiles']) {
+                $research_profiles_found = true;
+            } elseif ($cat->name == $eportfolio[$default_lang]['langLangProfLevel']) {
+                $lang_prof_level_found = true;
+            } elseif ($cat->name == $eportfolio[$default_lang]['langVolontSocialAct']) {
+                $volont_social_act_found = true;
+            }
+
+            $arr = array();
+            $key = array_search($cat->name, $eportfolio[$default_lang]);
+            if ($key !== false) { //category name has default value
+                foreach ($session->active_ui_languages as $lang) {
+                    $arr[$lang] = $eportfolio[$lang][$key];
+                }
+                Database::get()->query("UPDATE eportfolio_fields_category SET `name` = ?s WHERE id = ?d",
+                serialize($arr), $cat->id);
+            } else { //category name has been modified
+                Database::get()->query("UPDATE eportfolio_fields_category SET `name` = ?s WHERE id = ?d",
+                serialize([$default_lang => $cat->name]), $cat->id);
+            }
+        } else {
+            //check if new cats exist and are already serialized
+            $unserialized_cat = unserialize($cat->name, ["allowed_classes" => false]);
+            if (isset($unserialized_cat[$default_lang])) {
+                if ($unserialized_cat[$default_lang] == $eportfolio[$default_lang]['langResearchProfiles']) {
+                    $research_profiles_found = true;
+                } elseif ($unserialized_cat[$default_lang] == $eportfolio[$default_lang]['langLangProfLevel']) {
+                    $lang_prof_level_found = true;
+                } elseif ($unserialized_cat[$default_lang] == $eportfolio[$default_lang]['langVolontSocialAct']) {
+                    $volont_social_act_found = true;
+                }
+            }
+        }
+    }
+
+    if ($research_profiles_found === false) {
+        $arr_cat = array();
+        $arr_fields = array();
+        foreach ($session->active_ui_languages as $lang) {
+            $arr_cat[$lang] = $eportfolio[$lang]['langResearchProfiles'];
+            $arr_fields['langGoogleScholarProfile'][$lang] = $eportfolio[$lang]['langGoogleScholarProfile'];
+            $arr_fields['langScopusID'][$lang] = $eportfolio[$lang]['langScopusID'];
+            $arr_fields['langOrcid'][$lang] = $eportfolio[$lang]['langOrcid'];
+        }
+        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES (?s, ?d)", serialize($arr_cat), $min_eportf_cat_order)->lastInsertID;
+        Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
+            ('gscholar', '".serialize($arr_fields['langGoogleScholarProfile'])."', '', '5', $eportf_cat_id, 0, 0, ''),
+            ('scopus', '".serialize($arr_fields['langScopusID'])."', '', '1', $eportf_cat_id, -1, 0, ''),
+            ('orcid', '".serialize($arr_fields['langOrcid'])."', '', '5', $eportf_cat_id, -2, 0, '')");
+        $min_eportf_cat_order--;
+    }
+
+    if ($lang_prof_level_found === false) {
+        $arr_cat = array();
+        $arr_fields = array();
+        $lang_proficiency_levels = array();
+        foreach ($session->active_ui_languages as $lang) {
+            $arr_cat[$lang] = $eportfolio[$lang]['langLangProfLevel'];
+            $arr_fields['langGreek'][$lang] = $eportfolio[$lang]['langGreek'];
+            $arr_fields['langEnglish'][$lang] = $eportfolio[$lang]['langEnglish'];
+            $arr_fields['langAlbanian'][$lang] = $eportfolio[$lang]['langAlbanian'];
+            $arr_fields['langArabic'][$lang] = $eportfolio[$lang]['langArabic'];
+            $arr_fields['langFrench'][$lang] = $eportfolio[$lang]['langFrench'];
+            $arr_fields['langGerman'][$lang] = $eportfolio[$lang]['langGerman'];
+            $arr_fields['langItalian'][$lang] = $eportfolio[$lang]['langItalian'];
+            $arr_fields['langSpanish'][$lang] = $eportfolio[$lang]['langSpanish'];
+            $arr_fields['langChinese'][$lang] = $eportfolio[$lang]['langChinese'];
+            $arr_fields['langRussian'][$lang] = $eportfolio[$lang]['langRussian'];
+            $arr_fields['langTurkish'][$lang] = $eportfolio[$lang]['langTurkish'];
+            $arr_fields['langOtherLanguages'][$lang] = $eportfolio[$lang]['langOtherLanguages'];
+            $arr_fields['langePortfolioOtherLanguagesDescr'][$lang] = $eportfolio[$lang]['langePortfolioOtherLanguagesDescr'];
+            $lang_proficiency_levels[$lang] = [
+                $eportfolio[$lang]['langLangCEFRA1'],
+                $eportfolio[$lang]['langLangCEFRA2'],
+                $eportfolio[$lang]['langLangCEFRB1'],
+                $eportfolio[$lang]['langLangCEFRB2'],
+                $eportfolio[$lang]['langLangCEFRC1'],
+                $eportfolio[$lang]['langLangCEFRC2']
+            ];
+        }
+        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES (?s, ?d)", serialize($arr_cat), $min_eportf_cat_order)->lastInsertID;
+        Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
+            ('el', '".serialize($arr_fields['langGreek'])."', '', '4', $eportf_cat_id, 0, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('en', '".serialize($arr_fields['langEnglish'])."', '', '4', $eportf_cat_id, -1, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('sq', '".serialize($arr_fields['langAlbanian'])."', '', '4', $eportf_cat_id, -2, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('ar', '".serialize($arr_fields['langArabic'])."', '', '4', $eportf_cat_id, -3, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('fr', '".serialize($arr_fields['langFrench'])."', '', '4', $eportf_cat_id, -4, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('de', '".serialize($arr_fields['langGerman'])."', '', '4', $eportf_cat_id, -5, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('it', '".serialize($arr_fields['langItalian'])."', '', '4', $eportf_cat_id, -6, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('es', '".serialize($arr_fields['langSpanish'])."', '', '4', $eportf_cat_id, -7, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('zh', '".serialize($arr_fields['langChinese'])."', '', '4', $eportf_cat_id, -8, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('ru', '".serialize($arr_fields['langRussian'])."', '', '4', $eportf_cat_id, -9, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('tr', '".serialize($arr_fields['langTurkish'])."', '', '4', $eportf_cat_id, -10, 0, '" . serialize($lang_proficiency_levels) . "'),
+            ('other_languages', '".serialize($arr_fields['langOtherLanguages'])."', '".serialize($arr_fields['langePortfolioOtherLanguagesDescr'])."', '2', $eportf_cat_id, -11, 0, '')");
+        $min_eportf_cat_order--;
+    }
+
+    if ($volont_social_act_found === false) {
+        $arr_cat = array();
+        $arr_fields = array();
+        foreach ($session->active_ui_languages as $lang) {
+            $arr_cat[$lang] = $eportfolio[$lang]['langVolontSocialAct'];
+            $arr_fields['langSocialActivities'][$lang] = $eportfolio[$lang]['langSocialActivities'];
+            $arr_fields['langVolunteerActivities'][$lang] = $eportfolio[$lang]['langVolunteerActivities'];
+            $arr_fields['langePortfolioSocialActivitiesDescr'][$lang] = $eportfolio[$lang]['langePortfolioSocialActivitiesDescr'];
+            $arr_fields['langePortfolioVolunteerActivitiesDescr'][$lang] = $eportfolio[$lang]['langePortfolioVolunteerActivitiesDescr'];
+        }
+        $eportf_cat_id = Database::get()->query("INSERT INTO eportfolio_fields_category (name, sortorder) VALUES (?s, ?d)", serialize($arr_cat), $min_eportf_cat_order)->lastInsertID;
+        Database::get()->query("INSERT IGNORE INTO eportfolio_fields (shortname, name, description, datatype, categoryid, sortorder, required, data) VALUES
+        ('social_activities', '".serialize($arr_fields['langSocialActivities'])."', '".serialize($arr_fields['langePortfolioSocialActivitiesDescr'])."', '2', $eportf_cat_id, 0, 0, ''),
+        ('volunteer_activities', '".serialize($arr_fields['langVolunteerActivities'])."', '".serialize($arr_fields['langePortfolioSocialActivitiesDescr'])."', '2', $eportf_cat_id, -1, 0, '')");
+    }
+
+    $fields = Database::get()->queryArray("SELECT id, shortname, name, description, datatype, data FROM eportfolio_fields");
+    $field_shortnames = [
+        'about_me' => 'langAboutMeDescr',
+        'personal_website' => 'langePortfolioPersonalWebsiteDescr',
+        'education' => 'langEducationDescr',
+        'employment' => 'langePortfolioEmploymentDescr',
+        'certificates_awards' => 'langePortfolioCertificatesAwardsDescr',
+        'publications' => 'langePortfolioPublicationsDescr',
+        'personal_goals' => 'langePortfolioPersonalGoalsDescr',
+        'academic_goals' => 'langePortfolioAcademicGoalsDescr',
+        'career_goals' => 'langePortfolioCareerGoalsDescr',
+        'personal_skills' => 'langePortfolioPersonalSkillsDescr',
+        'academic_skills' => 'langePortfolioAcademicSkillsDescr',
+        'career_skills' => 'langePortfolioCareerSkillsDesc',
+        'social_activities' => 'langePortfolioSocialActivitiesDescr',
+        'volunteer_activities' => 'langePortfolioVolunteerActivitiesDescr'
+    ];
+    foreach ($fields as $field) {
+        if (!preg_match('/^a:\d+:\{.*\}$/s', $field->name)) { //if looks like being already serialized do nothing
+            if (!empty($field->description)) {
+                Database::get()->query("UPDATE eportfolio_fields SET name = ?s, description = ?s WHERE shortname = ?s", serialize([$default_lang => $field->name]),serialize([$default_lang => $field->description]), $field->shortname);
+            } else {
+                if (array_key_exists($field->shortname, $field_shortnames)) {
+                    Database::get()->query("UPDATE eportfolio_fields SET name = ?s, description = ?s WHERE shortname = ?s", serialize([$default_lang => $field->name]),serialize([$default_lang => $eportfolio[$default_lang][$field_shortnames[$field->shortname]]]), $field->shortname);
+                } else {
+                    Database::get()->query("UPDATE eportfolio_fields SET name = ?s WHERE shortname = ?s", serialize([$default_lang => $field->name]), $field->shortname);
+                }
+            }
+            if ($field->datatype == 4) {//select options
+                $data_arr = unserialize($field->data, ["allowed_classes" => false]);
+                Database::get()->query("UPDATE eportfolio_fields SET data = ?s WHERE shortname = ?s", serialize([$default_lang => $data_arr]), $field->shortname);
+            }
+        }
+    }
+
+    if (!DBHelper::indexExists('eportfolio_fields', 'shortname')) {
+        Database::get()->query("ALTER TABLE eportfolio_fields ADD UNIQUE (shortname)");
+    }
+
+    if (!DBHelper::fieldExists('eportfolio_fields_data', 'visibility')) {
+        Database::get()->query("ALTER TABLE eportfolio_fields_data ADD visibility TINYINT UNSIGNED NOT NULL DEFAULT 1");
+    }
+
+    if (!DBHelper::fieldExists('eportfolio_resource', 'reflection_comments')) {
+        Database::get()->query("ALTER TABLE eportfolio_resource ADD reflection_comments TEXT NULL");
+    }
+
+    if (!DBHelper::tableExists('session_poll_comments')) {
+        Database::get()->query("CREATE TABLE `session_poll_comments` (
+          `id` int NOT NULL AUTO_INCREMENT,
+          `course_id` INT NOT NULL,
+          `session_id` INT NOT NULL,
+          `poll_id` INT NOT NULL,
+          `user_id` INT NOT NULL,
+          `title` VARCHAR(255) NOT NULL DEFAULT '',
+          `comments` TEXT DEFAULT NULL,
+          `notify_comments` INT NOT NULL DEFAULT 0,
+          PRIMARY KEY (`id`),
+          FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+          FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE,
+          FOREIGN KEY (`poll_id`) REFERENCES `poll` (`pid`) ON DELETE CASCADE,
+          FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
+
+    // tenant table
+    if (!DBHelper::tableExists('tenant')) {
+        Database::get()->query("CREATE TABLE `tenant` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `name` varchar(200) NOT NULL,
+            `description` text DEFAULT NULL,
+            `department_id` int(11) NOT NULL,
+            `url` varchar(200) NOT NULL DEFAULT '',
+            `theme_id` int(11) DEFAULT NULL,
+            `created_at` DATETIME NOT NULL,
+            `updated_at` DATETIME NOT NULL,
+            `options` text DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `department_id` (`department_id`),
+            KEY `theme_id` (`theme_id`),
+            CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
+            CONSTRAINT FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)) $tbl_options");
+    }
+
+    // course resource usage table
+    if (!DBHelper::tableExists('course_resource_usage')) {
+        Database::get()->query("CREATE TABLE `course_resource_usage` (
+            `course_id` int(11) NOT NULL,
+            `disk_size` bigint DEFAULT NULL,
+            PRIMARY KEY (`course_id`),
+            KEY `idx_disk_size` (`disk_size`),
+            CONSTRAINT FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+                ON DELETE CASCADE ON UPDATE CASCADE
+            ) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('theme_options', 'tenant_id')) {
+        Database::get()->query("
+            ALTER TABLE theme_options
+            ADD tenant_id INT,
+            ADD CONSTRAINT `tenant_id`
+            FOREIGN KEY (`tenant_id`)
+            REFERENCES `tenant`(`id`)
+        ");
+    }
+
+    if (DBHelper::tableExists('admin_announcement') and !DBHelper::fieldExists('admin_announcement', 'tenant_id')) {
+        Database::get()->query("ALTER TABLE `admin_announcement` ADD `tenant_id` INT(11) DEFAULT NULL AFTER `id`");
+
+        Database::get()->query("ALTER TABLE `admin_announcement` ADD INDEX `idx_tenant_id` (`tenant_id`)");
+    }
+
+    if (!DBHelper::fieldExists('tenant', 'url_active')) {
+        Database::get()->query("ALTER TABLE tenant ADD url_active TINYINT(1) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('api_token', 'department_id')) {
+        Database::get()->query(
+            'ALTER TABLE `api_token`
+                        ADD `department_id` INT(11),
+                        ADD CONSTRAINT `fk_department_id`
+                        FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE'
+        );
+    }
+
+    if (!DBHelper::fieldExists('certificate_template', 'department_id')) {
+        Database::get()->query(
+            'ALTER TABLE `certificate_template`
+            ADD `department_id` INT(11) DEFAULT NULL,
+            ADD CONSTRAINT `fk_certificate_template_hierarchy`
+                FOREIGN KEY (`department_id`) REFERENCES `hierarchy`(`id`)
+                ON DELETE SET NULL
+                ON UPDATE CASCADE'
+        );
+    }
+
+    // Gamification
+    if (!DBHelper::tableExists('points_game')) {
+        Database::get()->query("CREATE TABLE `points_game` (
+            `id` int(11) not null auto_increment primary key,
+            `course_id` int(11) not null,
+            `title` varchar(255) not null,
+            `description` text,
+            `active` tinyint(1) not null default 1,
+            `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
+            `starts` datetime,
+            `expires` datetime,
+            `config` text,
+            index `points_game_course` (`course_id`),
+            foreign key (`course_id`) references `course` (`id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('points_game_criterion')) {
+        Database::get()->query("CREATE TABLE `points_game_criterion` (
+            `id` int(11) not null auto_increment primary key,
+            `points_game` int(11) not null,
+            `activity_type` varchar(255),
+            `module` int(11),
+            `resource` int(11),
+            `threshold` decimal(7,2),
+            `operator` varchar(20),
+            `points` int(11),
+            `criterion_type` varchar(20) not null,
+            `max_points_from_criterion` int(11),
+            `max_points_from_criterion_time_period` int(11),
+            `time_period_in_days` int(11),
+            foreign key (`points_game`) references `points_game`(`id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('points_game_levels')) {
+        Database::get()->query("CREATE TABLE `points_game_levels` (
+        `id` int(11) not null auto_increment primary key,
+        `points_game` int(11) not null,
+        `friendly_name` varchar(255),
+        `required_points` int(11) not null,
+        `icon` int(11) default null,
+        foreign key (`points_game`) references `points_game`(`id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('user_points_game_criterion')) {
+        Database::get()->query("CREATE TABLE `user_points_game_criterion` (
+        `id` int(11) not null auto_increment primary key,
+        `user` int(11) not null,
+        `points_game_criterion` int(11) not null,
+        `points_awarded` int(11) not null,
+        `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
+        foreign key (`user`) references `user`(`id`),
+        foreign key (`points_game_criterion`) references `points_game_criterion`(`id`)
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('user_points_game_points')) {
+        Database::get()->query("CREATE TABLE `user_points_game_points` (
+            `id` int(11) not null auto_increment primary key,
+            `user` int(11) not null,
+            `points_game` int(11) not null,
+            `total_points` int(11) not null,
+            `current_level` int(11),
+            unique key `user_points_game_points` (`user`, `points_game`),
+            index `user_points_game_leaderboard` (`points_game`, `total_points` DESC),
+            foreign key (`user`) references `user`(`id`),
+            foreign key (`points_game`) references `points_game`(`id`),
+            foreign key (`current_level`) references `points_game_levels`(`id`)
+        ) $tbl_options");
+    }
+
+    //sticky notes
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_topic` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `course_id` int(11) NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `description` text DEFAULT NULL,
+        `allow_edit` tinyint(1) NOT NULL DEFAULT 1,
+        `allow_delete` tinyint(1) NOT NULL DEFAULT 1,
+        `has_categories` tinyint(1) NOT NULL DEFAULT 0,
+        `per_page` int(11) NOT NULL DEFAULT 20,
+        `is_active` tinyint(1) NOT NULL DEFAULT 1,
+        `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+        `created_by` int(11) NOT NULL,
+        PRIMARY KEY (`id`),
+        KEY `fk_sticky_notes_topics_course` (`course_id`),
+        KEY `fk_sticky_notes_topics_creator` (`created_by`),
+        CONSTRAINT `fk_sticky_notes_topics_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+        CONSTRAINT `fk_sticky_notes_topics_creator` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE CASCADE
+    ) $tbl_options");
+
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_category` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `topic_id` int(11) NOT NULL,
+        `title` varchar(255) NOT NULL,
+        `sort_order` int(11) NOT NULL DEFAULT 0,
+        `created_at` datetime DEFAULT current_timestamp(),
+        PRIMARY KEY (`id`),
+        KEY `topic_id` (`topic_id`),
+        CONSTRAINT `sticky_notes_category_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `sticky_notes_topic` (`id`) ON DELETE CASCADE
+    ) $tbl_options");
+
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `sticky_notes_post` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `topic_id` int(11) NOT NULL,
+        `category_id` int(11) DEFAULT NULL,
+        `content` varchar(500) NOT NULL,
+        `user_id` int(11) NOT NULL,
+        `color` varchar(10) DEFAULT NULL,
+        `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+        `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+        PRIMARY KEY (`id`),
+        KEY `fk_sticky_notes_post_topic` (`topic_id`),
+        KEY `fk_sticky_notes_post_creator` (`user_id`),
+        KEY `category_id` (`category_id`),
+        CONSTRAINT `fk_sticky_notes_post_creator` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+        CONSTRAINT `fk_sticky_notes_post_topic` FOREIGN KEY (`topic_id`) REFERENCES `sticky_notes_topic` (`id`) ON DELETE CASCADE,
+        CONSTRAINT `sticky_notes_post_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `sticky_notes_category` (`id`) ON DELETE SET NULL
+    ) $tbl_options");
+
+    if (!DBHelper::tableExists('course_import')) {
+        Database::get()->query("CREATE TABLE course_import (
+            id INT NOT NULL AUTO_INCREMENT,
+            course_id INT NOT NULL,
+            imported_course_id INT NOT NULL,
+            imported DATETIME NOT NULL,
+            PRIMARY KEY(id)
+       ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('seb_courses')) {
+        Database::get()->query("CREATE TABLE `seb_courses` (
+                            `id` int NOT NULL AUTO_INCREMENT,
+                            `course_id` int NOT NULL,
+                             PRIMARY KEY(`id`),
+                             UNIQUE KEY `course_id` (`course_id`)
+       ) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('course', 'reg_start_date')) {
+        Database::get()->query("ALTER TABLE course ADD reg_start_date DATE DEFAULT NULL AFTER start_date");
+    }
+
+    if (!DBHelper::fieldExists('course', 'reg_end_date')) {
+        Database::get()->query("ALTER TABLE course ADD reg_end_date DATE DEFAULT NULL AFTER end_date");
+    }
+    // ensure that there are no invalid dates in courses. Type casting is necessary because of the default strict mode in newer mysql versions.
+    Database::get()->query("UPDATE course SET start_date = NULL WHERE CAST(start_date AS CHAR) = '0000-00-00'");
+
+    // change course unit format in one per line
+    Database::get()->query("UPDATE course SET view_units = 1 WHERE view_units = 0");
+
+    if (!DBHelper::tableExists('suppressed_words')) {
+        Database::get()->query("CREATE TABLE `suppressed_words` (
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `word` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+            `added_by` INT DEFAULT NULL,
+            `created_at` DATETIME NOT NULL,
+            PRIMARY KEY (`id`)) $tbl_options");
+
+        Database::get()->query("INSERT INTO `suppressed_words` (`word`, `created_at`) VALUES
+            ('χαζός', NOW()),
+            ('βλαμμένος', NOW()),
+            ('ανόητος', NOW()),
+            ('στόκος', NOW()),
+            ('τούβλο', NOW()),
+            ('moron', NOW()),
+            ('dumb', NOW()),
+            ('idiot', NOW()),
+            ('imbecile', NOW()),
+            ('jerk', NOW())");
+    }
+
+    if (!DBHelper::tableExists('secondfactorauth')) {
+        Database::get()->query("CREATE TABLE secondfactorauth (
+                    id int NOT NULL,
+                    secret varchar(100) NOT NULL,
+                    FOREIGN KEY (id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE)
+                   $tbl_options"
+          );
+    }
+
+    if (!DBHelper::fieldExists('user_badge', 'add_my_profile')) {
+        Database::get()->query("ALTER TABLE user_badge ADD add_my_profile INT NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::fieldExists('certified_users', 'add_my_profile')) {
+        Database::get()->query("ALTER TABLE certified_users ADD add_my_profile INT NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::tableExists('badge_icon_category')) {
+        Database::get()->query("CREATE TABLE `badge_icon_category` (
+            `id` MEDIUMINT not null auto_increment primary key,
+            `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci not null
+        ) $tbl_options");
+    }
+
+    if (DBHelper::fieldExists('badge_icon', 'description')) {
+        Database::get()->query("ALTER TABLE `badge_icon` DROP COLUMN `description`");
+    }
+
+    if (!DBHelper::fieldExists('badge_icon', 'category')) {
+        Database::get()->query("ALTER TABLE `badge_icon` ADD COLUMN `category` MEDIUMINT DEFAULT NULL AFTER `name`,
+            ADD CONSTRAINT FOREIGN KEY (category) REFERENCES badge_icon_category(id)");
+    }
+
+    if (!DBHelper::fieldExists('certificate', 'logo')) {
+        Database::get()->query("ALTER TABLE `certificate` ADD `logo` VARCHAR(255) DEFAULT NULL AFTER `title`");
+    }
+
+    if (!DBHelper::tableExists('eduapi_course_offerings')) {
+        Database::get()->query("CREATE TABLE `eduapi_course_offerings` (
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `sourced_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `course_id` INT NOT NULL,
+            `academic_session_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+            `academic_session_code` VARCHAR(100) DEFAULT NULL,
+            `organization_code` VARCHAR(100) DEFAULT NULL,
+            `title` TEXT DEFAULT NULL,
+            `last_sync` DATETIME DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `sourced_id` (`sourced_id`),
+            FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+                ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('eduapi_persons')) {
+        Database::get()->query("CREATE TABLE `eduapi_persons` (
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `sourced_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `user_id` INT NOT NULL,
+            `username` VARCHAR(190) DEFAULT NULL,
+            `email` VARCHAR(255) DEFAULT NULL,
+            `last_sync` DATETIME DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `sourced_id` (`sourced_id`),
+            UNIQUE KEY `user_id` (`user_id`),
+            FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+                ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('eduapi_nodes')) {
+        Database::get()->query("CREATE TABLE `eduapi_nodes` (
+            `id` INT NOT NULL AUTO_INCREMENT,
+            `ref_key` VARCHAR(150) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `hierarchy_id` INT NOT NULL,
+            `last_sync` DATETIME DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `ref_key` (`ref_key`),
+            FOREIGN KEY (`hierarchy_id`) REFERENCES `hierarchy` (`id`)
+                ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    installBadgeIcons($webDir);
+    upgrade_active_theme();
+    upgrade_certificates();
+}
+
+/**
+ * @brief upgrade queries for 4.5
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_4_5($tbl_options) : void
+{
+    if (!DBHelper::tableExists('cadmos_course')) {
+        Database::get()->query("CREATE TABLE `cadmos_course` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `course_id` int(11) DEFAULT NULL,
+            `user_id` int(11) NOT NULL,
+            `source` mediumtext NOT NULL,
+            `created` datetime DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            KEY `course_id` (`course_id`),
+            KEY `user_id` (`user_id`),
+            FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+        ) $tbl_options");
+    } elseif (!DBHelper::fieldExists('cadmos_course', 'created')) {
+        Database::get()->query("ALTER TABLE `cadmos_course` ADD `created` datetime DEFAULT CURRENT_TIMESTAMP AFTER `source`");
+    }
+}
+
+/**
+ * @brief OpenBadges Backpack Integration - Database Migration
+ * Creates tables and fields for external backpack provider integration
+ *
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_openbadges_backpack($tbl_options): void
+{
+    //Create backpack_provider table for managing external OpenBadges backpack providers
+    if (!DBHelper::tableExists('backpack_provider')) {
+        Database::get()->query("CREATE TABLE `backpack_provider` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(255) NOT NULL,
+            `api_url` VARCHAR(512) NOT NULL,
+            `ob_version` VARCHAR(50) DEFAULT 'OpenBadge v2.0',
+            `basic_auth_access_token` VARCHAR(512) DEFAULT NULL,
+            `refresh_access_token` VARCHAR(512) DEFAULT NULL,
+            `client_id` VARCHAR(255) DEFAULT NULL,
+            `client_secret` VARCHAR(255) DEFAULT NULL,
+            `authorization_endpoint` VARCHAR(512) DEFAULT NULL,
+            `token_endpoint` VARCHAR(512) DEFAULT NULL,
+            `registration_endpoint` VARCHAR(512) DEFAULT NULL,
+            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            `active` TINYINT(1) NOT NULL DEFAULT 1,
+            UNIQUE KEY `name` (`name`)
+        ) $tbl_options");
+    }
+
+    // Create user_backpack_connection table for user connections to backpack providers
+    if (!DBHelper::tableExists('user_backpack_connection')) {
+        Database::get()->query("CREATE TABLE `user_backpack_connection` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` INT(11) NOT NULL,
+            `backpack_provider_id` INT(11) NOT NULL,
+            `email` VARCHAR(255) DEFAULT NULL,
+            `password` VARCHAR(255) DEFAULT NULL,
+            `access_token` VARCHAR(512) DEFAULT NULL,
+            `refresh_token` VARCHAR(512) DEFAULT NULL,
+            `status` ENUM('connected', 'disconnected', 'error') DEFAULT 'disconnected',
+            `last_sync` DATETIME DEFAULT NULL,
+            `selected_collection_id` VARCHAR(512) DEFAULT NULL COMMENT 'Last selected collection for sync',
+            `selected_collection_name` VARCHAR(255) DEFAULT NULL COMMENT 'Display name of selected collection',
+            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY `user_provider` (`user_id`, `backpack_provider_id`),
+            FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    // Create user_badge_external table for imported external badges
+    if (!DBHelper::tableExists('user_badge_external')) {
+        Database::get()->query("CREATE TABLE `user_badge_external` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` INT(11) NOT NULL,
+            `backpack_provider_id` INT(11) NOT NULL,
+            `title` VARCHAR(255) NOT NULL,
+            `description` TEXT,
+            `image_url` VARCHAR(512),
+            `issuer` VARCHAR(255),
+            `issued_on` DATETIME,
+            `external_assertion_id` VARCHAR(512) NOT NULL,
+            `external_collection_id` VARCHAR(512),
+            `badge_data` LONGTEXT,
+            `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            UNIQUE KEY `user_assertion` (`user_id`, `external_assertion_id`(255)),
+            INDEX `user_id_idx` (`user_id`),
+            INDEX `backpack_provider_id_idx` (`backpack_provider_id`),
+            FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+            FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+        ) $tbl_options");
+    }
+
+    // Add external_assertion_id field to user_badge table (for tracking exported badges)
+    if (!DBHelper::fieldExists('user_badge', 'external_assertion_id')) {
+        Database::get()->query("ALTER TABLE `user_badge`
+            ADD `external_assertion_id` VARCHAR(512) DEFAULT NULL
+            COMMENT 'External assertion ID if published to backpack'");
+
+        // Add index for better query performance
+        if (!DBHelper::indexExists('user_badge', 'external_assertion_idx')) {
+            Database::get()->query("CREATE INDEX `external_assertion_idx`
+                ON `user_badge` (`external_assertion_id`(255))");
+        }
+    }
+
+    // Ensure badge table has allow_export field (should exist from 3.6, but double-check)
+    if (!DBHelper::fieldExists('badge', 'allow_export')) {
+        Database::get()->query("ALTER TABLE `badge`
+            ADD `allow_export` TINYINT(1) NOT NULL DEFAULT 1
+            COMMENT 'Controls if badge can be exported to external backpack'");
+
+        // Add index for filtering exportable badges
+        if (!DBHelper::indexExists('badge', 'idx_allow_export')) {
+            Database::get()->query("CREATE INDEX `idx_allow_export`
+                ON `badge` (`allow_export`)");
+        }
+    }
+
+    // Create indexes for better performance on backpack operations
+    if (!DBHelper::indexExists('user_backpack_connection', 'user_status_idx')) {
+        Database::get()->query("CREATE INDEX `user_status_idx`
+            ON `user_backpack_connection` (`user_id`, `status`)");
+    }
+
+    if (!DBHelper::indexExists('user_backpack_connection', 'provider_status_idx')) {
+        Database::get()->query("CREATE INDEX `provider_status_idx`
+            ON `user_backpack_connection` (`backpack_provider_id`, `status`)");
+    }
+
+    if (!DBHelper::indexExists('user_badge_external', 'collection_idx')) {
+        Database::get()->query("CREATE INDEX `collection_idx`
+            ON `user_badge_external` (`external_collection_id`(255))");
+    }
+
+    if (!DBHelper::indexExists('user_badge_external', 'created_at_idx')) {
+        Database::get()->query("CREATE INDEX `created_at_idx`
+            ON `user_badge_external` (`created_at`)");
+    }
+}
+
 
 /**
  * @brief Create Indexes
@@ -4622,7 +5337,7 @@ function update_upload_whitelists() {
         'm2v', 'aac', 'm4a', 'flv', 'f4v', 'm4v', 'mp3', 'swf', 'webm', 'ogv',
         'ogg', 'mid', 'midi', 'aif', 'rm', 'rpm', 'ram', 'wav', 'mp2', 'm3u',
         'qt', 'vsd', 'vss', 'vst', 'cg3', 'ggb', 'psc', 'dir', 'dcr', 'sb',
-        'sb2', 'sb3', 'sbx', 'kodu', 'html', 'htm', 'wlmp', 'mswmm',
+        'sb2', 'sb3', 'sbx', 'kodu', 'wlmp', 'mswmm',
         'apk', 'py', 'ev3', 'psg', 'glo', 'gsp', 'xml', 'a3p', 'ypr',
         'mw2', 'dtd', 'aia', 'hex', 'mscz', 'pages', 'heic', 'piv', 'stk',
         'pptm', 'gfar', 'lab', 'lmsp', 'qrs', 'cpp', 'c', 'h', 'java', 'm', 'opus', 'mka'];
@@ -4680,5 +5395,452 @@ function update_minedu_deps()
             Database::get()->query($db_string);
             $value_string = '';
         }
+    }
+}
+
+/**
+ * Create external repositories tables for upgrade
+ * @return void
+ */
+function upgrade_external_repositories()
+{
+    global $langUpgExternalRepos;
+
+    $tbl_options = 'DEFAULT CHARACTER SET=utf8mb4 COLLATE utf8mb4_bin ENGINE=InnoDB';
+
+    // Create external_repository table if it doesn't exist
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `external_repository` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `name` varchar(255) NOT NULL,
+        `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay','islandora') NOT NULL,
+        `base_url` varchar(512) DEFAULT NULL,
+        `api_key` varchar(255) DEFAULT NULL,
+        `auth_type` enum('none','api_key','oauth') NOT NULL DEFAULT 'none',
+        `enabled` tinyint(1) NOT NULL DEFAULT 1,
+        `config` text DEFAULT NULL COMMENT 'JSON configuration for additional settings',
+        `created` datetime DEFAULT NULL,
+        `updated` datetime DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `idx_type` (`type`),
+        INDEX `idx_enabled` (`enabled`)
+    ) $tbl_options");
+
+    // Create external_resource table if it doesn't exist
+    Database::get()->query("CREATE TABLE IF NOT EXISTS `external_resource` (
+        `id` int(11) NOT NULL AUTO_INCREMENT,
+        `course_id` int(11) NOT NULL,
+        `repository_id` int(11) NOT NULL,
+        `external_id` varchar(255) DEFAULT NULL COMMENT 'ID in the external system',
+        `title` varchar(512) NOT NULL,
+        `description` text DEFAULT NULL,
+        `url` varchar(1024) NOT NULL,
+        `resource_type` varchar(50) DEFAULT NULL COMMENT 'video, article, image, document',
+        `thumbnail_url` varchar(512) DEFAULT NULL,
+        `metadata` text DEFAULT NULL COMMENT 'JSON for additional data',
+        `rich_preview` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 = rich media preview, 0 = plain link preview',
+        `created` datetime DEFAULT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `idx_course` (`course_id`),
+        INDEX `idx_repository` (`repository_id`),
+        INDEX `idx_external_id` (`external_id`)
+    ) $tbl_options");
+
+    // Add external_resource.rich_preview on existing installs (idempotent).
+    $rpCol = Database::get()->querySingle("
+        SELECT COLUMN_NAME
+        FROM information_schema.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'external_resource'
+        AND COLUMN_NAME = 'rich_preview'
+    ");
+    if (!$rpCol) {
+        Database::get()->query("ALTER TABLE `external_resource`
+            ADD COLUMN `rich_preview` tinyint(1) NOT NULL DEFAULT 0
+            COMMENT '1 = rich media preview, 0 = plain link preview'");
+    }
+
+    // Extend external_repository.type enum with new values on existing installs.
+    // Idempotent: only runs when the value is missing from the column definition.
+    $col = Database::get()->querySingle("
+        SELECT COLUMN_TYPE AS t
+        FROM information_schema.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'external_repository'
+        AND COLUMN_NAME = 'type'
+    ");
+    if ($col && isset($col->t) && strpos($col->t, "'islandora'") === false) {
+        Database::get()->query("ALTER TABLE `external_repository`
+            MODIFY COLUMN `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay','islandora') NOT NULL");
+    }
+
+    // Add foreign keys if they don't exist
+    $fk_exists = Database::get()->querySingle("
+        SELECT CONSTRAINT_NAME
+        FROM information_schema.TABLE_CONSTRAINTS
+        WHERE CONSTRAINT_TYPE = 'FOREIGN KEY'
+        AND TABLE_NAME = 'external_resource'
+        AND CONSTRAINT_NAME = 'external_resource_ibfk_1'
+    ");
+
+    if (!$fk_exists) {
+        Database::get()->query("ALTER TABLE `external_resource`
+            ADD CONSTRAINT `external_resource_ibfk_1`
+            FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE");
+    }
+
+    $fk_exists2 = Database::get()->querySingle("
+        SELECT CONSTRAINT_NAME
+        FROM information_schema.TABLE_CONSTRAINTS
+        WHERE CONSTRAINT_TYPE = 'FOREIGN KEY'
+        AND TABLE_NAME = 'external_resource'
+        AND CONSTRAINT_NAME = 'external_resource_ibfk_2'
+    ");
+
+    if (!$fk_exists2) {
+        Database::get()->query("ALTER TABLE `external_resource`
+            ADD CONSTRAINT `external_resource_ibfk_2`
+            FOREIGN KEY (`repository_id`) REFERENCES `external_repository` (`id`) ON DELETE CASCADE");
+    }
+}
+
+/**
+ * @upgrade active theme with new options
+ * @return void
+ */
+function upgrade_active_theme() {
+    global $webDir;
+
+    $style = '';
+    $theme_id = get_config('theme_options_id');
+    if ($theme_id) {
+        $cssFile = "$webDir/courses/theme_data/$theme_id/style_str.css";
+        if (file_exists($cssFile)) {
+            $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+            $theme_options_styles = unserialize($theme_options->styles);
+            $theme_options_styles['bgColorContainerPortfolioInfo'] = 'rgba(0,0,0,0)';
+            $theme_options_styles['bgBorderColorSectionContainers'] = $theme_options_styles['BorderLeftToRightColumnCourseBgColor'] ?? 'rgba(0,0,0,0)';
+            $theme_options_styles['bgColorSectionContainers'] = $theme_options_styles['bgColor'] ?? 'rgba(0,0,0,0)';
+            $theme_options_styles['enable_aside_main_cards'] = 1;
+            $theme_options_styles['enable_aside_main_cards_no_border_radius'] = 1;
+            Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", serialize($theme_options_styles), $theme_id);
+
+            //////////////////////////////////////////////////////////////
+            if (isset($theme_options_styles['bgColorContainerPortfolioInfo'])) {
+                $style .= "
+                    .portfolio-profile-container {
+                        background: $theme_options_styles[bgColorContainerPortfolioInfo] !important;
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if (isset($theme_options_styles['bgColorSectionContainers'])) {
+                $style .= "
+                    .main-section .main-container{
+                        background-color: $theme_options_styles[bgColorSectionContainers] !important;
+                    }
+                    .portfolio-courses-container .padding-default{
+                        background-color: $theme_options_styles[bgColorSectionContainers] !important;
+                    }
+                    .main-container.main-container-login {
+                        background-color: transparent !important;
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if (isset($theme_options_styles['BorderLeftToRightColumnCourseBgColor'])) {
+                $style .= "
+                    @media(min-width: 992px) {
+                        .portfolio-profile-container .padding-default,
+                        .main-section .main-container,
+                        .portfolio-courses-container .padding-default,
+                        .col_maincontent_active,
+                        .ContentLeftNav,
+                        .main-maincontent {
+                            border: solid 1px $theme_options_styles[BorderLeftToRightColumnCourseBgColor] !important;
+                        }
+                    }
+                    @media(max-width: 991px) {
+                        .portfolio-profile-container .padding-default,
+                        .main-section .main-container,
+                        .portfolio-courses-container .padding-default,
+                        .col_maincontent_active,
+                        .ContentLeftNav,
+                        .main-maincontent {
+                            border: 0px !important;
+                        }
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if (isset($theme_options_styles['bgBorderColorSectionContainers'])) {
+                $style .= "
+                    @media(min-width: 992px) {
+                        .main-section .main-container{
+                            border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
+                        }
+                        .portfolio-courses-container .padding-default,
+                        .portfolio-profile-container .padding-default{
+                            border:solid 1px $theme_options_styles[bgBorderColorSectionContainers] !important;
+                        }
+                        .main-container.main-container-login {
+                            border: 0px !important;
+                            padding: 0 !important;
+                        }
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if(isset($theme_options_styles['enable_aside_main_cards'])) {
+                $style .= "
+                    @media (max-width: 991px) {
+                        .ContentLeftNav,
+                        .main-maincontent {
+                            border: 0px !important;
+                        }
+                        .portfolio-profile-container {
+                            padding-top: 56px !important;
+                            padding-left: 0px !important;
+                            padding-bottom: 0px !important;
+                            padding-right: 0px !important;
+                        }
+                        .section-portfolio-profile-container-info .padding-default {
+                            padding-top: 0px !important;
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                            padding-bottom: 0px !important;
+                        }
+                        .section-portfolio-profile-container-btns .padding-default {
+                            padding-top: 0px !important;
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                            padding-bottom: 0px !important;
+                        }
+                        .portfolio-courses-container {
+                            padding: 0px;
+                        }
+                        .brief-profile-container-info,
+                        .brief-profile-container-btns {
+                            padding: 32px 16px 32px 16px;
+                        }
+                    }
+
+                    @media (min-width: 992px) {
+                        .portfolio-profile-container .padding-default {
+                            margin-top: 28px !important;
+                            margin-bottom: 28px !important;
+                            padding: 45px 45px !important;
+                            border-radius: 32px !important;
+                        }
+                        .section-portfolio-profile-container-info .padding-default {
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                            padding-bottom: 0px !important;
+                        }
+                        .section-portfolio-profile-container-btns .padding-default {
+                            padding-top: 0px !important;
+                            padding-left: 0px !important;
+                            padding-right: 0px !important;
+                        }
+                        .main-section .main-container {
+                            padding: 45px 45px !important;
+                            border-radius: 32px !important;
+                            margin-bottom: 28px !important;
+                            margin-top: 28px !important;
+                        }
+                        .module-container .col_maincontent_active {
+                            padding: 45px 45px !important;
+                        }
+                        .brief-profile-container-btns {
+                            border-bottom-left-radius: 32px !important;
+                            border-bottom-right-radius: 32px !important;
+                            padding: 25px 55px !important;
+                        }
+                        .brief-profile-container-info {
+                            position: relative !important;
+                            overflow: hidden !important;
+                            padding: 45px 55px !important;
+                            border-top-left-radius: 32px !important;
+                            border-top-right-radius: 32px !important;
+                        }
+                        .brief-profile-container-info::after {
+                            content:'' !important;
+                            position:absolute !important;
+                            right:-80px !important;
+                            bottom:-150px !important;
+                            width:350px !important;
+                            height:350px !important;
+                            filter: blur(60px) !important;
+                            z-index:0 !important;
+                        }
+                        .portfolio-courses-container .padding-default {
+                            padding: 45px 55px !important;
+                            border-radius: 32px !important;
+                            margin-bottom: 28px !important;
+                        }
+                        body:has(.sidebar-card) .main-maincontent {
+                            border-top-left-radius: 0px;
+                            border-top-right-radius: 32px;
+                            border-bottom-left-radius: 0px;
+                            border-bottom-right-radius: 32px;
+                        }
+                        .sidebar-card .ContentLeftNav {
+                            border-top-left-radius: 32px;
+                            border-top-right-radius: 0px;
+                            border-bottom-left-radius: 32px;
+                            border-bottom-right-radius: 0px;
+                        }
+                    }
+                ";
+            }
+            //////////////////////////////////////////////////////////////
+            if(isset($theme_options_styles['enable_aside_main_cards_no_border_radius'])) {
+                $style .= "
+                    @media (min-width: 992px) {
+                        .portfolio-profile-container .padding-default {
+                            border-radius: 4px !important;
+                        }
+                        .main-section .main-container {
+                            border-radius: 4px !important;
+                        }
+                        .brief-profile-container-info {
+                            border-top-left-radius: 4px !important;
+                            border-top-right-radius: 4px !important;
+                        }
+                        .brief-profile-container-btns {
+                            border-bottom-left-radius: 4px !important;
+                            border-bottom-right-radius: 4px !important;
+                        }
+                        .portfolio-courses-container .padding-default {
+                            border-radius: 4px !important;
+                        }
+                        body:has(.sidebar-card) .main-maincontent {
+                            border-top-right-radius: 4px;
+                            border-bottom-right-radius: 4px;
+                        }
+                        .sidebar-card .ContentLeftNav {
+                            border-top-left-radius: 4px;
+                            border-bottom-left-radius: 4px;
+                        }
+                        .breadcrumbs-init {
+                            border-radius: 4px;
+                        }
+                    }
+                ";
+            }
+
+            // Text Editor
+            /////////////////////////////////////////////////////////////
+            if(isset($theme_options_styles['ColorHyperTexts'])) {
+                $style .= "
+                    .tox .tox-statusbar,
+                    .tox .tox-statusbar a, 
+                    .tox .tox-statusbar__path-item, 
+                    .tox .tox-statusbar__wordcount {
+                        color:$theme_options_styles[ColorHyperTexts] !important;
+                    }
+                ";
+            }
+            if (isset($theme_options_styles['buttonBgColor'])) {
+                $style .= "
+                    .tox .tox-tbtn {
+                        background: $theme_options_styles[buttonBgColor] !important;
+                    }
+                ";
+            }
+            if (isset($theme_options_styles['buttonHoverBgColor'])) {
+                $style .= "
+                    .tox .tox-tbtn:hover,
+                    .tox .tox-tbtn:focus {
+                        background: $theme_options_styles[buttonHoverBgColor] !important;
+                    }
+                ";
+            }
+            if (isset($theme_options_styles['buttonTextColor'])) {
+                $style .= "
+                    .tox .tox-tbtn {
+                        color: $theme_options_styles[buttonTextColor] !important;
+                    }
+                    .tox .tox-tbtn svg {
+                        display: block;
+                        fill: $theme_options_styles[buttonTextColor] !important;
+                    }
+                ";
+            }
+            if(isset($theme_options_styles['BgTextEditor'])) {
+                $style .= "
+                    .tox .tox-edit-area__iframe {
+                        background-color: $theme_options_styles[BgTextEditor] !important;
+                    }
+
+                    .tox:not(.tox-tinymce-inline) .tox-editor-header {
+                        background-color: $theme_options_styles[BgTextEditor] !important;
+                    }
+
+                    .tox .tox-toolbar-overlord {
+                        background-color: $theme_options_styles[BgTextEditor] !important;
+                    }
+
+                    .tox .tox-toolbar, .tox .tox-toolbar__overflow, .tox .tox-toolbar__primary {
+                        background-color: $theme_options_styles[BgTextEditor] !important;
+                    }
+
+                    .tox .tox-statusbar {
+                        background-color: $theme_options_styles[BgTextEditor] !important;
+                        border-top: 1px solid $theme_options_styles[BgTextEditor] !important;
+                    }
+                ";
+            }
+
+            // Add css rules
+            ///////////////////////////////////////////////////////////////////////////////////
+            if (!empty($style)) {
+                file_put_contents($cssFile, $style, FILE_APPEND);
+            }
+        }
+    }
+}
+
+/**
+ * @upgrade certificates
+ * @return void
+ */
+function upgrade_certificates() {
+    global $webDir;
+
+    $zipDir = $webDir . '/template/modern/certificates/';
+    $next = 1;
+    foreach (glob($zipDir . '*.zip') as $filepath) {
+        $filename = basename($filepath);
+        validateUploadedFile($filename, 3);
+        $certificate_directory = safe_filename() . "/";
+        $certificate_path = $webDir . CERT_TEMPLATE_PATH . $certificate_directory;
+        make_dir($certificate_path);
+
+        $files_in_zip = array();
+        $archive = new ZipArchive;
+        if ($archive->open($filepath) === TRUE) {
+            // check for file type in zip contents
+            for ($i = 0; $i < $archive->numFiles; $i++) {
+                $stat = $archive->statIndex($i, ZipArchive::FL_ENC_RAW);
+                $files_in_zip[$i] = $stat['name'];
+                if (!empty(my_basename($files_in_zip[$i]))) {
+                    validateUploadedFile(my_basename($files_in_zip[$i]), 3, additional: ['html']);
+                }
+            }
+            if ($archive->extractTo($certificate_path)) {
+                copy($filepath, $certificate_path . $filename);
+                $title = 'Πιστοποιητικό' . ' ' . $next;
+                Database::get()->query("INSERT INTO certificate_template SET
+                                                name = ?s,
+                                                description = ?s,
+                                                filename = ?s,
+                                                orientation = ?s,
+                                                all_courses = ?d",
+                                            $title, '', $certificate_directory, 'L', 1);
+            }
+
+            $archive->close();
+        }
+        $next++;
     }
 }

@@ -61,10 +61,10 @@ if (isset($_GET['parent_post'])) {
 
 $myrow = Database::get()->querySingle("SELECT f.name, t.title, t.locked
             FROM forum f, forum_topic t
-            WHERE f.id = $forum
-            AND t.id = $topic
+            WHERE f.id = ?d
+            AND t.id = ?d
             AND t.forum_id = f.id
-            AND f.course_id = ?d", $course_id);
+            AND f.course_id = ?d", $forum, $topic, $course_id);
 
 $forum_name = $myrow->name;
 $topic_title = $myrow->title;
@@ -102,10 +102,10 @@ if ($topic_locked == 1) {
 }
 
 if (isset($_POST['submit'])) {
-    $message = $_POST['message'];
+    $message = purify(trim($_POST['message']));
     $poster_ip = Log::get_client_ip();
     $parent_post = $_POST['parent_post'];
-    if (trim($message) == '') {
+    if ($message == '') {
         $tool_content .= "<div class='col-sm-12'>
                 <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langEmptyMsg</span></div>
             </div>
@@ -198,7 +198,7 @@ if (isset($_POST['submit'])) {
             <div class='form-group'>
               <label for='message' class='col-sm-12 control-label-notes'>$langBodyMessage</label>
               <div class='col-sm-12'>
-                " . rich_text_editor('message', 15, 70, $reply) . "
+                " . rich_text_editor('message', 15, 70, $reply, options: array('id' => 'message')) . "
               </div>
             </div>
             <div class='form-group mt-4'>

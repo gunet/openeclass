@@ -328,3 +328,25 @@ function pollHasGrade($pid) {
     }
     return $isEnabledGrade;
 }
+
+/**
+ * @brief Get default scale answer text
+ * @param $answer
+ * @return string
+ */
+function get_default_scale_answer_text($answer): string
+{
+    global $lang_rate1, $lang_rate2, $lang_rate3, $lang_rate4, $lang_rate5;
+
+    return match ($answer) {
+        '1' => $lang_rate1,
+        '2' => $lang_rate2,
+        '3' => $lang_rate3,
+        '4' => $lang_rate4,
+        '5' => $lang_rate5,
+        default => $answer,
+    };
+}
+
+
+

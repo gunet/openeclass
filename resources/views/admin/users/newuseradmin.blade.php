@@ -46,7 +46,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
@@ -70,7 +70,7 @@
                             <div class='col-12 mb-4'>
                                 <div class='card panelCard border-card-left-default px-3 py-2 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>{{ getValue('givenname_form', $pn) }} {{ getValue('surname_form', $ps) }}</h3>
+                                        <h2 class='text-heading-h3'>{{ getValue('givenname_form', $pn) }} {{ getValue('surname_form', $ps) }}</h2>
                                     </div>
                                     <div class='card-body'>
                                         <div class='row row-cols-1 g-3'>
@@ -257,8 +257,8 @@
                                     <label for='user_date_expires_at' class='col-sm-12 control-label-notes'>{{ trans('langExpirationDate') }}</label>
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
-                                            <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                            <input class='form-control mt-0 border-start-0' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $expirationDatevalue }}'>
+                                            <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                            <input class='form-control mt-0' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $expirationDatevalue }}'>
 
                                         </div>
                                     </div>
@@ -326,5 +326,5 @@
             </div>
             </div>
         </div>
-    </div>
+    </main>
 @endsection

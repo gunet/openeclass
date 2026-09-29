@@ -9,10 +9,10 @@
                             <span class='checkmark'></span>
                         </label>
                     </span>
-                <span class='add-on2 input-group-text h-40px input-border-color border-end-0'>
+                <span class='add-on2'>
                     <i class='fa-regular fa-calendar Neutral-600-cl'></i>
                 </span>
-                <input class='form-control mt-0 border-start-0' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='{{ $WorkFeedbackRelease }}' {{ $work_feedback_release_disabled }}>
+                <input class='form-control mt-0' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='{{ $WorkFeedbackRelease }}' {{ $work_feedback_release_disabled }}>
             </div>
             <span class='help-block'>
                 @if (Session::hasError('WorkFeedbackRelease'))

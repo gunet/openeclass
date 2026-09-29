@@ -85,7 +85,21 @@ $head_content .= "<script type='text/javascript'>
                        'sNext':     '&rsaquo;',
                        'sLast':     '&raquo;'
                    }
-               }
+               },
+               'tabIndex': -1,
+                'initComplete': function() {
+                    $('#polls thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                }
+            });
+
+            $('#polls').on('order.dt', function() {
+                $('#polls thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
+                });
             });
 
             $('.dt-search input').attr({
@@ -530,7 +544,8 @@ function printPolls() {
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
         $langCreateDuplicateIn, $langCurrentCourse, $langDate,
         $langUserDuration, $m, $langQuickSurvey, $langChoiceLesson, $langGenQrCode,
-        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup;
+        $langWorkToUser, $langWorkAssignTo, $langWorkToGroup,
+        $langSearch, $langWelcomeSelect, $langSelectAll, $langCourse,$langListChoices;
 
     $poll_check = 0;
     $query = "SELECT * FROM poll WHERE course_id = ?d";
@@ -750,7 +765,7 @@ function printPolls() {
                     </div>
                     <div class='modal-body'>
                         <div class='form-group'>
-                          <select class='form-select' id='course_id' name='clone_to_course_id' aria-label='$langChoiceLesson'>
+                          <select class='form-control' id='course_id' name='clone_to_course_id' aria-label='$langChoiceLesson'>
                             <option value='$course_id' selected>--- $langCurrentCourse ---</option>
                           </select>
                         </div>
@@ -766,34 +781,70 @@ function printPolls() {
             <script>
               $(function () {
                 $(document).on('click', '.warnLink', function(e) {
+                
+
+                    // var pid = $(this).data('pid');
+                    // $('#clone_form').attr('action', '" . js_escape($_SERVER['SCRIPT_NAME']) . "?course=$course_code&pid=' + pid);
+                    // $('#cloneModal').modal('show').on('hide.bs.modal', function () {
+                    //   if ($('#course_id').hasClass('select2-hidden-accessible')) {
+                    //     $('#course_id').select2('destroy');
+                    //   }
+                    // });
+                    // $('#course_id').select2({
+                    //   width: '100%',
+                    //   selectOnClose: true,
+                    //   dropdownParent: $('#cloneModal'),
+                    //   ajax: {
+                    //     url: '" . js_escape($urlAppend . 'main/coursefeed.php') .  "',
+                    //     dataType: 'json',
+                    //     delay: 250,
+                    //     data: function (params) {
+                    //       return {
+                    //         term: params.term,
+                    //         page: params.page || 1
+                    //       };
+                    //     }
+                    //   }
+                    // });
+
+
                     var pid = $(this).data('pid');
                     $('#clone_form').attr('action', '" . js_escape($_SERVER['SCRIPT_NAME']) . "?course=$course_code&pid=' + pid);
-                    $('#cloneModal').modal('show').on('hide.bs.modal', function () {
-                      if ($('#course_id').hasClass('select2-hidden-accessible')) {
-                        $('#course_id').select2('destroy');
-                      }
-                    });
-                    $('#course_id').select2({
-                      width: '100%',
-                      selectOnClose: true,
-                      dropdownParent: $('#cloneModal'),
-                      ajax: {
-                        url: '" . js_escape($urlAppend . 'main/coursefeed.php') .  "',
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                          return {
-                            term: params.term,
-                            page: params.page || 1
-                          };
+                    $('#cloneModal').modal({
+                        focus: false
+                    }).modal('show');
+
+                    var courseSelect = slimSelectFun(
+                        '#course_id',
+                        '" . js_escape(trans('langSearch')) . "', 
+                        '" . js_escape(trans('langWelcomeSelect')) . "', 
+                        '" . js_escape(trans('langSelectAll')) . "', 
+                        '" . js_escape(trans('langCourses')) . "',
+                        {
+                            url: '" . js_escape($urlAppend . 'main/coursefeed.php') . "',
+                            dataType: 'json',
+                            dataResponse: 'results',
+                            afterOpen: true,
+                            delay: 250,
+                            params: function(searchValue) {
+                                return {
+                                    term: searchValue,
+                                    page: 1
+                                };
+                            }
                         }
-                      }
+                    );
+
+                    $('#cloneModal').off('hide.bs.modal.courseSelect').on('hide.bs.modal.courseSelect', function() { 
+                        courseSelect.destroy(); 
                     });
+
                     e.preventDefault();
                 });
               });
             </script>";
-        load_js('select2');
+        //load_js('select2');
+        load_js('slimselect');
     }
 }
 

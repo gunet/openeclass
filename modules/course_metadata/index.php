@@ -61,7 +61,9 @@ $english = $langCMeta['en'];
 $instrPhoto = $langCMeta['course_instructor_photo'];
 $instrCode = $langCMeta['course_instructor_registrationCode'];
 
-load_js('select2');
+//load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 $head_content .= <<<EOF
 <link rel="stylesheet" type="text/css" href="{$urlAppend}modules/course_metadata/course_metadata.css">
 <script type='text/javascript'>
@@ -98,7 +100,14 @@ $head_content .= <<<EOF
             html: true
         });
         
-        $( "#multiselect" ).select2({width: '185'});
+        // $( "#multiselect" ).select2({width: '185'});
+        slimSelectFun(
+            '#multiselect',
+            '$langSearch',
+            '$langWelcomeSelect',
+            '$langSelectAll',
+            '$langListChoices'
+        );
         
         $( "#course_coursePhoto_delete" ).on('click', function() {
             $( "#course_coursePhoto_image" ).remove();

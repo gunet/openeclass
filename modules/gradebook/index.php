@@ -104,7 +104,20 @@ $(function() {
                            'sNext':     '&rsaquo;',
                            'sLast':     '&raquo;'
                        }
-                   }
+                   },
+                'tabIndex': -1,
+                'initComplete': function() {
+                    $('#users_table{$course_id} thead .dt-column-order').each(function() {
+                        $(this).removeAttr('aria-label');
+                        $(this).attr('aria-hidden', 'true');
+                    });
+                }
+    });
+    $('#users_table{$course_id}').on('order.dt', function() {
+        $('#users_table{$course_id} thead .dt-column-order').each(function() {
+            $(this).removeAttr('aria-label');
+            $(this).attr('aria-hidden', 'true');
+        });
     });
     $('#user_grades_form').on('submit', function (e) {
         oTable.rows().nodes().page.len(-1).draw();
@@ -136,32 +149,35 @@ $(function() {
     {
         $('#all_users').hide();
         $('#participants_tbl').removeClass('hide');
-        var type = $('input:radio[name=specific_gradebook_users]:checked').val();
+        let type = $('input:radio[name=specific_gradebook_users]:checked').val();
         $.post('$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . urlencode($_REQUEST['gradebook_id']) . "&editUsers=1',
         {
           assign_type: type
         },
-        function(data,status){
-            var index;
-            var parsed_data = JSON.parse(data);
-            var select_content = '';
-            var select_content_2 = '';
+        function(data, status){
+            let parsed_data = JSON.parse(data);
             if (type==2) {
-                for (index = 0; index < parsed_data.length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + q(parsed_data[index]['name']) + '<\/option>';                    
+                let ubox = $('#users_box');
+                ubox.empty();
+                for (let d of parsed_data) {
+                    ubox.append($('<option>', {
+                        value: d['id'],
+                        text: d['name'],
+                    }));
+                }
+            } else if (type==1) {
+                let box_elements = [$('#users_box'), $('#participants_box')];
+                for (let i = 0; i < box_elements.length; i++) {
+                    let elem = box_elements[i];
+                    elem.empty();
+                    for (let d of parsed_data[i]) {
+                        elem.append($('<option>', {
+                            value: d['id'],
+                            text: `\${d['surname']} \${d['givenname']}`,
+                        }));
+                    }
                 }
             }
-            if (type==1) {
-                for (index = 0; index < parsed_data[0].length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + q(parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname']) + '<\/option>';
-                }
-                for (index = 0; index < parsed_data[1].length; ++index) {
-                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + q(parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname']) + '<\/option>';                    
-                }
-            }
-            $('#users_box').find('option').remove().end().append(select_content);
-            $('#participants_box').find('option').remove().end().append(select_content_2);
-
         });
     }
 });
@@ -250,8 +266,8 @@ if ($is_editor) {
                 foreach ($ug as $u) {
                     if (!in_array($u->user_id, $already_inserted_ids)) {
                         Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid)
-                                SELECT $gradebook_id, user_id FROM course_user
-                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u->user_id);
+                                SELECT ?d, user_id FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d", $gradebook_id, $course_id, $u->user_id);
                         update_user_gradebook_activities($gradebook_id, $u->user_id);
                         $distinct_users_count++;
                     }

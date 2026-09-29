@@ -82,7 +82,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  <input type='hidden' name='meta_filename' value='$oldFilename' />
 	  <input type='hidden' name='meta_mimetype' value='" . get_mime_type($oldFilename) . "' />
 	  $group_hidden_input
-	  <h3>$langAddMetadata</h3>
+	  <h2 class='text-heading-h3'>$langAddMetadata</h2>
       <div class='table-responsive pt-0'>
 	  <table class='table-default'>
       <thead>

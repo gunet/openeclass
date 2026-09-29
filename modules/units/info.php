@@ -46,8 +46,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
 }
 
+//load_js('select2');
 load_js('tools.js');
-load_js('select2');
+load_js('slimselect');
 load_js('bootstrap-datepicker');
 
 $data['start_week'] = $data['finish_week'] = '';
@@ -137,7 +138,7 @@ if (isset($_GET['edit'])) {
 
 $data['postUrl'] = "index.php?course=$course_code" .
     ($data['unitId'] ? "&id=$data[unitId]": '');
-$data['descriptionEditor'] = rich_text_editor('unitdescr', 10, 20, $unitDescr);
+$data['descriptionEditor'] = rich_text_editor('unitdescr', 10, 20, $unitDescr, options: array('id' => 'unitdescr'));
 $data['tagInput'] = $data['unitId']? eClassTag::tagInput($data['unitId']): eClassTag::tagInput();
 
 view('modules.units.info', $data);

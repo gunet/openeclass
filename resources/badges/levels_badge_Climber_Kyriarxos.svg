@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 18px;
+      }
+
+      .st1 {
+        fill: #c7b299;
+      }
+    </style>
+  </defs>
+  <g id="background">
+    <rect class="st1" width="500" height="500" rx="120" ry="120"/>
+  </g>
+  <g id="icon">
+    <g>
+      <line class="st0" x1="184.84" y1="346.6" x2="184.84" y2="155.72"/>
+      <line class="st0" x1="314.75" y1="155.72" x2="314.75" y2="346.6"/>
+      <line class="st0" x1="271.45" y1="155.72" x2="271.45" y2="346.6"/>
+      <line class="st0" x1="228.15" y1="155.72" x2="228.15" y2="346.6"/>
+      <line class="st0" x1="175.35" y1="379.93" x2="325.21" y2="379.93"/>
+      <line class="st0" x1="161.6" y1="413.27" x2="337.18" y2="413.27"/>
+      <path class="st0" d="M159.86,90.55c-31.36,0-56.78,25.42-56.78,56.78,0,25.09,20.34,45.43,45.43,45.43,20.07,0,36.34-16.27,36.34-36.34,0-16.06-13.02-29.07-29.07-29.07-12.85,0-23.26,10.41-23.26,23.26"/>
+      <path class="st0" d="M339.74,90.55c31.36,0,56.78,25.42,56.78,56.78,0,25.09-20.34,45.43-45.43,45.43-20.07,0-36.34-16.27-36.34-36.34,0-16.06,13.02-29.07,29.07-29.07,12.85,0,23.26,10.41,23.26,23.26"/>
+      <line class="st0" x1="159.86" y1="90.55" x2="339.74" y2="90.55"/>
+    </g>
+  </g>
+</svg>

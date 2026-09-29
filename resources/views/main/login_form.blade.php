@@ -2,8 +2,8 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
-        <div class='{{ $container }} main-container'>
+    <main id="main" class="col-12 main-section login-main-section">
+        <div class='{{ $container }} main-container main-container-login'>
 
             @include('layouts.partials.show_alert')
 
@@ -12,7 +12,7 @@
                     <div class='modal-dialog modal-dialog-centered'>
                         <div class='modal-content border-0 p-0'>
                             <div class='modal-header d-flex justify-content-between align-items-center'>
-                                <h2 class='modal-title'>{{ trans('langError') }}</h2>
+                                <h2 tabindex="0" class='modal-title' id='modal-title-id'>{{ trans('langError') }}</h2>
                                 <button aria-label="{{ trans('langClose') }}" type='button' class='close' data-bs-dismiss='modal' id="closeBtn"></button>
                             </div>
                             <div class='modal-body'>
@@ -25,17 +25,20 @@
                     </div>
                 </div>
                 @push('bottom_scripts')
-                    <script>
-                        var warningModal = new bootstrap.Modal(document.getElementById('warning-modal'), {});
-                        const focusTarget = document.getElementById('closeBtn');
-                        warningModal.show();
-                        document.getElementById('warning-modal').addEventListener('shown.bs.modal', function () {
-                            focusTarget.focus();
-                        });
-                        document.body.addEventListener('keydown', function(e) {
-                          if (e.key == "Escape") {
-                            warningModal.hide();
-                          }
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            var warningModalElement = document.getElementById('warning-modal');
+                            var warningModal = new bootstrap.Modal(warningModalElement, {});
+                            var focusTarget = document.getElementById('modal-title-id');
+                            warningModal.show();
+                            warningModalElement.addEventListener('shown.bs.modal', function () {
+                                focusTarget.focus();
+                            });
+                            document.body.addEventListener('keydown', function(e) {
+                                if (e.key === "Escape") {
+                                    warningModal.hide();
+                                }
+                            });
                         });
                     </script>
                 @endpush
@@ -48,7 +51,7 @@
                         <div class='col {!! $Position !!}'>
                             @if($auth_enabled_method == 1)
                                 @if (count($authLink) > 0)
-                                    <div class='card form-homepage-login border-card h-100 px-lg-4 py-lg-3 p-3'>
+                                    <div class='card form-homepage-login border-card px-lg-4 py-lg-3 p-3'>
                                         <div class='card-body d-flex justify-content-center align-items-center p-1 p-md-2'>
                                             <div class='w-100 h-100'>
                                                 <div class='col-12 container-pages d-flex align-items-center h-100'>
@@ -220,7 +223,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
 <script type='text/javascript'>
     $(document).ready(function() {
@@ -229,6 +232,12 @@
         }).mouseup(function () {
             $('#password_id').attr('type', 'password');
         })
+        $('#revealPass').keydown(function(e) {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                $('#password_id').attr('type', 'text');
+            }
+        });
     });
 </script>
 

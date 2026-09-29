@@ -23,6 +23,11 @@ const LTI_TYPE = 'limesurvey';
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = true;
+
+$require_help = true;
+$helpTopic = 'external_tools';
+$helpSubTopic = 'limesurvey';
+
 require_once '../../include/baseTheme.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 
@@ -33,11 +38,17 @@ $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('validation.js');
-load_js('select2');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {                
-        $('#select-courses').select2();
+        slimSelectFun (
+            '#select-courses', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             var stringVal = [];

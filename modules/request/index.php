@@ -64,7 +64,9 @@ if (isset($_GET['id'])) {
     }
 
     if ($can_modify) {
-        load_js('select2');
+        //load_js('select2');
+        load_js('tools.js');
+        load_js('slimselect');
         $data['editUrl'] = $urlAppend . 'modules/request/edit.php?course=' . $course_code . '&id=' . $id;
         $data['course_users'] = Database::get()->queryArray("SELECT user_id,
                 CONCAT(surname, ' ', givenname) name, email
@@ -213,7 +215,7 @@ if (isset($_GET['id'])) {
     $data['can_modify'] = $can_modify;
     $data['can_comment'] = $can_comment;
     $data['commenterName'] = $_SESSION['givenname'] . ' ' . $_SESSION['surname'];
-    $data['commentEditor'] = rich_text_editor('requestComment', 4, 20, '');
+    $data['commentEditor'] = rich_text_editor('requestComment', 4, 20, '', options: array('id' => 'requestComment'));
     $data['comments'] = Database::get()->queryArray('SELECT * FROM request_action
         WHERE request_id = ?d
         ORDER BY ts', $id);

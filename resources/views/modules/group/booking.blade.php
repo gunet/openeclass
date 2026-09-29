@@ -3,15 +3,10 @@
 
 @section('content')
 
-<div class="col-12 main-section" >
-
-    <div class="{{ $container }} module-container py-lg-0">
-
+<div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class='row'>
 
@@ -83,10 +78,10 @@
                     <input type="hidden" id="group_Id" value="{{ $group_id }}">
 
                 </div>
-            </div>
+            </main>
         </div>
     </div>
-</div>
+
 
 
 

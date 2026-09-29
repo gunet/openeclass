@@ -192,7 +192,7 @@ if ($is_editor) {
             $data['submit_label'] = $langAdd;
         }
         $data['urlLinkError'] = Session::getError('urllink') ? " has-error" : "";
-        $data['description_textarea'] = rich_text_editor('description', 3, 30, $form_description);
+        $data['description_textarea'] = rich_text_editor('description', 3, 30, $form_description, options: array('id' => 'description'));
 
         $data['categories'] = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d ORDER BY `order`", $course_id);
 
@@ -277,7 +277,7 @@ if ($is_editor) {
                         $description = '';
                     }
                     $data['urlLinkError'] = Session::getError('urllink') ? " has-error" : "";
-                    $data['description_textarea'] = rich_text_editor('description', 3, 30, $description);
+                    $data['description_textarea'] = rich_text_editor('description', 3, 30, $description, options: array('id' => 'description'));
 
                     view('modules.link.create', $data);
                 }

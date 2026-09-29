@@ -17,7 +17,7 @@
  *
  */
 
-$require_admin = TRUE;
+$require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -28,6 +28,16 @@ load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 
 $tree = new Hierarchy();
+$tenantNodeIds = [];
+$is_saek_admin = $is_departmentmanage_user && !$is_admin;
+
+if ($is_saek_admin) {
+    $tenant = getCurrentTenant();
+    if ($tenant) {
+        $tenantNodes = $tree->getTenantNodes($tenant->id);
+        $tenantNodeIds = array_map(fn($n) => intval($n->id), $tenantNodes);
+    }
+}
 $user = new User();
 $toolName = $langAdmin;
 $pageName = $langStatOfFaculty;
@@ -69,21 +79,51 @@ if (isset($_GET['user_date_end'])) {
 if (isset($_GET['stats_submit'])) {
     if (isset($_GET['formsearchfaculte'])) {
         $searchfaculte = intval($_GET['formsearchfaculte']);
+
         if ($searchfaculte) {
-            $subs = $tree->buildSubtrees(array($searchfaculte));
-            $ids = 0;
-            foreach ($subs as $key => $id) {
+            $subs = $tree->buildSubtrees([$searchfaculte]);
+            $terms = [];
+
+            foreach ($subs as $id) {
+                if ($is_saek_admin && !in_array($id, $tenantNodeIds)) {                    
+                    continue;
+                }
                 $terms[] = $id;
-                $ids++;
             }
-            $query = ' AND hierarchy.id IN (' . implode(', ', array_fill(0, $ids, '?d')) . ')';
+
+            if (!empty($terms)) {
+                $query = ' AND hierarchy.id IN (' . implode(', ', array_fill(0, count($terms), '?d')) . ')';
+            } else {
+                $query = ' AND 0=1';
+            }
         } else {
             $query = $terms = '';
         }
     }
 
+    if (
+        empty($query)
+        && $is_saek_admin
+        && !empty($tenantNodeIds)
+    ) {
+        $query = ' AND hierarchy.id IN (' . implode(', ', array_fill(0, count($tenantNodeIds), '?d')) . ')';
+        $terms = $tenantNodeIds;
+    }
+
     // only one course
     if (isset($_GET['c'])) {
+        if ($is_saek_admin) {
+            $allowed = Database::get()->querySingle("
+                SELECT COUNT(*) AS cnt
+                FROM course_department
+                WHERE course = ?d
+                  AND department IN (" . implode(',', $tenantNodeIds) . ")
+            ", $_GET['c'])->cnt;
+        
+            if (!$allowed) {
+                forbidden(); 
+            }
+        }
         $navigation[] = array("url" => "faculty_stats.php?formsearchfaculte=1&user_date_start=$_GET[user_date_start]&user_date_end=$_GET[user_date_end]&stats_submit=true", "name" => $langStatOfFaculty);
         $pageName = $langStatsCourse;
         $month_stats =  [];
@@ -102,33 +142,51 @@ if (isset($_GET['stats_submit'])) {
         $data['visibility_icon'] = course_access_icon($course->visible);
         foreach ($period as $dt) {
             $start = $dt->format('Y-m-d');
-            $cnt_prof = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user
+            $cnt_prof = Database::get()->querySingle(
+                "SELECT COUNT(*) AS cnt FROM course_user
                                                     WHERE course_id = ?d
                                                     AND status = " . USER_TEACHER . "
                                                     AND reg_date <= ?t",
-                                            $_GET['c'], $start)->cnt;
-            $cnt_students = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user
+                $_GET['c'],
+                $start
+            )->cnt;
+            $cnt_students = Database::get()->querySingle(
+                "SELECT COUNT(*) AS cnt FROM course_user
                                                     WHERE course_id = ?d
                                                     AND status = " . USER_STUDENT . "
                                                     AND reg_date <= ?t",
-                                            $_GET['c'], $start)->cnt;
-            $cnt_guests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user
+                $_GET['c'],
+                $start
+            )->cnt;
+            $cnt_guests = Database::get()->querySingle(
+                "SELECT COUNT(*) AS cnt FROM course_user
                                                     WHERE course_id = ?d
                                                     AND status = " . USER_GUEST . "
                                                     AND reg_date <= ?t",
-                                            $_GET['c'], $start)->cnt;
-            $cnt_documents = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM document
+                $_GET['c'],
+                $start
+            )->cnt;
+            $cnt_documents = Database::get()->querySingle(
+                "SELECT COUNT(*) AS cnt FROM document
                                                     WHERE course_id = ?d
                                                     AND date <= ?t",
-                                            $_GET['c'], $start)->cnt;
-            $cnt_announcements = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM announcement
+                $_GET['c'],
+                $start
+            )->cnt;
+            $cnt_announcements = Database::get()->querySingle(
+                "SELECT COUNT(*) AS cnt FROM announcement
                                                     WHERE course_id = ?d
                                                     AND date <= ?t",
-                                            $_GET['c'], $start)->cnt;
-            $cnt_messages = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM dropbox_msg
+                $_GET['c'],
+                $start
+            )->cnt;
+            $cnt_messages = Database::get()->querySingle(
+                "SELECT COUNT(*) AS cnt FROM dropbox_msg
                                                     WHERE course_id = ?d                                                    
                                                     AND FROM_UNIXTIME(timestamp, '%Y-%m-%d') <= ?t",
-                                            $_GET['c'], $start)->cnt;
+                $_GET['c'],
+                $start
+            )->cnt;
             $cnt_exercises = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM exercise WHERE course_id = ?d", $_GET['c'])->cnt;
             $cnt_assignments = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM assignment WHERE course_id = ?d", $_GET['c'])->cnt;
             $cnt_forum_posts = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM forum WHERE course_id = ?d", $_GET['c'])->cnt;
@@ -146,7 +204,6 @@ if (isset($_GET['stats_submit'])) {
             ];
         }
         $data['month_stats'] = array_reverse($month_stats);
-
     } else { // courses list
         if (!empty($query)) {
             $data['s'] = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course, course_department, hierarchy
@@ -158,7 +215,19 @@ if (isset($_GET['stats_submit'])) {
                                             WHERE course.id = course_department.course
                                             AND hierarchy.id = course_department.department")->total;
         }
-        $data['all'] = Database::get()->querySingle("SELECT COUNT(*) AS num_of_courses FROM course")->num_of_courses;
+        if ($is_saek_admin && !empty($tenantNodeIds)) {
+            $data['all'] = Database::get()->querySingle("
+                SELECT COUNT(DISTINCT course.id) AS num_of_courses
+                FROM course
+                JOIN course_department cd ON cd.course = course.id
+                WHERE cd.department IN (" . implode(',', $tenantNodeIds) . ")
+            ")->num_of_courses;
+        } else {
+            $data['all'] = Database::get()->querySingle("
+                SELECT COUNT(*) AS num_of_courses
+                FROM course
+            ")->num_of_courses;
+        }
 
         if (!empty($query)) {
             $data['sql'] = Database::get()->queryArray("SELECT course.id, course.code, course.visible, title, prof_names, DATE_FORMAT(created, '%d-%m-%Y %h:%m') AS creation_time

@@ -31,6 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'exercises';
 
 require_once '../../include/baseTheme.php';
+require_once 'modules/exercise/exercise.lib.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
@@ -212,7 +213,12 @@ if ($is_editor) {
             'icon' => 'fa-cubes'
         )
     ), false);
-    $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
+    $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b 
+                                                WHERE a.course_id = b.id 
+                                                AND a.course_id != ?d 
+                                                AND a.user_id = ?d 
+                                                AND a.status = " . USER_TEACHER . " 
+                                                ORDER BY Title", $course_id, $uid);
     foreach ($my_courses as $row) {
         $courses_options .= "'<option value=\"$row->Course_id\">".js_escape($row->Title)."</option>'+";
     }
@@ -234,7 +240,7 @@ function has_user_participate_in_exercise($eid)
 {
     global $uid;
 
-    if (check_guest()) {
+    if (!$uid or check_guest()) {
         return false;
     }
 
@@ -268,15 +274,22 @@ function count_exercise_submissions($eid): int
 }
 
 /**
- * @brief check if exercise has imcomplete attempts
+ * @brief Check if exercise has incomplete attempts for a user and if so return the first one
  * @param $eid
  * @param $uid
  * @param $continue_time_limit
- * @return null
+ * @return null|object
  */
-function hasExerciseIncompleteAttempts($eid, $uid, $continue_time_limit) {
+function exerciseIncompleteAttempts($eid, $uid, $continue_time_limit) {
+    static $cache = null;
 
+    if (!$uid or check_guest($uid)) {
+        return null;
+    }
     if ($continue_time_limit) {
+        if (isset($cache[$eid][$uid])) {
+            return $cache[$eid][$uid];
+        }
         $q = Database::get()->querySingle("SELECT eurid, attempt
                                              FROM exercise_user_record
                                              WHERE eid = ?d AND uid = ?d AND
@@ -285,6 +298,7 @@ function hasExerciseIncompleteAttempts($eid, $uid, $continue_time_limit) {
                                              ORDER BY eurid DESC LIMIT 1",
             $eid, $uid, ATTEMPT_ACTIVE, 60 * $continue_time_limit);
         if ($q) {
+            $cache[$eid][$uid] = $q->eurid;
             return $q->eurid;
         } else {
             return null;
@@ -294,28 +308,35 @@ function hasExerciseIncompleteAttempts($eid, $uid, $continue_time_limit) {
     }
 }
 
-/** @brief check if exercise has been paused by user
+/**
+ * @brief Check if exercise has incomplete attempts for a user and if so return the first one
  * @param $eid
  * @param $uid
- * @return null
+ * @return null|object
  */
-function isExercisePaused($eid, $uid) {
+function exercisePausedAttempts($eid, $uid) {
+    static $cache = null;
 
-    if ($uid) {
+    if (!$uid or check_guest($uid)) {
+        return null;
+    } else {
+        if (isset($cache[$eid][$uid])) {
+            return $cache[$eid][$uid];
+        }
         $q = Database::get()->querySingle("SELECT eurid, attempt
                                              FROM exercise_user_record
                                              WHERE eid = ?d
                                              AND uid = ?d
-                                             AND attempt_status = " . ATTEMPT_PAUSED . "",
+                                             AND attempt_status = " . ATTEMPT_PAUSED,
                             $eid, $uid);
         if ($q) {
+            $cache[$eid][$uid] = $q->eurid;
             return $q->eurid;
         } else {
             return null;
         }
-    } else {
-        return null;
     }
+    return null;
 }
 
 /**
@@ -340,7 +361,7 @@ function exerciseUserAttempts($eid, $uid) {
  * @return mixed
  */
 function exerciseUserLastScore($eid, $uid) {
-    if (check_guest()) {
+    if (!$uid or check_guest()) {
         return null;
     }
     $attempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record

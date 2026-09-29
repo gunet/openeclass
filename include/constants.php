@@ -22,6 +22,9 @@
 @brief Enter only platform constants here.
 */
 
+/* version */
+define('ECLASS_VERSION', '4.5-dev');
+
 /* course status */
 define('COURSE_CLOSED', 0);
 define('COURSE_REGISTRATION', 1);
@@ -108,6 +111,7 @@ define('MODULE_ID_H5P', 52);
 define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_REQUEST', 100);
 define('MODULE_ID_SESSION', 101);
+define('MODULE_ID_STICKY_NOTES', 102);
 //user activities
 define('MODULE_ID_EBOOK_READ','FC1');
 define('MODULE_ID_VIDEO_WATCH','FC2');
@@ -164,6 +168,7 @@ define('SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT', 31); /* course image foote
 define('SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH', 32); /* course image header width */
 define('SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH', 33); /* course image footer width */
 define('SETTING_COURSE_H5P_USERS_UPLOADING_ENABLE', 34); /* course H5P users uploading enable */
+define('SETTING_COURSE_REPORT_VIEW_TYPE', 200);
 
 // Available user settings
 define('SETTING_FORUM_POST_VIEW', 1);
@@ -182,6 +187,7 @@ define('DRAG_AND_DROP_MARKERS', 10);
 define('CALCULATED', 11);
 define('ORDERING', 12);
 define('ORAL', 13);
+define('UPLOAD_FILE', 14);
 
 // exercise view type
 define('SINGLE_PAGE_TYPE', 1);
@@ -237,6 +243,11 @@ define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
 define('GRADEBOOK_ACTIVITY_EXERCISE', 2);
 define('GRADEBOOK_ACTIVITY_LP', 3);
 define('GRADEBOOK_ACTIVITY_TC', 4);
+
+//eportfolio visibility levels
+define('EPF_VISIBLE_PUBLIC', 1);
+define('EPF_VISIBLE_USERS', 2);
+define('EPF_VISIBLE_PRIVATE', 3);
 
 // Subsystem types (used in documents)
 define('MAIN', 0);

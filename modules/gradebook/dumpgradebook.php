@@ -98,6 +98,7 @@ if ($t == 1) { // download gradebook activities results
     $data_header = [];
     // mapping of activity id's to output columns
     $actId = array();
+    $activities_header = [];
     $actCounter = 0;
     $header1 = [ $langSurname, $langName, $langAm, $langUsername, $langGroups, $langEmail ];
     $activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", $gid);

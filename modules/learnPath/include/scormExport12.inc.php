@@ -82,8 +82,6 @@ if (!class_exists('ScormExport')) {
         private $srcDirDocument;
         private $srcDirExercise;
         private $srcDirVideo;
-        private $manifest_itemTree;
-        private $scormURL;
         private $mp3Found;
         private $error;
 

@@ -110,7 +110,7 @@ class AssignmentAnalyticsEvent extends Event {
                 . " AND a.course_id = ?d", $this->context['user_id'], $this->context['resource'], $this->context['course_id']);
 
                 $value = 0;
-                if ($recorddl && $recorddl->submission_date <= $recorddl->deadline ) {
+                if ($recorddl && (empty($recorddl->deadline) || $recorddl->deadline == '0000-00-00 00:00:00' || $recorddl->submission_date <= $recorddl->deadline)) {
                     $value = 1;
                 }
 
@@ -119,8 +119,6 @@ class AssignmentAnalyticsEvent extends Event {
                             user_id = ?d
                             AND analytics_element_id = ?d
                             AND DATE(`updated`) = CURDATE()", $this->context['user_id'], $element->id);
-
-
 
                     if ($recorddl) {
                         $id = $recorddl->id;
@@ -151,7 +149,7 @@ class AssignmentAnalyticsEvent extends Event {
 
                 foreach ($assignment_recordsdl as $assignment_recorddl) {
                     $value = 0;
-                    if ($assignment_recorddl && $assignment_recorddl->submission_date < $assignment_recorddl->deadline ) {
+                    if ($assignment_recorddl && (empty($assignment_recorddl->deadline) || $assignment_recorddl->deadline == '0000-00-00 00:00:00' || $assignment_recorddl->submission_date <= $assignment_recorddl->deadline)) {
                         $value = 1;
                     }
 

@@ -27,7 +27,8 @@ require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/apitokenapp.php';
 
 load_js('bootstrap-datetimepicker');
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 
 $head_content .= "
     <script type='text/javascript'>
@@ -81,6 +82,13 @@ if (isset($_POST['submit'])) {
     } else {
         $enabled = 0;
     }
+
+    if (isset($_POST['api_category']) && $_POST['api_category'] !== '') {
+        $api_category = intval($_POST['api_category']);
+    } else {
+        $api_category = null;
+    }
+
     $all_courses = (($_POST['api_all_courses'] ?? '') == 'true')? 1: 0;
     $token = null;
     if (isset($_GET['edit'])) {
@@ -94,11 +102,12 @@ if (isset($_POST['submit'])) {
         $result_update = Database::get()->query("UPDATE api_token SET
                             name = ?s,
                             comments = ?s,
+                            department_id = ?d,
                             ip = ?s,
                             enabled = ?d,
                             expired = ?s,
                             all_courses = ?d
-                        WHERE id = ?d", $_POST['name'], $_POST['comments'], $_POST['remote_url'], $enabled, $token_expires_at, $all_courses, $_GET['edit']);
+                        WHERE id = ?d", $_POST['name'], $_POST['comments'], $api_category, $_POST['remote_url'], $enabled, $token_expires_at, $all_courses, $_GET['edit']);
         $token_id = $_GET['edit'];
     } else {
         $token = "eclass_".bin2hex(random_bytes(32));
@@ -106,21 +115,24 @@ if (isset($_POST['submit'])) {
                                 token = ?s,
                                 name = ?s,
                                 comments = ?s,
+                                department_id = ?d,
                                 ip = ?s,
                                 enabled = 1,
                                 created = " . DBHelper::timeAfter() . ",
                                 expired = ?s",
-            $token, $_POST['name'], $_POST['comments'], $_POST['remote_url'], $token_expires_at);
+            $token, $_POST['name'], $_POST['comments'], $api_category, $_POST['remote_url'], $token_expires_at);
         $token_id = $result_insert->lastInsertID;
     }
     Database::get()->query('DELETE FROM api_token_course WHERE token_id = ?d', $token_id);
     if (!$all_courses) {
-        $course_update_sql = implode(',', array_fill(0, count($_POST['api_courses']), '(?d, ?d)'));
-        $course_update_values = array_map(function ($course_id) use ($token_id) {
-            return [$course_id, $token_id];
-        }, $_POST['api_courses']);
-        Database::get()->query('INSERT INTO api_token_course (course_id, token_id) VALUES ' . $course_update_sql,
-            $course_update_values);
+        if (isset($_POST['api_courses'])) {
+            $course_update_sql = implode(',', array_fill(0, count($_POST['api_courses']), '(?d, ?d)'));
+            $course_update_values = array_map(function ($course_id) use ($token_id) {
+                return [$course_id, $token_id];
+            }, $_POST['api_courses']);
+            Database::get()->query('INSERT INTO api_token_course (course_id, token_id) VALUES ' . $course_update_sql,
+                $course_update_values);
+        }
     }
 
     if ($token) {
@@ -178,6 +190,26 @@ if (count($q) > 0) {
     $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoApiToken</span></div>";
 }
 
+$tree = new Hierarchy();
+$categories_list = $tree->buildRootsArray();
+$listcategories = "<option value=''>Χωρίς κατηγορία</option>\n" . implode("\n", array_map(function ($category) {
+    // Check if name is serialized (starts with 'a:' pattern for arrays)
+    if (is_string($category->name) && preg_match('/^[aOs]:[0-9]+:/', $category->name)) {
+        $unserialized = @unserialize($category->name);
+        // If it's an array (multilingual), try to get the current language or first available
+        if (is_array($unserialized)) {
+            $display_name = $unserialized['el'] ?? reset($unserialized) ?? '';
+        } else {
+            $display_name = $category->name;
+        }
+    } else {
+        $display_name = $category->name;
+    }
+
+    return "<option value='{$category->id}'>" . q($display_name) . "</option>";
+}, $categories_list));
+
+
 if (isset($_GET['edit'])) {
     $data = Database::get()->querySingle('SELECT * FROM api_token WHERE id = ?d', $_GET['edit']);
     $courses_list = Database::get()->queryArray("SELECT course.id AS id, code, title, token_id
@@ -222,12 +254,21 @@ if (isset($_GET['edit'])) {
                             <textarea id='$langComments' class='form-control' rows='3' cols='40' name='comments'>" . q($data->comments) . "</textarea>
                         </div>
                     </div>
+                    <div id='category-select-field' class='form-group mt-4'>
+                        <label for='select-category' class='col-12 control-label-notes'>$langCategory</label>
+                        <div class='col-sm-12'>
+                            <select class='form-select' name='api_category' class='form-control' id='select-category'>
+                                $listcategories
+                            </select>
+                        </div>
+                    </div>
                     <div class='input-append date form-group mt-4'>
                         <label for='token_expires_at' class='col-12 control-label-notes'>$langExpirationDate:</label>
                         <div class='col-12'>
                             <div class='input-group'>
-                                <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
-                                <span class='input-group-text input-group-addon h-40px bg-input-default border-start-0 input-border-color'><i class='fa-regular fa-calendar'></i></span>
+                                <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
+
                             </div>
                         </div>
                     </div>
@@ -288,6 +329,7 @@ if (isset($_GET['edit'])) {
         $listcourses = implode("\n", array_map(function ($course) {
               return "<option value='{$course->id}'>" . q("{$course->title} ({$course->code})") . "</option>";
         }, $courses_list));
+
         $expirationDate = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now") + $duration_time));
         $tool_content .= "
         <div class='row extapp'>
@@ -307,6 +349,14 @@ if (isset($_GET['edit'])) {
                                 <div class='form-text'>$langAPITokenIP</div>
                             </div>
                         </div>
+                        <div id='category-select-field' class='form-group mt-4'>
+                            <label for='select-category' class='col-12 control-label-notes'>$langCategory</label>
+                            <div class='col-sm-12'>
+                                <select class='form-select' name='api_category' class='form-control' id='select-category'>
+                                    $listcategories
+                                </select>
+                            </div>
+                        </div>
                         <div class='form-group mt-4'>
                             <label for='$langComments' class='col-12 control-label-notes'>$langComments</label>
                             <div class='col-12'>
@@ -317,8 +367,9 @@ if (isset($_GET['edit'])) {
                             <div class='col-12 control-label-notes'>$langExpirationDate:</div>
                             <div class='col-12'>
                                 <div class='input-group'>
-                                    <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
-                                    <span class='input-group-text input-group-addon h-40px bg-input-default input-border-color'><i class='fa-regular fa-calendar'></i></span>
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
+
                                 </div>
                             </div>
                         </div>
@@ -341,10 +392,9 @@ if (isset($_GET['edit'])) {
                         </div>
                         <div id='courses-select-field' class='form-group d-none'>
                             <div class='col-sm-12'>
-                                <select class='form-select' name='api_courses[]' multiple class='form-control' id='select-courses'>
+                                <select class='form-control' name='api_courses[]' multiple id='select-courses'>
                                     $listcourses
                                 </select>
-                                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                             </div>
                         </div>
                         <div class='form-group mt-4'>
@@ -384,7 +434,20 @@ $head_content .= "
                     $('#courses-select-field').slideUp(400);
                 }
             });
-            $('#select-courses').select2();
+            slimSelectFun (
+                '#select-courses',
+                '" . js_escape(trans('langSearch')) . "',
+                '" . js_escape(trans('langWelcomeSelect')) . "',
+                '" . js_escape(trans('langSelectAll')) . "',
+                '" . js_escape(trans('langListChoices')) . "'
+            );
+            slimSelectFun (
+                '#select-categories',
+                '" . js_escape(trans('langSearch')) . "',
+                '" . js_escape(trans('langWelcomeSelect')) . "',
+                '" . js_escape(trans('langSelectAll')) . "',
+                '" . js_escape(trans('langListChoices')) . "'
+            );
             $('#selectAll').click(function(e) {
                 e.preventDefault();
                 var stringVal = [];

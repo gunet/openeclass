@@ -102,7 +102,8 @@ $head_content .= "<script type='text/javascript'>
         });
     </script>";
 
-load_js('select2');
+//load_js('select2');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
@@ -111,7 +112,14 @@ $head_content .= "<script type='text/javascript'>
             return false;
         });
 
-        $('#select-groups').select2();
+        
+        slimSelectFun (
+            '#select-groups', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langParticipants')) . "'
+        );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             var stringVal = [];
@@ -138,9 +146,10 @@ $head_content .= "<script type='text/javascript'>
         alert('Changed a tag: ' + tag);
     }
 
-    $(function() {
-        $('#tags_1').select2({tags:[], formatNoMatches: ''});
-    });
+    // $(function() {
+    //     $('#tags_1').select2({tags:[], formatNoMatches: ''});
+    // });
+    
 </script>
 ";
 

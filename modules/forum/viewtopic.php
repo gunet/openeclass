@@ -42,8 +42,11 @@ ModalBoxHelper::loadModalBox();
 $toolName = $langForums;
 
 load_js('tools.js');
+load_js('suppressedWords/suppressedWords.js');
+$head_content .= "<script>var urlAppend = '$urlAppend';$(function() { initSuppressedWordsBlur('.card-body, .panelCard'); });</script>";
 $head_content .= "
     <script type='text/javascript'>
+    
         function highlight(selector) {
             $(selector).removeClass('panel-default').removeClass('panel-primary').addClass('panel-success').css('border-color','green').css('border', '2px solid');
         }
@@ -239,9 +242,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     }
     if ($last_post_in_thread == $this_post_time) {
         $topic_time_fixed = $last_post_in_thread;
-        $sql = "UPDATE forum_topic
-			SET topic_time = '$topic_time_fixed'
-			WHERE id = $topic";
+        Database::get()->query("UPDATE forum_topic SET topic_time = ?s WHERE id = ?d", $topic_time_fixed, $topic);
     }
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langDeletedMessage</span></div></div>";
 }
@@ -283,16 +284,21 @@ if ($topic_locked == 1) {
         $reply_url = "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum";
     }
     $action_bar = action_bar(array(
+                                    array('title' => $langBack,
+                                        'url' => "$back_url",
+                                        'icon' => 'fa-reply',
+                                        'level' => 'primary'),
                                     array('title' => $langReply,
                                         'url' => "$reply_url",
                                         'icon' => 'fa-regular fa-comments',
                                         'level' => 'primary-label',
                                         'button-class' => 'btn-success action-forum-btn'),
                                     array('title' => $langDumpPDF,
-                                           'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&topic=$_GET[topic]&forum=$_GET[forum]&export_ans=true",
-                                           'icon' => 'fa-solid fa-file-pdf',
-                                            'level' => 'primary-label',
-                                            'button-class' => 'btn-success action-forum-btn')
+                                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&topic=$_GET[topic]&forum=$_GET[forum]&export_ans=true",
+                                        'icon' => 'fa-solid fa-file-pdf',
+                                        'level' => 'primary-label',
+                                        'link-attrs' => "target='_blank'",
+                                        'button-class' => 'btn-success action-forum-btn')
                                 )
                             );
     $tool_content .= $action_bar;
@@ -749,8 +755,9 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
  * @return void
  * @throws \Mpdf\MpdfException
  */
-function pdf_forum_output($content_m,$topic_id,$forum_id) {
-    global $currentCourseName, $webDir, $course_id, $course_code, $language;
+function pdf_forum_output($content_m,$topic_id,$forum_id): void
+{
+    global $currentCourseName;
 
     $res = Database::get()->querySingle("SELECT * FROM forum_topic WHERE id = ?d AND forum_id = ?d",$topic_id,$forum_id);
 
@@ -758,81 +765,8 @@ function pdf_forum_output($content_m,$topic_id,$forum_id) {
     $newContent2 = str_replace("</a>","</span>",$newContent1);
     $topicName = $res->title;
 
-    $pdf_mcontent = "
-        <!DOCTYPE html>
-        <html lang='$language'>
-        <head>
-          <meta charset='utf-8'>
-          <title>" . q("$currentCourseName") . "</title>
-          <style>
-            * { font-family: 'opensans'; }
-            body { font-family: 'opensans'; font-size: 10pt; }
-            small, .small { font-size: 8pt; }
-            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-            h1 { font-size: 16pt; }
-            h2 { font-size: 12pt; }
-            h3 { font-size: 10pt; color: #158; }
-            .card-default { background: #fafafa; }
-            .panel-title { color: #5d6d7e; }
-            .action-bar-title { display: none; }
-            .actions-post-btns { display: none; }
-            .selection_type { display: none; }
-            .ButtonsContent { display: none; }
-            .div-profile-img { display: none; }
-            .reply-post-btn { display: none; }
-            .div-menu-popover{ display: none; }
-            .card-default {border: solid 1px #000000; padding: 10px; margin-top: 15px; }
-          </style>
-        </head>
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-        <h2> " . q($topicName) . "</h2>";
-
-    $pdf_mcontent .= $newContent2;
-    $pdf_mcontent .= "</body></html>";
-
-    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata'];
-
-    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header+15,     // mm
-        'margin_bottom' => $image_height_footer+15,  // mm
-        'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-        'fontdata' => $fontData + [
-                'opensans' => [
-                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                ],
-                'roboto' => [
-                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-                ]
-            ]
-    ]);
-
-    
-    $mpdf->SetHTMLHeader(get_platform_logo());
-    $footerHtml = '
-    <div>
-        <table width="100%" style="border: none;">
-            <tr>
-                <td style="text-align: left;">{DATE j-n-Y}</td>
-                <td style="text-align: right;">{PAGENO} / {nb}</td>
-            </tr>
-        </table>
-    </div>
-    ' . get_platform_logo('','footer') . '';
-    $mpdf->SetHTMLFooter($footerHtml);
-    $mpdf->SetCreator(course_id_to_prof($course_id));
-    $mpdf->SetAuthor(course_id_to_prof($course_id));
-    $mpdf->WriteHTML($pdf_mcontent);
-    $mpdf->Output("forum_topic.pdf", 'I'); // 'D' or 'I' for download / inline display
-    exit;
+    $pdf_title = "forum_topic";
+    $course_title = q("$currentCourseName");
+    $module_type_title = q($topicName);
+    html_to_pdf($pdf_title, $course_title, $module_type_title, $newContent2);
 }

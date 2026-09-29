@@ -26,6 +26,8 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/message/class.mailbox.php';
 require_once 'modules/message/class.msg.php';
+require_once 'include/main_lib.php';
+
 /**
  * @brief display user courses
  * @param integer $uid
@@ -43,11 +45,11 @@ function getUserCourseInfo($uid): string
            $langWelcomeStudCollab, $langWelcomeProfCollab, $langThisCollabDescriptionIsEmpty,
            $mine_courses, $mine_collaborations, $langNotificationsExist, $langCourseImage, $langClose, $langNoFavorite;
 
-    if(!get_config('show_always_collaboration')){
+    if (!get_config('show_always_collaboration')){
         $myCourses = $mine_courses = getUserCourses($uid);
     }
 
-    if(get_config('show_collaboration')){
+    if (get_config('show_collaboration')){
         $myCollaborations = $mine_collaborations = getUserCollaborations($uid);
     }
 
@@ -67,7 +69,7 @@ function getUserCourseInfo($uid): string
                                         LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                         WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $data->course_id);
 
-                if ($data->visible == COURSE_INACTIVE) {
+                if ($data->visible == COURSE_INACTIVE || !course_has_started($data->course_id) || course_has_expired($data->course_id)) {
                     $visclass = "not_visible";
                 }
                 if (isset($data->favorite)) {
@@ -82,16 +84,46 @@ function getUserCourseInfo($uid): string
                     $pressed = 'false';
                 }
                 $license = '';
-                if($data->course_license > 0){
+                if ($data->course_license > 0){
                     $license = copyright_info($data->course_id);
                 }
+                
+                $percentage_html = '';
+                if ($data->status == USER_STUDENT) {
+                    $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1 AND active = 1 AND unit_id = 0", $data->course_id);
+                    if ($badge) {
+                        $badge_data = Database::get()->querySingle("SELECT completed_criteria, total_criteria FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $badge->id);
+                        if (!$badge_data or !$badge_data->total_criteria) {
+                            $percentage = 0;
+                        } else {
+                            $percentage = round($badge_data->completed_criteria / $badge_data->total_criteria * 100, 0);
+                        }
+
+                        $badgeBattery = 'badge Primary-600-bg py-0 px-2';
+                        $battery_icon = 'fa-battery-empty';
+                        if ($percentage > 0 && $percentage < 34) {
+                            $battery_icon = 'fa-battery-quarter';
+                        } elseif ($percentage >= 34 && $percentage < 67) {
+                            $battery_icon = 'fa-battery-half';
+                        } elseif ($percentage >= 67 && $percentage < 100) {
+                            $battery_icon = 'fa-battery-three-quarters';
+                        } elseif ($percentage == 100) {
+                            $battery_icon = 'fa-battery-full';
+                            $badgeBattery = 'badge Success-200-bg py-0 px-2';
+                        }
+                        $percentage_html = "<span class='$badgeBattery vsmall-text text-end me-3 d-flex flex-row'><span class='me-1' style='font-size: 0.8em; font-weight: bold;'>$percentage%</span><i class='fa-solid $battery_icon' style='font-size: 1.6em;line-height: 24px;'></i></span>";
+                    }
+                }
+
                 $lesson_content .= "
                     <tr class='$visclass row-course'>
                         <td class='border-top-0 border-start-0 border-end-0'>
                             <div class='d-flex gap-1 flex-wrap'>
-                                <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a>
-                                <small>(" .  q($data->public_code) . ")</small>
-                                <a id='btnNotification_{$data->course_id}' class='invisible btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}'
+                                <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a>";
+                if ($data->public_code) {
+                    $lesson_content .= "<small>(" . q($data->public_code) . ")</small>";
+                }
+                $lesson_content .= "<a id='btnNotification_{$data->course_id}' class='invisible btn btn-notification-course text-decoration-none' data-bs-toggle='collapse' href='#notification{$data->course_id}'
                                                 role='button' aria-expanded='false' aria-controls='notification{$data->course_id}' aria-label='$langNotificationsExist'>
                                     <i class='fa-solid fa-bell link-color' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNotificationsExist'></i>
                                 </a>
@@ -107,7 +139,8 @@ function getUserCourseInfo($uid): string
                 $lesson_content .= "
                         <td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
                             <div class='col-12 portfolio-tools'>
-                                <div class='d-inline-flex'>";
+                                <div class='d-inline-flex align-items-center'>" . $percentage_html . "
+                                ";
 
                 $lesson_content .= "<a class='ClickCoursePortfolio portfolio-course-links me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langOfCourse' aria-label='$langPreview&nbsp;$langOfCourse'>
                                     <i class='fa-solid fa-display fa-lg'></i>
@@ -123,15 +156,18 @@ function getUserCourseInfo($uid): string
                                                     " . course_access_icon($data->visible) . "
                                                     $license
                                                 </div>
-                                                <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
+                                            <div class='mt-2'>";
+                                            if ($data->public_code) {
+                                                $lesson_content .= q($data->public_code) . "&nbsp; - &nbsp;";
+                                            }
+                                            $lesson_content .= q($data->professor) . "</div>
+                                                </div>
+                                                <div>
+                                                    <button aria-label='$langClose' type='button' class='close'></button>
+                                                </div>    
                                             </div>
-                                            <div>
-                                                <button aria-label='$langClose' type='button' class='close'></button>
-                                            </div>
-
-                                        </div>
-                                        <div class='course-content mt-4'>
-                                            <div class='col-12 d-flex justify-content-center align-items-start'>";
+                                            <div class='course-content mt-4'>
+                                                <div class='col-12 d-flex justify-content-center align-items-start'>";
                 if($data->course_image == NULL) {
                     if ($data->is_collaborative) {
                         $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/images/default-collaboration.jpg' alt='$langCourseImage' />";
@@ -184,7 +220,7 @@ function getUserCourseInfo($uid): string
                 $lesson_content .= "</div>
                                 </div>";
 
-                $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status", "class='portfolio-course-links'", false, false, $pressed);
+                $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
                 if ($data->status == USER_STUDENT) {
                     if (get_config('disable_student_unregister_cours') == 0) {
                         $lesson_content .= icon('fa-minus-circle fa-lg ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid", "class='portfolio-course-links'");
@@ -211,12 +247,13 @@ function getUserCourseInfo($uid): string
         }
     }
 
-    // Create ui for collabations which a user is participated in.
-    if(get_config('show_collaboration')){
-        if(!get_config('show_always_collaboration')){
-        $lesson_content .= "<div class='col-12 mt-5 mb-4'>
-                <h2>$langMyCollaborations&nbsp;&nbsp;(" . count($myCollaborations) . ")</h2>
-            </div>";}
+    // Create ui for collaborations which a user is participated in.
+    if (get_config('show_collaboration')) {
+        if (!get_config('show_always_collaboration')) {
+            $lesson_content .= "<div class='col-12 mt-5 mb-4'>
+                    <h2>$langMyCollaborations&nbsp;&nbsp;(" . count($myCollaborations) . ")</h2>
+                </div>";
+        }
         if($myCollaborations){
                 $lesson_content .= "<table id='portfolio_collaborations' class='table portfolio-collaborations-table'>";
                 $lesson_content .= "<thead class='visually-hidden'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
@@ -250,6 +287,34 @@ function getUserCourseInfo($uid): string
                     if($data->course_license > 0){
                         $license = copyright_info($data->course_id);
                     }
+                    
+                    $percentage_html = '';
+                    if ($data->status == USER_STUDENT) {
+                        $badge = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1 AND active = 1 AND unit_id = 0", $data->course_id);
+                        if ($badge) {
+                            $badge_data = Database::get()->querySingle("SELECT completed_criteria, total_criteria FROM user_badge WHERE user = ?d AND badge = ?d", $uid, $badge->id);
+                            if (!$badge_data or !$badge_data->total_criteria) {
+                                $percentage = 0;
+                            } else {
+                                $percentage = round($badge_data->completed_criteria / $badge_data->total_criteria * 100, 0);
+                            }
+
+                            $battery_icon = 'fa-battery-empty';
+                            $badgeBattery = 'badge Primary-600-bg py-0 px-2';
+                            if ($percentage > 0 && $percentage < 34) {
+                                $battery_icon = 'fa-battery-quarter';
+                            } elseif ($percentage >= 34 && $percentage < 67) {
+                                $battery_icon = 'fa-battery-half';
+                            } elseif ($percentage >= 67 && $percentage < 100) {
+                                $battery_icon = 'fa-battery-three-quarters';
+                            } elseif ($percentage == 100) {
+                                $battery_icon = 'fa-battery-full';
+                                $badgeBattery = 'badge Success-200-bg py-0 px-2';
+                            }
+                            $percentage_html = "<span class='$badgeBattery vsmall-text text-end me-3 d-flex flex-row'><span class='me-1' style='font-size: 0.8em; font-weight: bold;'>$percentage%</span><i class='fa-solid $battery_icon' style='font-size: 1.6em;line-height: 24px;'></i></span>";
+                        }
+                    }
+
                     $lesson_content .= "
                         <tr class='$visclass row-course'>
                             <td class='border-top-0 border-start-0 border-end-0'>
@@ -273,7 +338,8 @@ function getUserCourseInfo($uid): string
                     $lesson_content .= "
                             <td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
                                 <div class='col-12 portfolio-tools'>
-                                    <div class='d-inline-flex'>";
+                                    <div class='d-inline-flex align-items-center'>" . $percentage_html . "
+                                    ";
 
                     $lesson_content .= "<a class='ClickCoursePortfolio portfolio-course-links me-3' href='javascript:void(0);' id='CourseTable_{$data->code}' role='button' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp;$langPreviewCollaboration' aria-label='$langPreview&nbsp;$langOfCourse'>
                                         <i class='fa-solid fa-display fa-lg'></i>
@@ -351,7 +417,7 @@ function getUserCourseInfo($uid): string
                     $lesson_content .= "</div>
                                     </div>";
 
-                    $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status", "class='portfolio-course-links'", false, false, $pressed);
+                    $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
                     if ($data->status == USER_STUDENT) {
                         if (get_config('disable_student_unregister_cours') == 0) {
                             $lesson_content .= icon('fa-minus-circle fa-lg ms-3', $langUnregCollaboration, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid", "class='portfolio-course-links'");
@@ -392,7 +458,7 @@ function getUserCourseInfo($uid): string
  */
 function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') {
 
-    global $urlAppend, $langAdminAn, $language;
+    global $urlAppend, $langAdminAn, $language,$is_admin,$is_departmentmanage_user;
 
     if ($type == 'more') {
         $sql_append = '';
@@ -410,28 +476,52 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
     }
 
     if (!count($lesson_id)) {
-        $q = Database::get()->queryArray("
-                                SELECT admin_announcement.title,
-                                             admin_announcement.`date` AS an_date,
-                                             admin_announcement.id
-                                FROM admin_announcement
-                                WHERE admin_announcement.visible = 1
-                                        AND lang = ?s
-                                        AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
-                                        AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
-                                        AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
-                                 ORDER BY an_date DESC
-                         $sql_append", $language, $filter_param);
+        if ($is_departmentmanage_user && !$is_admin) {
+            $q = Database::get()->queryArray("
+                            SELECT admin_announcement.title,
+                                   admin_announcement.`date` AS an_date,
+                                   admin_announcement.id
+                            FROM admin_announcement
+                            WHERE admin_announcement.visible = 1
+                                  AND lang = ?s
+                                  AND (
+                                    tenant_id = ?d
+                                    OR tenant_id IS NULL
+                                   )
+                                  AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
+                                  AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
+                                  AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
+                            ORDER BY an_date DESC
+                            $sql_append", 
+                            $language, 
+                            getCurrentTenant()->id,
+                            $filter_param);
+        } else {
+            $q = Database::get()->queryArray("
+                            SELECT admin_announcement.title,
+                                   admin_announcement.`date` AS an_date,
+                                   admin_announcement.id
+                            FROM admin_announcement
+                            WHERE admin_announcement.visible = 1
+                                  AND lang = ?s
+                                  AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
+                                  AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
+                                  AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
+                            ORDER BY an_date DESC
+                            $sql_append", 
+                            $language, 
+                            $filter_param);
+        }
     } else {
-
         $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
-
-        $q = Database::get()->queryArray("(SELECT announcement.title,
-                                             announcement.`date` AS an_date,
-                                             announcement.id,
-                                             announcement.content,
-                                             course.code,
-                                             course.title course_title
+        if ($_SESSION['current_user_tenant']) {
+            $q = Database::get()->queryArray(
+                "(SELECT announcement.title,
+                                    announcement.`date` AS an_date,
+                                    announcement.id,
+                                    announcement.content,
+                                    course.code,
+                                    course.title course_title
                             FROM course, course_module, announcement
                             WHERE course.id IN ($course_id_sql)
                                     AND course.id = course_module.course_id
@@ -444,16 +534,62 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                     AND course_module.visible = 1 $course_filter_sql)
                             UNION
                                 (SELECT admin_announcement.title,
-                                             admin_announcement.`date` AS admin_an_date,
-                                             admin_announcement.id, admin_announcement.body AS content, '', ''
+                                        admin_announcement.`date` AS admin_an_date,
+                                        admin_announcement.id, admin_announcement.body AS content, '', ''
                                 FROM admin_announcement
                                 WHERE admin_announcement.visible = 1
-                                      AND lang = ?s
-                                      AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
-                                      AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
-                                      AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
+                                    AND lang = ?s
+                                    AND (
+                                        tenant_id = ?d
+                                        OR tenant_id IS NULL
+                                    )
+                                    AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
+                                    AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
+                                    AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
                                 ) ORDER BY an_date DESC
-                         $sql_append", $lesson_id, $filter_param,  $language, $filter_param);
+                            $sql_append",
+                $lesson_id,
+                $language,
+                getCurrentTenant()->id,
+                $filter_param,
+                $filter_param
+            );
+        } else {
+            $q = Database::get()->queryArray(
+                "(SELECT announcement.title,
+                                    announcement.`date` AS an_date,
+                                    announcement.id,
+                                    announcement.content,
+                                    course.code,
+                                    course.title course_title
+                            FROM course, course_module, announcement
+                            WHERE course.id IN ($course_id_sql)
+                                    AND course.id = course_module.course_id
+                                    AND course.id = announcement.course_id
+                                    AND announcement.visible = 1
+                                    AND (announcement.start_display <= " . DBHelper::timeAfter() . " OR announcement.start_display IS NULL)
+                                    AND (announcement.stop_display >= " . DBHelper::timeAfter() . " OR announcement.stop_display IS NULL)
+                                    AND announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+                                    AND course_module.module_id = " . MODULE_ID_ANNOUNCE . "
+                                    AND course_module.visible = 1 $course_filter_sql)
+                            UNION
+                                (SELECT admin_announcement.title,
+                                        admin_announcement.`date` AS admin_an_date,
+                                        admin_announcement.id, admin_announcement.body AS content, '', ''
+                                FROM admin_announcement
+                                WHERE admin_announcement.visible = 1
+                                    AND lang = ?s
+                                    AND (admin_announcement.begin <= " . DBHelper::timeAfter() . " OR admin_announcement.begin IS NULL)
+                                    AND (admin_announcement.end >= " . DBHelper::timeAfter() . " OR admin_announcement.end IS NULL)
+                                    AND admin_announcement.`date` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) $admin_filter_sql
+                                ) ORDER BY an_date DESC
+                            $sql_append",
+                $lesson_id,
+                $language,
+                $filter_param,
+                $filter_param
+            );
+        }
     }
 
     if ($to_ajax) {
@@ -599,15 +735,23 @@ function getUserCourses($uid, $colaborative = 0)
                              course.course_image course_image,
                              course.popular_course popular_course,
                              course.is_collaborative,
+                             course.start_date start_date,
+                             course.end_date end_date,
                              course_user.status status,
                              course_user.favorite favorite
                         FROM course JOIN course_user
                             ON course.id = course_user.course_id
                             AND course_user.user_id = ?d
-                            AND (course.visible != " . COURSE_INACTIVE . " OR
+                            AND (
                                  course_user.status = " . USER_TEACHER . " OR
                                  course_user.course_reviewer = 1 OR
-                                 course_user.editor = 1)
+                                 course_user.editor = 1 OR
+                                 (
+                                  course.visible != " . COURSE_INACTIVE . " AND
+                                  (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") AND
+                                  (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+                                 )
+                             )
                             AND course.is_collaborative = ?d
                         ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid, $colaborative);
 
@@ -654,14 +798,21 @@ function CountCourses($uid) {
                 FROM course JOIN course_user
                     ON course.id = course_user.course_id
             AND course_user.user_id = ?d
-            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . " OR course_user.editor = 1)
+            AND ( 
+                course_user.status = " . USER_TEACHER . " OR 
+                course_user.editor = 1 OR (
+                    course.visible != " . COURSE_INACTIVE . " AND
+                    (course.start_date IS NULL OR course.start_date < " . DBHelper::timeAfter() . ") AND
+                    (course.end_date IS NULL OR course.end_date > " . DBHelper::timeAfter() . ")
+                )
+            )
             AND course.is_collaborative = ?d", $uid, 0)->total;
 
     return $total;
 }
 
 /**
- * @brief count teacher courses
+ * @brief count teacher collaborations
  * @param $uid
  * @return mixed
  */

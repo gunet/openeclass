@@ -22,18 +22,18 @@ $require_login = true;
 $require_valid_uid = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'main/eportfolio/eportfolio_functions.php';
 
 check_uid();
 check_guest();
 
 $toolName = $langMyePortfolio;
 $pageName = $langUploadBio;
-$token = token_generate('eportfolio' . $uid);
 $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
-$navigation[] = array('url' => "index.php?id=$uid&token=$token", 'name' => $langMyePortfolio);
+$navigation[] = array('url' => "index.php", 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
-    $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div></div>";
+    $tool_content = "<div class='col-12'><div class='alert alert-danger alert-dismissible'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
     draw($tool_content, 1);
     exit;
 }
@@ -41,13 +41,13 @@ if (!get_config('eportfolio_enable')) {
 $userdata = Database::get()->querySingle("SELECT eportfolio_enable FROM user WHERE id = ?d", $uid);
 
 if ($userdata->eportfolio_enable == 0) {
-    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span></div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
 }
 
 if (isset($_GET['delete_bio'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
-    $tool_content .= "<div class='col-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langBioDeletedSuccess</span></div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-success alert-dismissible'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langBioDeletedSuccess</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
     redirect_to_home_page('main/eportfolio/bio_upload.php');
 }
 elseif (isset($_POST['submit'])) {
@@ -61,16 +61,18 @@ elseif (isset($_POST['submit'])) {
             if ($_FILES['bio']['size'] <= get_config('bio_quota')*1024*1024) {
                 @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
                 move_uploaded_file($_FILES['bio']['tmp_name'], "$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
-                $tool_content .= "<div class='col-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langUploadBioSuccess</span></div></div>";
+                $tool_content .= "<div class='col-12'><div class='alert alert-success alert-dismissible'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langUploadBioSuccess</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
             } else {
-                $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadBioFailSize ".get_config('bio_quota')."</span></div></div>";
+                $tool_content .= "<div class='col-12'><div class='alert alert-danger alert-dismissible'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadBioFailSize ".get_config('bio_quota')."</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
             }
         } else {
-            $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadBioFailType</span></div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-danger alert-dismissible'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadBioFailType</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
         }
         redirect_to_home_page('main/eportfolio/bio_upload.php');
     }
 }
+
+$head_content .= eportfolio_alert_css();
 
 $head_content .= "<script>
                     function confirmDel(url) {
@@ -106,7 +108,7 @@ $tool_content .=
 enableCheckFileSize();
 if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $label = $langReplace;
-    $bio = "<a href='{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$uid&amp;token=$token'>$langBio</a>&nbsp;&nbsp;
+    $bio = "<a href='{$urlAppend}main/eportfolio/index.php?action=get_bio'>$langBio</a>&nbsp;&nbsp;
         <a class='btn deleteAdminBtn' onclick='return confirmDel(this.href)' href='$_SERVER[SCRIPT_NAME]?delete_bio=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>";
 } else {
     $label = $langPathUploadFile;
@@ -114,7 +116,7 @@ if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
 }
 $tool_content .=
     "<div class='col-12'>
-        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</span></div></div>
+        <div class='alert alert-info alert-dismissible'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>
             <div class='row'>
                 <label for='bio' class='control-label-notes'>$label <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='d-inline-flex'>$bio" . fileSizeHidenInput() . "</div>
@@ -124,7 +126,7 @@ $tool_content .=
             <div class='form-group mt-5'>
                 <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                     <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-                    <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn'>$langCancel</a>
+                    <a href='{$urlAppend}main/eportfolio/index.php' class='btn cancelAdminBtn'>$langCancel</a>
                 </div>
             </div>";
 

@@ -351,7 +351,20 @@ if ($total_categories > 0) {
                            'sNext':     '&rsaquo;',
                            'sLast':     '&raquo;'
                        }
-                   }
+                   },
+                   'tabIndex': -1,
+                    'initComplete': function() {
+                        $('.forum_index thead .dt-column-order').each(function() {
+                            $(this).removeAttr('aria-label');
+                            $(this).attr('aria-hidden', 'true');
+                        });
+                    }
+                });
+            });
+            $('.forum_index').on('order.dt', function() {
+                $('.forum_index thead .dt-column-order').each(function() {
+                    $(this).removeAttr('aria-label');
+                    $(this).attr('aria-hidden', 'true');
                 });
             });
         </script>

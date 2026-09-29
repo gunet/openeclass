@@ -2,19 +2,19 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} @if($course_code) module-container py-lg-0 @else main-container @endif'>
-        <div class="@if($course_code) course-wrapper d-lg-flex align-items-lg-strech w-100 @else row m-auto @endif">
 
-            @if($course_code)
-                @include('layouts.partials.left_menu')
-            @endif
+@if($course_code)
+<div class="{{ $container }} module-container py-lg-0">
+<div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+<aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+<main id="main" class="col-12 main-maincontent col_maincontent_active">
+@else
+<main id="main" class="col-12 main-section">
+<div class="{{ $container }} main-container">
+<div class="row m-auto">
+<div class="col-12">
+@endif
 
-            @if($course_code)
-                <div class="col_maincontent_active">
-            @else
-                <div class="col-12">
-            @endif
                     <div class="row">
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -103,9 +103,12 @@
                                 <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNotAllowed') }}</span></div>
                             </div>
                         @endif
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                    </div>
+
+@if($course_code)
+</main></div></div>
+@else
+</div></div></div></main>
+@endif
+
 @endsection

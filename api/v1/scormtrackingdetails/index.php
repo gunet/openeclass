@@ -1,5 +1,6 @@
 <?php
 
+
 /*
  *  ========================================================================
  *  * Open eClass
@@ -18,7 +19,9 @@
  *
  */
 
-function get_scorm_details($path) {
+
+function get_scorm_details($path)
+{
     $path .= "/imsmanifest.xml";
     if (!($xml = simplexml_load_file($path))) {
         return null;
@@ -26,8 +29,11 @@ function get_scorm_details($path) {
     return $xml->organizations->organization->item;
 }
 
-function api_method($access) {
+
+function api_method($access)
+{
     global $course_id;
+
 
     $course = null;
     $scorms = [];
@@ -36,6 +42,10 @@ function api_method($access) {
         Access::error(100, "Authentication required");
     }
     if (isset($_GET['user_id'])) {
+        // Check if user belongs to allowed departments
+        if (!Access::checkUserDepartmentAccess($_GET['user_id'], $access->allowedDepartments)) {
+            Access::error(403, 'Error: user is not in an allowed department', 403);
+        }
         $users = [$_GET['user_id']];
     } elseif (isset($_GET['group_id'])) {
         $group = Database::get()->querySingle('SELECT * FROM `group` WHERE id = ?d', $_GET['group_id']);
@@ -44,6 +54,12 @@ function api_method($access) {
         }
         $course = Database::get()->querySingle('SELECT id, code, visible FROM course
             WHERE id = ?d', $group->course_id);
+
+        // Check if group's course belongs to allowed departments
+        if (!Access::checkCourseDepartmentAccess($course->id, $access->allowedDepartments)) {
+            Access::error(403, 'Error: course is not in an allowed department', 403);
+        }
+
         $group_members = Database::get()->queryArray('SELECT user_id FROM group_members
             WHERE group_id = ?d AND is_tutor = 0', $_GET['group_id']);
         if (!$group_members) {
@@ -52,6 +68,13 @@ function api_method($access) {
         $users = array_map(function ($member) {
             return $member->user_id;
         }, $group_members);
+
+        // Filter users by allowed departments
+        if ($access->allowedDepartments !== null) {
+            $users = array_filter($users, function ($user_id) use ($access) {
+                return Access::checkUserDepartmentAccess($user_id, $access->allowedDepartments);
+            });
+        }
     }
     if (isset($_GET['course_id'])) {
         $course_id = $_GET['course_id'];
@@ -60,6 +83,11 @@ function api_method($access) {
         if (!$course) {
             Access::error(3, "Course with id '$course_id' not found");
         }
+
+        // Check if course belongs to allowed departments
+        if (!Access::checkCourseDepartmentAccess($course->id, $access->allowedDepartments)) {
+            Access::error(403, 'Error: course is not in an allowed department', 403);
+        }
     }
     if (isset($_GET['scorm_id'])) {
         $lp = Database::get()->querySingle('SELECT learnPath_id, name, comment, course_id
@@ -67,6 +95,12 @@ function api_method($access) {
         if (!$lp) {
             Access::error(3, "SCORM with id '$_GET[scorm_id]' not found");
         }
+
+        // Check if SCORM's course belongs to allowed departments
+        if (!Access::checkCourseDepartmentAccess($lp->course_id, $access->allowedDepartments)) {
+            Access::error(403, 'Error: course is not in an allowed department', 403);
+        }
+
         $course_code = course_id_to_code($lp->course_id);
         $path = "courses/$course_code/scormPackages/path_{$lp->learnPath_id}";
         $scorm_details = get_scorm_details($path);
@@ -75,12 +109,14 @@ function api_method($access) {
         }
         $scorms = [[$lp->learnPath_id, $scorm_details['identifier']]];
     } elseif ($course) {
-        $lps = Database::get()->queryArray("SELECT lp_learnPath.learnPath_id
+        $lps = Database::get()->queryArray(
+            "SELECT lp_learnPath.learnPath_id
             FROM lp_learnPath
                 JOIN lp_rel_learnPath_module ON lp_learnPath.learnPath_id = lp_rel_learnPath_module.learnPath_id
                 JOIN lp_module ON lp_module.module_id = lp_rel_learnPath_module.module_id
             WHERE lp_learnPath.course_id = ?d AND lp_learnPath.visible = 1 AND lp_module.contentType = 'SCORM'",
-            $course->id);
+            $course->id
+        );
         $course_code = $course->code;
         foreach ($lps as $lp) {
             $path = "courses/$course_code/scormPackages/path_{$lp->learnPath_id}";
@@ -89,11 +125,11 @@ function api_method($access) {
         }
     }
     if (!$course) {
-       if (isset($course_code)) {
-           $course = Database::get()->querySingle('SELECT id FROM course WHERE code = ?s', $course_code);
-       } else {
-           Access::error(2, 'Required parameter missing - group_id, course_id or scorm_id is required');
-       }
+        if (isset($course_code)) {
+            $course = Database::get()->querySingle('SELECT id FROM course WHERE code = ?s', $course_code);
+        } else {
+            Access::error(2, 'Required parameter missing - group_id, course_id or scorm_id is required');
+        }
     }
     if (!$users) {
         $course_users = Database::get()->queryArray('SELECT user_id FROM course_user
@@ -101,6 +137,13 @@ function api_method($access) {
         $users = array_map(function ($user) {
             return $user->user_id;
         }, $course_users);
+
+        // Filter users by allowed departments
+        if ($access->allowedDepartments !== null) {
+            $users = array_filter($users, function ($user_id) use ($access) {
+                return Access::checkUserDepartmentAccess($user_id, $access->allowedDepartments);
+            });
+        }
     }
     $course_id = $course->id;
     if (!isset($_GET['group_id'])) {
@@ -122,16 +165,18 @@ function api_method($access) {
     }
     $tracking_data = [];
 
+
     $from_date = null;
     if (isset($_GET['from_date'])) {
         $from_date = $_GET['from_date'] . ' 00:00:00';
     }
 
+
     foreach ($scorms as $scorm) {
         $path_id = $scorm[0];
         $sco_id = (string)$scorm[1];
         foreach ($users as $user_id) {
-            $attempts = get_learnPath_progress_details($path_id, $user_id, false, $from_date);
+            $attempts = get_learnPath_progress_details($path_id, $user_id, false, $from_date, return_null_score: true);
             foreach ($attempts as $attempt) {
                 list($progress, $time, $started, $accessed, $status, $attemptNb) = $attempt;
                 $data = [
@@ -142,6 +187,7 @@ function api_method($access) {
                     'endtime' => $accessed,
                     'duration' => $time,
                     'attempt' => $attemptNb,
+                    'score' => $progress,
                 ];
                 if (isset($_GET['group_id'])) {
                     $data['groupid'] = $_GET['group_id'];
@@ -153,11 +199,13 @@ function api_method($access) {
         }
     }
 
+
     header('Content-Type: application/json');
     header('X-Content-Type-Options: nosniff');
     echo json_encode($tracking_data, JSON_UNESCAPED_UNICODE);
     exit();
 }
+
 
 require_once '../../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';

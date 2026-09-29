@@ -23,10 +23,31 @@
 
 require_once 'include/init.php';
 
-$result = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
-    FROM admin_announcement
-    WHERE visible = 1 AND lang = ?s
-    ORDER BY `date` DESC", $language);
+
+if ($is_departmentmanage_user && !$is_admin) {
+    $result = Database::get()->querySingle(
+        "SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+        FROM admin_announcement
+        WHERE visible = 1 
+        AND (
+            tenant_id = ?d
+            OR tenant_id IS NULL
+        )
+        AND lang = ?s
+        ORDER BY `date` DESC",
+        getCurrentTenant()->id,
+        $language
+    );
+} else {
+    $result = Database::get()->querySingle(
+        "SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+        FROM admin_announcement
+        WHERE visible = 1 
+        AND lang = ?s
+        ORDER BY `date` DESC",
+        $language
+    );
+}
 
 if ($result) {
     $lastbuilddate = $result->dateformat;
@@ -45,10 +66,21 @@ echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>" . $language . "</language>";
 
-$sql = Database::get()->queryArray("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
-        FROM admin_announcement
-        WHERE visible = 1 AND lang = ?s
-        ORDER BY `date` DESC", $language);
+if ($is_departmentmanage_user && !$is_admin) {
+    $sql = Database::get()->queryArray("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+    FROM admin_announcement
+    
+    WHERE visible = 1 AND lang = ?s AND (
+        tenant_id = ?d
+        OR tenant_id IS NULL
+    )
+    ORDER BY `date` DESC", $language, getCurrentTenant()->id);
+} else {
+    $sql = Database::get()->queryArray("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+    FROM admin_announcement
+    WHERE visible = 1 AND lang = ?s
+    ORDER BY `date` DESC", $language);
+}
 
 if ($sql) {
     foreach ($sql as $r) {

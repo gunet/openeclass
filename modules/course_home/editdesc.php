@@ -98,7 +98,7 @@ $data['fileSizeHidenInput'] = fileSizeHidenInput();
 $data['course_image'] = $course_image = $course->course_image;
 $data['layout'] = $layout = $course->home_layout;
 $data['selection'] = selection(array(1 => $langCourseLayout1, 3 => $langCourseLayout3), 'layout', $layout, 'class="form-control"');
-$data['rich_text_editor'] = rich_text_editor('description', 8, 20, $course->description);
+$data['rich_text_editor'] = rich_text_editor('description', 8, 20, $course->description, options: array('id' => 'description'));
 
 // Get all images from dir courses_images
 $image_content = '';

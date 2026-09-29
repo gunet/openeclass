@@ -3,13 +3,10 @@
 @section('content')
 
 
-<div class="col-12 main-section">
 <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
-
-            @include('layouts.partials.left_menu')
-
-            <div class="col_maincontent_active">
+            <aside class='aside-sidebar'>@include('layouts.partials.left_menu')</aside>
+            <main id="main" class="col-12 main-maincontent col_maincontent_active">
 
                 <div class="row">
 
@@ -63,44 +60,17 @@
                     </div>
 
                 </div>
-            </div>
+            </main>
 
         </div>
 
-</div>
 </div>
 
 
 
 <script>
 
-    function popover_init() {
-        $('[data-bs-toggle="popover"]').on('click',function(e){
-            e.preventDefault();
-        }).popover();
-        var click_in_process = false;
-        var hidePopover = function () {
-            if (!click_in_process) {
-                $(this).popover('hide');
-            }
-        }
-        , togglePopover = function () {
-            $(this).popover('toggle');
-            $('#action_button_menu').parent().parent().addClass('menu-popover');
-        };
-        $('.menu-popover').popover({html:true}).on('click', togglePopover).on('blur', hidePopover);
-        $('.menu-popover').on('shown.bs.popover', function () {
-            $('.popover').mousedown(function () {
-                click_in_process = true;
-            });
-            $('.popover').mouseup(function () {
-                click_in_process = false;
-                $(this).popover('hide');
-            });
-            act_confirm();
-        });
 
-    }
     function tooltip_init() {
         $('[data-bs-toggle="tooltip"]').tooltip({container: 'body'});
     }
@@ -132,7 +102,6 @@
             scrollX: true,
             drawCallback: function(settings) {
                 tooltip_init();
-                popover_init();
             },
             paginationType: 'full_numbers',
             language: {

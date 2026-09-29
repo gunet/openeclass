@@ -2,9 +2,9 @@
 
 @section('content')
 
-<div class="col-12 main-section">
-    <div class='{{ $container }} main-container'>
-        <div class="row m-auto">
+<main id="main" class="col-12 main-section">
+        <div class='{{ $container }} main-container'>
+            <div class="row m-auto">
                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                 @include('layouts.partials.legend_view')
@@ -15,11 +15,9 @@
                     <div class='mt-4'></div>
                 @endif
 
-                @include('layouts.partials.show_alert') 
+                @include('layouts.partials.show_alert')
 
-                @if (!$tc_cron_running)
-                    @include('admin.other.extapps.bbb.bbb_cron_modal')
-                @endif
+                @include('admin.other.extapps.bbb.bbb_cron_modal')
 
                 @if (count($q) > 0)
                     <div class='col-12'>
@@ -37,7 +35,7 @@
                                 </tr>
                                 </thead>
 
-                                {!! $bbb_cnt !!}    
+                                {!! $bbb_cnt !!}
                             </table>
                         </div>
                     </div>
@@ -51,5 +49,5 @@
                 @endif
             </div>
         </div>
-    </div>
+</main>
 @endsection

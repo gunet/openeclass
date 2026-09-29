@@ -1,10 +1,11 @@
 {
     "require": {
+        "php": ">8.2",
         "vlucas/valitron": "^1.4.2",
         "apereo/phpcas": "^1.6",
         "ezyang/htmlpurifier": "^4.19",
         "pragmarx/google2fa":"^8.0",
-        "swiftmailer/swiftmailer": "^6.3.0",
+        "symfony/mailer": "^7.4",
         "sabre/dav": "~3.2.0",
         "google/apiclient": "1.0.*@beta",
         "guzzlehttp/guzzle": "^7.9",
@@ -20,7 +21,7 @@
         "bacon/bacon-qr-code": "^2.0",
         "phpoffice/phpspreadsheet": "^3.9",
         "dapphp/securimage": "dev-mantis",
-        "h5p/h5p-core": "^1.27",
+        "h5p/h5p-core": "^1.28",
         "h5p/h5p-editor": "<1.26",
         "snapappointments/bootstrap-select": "^1.13.18",
         "jenssegers/blade": "^1.4",

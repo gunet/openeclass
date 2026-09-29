@@ -15,7 +15,7 @@
 
 @section('content')
 
-    <div class="col-12 main-section">
+    <main id="main" class="col-12 main-section">
         <div class='{{ $container }} module-container py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
@@ -48,8 +48,8 @@
                                                     <label class='col-12 control-label-notes' for='user_date_start'>{{ trans('langFrom') }}</label>
                                                     <div class='col-12'>
                                                         <div class='input-group'>
-                                                            <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                            <input class='form-control mt-0 border-start-0' name='user_date_start' id='user_date_start' type='text' value = '{{ $user_date_start }}'>
+                                                            <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                            <input class='form-control mt-0' name='user_date_start' id='user_date_start' type='text' value = '{{ $user_date_start }}'>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -57,8 +57,8 @@
                                                     <label class='col-12 control-label-notes' for='user_date_end'>{{ trans('langTill') }}</label>
                                                     <div class='col-12'>
                                                         <div class='input-group'>
-                                                            <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                            <input class='form-control mt-0 border-start-0' id='user_date_end' name='user_date_end' type='text' value= '{{ $user_date_end }}'>
+                                                            <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                            <input class='form-control mt-0' id='user_date_end' name='user_date_end' type='text' value= '{{ $user_date_end }}'>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -177,6 +177,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
 @endsection

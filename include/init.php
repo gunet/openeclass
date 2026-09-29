@@ -174,17 +174,46 @@ if (file_exists($extra_messages)) {
 } else {
     $extra_messages = false;
 }
+
 require "$webDir/lang/$language/messages.inc.php";
-if (file_exists('config/config.php')) {
-    if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
-        require "$webDir/lang/$language/messages_collaboration.inc.php";
-    }
+if (get_config('show_always_collaboration') and get_config('show_collaboration')) {
+    require "$webDir/lang/$language/common_collaboration.inc.php";
+    require "$webDir/lang/$language/messages.inc.php";
+    require "$webDir/lang/$language/messages_collaboration.inc.php";
 }
+
 if ($extra_messages) {
     include $extra_messages;
 }
 
+// Check if user connected to a tenant URL
+$main_host = parse_url($urlServer, PHP_URL_HOST);
+$main_http_port = parse_url($urlServer, PHP_URL_PORT);
+if ($main_http_port) {
+    $main_host .= ':' . $main_http_port;
+}
+$http_host = isset($_SERVER['HTTP_HOST'])? $_SERVER['HTTP_HOST']: $main_host;
 
+// localhost is used for tenant domain validity check by web server
+if ($http_host != $main_host and $http_host != 'localhost') {
+    if (defined('UPGRADE')) {
+        $tenant = null;
+    } else {
+        $tenant = Database::get()->querySingle('
+            SELECT tenant.*, hierarchy.lft, hierarchy.rgt
+            FROM tenant
+            JOIN hierarchy ON hierarchy.id = tenant.department_id
+            WHERE url REGEXP ?s', "/$http_host(/|$)"
+        );
+    }
+
+    if ($tenant) {
+        $urlServer = $tenant->url;
+        $_SESSION['current_user_tenant'] = $tenant;
+    } else {
+        redirect_to_home_page();
+    }
+}
 
 if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = generate_csrf_token();
@@ -203,6 +232,16 @@ if (($upgrade_begin = get_config('upgrade_begin'))) {
 // SSO transition
 if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
     redirect_to_home_page('modules/auth/transition/auth_transition.php');
+}
+
+// mobile view
+if (isset($_GET['view']) and $_GET['view'] == 'mobile') {
+    $_SESSION['mobile'] = true;
+}
+
+// Safe Exam Browser view
+if (str_contains($_SERVER['HTTP_USER_AGENT'] ?? '', 'Open-eClass-Exam')) { // User is NOT using SEB
+    $_SESSION['safe_exam_browser_view'] = true;
 }
 
 // check if we are admin or power user or manageuser_user
@@ -233,7 +272,8 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_departmentmanage_user = false;
 }
 
-if ($uid and !isset($_GET['logout']) and !$is_power_user and get_config('double_login_lock')) {
+if ($uid and !isset($_GET['logout']) and !$is_power_user and get_config('double_login_lock')
+        and !(defined('SKIP_DOUBLE_LOGIN_LOCK') or isset($_SESSION['SKIP_DOUBLE_LOGIN_LOCK']))) {
     $sessions = Database::get()->queryArray('SELECT session_id FROM login_lock
         WHERE user_id = ?d ORDER BY ts DESC', $uid);
     if ($sessions and count($sessions) > 1 and $sessions[0]->session_id != session_id()) {
@@ -278,6 +318,12 @@ if (file_exists("template/$theme/settings.php")) {
 }
 
 if (isset($require_login) and $require_login and ! $uid) {
+    // Mobile app WebView: a session that expired while a page was open would otherwise show the web
+    // "session lost" message, unrelated to the app flow. Redirect to the session-expired sentinel so
+    // the app can silently refresh the session and return the user to the same page.
+    if (isset($_SERVER['HTTP_USER_AGENT']) and str_contains($_SERVER['HTTP_USER_AGENT'], 'eClassMobileApp')) {
+        redirect_to_home_page('modules/mobile/msession_expired.php?return=' . urlencode($urlServer . ltrim($_SERVER['REQUEST_URI'], '/')));
+    }
     $toolContent_ErrorExists = $langSessionIsLost;
 }
 
@@ -397,8 +443,8 @@ if (isset($_SESSION['CurrentReferenceSessionId']) && $_SESSION['CurrentReference
     unset($_SESSION['userId__reference_uploader']);
 }
 
-// If $require_current_course is true, initialise course settings
-// Read properties of current course
+// If $require_current_course is true, initialize course settings
+// Read properties of the current course
 $is_editor = false;
 $is_course_reviewer = false;
 $is_coordinator = false;
@@ -444,6 +490,12 @@ if (isset($require_current_course) and $require_current_course) {
             },
             $dbname);
 
+        // if course is collaborative include collaborative messages
+        if (isset($is_collaborative_course) and $is_collaborative_course) {
+            require "$webDir/lang/$language/common_collaboration.inc.php";
+        }
+        require "$webDir/lang/$language/messages.inc.php";
+
         if (!isset($course_code) or empty($course_code)) {
             Session::flash('alert-class', 'alert-danger');
             Session::flash('message', $langLessonDoesNotExist);
@@ -457,71 +509,93 @@ if (isset($require_current_course) and $require_current_course) {
             }
         }
 
-        // Check for course visibility by current user
-        $status = 0;
-        // The admin and power users can see all courses as adminOfCourse
-        if ($is_admin or $is_power_user) {
-            $status = USER_TEACHER;
-            $is_coordinator = $is_consultant = true;
-        } elseif ($uid) {
-            $stat = Database::get()->querySingle("SELECT status, tutor, editor, course_reviewer FROM course_user
-                                                           WHERE user_id = ?d AND
-                                                           course_id = ?d", $uid, $course_id);
-            if ($stat) {
-                $status = $stat->status;
-                $is_editor = $stat->editor;
-                $is_course_reviewer = $stat->course_reviewer;
-                if ($stat->status == USER_STUDENT && $stat->tutor && !$stat->editor && !$stat->course_reviewer) {
-                    $is_consultant = true;
-                    $is_coordinator = false;
-                } elseif ($stat->status == USER_TEACHER or $is_editor) {
-                    $is_coordinator = $is_consultant = true;
-                } elseif ($stat->status == USER_STUDENT && !$stat->tutor && !$stat->editor && !$stat->course_reviewer) {
-                    $is_simple_user = true;
-                    $is_consultant = false;
-                    $is_coordinator = false;
-                    $is_course_reviewer = false;
-                }
-            }
-            if ($is_departmentmanage_user and isset($course_code)) {
-                // the department manager has rights to the courses of his department(s)
-                require_once 'include/lib/hierarchy.class.php';
-                require_once 'include/lib/course.class.php';
-                require_once 'include/lib/user.class.php';
-
-                $treeObj = new Hierarchy();
-                $courseObj = new Course();
-                $userObj = new User();
-
-                $atleastone = false;
-                $subtrees = $treeObj->buildSubtrees($userObj->getAdminDepartmentIds($uid));
-                $depIds = $courseObj->getDepartmentIds($course_id);
-                foreach ($depIds as $depId) {
-                    if (in_array($depId, $subtrees)) {
-                        $atleastone = true;
-                        break;
+        // Defining COURSE_VISIBILITY_MANUAL_CHECK skips course visibility checks and assumes student visibility
+        if (defined('COURSE_VISIBILITY_MANUAL_CHECK')) {
+            $status = USER_STUDENT;
+        } else {
+            // Check for course visibility by current user
+            $status = 0;
+            // The admin and power users can see all courses as adminOfCourse
+            if ($is_admin or $is_power_user) {
+                $status = USER_TEACHER;
+                $is_coordinator = $is_consultant = true;
+            } elseif ($uid) {
+                $stat = Database::get()->querySingle("SELECT status, tutor, editor, course_reviewer FROM course_user
+                                                               WHERE user_id = ?d AND
+                                                               course_id = ?d", $uid, $course_id);
+                if ($stat) {
+                    $status = $stat->status;
+                    $is_editor = $stat->editor;
+                    $is_course_reviewer = $stat->course_reviewer;
+                    if ($stat->status == USER_STUDENT && $stat->tutor && !$stat->editor && !$stat->course_reviewer) {
+                        $is_consultant = true;
+                        $is_coordinator = false;
+                    } elseif ($stat->status == USER_TEACHER or $is_editor) {
+                        $is_coordinator = $is_consultant = true;
+                    } elseif ($stat->status == USER_STUDENT && !$stat->tutor && !$stat->editor && !$stat->course_reviewer) {
+                        $is_simple_user = true;
+                        $is_consultant = false;
+                        $is_coordinator = false;
+                        $is_course_reviewer = false;
                     }
                 }
+                if ($is_departmentmanage_user and isset($course_code)) {
+                    // the department manager has rights to the courses of his department(s)
+                    require_once 'include/lib/hierarchy.class.php';
+                    require_once 'include/lib/course.class.php';
+                    require_once 'include/lib/user.class.php';
 
-                if ($atleastone) {
-                    $status = USER_TEACHER;
-                    $is_editor = $is_course_admin = $is_course_reviewer = true;
-                    $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
-                    $is_coordinator = $is_consultant = true;
+                    $treeObj = new Hierarchy();
+                    $courseObj = new Course();
+                    $userObj = new User();
+
+                    $atleastone = false;
+                    $subtrees = $treeObj->buildSubtrees($userObj->getAdminDepartmentIds($uid));
+                    $depIds = $courseObj->getDepartmentIds($course_id);
+                    foreach ($depIds as $depId) {
+                        if (in_array($depId, $subtrees)) {
+                            $atleastone = true;
+                            break;
+                        }
+                    }
+
+                    if ($atleastone) {
+                        $status = USER_TEACHER;
+                        $is_editor = $is_course_admin = $is_course_reviewer = true;
+                        $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
+                        $is_coordinator = $is_consultant = true;
+                    }
+                }
+            }
+            if ($visible != COURSE_OPEN) {
+                if (!$uid) {
+                    $toolContent_ErrorExists = $langNoAdminAccess;
+                } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !@$course_guest_allowed) {
+                    Session::flash('message', $langLoginRequired);
+                    Session::flash('alert-class', 'alert-info');
+                    redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
+                } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and $visible == COURSE_INACTIVE) { // inactive course
+                    $toolContent_ErrorExists = $langCheckProf;
+                } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and (course_has_expired($course_id) or !course_has_started($course_id))) { // expired course
+                    $toolContent_ErrorExists = $langCourseHasExpired;
+                }
+
+            }
+
+            // Check for prerequisites completion for students and redirect to registration page if not completed
+            if ($uid and $status != USER_TEACHER and !$is_editor and !$is_course_reviewer) {
+                $missing_prereqs = check_course_prerequisites($uid, $course_id);
+                if (!empty($missing_prereqs)) {
+                    if (!str_contains($_SERVER['SCRIPT_NAME'], 'modules/course_home/register.php')) {
+                        $missing_list = implode(', ', $missing_prereqs);
+                        Session::flash('message', $langPrerequisitesNotComplete . ' (' . $missing_list . ')');
+                        Session::flash('alert-class', 'alert-danger');
+                        redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
+                    }
                 }
             }
         }
-        if ($visible != COURSE_OPEN) {
-            if (!$uid) {
-                $toolContent_ErrorExists = $langNoAdminAccess;
-            } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !@$course_guest_allowed) {
-                Session::flash('message', $langLoginRequired);
-                Session::flash('alert-class', 'alert-info');
-                redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
-            } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and $visible == COURSE_INACTIVE) {
-                $toolContent_ErrorExists = $langCheckProf;
-            }
-        }
+
         $_SESSION['courses'][$course_code] = $courses[$course_code] = $status;
         // Clear session data about polls in course or session mode
         if (!isset($_GET['pid']) && !isset($_GET['from_poll'])) {
@@ -551,6 +625,9 @@ if (isset($require_current_course) and $require_current_course) {
                 include $extra_messages;
             } else {
                 $extra_messages = false;
+            }
+            if (isset($is_collaborative_course) and $is_collaborative_course) {
+                include "lang/$language/common_collaboration.inc.php";
             }
             include "lang/$language/messages.inc.php";
             if (file_exists('config/config.php')) {
@@ -586,7 +663,6 @@ require_once "license_info.php";
 // Course modules array
 // user modules
 // ----------------------------------------
-
 if(isset($is_collaborative_course) and $is_collaborative_course){
     $modules = $modules_collaborations = array(
         MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-regular fa-calendar'),
@@ -602,6 +678,7 @@ if(isset($is_collaborative_course) and $is_collaborative_course){
         MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-quote-left'),
         MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
         MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
+        MODULE_ID_STICKY_NOTES => array('title' => $langStickyNotes, 'link' => 'sticky_notes', 'image' => 'fa-regular fa-note-sticky'),
         MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'fa-solid fa-upload'),
         MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-solid fa-a'),
         MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-solid fa-clipboard-user'),
@@ -633,6 +710,7 @@ if(isset($is_collaborative_course) and $is_collaborative_course){
         MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
         MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-solid fa-arrow-trend-up'),
         MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
+        MODULE_ID_STICKY_NOTES => array('title' => $langStickyNotes, 'link' => 'sticky_notes', 'image' => 'fa-regular fa-note-sticky'),
         MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-solid fa-arrow-pointer')
 
     );
@@ -659,6 +737,7 @@ $icons_map = array(
         MODULE_ID_ATTENDANCE => 'fa-solid fa-clipboard-user',
         MODULE_ID_GRADEBOOK => 'fa-solid fa-a',
         MODULE_ID_SESSION => 'fa-solid fa-handshake',
+        MODULE_ID_STICKY_NOTES => 'fa-regular fa-note-sticky',
     ),
 );
 
@@ -716,10 +795,10 @@ $admin_modules = array(
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info', 'image' => 'fa-cogs'),
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'fa-user'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'fa-area-chart'),
-    MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets', 'image' => 'fa-magic'),
-    MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools', 'image' => 'fa-wrench'),
+    MODULE_ID_TOOLADMIN => array('title' => $langTools, 'link' => 'course_tools', 'image' => 'fa-wrench'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'fa-flag'),
     MODULE_ID_COURSEPREREQUISITE => array('title' => $langCoursePrerequisites, 'link' => 'course_prerequisites', 'image' => 'fa-university'),
+    MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets', 'image' => 'fa-magic'),
     MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => 'lti_consumer', 'image' => 'fa-link'),
     MODULE_ID_ANALYTICS => array('title' => $langLearningAnalytics, 'link' => 'analytics', 'image' => 'fa-line-chart')
 );
@@ -932,6 +1011,16 @@ get_tinymce_color_text();
 
 // Theme initialization only if not running via cli
 if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
+    $tenant = defined('UPGRADE')? null: getCurrentTenant();
+
+    if (isset($_SESSION['theme_options_id'])) {
+        $theme_id = $_SESSION['theme_options_id'];
+    } elseif (isset($_SESSION['current_user_tenant']) && $_SESSION['current_user_tenant']->theme_id) {
+        $theme_id = $_SESSION['current_user_tenant']->theme_id;
+    } else {
+        $theme_id = get_config('theme_options_id');
+    }
+
     // User theme override: Check for preview (session) or saved selection (cookie)
     // Must happen BEFORE theme_initialization() to ensure correct CSS generation
     $user_selected_theme_id = 0;
@@ -963,8 +1052,6 @@ if (php_sapi_name() != 'cli' or isset($_SERVER['REMOTE_ADDR'])) {
     // Apply user theme if set, otherwise use admin default theme
     if ($user_selected_theme_id > 0) {
         $theme_id = $user_selected_theme_id;
-    } else {
-        $theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
     }
 
     $theme_css = "courses/theme_data/{$theme_id}/style_str.css";

@@ -67,7 +67,7 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
     $auth_methods_form = isset($_POST['auth_methods_form']) ? $_POST['auth_methods_form'] : 1;
 
     if ($auth_methods_form != 1) {
-        $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username');
+        $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'ext_uid');
     }
 
     // validation for departments
@@ -82,7 +82,7 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
             $field_value = trim($cell->getValue());
             if (!empty($field_value)) {
                 if (!in_array($field_value, $acceptable_fields)) {
-                Session::flash('message',"$langMultiRegFieldError <b>$field_value)</b>");
+                Session::flash('message',"$langMultiRegFieldError <b>$field_value</b>");
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page('modules/admin/multireguser.php');
                 exit;
@@ -106,8 +106,6 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
                 continue;
             }
             $cellIterator = $row->getCellIterator();
-            // ignore empty cells
-            $cellIterator->setIterateOnlyExistingCells(TRUE);
             foreach ($cellIterator as $cell) {
                 $user_data[] = trim($cell->getValue());
             }
@@ -123,9 +121,8 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
                 continue;
             }
             if (isset($info['email'])) {
-                if (!valid_email($info['email'])) {
-                    Session::flash('message',$langUsersEmailWrong . ': ' . q($info['email']));
-                    Session::flash('alert-class', 'alert-danger');
+                if ($info['email'] !== '' and !valid_email($info['email'])) {
+                    Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
                     $email = '';
                 } else {
                     $email = $info['email'];
@@ -160,6 +157,11 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
             if ($new === false) {
                 $unparsed_lines .= q($row->getRowIndex() . "\n". $error . "\n");
             } else {
+                if (isset($info['ext_uid']) and $info['ext_uid'] !== '' and $auth_methods_form != 1) {
+                    Database::get()->querySingle('INSERT INTO user_ext_uid
+                        SET user_id = ?d, auth_id = ?d, uid = ?s',
+                        $new[0], $auth_methods_form, $info['ext_uid']);
+                }
                 $new_users_info[] = $new;
                 // Now, the $userl array should contain only course codes
                 if (count($userl) > 0) {
@@ -175,10 +177,10 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
         }
     }
 
-$data['unparsed_lines'] = $unparsed_lines;
-$data['new_users_info'] = $new_users_info;
+    $data['unparsed_lines'] = $unparsed_lines;
+    $data['new_users_info'] = $new_users_info;
 
-$view = 'admin.users.multireguser_result';
+    $view = 'admin.users.multireguser_result';
 
 } else {
     Database::get()->queryFunc("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name", function($n) use(&$facs) {
@@ -225,7 +227,7 @@ $view = 'admin.users.multireguser_result';
                 </ul></p>
             </div>
         </div>";
-    $data['rich_text_editor'] = rich_text_editor('emailNewBodyEditor', 4, 20, "$emailNewBody");
+    $data['rich_text_editor'] = rich_text_editor('emailNewBodyEditor', 4, 20, "$emailNewBody", options: array('id' => 'emailNewBodyEditor'));
     $view = 'admin.users.multireguser';
 }
 
@@ -266,11 +268,6 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $mail_message = $password;
     }
 
-    if (isset($_POST['force_password_change'])) {
-        $options = json_encode(['force_password_change' => 1]);
-    } else {
-        $options = json_encode(['force_password_change' => 0]);
-    }
 
     $id = Database::get()->query("INSERT INTO user
                     (surname, givenname, username, password, email,
@@ -278,9 +275,14 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                      email_public, phone_public, am_public, description, verified_mail, whitelist, options)
                 VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . ",
                     DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
-                    ?s, ?s, ?s, ?d, ?d, ?d, '', " . EMAIL_VERIFIED . ", '', ?s)"
+                    ?s, ?s, ?s, ?d, ?d, ?d, '', " . EMAIL_VERIFIED . ", '', null)"
                 , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)),
-                  $status, $lang, $am, $phone, $email_public, $phone_public, $am_public, $options)->lastInsertID;
+                  $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
+
+    if (isset($_POST['force_password_change'])) {
+        set_user_option($id, 'force_password_change', '1');
+    }
+
     // update personal calendar info table
     // we don't check if trigger exists since it requires `super` privilege
     Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $id);

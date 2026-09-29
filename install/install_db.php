@@ -76,6 +76,13 @@ $db->query("CREATE TABLE `course_learning_objectives` (
     `course_code` VARCHAR(20) NOT NULL,
     `title` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `suppressed_words` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `word` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `added_by` INT DEFAULT NULL,
+    `created_at` DATETIME NOT NULL,
+    PRIMARY KEY (`id`)) $tbl_options");
 // end of flipped classroom
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_module` (
@@ -129,6 +136,7 @@ $db->query("CREATE TABLE `announcement` (
 $db->query("CREATE TABLE `admin_announcement` (
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `tenant_id` INT DEFAULT NULL,
     `body` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
     `date` DATETIME NOT NULL,
     `begin` DATETIME DEFAULT NULL,
@@ -174,7 +182,9 @@ $db->query("CREATE TABLE `course` (
   `glossary_index` BOOL NOT NULL DEFAULT 1,
   `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
   `start_date` DATE DEFAULT NULL,
+  `reg_start_date` DATE DEFAULT NULL,
   `end_date` DATE DEFAULT NULL,
+  `reg_end_date` DATE DEFAULT NULL,
   `description` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   `home_layout` TINYINT NOT NULL DEFAULT 1,
   `course_image` VARCHAR(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NULL,
@@ -258,6 +268,18 @@ $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `vi
 //$db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC17',0,0,0,0)");
 $db->query("INSERT INTO `course_activities` (`activity_id`, `activity_type`, `visible`,`unit_id`,`module_id`) VALUES ('FC18',1,0,0,0)");
 
+$db->query("INSERT INTO `suppressed_words` (`word`, `created_at`) VALUES
+    ('χαζός', NOW()),
+    ('βλαμμένος', NOW()),
+    ('ανόητος', NOW()),
+    ('στόκος', NOW()),
+    ('τούβλο', NOW()),
+    ('moron', NOW()),
+    ('dumb', NOW()),
+    ('idiot', NOW()),
+    ('imbecile', NOW()),
+    ('jerk', NOW())");
+
 $db->query("CREATE TABLE IF NOT EXISTS `course_description` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `course_id` INT NOT NULL,
@@ -268,6 +290,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_description` (
     `order` INT NOT NULL,
     `update_dt` datetime NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE course_import (
+        id INT NOT NULL AUTO_INCREMENT,
+        course_id INT NOT NULL,
+        imported_course_id INT NOT NULL,
+        imported DATETIME NOT NULL,
+        PRIMARY KEY(id)) $tbl_options");
 
 $db->query("CREATE TABLE `course_review` (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -304,6 +333,7 @@ $db->query("CREATE TABLE `user` (
     pic_public TINYINT NOT NULL DEFAULT 0,
     whitelist TEXT CHARACTER SET ascii COLLATE ascii_bin,
     eportfolio_enable TINYINT NOT NULL DEFAULT 0,
+    eportfolio_token VARCHAR(64) DEFAULT NULL,
     last_passreminder DATETIME DEFAULT NULL,
     disable_course_registration TINYINT NULL DEFAULT 0,
     options TEXT CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL) $tbl_options");
@@ -902,7 +932,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
                 `visibility` TINYINT NOT NULL DEFAULT 0,
                 `user_type` TINYINT NOT NULL,
                 `registration` TINYINT NOT NULL DEFAULT 0,
-                `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL) $tbl_options");
+                `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+                UNIQUE (`shortname`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data` (
                 `user_id` INT UNSIGNED NOT NULL DEFAULT 0,
@@ -962,12 +993,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields` (
         `categoryid` INT NOT NULL DEFAULT 0,
         `sortorder`  INT NOT NULL DEFAULT 0,
         `required` TINYINT NOT NULL DEFAULT 0,
-        `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL) $tbl_options");
+        `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+        UNIQUE (`shortname`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_data` (
         `user_id` INT UNSIGNED NOT NULL DEFAULT 0,
         `field_id` INT NOT NULL,
         `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+        `visibility` TINYINT UNSIGNED NOT NULL DEFAULT 1,
         PRIMARY KEY (`user_id`, `field_id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_category` (
@@ -975,35 +1008,96 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_category` (
         `name` MEDIUMTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
         `sortorder`  INT NOT NULL DEFAULT 0) $tbl_options");
 
+$eportfolio_strings = array(
+    'langPersInfo', 'langEduEmpl', 'langAchievements', 'langGoalsSkills', 'langContactInfo', 'langResearchProfiles', 'langLangProfLevel',
+    'langVolontSocialAct', 'langMale', 'langFemale', 'langLangCEFRA1', 'langLangCEFRA2', 'langLangCEFRB1', 'langLangCEFRB2', 'langLangCEFRC1',
+    'langLangCEFRC2', 'langBirthDate', 'langBirthPlace', 'langGender', 'langAboutMe', 'langAboutMeDescr', 'langPersWebsite', 'langePortfolioPersonalWebsiteDescr',
+    'langEducation', 'langEducationDescr', 'langEmployment', 'langePortfolioEmploymentDescr', 'langCertAwards', 'langePortfolioCertificatesAwardsDescr',
+    'langPublications', 'langePortfolioPublicationsDescr', 'langPersGoals', 'langePortfolioPersonalGoalsDescr', 'langAcademicGoals', 'langePortfolioAcademicGoalsDescr',
+    'langCareerGoals', 'langePortfolioCareerGoalsDescr', 'langPersSkills', 'langePortfolioPersonalSkillsDescr', 'langAcademicSkills', 'langePortfolioAcademicSkillsDescr',
+    'langCareerSkills', 'langePortfolioCareerSkillsDesc', 'langEmail', 'langPhone', 'langAddress', 'langFBProfile', 'langTwitterAccount', 'langLinkedInProfile',
+    'langGoogleScholarProfile', 'langScopusID', 'langOrcid', 'langGreek', 'langEnglish', 'langAlbanian', 'langArabic', 'langFrench', 'langGerman', 'langItalian',
+    'langSpanish', 'langChinese', 'langRussian', 'langTurkish', 'langOtherLanguages', 'langePortfolioOtherLanguagesDescr', 'langSocialActivities',
+    'langePortfolioSocialActivitiesDescr', 'langVolunteerActivities', 'langePortfolioVolunteerActivitiesDescr'
+);
+
+$eportfolio = [
+    'el' => load_lang_strings('el', $eportfolio_strings),
+    'en' => load_lang_strings('en', $eportfolio_strings)
+];
+
 $db->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`) VALUES
-        (1, '$langPersInfo', 0),
-        (2, '$langEduEmpl', -1),
-        (3, '$langAchievements', -2),
-        (4, '$langGoalsSkills', -3),
-        (5, '$langContactInfo', -4)");
+        (1, '".serialize(['el' => $eportfolio['el']['langPersInfo'], 'en' => $eportfolio['en']['langPersInfo']])."', 0),
+        (2, '".serialize(['el' => $eportfolio['el']['langEduEmpl'], 'en' => $eportfolio['en']['langEduEmpl']])."', -1),
+        (3, '".serialize(['el' => $eportfolio['el']['langAchievements'], 'en' => $eportfolio['en']['langAchievements']])."', -2),
+        (4, '".serialize(['el' => $eportfolio['el']['langGoalsSkills'], 'en' => $eportfolio['en']['langGoalsSkills']])."', -3),
+        (5, '".serialize(['el' => $eportfolio['el']['langContactInfo'], 'en' => $eportfolio['en']['langContactInfo']])."', -4),
+        (6, '".serialize(['el' => $eportfolio['el']['langResearchProfiles'], 'en' => $eportfolio['en']['langResearchProfiles']])."', -5),
+        (7, '".serialize(['el' => $eportfolio['el']['langLangProfLevel'], 'en' => $eportfolio['en']['langLangProfLevel']])."', -6),
+        (8, '".serialize(['el' => $eportfolio['el']['langVolontSocialAct'], 'en' => $eportfolio['en']['langVolontSocialAct']])."', -7)");
+
+$gender_options = [
+    'el' => [$eportfolio['el']['langMale'], $eportfolio['el']['langFemale']],
+    'en' => [$eportfolio['en']['langMale'], $eportfolio['en']['langFemale']]
+];
+$lang_proficiency_levels = [
+    'el' => [
+        $eportfolio['el']['langLangCEFRA1'],
+        $eportfolio['el']['langLangCEFRA2'],
+        $eportfolio['el']['langLangCEFRB1'],
+        $eportfolio['el']['langLangCEFRB2'],
+        $eportfolio['el']['langLangCEFRC1'],
+        $eportfolio['el']['langLangCEFRC2']
+    ],
+    'en' => [
+        $eportfolio['en']['langLangCEFRA1'],
+        $eportfolio['en']['langLangCEFRA2'],
+        $eportfolio['en']['langLangCEFRB1'],
+        $eportfolio['en']['langLangCEFRB2'],
+        $eportfolio['en']['langLangCEFRC1'],
+        $eportfolio['en']['langLangCEFRC2']
+    ]
+];
 
 $db->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
-        (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
-        (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
-        (3, 'gender', '$langGender', '', '4', 1, -2, 0, 'a:2:{i:0;s:".strlen($langMale).":\"$langMale\";i:1;s:".strlen($langFemale).":\"$langFemale\";}'),
-        (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
-        (5, 'personal_website', '$langPersWebsite', '', '5', 1, -4, 0, ''),
-        (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
-        (7, 'employment', '$langEmployment', '', '2', 2, -1, 0, ''),
-        (8, 'certificates_awards', '$langCertAwards', '', '2', 3, 0, 0, ''),
-        (9, 'publications', '$langPublications', '', '2', 3, -1, 0, ''),
-        (10, 'personal_goals', '$langPersGoals', '', '2', 4, 0, 0, ''),
-        (11, 'academic_goals', '$langAcademicGoals', '', '2', 4, -1, 0, ''),
-        (12, 'career_goals', '$langCareerGoals', '', '2', 4, -2, 0, ''),
-        (13, 'personal_skills', '$langPersSkills', '', '2', 4, -3, 0, ''),
-        (14, 'academic_skills', '$langAcademicSkills', '', '2', 4, -4, 0, ''),
-        (15, 'career_skills', '$langCareerSkills', '', '2', 4, -5, 0, ''),
-        (16, 'email', '$langEmail', '', '1', 5, 0, 0, ''),
-        (17, 'phone_number', '$langPhone', '', '1', 5, -1, 0, ''),
-        (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
-        (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
-        (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
-        (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
+        (1, 'birth_date', '".serialize(['el' => $eportfolio['el']['langBirthDate'], 'en' => $eportfolio['en']['langBirthDate']])."', '', '3', 1, 0, 0, ''),
+        (2, 'birth_place', '".serialize(['el' => $eportfolio['el']['langBirthPlace'], 'en' => $eportfolio['en']['langBirthPlace']])."', '', '1', 1, -1, 0, ''),
+        (3, 'gender', '".serialize(['el' => $eportfolio['el']['langGender'], 'en' => $eportfolio['en']['langGender']])."', '', '4', 1, -2, 0, '".serialize($gender_options)."'),
+        (4, 'about_me', '".serialize(['el' => $eportfolio['el']['langAboutMe'], 'en' => $eportfolio['en']['langAboutMe']])."', '".serialize(['el' => $eportfolio['el']['langAboutMeDescr'], 'en' => $eportfolio['en']['langAboutMeDescr']])."', '2', 1, -3, 0, ''),
+        (5, 'personal_website', '".serialize(['el' => $eportfolio['el']['langPersWebsite'], 'en' => $eportfolio['en']['langPersWebsite']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioPersonalWebsiteDescr'], 'en' => $eportfolio['en']['langePortfolioPersonalWebsiteDescr']])."', '5', 1, -4, 0, ''),
+        (6, 'education', '".serialize(['el' => $eportfolio['el']['langEducation'], 'en' => $eportfolio['en']['langEducation']])."', '".serialize(['el' => $eportfolio['el']['langEducationDescr'], 'en' => $eportfolio['en']['langEducationDescr']])."', '2', 2, 0, 0, ''),
+        (7, 'employment', '".serialize(['el' => $eportfolio['el']['langEmployment'], 'en' => $eportfolio['en']['langEmployment']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioEmploymentDescr'], 'en' => $eportfolio['en']['langePortfolioEmploymentDescr']])."', '2', 2, -1, 0, ''),
+        (8, 'certificates_awards', '".serialize(['el' => $eportfolio['el']['langCertAwards'], 'en' => $eportfolio['en']['langCertAwards']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioCertificatesAwardsDescr'], 'en' => $eportfolio['en']['langePortfolioCertificatesAwardsDescr']])."', '2', 3, 0, 0, ''),
+        (9, 'publications', '".serialize(['el' => $eportfolio['el']['langPublications'], 'en' => $eportfolio['en']['langPublications']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioPublicationsDescr'], 'en' => $eportfolio['en']['langePortfolioPublicationsDescr']])."', '2', 3, -1, 0, ''),
+        (10, 'personal_goals', '".serialize(['el' => $eportfolio['el']['langPersGoals'], 'en' => $eportfolio['en']['langPersGoals']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioPersonalGoalsDescr'], 'en' => $eportfolio['en']['langePortfolioPersonalGoalsDescr']])."', '2', 4, 0, 0, ''),
+        (11, 'academic_goals', '".serialize(['el' => $eportfolio['el']['langAcademicGoals'], 'en' => $eportfolio['en']['langAcademicGoals']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioAcademicGoalsDescr'], 'en' => $eportfolio['en']['langePortfolioAcademicGoalsDescr']])."', '2', 4, -1, 0, ''),
+        (12, 'career_goals', '".serialize(['el' => $eportfolio['el']['langCareerGoals'], 'en' => $eportfolio['en']['langCareerGoals']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioCareerGoalsDescr'], 'en' => $eportfolio['en']['langePortfolioCareerGoalsDescr']])."', '2', 4, -2, 0, ''),
+        (13, 'personal_skills', '".serialize(['el' => $eportfolio['el']['langPersSkills'], 'en' => $eportfolio['en']['langPersSkills']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioPersonalSkillsDescr'], 'en' => $eportfolio['en']['langePortfolioPersonalSkillsDescr']])."', '2', 4, -3, 0, ''),
+        (14, 'academic_skills', '".serialize(['el' => $eportfolio['el']['langAcademicSkills'], 'en' => $eportfolio['en']['langAcademicSkills']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioAcademicSkillsDescr'], 'en' => $eportfolio['en']['langePortfolioAcademicSkillsDescr']])."', '2', 4, -4, 0, ''),
+        (15, 'career_skills', '".serialize(['el' => $eportfolio['el']['langCareerSkills'], 'en' => $eportfolio['en']['langCareerSkills']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioCareerSkillsDesc'], 'en' => $eportfolio['en']['langePortfolioCareerSkillsDesc']])."', '2', 4, -5, 0, ''),
+        (16, 'email', '".serialize(['el' => $eportfolio['el']['langEmail'], 'en' => $eportfolio['en']['langEmail']])."', '', '1', 5, 0, 0, ''),
+        (17, 'phone_number', '".serialize(['el' => $eportfolio['el']['langPhone'], 'en' => $eportfolio['en']['langPhone']])."', '', '1', 5, -1, 0, ''),
+        (18, 'Address', '".serialize(['el' => $eportfolio['el']['langAddress'], 'en' => $eportfolio['en']['langAddress']])."', '', '1', 5, -2, 0, ''),
+        (19, 'fb', '".serialize(['el' => $eportfolio['el']['langFBProfile'], 'en' => $eportfolio['en']['langFBProfile']])."', '', '5', 5, -3, 0, ''),
+        (20, 'twitter', '".serialize(['el' => $eportfolio['el']['langTwitterAccount'], 'en' => $eportfolio['en']['langTwitterAccount']])."', '', '5', 5, -4, 0, ''),
+        (21, 'linkedin', '".serialize(['el' => $eportfolio['el']['langLinkedInProfile'], 'en' => $eportfolio['en']['langLinkedInProfile']])."', '', '5', 5, -5, 0, ''),
+        (22, 'gscholar', '".serialize(['el' => $eportfolio['el']['langGoogleScholarProfile'], 'en' => $eportfolio['en']['langGoogleScholarProfile']])."', '', '5', 6, 0, 0, ''),
+        (23, 'scopus', '".serialize(['el' => $eportfolio['el']['langScopusID'], 'en' => $eportfolio['en']['langScopusID']])."', '', '1', 6, -1, 0, ''),
+        (24, 'orcid', '".serialize(['el' => $eportfolio['el']['langOrcid'], 'en' => $eportfolio['en']['langOrcid']])."', '', '5', 6, -2, 0, ''),
+        (25, 'el', '".serialize(['el' => $eportfolio['el']['langGreek'], 'en' => $eportfolio['en']['langGreek']])."', '', '4', 7, 0, 0, '".serialize($lang_proficiency_levels)."'),
+        (26, 'en', '".serialize(['el' => $eportfolio['el']['langEnglish'], 'en' => $eportfolio['en']['langEnglish']])."', '', '4', 7, -1, 0, '".serialize($lang_proficiency_levels)."'),
+        (27, 'sq', '".serialize(['el' => $eportfolio['el']['langAlbanian'], 'en' => $eportfolio['en']['langAlbanian']])."', '', '4', 7, -2, 0, '".serialize($lang_proficiency_levels)."'),
+        (28, 'ar', '".serialize(['el' => $eportfolio['el']['langArabic'], 'en' => $eportfolio['en']['langArabic']])."', '', '4', 7, -3, 0, '".serialize($lang_proficiency_levels)."'),
+        (29, 'fr', '".serialize(['el' => $eportfolio['el']['langFrench'], 'en' => $eportfolio['en']['langFrench']])."', '', '4', 7, -4, 0, '".serialize($lang_proficiency_levels)."'),
+        (30, 'de', '".serialize(['el' => $eportfolio['el']['langGerman'], 'en' => $eportfolio['en']['langGerman']])."', '', '4', 7, -5, 0, '".serialize($lang_proficiency_levels)."'),
+        (31, 'it', '".serialize(['el' => $eportfolio['el']['langItalian'], 'en' => $eportfolio['en']['langItalian']])."', '', '4', 7, -6, 0, '".serialize($lang_proficiency_levels)."'),
+        (32, 'es', '".serialize(['el' => $eportfolio['el']['langSpanish'], 'en' => $eportfolio['en']['langSpanish']])."', '', '4', 7, -7, 0, '".serialize($lang_proficiency_levels)."'),
+        (33, 'zh', '".serialize(['el' => $eportfolio['el']['langChinese'], 'en' => $eportfolio['en']['langChinese']])."', '', '4', 7, -8, 0, '".serialize($lang_proficiency_levels)."'),
+        (34, 'ru', '".serialize(['el' => $eportfolio['el']['langRussian'], 'en' => $eportfolio['en']['langRussian']])."', '', '4', 7, -9, 0, '".serialize($lang_proficiency_levels)."'),
+        (35, 'tr', '".serialize(['el' => $eportfolio['el']['langTurkish'], 'en' => $eportfolio['en']['langTurkish']])."', '', '4', 7, -10, 0, '".serialize($lang_proficiency_levels)."'),
+        (36, 'other_languages', '".serialize(['el' => $eportfolio['el']['langOtherLanguages'], 'en' => $eportfolio['en']['langOtherLanguages']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioOtherLanguagesDescr'], 'en' => $eportfolio['en']['langePortfolioOtherLanguagesDescr']])."', '2', 7, -11, 0, ''),
+        (37, 'social_activities', '".serialize(['el' => $eportfolio['el']['langSocialActivities'], 'en' => $eportfolio['en']['langSocialActivities']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioSocialActivitiesDescr'], 'en' => $eportfolio['en']['langePortfolioSocialActivitiesDescr']])."', '2', 8, 0, 0, ''),
+        (38, 'volunteer_activities', '".serialize(['el' => $eportfolio['el']['langVolunteerActivities'], 'en' => $eportfolio['en']['langVolunteerActivities']])."', '".serialize(['el' => $eportfolio['el']['langePortfolioVolunteerActivitiesDescr'], 'en' => $eportfolio['en']['langePortfolioVolunteerActivitiesDescr']])."', '2', 8, -1, 0, '')");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1014,6 +1108,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
         `course_title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '',
         `time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `data` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+        `visibility` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+        `reflection_comments` TEXT NOT NULL,
         INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
@@ -1360,6 +1456,12 @@ $db->query("CREATE TABLE exercise_ai_evaluation (
         FOREIGN KEY (`exercise_id`) REFERENCES `exercise`(`id`) ON DELETE CASCADE,
         FOREIGN KEY (`student_record_id`) REFERENCES `exercise_user_record`(`eurid`) ON DELETE CASCADE) $tbl_options");
 
+$db->query("CREATE TABLE `seb_courses` (
+        `id` int NOT NULL AUTO_INCREMENT,
+        `course_id` int NOT NULL,
+         PRIMARY KEY (`id`),
+         UNIQUE KEY `course_id` (`course_id`)) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS lti_apps (
     `id` INT NOT NULL AUTO_INCREMENT,
     `course_id` INT DEFAULT NULL,
@@ -1524,8 +1626,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
     KEY `lftindex` (`lft`),
     KEY `rgtindex` (`rgt`) ) $tbl_options");
 
+$institutionForm = canonicalize_whitespace($institutionForm);
 $db->query("INSERT INTO `hierarchy` (code, name, description, lft, rgt)
-    VALUES ('', ?s, '', 1, 68)", $institutionForm);
+    VALUES ('', ?s, '', 1, 68)", $institutionForm? $institutionForm: $langEclass);
 
 $db->query("INSERT INTO `hierarchy` (code, name, description, number, generator, lft, rgt, allow_course, allow_user)
     VALUES ('TMA', ?s, '', '10', '100', 2, 23, true, true)", $langHierarchyTestDepartment);
@@ -1572,17 +1675,31 @@ $db->query("CREATE TABLE `admin` (
 
 // encrypt the admin password into DB
 $password_encrypted = password_hash($passForm, PASSWORD_DEFAULT);
-$admin_uid = $db->query("INSERT INTO `user`
+$admin_uid = $db->query(
+    "INSERT INTO `user`
     (`givenname`, `surname`, `username`, `password`, `email`, `status`, `lang`,
      `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
     VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, " . DBHelper::timeAfter() . ", " .
-            DBHelper::timeAfter(5 * 365 * 24 * 60 * 60) . ", ?d, ?s, ?s)",
-    $nameForm, '', $loginForm, $password_encrypted, $emailForm, 1, $lang, 1,
-    NULL, 'Administrator')->lastInsertID;
+        DBHelper::timeAfter(5 * 365 * 24 * 60 * 60) . ", ?d, ?s, ?s)",
+    $nameForm,
+    '',
+    $loginForm,
+    $password_encrypted,
+    $emailForm,
+    1,
+    $lang,
+    1,
+    NULL,
+    'Administrator'
+)->lastInsertID;
 if (isset($_SERVER['REMOTE_ADDR'])) {
-    $db->query("INSERT INTO loginout (`id_user`, `ip`, `when`, `action`)
+    $db->query(
+        "INSERT INTO loginout (`id_user`, `ip`, `when`, `action`)
         VALUES (?d, ?s, " . DBHelper::timeAfter() . ", ?s)",
-        $admin_uid, $_SERVER['REMOTE_ADDR'], 'LOGIN');
+        $admin_uid,
+        $_SERVER['REMOTE_ADDR'],
+        'LOGIN'
+    );
 }
 
 $db->query("INSERT INTO admin (user_id, privilege) VALUES (?d, ?d)", $admin_uid, 0);
@@ -1678,91 +1795,174 @@ $db->query("CREATE TABLE `config` (
     PRIMARY KEY (`key`)) $tbl_options");
 
 $default_config = array(
-    'base_url', $urlForm,
-    'default_language', $lang,
-    'dont_display_login_form', 0,
-    'dont_display_testimonials', 1,
-    'dont_display_announcements', 0,
-    'dont_display_popular_courses', 1,
-    'dont_display_texts', 1,
-    'dont_display_statistics', 1,
-    'dont_display_open_courses', 1,
-    'course_invitation', 0,
-    'total_courses', 0,
-    'visits_per_week', 0,
-    'users_registered', 0,
-    'show_modal_openCourses', 0,
-    'individual_group_bookings', 0,
-    'enable_quick_note', 0,
-    'email_required', 0,
-    'email_from', 1,
-    'email_verification_required', 0,
-    'dont_mail_unverified_mails', 0,
-    'am_required', 0,
-    'dropbox_allow_student_to_student', 0,
-    'block_username_change', 0,
-    'enable_mobileapi', 1,
-    'code_key', generate_secret_key(32),
-    'display_captcha', 0,
-    'insert_xml_metadata', 0,
-    'doc_quota', 500,
-    'video_quota', 500,
-    'group_quota', 500,
-    'dropbox_quota', 500,
-    'user_registration', 1,
-    'alt_auth_stud_reg', 2,
-    'alt_auth_prof_reg', 2,
-    'eclass_stud_reg', $eclass_stud_reg,
-    'eclass_prof_reg', 1,
-    'course_multidep', 0,
-    'user_multidep', 0,
-    'restrict_owndep', 0,
-    'restrict_teacher_owndep', 0,
-    'allow_teacher_clone_course', 0,
-    'contact_form_activation', 1,
-    'max_glossary_terms', '250',
-    'phpSysInfoURL', $phpSysInfoURL,
-    'email_sender', $emailForm,
-    'admin_name', $nameForm,
-    'email_helpdesk', $helpdeskmail,
-    'site_name', $campusForm,
-    'phone', $helpdeskForm,
-    'postaddress', $postaddressForm,
-    'institution', $institutionForm,
-    'institution_url', $institutionUrlForm,
-    'account_duration', '126144000',
-    'language', $lang,
-    'active_ui_languages', $active_ui_languages,
+    'base_url',
+    $urlForm,
+    'default_language',
+    $lang,
+    'dont_display_login_form',
+    0,
+    'dont_display_testimonials',
+    1,
+    'dont_display_announcements',
+    0,
+    'dont_display_popular_courses',
+    1,
+    'dont_display_texts',
+    1,
+    'dont_display_statistics',
+    1,
+    'dont_display_open_courses',
+    1,
+    'course_invitation',
+    0,
+    'total_courses',
+    0,
+    'visits_per_week',
+    0,
+    'users_registered',
+    0,
+    'show_modal_openCourses',
+    0,
+    'individual_group_bookings',
+    0,
+    'enable_quick_note',
+    0,
+    'third_party_cookies',
+    0,
+    'email_required',
+    0,
+    'email_from',
+    1,
+    'email_verification_required',
+    0,
+    'dont_mail_unverified_mails',
+    0,
+    'am_required',
+    0,
+    'dropbox_allow_student_to_student',
+    0,
+    'block_username_change',
+    0,
+    'enable_mobileapi',
+    1,
+    'code_key',
+    generate_secret_key(32),
+    'display_captcha',
+    0,
+    'insert_xml_metadata',
+    0,
+    'doc_quota',
+    500,
+    'video_quota',
+    500,
+    'group_quota',
+    500,
+    'dropbox_quota',
+    500,
+    'user_registration',
+    1,
+    'alt_auth_stud_reg',
+    2,
+    'alt_auth_prof_reg',
+    2,
+    'eclass_stud_reg',
+    $eclass_stud_reg,
+    'eclass_prof_reg',
+    1,
+    'course_multidep',
+    0,
+    'user_multidep',
+    0,
+    'restrict_owndep',
+    0,
+    'restrict_teacher_owndep',
+    0,
+    'allow_teacher_clone_course',
+    0,
+    'contact_form_activation',
+    1,
+    'max_glossary_terms',
+    '250',
+    'phpSysInfoURL',
+    $phpSysInfoURL,
+    'email_sender',
+    $emailForm,
+    'admin_name',
+    $nameForm,
+    'email_helpdesk',
+    $helpdeskmail,
+    'site_name',
+    $campusForm,
+    'phone',
+    $helpdeskForm,
+    'postaddress',
+    $postaddressForm,
+    'institution',
+    $institutionForm,
+    'institution_url',
+    $institutionUrlForm,
+    'account_duration',
+    '126144000',
+    'language',
+    $lang,
+    'active_ui_languages',
+    $active_ui_languages,
     // 'student_upload_whitelist', $student_upload_whitelist,
     // 'teacher_upload_whitelist', $teacher_upload_whitelist,
-    'theme', 'modern',
-    'login_fail_check', 1,
-    'login_fail_threshold', 15,
-    'login_fail_deny_interval', 5,
-    'login_fail_forgive_interval', 24,
-    'actions_expire_interval', 24,
-    'log_expire_interval', 5,
-    'log_purge_interval', 12,
-    'course_metadata', 0,
-    'opencourses_enable', 0,
-    'enable_indexing', 1,
-    'enable_search', 1,
-    'enable_social_sharing_links', 1,
-    'eportfolio_enable', 1,
-    'enable_prevent_download_url', 0,
-    'personal_blog', 1,
-    'personal_blog_commenting', 1,
-    'personal_blog_rating', 1,
-    'personal_blog_sharing', 1,
-    'course_guest', 'link',
-    'allow_rec_audio', 1,
-    'allow_rec_video', 1,
-    'show_always_collaboration', 0,
-    'show_collaboration', 0,
-    'version', ECLASS_VERSION);
+    'theme',
+    'modern',
+    'login_fail_check',
+    1,
+    'login_fail_threshold',
+    15,
+    'login_fail_deny_interval',
+    5,
+    'login_fail_forgive_interval',
+    24,
+    'actions_expire_interval',
+    24,
+    'log_expire_interval',
+    5,
+    'log_purge_interval',
+    12,
+    'course_metadata',
+    0,
+    'opencourses_enable',
+    0,
+    'enable_indexing',
+    1,
+    'enable_search',
+    1,
+    'enable_social_sharing_links',
+    1,
+    'eportfolio_enable',
+    1,
+    'enable_prevent_download_url',
+    0,
+    'personal_blog',
+    1,
+    'personal_blog_commenting',
+    1,
+    'personal_blog_rating',
+    1,
+    'personal_blog_sharing',
+    1,
+    'course_guest',
+    'link',
+    'allow_rec_audio',
+    1,
+    'allow_rec_video',
+    1,
+    'show_always_collaboration',
+    0,
+    'show_collaboration',
+    0,
+    'version',
+    ECLASS_VERSION
+);
 
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .
-        implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')), $default_config);
+    implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')), $default_config);
 
 store_mail_config();
 update_upload_whitelists();
@@ -1892,7 +2092,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
 
 
 $db->query("CREATE TABLE `tc_attendance` (
-    `id` INT NOT NULL DEFAULT '0',
+    `id` INT NOT NULL AUTO_INCREMENT,
     `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `bbbuserid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
     `totaltime` INT NOT NULL DEFAULT '0',
@@ -2017,12 +2217,37 @@ $db->query("CREATE TABLE IF NOT EXISTS `idx_queue_async` (
     `resource_id` INT NOT NULL,
     PRIMARY KEY (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE `tenant` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(200) NOT NULL,
+    `description` text DEFAULT NULL,
+    `department_id` int(11) NOT NULL,
+    `url` varchar(200) NOT NULL DEFAULT '',
+    `url_active` tinyint(1) NOT NULL DEFAULT '0',
+    `theme_id` int(11) DEFAULT NULL,
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL,
+    `options` text DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `department_id` (`department_id`),
+    KEY `theme_id` (`theme_id`),
+    CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`)) $tbl_options");
+
 $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
     `styles` LONGTEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `tenant_id` int(11) DEFAULT NULL,
     `version` TINYINT,
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("ALTER TABLE `theme_options`
+    ADD CONSTRAINT `fk_theme_options_tenant`
+	 FOREIGN KEY (`tenant_id`) REFERENCES `tenant` (`id`)");
+
+$db->query("ALTER TABLE `tenant`
+    ADD CONSTRAINT `fk_tenant_theme`
+	 FOREIGN KEY (`theme_id`) REFERENCES `theme_options` (`id`)");
 
 // Tags tables
 $db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
@@ -2185,14 +2410,26 @@ $db->query("CREATE TABLE `certificate_template` (
     `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
     `filename` varchar(255),
     `orientation` varchar(10),
-    `all_courses` TINYINT not null default 1
+    `all_courses` TINYINT not null default 1,
+    `department_id` int(11) default null,
+    KEY `fk_certificate_template_hierarchy` (`department_id`),
+    CONSTRAINT `fk_certificate_template_hierarchy`
+        FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+) $tbl_options");
+
+$db->query("CREATE TABLE `badge_icon_category` (
+    `id` MEDIUMINT not null auto_increment primary key,
+    `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci not null
 ) $tbl_options");
 
 $db->query("CREATE TABLE `badge_icon` (
     `id` MEDIUMINT not null auto_increment primary key,
     `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci not null,
-    `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-    `filename` varchar(255)
+    `category` mediumint DEFAULT NULL,
+    `filename` varchar(255),
+    CONSTRAINT FOREIGN KEY (`category`) REFERENCES `badge_icon_category` (`id`)
 ) $tbl_options");
 
 $db->query("CREATE TABLE `certificate` (
@@ -2230,7 +2467,9 @@ $db->query("CREATE TABLE `badge` (
   `created` datetime,
   `expires` datetime,
   `bundle` INT not null default 0,
+  `allow_export` tinyint(1) not null default 1 COMMENT 'Controls if badge can be exported to external backpack',
   index `badge_course` (`course_id`),
+  index `idx_allow_export` (`allow_export`),
   foreign key (`course_id`) references `course` (`id`)
 ) $tbl_options");
 
@@ -2248,6 +2487,64 @@ $db->query("CREATE TABLE `user_certificate` (
   foreign key (`certificate`) references `certificate` (`id`)
 ) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `backpack_provider` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `api_url` VARCHAR(512) NOT NULL,
+    `ob_version` VARCHAR(50) DEFAULT 'OpenBadge v2.0',
+    `basic_auth_access_token` VARCHAR(512) DEFAULT NULL,
+    `refresh_access_token` VARCHAR(512) DEFAULT NULL,
+    `client_id` VARCHAR(255) DEFAULT NULL,
+    `client_secret` VARCHAR(255) DEFAULT NULL,
+    `authorization_endpoint` VARCHAR(512) DEFAULT NULL,
+    `token_endpoint` VARCHAR(512) DEFAULT NULL,
+    `registration_endpoint` VARCHAR(512) DEFAULT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `active` TINYINT(1) NOT NULL DEFAULT 1,
+    UNIQUE KEY (`name`)
+) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `user_backpack_connection` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT(11) NOT NULL,
+    `backpack_provider_id` INT(11) NOT NULL,
+    `email` VARCHAR(255) DEFAULT NULL,
+    `password` VARCHAR(255) DEFAULT NULL,
+    `access_token` VARCHAR(512) DEFAULT NULL,
+    `refresh_token` VARCHAR(512) DEFAULT NULL,
+    `status` ENUM('connected', 'disconnected', 'error') DEFAULT 'disconnected',
+    `last_sync` DATETIME DEFAULT NULL,
+    `selected_collection_id` VARCHAR(512) DEFAULT NULL COMMENT 'Last selected collection for sync',
+    `selected_collection_name` VARCHAR(255) DEFAULT NULL COMMENT 'Display name of selected collection',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY `user_provider` (`user_id`, `backpack_provider_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `user_badge_external` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT(11) NOT NULL,
+    `backpack_provider_id` INT(11) NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    `image_url` VARCHAR(512),
+    `issuer` VARCHAR(255),
+    `issued_on` DATETIME,
+    `external_assertion_id` VARCHAR(512) NOT NULL,
+    `external_collection_id` VARCHAR(512),
+    `badge_data` LONGTEXT,
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY `user_assertion` (`user_id`, `external_assertion_id`),
+    INDEX `user_id_idx` (`user_id`),
+    INDEX `backpack_provider_id_idx` (`backpack_provider_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`backpack_provider_id`) REFERENCES `backpack_provider`(`id`) ON DELETE CASCADE
+) $tbl_options");
+
 $db->query("CREATE TABLE `user_badge` (
   `id` INT not null auto_increment primary key,
   `user` INT not null,
@@ -2257,7 +2554,10 @@ $db->query("CREATE TABLE `user_badge` (
   `total_criteria` INT,
   `updated` datetime,
   `assigned` datetime,
+  `external_assertion_id` VARCHAR(512) DEFAULT NULL COMMENT 'External assertion ID if published to backpack',
+  `add_my_profile` INT NOT NULL DEFAULT 0,
   unique key `user_badge` (`user`, `badge`),
+  INDEX `external_assertion_idx` (`external_assertion_id`),
   foreign key (`user`) references `user`(`id`),
   foreign key (`badge`) references `badge` (`id`)
 ) $tbl_options");
@@ -2317,6 +2617,7 @@ $db->query("CREATE TABLE `certified_users` (
   `expires` datetime DEFAULT NULL,
   `template_id` INT,
   `user_id` INT DEFAULT NULL,
+  `add_my_profile` INT NOT NULL DEFAULT 0,
    PRIMARY KEY (`id`),
    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE SET NULL
   ) $tbl_options");
@@ -2328,6 +2629,68 @@ $db->query("CREATE TABLE `course_certificate_template` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
   FOREIGN KEY (`certificate_template_id`) REFERENCES `certificate_template` (`id`) ON DELETE CASCADE
+) $tbl_options");
+
+$db->query("CREATE TABLE `points_game` (
+    `id` int(11) not null auto_increment primary key,
+    `course_id` int(11) not null,
+    `title` varchar(255) not null,
+    `description` text,
+    `active` tinyint(1) not null default 1,
+    `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
+    `starts` datetime,
+    `expires` datetime,
+    `config` text,
+    index `points_game_course` (`course_id`),
+    foreign key (`course_id`) references `course` (`id`)
+) $tbl_options");
+
+$db->query("CREATE TABLE `points_game_criterion` (
+    `id` int(11) not null auto_increment primary key,
+    `points_game` int(11) not null,
+    `activity_type` varchar(255),
+    `module` int(11),
+    `resource` int(11),
+    `threshold` decimal(7,2),
+    `operator` varchar(20),
+    `points` int(11),
+    `criterion_type` varchar(20) not null,
+    `max_points_from_criterion` int(11),
+    `max_points_from_criterion_time_period` int(11),
+    `time_period_in_days` int(11),
+    foreign key (`points_game`) references `points_game`(`id`)
+) $tbl_options");
+
+$db->query("CREATE TABLE `points_game_levels` (
+    `id` int(11) not null auto_increment primary key,
+    `points_game` int(11) not null,
+    `friendly_name` varchar(255),
+    `required_points` int(11) not null,
+    `icon` int(11) default null,
+    foreign key (`points_game`) references `points_game`(`id`)
+) $tbl_options");
+
+$db->query("CREATE TABLE `user_points_game_criterion` (
+    `id` int(11) not null auto_increment primary key,
+    `user` int(11) not null,
+    `points_game_criterion` int(11) not null,
+    `points_awarded` int(11) not null,
+    `created` datetime not null DEFAULT CURRENT_TIMESTAMP,
+    foreign key (`user`) references `user`(`id`),
+    foreign key (`points_game_criterion`) references `points_game_criterion`(`id`)
+) $tbl_options");
+
+$db->query("CREATE TABLE `user_points_game_points` (
+    `id` int(11) not null auto_increment primary key,
+    `user` int(11) not null,
+    `points_game` int(11) not null,
+    `total_points` int(11) not null,
+    `current_level` int(11),
+    unique key `user_points_game_points` (`user`, `points_game`),
+    index `user_points_game_leaderboard` (`points_game`, `total_points` DESC),
+    foreign key (`user`) references `user`(`id`),
+    foreign key (`points_game`) references `points_game`(`id`),
+    foreign key (`current_level`) references `points_game_levels`(`id`)
 ) $tbl_options");
 
 $db->query("CREATE TABLE `course_prerequisite` (
@@ -2560,13 +2923,24 @@ $db->query("CREATE TABLE api_token (
     `id` smallint NOT NULL AUTO_INCREMENT,
     `token` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+    `department_id` int(11) NOT NULL,
     `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
     `ip` varchar(45) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `enabled` tinyint NOT NULL,
     `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE `api_token_course` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `course_id` int(11) NOT NULL,
+   `token_id` smallint(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`token_id`) REFERENCES `api_token` (`id`) ON DELETE CASCADE)
+    $tbl_options");
 
 $db->query("CREATE TABLE ai_providers (
     `id` smallint NOT NULL AUTO_INCREMENT,
@@ -2658,55 +3032,226 @@ $db->query("CREATE TABLE `mod_session` (
         `course_id` INT NOT NULL,
         `consent` INT NOT NULL DEFAULT 1,
         PRIMARY KEY(id),
-        FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE) $tbl_options");
+        FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE) 
+    $tbl_options");
 
 $db->query("CREATE TABLE `mod_session_users` (
-            `id` INT NOT NULL AUTO_INCREMENT,
-            `session_id` INT NOT NULL DEFAULT 0,
-            `participants` INT NOT NULL DEFAULT 0,
-            `is_accepted` INT NOT NULL DEFAULT 0,
-            PRIMARY KEY(id),
-            FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
-
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `session_id` INT NOT NULL DEFAULT 0,
+        `participants` INT NOT NULL DEFAULT 0,
+        `is_accepted` INT NOT NULL DEFAULT 0,
+        PRIMARY KEY(id),
+        FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) 
+    $tbl_options");
 
 $db->query("CREATE TABLE `session_resources` (
-                            `id` INT NOT NULL AUTO_INCREMENT,
-                            `session_id` INT NOT NULL DEFAULT 0,
-                            `title` VARCHAR(255) NOT NULL DEFAULT '',
-                            `comments` MEDIUMTEXT,
-                            `res_id` INT NOT NULL DEFAULT 0,
-                            `type` VARCHAR(255) NOT NULL DEFAULT '',
-                            `visible` TINYINT,
-                            `order` INT NOT NULL DEFAULT 0,
-                            `date` DATETIME NOT NULL,
-                            `doc_id` INT NOT NULL DEFAULT 0,
-                            `is_completed` INT NOT NULL DEFAULT 0,
-                            `from_user` INT NOT NULL DEFAULT 0,
-                            `deliverable_comments` TEXT DEFAULT NULL,
-                            `passage` TEXT DEFAULT NULL,
-                            PRIMARY KEY(id),
-                            FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) $tbl_options");
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `session_id` INT NOT NULL DEFAULT 0,
+        `title` VARCHAR(255) NOT NULL DEFAULT '',
+        `comments` MEDIUMTEXT,
+        `res_id` INT NOT NULL DEFAULT 0,
+        `type` VARCHAR(255) NOT NULL DEFAULT '',
+        `visible` TINYINT,
+        `order` INT NOT NULL DEFAULT 0,
+        `date` DATETIME NOT NULL,
+        `doc_id` INT NOT NULL DEFAULT 0,
+        `is_completed` INT NOT NULL DEFAULT 0,
+        `from_user` INT NOT NULL DEFAULT 0,
+        `deliverable_comments` TEXT DEFAULT NULL,
+        `passage` TEXT DEFAULT NULL,
+        PRIMARY KEY(id),
+        FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) 
+    $tbl_options");
 
 $db->query("CREATE TABLE `mod_session_completion` (
-                            `id` INT NOT NULL AUTO_INCREMENT,
-                            `course_id` INT NOT NULL,
-                            `session_id` INT NOT NULL,
-                            PRIMARY KEY (`id`),
-                            FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
-                            FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
-
+        `id` INT NOT NULL AUTO_INCREMENT,
+        `course_id` INT NOT NULL,
+        `session_id` INT NOT NULL,
+        PRIMARY KEY (`id`),
+        FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) 
+    $tbl_options");
 
 $db->query("CREATE TABLE `session_user_material` (
-          `id` INT NOT NULL AUTO_INCREMENT,
-          `course_id` INT NOT NULL,
-          `session_id` INT NOT NULL,
-          `user_id` INT NOT NULL,
-          `content` MEDIUMTEXT,
-          PRIMARY KEY (`id`),
-          FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
-          FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) $tbl_options");
+      `id` INT NOT NULL AUTO_INCREMENT,
+      `course_id` INT NOT NULL,
+      `session_id` INT NOT NULL,
+      `user_id` INT NOT NULL,
+      `content` MEDIUMTEXT,
+      PRIMARY KEY (`id`),
+      FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+      FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) 
+    $tbl_options");
 
+$db->query("CREATE TABLE `session_poll_comments` (
+        `id` int NOT NULL AUTO_INCREMENT,
+        `course_id` INT NOT NULL,
+        `session_id` INT NOT NULL,
+        `poll_id` INT NOT NULL,
+        `user_id` INT NOT NULL,
+        `title` VARCHAR(255) NOT NULL DEFAULT '',
+        `comments` TEXT DEFAULT NULL,
+        `notify_comments` int NOT NULL DEFAULT 0,
+        PRIMARY KEY (`id`),
+        FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE,
+        FOREIGN KEY (`poll_id`) REFERENCES `poll` (`pid`) ON DELETE CASCADE,
+        FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE) 
+    $tbl_options");
 
+// External Repositories
+$db->query("CREATE TABLE `external_repository` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `name` varchar(255) NOT NULL,
+    `type` enum('dspace','reasonable_graph','youtube','wikipedia','pixabay','islandora') NOT NULL,
+    `base_url` varchar(512) DEFAULT NULL,
+    `api_key` varchar(255) DEFAULT NULL,
+    `auth_type` enum('none','api_key','oauth') NOT NULL DEFAULT 'none',
+    `enabled` tinyint NOT NULL DEFAULT 1,
+    `config` text DEFAULT NULL COMMENT 'JSON configuration for additional settings',
+    `created` datetime DEFAULT NULL,
+    `updated` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `idx_type` (`type`),
+    INDEX `idx_enabled` (`enabled`)
+) $tbl_options");
+
+$db->query("CREATE TABLE `course_resource_usage` (
+    `course_id` int NOT NULL,
+    `disk_size` bigint DEFAULT NULL,
+    PRIMARY KEY (`course_id`),
+    KEY `idx_disk_size` (`disk_size`),
+    CONSTRAINT FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+        ON DELETE CASCADE ON UPDATE CASCADE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE `external_resource` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `course_id` int NOT NULL,
+    `repository_id` int NOT NULL,
+    `external_id` varchar(255) DEFAULT NULL COMMENT 'ID in the external system',
+    `title` varchar(512) NOT NULL,
+    `description` text DEFAULT NULL,
+    `url` varchar(1024) NOT NULL,
+    `resource_type` varchar(50) DEFAULT NULL COMMENT 'video, article, image, document',
+    `thumbnail_url` varchar(512) DEFAULT NULL,
+    `metadata` text DEFAULT NULL COMMENT 'JSON for additional data',
+    `rich_preview` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 = rich media preview, 0 = plain link preview',
+    `created` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `idx_course` (`course_id`),
+    INDEX `idx_repository` (`repository_id`),
+    INDEX `idx_external_id` (`external_id`),
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`repository_id`) REFERENCES `external_repository` (`id`) ON DELETE CASCADE
+) $tbl_options");
+
+$db->query("CREATE TABLE `sticky_notes_topic` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `course_id` int NOT NULL,
+    `title` varchar(255) NOT NULL,
+    `description` text DEFAULT NULL,
+    `allow_edit` tinyint NOT NULL DEFAULT 1,
+    `allow_delete` tinyint NOT NULL DEFAULT 1,
+    `has_categories` tinyint NOT NULL DEFAULT 0,
+    `per_page` int NOT NULL DEFAULT 20,
+    `is_active` tinyint NOT NULL DEFAULT 1,
+    `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+    `created_by` int NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `fk_sticky_notes_topics_course` (`course_id`),
+    KEY `fk_sticky_notes_topics_creator` (`created_by`),
+    CONSTRAINT `fk_sticky_notes_topics_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_sticky_notes_topics_creator` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE CASCADE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE `sticky_notes_category` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `topic_id` int NOT NULL,
+    `title` varchar(255) NOT NULL,
+    `sort_order` int NOT NULL DEFAULT 0,
+    `created_at` datetime DEFAULT current_timestamp(),
+    PRIMARY KEY (`id`),
+    KEY `topic_id` (`topic_id`),
+    CONSTRAINT `sticky_notes_category_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `sticky_notes_topic` (`id`) ON DELETE CASCADE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE `sticky_notes_post` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `topic_id` int NOT NULL,
+    `category_id` int DEFAULT NULL,
+    `content` varchar(500) NOT NULL,
+    `user_id` int NOT NULL,
+    `color` varchar(10) DEFAULT NULL,
+    `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+    `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`id`),
+    KEY `fk_sticky_notes_post_topic` (`topic_id`),
+    KEY `fk_sticky_notes_post_creator` (`user_id`),
+    KEY `category_id` (`category_id`),
+    CONSTRAINT `fk_sticky_notes_post_creator` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_sticky_notes_post_topic` FOREIGN KEY (`topic_id`) REFERENCES `sticky_notes_topic` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `sticky_notes_post_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `sticky_notes_category` (`id`) ON DELETE SET NULL
+    ) $tbl_options");
+
+$db->query("CREATE TABLE secondfactorauth (
+        id int NOT NULL,
+        secret varchar(100) NOT NULL,
+        FOREIGN KEY (id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE
+      ) $tbl_options");
+
+$db->query("CREATE TABLE `cadmos_course` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) DEFAULT NULL,
+    `user_id` int(11) NOT NULL,
+    `source` mediumtext NOT NULL,
+    `created` datetime DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `course_id` (`course_id`),
+    KEY `user_id` (`user_id`),
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `eduapi_course_offerings` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `sourced_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `course_id` INT NOT NULL,
+    `academic_session_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+    `academic_session_code` VARCHAR(100) DEFAULT NULL,
+    `organization_code` VARCHAR(100) DEFAULT NULL,
+    `title` TEXT DEFAULT NULL,
+    `last_sync` DATETIME DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `sourced_id` (`sourced_id`),
+    FOREIGN KEY (`course_id`) REFERENCES `course` (`id`)
+        ON DELETE CASCADE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `eduapi_persons` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `sourced_id` VARCHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `user_id` INT NOT NULL,
+    `username` VARCHAR(190) DEFAULT NULL,
+    `email` VARCHAR(255) DEFAULT NULL,
+    `last_sync` DATETIME DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `sourced_id` (`sourced_id`),
+    UNIQUE KEY `user_id` (`user_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+        ON DELETE CASCADE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `eduapi_nodes` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `ref_key` VARCHAR(150) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+    `hierarchy_id` INT NOT NULL,
+    `last_sync` DATETIME DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `ref_key` (`ref_key`),
+    FOREIGN KEY (`hierarchy_id`) REFERENCES `hierarchy` (`id`)
+        ON DELETE CASCADE
+    ) $tbl_options");
 
 $_SESSION['theme'] = 'modern';
 

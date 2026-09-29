@@ -31,6 +31,7 @@ if (!$course) {
 
 try {
     // Query for image files in course documents
+    $images = [];
     $image_extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
     $extension_conditions = [];
     foreach ($image_extensions as $ext) {
@@ -39,9 +40,9 @@ try {
     $extension_sql = implode(' OR ', $extension_conditions);
 
     $q = Database::get()->querySingle("SELECT path FROM document WHERE course_id = ?d AND subsystem = 0 AND filename = 'Report_Images'", $course_id);
-    $path = $q->path;
-
-    $sql = "SELECT id, filename, path, format, title, date_modified
+    if ($q) {
+        $path = $q->path;
+        $sql = "SELECT id, filename, path, format, title, date_modified
             FROM document
             WHERE course_id = ?d
             AND subsystem = 0
@@ -49,30 +50,26 @@ try {
             AND ($extension_sql)
             ORDER BY filename ASC";
 
-    $params = array_merge([$course_id], $image_extensions);
-    $documents = Database::get()->queryArray($sql, ...$params);
-
-    $images = [];
-    foreach ($documents as $doc) {
-        // Generate accessible URL for the image
-        $file_url = $urlServer . "modules/document/index.php?course=" . $course->code . "&download=" . getInDirectReference($doc->path);
-
-        $images[] = [
-            'id' => $doc->id,
-            'path' => $doc->path,
-            'name' => $doc->title ?: $doc->filename,
-            'url' => $file_url,
-            'filename' => $doc->filename,
-            'format' => $doc->format
-        ];
+        $params = array_merge([$course_id], $image_extensions);
+        $documents = Database::get()->queryArray($sql, ...$params);
+        foreach ($documents as $doc) {
+            // Generate accessible URL for the image
+            $file_url = $urlServer . "modules/document/index.php?course=" . $course->code . "&download=" . getInDirectReference($doc->path);
+            $images[] = [
+                'id' => $doc->id,
+                'path' => $doc->path,
+                'name' => $doc->title ?: $doc->filename,
+                'url' => $file_url,
+                'filename' => $doc->filename,
+                'format' => $doc->format
+            ];
+        }
     }
-
     echo json_encode([
         'success' => true,
         'images' => $images,
         'count' => count($images)
     ]);
-
 } catch (Exception $e) {
     error_log("Error in ajax_load_images.php: " . $e->getMessage());
     echo json_encode(['success' => false, 'error' => 'Database error occurred']);

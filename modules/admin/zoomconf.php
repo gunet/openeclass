@@ -37,7 +37,8 @@ $client = new Client();
 $zoomApiRepo = new Repository($client);
 $zoomUserRepo = new ZoomUserRepository($client, $zoomApiRepo);
 
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     function doSelectedCourses() {
@@ -81,7 +82,13 @@ $head_content .= "<script type='text/javascript'>
             }
         });
         
-        $('#select-courses').select2();
+        slimSelectFun (
+            '#select-courses', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             let stringVal = [];
@@ -207,13 +214,13 @@ if (isset($_POST['submit'])) {
             $tool_content .= "<div class='form-group mt-4' id='courses-list'>";
             $tool_content .= "<label for='select-courses' class='col-sm-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
             $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langUseOfServiceInfo'></span></label>";
-            $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-select' name='tc_courses[]' multiple>";
+            $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
             $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
             foreach ($courses_list as $c) {
                 $selected = in_array($c->id, $selections) ? "selected" : "";
                 $tool_content .= "<option value='$c->id' $selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
             }
-            $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></div></div>";
+            $tool_content .= "</select></div></div>";
             $tool_content .= "<input type='hidden' id='enabled-courses' name='" . $param->name() . "'>";
         }
     }
@@ -268,13 +275,13 @@ if (isset($_POST['submit'])) {
                 $tool_content .= "<div class='form-group mt-4' id='courses-list'>";
                 $tool_content .= "<label for='select-courses' class='col-sm-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
                 $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langUseOfServiceInfo'></span></label>";
-                $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-select' name='tc_courses[]' multiple>";
+                $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
                 $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
                 foreach ($courses_list as $c) {
                     $selected = in_array($c->id, $selections) ? "selected" : "";
                     $tool_content .= "<option value='$c->id' $selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
                 }
-                $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></div></div>";
+                $tool_content .= "</select></div></div>";
                 $tool_content .= "<input type='hidden' id='enabled-courses' name='" . $param->name() . "'>";
             }
         }
@@ -366,7 +373,7 @@ if (isset($_POST['submit'])) {
                             <div class='col-lg-6 col-12'>
                                 <div class='card panelCard card-default px-lg-4 py-lg-3 h-100'>
                                     <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                        <h3>$langZoomConnect</h3>
+                                        <h2 class='text-heading-h3'>$langZoomConnect</h2>
                                     </div>
                                     <div class='card-body'>
                                         <div class='d-flex justify-content-center align-items-center gap-3 flex-wrap'>

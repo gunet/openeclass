@@ -82,12 +82,12 @@ if (isset($_POST['submitAnnouncement'])) {
             Database::get()->query("UPDATE announcement
                     SET content = ?s,
                         title = ?s,
-                        `date` = '$date_announcement',
+                        `date` = ?t,
                         start_display = ?t,
                         stop_display = ?t,
                         visible = ?d
                     WHERE id = ?d",
-                $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
+                $newContent, $antitle, $date_announcement, $start_display, $stop_display, $is_visible, $id);
             $log_type = LOG_MODIFY;
             $message = $langAnnModify;
             if (isset($_POST['tags'])) {
@@ -103,11 +103,11 @@ if (isset($_POST['submitAnnouncement'])) {
             }
             $id = Database::get()->query("INSERT INTO announcement
                                              SET content = ?s,
-                                                 title = ?s, `date` = '$date_announcement',
+                                                 title = ?s, `date` = ?t,
                                                  course_id = ?d, `order` = 0,
                                                  start_display = ?t,
                                                  stop_display = ?t,
-                                                 visible = ?d", $newContent, $antitle, $course_id, $start_display, $stop_display, $is_visible)->lastInsertID;
+                                                 visible = ?d", $newContent, $antitle, $date_announcement, $course_id, $start_display, $stop_display, $is_visible)->lastInsertID;
             $log_type = LOG_INSERT;
             $message = $langAnnAdd;
             if (isset($_POST['tags'])) {

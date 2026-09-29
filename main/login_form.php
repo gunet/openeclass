@@ -70,13 +70,32 @@ foreach ($q as $l) {
             $authTitle,
             $authInstructions);
     } else if (in_array($l->auth_name, $extAuthMethods)) { // defined auth methods
-        $authUrl = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');
+        switch ($l->auth_name) {
+            case 'cas':
+                $path = 'modules/auth/cas.php';
+                break;
+            /* XXX: bilias: I believe this is also missing
+            case 'oauth2':
+                $path = 'modules/auth/oauth2.php';
+                break;
+            */
+            case 'keycloak':
+                $path = 'modules/auth/keycloak.php';
+                break;
+            default:
+                $path = 'secure/';
+                break;
+        }
+
+        //$authUrl = $urlServer . ($l->auth_name == 'cas' ? 'modules/auth/cas.php': 'secure/');
+        $authUrl = $urlServer . $path;
+
         if (isset($_GET['next'])) {
             $authUrl .= '?next=' . urlencode($_GET['next']);
         }
         $authLink[] = array(false, "
                                   <div class='col-12 d-flex justify-content-center align-items-center'>
-                                       <div class='form-wrapper form-edit wrapper-sso w-100'><a class='btn submitAdminBtnDefault sso-btn d-inline-flex' href='$authUrl'>
+                                       <div class='form-wrapper form-edit wrapper-sso w-100 my-5'><a class='btn submitAdminBtnDefault sso-btn d-inline-flex py-5 fs-5' href='$authUrl'>
                                             ".(!empty($authTitle) ? $authTitle : $langEnter)."
                                        </a></div>
                                   </div>",

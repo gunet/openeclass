@@ -3,6 +3,7 @@
 require_once __DIR__ . '/providers/OpenAIProvider.php';
 require_once __DIR__ . '/providers/AnthropicProvider.php';
 require_once __DIR__ . '/providers/GeminiProvider.php';
+require_once __DIR__ . '/providers/CustomProvider.php';
 
 /**
  * Factory class for creating AI provider instances
@@ -13,7 +14,7 @@ class AIProviderFactory {
     /**
      * Create an AI provider instance
      *
-     * @param string $providerType Provider type (openai, anthropic, gemini)
+     * @param string $providerType Provider type (openai, anthropic, gemini, custom)
      * @param array $config Provider configuration
      * @return AIProviderInterface Provider instance
      * @throws Exception If provider type is unknown
@@ -28,6 +29,10 @@ class AIProviderFactory {
 
             case 'gemini':
                 return new GeminiProvider($config);
+
+            case 'custom':
+            case 'other':
+                return new CustomProvider($config);
 
             default:
                 throw new InvalidArgumentException("Unknown AI provider type: {$providerType}");
@@ -104,7 +109,7 @@ class AIProviderFactory {
      * @return array Array of provider type identifiers
      */
     public static function getAvailableProviderTypes(): array {
-        return ['openai', 'anthropic', 'gemini'];
+        return ['openai', 'anthropic', 'gemini', 'custom'];
     }
 
     /**
@@ -116,7 +121,8 @@ class AIProviderFactory {
         return [
             'openai' => 'OpenAI (ChatGPT)',
             'anthropic' => 'Anthropic (Claude)',
-            'gemini' => 'Google Gemini'
+            'gemini' => 'Google Gemini',
+            'custom' => 'Other'
         ];
     }
 

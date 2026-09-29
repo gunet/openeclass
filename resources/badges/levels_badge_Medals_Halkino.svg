@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fff;
+        stroke-width: 5px;
+      }
+
+      .st0, .st1 {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .st1 {
+        fill: none;
+        stroke-width: 16px;
+      }
+
+      .st2 {
+        fill: #a65f52;
+      }
+    </style>
+  </defs>
+  <g id="background">
+    <rect class="st2" width="500" height="500" rx="120" ry="120"/>
+  </g>
+  <g id="icon">
+    <g>
+      <path class="st1" d="M145.16,93.19h209.68v50.59c0,57.9-46.93,104.84-104.83,104.85h-.01c-57.9,0-104.84-46.94-104.84-104.84h0v-50.61h0Z"/>
+      <path class="st1" d="M318.84,143.79c0,37.96-30.87,68.85-68.83,68.85h0"/>
+      <path class="st1" d="M328.63,406.81c0-43.43-35.2-78.63-78.63-78.63s-78.63,35.2-78.63,78.63h157.26Z"/>
+      <line class="st1" x1="250" y1="248.64" x2="250" y2="328.18"/>
+      <path class="st1" d="M318.3,223.34h35.45c29.56,0,53.52-23.96,53.52-53.52v-25.11h-52.43"/>
+      <path class="st1" d="M181.7,223.34h-35.45c-29.56,0-53.52-23.96-53.52-53.52v-25.11h52.43"/>
+    </g>
+  </g>
+  <g id="stars">
+    <path class="st0" d="M91.38,339.36h0c0-18.32-14.99-33.3-33.3-33.3h0c18.32,0,33.3-14.99,33.3-33.3h0c0,18.32,14.99,33.3,33.3,33.3h0c-18.32,0-33.3,14.99-33.3,33.3Z"/>
+    <path class="st0" d="M408.62,339.36h0c0-18.32-14.99-33.3-33.3-33.3h0c18.32,0,33.3-14.99,33.3-33.3h0c0,18.32,14.99,33.3,33.3,33.3h0c-18.32,0-33.3,14.99-33.3,33.3Z"/>
+  </g>
+</svg>

@@ -28,7 +28,8 @@ require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/ltipublishapp.php';
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 
 $head_content .= "<script type='text/javascript'>
     function doSelectedCourses() {
@@ -63,7 +64,13 @@ $head_content .= "<script type='text/javascript'>
     }
     
     $(document).ready(function () {                
-        $('#select-courses').select2();
+        slimSelectFun (
+            '#select-courses', 
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langListChoices')) . "'
+        );
         $('#selectAll').click(function(e) {
             e.preventDefault();
             let stringVal = [];
@@ -152,13 +159,13 @@ foreach ($app->getParams() as $param) {
         $tool_content .= "<div class='form-group mb-4' id='courses-list'>";
         $tool_content .= "<label for='select-courses' class='col-sm-12 control-label-notes'>$langUseOfApp&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langUseOfAppInfo'></span></label>";
-        $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-select' name='lti_courses[]' multiple>";
+        $tool_content .= "<div class='col-sm-12'><select id='select-courses' class='form-control' name='lti_courses[]' multiple>";
         $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
         foreach($courses_list as $c) {
             $selected = in_array($c->id, $selections) ? "selected" : "";
             $tool_content .= "<option value='$c->id' $selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
         }
-        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a></div></div>";
+        $tool_content .= "</select></div></div>";
         $tool_content .= "<input type='hidden' id='enabled-courses' name='" . $param->name() . "'>";
     } else {
         $tool_content .= "<div class='form-group mb-4'>";

@@ -89,9 +89,9 @@ $resource_info = Database::get()->querySingle("SELECT title,comments,passage FRO
 $data['resource_id'] = $_GET['resource_id'];
 $data['title'] = $resource_info->title;
 if(isset($_GET['passage_resource'])){
-    $data['comments'] = rich_text_editor('add_new_passage', 5, 40, $resource_info->passage );
+    $data['comments'] = rich_text_editor('add_new_passage', 5, 40, $resource_info->passage, options: array('id' => 'add_new_passage'));
 }else{
-    $data['comments'] = rich_text_editor('comments', 5, 40, $resource_info->comments );
+    $data['comments'] = rich_text_editor('comments', 5, 40, $resource_info->comments, options: array('id' => 'comments'));
 }
 
 $data['action_bar'] = action_bar([
