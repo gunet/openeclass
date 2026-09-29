@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /*
  *  ========================================================================
@@ -24,11 +24,10 @@
  */
 function display_certificates(): void
 {
-    global $course_id, $tool_content, $head_content, $course_code, $urlServer,
-           $langDelete, $langConfirmDelete, $is_editor, $uid,
+    global $course_id, $tool_content, $head_content, $course_code, $is_editor, $uid,
            $langNoCertificates, $langNoCertificatesStud, $langActive, $langInactive, $langNoThumbnail,
-           $langEditChange, $langNewCertificate, $langActivate, $langDeactivate, $langSee,
-           $webDir, $langTotalPercentCompleteness;
+           $langEditChange, $langNewCertificate, $langActivate, $langDeactivate,
+           $webDir, $langTotalPercentCompleteness, $langDelete, $langConfirmDelete;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
@@ -36,23 +35,8 @@ function display_certificates(): void
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d AND active = 1", $course_id);
     }
 
-    $head_content .= "<style>
-        .reward-list-card { display:block; border:1px solid #e5e7eb; border-radius:12px; padding:22px 28px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.07); margin-bottom:12px; transition:box-shadow 0.2s,transform 0.2s; text-decoration:none !important; color:inherit !important; cursor:pointer; }
-        .reward-list-card:hover { box-shadow:0 8px 28px rgba(0,0,0,0.13); transform:translateY(-2px); }
-        .reward-img-col { flex-shrink:0; width:72px; display:flex; align-items:center; justify-content:center; }
-        .reward-title-col { flex-shrink:0; min-width:180px; }
-        .reward-bar-col { flex-grow:1; }
-        .reward-bar-inner { width:75%; }
-        @media (max-width:575.98px) {
-            .reward-list-card { padding:16px 18px; }
-            .reward-img-col { width:100%; justify-content:flex-start; }
-            .reward-title-col { width:100%; min-width:0; }
-            .reward-bar-col { width:100%; }
-            .reward-bar-inner { width:100%; }
-        }
-    </style>";
 
-    $tool_content .= "<div class='col-12 mt-4 px-3 px-md-4'>";
+    $tool_content .= "<div class='col-12 mt-4'>";
 
     if ($is_editor) {
         $tool_content .= "
@@ -93,25 +77,34 @@ function display_certificates(): void
                 $pct = $total > 0 ? round($done / $total * 100) : 0;
                 $right_html = "
                     <div class='reward-bar-inner'>
-                        <div style='font-size:13px;color:#6b7280;margin-bottom:8px;'>$langTotalPercentCompleteness</div>
+                        <div class='text_muted_cl' style='font-size:13px; margin-bottom:8px;'>$langTotalPercentCompleteness</div>
                         <div class='d-flex align-items-center gap-3'>
-                            <div style='flex-grow:1;height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;'>
-                                <div style='height:100%;width:{$pct}%;background:#2563eb;border-radius:3px;'></div>
+                            <div class='progress_bar_certificates'>
+                                <div class='progress_bar_fill_certificates' style='width:{$pct}%;'></div>
                             </div>
-                            <span style='font-size:14px;font-weight:600;color:#374151;min-width:40px;text-align:right;'>{$pct}%</span>
+                            <span class='text_muted_cl' style='font-size:14px;font-weight:600;min-width:40px;text-align:right;'>{$pct}%</span>
                         </div>
                     </div>";
             } else {
-                $vis_label = $data->active ? $langDeactivate : $langActivate;
-                $right_html = "
-                    <div class='d-flex gap-2'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1' class='btn submitAdminBtn btn-sm'>
-                            <i class='fa fa-pencil'></i>&nbsp;$langEditChange
-                        </a>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-danger btn-sm text-decoration-none' : 'btn btn-success btn-sm text-decoration-none') ."'>
-                            $vis_label
-                        </a>
-                    </div>";
+                $right_html = action_button(array(
+                    array(
+                        'title' => $langEditChange,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
+                        'icon' => 'fa-pencil'
+                    ),
+                    array(
+                        'title' => $data->active ? $langDeactivate : $langActivate,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" . ($data->active ? '0' : '1'),
+                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'
+                    ),
+                    array(
+                        'title' => $langDelete,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
+                        'icon' => 'fa-xmark',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmDelete
+                    ),
+                ));
             }
 
             $cert_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id";
@@ -153,9 +146,8 @@ function display_certificates(): void
 function display_badges(): void
 {
     global $course_id, $tool_content, $head_content, $course_code, $is_editor, $uid,
-           $langDelete, $langConfirmDelete,
-           $langNoBadges, $langNoBadgesStud, $langEditChange,
-           $langActivate, $langDeactivate, $langNewBadge,
+           $langNoBadges, $langNoBadgesStud, $langEditChange, $langDelete,
+           $langActivate, $langDeactivate, $langNewBadge, $langConfirmDelete,
            $langActive, $langInactive, $urlServer, $langTotalPercentCompleteness;
 
     if ($is_editor) {
@@ -164,23 +156,7 @@ function display_badges(): void
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1 AND bundle >= 0", $course_id);
     }
 
-    $head_content .= "<style>
-        .reward-list-card { display:block; border:1px solid #e5e7eb; border-radius:12px; padding:22px 28px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.07); margin-bottom:12px; transition:box-shadow 0.2s,transform 0.2s; text-decoration:none !important; color:inherit !important; cursor:pointer; }
-        .reward-list-card:hover { box-shadow:0 8px 28px rgba(0,0,0,0.13); transform:translateY(-2px); }
-        .reward-img-col { flex-shrink:0; width:72px; display:flex; align-items:center; justify-content:center; }
-        .reward-title-col { flex-shrink:0; min-width:180px; }
-        .reward-bar-col { flex-grow:1; }
-        .reward-bar-inner { width:75%; }
-        @media (max-width:575.98px) {
-            .reward-list-card { padding:16px 18px; }
-            .reward-img-col { width:100%; justify-content:flex-start; }
-            .reward-title-col { width:100%; min-width:0; }
-            .reward-bar-col { width:100%; }
-            .reward-bar-inner { width:100%; }
-        }
-    </style>";
-
-    $tool_content .= "<div class='col-12 mt-4 px-3 px-md-4'>";
+    $tool_content .= "<div class='col-12 mt-4'>";
 
     if ($is_editor) {
         $tool_content .= "
@@ -198,6 +174,7 @@ function display_badges(): void
         foreach ($sql_cer as $data) {
             $badge_details = get_badge_icon($data->icon);
             $badge_icon    = $badge_details[key($badge_details)];
+            $icon_name     = key($badge_details);
             $icon_link     = $urlServer . BADGE_TEMPLATE_PATH . $badge_icon;
 
             $pill = $data->active
@@ -213,25 +190,34 @@ function display_badges(): void
                 $pct = $total > 0 ? round($done / $total * 100) : 0;
                 $right_html = "
                     <div class='reward-bar-inner'>
-                        <div style='font-size:13px;color:#6b7280;margin-bottom:8px;'>$langTotalPercentCompleteness</div>
+                        <div class='text_muted_cl' style='font-size:13px;margin-bottom:8px;'>$langTotalPercentCompleteness</div>
                         <div class='d-flex align-items-center gap-3'>
-                            <div style='flex-grow:1;height:5px;background:#e5e7eb;border-radius:3px;overflow:hidden;'>
-                                <div style='height:100%;width:{$pct}%;background:#2563eb;border-radius:3px;'></div>
+                            <div class='progress_bar_badges'>
+                                <div class='progress_bar_fill_badges' style='width:{$pct}%;'></div>
                             </div>
-                            <span style='font-size:14px;font-weight:600;color:#374151;min-width:40px;text-align:right;'>{$pct}%</span>
+                            <span class='text_muted_cl' style='font-size:14px;font-weight:600;min-width:40px;text-align:right;'>{$pct}%</span>
                         </div>
                     </div>";
             } else {
-                $vis_label = $data->active ? $langDeactivate : $langActivate;
-                $right_html = "
-                    <div class='d-flex gap-2'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1' class='btn submitAdminBtn btn-sm'>
-                            <i class='fa fa-pencil'></i>&nbsp;$langEditChange
-                        </a>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-danger btn-sm text-decoration-none' : 'btn btn-success btn-sm text-decoration-none') ."'>
-                            $vis_label
-                        </a>
-                    </div>";
+                $right_html = action_button(array(
+                    array(
+                        'title' => $langEditChange,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1",
+                        'icon' => 'fa-pencil'
+                    ),
+                    array(
+                        'title' => $data->active ? $langDeactivate : $langActivate,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" . ($data->active ? '0' : '1'),
+                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'
+                    ),
+                    array(
+                        'title' => $langDelete,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
+                        'icon' => 'fa-xmark',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmDelete
+                    )
+                ));
             }
 
             $badge_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id";
@@ -240,7 +226,7 @@ function display_badges(): void
                 <div class='reward-list-card' onclick=\"window.location.href='$badge_url'\" style='cursor:pointer;'>
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                         <div class='reward-img-col'>
-                            <img src='$icon_link' style='width:64px;height:auto;'>
+                            <img alt='$icon_name' src='$icon_link' style='width:64px;height:auto;'>
                         </div>
                         <div class='reward-title-col'>
                             <div style='font-size:16px;font-weight:700;margin-bottom:8px;'>" . q($data->title) . "</div>
@@ -254,7 +240,7 @@ function display_badges(): void
                 <a href='$badge_url' class='reward-list-card'>
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                         <div class='reward-img-col'>
-                            <img src='$icon_link' style='width:64px;height:auto;'>
+                            <img alt='$icon_name' src='$icon_link' style='width:64px;height:auto;'>
                         </div>
                         <div class='reward-title-col'>
                             <div style='font-size:16px;font-weight:700;margin-bottom:8px;'>" . q($data->title) . "</div>
@@ -280,39 +266,17 @@ function display_points_games(): void
            $langNoPointsGames, $langNoPointsGamesStud, $langEditChange, $langPurge,
            $langActivate, $langDeactivate, $langNewPointsGame,
            $langActive, $langInactive, $langConfirmPurgePointsGame,
-           $langPoints, $langLevel, $langStart, $langReadMore, $langCompletion,
-           $uid;
+           $langPoints, $langLevel, $langReadMore,
+           $uid, $langTotalPercentCompleteness, $urlServer, 
+           $langInProgress, $langHasExpired, $langHasNotStarted;
+
+    $current_time = date('Y-m-d H:i:s', strtotime('now'));
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, starts, expires FROM points_game WHERE course_id = ?d ORDER BY starts DESC", $course_id);
     } else {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, starts, expires FROM points_game WHERE course_id = ?d AND active = 1 ORDER BY starts DESC", $course_id);
     }
-
-    $head_content .= "<style>
-        .pg-list-card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px 24px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.06); transition: box-shadow 0.2s; margin-bottom: 12px; }
-        .pg-list-card-link:hover .pg-list-card { box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
-        .pg-list-badge { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 48px; height: 48px; flex-shrink: 0; }
-        .pg-list-badge span { border-radius: 4px; display: block; }
-        .pg-list-title { font-size: 16px; font-weight: 700; color: #1f2937; }
-        .pg-list-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: #6b7280; }
-        .pg-list-sep { color: #d1d5db; }
-        .pg-list-active { color: #6b7280; font-weight: 600; }
-        .pg-list-inactive { color: #6b7280; font-weight: 600; }
-        .pg-list-date { font-size: 13px; color: #111827; font-weight: 600; white-space: nowrap; }
-        .pg-list-bar-outer { height: 7px; background: #e5e7eb; border-radius: 4px; overflow: hidden; flex-grow: 1; min-width: 60px; }
-        .pg-list-bar-inner { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2563eb, #7c3aed); }
-        .pg-list-bar-label { font-size: 12px; color: #6b7280; margin-bottom: 5px; }
-        .pg-list-bar-pct { font-size: 12px; color: #374151; font-weight: 600; white-space: nowrap; }
-        @media (max-width: 575.98px) {
-            .pg-list-card { padding: 14px 16px; }
-            .pg-list-date { width: 100%; margin-top: 4px; }
-        }
-        .pg-list-desc { font-size: 13px; color: #4b5563; margin-top: 10px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .pg-list-desc:hover { -webkit-line-clamp: unset; overflow: visible; }
-        .pg-list-more { font-size: 13px; font-weight: 600; color: #2563eb; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; margin-top: 12px; }
-        .pg-list-more:hover { text-decoration: underline; color: #1d4ed8; }
-    </style>";
 
     $tool_content .= "<div class='col-12 mt-4'>";
 
@@ -328,47 +292,70 @@ function display_points_games(): void
         $msg = $is_editor ? $langNoPointsGames : $langNoPointsGamesStud;
         $tool_content .= "<p class='text-center text-muted py-4'>$msg</p>";
     } else {
-        $badge_palettes = [
-            ['#e74c3c','#3498db','#2ecc71','#f39c12'],
-            ['#9b59b6','#1abc9c','#e67e22','#34495e'],
-            ['#e91e63','#2196f3','#4caf50','#ff9800'],
-            ['#f44336','#00bcd4','#8bc34a','#673ab7'],
-        ];
-
-        $idx = 0;
         foreach ($sql_cer as $data) {
-            $bp = $badge_palettes[$idx % count($badge_palettes)];
-            $idx++;
 
             $start_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->starts), 'd/m/Y');
             $end_date   = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd/m/Y');
-            $status_html = $data->active
-                ? "<span class='pg-list-active'>$langActive</span>"
-                : "<span class='pg-list-inactive'>$langInactive</span>";
+            $status_html = '';
+            if ($data->active) {
+                $status_html .= "<span class='badge Primary-600-bg'>$langActive</span>";
+                if ($current_time >= $data->starts && $current_time <= $data->expires) {
+                    $status_html .= "<span class='d-flex align-items-center gap-1'>
+                                        $langInProgress
+                                        <div style='width: 12px; height:12px;' class='spinner-grow text-success' role='status'></div>
+                                        <div style='width: 12px; height:12px;' class='spinner-grow text-danger' role='status'></div>
+                                        <div style='width: 12px; height:12px;' class='spinner-grow text-warning' role='status'></div>
+                                        <div style='width: 12px; height:12px;' class='spinner-grow text-info' role='status'></div>
+                                    </span>";
+                } elseif ($current_time < $data->starts) {
+                    $status_html .= "<span class='badge Warning-200-bg'>$langHasNotStarted</span>";
+                } elseif ($current_time > $data->expires) {
+                    $status_html .= "<span class='badge Accent-200-bg'>$langHasExpired</span>";
+                }
+            } else {
+                $status_html .= "<span class='badge Accent-200-bg'>$langInactive</span>";
+            }
             $desc_html = !empty($data->description)
                 ? "<div class='pg-list-desc' title='" . htmlspecialchars($data->description) . "'>" . htmlspecialchars($data->description) . "</div>"
                 : '';
 
-            $badge_html = "<div class='pg-list-badge'>
-                <span style='background:{$bp[0]}'></span>
-                <span style='background:{$bp[1]}'></span>
-                <span style='background:{$bp[2]}'></span>
-                <span style='background:{$bp[3]}'></span>
+            $badge_html = "<div class='pg-list-badge' style='display:flex;align-items:center;justify-content:center;background:#2563eb;border-radius:10px;'>
+                <i class='fa-solid fa-puzzle-piece' style='color:#fff;font-size:22px;'></i>
             </div>";
 
             if (!$is_editor) {
                 $user_progress = PointsGame::getNextLevelInfo($uid, $data->id);
                 $current_points = $user_progress['current_points'];
                 $level_num = $user_progress['current_level_num'] ?? '';
-                $pct = $user_progress['progress_percentage'] ?? 0;
+                //$pct = $user_progress['progress_percentage'] ?? 0;
+                $pct = 0;
+                $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d ORDER BY required_points ASC", $data->id);
+                if (!empty($level_num) && count($pointslevels) > 0) {
+                    $pct = round(($level_num/count($pointslevels))*100, 2);
+                }
                 $level_part = $level_num !== '' && $level_num !== null
                     ? "<span class='pg-list-sep'>|</span><span>$langLevel $level_num</span>"
                     : '';
                 $points_part = "<span class='pg-list-sep'>|</span><span>$current_points $langPoints</span>";
 
+                // Resolve level icon: current level's, or first level's as fallback
+                $icon_level_id = $user_progress['current_level_id'] ?? null;
+                if (!$icon_level_id && isset($pointslevels[0])) {
+                    $icon_level_id = $pointslevels[0]->id;
+                }
+                $level_icon_fn = null;
+                if ($icon_level_id) {
+                    $lbi = Database::get()->querySingle(
+                        "SELECT bi.filename FROM points_game_levels pgl JOIN badge_icon bi ON bi.id = pgl.icon WHERE pgl.id = ?d", $icon_level_id);
+                    if ($lbi) { $level_icon_fn = $lbi->filename; }
+                }
+                if ($level_icon_fn) {
+                    $badge_html = "<img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($level_icon_fn) . "' class='pg-list-badge' style='background:transparent;object-fit:contain;border-radius:10px;' alt=''>";
+                }
+
                 $progress_html = "
                 <div class='mt-3'>
-                    <div class='pg-list-bar-label'>Συνολικό ποσοστό ολοκλήρωσης</div>
+                    <div class='pg-list-bar-label'>$langTotalPercentCompleteness</div>
                     <div class='d-flex align-items-center gap-2'>
                         <div class='pg-list-bar-outer'>
                             <div class='pg-list-bar-inner' style='width:{$pct}%'></div>
@@ -383,8 +370,8 @@ function display_points_games(): void
             }
 
             $game_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id";
-            $pg_link_open  = !$is_editor ? "<a href='$game_url' class='pg-list-card-link' style='display:block;text-decoration:none;color:inherit;'>" : '';
-            $pg_link_close = !$is_editor ? "</a>" : '';
+            $pg_link_open  = (!$is_editor && $current_time >= $data->starts) ? "<a href='$game_url' class='pg-list-card-link' style='display:block;text-decoration:none;color:inherit;'>" : '';
+            $pg_link_close = (!$is_editor && $current_time >= $data->starts) ? "</a>" : '';
 
             $tool_content .= "{$pg_link_open}<div class='pg-list-card'>
                 <div class='d-flex align-items-start gap-3'>
@@ -401,21 +388,29 @@ function display_points_games(): void
 
             if ($is_editor) {
                 $tool_content .= action_button(array(
-                    array('title' => $langEditChange,
+                    array(
+                        'title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;edit=1",
-                        'icon' => 'fa-edit'),
-                    array('title' => $data->active ? $langDeactivate : $langActivate,
+                        'icon' => 'fa-edit'
+                    ),
+                    array(
+                        'title' => $data->active ? $langDeactivate : $langActivate,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;points_game_id=$data->id&amp;vis=" . ($data->active ? '0' : '1'),
-                        'icon' => 'fa-power-off'),
-                    array('title' => $langResetPointsGame,
+                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'
+                    ),
+                    array(
+                        'title' => $langResetPointsGame,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;reset_points_game=$data->id",
                         'icon' => 'fa-arrows-rotate',
-                        'confirm' => $langConfirmResetPointsGame),
-                    array('title' => $langPurge,
+                        'confirm' => $langConfirmResetPointsGame
+                    ),
+                    array(
+                        'title' => $langPurge,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_points_game=$data->id",
-                        'icon' => 'fa-trash-can',
+                        'icon' => 'fa-solid fa-xmark',
                         'class' => 'delete',
-                        'confirm' => $langConfirmPurgePointsGame)
+                        'confirm' => $langConfirmPurgePointsGame
+                    )
                 ));
             }
 
@@ -441,33 +436,10 @@ function display_points_games(): void
 function display_course_completion(): void
 {
     global $course_id, $tool_content, $head_content, $course_code, $is_editor, $uid, $urlServer,
-           $langEditChange, $langCourseCompletionNotActivated, $langActivateCourseCompletion,
-           $langAttendanceActList, $langCompleted, $langSurveyNotStarted, $langActive, $langInactive,
-           $langRubricCrit, $langNoActivCert, $langActivate, $langDeactivate;
-
-    $head_content .= "<style>
-        .progress-activity-card {
-            border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px; background: #fff;
-            height: 100%; display: flex; flex-direction: column;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.07); transition: box-shadow 0.2s;
-        }
-        .progress-activity-card-link:hover .progress-activity-card { box-shadow: 0 4px 16px rgba(0,0,0,0.11); transform: translateY(-1px); }
-        .progress-activity-icon {
-            width: 44px; height: 44px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; color: #fff; font-size: 20px;
-        }
-        .progress-activity-type-label { font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.06em; }
-        .progress-activity-name { font-size: 15px; font-weight: 600; color: #1f2937; margin: 10px 0 4px; flex-grow: 1; }
-        .progress-activity-criteria { font-size: 13px; color: #6b7280; margin-bottom: 4px; }
-        .progress-activity-status { display: inline-flex !important; align-items: center !important; gap: 5px; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: auto; align-self: flex-start; }
-        .status-completed { border: 1.5px solid #16a34a !important; color: #16a34a !important; background: transparent !important; }
-        .status-not-started { border: 1.5px solid #f97316 !important; color: #ea580c !important; background: transparent !important; }
-        .cc-donut-wrap { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
-        .cc-donut-pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #1f2937; }
-        .cc-pill-active { display: inline-block; padding: 3px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; background: transparent; color: #16a34a; border: 1.5px solid #16a34a; }
-        .cc-pill-inactive { display: inline-block; padding: 3px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; background: transparent; color: #dc2626; border: 1.5px solid #dc2626; }
-    </style>";
+           $langDelete, $langCourseCompletionNotActivated, $langActivateCourseCompletion,
+           $langCriteria, $langCompleted, $langSurveyNotStarted, $langActive, $langInactive,
+           $langRubricCrit, $langNoActivCert, $langActivate, $langDeactivate, $langTotalPercentCompleteness,
+           $langsActivities, $langYouHaveCompleted, $langFrom2, $langCourseCompletion, $langConfirmDelete;
 
     $data = Database::get()->querySingle("SELECT id, title, description, active, icon FROM badge
                                          WHERE course_id = ?d AND bundle = -1 AND unit_id = 0", $course_id);
@@ -484,7 +456,7 @@ function display_course_completion(): void
                         <i class='fa fa-trophy fa-3x text-muted mb-3'></i>
                         <p class='text-muted'>$langCourseCompletionNotActivated</p>
                         <a href='{$_SERVER['SCRIPT_NAME']}?course={$course_code}&amp;tab=course_completion&amp;newcc=1' class='btn submitAdminBtn'>
-                            <i class='fa fa-power-off'></i>&nbsp;&nbsp;$langActivateCourseCompletion                        </a>
+                            <i class='fa fa-power-off'></i>&nbsp;&nbsp;$langActivateCourseCompletion</a>
                     </div>
                 </div>
             </div>";
@@ -492,8 +464,7 @@ function display_course_completion(): void
     }
 
     // Fetch criteria
-    $all_criteria = Database::get()->queryArray(
-        "SELECT id, activity_type, threshold, operator FROM badge_criterion WHERE badge = ?d", $data->id);
+    $all_criteria = Database::get()->queryArray("SELECT id, activity_type, threshold, operator FROM badge_criterion WHERE badge = ?d", $data->id);
     $total = count($all_criteria);
 
     // Completed criteria for current user
@@ -508,16 +479,18 @@ function display_course_completion(): void
         }
     }
 
-    $vis_label = $data->active ? $langDeactivate : $langActivate;
-    $editor_btns = $is_editor ? "
-        <div class='d-flex gap-2'>
-            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;edit=1' class='btn submitAdminBtn btn-sm'>
-                <i class='fa fa-pencil'></i>&nbsp;$langEditChange
-            </a>
-            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;vis=" . ($data->active ? '0' : '1') . "' class='". ($data->active ? 'btn btn-danger btn-sm' : 'btn btn-success btn-sm text-decoration-none') ."'>
-                $vis_label
-            </a>
-        </div>" : '';
+    $editor_btns = action_button(array(
+        array('title' => $data->active ? $langDeactivate : $langActivate,
+             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id={$data->id}&amp;vis=" . ($data->active ? '0' : '1'),
+             'icon' => 'fa-power-off'
+        ),
+        array('title' => $langDelete,
+             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id&amp;tab=course_completion",
+             'icon' => 'fa-xmark',
+             'class' => 'delete',
+             'confirm' => $langConfirmDelete
+        ),
+    ));
 
     $done = count($done_ids);
     $pct  = $total > 0 ? round($done / $total * 100) : 0;
@@ -538,83 +511,83 @@ function display_course_completion(): void
         : "<span class='cc-pill-inactive'>$langInactive</span>";
 
     $sub_text = $is_editor
-        ? "$total $langAttendanceActList"
-        : "Έχεις ολοκληρώσει $done από τις $total δραστηριότητες";
+        ? "$total $langCriteria"
+        : "$langYouHaveCompleted $done $langFrom2 $total $langsActivities";
 
     // Summary card
     if ($is_editor) {
         $tool_content .= "
-        <div class='col-12 mt-4'>
-            <div class='card rounded-3'>
-                <div class='card-body p-4'>
-                    <div class='d-flex align-items-center justify-content-between gap-3 flex-wrap'>
+            <div class='reward-list-card' onclick=\"window.location.href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'\" style='cursor:pointer;'>
+                <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
+                    <div class='reward-title-col'>
+                        <div style='font-size:16px;font-weight:700;margin-bottom:8px;'>$langCourseCompletion</div>
                         $status_pill
+                    </div>
+                    <div class='reward-bar-col d-flex align-items-center justify-content-end' onclick='event.stopPropagation();'>
                         $editor_btns
                     </div>
                 </div>
-            </div>
-        </div>";
+            </div>";
     } else {
+        $tool_content .= "
+            <div class='col-12 mt-4'>
+                <div class='card rounded-3'>
+                    <div class='card-body p-4'>
+                        <div class='d-flex justify-content-center align-items-center gap-4'>
+                            <div class='cc-donut-wrap'>
+                                $donut_svg
+                                <div class='cc-donut-pct'>{$pct}%</div>
+                            </div>
+                            <div>
+                                <div class='default-dark-text' style='font-size:17px;font-weight:700;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
+                                <div class='text_muted_cl' style='font-size:13px;margin-bottom:10px;'>$sub_text</div>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>";
+    }
+
+    if (!$is_editor || isset($_GET['badge_id'])) { // Activities card
         $tool_content .= "
         <div class='col-12 mt-4'>
             <div class='card rounded-3'>
                 <div class='card-body p-4'>
-                    <div class='d-flex justify-content-center align-items-center gap-4'>
-                        <div class='cc-donut-wrap'>
-                            $donut_svg
-                            <div class='cc-donut-pct'>{$pct}%</div>
-                        </div>
-                        <div>
-                            <div style='font-size:17px;font-weight:700;color:#1f2937;margin-bottom:4px;'>Συνολικό ποσοστό ολοκλήρωσης</div>
-                            <div style='font-size:13px;color:#6b7280;margin-bottom:10px;'>$sub_text</div>
-                            $status_pill
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>";
-    }
-
-    // Activities card
-    $tool_content .= "
-        <div class='col-12 mt-4'>
-            <div class='card rounded-3'>
-                <div class='card-body p-4'>
                     <div class='d-flex justify-content-between align-items-center mb-3'>
-                        <h2 class='text-heading-h3 mb-0'>$langAttendanceActList</h2>
+                        <h2 class='text-heading-h3 mb-0'>$langCriteria</h2>
                     </div>";
 
-    if ($total > 0) {
-        $tool_content .= "<div class='row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mt-1'>";
+        if ($total > 0) {
+            $tool_content .= "<div class='row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mt-1'>";
 
-        foreach ($all_criteria as $criterion) {
-            $resource_data = get_resource_details('badge', $criterion->id);
-            $activity_style = get_activity_style($criterion->activity_type);
-            $activity_title = q($resource_data['title']);
-            $activity_type_label = q($resource_data['type']);
+            foreach ($all_criteria as $criterion) {
+                $resource_data = get_resource_details('badge', $criterion->id);
+                $activity_style = get_activity_style($criterion->activity_type);
+                $activity_title = q($resource_data['title']);
+                $activity_type_label = q($resource_data['type']);
 
-            if (!empty($criterion->operator) && $criterion->threshold !== null) {
-                $op = get_operators();
-                $op_content = $op[$criterion->operator] ?? $criterion->operator;
-                $threshold = (int)$criterion->threshold == $criterion->threshold ? (int)$criterion->threshold : $criterion->threshold;
-                $criteria_html = "<div class='progress-activity-criteria'>$langRubricCrit: $op_content $threshold</div>";
-            } else {
-                $criteria_html = '';
-            }
+                if (!empty($criterion->operator) && $criterion->threshold !== null) {
+                    $op = get_operators();
+                    $op_content = $op[$criterion->operator] ?? $criterion->operator;
+                    $threshold = (int)$criterion->threshold == $criterion->threshold ? (int)$criterion->threshold : $criterion->threshold;
+                    $criteria_html = "<div class='progress-activity-criteria'>$langRubricCrit: $op_content $threshold</div>";
+                } else {
+                    $criteria_html = '';
+                }
 
-            $is_done = in_array($criterion->id, $done_ids);
-            if ($is_editor) {
-                $act_status_pill = '';
-            } elseif ($is_done) {
-                $act_status_pill = "<div style='display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-top:auto;align-self:flex-start;border:1.5px solid #16a34a;color:#16a34a;background:transparent;'><i class='fa fa-check-circle'></i> $langCompleted</div>";
-            } else {
-                $act_status_pill = "<div style='display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-top:auto;align-self:flex-start;border:1.5px solid #f97316;color:#ea580c;background:transparent;'><i class='fa fa-clock-o'></i> $langSurveyNotStarted</div>";
-            }
+                $is_done = in_array($criterion->id, $done_ids);
+                if ($is_editor) {
+                    $act_status_pill = '';
+                } elseif ($is_done) {
+                    $act_status_pill = "<div style='display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-top:auto;align-self:flex-start;border:1.5px solid #16a34a;color:#16a34a;background:transparent;'><i class='fa fa-check-circle'></i> $langCompleted</div>";
+                } else {
+                    $act_status_pill = "<div style='display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;margin-top:auto;align-self:flex-start;border:1.5px solid #f97316;color:#ea580c;background:transparent;'><i class='fa fa-clock-o'></i> $langSurveyNotStarted</div>";
+                }
 
-            $act_url = $resource_data['url'] ?? null;
-            $act_link_open  = $act_url ? "<a class='progress-activity-card-link' href='{$urlServer}{$act_url}' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
-            $act_link_close = $act_url ? "</a>" : '';
-            $tool_content .= "
+                $act_url = $resource_data['url'] ?? null;
+                $act_link_open = $act_url ? "<a class='progress-activity-card-link' href='{$urlServer}{$act_url}' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
+                $act_link_close = $act_url ? "</a>" : '';
+                $tool_content .= "
                 <div class='col'>
                     {$act_link_open}<div class='progress-activity-card'>
                         <div class='d-flex align-items-center gap-3 mb-2'>
@@ -628,12 +601,12 @@ function display_course_completion(): void
                         $act_status_pill
                     </div>{$act_link_close}
                 </div>";
+            }
+            $tool_content .= "</div>";
+        } else {
+            $tool_content .= "<p class='text-center text-muted'>$langNoActivCert</p>";
         }
-        $tool_content .= "</div>";
-    } else {
-        $tool_content .= "<p class='text-center text-muted'>$langNoActivCert</p>";
     }
-
     $tool_content .= "
                 </div>
             </div>
@@ -647,51 +620,108 @@ function display_course_completion(): void
  */
 function display_activities($element, $id, $unit_id = 0) {
 
-    global $tool_content, $course_code, $is_editor, $action_bar, $langActions,
-           $langNoActivCert, $langActivities, $langTitle, $langType,
+    global $tool_content, $course_code, $is_editor, $action_bar,
+           $langNoActivCert, $langTitle, $langType, $langRefreshProgress,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langNumInForum, $langOfBlogComments, $langConfirmDelete,
-           $langOfLearningPath, $langOfLearningPathDuration, $langOfLearningPathProgressMeasure, $langOfLearningPathLessonStatus,
+           $langOfLearningPath, $langOfLearningPathDuration, $langOfLearningPathProgressMeasure,
            $langDelete, $langEditChange, $langDocumentAsModuleLabel, $langCourseParticipation,
-           $langAdd, $langBack, $langUsers, $langOfGradebook,
+           $langAdd, $langBack, $langUsers, $langOfGradebook, $langOfLearningPathLessonStatus,
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
            $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance,
-           $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities, $langForumParticipation,
-           $langPointsGameNoOneTimeActivities, $langPoints, $langActivityMaxPoints, $langActivityMaxPointsInPeriod, $langActivityMaxPointsTimePeriod,
-           $langRubricCrit, $head_content, $uid, $langCompleted, $langSurveyNotStarted, $urlServer, $langAttendanceActList;
+           $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langPointsGameNoRecActivities,
+           $langPointsGameNoOneTimeActivities, $langPoints, $langForumParticipation,
+           $langRubricCrit, $head_content, $uid, $langCompleted, $langExport,
+           $langSurveyNotStarted, $urlServer, $langCriteria, $langRefreshProgressInfo,
+           $langPrint, $langFullScreen, $langNewTab, $langCancel;
+
+    require_once 'include/lib/modalboxhelper.class.php';
+    ModalBoxHelper::loadModalBox(false);
 
     load_js('bootstrap-table');
     
     //fix for delete confirmation not showing due to bootstrap-table plugin
-    $tool_content .= "<script>
-    $(document).on('post-body.bs.table', function () {
-        $('.confirmAction').off('click');
-        act_confirm();
-    });
-    </script>";
+    $tool_content .= "
+    <script>
+        $(document).on('post-body.bs.table', function () {
+            $('.confirmAction').off('click');
+            act_confirm();
+        });
+    </script>
+    
+    <script>
 
-    $head_content .= "<style>
-        .progress-activity-card {
-            border: 1px solid #e5e7eb; border-radius: 10px; padding: 18px; background: #fff;
-            height: 100%; display: flex; flex-direction: column;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.07); transition: box-shadow 0.2s;
-        }
-        .progress-activity-card-link:hover .progress-activity-card { box-shadow: 0 4px 16px rgba(0,0,0,0.11); transform: translateY(-1px); }
-        .progress-activity-icon {
-            width: 44px; height: 44px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; color: #fff; font-size: 20px;
-        }
-        .progress-activity-type-label { font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.06em; }
-        .progress-activity-name { font-size: 15px; font-weight: 600; color: #1f2937; margin: 10px 0 4px; flex-grow: 1; }
-        .progress-activity-criteria { font-size: 13px; color: #6b7280; margin-bottom: 4px; }
-        .progress-activity-status { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: auto; align-self: flex-start; }
-        .status-completed { border: 1.5px solid #16a34a; color: #16a34a; background: transparent; }
-        .status-not-started { border: 1.5px solid #f97316; color: #ea580c; background: transparent; }
-        .progress-activity-criterion-type { font-size: 11px; color: #d1d5db; font-weight: 500; }
-    </style>";
+        $(document).on('click', '.colorboxframe', function (e) {
+            $('.colorboxframe').colorbox();
+        });
+
+        $(document).on('click', '.fileModal', function (e) {
+            e.preventDefault();
+            var fileURL = $(this).attr('href');
+            var fileTitle = $(this).attr('title') || '';
+
+            // BUTTONS declare
+            var bts = {
+                print: {
+                    label: '$langPrint',
+                    className: 'submitAdminBtn gap-1',
+                    callback: function () {
+                        var iframe = document.getElementById('fileFrame');
+                        iframe.contentWindow.print();
+                    }
+                }
+            };
+
+            if (screenfull.enabled) {
+                bts.fullscreen = {
+                    label: '$langFullScreen',
+                    className: 'submitAdminBtn gap-1',
+                    callback: function () {
+                        screenfull.request(document.getElementById('fileFrame'));
+                        return false;
+                    }
+                };
+            }
+
+            bts.newtab = {
+                label: '$langNewTab',
+                className: 'submitAdminBtn gap-1',
+                callback: function () {
+                    window.open(fileURL, '_blank');
+                    return false;
+                }
+            };
+
+            bts.cancel = {
+                label: '$langCancel',
+                className: 'cancelAdminBtn'
+            };
+
+            bootbox.dialog({
+                size: 'large',
+                title: fileTitle,
+                onEscape: true,
+                backdrop: true,
+                message:
+                    '<div class=\"row\">' +
+                        '<div class=\"col-12\">' +
+                            '<div class=\"iframe-container\" style=\"height:500px;\">' +
+                                '<iframe ' +
+                                    'title=\"' + fileTitle + '\" ' +
+                                    'id=\"fileFrame\" ' +
+                                    'src=\"' + fileURL + '\" ' +
+                                    'style=\"width:100%; height:500px; border:0;\">' +
+                                '</iframe>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>',
+                buttons: bts
+            });
+        });
+        
+    </script>";
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
@@ -720,10 +750,21 @@ function display_activities($element, $id, $unit_id = 0) {
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                     'icon' => 'fa-reply',
                     'level' => 'primary',
-                    'show'  =>  $unit_id ? false : true)
-            ),
-            false
-        );
+                    'show'  => !$unit_id),
+                array('title' => $langRefreshProgress,
+                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;refresh=true",
+                    'icon' => 'fa-refresh',
+                    'link-attrs' => "title='$langRefreshProgressInfo'",
+                    'level' => 'primary-label',
+                    'show' => $element != 'points_game'
+                ),
+                array('title' => "$langExport",
+                    'url' => "dumpcertificateresults.php?$link_id",
+                    'icon' => 'fa-file-excel',
+                    'level' => 'primary-label',
+                    'show' => $element != 'points_game'
+                )
+            ));
     $tool_content .= $action_bar;
     if ($unit_id) {
         // check if unit completion is enabled
@@ -780,7 +821,7 @@ function display_activities($element, $id, $unit_id = 0) {
             'class' => ''),
         array('title' => $langOfBlog,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . BlogEvent::ACTIVITY,
-            'icon' => 'fa fa-columns fa-fw',
+            'icon' => 'fa fa-globe fa-fw',
             'show' => ($unit_id == 0),
             'class' => ''),
         array('title' => $langOfBlogComments,
@@ -803,22 +844,22 @@ function display_activities($element, $id, $unit_id = 0) {
             'class' => ''),
         array('title' => $langOfLearningPath,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lp",
-            'icon' => 'fa fa-ellipsis-h fa-fw',
+            'icon' => 'fa fa-solid fa-timeline fa-fw',
             'class' => '',
             'show' => $element != 'points_game'),
         array('title' => $langOfLearningPathDuration,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lpduration",
-            'icon' => 'fa fa-ellipsis-h fa-fw',
+            'icon' => 'fa fa-solid fa-timeline fa-fw',
             'class' => '',
             'show' => $element != 'points_game'),
         array('title' => $langOfLearningPathProgressMeasure,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lpprogressmeasure",
-            'icon' => 'fa fa-ellipsis-h fa-fw',
+            'icon' => 'fa fa-solid fa-timeline fa-fw',
             'class' => '',
             'show' => $element != 'points_game'),
         array('title' => $langOfLearningPathLessonStatus,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lplessonstatus",
-            'icon' => 'fa fa-ellipsis-h fa-fw',
+            'icon' => 'fa fa-solid fa-timeline fa-fw',
             'class' => '',
             'show' => $element != 'points_game'),
         /*array('title' => $langOfLikesSocial,
@@ -831,19 +872,19 @@ function display_activities($element, $id, $unit_id = 0) {
               'class' => ''),*/
         array('title' => $langDocumentAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
-            'icon' => 'fa fa-folder-open fa-fw',
+            'icon' => 'fa fa-regular fa-folder fa-fw',
             'class' => ''),
         array('title' => $langMediaAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=multimedia",
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-film space-after-icon',
             'class' => ''),
         array('title' => $langOfEBook,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=ebook",
-            'icon' => 'fa fa-book fa-fw',
+            'icon' => 'fa fa-solid fa-book fa-fw',
             'class' => ''),
         array('title' => $langOfPoll,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
-            'icon' => 'fa fa-question-circle fa-fw',
+            'icon' => 'fa fa-solid fa-question fa-fw',
             'class' => ''),
         array('title' => $langWiki,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . WikiEvent::ACTIVITY,
@@ -856,18 +897,18 @@ function display_activities($element, $id, $unit_id = 0) {
             'show' => $element != 'points_game'),
         array('title' => $langOfGradebook,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . GradebookEvent::ACTIVITY,
-            'icon' => 'fa fa-sort-numeric-desc space-after-icon',
+            'icon' => 'fa fa-solid fa-a space-after-icon',
+            'show' => ($unit_id == 0) && ($element != 'points_game'),
+            'class' => ''),
+        array('title' => $langAttendance,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AttendanceEvent::ACTIVITY,
+            'icon' => 'fa fa-clipboard-user space-after-icon',
             'show' => ($unit_id == 0) && ($element != 'points_game'),
             'class' => ''),
         array('title' => $langOfCourseCompletion,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
             'icon' => 'fa fa-trophy',
-            'show' => $cc_enable && !$cc_is_current && $element != 'points_game'),
-        array('title' => $langAttendance,
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AttendanceEvent::ACTIVITY,
-            'icon' => 'fa fa-sort-numeric-desc space-after-icon',
-            'show' => ($unit_id == 0) && ($element != 'points_game'),
-            'class' => '')),
+            'show' => $cc_enable && !$cc_is_current && $element != 'points_game')),
         array(
             'secondary_title' => $langAdd,
             'secondary_icon' => 'fa-plus',
@@ -879,7 +920,7 @@ function display_activities($element, $id, $unit_id = 0) {
         $addRecActivityBtn = action_button(array(
             array('title' => $langOfBlog,
                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act_rec=" . BlogEvent::ACTIVITY,
-                'icon' => 'fa fa-columns fa-fw',
+                'icon' => 'fa fa-globe fa-fw',
                 'show' => ($unit_id == 0),
                 'class' => ''),
             array('title' => $langOfBlogComments,
@@ -1027,11 +1068,59 @@ function display_activities($element, $id, $unit_id = 0) {
                                             $criteria_text = "";
                                         }
                                         $act_url = $resource_data['url'] ?? null;
+                                        $typeResClass = '';
+                                        $fileTitle = '';
+                                        if ($details->activity_type == 'document') {
+                                            $file = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND course_id = ?d", $details->resource, $course_id);
+                                            if ($file->format != '.dir') {
+                                                require_once 'include/lib/fileDisplayLib.inc.php';
+                                                require_once 'include/lib/mediaresource.factory.php';
+                                                require_once 'include/lib/multimediahelper.class.php';
+                                                require_once 'modules/document/doc_init.php';
+                                                doc_init();
+                                                $file_obj = MediaResourceFactory::initFromDocument($file);
+                                                $file_obj->setAccessURL(file_url($file->path, $file->filename));
+                                                $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+                                                $fileObjUrl = ltrim($file_obj->getAccessURL(), '/');
+                                                $act_url = $fileObjUrl ?? null;
+                                                $typeResClass = 'fileURL fileModal';
+                                                $fileTitle = $file_obj->getTitle() ?? '';
+                                            } else {
+                                                $act_url = "modules/document/index.php?course=$course_code&openDir=$file->path";
+                                            }
+                                        } elseif ($details->activity_type == 'video') {
+                                            require_once 'include/lib/mediaresource.factory.php';
+                                            require_once 'include/lib/multimediahelper.class.php';
+                                            $video = Database::get()->querySingle("SELECT * FROM video WHERE id = ?d AND course_id = ?d", $details->resource, $course_id);
+                                            $video_obj = MediaResourceFactory::initFromVideo($video);
+                                            $video_url = parse_url($video_obj->getAccessURL());
+                                            if ($video_url) {
+                                                $act_url = ltrim($video_url['path'], '/') . '?' . $video_url['query'];
+                                            } else {
+                                                $act_url = null;
+                                            }
+                                            $typeResClass = 'colorbox fileURL cboxElement';
+                                        } elseif ($details->activity_type == 'videolink') {
+                                            require_once 'include/lib/mediaresource.factory.php';
+                                            require_once 'include/lib/multimediahelper.class.php';
+                                            $video = Database::get()->querySingle("SELECT * FROM videolink WHERE id = ?d AND course_id = ?d", $details->resource, $course_id);
+                                            $video_obj = MediaResourceFactory::initFromVideoLink($video);
+                                            $video_url = parse_url($video_obj->getPlayURL());
+                                            if ($video_url) {
+                                                $act_url = ltrim($video_url['path'], '/') . '?' . $video_url['query'];
+                                            } else {
+                                                $act_url = null;
+                                            }
+                                            $typeResClass = 'colorboxframe fileURL cboxElement';
+                                        } elseif ($details->activity_type == 'ebook') {
+                                            $act_url = "modules/ebook/show.php?$course_code/$details->resource/";
+                                        }
+
                                         if ($is_editor && $act_url) {
                                             $act_link_open  = "<div onclick=\"window.location.href='{$urlServer}{$act_url}'\" class='progress-activity-card-link' style='cursor:pointer;display:block;height:100%;'>";
                                             $act_link_close = "</div>";
                                         } else {
-                                            $act_link_open  = $act_url ? "<a class='progress-activity-card-link' href='{$urlServer}{$act_url}' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
+                                            $act_link_open  = $act_url ? "<a class='progress-activity-card-link $typeResClass' href='{$urlServer}{$act_url}' title='$fileTitle' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
                                             $act_link_close = $act_url ? "</a>" : '';
                                         }
                                         $editor_btn_one = $is_editor ?
@@ -1087,7 +1176,7 @@ function display_activities($element, $id, $unit_id = 0) {
                     <div class='card rounded-3'>
                         <div class='card-body p-4'>
                             <div class='d-flex justify-content-between align-items-center mb-3'>
-                                <h2 class='text-heading-h3 mb-0'>$langAttendanceActList</h2>";
+                                <h2 class='text-heading-h3 mb-0'>$langCriteria</h2>";
                             if ($is_editor) {
                                 $tool_content .= "<div>$addActivityBtn</div>";
                             }
@@ -1130,7 +1219,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                         $status_pill = "<div class='progress-activity-status status-not-started'><i class='fa fa-clock-o'></i> $langSurveyNotStarted</div>";
                                     }
 
-                                    $editor_btns = $is_editor ? "<div class='mt-1 pt-2 text-end' onclick='event.stopPropagation()'>" .
+                                    $editor_btns = $is_editor ? "<div class='text-end' onclick='event.stopPropagation()'>" .
                                         action_button(array(
                                             array('title' => $langEditChange, 'icon' => 'fa-edit',
                                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
@@ -1145,22 +1234,26 @@ function display_activities($element, $id, $unit_id = 0) {
                                         $act_link_open  = "<div onclick=\"window.location.href='{$urlServer}{$act_url}'\" class='progress-activity-card-link' style='cursor:pointer;display:block;height:100%;'>";
                                         $act_link_close = "</div>";
                                     } else {
-                                        $act_link_open  = $act_url ? "<a class='progress-activity-card-link' href='{$urlServer}{$act_url}' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
+                                        $act_link_open  = $act_url ? "<a class='progress-activity-card-link' href='{$urlServer}$act_url' style='display:block;text-decoration:none;color:inherit;height:100%;'>" : '';
                                         $act_link_close = $act_url ? "</a>" : '';
                                     }
                                     $tool_content .= "
                                         <div class='col'>
                                             {$act_link_open}<div class='progress-activity-card'>
-                                                <div class='d-flex align-items-center gap-3 mb-2'>
-                                                    <div class='progress-activity-icon' style='background:{$activity_style['color']};'>
-                                                        <i class='fa {$activity_style['icon']}'></i>
+                                                <div class='d-flex justify-content-between align-items-center gap-3'>
+                                                    <div class='d-flex align-items-center gap-3'>
+                                                        <div class='progress-activity-icon' style='background:{$activity_style['color']};'>
+                                                            <i class='fa {$activity_style['icon']}'></i>
+                                                        </div>
+                                                        <span class='progress-activity-type-label text-wrap me-4' style='line-height: 16px;' '>$activity_type_label</span>
                                                     </div>
-                                                    <span class='progress-activity-type-label'>$activity_type_label</span>
+                                                    $editor_btns
                                                 </div>
-                                                <div class='progress-activity-name'>$activity_title</div>
+                                                <div class='progress-activity-name'>
+                                                    $activity_title
+                                                </div>
                                                 $criteria_html
-                                                $status_pill
-                                                $editor_btns
+                                                $status_pill                                                
                                             </div>{$act_link_close}
                                         </div>";
                                 }
@@ -1335,6 +1428,7 @@ function display_activities($element, $id, $unit_id = 0) {
                 </div>
             </div>";
     }
+
 }
 
 /**
@@ -1381,7 +1475,7 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
         case ExerciseEvent::ACTIVITY:
             display_available_exercises($element, $element_id, $unit_id, $unit_resource_id);
             break;
-        case BlogEvent::ACTIVITY;
+        case BlogEvent::ACTIVITY:
             display_available_blogs($element, $element_id, $unit_id);
             break;
         case 'blogcomments':
@@ -1416,9 +1510,6 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
             if ($element != 'points_game') {
                 display_available_lps($element, $element_id, LearningPathLessonStatusEvent::ACTIVITY, $unit_id, $unit_resource_id);
             }
-            break;
-        case 'likesocial';
-        case 'likeforum';
             break;
         case 'document':
         case 'doc':
@@ -1466,9 +1557,10 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
  * @param type $points_game_id
  * @param type $activity
  */
-function insert_rec_activity($points_game_id, $activity) {
+function insert_rec_activity($points_game_id, $activity): void
+{
     switch ($activity) {
-        case BlogEvent::ACTIVITY;
+        case BlogEvent::ACTIVITY:
             display_blog_rec_act_form($points_game_id);
             break;
         case 'blogcomments':
@@ -1697,7 +1789,8 @@ function display_modification_rec_activity($points_game_id, $activity_id) {
  * @param type $activity_id
  * @param int $unit_id
  */
-function display_modification_activity($element, $element_id, $activity_id, $unit_id = 0) {
+function display_modification_activity($element, $element_id, $activity_id, $unit_id = 0): void
+{
     global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $langImgFormsDes, $langPoints, $langValue;
 
     if ($element == 'certificate') {
@@ -1734,9 +1827,9 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
         $tool_content .= "<div class='form-group mt-3'>";
-        $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langOperator:</label>";
+        $tool_content .= "<label for='name' class='col-sm-2 control-label-notes'>$langOperator:</label>";
         $tool_content .= "<span class='col-sm-2'>" . selection($operators, 'cert_operator', $data->operator) . "</span>";
-        $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langValue:</label>";
+        $tool_content .= "<label for='name' class='col-sm-2 control-label-notes'>$langValue:</label>";
         $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='cert_threshold' value='$data->threshold'></span>";
         if ($element == 'points_game') {
             $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langPoints:</label>";
@@ -1755,7 +1848,7 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
 }
 
 /**
- * @brief assignments display form
+ * @brief assignment display form
  * @param type $element
  * @param type $element_id
  * @param int $unit_id
@@ -1765,7 +1858,7 @@ function display_available_assignments($element, $element_id, $activity_type, $u
 
     global $course_id, $tool_content, $langNoAssign, $course_code,
            $langTitle, $langGroupWorkDeadline_of_Submission,
-           $langAddModulesButton, $langChoice, $langParticipateSimple, $langPoints,
+           $langAddModulesButton, $langChoice, $langPoints,
            $langOperator, $langGradebookGrade, $urlServer, $langSelect, $langPollFillText;
 
     if ($element == 'certificate') {
@@ -1878,7 +1971,8 @@ function display_available_assignments($element, $element_id, $activity_type, $u
  * @param int $unit_id
  * @param int $unit_resource_id
  */
-function display_available_exercises($element, $element_id, $unit_id = 0, $unit_resource_id = 0) {
+function display_available_exercises($element, $element_id, $unit_id = 0, $unit_resource_id = 0): void
+{
 
     global $course_id, $course_code, $tool_content, $urlServer, $langExercices,
             $langNoExercises, $langChoice, $langAddModulesButton, $langPoints,
@@ -2067,7 +2161,7 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
             $parentpath = dirname($path);
             $dirname =  htmlspecialchars($dirname->filename);
             $parentlink = $urlbase . $parentpath;
-            $parenthtml = "<span class='float-end'><a href='$parentlink'>$langUp " .
+            $parenthtml = "<span class='float-end'><a class='text-nowrap' href='$parentlink'>$langUp " .
                     icon('fa-level-up') . "</a></span>";
             $colspan = 4;
         }
@@ -2088,7 +2182,7 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
         if( !empty($path)) {
         $tool_content .=
                 "<tr>" .
-                "<th colspan='$colspan'><div>$langDirectory: $dirname$parenthtml</div></th>" .
+                "<th colspan='$colspan'><div>$langDirectory: $dirname</div></th><th>$parenthtml</th>" .
                 "</tr>" ;
         }
         $tool_content .=
@@ -2580,7 +2674,7 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
                 $lp_id = $entry['id'];
                 $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
                 $tool_content .= "<tr>";
-                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
+                $tool_content .= "<td>&nbsp;".icon('fa-timeline')."&nbsp;&nbsp;<a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
                 if ($show_threshold) {
                     $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
                     $tool_content .= "<td><input aria-label='$langPollFillText' class='form-control' type='text' name='threshold[$lp_id]' value=''></td>";
@@ -2904,7 +2998,8 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
  * @param int $unit_id
  * @param int $unit_resource_id
  */
-function display_available_polls($element, $element_id, $unit_id = 0, int $unit_resource_id = 0) {
+function display_available_polls($element, $element_id, $unit_id = 0, int $unit_resource_id = 0): void
+{
 
     global $course_id, $course_code, $urlServer, $tool_content, $langPoints, $langPollFillText,
             $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton, $langSelect;
@@ -2999,7 +3094,8 @@ function display_available_polls($element, $element_id, $unit_id = 0, int $unit_
  * @param type $element_id
  * @param int $unit_id
  */
-function display_available_wiki($element, $element_id, $unit_id = 0) {
+function display_available_wiki($element, $element_id, $unit_id = 0): void
+{
 
     global $tool_content, $langResourceAlreadyAdded, $langPoints,
     $langAddModulesButton, $langChoice, $langTitle, $langWikiPages,
@@ -3072,7 +3168,8 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
  * @param type $element_id
  * @param int $unit_id
  */
-function display_available_participation($element, $element_id, $unit_id = 0) {
+function display_available_participation($element, $element_id, $unit_id = 0): void
+{
 
     global $tool_content, $course_code, $langHours,
            $langTitle, $langChoice, $langAddModulesButton,
@@ -3123,7 +3220,8 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
  * @param type $element
  * @param int $unit_id
  */
-function display_available_gradebooks($element, $element_id, $unit_id = 0) {
+function display_available_gradebooks($element, $element_id, $unit_id = 0): void
+{
 
     global $course_id, $tool_content, $langNoGradeBooks, $course_code, $urlServer,
            $langAvailableGradebooks, $langStart, $langFinish, $langChoice,
@@ -3187,7 +3285,8 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
  * @param $element_id
  * @param int $unit_id
  */
-function display_available_coursecompletiongrade($element, $element_id, $unit_id = 0) {
+function display_available_coursecompletiongrade($element, $element_id, $unit_id = 0): void
+{
 
     global $tool_content, $langAddModulesButton, $langCourseCompletion,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
@@ -3236,7 +3335,8 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
  * @param int $element_id
  * @param int $unit_id
  */
-function display_available_attendances($element, $element_id, $unit_id = 0) {
+function display_available_attendances($element, $element_id, $unit_id = 0): void
+{
 
     global $course_id, $tool_content, $langNoAttendances, $course_code, $urlServer,
            $langAvailableAttendances, $langStart, $langFinish, $langChoice,
@@ -3303,10 +3403,11 @@ function display_available_attendances($element, $element_id, $unit_id = 0) {
 function display_points_game_settings($element_id): void
 {
     global $tool_content, $head_content, $course_id, $course_code, $langEditChange,
-           $langLeaderboardActivation, $langLeaderboardAnonymization,
+           $langLeaderboard, $langLeaderboardAnonymization,
            $is_editor, $langPointsGameLevels, $langPointsGameLevelRequiredPoints,
            $langIsActive, $langTypeInactive, $langPoints, $langLevel, $langForNextLevel, $langCompletion,
-           $langStart, $uid;
+           $langStart, $uid, $urlServer, 
+           $langActive, $langInactive, $langInProgress, $langHasExpired, $langHasNotStarted, $langStatus;
 
     $data = Database::get()->querySingle("SELECT title, description, active, starts, expires, config
                             FROM points_game WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
@@ -3317,6 +3418,27 @@ function display_points_game_settings($element_id): void
     $start_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->starts), 'd/m/Y');
     $end_date = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd/m/Y');
     $config = json_decode($data->config, TRUE);
+
+    $status_game = '';
+    $current_time = date('Y-m-d H:i:s', strtotime('now'));
+    if ($data->active) {
+        $status_game .= "<span class='badge Primary-600-bg'>$langActive</span>";
+        if ($current_time >= $data->starts && $current_time <= $data->expires) {
+            $status_game .= "<span class='d-flex align-items-center gap-1'>
+                                $langInProgress
+                                <div style='width: 12px; height:12px;' class='spinner-grow text-success' role='status'></div>
+                                <div style='width: 12px; height:12px;' class='spinner-grow text-danger' role='status'></div>
+                                <div style='width: 12px; height:12px;' class='spinner-grow text-warning' role='status'></div>
+                                <div style='width: 12px; height:12px;' class='spinner-grow text-info' role='status'></div>
+                            </span>";
+        } elseif ($current_time < $data->starts) {
+            $status_game .= "<span class='badge Warning-200-bg'>$langHasNotStarted</span>";
+        } elseif ($current_time > $data->expires) {
+            $status_game .= "<span class='badge Accent-200-bg'>$langHasExpired</span>";
+        }
+    } else {
+        $status_game .= "<span class='badge Accent-200-bg'>$langInactive</span>";
+    }
 
     $enable_leaderboard = !empty($config['enable_leaderboard']);
     $anonymize_leaderboard = !empty($config['anonymize_leaderboard']);
@@ -3357,9 +3479,14 @@ function display_points_game_settings($element_id): void
                                         </div>
                                     </div>
                                     $desc_html
-                                    <div class='d-flex align-items-center gap-2 mt-2 flex-wrap'>
-                                        <span class='secondary-title' style='font-size:13px; font-weight: bold;'>$langLeaderboardActivation:</span>
+                                    <div class='d-flex align-items-center gap-1 flex-wrap mt-3'>
+                                        $status_game
+                                    </div>
+                                    <div class='d-flex align-items-center gap-2 mt-3 flex-wrap'>
+                                        <span class='secondary-title' style='font-size:13px; font-weight: bold;'>$langLeaderboard:</span>
                                         $lb_badge
+                                    </div>
+                                    <div class='d-flex align-items-center gap-2 mt-3 flex-wrap'>
                                         <span class='secondary-title' style='font-size:13px; font-weight: bold;'>$langLeaderboardAnonymization:</span>
                                         $anon_badge
                                     </div>
@@ -3373,7 +3500,53 @@ function display_points_game_settings($element_id): void
         $current_points = $user_progress['current_points'];
         $pct = $user_progress['progress_percentage'] ?? 0;
 
-        // Resolve current level title: assigned level → highest qualifying level → first defined level → fallback
+
+        // level icon
+        $arrLevels = [];
+        $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d ORDER BY required_points ASC", $element_id);
+        if (count($pointslevels) > 0) {
+            $level_colors = ['#14b8a6','#6366f1','#7c3aed','#ef4444','#f97316','#f59e0b','#10b981','#8b5cf6'];
+            $lc_idx = 0;
+            foreach ($pointslevels as $level) {
+                $lc = $level_colors[$lc_idx % count($level_colors)];
+                $lc_idx++;
+                $lvl_icon_filename = null;
+                if (!empty($level->icon)) {
+                    $lbi = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = ?d", $level->icon);
+                    if ($lbi) {
+                        $lvl_icon_filename = $lbi->filename;
+                    }
+                }
+                $arrLevels[] = [
+                    'level_title'    => $level->friendly_name,
+                    'level_point'    => $level->required_points,
+                    'level_color'    => $lc,
+                    'icon_filename'  => $lvl_icon_filename,
+                ];
+            }
+        }
+        $levelCounter = 0;
+        $bgLevelStar = '#9fa0a4';
+        $currentLevelIconFilename = null;
+        if (count($arrLevels) > 0) {
+            foreach ($arrLevels as $l) {
+                $isLast = !isset($arrLevels[$levelCounter + 1]);
+                $inRange = $isLast
+                    ? $current_points >= $l['level_point']
+                    : ($current_points >= $l['level_point'] && $current_points < $arrLevels[$levelCounter + 1]['level_point']);
+                if ($inRange) {
+                    $bgLevelStar = $l['level_color'];
+                    $currentLevelIconFilename = $l['icon_filename'];
+                    break;
+                }
+                $levelCounter++;
+            }
+            // No level reached yet — fall back to the first level's icon
+            if ($currentLevelIconFilename === null) {
+                $currentLevelIconFilename = $arrLevels[0]['icon_filename'];
+            }
+        }
+
         if (!empty($user_progress['current_level_title'])) {
             $current_level_title = $user_progress['current_level_title'];
         } else {
@@ -3391,6 +3564,7 @@ function display_points_game_settings($element_id): void
                      ORDER BY required_points ASC LIMIT 1",
                     $element_id);
                 $current_level_title = $first_level ? $first_level->friendly_name : $langStart;
+                $current_level_title = "-";
             }
         }
 
@@ -3429,10 +3603,17 @@ function display_points_game_settings($element_id): void
                         <div class='col-md-6'>
                             <div class='card rounded-3 h-100'>
                                 <div class='card-body p-4'>
-                                    <div class='d-flex align-items-center gap-3 mb-4 flex-wrap'>
-                                        <div class='pg-level-badge-icon'>
-                                            <i class='fa fa-shield-alt'></i>
-                                        </div>
+                                    <div class='d-flex align-items-center gap-3 mb-4 flex-wrap'>";
+        if ($currentLevelIconFilename) {
+            $tool_content .= "
+                                        <img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($currentLevelIconFilename) . "' style='width:54px;height:54px;object-fit:contain;flex-shrink:0;border-radius:12px;' alt='" . q($current_level_title) . "'>";
+        } else {
+            $tool_content .= "
+                                        <div class='lb-level-badge-star' style='background: $bgLevelStar; width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;flex-shrink:0;'>
+                                            <i class='fa fa-star'></i>
+                                        </div>";
+        }
+        $tool_content .= "
                                         <div class='d-flex flex-grow-1 align-items-center flex-wrap gap-2'>
                                             <div class='flex-fill text-center pg-stat-col'>
                                                 <div class='pg-stat-label'>Τρέχον Επίπεδο</div>
@@ -3479,11 +3660,17 @@ function display_points_game_settings($element_id): void
         foreach ($levels as $level) {
             $lc = $level_colors[$lc_idx % count($level_colors)];
             $lc_idx++;
+            if (!empty($level->icon)) {
+                $lbi = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = ?d", $level->icon);
+                $lvl_img = $lbi
+                    ? "<img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($lbi->filename) . "' class='pg-lvl-icon' style='background:transparent;object-fit:contain;' alt='" . q($level->friendly_name) . "'>"
+                    : "<div class='pg-lvl-icon' style='background:$lc;'><i class='fa fa-star'></i></div>";
+            } else {
+                $lvl_img = "<div class='pg-lvl-icon' style='background:$lc;'><i class='fa fa-star'></i></div>";
+            }
             $tool_content .= "
                                         <div class='text-center' style='min-width:70px;'>
-                                            <div class='pg-lvl-icon' style='background:$lc;'>
-                                                <i class='fa fa-star'></i>
-                                            </div>
+                                            $lvl_img
                                             <div class='pg-lvl-name'>" . htmlspecialchars($level->friendly_name) . "</div>
                                             <div class='pg-lvl-pts'>{$level->required_points} $langPoints</div>
                                         </div>";
@@ -3498,33 +3685,6 @@ function display_points_game_settings($element_id): void
 
     $tool_content .= "
     </div>"; // end col-12
-
-    $head_content .= "<style>
-        .pg-level-badge-icon {
-            width: 54px; height: 54px; border-radius: 14px;
-            background: linear-gradient(135deg, #14b8a6, #6366f1);
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 22px; flex-shrink: 0;
-        }
-        .pg-stat-label { font-size: 11px; color: #9ca3af; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
-        .pg-stat-val { font-size: 16px; font-weight: 700; color: #1f2937; }
-        .pg-progress-label { font-size: 12px; font-weight: 600; color: #6b7280; }
-        .pg-progress-bar-outer { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
-        .pg-progress-bar-inner { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2563eb, #7c3aed); transition: width 0.4s; }
-        .pg-progress-text { font-size: 11px; color: #6b7280; }
-        .pg-progress-pct { font-size: 11px; color: #6b7280; font-weight: 600; }
-        .pg-lvl-icon {
-            width: 54px; height: 54px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 20px; margin: 0 auto 6px;
-        }
-        .pg-lvl-name { font-size: 12px; font-weight: 600; color: #374151; }
-        .pg-lvl-pts { font-size: 11px; color: #9ca3af; }
-        .pg-stat-col { min-width: 80px; }
-        @media (max-width: 575.98px) {
-            .pg-stat-col { flex: 1 1 30%; min-width: 70px; }
-        }
-    </style>";
 }
 
 /**
@@ -3534,8 +3694,7 @@ function display_points_game_settings($element_id): void
  */
 function display_settings($element, $element_id, $unit_id = 0): void
 {
-    global $tool_content, $course_id, $course_code, $urlServer, $langTitle,
-           $langDescription, $langMessage, $langProgressBasicInfo, $langCourseCompletion,
+    global $tool_content, $course_id, $course_code, $urlServer,
            $langpublisher, $langEditChange, $is_editor;
 
     $field = ($element == 'certificate') ? 'template' : 'icon';
@@ -3547,7 +3706,6 @@ function display_settings($element, $element_id, $unit_id = 0): void
     $issuer = $data->issuer;
     $title = $data->title;
     $description = $data->description;
-    $message = $data->message;
 
     if ($bundle != -1) {
         if ($element == 'badge') {
@@ -3555,11 +3713,10 @@ function display_settings($element, $element_id, $unit_id = 0): void
             $badge_icon = $badge_details[key($badge_details)];
             $img_html = "<img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($badge_icon) . "' style='width:80px;height:auto;'>";
         } else {
-            $template_details = get_certificate_template($data->template);
-            $template_filename = $template_details[key($template_details)];
-            //$thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
             $thumbnail_filename = certificate_thumbnails($data->template);
-            $img_html = "<img src='{$thumbnail_filename}' style='width:65%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
+            $img_html = "<a href='$_SERVER[SCRIPT_NAME]?course_code=$course_code&certificate_id=$element_id&preview=1' target=_blank>
+                            <img src='{$thumbnail_filename}' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>
+                        </a>";
         }
 
         $desc_html   = !empty($description) ? "<div style='font-size:14px;margin-top:6px;'>" . q($description) . "</div>" : '';
@@ -3572,38 +3729,38 @@ function display_settings($element, $element_id, $unit_id = 0): void
 
         if ($element == 'certificate') {
             $tool_content .= "
-            <div class='col-12 mt-4'>
-                <div class='card rounded-3'>
-                    <div class='card-body p-4'>
-                        " . (!empty($img_html) ? "<div style='text-align:center;margin-bottom:20px;'>$img_html</div>" : '') . "
-                        <div class='d-flex justify-content-between align-items-start gap-3'>
-                            <div style='font-size:18px;font-weight:700;'>$title</div>
-                            $edit_btn
+                <div class='col-12 mt-4'>
+                    <div class='card rounded-3'>
+                        <div class='card-body p-4'>                                            
+                            <div class='d-flex justify-content-between align-items-start gap-3'>
+                                <h3>$title</h3>
+                                $edit_btn
+                            </div>
+                            $desc_html
+                            $issuer_html
+                            " . (!empty($img_html) ? "<div style='text-align:center;margin-bottom:20px;'>$img_html</div>" : '') . "                        
                         </div>
-                        $desc_html
-                        $issuer_html
                     </div>
-                </div>
-            </div>";
+                </div>";
         } else {
             $tool_content .= "
-            <div class='col-12 mt-4'>
-                <div class='card rounded-3'>
-                    <div class='card-body p-4'>
-                        <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
-                            <div style='flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center;'>$img_html</div>
-                            <div style='flex-grow:1;'>
-                                <div class='d-flex justify-content-between align-items-start gap-3'>
-                                    <div style='font-size:18px;font-weight:700;'>$title</div>
-                                    $edit_btn
+                <div class='col-12 mt-4'>
+                    <div class='card rounded-3'>
+                        <div class='card-body p-4'>
+                            <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
+                                <div style='flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center;'>$img_html</div>
+                                <div style='flex-grow:1;'>
+                                    <div class='d-flex justify-content-between align-items-start gap-3'>
+                                        <div style='font-size:18px;font-weight:700;'>$title</div>
+                                        $edit_btn
+                                    </div>
+                                    $desc_html
+                                    $issuer_html
                                 </div>
-                                $desc_html
-                                $issuer_html
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>";
+                </div>";
         }
     }
 }
@@ -3614,9 +3771,42 @@ function display_settings($element, $element_id, $unit_id = 0): void
  * @param type $points_game_id
  */
 function points_game_settings($points_game_id = 0) {
-    global $tool_content, $head_content, $course_id, $course_code, $langAdd, $langPointsGameLevelName, $langPointsGameLevelRequiredPoints,
-        $language, $langTitle, $langDescription, $langSubmit, $langImgFormsDes, $langPointsGameLevels, $langSettingSelect,
-        $langInsert, $langStartDate, $langEndDate, $langLeaderboardActivation, $langLeaderboardAnonymization, $langDelete; 
+    global $tool_content, $head_content, $course_id, $course_code, $langAdd,
+        $langPointsGameLevelName, $langPointsGameLevelRequiredPoints,
+        $language, $langTitle, $langDescription, $langSubmit, $langPointsGameLevels, $langSettingSelect,
+        $langInsert, $langStartDate, $langEndDate, $langLeaderboard, $langLeaderboardAnonymization, $langDelete, $langImgFormsDes,
+        $langIcon, $urlServer, $langSelect, $langCancel;
+
+    // Build level badge icon data for the picker
+    $lbi_rows = Database::get()->queryArray(
+        "SELECT bi.id, bi.name, bi.filename, bic.name as cat_name
+         FROM badge_icon bi
+         JOIN badge_icon_category bic ON bic.id = bi.category
+         WHERE bi.filename LIKE 'levels\_badge\_%'
+         ORDER BY bic.id, bi.id"
+    );
+    $icon_opts_html = "<option value=''>—</option>";
+    $level_badge_filenames = [];
+    $current_cat = null;
+    foreach ($lbi_rows as $lbi) {
+        $cat = getSerializedMessage($lbi->cat_name);
+        if ($cat !== $current_cat) {
+            if ($current_cat !== null) {
+                $icon_opts_html .= "</optgroup>";
+            }
+            $icon_opts_html .= "<optgroup label='" . htmlspecialchars($cat) . "'>";
+            $current_cat = $cat;
+        }
+        $iname = htmlspecialchars(getSerializedMessage($lbi->name));
+        $icon_opts_html .= "<option value='{$lbi->id}'>$iname</option>";
+        $level_badge_filenames[$lbi->id] = $lbi->filename;
+    }
+    if ($current_cat !== null) {
+        $icon_opts_html .= "</optgroup>";
+    }
+    $icon_filenames_js = json_encode($level_badge_filenames);
+    $badge_base_url = $urlServer . BADGE_TEMPLATE_PATH;
+    $icon_opts_js   = json_encode($icon_opts_html);
 
     load_js('bootstrap-datetimepicker');
 
@@ -3647,9 +3837,12 @@ function points_game_settings($points_game_id = 0) {
             });
         });
 
+        var levelIconFilenames = $icon_filenames_js;
+        var levelIconBaseUrl   = " . json_encode($badge_base_url) . ";
+
         $(function() {
-            $('#addLevel').on('click', function() {
-                $('#levels_table tbody').append(
+            \$(document).on('click', '#addLevel', function() {
+                \$('#levels_table tbody').append(
                     '<tr>'+
                     '<td class=\'form-group\'>'+
                     '<input aria-label=\'$langPointsGameLevelName\' type=\'text\' name=\'level_item_name[]\' class=\'form-control\' value=\'\' required>'+
@@ -3657,6 +3850,12 @@ function points_game_settings($points_game_id = 0) {
                     '<td class=\'form-group\'>'+
                     '<input aria-label=\'$langPointsGameLevelRequiredPoints\' type=\'number\' name=\'level_item_req_points[]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
                     '</td>'+
+                    '<td class=\'form-group\'>'+
+                    '<div class=\'d-flex gap-2 align-items-baseline\'>'+
+                    '<img class=\'level-icon-preview select-icon-btn\' src=\'\' style=\'width:32px;height:32px;object-fit:contain;display:none;cursor:pointer;\' title=\'' + ('".q($langSelect)."') + '\'>'+
+                    '<input type=\'hidden\' name=\'level_item_icon[]\' class=\'level-icon-hidden\' value=\'\'>'+
+                    '<button type=\'button\' class=\'btn btn-default select-icon-btn\'><i class=\'fa-solid fa-image\'></i><span class=\'ms-1\'>' + ('".q($langSelect)."') + '</span></button>'+
+                    '</div></td>'+
                     '<td class=\'text-center\'>'+
                     '<a href=\'#\' aria-label=\'$langDelete\' class=\'removeLevel\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
                     '</td>'+
@@ -3701,174 +3900,373 @@ function points_game_settings($points_game_id = 0) {
         $display_anon = 'style="display:none;"';
     }
 
-    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
-    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <div class='form-group'>
-                    <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
-                    <div class='col-sm-12'>
-                        <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title' required>
-                    </div>
-                </div>
-                <div class='form-group mt-4'>
-                    <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
-                    <div class='col-sm-12'>
-                        <textarea id='description' class='form-control' name='description' rows='6'>$description</textarea>
-                    </div>
-                </div>
-
-                <div class='form-group mt-4'>
-                    <label for='startdatepicker' class='col-sm-12 control-label-notes'>$langStartDate:</label>
-                    <div class='col-sm-12'>
-                       <div class='input-group'>
-                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                           <input class='form-control mt-0 border-start-0' name='startdatepicker' id='startdatepicker' type='text' value='$startdate'>
-                       </div>
-                    </div>
-                    <label for='enddatepicker' class='col-sm-12 control-label-notes'>$langEndDate:</label>
-                    <div class='col-sm-12'>
-                       <div class='input-group'>
-                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                           <input class='form-control mt-0 border-start-0' name='enddatepicker' id='enddatepicker' type='text' value='$enddate'>
-                       </div>
-                    </div>
-                </div>
-                <div class='form-group mt-4'>                    
-                    <div class='col-sm-12 mb-3'>
-
-                        <div class='checkbox'>
-                            <label class='label-container' for='enable_leaderboard'>
-                                <input type='checkbox' name='enable_leaderboard' id='enable_leaderboard' value='1' $enable_checked>
-                                <span class='checkmark'></span>
-                                $langLeaderboardActivation
-                            </label>
+    $tool_content .= "
+    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded'>
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                    <div class='form-group'>
+                        <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
+                        <div class='col-sm-12'>
+                            <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title' required>
                         </div>
-
                     </div>
-                    <div class='col-sm-12 mb-3' id='anonymize_area' $display_anon>
-
-                        <div class='checkbox'>
-                            <label class='label-container' for='anonymize_leaderboard'>
-                                <input type='checkbox' name='anonymize_leaderboard' id='anonymize_leaderboard' value='1' $anon_checked>
-                                <span class='checkmark'></span>
-                                $langLeaderboardAnonymization
-                            </label>
+                    <div class='form-group mt-4'>
+                        <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
+                        <div class='col-sm-12'>
+                            <textarea id='description' class='form-control' name='description' rows='6'>$description</textarea>
                         </div>
-
                     </div>
-                </div>
-                $points_game_hidden";
 
-                //Game levels
-                if ($points_game_id > 0) {
-                    $tool_content .= "
-                        <div class='form-group mt-4'>
-                            <div class='col-sm-12 control-label-notes'>$langPointsGameLevels:</div>
-                            <div class='col-sm-12'>
-                                <div class='table-responsive mt-0'>
-                                    <table class='table-default' id='levels_table'>
-                                        <thead>
-                                            <tr>
-                                                <th style='width:47%'>$langPointsGameLevelName</th>
-                                                <th style='width:47%'>$langPointsGameLevelRequiredPoints</th>
-                                                <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>";
-                                        $attr = "required";
-                                        if ($levels_used) {
-                                            $attr = "disabled";
-                                        }
-                                        $level_i = 1;
-                                        foreach ($levels as $level) {
-                                            $tool_content .= "<tr>
-                                                <td class='form-group'>
-                                                    <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='".$level->friendly_name."' $attr>
-                                                </td>
-                                                <td class='form-group'>
-                                                    <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='".$level->required_points."' min='0' $attr>
-                                                </td>";
-                                                if ($level_i == 1 || $levels_used) {
-                                                    $tool_content .= "<td class='text-center'>
+                    <div class='form-group mt-4'>
+                        <label for='startdatepicker' class='col-sm-12 control-label-notes'>$langStartDate:</label>
+                        <div class='col-sm-12'>
+                        <div class='input-group'>
+                            <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                            <input class='form-control mt-0' name='startdatepicker' id='startdatepicker' type='text' value='$startdate' required>
+                        </div>
+                        </div>
+                        <label for='enddatepicker' class='col-sm-12 control-label-notes mt-4'>$langEndDate:</label>
+                        <div class='col-sm-12'>
+                        <div class='input-group'>
+                            <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                            <input class='form-control mt-0' name='enddatepicker' id='enddatepicker' type='text' value='$enddate' required>
+                        </div>
+                        </div>
+                    </div>
+                    <div class='form-group mt-4'>                    
+                        <div class='col-sm-12 mb-3'>
+
+                            <div class='checkbox'>
+                                <label class='label-container' for='enable_leaderboard'>
+                                    <input type='checkbox' name='enable_leaderboard' id='enable_leaderboard' value='1' $enable_checked>
+                                    <span class='checkmark'></span>
+                                    $langLeaderboard
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class='col-sm-12 mb-3' id='anonymize_area' $display_anon>
+
+                            <div class='checkbox'>
+                                <label class='label-container' for='anonymize_leaderboard'>
+                                    <input type='checkbox' name='anonymize_leaderboard' id='anonymize_leaderboard' value='1' $anon_checked>
+                                    <span class='checkmark'></span>
+                                    $langLeaderboardAnonymization
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+                    $points_game_hidden";
+
+                    //Game levels
+                    if ($points_game_id > 0) {
+                        $tool_content .= "
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-12 control-label-notes'>$langPointsGameLevels:</div>
+                                <div class='col-sm-12'>
+                                    <div class='table-responsive mt-0'>
+                                        <table class='table-default' id='levels_table'>
+                                            <thead>
+                                                <tr>
+                                                    <th style='width:45%'>$langPointsGameLevelName</th>
+                                                    <th style='width:30%'>$langPointsGameLevelRequiredPoints</th>
+                                                    <th style='width:20%'>$langIcon</th>
+                                                    <th class='text-center option-btn-cell' style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>";
+                                            $attr = "required";
+                                            if ($levels_used) {
+                                                $attr = "disabled";
+                                            }
+                                            $level_i = 1;
+                                            foreach ($levels as $level) {
+                                                $sel_icon = (int)($level->icon ?? 0);
+                                                $attr_hidden = str_replace("required", "", $attr);
+                                                $icon_preview_src = ($sel_icon && isset($level_badge_filenames[$sel_icon])) ? $badge_base_url . $level_badge_filenames[$sel_icon] : '';
+                                                $icon_preview_style = $icon_preview_src ? 'width:32px;height:32px;object-fit:contain;' : 'width:32px;height:32px;object-fit:contain;display:none;';
+                                                $tool_content .= "<tr>
+                                                    <td class='form-group'>
+                                                        <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='".$level->friendly_name."' $attr>
+                                                    </td>
+                                                    <td class='form-group'>
+                                                        <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='".$level->required_points."' min='0' $attr>
+                                                    </td>
+                                                    <td class='form-group'>
+                                                        <div class='d-flex gap-2 align-items-baseline'>
+                                                            <img class='level-icon-preview select-icon-btn' src='$icon_preview_src' style='$icon_preview_style cursor:pointer;' title='" . $langSelect . "'>
+                                                            <input type='hidden' name='level_item_icon[]' class='level-icon-hidden' value='$sel_icon' $attr_hidden>
+                                                            <button type='button' class='btn btn-default select-icon-btn' $attr style='" . ($sel_icon ? "display:none;" : "") . "'><i class='fa-solid fa-image'></i><span class='ms-1'>" . $langSelect . "</span></button>
+                                                        </div>
                                                     </td>";
-                                                } else {
-                                                    $tool_content .= "<td class='text-center'>
-                                                        <a href='#' aria-label='$langDelete' class='removeLevel'><span class='fa-solid fa-xmark' style='color:red;'></span></a>
-                                                    </td>";
-                                                }
-                                            $tool_content .= "</tr>";
-                                            $level_i ++;
-                                        }
-                    $tool_content .= "</tbody>
-                                    </table>
+                                                    if ($level_i == 1 || $levels_used) {
+                                                        $tool_content .= "<td class='text-center'>
+                                                        </td>";
+                                                    } else {
+                                                        $tool_content .= "<td class='text-center'>
+                                                            <a href='#' aria-label='$langDelete' class='removeLevel'><span class='fa-solid fa-xmark' style='color:red;'></span></a>
+                                                        </td>";
+                                                    }
+                                                $tool_content .= "</tr>";
+                                                $level_i ++;
+                                            }
+                        $tool_content .= "</tbody>
+                                        </table>
+                                    </div>
+                                </div>";
+                        if (!$levels_used) {
+                            $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center'>
+                                    <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
+                                </div>";
+                        }
+                        $tool_content .= "</div>";
+                    } else {
+                        $tool_content .= "
+                            <div class='form-group mt-4'>
+                                <div class='col-sm-12 control-label-notes'>$langPointsGameLevels:</div>
+                                <div class='col-sm-12'>
+                                    <div class='table-responsive mt-0'>
+                                        <table class='table-default' id='levels_table'>
+                                            <thead>
+                                                <tr>
+                                                    <th style='width:45%'>$langPointsGameLevelName</th>
+                                                    <th style='width:30%'>$langPointsGameLevelRequiredPoints</th>
+                                                    <th style='width:20%'>$langIcon</th>
+                                                    <th class='text-center option-btn-cell' style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class='form-group'>
+                                                        <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='' required>
+                                                    </td>
+                                                    <td class='form-group'>
+                                                        <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='' min='0' required>
+                                                    </td>
+                                                    <td class='form-group'>
+                                                        <div class='d-flex gap-2 align-items-baseline'>
+                                                            <img class='level-icon-preview select-icon-btn' src='' style='width:32px;height:32px;object-fit:contain;display:none;cursor:pointer;' title='" . $langSelect . "'>
+                                                            <input type='hidden' name='level_item_icon[]' class='level-icon-hidden' value=''>
+                                                            <button type='button' class='btn btn-default select-icon-btn'><i class='fa-solid fa-image'></i><span class='ms-1'>" . $langSelect . "</span></button>
+                                                        </div>
+                                                    </td>
+                                                    <td class='text-center'>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>";
-                    if (!$levels_used) {
-                        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center'>
-                                <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
+                                <div class='col-12 mt-5 d-flex justify-content-center'>
+                                    <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
+                                </div>
                             </div>";
                     }
-                    $tool_content .= "</div>";
-                } else {
-                    $tool_content .= "
-                        <div class='form-group mt-4'>
-                            <div class='col-sm-12 control-label-notes'>$langPointsGameLevels:</div>
-                            <div class='col-sm-12'>
-                                <div class='table-responsive mt-0'>
-                                    <table class='table-default' id='levels_table'>
-                                        <thead>
-                                            <tr>
-                                                <th style='width:47%'>$langPointsGameLevelName</th>
-                                                <th style='width:47%'>$langPointsGameLevelRequiredPoints</th>
-                                                <th class='text-center option-btn-cell'  style='width:5%' aria-label='$langSettingSelect'>" . icon('fa-gears') . "</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class='form-group'>
-                                                    <input aria-label='$langPointsGameLevelName' type='text' name='level_item_name[]' class='form-control' value='' required>
-                                                </td>
-                                                <td class='form-group'>
-                                                    <input aria-label='$langPointsGameLevelRequiredPoints' type='number' name='level_item_req_points[]' class='form-control' value='' min='0' required>
-                                                </td>
-                                                <td class='text-center'>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class='col-12 mt-5 d-flex justify-content-center'>
-                                <a class='btn submitAdminBtn' id='addLevel'>$langAdd</a>
-                            </div>
-                        </div>";
-                }
 
-                $tool_content .= "<div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-end align-items-center'>
+                    $tool_content .= "<div class='form-group mt-5'>
+                        <div class='col-12 d-flex justify-content-end align-items-center'>
 
 
-                           ".form_buttons(array(
-                            array(
-                                    'class' => 'submitAdminBtn',
-                                    'text' => $langSubmit,
-                                    'name' => $name,
-                                    'value'=> $langInsert
-                            ),
-                            array(
-                                'class' => 'cancelAdminBtn ms-1',
-                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                )
-                            ))."
+                            ".form_buttons(array(
+                                array(
+                                        'class' => 'submitAdminBtn',
+                                        'text' => $langSubmit,
+                                        'name' => $name,
+                                        'value'=> $langInsert
+                                ),
+                                array(
+                                    'class' => 'cancelAdminBtn ms-1',
+                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                    )
+                                ))."
 
 
 
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div></div>
+                </form>
+            </div>
+        </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='".get_form_image()."' alt='$langImgFormsDes'>
+        </div>
     </div>";
 
+    $modal_content = "";
+    $lang_search_str = $GLOBALS['langSearch'] ?? 'Αναζήτηση...';
+    $cats = get_badge_categories();
+    $icon_cats = get_badge_icon_categories();
+    $badges = get_badge_icons();
+    $filenames = get_badge_filenames();
+    
+    $modal_content .= "
+    <div class='modal fade' id='iconSelectionModal' tabindex='-1' role='dialog' aria-hidden='true'>
+        <div class='modal-dialog modal-lg' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h5 class='modal-title'>" . $langIcon . "</h5>
+                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                </div>
+                <div class='modal-body'>
+                    <div id='icon_grid_modal' class='border rounded p-2'>
+                        <div class='row p-2'>
+                            <div class='d-flex align-items-center flex-row border-bottom pb-3'>
+                                <img id='modal_selected_badge_preview' src='' alt='Preview' style='max-height: 40px; display: none;'>
+                                <span id='modal_selected_badge_name' class='ms-2 fw-bold text-primary'></span>
+                            </div>
+                        </div>
+                        <div class='row mb-3'>
+                            <div class='col-md-6 mb-2 mb-md-0'>
+                                <input type='text' id='modalBadgeSearch' class='form-control' placeholder='" . q($lang_search_str) . "'>
+                            </div>
+                            <div class='col-md-6'>
+                                <select id='modalBadgeCategoryFilter' class='form-select form-control'>
+                                    <option value=''>Όλες οι κατηγορίες</option>";
+                                    foreach ($cats as $cid => $cname) {
+                                        $modal_content .= "<option value='$cid'>" . q($cname) . "</option>";
+                                    }
+                        $modal_content .= "  </select>
+                            </div>
+                        </div>
+                        <div class='row m-0' style='height: 300px; overflow-y: auto;'>";
+                        
+                        foreach ($badges as $id => $badgeName) {
+                            $imgPath = $urlServer . "courses/user_progress_data/badge_templates/" . $filenames[$id];
+                            $cat_id = isset($icon_cats[$id]) ? $icon_cats[$id] : '';
+                            $modal_content .= "
+                            <div class='col-4 col-md-fifth text-center mb-3 badge-icon-container' data-category='$cat_id'>
+                                <label class='d-block border p-2 rounded cursor-pointer badge-icon-label border-transparent' style='cursor: pointer; height: 100%; transition: all 0.2s;'>
+                                    <input type='radio' name='modal_icon_selection' value='$id' class='d-none badge-icon-radio'>
+                                    <img src='$imgPath' alt='".q($badgeName)."' style='max-width: 100%; height: auto; max-height: 60px;'>
+                                    <div class='mt-2 small fw-bold badge-name'>".q($badgeName)."</div>
+                                </label>
+                            </div>";
+                        }
+                    $modal_content .= "</div>
+                    </div>
+                </div>
+                <div class='modal-footer'>
+                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>" . $langCancel . "</button>
+                    <button type='button' class='btn submitAdminBtn' id='saveIconSelection'>" . $langSelect . "</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .border-transparent { border-color: transparent !important; }
+        @media (min-width: 768px) {
+            #iconSelectionModal .col-md-fifth { width: 20%; flex: 0 0 20%; max-width: 20%; }
+        }
+    </style>
+    <script>
+        let currentIconBtn = null;
+        let currentIconHidden = null;
+        let currentIconImg = null;
+        let lastSelectedCategory = null;
+
+        $(document).ready(function() {
+            $(document).on('click', '.select-icon-btn', function(e) {
+                e.preventDefault();
+                currentIconBtn = $(this);
+                let parentDiv = currentIconBtn.closest('.d-flex');
+                currentIconHidden = parentDiv.find('.level-icon-hidden');
+                currentIconImg = parentDiv.find('.level-icon-preview');
+                
+                let currentVal = currentIconHidden.val();
+                
+                // Reset modal selections
+                $('#iconSelectionModal .badge-icon-radio').prop('checked', false);
+                $('#iconSelectionModal .badge-icon-label').removeClass('border-primary').addClass('border-transparent');
+                
+                if (currentVal) {
+                    let radio = $('#iconSelectionModal .badge-icon-radio[value=\"'+currentVal+'\"]');
+                    if (radio.length) {
+                        radio.prop('checked', true);
+                        radio.closest('.badge-icon-label').removeClass('border-transparent').addClass('border-primary');
+                    }
+                }
+                
+                // Apply last selected category filter if available
+                if (lastSelectedCategory !== null) {
+                    $('#modalBadgeCategoryFilter').val(lastSelectedCategory);
+                } else {
+                    $('#modalBadgeCategoryFilter').val('');
+                }
+                
+                updateModalSelectedPreview();
+                filterModalIcons();
+                
+                $('#iconSelectionModal').modal('show');
+            });
+
+            function updateModalSelectedPreview() {
+                let selectedLabel = $('#iconSelectionModal .badge-icon-radio:checked').closest('.badge-icon-label');
+                if (selectedLabel.length) {
+                    let imgSrc = selectedLabel.find('img').attr('src');
+                    let badgeName = selectedLabel.find('.badge-name').text();
+                    $('#modal_selected_badge_preview').attr('src', imgSrc).show();
+                    $('#modal_selected_badge_name').text(badgeName);
+                } else {
+                    $('#modal_selected_badge_preview').hide();
+                    $('#modal_selected_badge_name').text('');
+                }
+            }
+
+            $('#iconSelectionModal').on('change', '.badge-icon-radio', function() {
+                $('#iconSelectionModal .badge-icon-label').removeClass('border-primary').addClass('border-transparent');
+                $(this).closest('.badge-icon-label').removeClass('border-transparent').addClass('border-primary');
+                updateModalSelectedPreview();
+            });
+
+            $('#saveIconSelection').on('click', function() {
+                let selectedRadio = $('#iconSelectionModal .badge-icon-radio:checked');
+                if (selectedRadio.length && currentIconHidden) {
+                    let val = selectedRadio.val();
+                    let imgSrc = selectedRadio.siblings('img').attr('src');
+                    let badgeName = selectedRadio.siblings('.badge-name').text();
+                    
+                    let cat = selectedRadio.closest('.badge-icon-container').data('category');
+                    if (cat !== undefined && cat !== '') {
+                        lastSelectedCategory = cat;
+                    }
+                    
+                    currentIconHidden.val(val);
+                    currentIconImg.attr('src', imgSrc).show();
+                    currentIconBtn.closest('.d-flex').find('button').hide();
+                    
+                    let nameInput = currentIconBtn.closest('tr').find('input[name=\"level_item_name[]\"]');
+                    if (nameInput.length && badgeName) {
+                        nameInput.val(badgeName);
+                    }
+                }
+                $('#iconSelectionModal').modal('hide');
+            });
+
+            function filterModalIcons() {
+                let term = $('#modalBadgeSearch').val().toLowerCase();
+                let cat = $('#modalBadgeCategoryFilter').val();
+                $('#iconSelectionModal .badge-icon-container').each(function() {
+                    let text = $(this).find('.badge-name').text().toLowerCase();
+                    let itemCat = $(this).data('category');
+                    let matchText = term === '' || text.indexOf(term) !== -1;
+                    let matchCat = cat === '' || itemCat == cat;
+                    if (matchText && matchCat) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+
+            $('#modalBadgeSearch').on('keyup', filterModalIcons);
+            $('#modalBadgeCategoryFilter').on('change', filterModalIcons);
+        });
+    </script>
+    ";
+    
+    $tool_content .= $modal_content;
 }
 
 
@@ -3884,10 +4282,11 @@ function certificate_settings($element, $element_id = 0) {
            $langTitle, $langSubmit, $langInsert, $langCertDeadlineHelp,
            $langDescription, $langpublisher, $langIcon, $langCertificateDeadline,
            $urlServer, $langImgFormsDes, $langSelect,
-           $langAllowBadgeExport, $langAllowBadgeExportHelp;
+           $langAllowBadgeExport, $langAllowBadgeExportHelp, $langLogo, $urlAppend, $langDelete, 
+           $webDir, $langSelect, $langChooseTemplate, $langSelectedTemplate;
 
     load_js('bootstrap-datetimepicker');
-    load_js('select2');
+    // load_js('select2');
 
     $head_content .= "
     <script type='text/javascript'>
@@ -3911,89 +4310,157 @@ function certificate_settings($element, $element_id = 0) {
                 }
             });
 
-            if ($('#selectWithIcon').length > 0) {
+            // if ($('#selectWithIcon').length > 0) {
 
-                let urlServer = $('#urlServer').val();
-                let select2Data;
-                let certImage = {};
+            //     let urlServer = $('#urlServer').val();
+            //     let select2Data;
+            //     let certImage = {};
 
-                if ($('#certificate_hidden').length > 0) {
-                    let data = JSON.parse($('#certificate_hidden').val());
+            //     if ($('#certificate_hidden').length > 0) {
+            //         let data = JSON.parse($('#certificate_hidden').val());
                     
-                    let requests = Object.keys(data).map(key => {
-                        return $.ajax({
-                                    url: 'ajax_certificate.php',
-                                    type: 'POST',
-                                    dataType: 'json',
-                                    data: {
-                                        certificate_id: key
-                                    }
-                                }).then(response => {
-                                    if (response.success) {
-                                        certImage[key] = response.result;
-                                    }
-                                });
-                    });
+            //         let requests = Object.keys(data).map(key => {
+            //             return $.ajax({
+            //                         url: 'ajax_certificate.php',
+            //                         type: 'POST',
+            //                         dataType: 'json',
+            //                         data: {
+            //                             certificate_id: key
+            //                         }
+            //                     }).then(response => {
+            //                         if (response.success) {
+            //                             certImage[key] = response.result;
+            //                         }
+            //                     });
+            //         });
 
-                    Promise.all(requests).then(() => {
-                        select2Data = Object.keys(data).map(key => ({
-                            id: key,
-                            text: data[key],
-                            image: certImage[key]
-                        }));
-                        $('#selectWithIcon').select2({
-                            data: select2Data,
-                            templateResult: formatOption,
-                        });
-                        let imgPath = certImage[$('#selectWithIcon').val()];
-                        $('#selected_icon').attr('src', imgPath);
-                    });
-                }
+            //         Promise.all(requests).then(() => {
+            //             select2Data = Object.keys(data).map(key => ({
+            //                 id: key,
+            //                 text: data[key],
+            //                 image: certImage[key]
+            //             }));
+            //             $('#selectWithIcon').select2({
+            //                 data: select2Data,
+            //                 templateResult: formatOption,
+            //             });
+            //             let imgPath = certImage[$('#selectWithIcon').val()];
+            //             $('#selected_icon').attr('src', imgPath);
+            //         });
+            //     }
 
-                if ($('#badge_hidden').length > 0) {
-                    let data = JSON.parse($('#badge_hidden').val());
-                    select2Data = Object.keys(data).map(key => ({
-                        id: key,
-                        text: data[key],
-                        image: urlServer + 'courses/user_progress_data/badge_templates/' + data[key] + '.png',
-                        width: 48
-                    }));
-                    $('#selectWithIcon').select2({
-                        data: select2Data,
-                        templateResult: formatOption,
-                    });
-                    let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
-                    $('#selected_icon').attr('src', imgPath);
-                    $('#selected_icon').attr('width', 48);
-                }
+            //     if ($('#badge_hidden').length > 0) {
+            //         let data = JSON.parse($('#badge_hidden').val());
+            //         let filenames = JSON.parse($('#badge_filenames_hidden').val());
+            //         select2Data = Object.keys(data).map(key => ({
+            //             id: key,
+            //             text: data[key],
+            //             image: urlServer + 'courses/user_progress_data/badge_templates/' + filenames[key],
+            //             width: 48
+            //         }));
+            //         $('#selectWithIcon').select2({
+            //             data: select2Data,
+            //             templateResult: formatOption,
+            //         });
+            //         let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + filenames[$('#selectWithIcon').val()];
+            //         $('#selected_icon').attr('src', imgPath);
+            //         $('#selected_icon').attr('width', 48);
+            //     }
 
-                function formatOption(option) {
-                    let dareturn = '<span><img ' + (option.width ? 'width=' + option.width : '') + ' src=' + option.image + ' /> ' + option.text + '</span>';
-                    return $(dareturn);
-                }
+            //     function formatOption(option) {
+            //         let dareturn = '<span><img ' + (option.width ? 'width=' + option.width : '') + ' src=' + option.image + ' /> ' + option.text + '</span>';
+            //         return $(dareturn);
+            //     }
 
-                $('#selectWithIcon').on('change', function (e) {
-                    let dataType = $(this).data('type');
-                    if (dataType == 'certificate') {
-                        let imgPath = certImage[$('#selectWithIcon').val()];
-                        $('#selected_icon').attr('src', imgPath);
-                    } else if (dataType === 'badge') {
-                        let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
-                        $('#selected_icon').attr('src', imgPath);
+            //     $('#selectWithIcon').on('change', function (e) {
+            //         let dataType = $(this).data('type');
+            //         if (dataType == 'certificate') {
+            //             let imgPath = certImage[$('#selectWithIcon').val()];
+            //             $('#selected_icon').attr('src', imgPath);
+            //         } else if (dataType === 'badge') {
+            //             let filenames = JSON.parse($('#badge_filenames_hidden').val());
+            //             let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + filenames[$('#selectWithIcon').val()];
+            //             $('#selected_icon').attr('src', imgPath);
+            //         }
+            //     });
+
+            // }
+
+            $('.chooseCertificate').on('click', function () {
+                const modalCerts = document.getElementById('openCertificateTemplate');
+                const modalC = bootstrap.Modal.getOrCreateInstance(modalCerts);
+                var certID = $(this).attr('id');
+
+                document.querySelectorAll('.cardCert').forEach(div => {
+                    div.classList.remove('cart_certificate_selected');
+                });
+                $('#card_certificate_'+certID).addClass('cart_certificate_selected');
+
+                $('#selected_certificate_template').val(certID);
+                
+                $.ajax({
+                    url: 'ajax_certificate.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        certificate_id: certID
+                    }
+                }).then(response => {
+                    if (response.success) {
+                        $('#selected_certificate_img').attr('src', response.result);
+                        modalC.hide();
                     }
                 });
-
-            }
+            });
 
         });
     </script>";
 
+    $logo_html = '';
     if ($element_id > 0) {      // edit
         $field = ($element == 'certificate') ? 'template' : 'icon';
         $allow_export_field = ($element == 'badge') ? ', allow_export' : '';
         $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle, expires $allow_export_field
                                 FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
-                                
+        
+        if ($element == 'certificate') {
+            $certLogo = Database::get()->querySingle("SELECT `logo` FROM $element WHERE id = ?d", $element_id)->logo;
+            if (!is_null($certLogo)) {
+                $logo_html .= "
+                    <p for='filename_id' class='col-sm-12 control-label-notes mb-2'>$langLogo</p>
+                    <div class='form-group d-flex justify-content-start align-items-center gap-3'>
+                        <img style='max-height:100px;max-width:150px;' src='{$urlAppend}courses/{$course_code}/cert_logo/{$certLogo}' alt='{$langLogo}'>
+                        <a class='btn deleteAdminBtn' href='{$urlAppend}modules/progress/index.php?course={$course_code}&cert_id={$element_id}&del_cert_logo={$certLogo}&token=$_SESSION[csrf_token]'>$langDelete</a>
+                    </div>
+                ";
+            } else {
+                $logo_html .= "
+                    <div class='form-group'> 
+                        <label for='filename_id' class='col-sm-12 control-label-notes'>$langLogo</label>
+                        <input id='filename_id' type='file' name='cert_logo'>
+                    </div>
+                ";
+            }
+
+            
+            $q = Database::get()->querySingle("SELECT ct.filename,c.template FROM certificate_template ct
+                                               JOIN certificate c ON ct.id = c.template
+                                               AND c.id = ?d
+                                               AND c.course_id = ?d", $element_id, $course_id);
+                                               
+            if ($q) {
+                $selected_template_id = $q->template;
+                if (!str_contains($q->filename, '.html')) { // new way
+                    $certpathtmp = getFilenames(true, $q->template, 'thumbnail');
+                    $certpath = parse_url($certpathtmp, PHP_URL_PATH);
+                } else { // old way
+                    $certpath = $urlAppend . "courses/user_progress_data/cert_templates/" . str_replace('.html', '_thumbnail.png', $q->filename);
+                }
+                $selected_cert_img = '';
+                $selected_cert_img .= "<img id='selected_certificate_img' src='{$certpath}' alt='' style='max-height:100px;max-width:150px;'>";
+            }
+        }
+                   
         $issuer = $data->issuer ?? '';
         $template = $data->$field ?? '';
         $title = $data->title ?? '';
@@ -4017,6 +4484,8 @@ function certificate_settings($element, $element_id = 0) {
             $check_allow_export = "";
         }
     } else {        // add
+        $selected_template_id = 0;
+        $selected_cert_img = '';
         $issuer = q(get_config('institution'));
         $template = '';
         $title = '';
@@ -4029,14 +4498,27 @@ function certificate_settings($element, $element_id = 0) {
         $statuscertdeadline = '';
         // Default: allow export for new badges
         $check_allow_export = ($element == 'badge') ? " checked" : "";
+
+        if ($element == 'certificate') {
+            $logo_html .= "
+                <div class='form-group'> 
+                    <label for='filename_id' class='col-sm-12 control-label-notes'>$langLogo</label>
+                    <input id='filename_id' type='file' name='cert_logo'>
+                </div>
+            ";
+        }
+
+        $selected_cert_img .= "<img id='selected_certificate_img' alt='' style='max-height:100px;max-width:150px;'>";
+
     }
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
-                <div class='form-group'>
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\" enctype='multipart/form-data'>
+                $logo_html
+                <div class='form-group mt-4'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
-                        <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
+                        <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title' required>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
@@ -4046,34 +4528,176 @@ function certificate_settings($element, $element_id = 0) {
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <label for='selectWithIcon' class='col-sm-6 control-label-notes'>";
+                    <label for='selectWithIcon' class='col-sm-6 control-label-notes pb-2'>";
                     $tool_content .= ($element == 'certificate') ? $langTemplate : $langIcon;
                     $tool_content .= "</label>
                         <div class='col-sm-12'>";
-                            $tool_content .= ($element == 'certificate') ? selection(get_certificate_templates(), 'template', $template, 'id="selectWithIcon" data-type="certificate"',) : selection(get_badge_icons(), 'template', $template, 'id="selectWithIcon"  data-type="badge"');
-//                            if ($element == 'certificate') {
-//                                $tool_content .= "<input id='certificate_hidden' type='hidden' value='".json_encode(get_certificate_templates())."'>";
-//                            }
-//                            if ($element == 'badge') {
-//                                $tool_content .= "<input id='badge_hidden' type='hidden' value='".json_encode(get_badge_icons())."'>";
-//                            }
-                            if ($element == 'certificate' || $element == 'badge') {
-                                $inputId = $element . '_hidden';
-                                $value = ($element == 'certificate') ? json_encode(get_certificate_templates()) : json_encode(get_badge_icons());
-                                $tool_content .= "<input id='$inputId' type='hidden' value='$value'>";
+                            if ($element == 'badge') {
+                                $tool_content .= "<style>
+                                    .border-transparent { border-color: transparent !important; }
+                                    @media (min-width: 768px) {
+                                        .col-md-fifth { width: 20%; flex: 0 0 20%; max-width: 20%; }
+                                    }
+                                </style>";
+                                $tool_content .= "<div id='icon_grid' class='border rounded p-2'>";
+                                
+                                $lang_search_str = $GLOBALS['langSearch'] ?? 'Αναζήτηση...';
+                                $cats = get_badge_categories();
+                                $icon_cats = get_badge_icon_categories();
+                                
+                                $tool_content .= "
+                                <div class='row p-2'>
+                                    <div class='d-flex align-items-center flex-row border-bottom pb-3'>
+                                        <img id='selected_badge_preview' src='' alt='Preview' style='max-height: 40px; display: none;'>
+                                        <span id='selected_badge_name' class='ms-2 fw-bold text-primary'></span>
+                                    </div>
+                                </div>
+                                <div class='row mb-3'>
+                                    <div class='col-md-6 mb-2 mb-md-0'>
+                                        <input type='text' id='badgeSearch' class='form-control' placeholder='" . q($lang_search_str) . "'>
+                                    </div>
+                                    <div class='col-md-6'>
+                                        <select id='badgeCategoryFilter' class='form-select form-control'>
+                                            <option value=''>Όλες οι κατηγορίες</option>";
+                                            foreach ($cats as $cid => $cname) {
+                                                $tool_content .= "<option value='$cid'>" . q($cname) . "</option>";
+                                            }
+                                $tool_content .= "  </select>
+                                    </div>
+                                </div>
+                                <div class='row m-0' style='height: 300px; overflow-y: auto;'>";
+
+                                $badges = get_badge_icons();
+                                $filenames = get_badge_filenames();
+                                $first = true;
+                                foreach ($badges as $id => $badgeName) {
+                                    $imgPath = $urlServer . "courses/user_progress_data/badge_templates/" . $filenames[$id];
+                                    $checked = ($template == $id || ($template == '' && $first)) ? "checked" : "";
+                                    $first = false;
+                                    $activeClass = $checked ? "border-primary" : "border-transparent";
+                                    $cat_id = isset($icon_cats[$id]) ? $icon_cats[$id] : '';
+                                    $tool_content .= "
+                                    <div class='col-4 col-md-fifth text-center mb-3 badge-icon-container' data-category='$cat_id'>
+                                        <label class='d-block border p-2 rounded cursor-pointer badge-icon-label $activeClass' style='cursor: pointer; height: 100%; transition: all 0.2s;'>
+                                            <input type='radio' name='template' value='$id' class='d-none badge-icon-radio' $checked>
+                                            <img src='$imgPath' alt='".q($badgeName)."' style='max-width: 100%; height: auto; max-height: 60px;'>
+                                            <div class='mt-2 small fw-bold badge-name'>".q($badgeName)."</div>
+                                        </label>
+                                    </div>";
+                                }
+                                $tool_content .= "</div>"; // close inner scrollable div
+                                $tool_content .= "</div>"; // close #icon_grid
+                                $tool_content .= "<script>
+                                    $(document).ready(function() {
+                                        function updateSelectedPreview() {
+                                            let selectedLabel = $('.badge-icon-radio:checked').closest('.badge-icon-label');
+                                            if (selectedLabel.length) {
+                                                let imgSrc = selectedLabel.find('img').attr('src');
+                                                let badgeName = selectedLabel.find('.badge-name').text();
+                                                $('#selected_badge_preview').attr('src', imgSrc).show();
+                                                $('#selected_badge_name').text(badgeName);
+                                            }
+                                        }
+
+                                        $('.badge-icon-radio').on('change', function() {
+                                            $('.badge-icon-label').removeClass('border-primary').addClass('border-transparent');
+                                            $(this).closest('.badge-icon-label').removeClass('border-transparent').addClass('border-primary');
+                                            updateSelectedPreview();
+                                        });
+
+                                        updateSelectedPreview();
+
+                                        function filterIcons() {
+                                            let term = $('#badgeSearch').val().toLowerCase();
+                                            let cat = $('#badgeCategoryFilter').val();
+                                            $('.badge-icon-container').each(function() {
+                                                let name = $(this).find('.badge-name').text().toLowerCase();
+                                                let iconCat = $(this).data('category').toString();
+                                                let matchName = name.includes(term);
+                                                let matchCat = (cat === '' || cat === iconCat);
+                                                
+                                                if (matchName && matchCat) {
+                                                    $(this).removeClass('d-none');
+                                                } else {
+                                                    $(this).addClass('d-none');
+                                                }
+                                            });
+                                        }
+
+                                        $('#badgeSearch').on('keyup', filterIcons);
+                                        $('#badgeCategoryFilter').on('change', filterIcons);
+                                    });
+                                </script>";
+                            } else {
+                                $cert_body = '';
+                                $cert_body .= "<div class='col-12'><div class='row row-cols-lg-3 row-cols-1 g-3'>";
+                                foreach(get_certificate_templates() as $certId => $cert_name) {
+                                    $q = Database::get()->querySingle("SELECT `filename` FROM certificate_template WHERE id = ?d", $certId);
+                                    if ($q) {
+                                        $borderSelectedCert = ($selected_template_id == $certId) ? 'cart_certificate_selected' : '';
+                                        $cert_body .= "<div class='col'><div class='card cardCert $borderSelectedCert h-100' id='card_certificate_{$certId}'>";
+                                        if (!str_contains($q->filename, '.html')) { // new way
+                                            $cert_path_tmp = getFilenames(true, $certId, 'thumbnail');
+                                            $cert_path = parse_url($cert_path_tmp, PHP_URL_PATH);
+                                        } else { // old way
+                                            $cert_path = $urlAppend . "courses/user_progress_data/cert_templates/" . str_replace('.html', '_thumbnail.png', $q->filename);
+                                        }
+                                        $cert_body .= "<img style='height: 200px;' src='{$cert_path}' class='card-img-top' alt='certificate'>";
+                                        $cert_body .= "<div class='card-body'><a class='btn submitAdminBtnDefault chooseCertificate' id='{$certId}'>$langSelect</a></div>";
+                                        $cert_body .= "</div></div>";
+                                    }
+                                }
+                                $cert_body .= "</div></div>";
+
+                                $tool_content .= "<input id='selected_certificate_template' type='hidden' name='template' value='{$selected_template_id}'>";
+                                $tool_content .= "
+                                    <a class='btn submitAdminBtn d-inline-flex' href='#openCertificateTemplate' data-bs-toggle='modal'>$langChooseTemplate</a>
+                                    <div class='mt-3'>
+                                        <p class='TextBold'>$langSelectedTemplate:</p>
+                                        $selected_cert_img
+                                    </div>
+                                ";
+                                $tool_content .= "
+                                    <div class='modal fade' id='openCertificateTemplate' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='openCertificateTemplateLabel' aria-hidden='true'>
+                                        <div class='modal-dialog modal-lg'>
+                                            <div class='modal-content'>
+                                                <div class='modal-header'>
+                                                    <h5 class='modal-title' id='openCertificateTemplate'>Επιλογή πιστοποιητικού</h5>
+                                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                </div>
+                                                <div class='modal-body'>
+                                                    $cert_body
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ";
+
+                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                // $tool_content .= selection(get_certificate_templates(), 'template', $template, 'id="selectWithIcon" data-type="certificate"');
+                                // $inputId = $element . '_hidden';
+                                // $value = json_encode(get_certificate_templates());
+                                // $tool_content .= "<input id='$inputId' type='hidden' value='$value'>";
+                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                
                             }
                             $tool_content .= "<input id='urlServer' type='hidden' value='".$urlServer."'>";
 
                         $tool_content .= "</div>
-                </div>
-                <div class='form-group mt-4'>
-                    <div class='col-sm-2'></div>
-                    <div class='col-sm-10'>
-                        <img id='selected_icon' src='' alt=''>
-                    </div>
-                </div>
+                </div>";
+                // if ($element == 'certificate') {
+                //     $tool_content .= "
+                //     <div class='form-group mt-4'>
+                //         <div class='col-sm-2'></div>
+                //         <div class='col-sm-10'>
+                //             <img id='selected_icon' src='' alt='' style='max-height:100px;max-width:150px;'>
+                //         </div>
+                //     </div>";
+                // }
 
-                <div class='form-group mt-4'>
+                $tool_content .= "<div class='form-group mt-4'>
                     <label for='message_id' class='col-sm-12 control-label-notes'>$langMessage</label>
                     <div class='col-sm-12'>
                         <textarea id='message_id' class='form-control' name='message' rows='3' maxlength='1200'>$message</textarea>
@@ -4096,8 +4720,8 @@ function certificate_settings($element, $element_id = 0) {
                                     <span class='checkmark'></span>
                                 </label>
                             </span>
-                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                           <input class='form-control mt-0 border-start-0' name='enddatepicker' id='enddatepicker' type='text' value='$certdeadline' $statuscertdeadline>
+                           <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                           <input class='form-control mt-0' name='enddatepicker' id='enddatepicker' type='text' value='$certdeadline' $statuscertdeadline>
                        </div>
                        <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langCertDeadlineHelp</span>
                     </div>
@@ -4158,33 +4782,10 @@ function student_view_progress() {
 
     global $uid, $course_id, $urlServer, $tool_content, $langNoCertBadge,
             $langBadges, $course_code, $langCertificates, $langPrintVers,
-           $langCourseCompletion, $head_content, $langDetail, $langPointsGames;
+           $langCourseCompletion, $head_content, $langPointsGames;
 
     require_once 'Game.php';
     require_once 'PointsGame.php';
-
-    $head_content .= "<style>
-        #progress_circle {
-            display: flex;
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            background: conic-gradient(#0073E6 var(--progress), #E8EDF8 0deg);
-            font-size: 0;
-        }
-        #progress_circle::after {
-            content: attr(data-progress) '%';
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            width: 100%;
-            margin: 10px;
-            border-radius: 50%;
-            background: white;
-            font-size: 2rem;
-            text-align: center;
-        }
-    </style>";
 
     // check for completeness in order to refresh user data
     Game::checkCompleteness($uid, $course_id);
@@ -4327,7 +4928,7 @@ function student_view_progress() {
                 $tool_content .= "<div class='col-12'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
                 $tool_content .= "<div class='col-12 certificate_panel border-card m-auto d-block p-3'>
-                        <h4 class='text-center'>$certificate->title</h4>
+                        <div class='text-heading-h4 text-center'>$certificate->title</div>
                         <div class='row'>
                             <div class='col-sm-12 certificate_panel_date text-success text-center'>$dateAssigned</div>
                             <div class='col-sm-12 certificate_panel_issuer text-center'>$certificate->issuer</div>
@@ -4417,9 +5018,11 @@ function student_view_progress() {
 /**
  * Display leaderboard accordion for a points game
  */
-function display_leaderboard_accordion($points_game_id) {
-    global $tool_content, $head_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langAutoJudgeRank, $langLevel, $langProgress,
-        $langLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous, $langStart, $langForNextLevel, $langPoints, $urlAppend;
+function display_leaderboard_accordion($points_game_id): void
+{
+    global $tool_content, $head_content, $course_code, $course_id, $langNoUserList, $langLevel,
+           $langLeaderboard, $langCompletion, $is_editor, $uid, $langAnonymous,
+           $langForNextLevel, $langPoints, $urlAppend, $urlServer;
 
     $anon = false;
     if (!$is_editor) {
@@ -4452,69 +5055,31 @@ function display_leaderboard_accordion($points_game_id) {
                                             u.surname ASC,
                                             u.givenname ASC", $points_game_id, $course_id);
 
-    $head_content .= "<style>
-        .lb-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
-        .lb-row {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 14px 20px;
-            border-radius: 12px;
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: box-shadow 0.2s;
-            flex-wrap: wrap;
-        }
-        .lb-row:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.09); }
-        .lb-row.lb-current-user { background: #f3f4f6; border-color: #d1d5db; font-weight: 700; }
-        .lb-rank { font-size: 16px; font-weight: 700; color: #374151; flex: 1 1 0; text-align: center; }
-        .lb-avatar-wrap { display: flex; align-items: center; gap: 10px; flex: 1 1 0; min-width: 0; }
-        .lb-avatar {
-            width: 42px; height: 42px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0;
-        }
-        .lb-username { font-size: 14px; color: #374151; word-break: break-all; }
-        .lb-username-link { font-size: 14px; color: #2563eb; text-decoration: none; word-break: break-all; }
-        .lb-username-link:hover { text-decoration: underline; }
-        .lb-level-wrap { display: flex; align-items: center; gap: 8px; flex: 1 1 0; min-width: 0; }
-        .lb-level-badge-star {
-            width: 28px; height: 28px; border-radius: 5px;
-            background: #f59e0b;
-            display: flex; align-items: center; justify-content: center;
-            color: #fff; font-size: 14px; flex-shrink: 0;
-        }
-        .lb-level-text { font-size: 13px; color: #374151; white-space: nowrap; }
-        .lb-points-wrap { flex: 1 1 0; text-align: center; }
-        .lb-points-val { font-size: 16px; font-weight: 700; color: #2563eb; }
-        .lb-points-val a { color: inherit; text-decoration: none; }
-        .lb-points-val a:hover { text-decoration: underline; }
-        .lb-points-label { font-size: 11px; color: #9ca3af; }
-        .lb-progress-wrap { flex: 2 1 0; min-width: 0; }
-        .lb-progress-bar-outer { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
-        .lb-progress-bar-inner { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2563eb, #7c3aed); transition: width 0.4s; }
-        .lb-progress-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
-        .lb-progress-text-val { font-size: 11px; color: #6b7280; }
-        .lb-progress-pct { font-size: 11px; color: #6b7280; font-weight: 600; }
-        .lb-pagination { display: flex; gap: 6px; align-items: center; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
-        .lb-page-btn {
-            padding: 5px 13px; border-radius: 6px; border: 1px solid #d1d5db;
-            background: #fff; color: #374151; font-size: 13px; cursor: pointer;
-            transition: background 0.15s, color 0.15s;
-        }
-        .lb-page-btn:hover { background: #f3f4f6; }
-        .lb-page-btn.lb-page-active { background: #2563eb; color: #fff; border-color: #2563eb; font-weight: 700; }
-        @media (max-width: 575.98px) {
-            .lb-row { gap: 10px; padding: 12px 14px; }
-            .lb-rank { flex: 0 0 28px; font-size: 14px; }
-            .lb-avatar-wrap { flex: 1 1 auto; min-width: 0; }
-            .lb-level-wrap { flex: 1 1 45%; }
-            .lb-points-wrap { flex: 1 1 45%; }
-            .lb-progress-wrap { flex: 1 1 100%; }
-        }
-    </style>";
 
+    $arrLevelColors = [];
+    $firstLevelIconFilename = null;
+    $pointslevels = Database::get()->queryArray("SELECT * FROM points_game_levels WHERE points_game = ?d ORDER BY required_points ASC", $points_game_id);
+    if (count($pointslevels) > 0) {
+        $level_colors = ['#14b8a6','#6366f1','#7c3aed','#ef4444','#f97316','#f59e0b','#10b981','#8b5cf6'];
+        $lc_idx = 0;
+        foreach ($pointslevels as $level) {
+            $lc = $level_colors[$lc_idx % count($level_colors)];
+            $lvl_icon_fn = null;
+            if (!empty($level->icon)) {
+                $lbi = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = ?d", $level->icon);
+                if ($lbi) { $lvl_icon_fn = $lbi->filename; }
+            }
+            $arrLevelColors[] = [
+                'level_title'    => $level->friendly_name,
+                'level_point'    => $level->required_points,
+                'level_color'    => $lc,
+                'icon_filename'  => $lvl_icon_fn,
+            ];
+            if ($lc_idx === 0) { $firstLevelIconFilename = $lvl_icon_fn; }
+            $lc_idx++;
+        }
+    }
+    
     $tool_content .= "
         <div class='card rounded-3 mt-4'>
             <div class='card-body p-4'>
@@ -4549,7 +5114,8 @@ function display_leaderboard_accordion($points_game_id) {
             $user_progress = PointsGame::getNextLevelInfo($user_data->id, $points_game_id);
             $current_points = $user_progress['current_points'];
             $level_num = $user_progress['current_level_num'] ?? null;
-            $level_text = $langLevel . ($level_num !== null ? " $level_num" : '');
+            //$level_text = ($level_num !== null ? "$langLevel $level_num" : '-');
+            $level_text = (($level_num !== null && !empty($user_progress['current_level_title'])) ? $user_progress['current_level_title'] : '-');
             $pct = $user_progress['progress_percentage'] ?? 0;
 
             if (is_null($user_progress['next_level_id'])) {
@@ -4564,12 +5130,39 @@ function display_leaderboard_accordion($points_game_id) {
             }
 
             if ($current_points > 0 && ($is_editor || $user_data->id == $uid)) {
-                $points_html = "<a href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>$current_points</a>";
+                $points_html = "<a class='fs-6 TextBold' href='index.php?course=$course_code&amp;points_game_id=$points_game_id&amp;u=$user_data->id'>$current_points</a>";
             } else {
                 $points_html = $current_points > 0 ? $current_points : '0';
             }
 
-            $badge_html = "<div class='lb-level-badge-star'><i class='fa fa-star'></i></div>";
+            $levelCounter = 0;
+            $bgLevelStar = '#9fa0a4';
+            $userLevelIconFilename = null;
+            if (count($arrLevelColors) > 0) {
+                foreach ($arrLevelColors as $l) {
+                    if (isset($arrLevelColors[$levelCounter + 1]) && $current_points >= $l['level_point'] && $current_points < $arrLevelColors[$levelCounter + 1]['level_point']) {
+                        $bgLevelStar = $l['level_color'];
+                        $userLevelIconFilename = $l['icon_filename'];
+                        break;
+                    }
+                    if (!isset($arrLevelColors[$levelCounter + 1]) && $current_points >= $l['level_point']) {
+                        $bgLevelStar = $l['level_color'];
+                        $userLevelIconFilename = $l['icon_filename'];
+                        break;
+                    }
+                    $levelCounter++;
+                }
+                // No level reached yet — show first level's icon as target
+                if ($userLevelIconFilename === null) {
+                    $userLevelIconFilename = $firstLevelIconFilename;
+                }
+            }
+
+            if ($userLevelIconFilename) {
+                $badge_html = "<img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($userLevelIconFilename) . "' class='lb-level-badge-star' style='background:transparent;object-fit:contain;' alt='" . q($level_text) . "'>";
+            } else {
+                $badge_html = "<div class='lb-level-badge-star' style='background: $bgLevelStar;'><i class='fa fa-star'></i></div>";
+            }
 
             $tool_content .= "
             <div class='$row_class' data-lb-page='$page'>
@@ -4639,7 +5232,8 @@ function display_leaderboard_accordion($points_game_id) {
  * @brief display users points game progress
  * @param type $points_game_id
  */
-function display_users_points_game_progress ($points_game_id) {
+function display_users_points_game_progress ($points_game_id): void
+{
     global $tool_content, $course_code, $course_id, $langNoUserList, $langSurnameName, $langID, $langProgress, $is_editor, $uid, $langAnonymous;
 
     $anon = false;
@@ -4737,15 +5331,16 @@ function display_users_points_game_progress ($points_game_id) {
 }
 
 /**
- * @brief display users progress (teacher view)
+ * @brief display users' progress (teacher view)
  * @param type $element
  * @param type $element_id
  */
-function display_users_progress($element, $element_id) {
+function display_users_progress($element, $element_id): void
+{
 
-    global $tool_content, $head_content, $course_code, $course_id, $langNoCertificateUsers, $langSurnameName, $langUsersS,
-           $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults, $langCompletedIn,
-           $langCompletion, $urlAppend;
+    global $tool_content, $head_content, $course_id, $langNoCertificateUsers,  $langUsersS,
+           $langAmShort, $langProgress, $langUsersCertResults, $langCompletion,
+           $urlAppend, $course_code, $active_tab;
 
     if ($element == 'certificate') {
         $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user.am, user, completed, completed_criteria, total_criteria, assigned
@@ -4801,36 +5396,6 @@ function display_users_progress($element, $element_id) {
                                             AND reviewer = 0
                                             AND course_id = ?d", $course_id)->total;
 
-    $head_content .= "<style>
-        .up-lb-list { display: flex; flex-direction: column; gap: 10px; }
-        .up-lb-row {
-            display: flex; align-items: center; gap: 20px; padding: 14px 20px;
-            border-radius: 12px; background: #fff; border: 1px solid #e5e7eb;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05); flex-wrap: wrap;
-        }
-        .up-lb-rank { font-size: 16px; font-weight: 700; color: #374151; flex: 0 0 38px; text-align: center; }
-        .up-lb-avatar-wrap { display: flex; align-items: center; gap: 10px; flex: 1 1 160px; min-width: 0; }
-        .up-lb-avatar {
-            width: 42px; height: 42px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; font-weight: 700; color: #fff; flex-shrink: 0;
-        }
-        .up-lb-username { font-size: 14px; color: #374151; }
-        .up-lb-username-link { font-size: 14px; color: #2563eb; text-decoration: none; }
-        .up-lb-username-link:hover { text-decoration: underline; }
-        .up-lb-progress-wrap { flex: 3 1 200px; min-width: 0; }
-        .up-lb-bar-outer { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
-        .up-lb-bar-inner { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #2563eb, #7c3aed); transition: width 0.4s; }
-        .up-lb-bar-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
-        .up-lb-bar-label { font-size: 11px; color: #6b7280; }
-        .up-lb-bar-pct { font-size: 11px; color: #6b7280; font-weight: 600; }
-        @media (max-width: 575.98px) {
-            .up-lb-row { gap: 10px; padding: 12px 14px; }
-            .up-lb-rank { flex: 0 0 28px; font-size: 14px; }
-            .up-lb-avatar-wrap { flex: 1 1 auto; }
-            .up-lb-progress-wrap { flex: 1 1 100%; }
-        }
-    </style>";
 
     $avatar_colors = ['#2563eb','#7c3aed','#db2777','#ea580c','#16a34a','#0891b2','#b45309','#0e7490','#6d28d9','#059669'];
 
@@ -4859,8 +5424,8 @@ function display_users_progress($element, $element_id) {
                     : '';
                 $progress_col = "
                     <div class='d-flex align-items-center gap-2'>
-                        <i class='fa fa-check-circle' style='color:#22c55e; font-size:20px;'></i>
-                        <span style='font-size:13px; color:#16a34a; font-weight:600;'>$langCompletion</span>
+                        <i class='fa fa-check-circle Success-200-cl' style='font-size:20px;'></i>
+                        <span class='Success-200-cl' style='font-size:13px; font-weight:600;'>$langCompletion</span>
                         " . ($date_text ? "<span style='font-size:12px; color:#6b7280;'>($date_text)</span>" : '') . "
                     </div>";
             } else {
@@ -4885,7 +5450,7 @@ function display_users_progress($element, $element_id) {
                     </div>
                 </div>
                 <div class='up-lb-progress-wrap'>
-                    $progress_col
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=$user_data->user&tab=$active_tab'>$progress_col</a>
                 </div>
             </div>";
             $cnt++;
@@ -4929,12 +5494,12 @@ function get_activity_style($activity_type) {
  * @param type $element_id
  * @param type $user_id
  */
-function display_user_progress_details($element, $element_id, $user_id) {
+function display_user_progress_details($element, $element_id, $user_id): void
+{
 
-    global $tool_content, $langNoUserActivity, $langAttendanceActList, $langAttendanceActivity, $langpublisher,
-           $langInstallEnd, $langTotalPercentCompleteness, $langTitle, $langDescription,
+    global $tool_content, $langNoUserActivity, $langCriteria, $langpublisher, $langTotalPercentCompleteness,
            $langCertAddress, $langRubricCrit, $langCompleted, $langSurveyNotStarted, $head_content,
-           $urlServer, $webDir;
+           $urlServer, $webDir, $course_code, $is_editor;
 
     $element_title = get_cert_title($element, $element_id);
     $resource_data = array();
@@ -4985,7 +5550,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
         if ($badge_data && $badge_data->icon) {
             $badge_icon_details = get_badge_icon($badge_data->icon);
             $badge_icon_filename = $badge_icon_details[key($badge_icon_details)];
-            $img_html = "<img src='" . $urlServer . BADGE_TEMPLATE_PATH . q($badge_icon_filename) . "' style='width:80px;height:auto;'>";
+            $img_html = "<img alt='".key($badge_icon_details)."' src='" . $urlServer . BADGE_TEMPLATE_PATH . q($badge_icon_filename) . "' style='width:80px;height:auto;'>";
         }
     } else {
         $cert_data = Database::get()->querySingle("SELECT template FROM certificate WHERE id = ?d", $element_id);
@@ -4995,8 +5560,20 @@ function display_user_progress_details($element, $element_id, $user_id) {
             $template_filename  = $template_details[$template_name];
             $thumbnail_filename = preg_replace('/.html/', '_thumbnail.png', $template_filename);
             if (file_exists($webDir . CERT_TEMPLATE_PATH . $thumbnail_filename)) {
-                $cert_thumbnail_url = $urlServer . CERT_TEMPLATE_PATH . q($thumbnail_filename);
-                $img_html = "<img src='$cert_thumbnail_url' style='width:65%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
+                $fq = Database::get()->querySingle("SELECT id, `filename` FROM certificate_template WHERE id = ?d", $cert_data->template);
+                if (!str_contains($fq->filename, '.html')) { // new way
+                    $cert_thumbnail_url =getFilenames(true, $fq->id, 'thumbnail');
+                } else { // old way
+                    $cert_thumbnail_url = $urlServer . CERT_TEMPLATE_PATH . q($thumbnail_filename);
+                }
+                if ($is_editor) {
+                    $img_html = "<img alt='$template_name' src='$cert_thumbnail_url' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>";
+                } else {
+                    $img_html = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&certificate_id=$element_id&u=$user_id&p=1' target='_blank'>
+                                <img alt='$template_name' src='$cert_thumbnail_url' style='width:25%;height:auto;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.10);'>
+                             </a>";
+                }
+
             }
         }
     }
@@ -5019,12 +5596,12 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
     // Info card elements
     $cert_desc   = get_cert_desc($element, $element_id);
-    $desc_html   = !empty($cert_desc) ? "<div style='font-size:14px;color:#6b7280;margin-top:6px;'>" . $cert_desc . "</div>" : '';
+    $desc_html   = !empty($cert_desc) ? "<div class='text_muted_cl' style='font-size:14px;margin-top:6px;'>" . $cert_desc . "</div>" : '';
     $issuer_html = '';
     if ($bundle != -1) {
         $issuer = get_cert_issuer($element, $element_id);
         if (!empty($issuer)) {
-            $issuer_html = "<div style='font-size:13px;color:#6b7280;margin-top:6px;'><span style='font-weight:600;'>$langpublisher:</span> " . q($issuer) . "</div>";
+            $issuer_html = "<div class='text_muted_cl' style='font-size:13px;margin-top:6px;'><span style='font-weight:600;'>$langpublisher:</span> " . q($issuer) . "</div>";
         }
     }
     $cert_link_html = !empty($cert_public_link) ? "<div style='margin-top:8px;font-size:13px;'>$cert_public_link</div>" : '';
@@ -5035,11 +5612,10 @@ function display_user_progress_details($element, $element_id, $user_id) {
         $tool_content .= "
         <div class='col-12 mt-4'>
             <div class='card rounded-3'>
-                <div class='card-body p-4'>" .
-                    (!empty($img_html) ? "<div style='text-align:center;margin-bottom:20px;'>$img_html</div>" : '') . "
+                <div class='card-body p-4'>                     
                     <div style='font-size:18px;font-weight:700;'>$element_title</div>
                     $desc_html
-                    $issuer_html
+                    $issuer_html " . (!empty($img_html) ? "<div style='text-align:center;margin-bottom:20px;'>$img_html</div>" : '') . "
                     $cert_link_html
                 </div>
             </div>
@@ -5051,12 +5627,15 @@ function display_user_progress_details($element, $element_id, $user_id) {
             <div class='card rounded-3'>
                 <div class='card-body p-4'>
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
-                        <div style='flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center;'>$img_html</div>
+                        <div style='flex-shrink:0;width:80px;display:flex;align-items:center;justify-content:center;'>
+                            $img_html
+                        </div>
                         <div>
                             <div style='font-size:18px;font-weight:700;'>$element_title</div>
                             $desc_html
                             $issuer_html
-                            $cert_link_html                        </div>
+                            $cert_link_html                        
+                        </div>
                     </div>
                 </div>
             </div>
@@ -5071,75 +5650,19 @@ function display_user_progress_details($element, $element_id, $user_id) {
                     <div class='d-flex flex-column flex-sm-row align-items-sm-center gap-3'>
                         <div class='cc-donut-wrap'>$donut_svg<div class='cc-donut-pct'>{$pct}%</div></div>
                         <div>
-                            <div style='font-size:17px;font-weight:700;color:#1f2937;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
-                            <div style='font-size:13px;color:#6b7280;'>$completed_num / $total_num $langAttendanceActList</div>
+                            <div class='default-dark-text' style='font-size:17px;font-weight:700;margin-bottom:4px;'>$langTotalPercentCompleteness</div>
+                            <div class='text_muted_cl' style='font-size:13px;'>$completed_num / $total_num $langCriteria</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>";
 
-	$head_content .= "<style>
-        .progress-activity-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            padding: 18px;
-            background: #fff;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.07);
-            transition: box-shadow 0.2s;
-        }
-        .progress-activity-card-link:hover .progress-activity-card { box-shadow: 0 4px 16px rgba(0,0,0,0.11); transform: translateY(-1px); }
-        .progress-activity-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            color: #fff;
-            font-size: 20px;
-        }
-        .progress-activity-type-label {
-            font-size: 12px;
-            font-weight: 700;
-            color: #9ca3af;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-        .progress-activity-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1f2937;
-            margin: 10px 0 4px;
-            flex-grow: 1;
-        }
-        .progress-activity-criteria { font-size: 13px; color: #6b7280; margin-bottom: 12px; }
-        .progress-activity-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: auto;
-            align-self: flex-start;
-        }
-        .status-completed { border: 1.5px solid #16a34a; color: #16a34a; background: transparent; }
-        .status-not-started { border: 1.5px solid #f97316; color: #ea580c; background: transparent; }
-        .cc-donut-wrap { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
-        .cc-donut-pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #1f2937; }
-    </style>";
-
 	$tool_content .= "
         <div class='col-12 mt-3'>
             <div class='card rounded-3'>
                 <div class='card-body p-4'>
-                    <h2 class='text-heading-h3 mb-3'>$langAttendanceActList</h2>
+                    <h2 class='text-heading-h3 mb-3'>$langCriteria</h2>
                     <div class='row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3'>";
     // completed criteria
 	foreach ($sql as $user_criterion) {
@@ -5271,9 +5794,85 @@ function criteria_with_operators() {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function display_user_points_game_details($points_game_id, $user_id) {
-    global $tool_content, $langNoUserActivity, $langPoints, $langDescription, $langLevel, $langAttendanceActivity, $langTitle, $langDate,
-        $langType, $langPointsGameRecActivities, $langPointsGameOneTimeActivities, $langRubricCrit, $head_content;
+    global $tool_content, $langNoUserActivity, $langPoints, $langDescription, $langLevel,
+           $langAttendanceActivity, $langRubricCrit, $head_content;
 
     $sql = Database::get()->queryArray("SELECT * FROM points_game_criterion AS pgc, user_points_game_criterion AS upgc
                                         WHERE upgc.points_game_criterion = pgc.id AND pgc.points_game = ?d AND upgc.user = ?d
@@ -5427,5 +6026,3 @@ function display_user_points_game_details($points_game_id, $user_id) {
         </div>";
     }
 }
-
-

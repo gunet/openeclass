@@ -104,11 +104,21 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if (isset($_POST['file_uploaded'])) {
             header('Content-Type: application/json');
             $questionID = $_POST['question_id'];
-            $docInfo = ['filename' => $_POST['file_name'], 'filepath' => $_POST['file_path']];
-            $_SESSION['data_answers'][$questionID] = serialize($docInfo);
-            $_SESSION['data_file_answer'][$questionID] = serialize($docInfo);
-            echo json_encode(['upload_success' => true]);
-            exit();
+            $docInfo = [
+                'filename' => basename(trim($_POST['file_name'] ?? '')),
+                'filepath' => trim($_POST['file_path'] ?? '')
+            ];
+            $checkObj = serialize($docInfo);
+            $arrFileObj = unserialize($checkObj, ['allowed_classes' => false]);
+            if (is_array($arrFileObj) && isset($arrFileObj['filename'], $arrFileObj['filepath']) 
+                && is_string($arrFileObj['filename']) && is_string($arrFileObj['filepath'])) {
+                $_SESSION['data_answers'][$questionID] = serialize($docInfo);
+                $_SESSION['data_file_answer'][$questionID] = serialize($docInfo);
+                echo json_encode(['upload_success' => true]);
+                exit();
+            } else {
+                exit();
+            }
         }
 
         // File has been removed from uppy
@@ -126,13 +136,23 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $fpath = $_POST['fPath'];
             $file = "$webDir/courses/$c/poll_$pollId/$currentUser/$questionID/$s$fpath";
             if (file_exists($file)) {
-                unlink($file);
-                Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
-                                        INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
-                                        WHERE poll_answer_record.qid = ?d
-                                        AND poll_user_record.uid = ?d
-                                        AND poll_user_record.pid = ?d
-                                        AND poll_user_record.session_id = ?d", $questionID, $currentUser, $pollId, $s);
+                $uidAnswers = Database::get()->queryArray("SELECT par.arid, par.answer_text FROM poll_answer_record par
+                                                           JOIN poll_user_record pur ON pur.id=par.poll_user_record_id
+                                                           WHERE par.qid = ?d
+                                                           AND pur.uid = ?d
+                                                           AND pur.pid = ?d
+                                                           AND pur.session_id = ?d", $questionID, $currentUser, $pollId, $s);
+
+                if (count($uidAnswers) > 0) {
+                    foreach ($uidAnswers as $an) {
+                        $answer_txt = unserialize($an->answer_text);
+                        if (isset($answer_txt['filepath']) && $answer_txt['filepath'] == $fpath) {
+                            unlink($file);
+                            Database::get()->query("DELETE FROM poll_answer_record WHERE arid = ?d", $an->arid);
+                            break;
+                        }
+                    }
+                }
             } 
             exit();
         }
@@ -165,15 +185,28 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['answer'])) {
     $dir = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid/";
     if (!file_exists($dir)) {
         mkdir("$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid/", 0755, true);
-    } else {// delete prev file
-        $folder = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid";
-        if (is_dir($folder)) {
-            $files = scandir($folder);
-            foreach ($files as $file) {
-                if ($file !== '.' && $file !== '..') {
-                    $filePath = $folder . DIRECTORY_SEPARATOR . $file;
-                    if (is_file($filePath)) {
-                        unlink($filePath); // Delete the file
+    } else {// delete prev file only if history of multiple submissions is not enabled.
+        $saveMultipleSubmission = false;
+        $poll = Database::get()->querySingle("SELECT options FROM poll WHERE pid = ?d AND course_id = ?d", $pid, $course_id);
+        if (isset($poll) && !is_null($poll->options)) {
+            $pollOptions = unserialize($poll->options);
+            foreach ($pollOptions as $opt) {
+                if (isset($opt['save_prev_user_answers']) && $opt['save_prev_user_answers'] == 1) {
+                    $saveMultipleSubmission = true;
+                    break;
+                }
+            }
+        }
+        if (!$saveMultipleSubmission) {
+            $folder = "$webDir/courses/$course_code/poll_$pid/$currentUser/$qid/$sid";
+            if (is_dir($folder)) {
+                $files = scandir($folder);
+                foreach ($files as $file) {
+                    if ($file !== '.' && $file !== '..') {
+                        $filePath = $folder . DIRECTORY_SEPARATOR . $file;
+                        if (is_file($filePath)) {
+                            unlink($filePath); // Delete the file
+                        }
                     }
                 }
             }
@@ -755,13 +788,6 @@ function printPollForm() {
             unset($_SESSION["poll_answers_$pid"]);
         }
 
-        if (!isset($_GET['page']) or (isset($_GET['page']) && intval($_GET['page']) == 1)) {
-            $_SESSION['q_counter'] = 1;
-        } else {
-            $totalQuestionsInPrevPages = Database::get()->querySingle("SELECT COUNT(*) as total FROM poll_question 
-                                                                       WHERE pid = ?d AND `page` < ?d AND `page` > ?d", $pid, intval($_GET['page']), 0)->total;
-            $_SESSION['q_counter'] = $totalQuestionsInPrevPages + 1;
-        }
         // Session process
         $sql_an = '';
         $s_id = $_GET['session'] ?? 0;
@@ -793,7 +819,19 @@ function printPollForm() {
             unset($_SESSION['temp_data_answers']);
             unset($_SESSION['unanswered_required_qids']);
         }
-        
+
+        // Question number regarding pagebreak
+        $questionNumberArr = [];
+        $qcounter = 1;
+        foreach ($questions as $q) {
+            if ($q->qtype == QTYPE_LABEL or $q->has_sub_question == -1) {
+                continue;
+            }
+
+            $questionNumberArr[$q->pqid] = $qcounter;
+            $qcounter++;
+        }
+
 
         foreach ($questions as $theQuestion) {
             if ($temp_IsLime) {
@@ -849,7 +887,7 @@ function printPollForm() {
                 <div class='col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100 panelCard-questionnaire poll-panel mb-4' $emptyQuestionStyle>
                         <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                            <h2 class='text-heading-h3'>$langQuestion $_SESSION[q_counter] $RequiredQuestionHtml</h2>
+                            <h2 class='text-heading-h3'>$langQuestion $questionNumberArr[$pqid] $RequiredQuestionHtml</h2>
                         </div>
                         <div class='card-body'>";
                             $tool_content .= "<p tabindex='0' class='TextMedium Neutral-900-cl mb-2'>".q_math($theQuestion->question_text)."</p>";
@@ -1107,10 +1145,10 @@ function printPollForm() {
                                     <div class='form-group margin-bottom-fat'>
                                         <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                             <div class='input-group'>
-                                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'>
+                                                <span class='add-on1'>
                                                     <i class='fa-regular fa-calendar Neutral-600-cl'></i>
                                                 </span>
-                                                <input id='dateTimeAnswer_$pqid' class='datetimeAnswer form-control mt-0 border-start-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
+                                                <input id='dateTimeAnswer_$pqid' class='datetimeAnswer form-control mt-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
                                             </div>
                                         </div>
                                     </div>";
@@ -1119,10 +1157,10 @@ function printPollForm() {
                                     <div class='form-group margin-bottom-fat'>
                                         <div class='col-sm-12 margin-top-thin QuestionType_{$qtype} QuestionNumber_{$pqid}'>
                                             <div class='input-group'>
-                                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'>
+                                                <span class='add-on1'>
                                                     <i class='fa-regular fa-calendar Neutral-600-cl'></i>
                                                 </span>
-                                                <input id='dateAnswer_$pqid' class='dateAnswer form-control mt-0 border-start-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
+                                                <input id='dateAnswer_$pqid' class='dateAnswer form-control mt-0' name='answer[$pqid]' type='text' data-question-type='$qtype' value='$text'>
                                             </div>
                                         </div>
                                     </div>";
@@ -1146,7 +1184,6 @@ function printPollForm() {
                         </div>
                     </div>
                 </div>";
-                $_SESSION['q_counter'] = $_SESSION['q_counter'] + 1;
             }
         }
 
@@ -1308,6 +1345,16 @@ function submitPoll() {
 
     $unit_id = isset($_REQUEST['unit_id'])? intval($_REQUEST['unit_id']): null;
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
+    $savePreviousUserAnswers = false;
+    if (isset($poll) && !is_null($poll->options)) {
+        $pollOptions = unserialize($poll->options);
+        foreach ($pollOptions as $opt) {
+            if (isset($opt['save_prev_user_answers']) && $opt['save_prev_user_answers'] == 1) {
+                $savePreviousUserAnswers = true;
+                break;
+            }
+        }
+    }
     $default_answer = $poll->default_answer;
     $is_complete = true;
     $v = new Valitron\Validator($_POST);
@@ -1404,7 +1451,7 @@ function submitPoll() {
             $eventData->resource = intval($pid);
             ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 
-            if (isset($_REQUEST['update'])) { // if poll has enabled multiple submissions first delete the previous answers
+            if (isset($_REQUEST['update']) && !$savePreviousUserAnswers) { // if poll has enabled multiple submissions first delete the previous answers
                 Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d $sql_u)", $userDefault, $pid);
                 Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d $sql_u", $userDefault, $pid);
             }
@@ -1537,6 +1584,12 @@ function submitPoll() {
             }
         }
 
+        // update submission date
+        if (isset($user_record_id)) {
+            $lastSubmissionDate = Database::get()->querySingle("SELECT MAX(submit_date) AS last_submission FROM poll_answer_record WHERE poll_user_record_id = ?d", $user_record_id)->last_submission;
+            Database::get()->query("UPDATE poll_answer_record SET submit_date = ?t WHERE poll_user_record_id = ?d", $lastSubmissionDate, $user_record_id);
+        }
+
         if (!$is_complete) {
             $user_answers = Database::get()->queryArray('SELECT * FROM poll_answer_record
                 WHERE poll_user_record_id = ?d', $user_record_id);
@@ -1549,8 +1602,8 @@ function submitPoll() {
                 }
             }
             $_SESSION["poll_answers_$pid"] = $session_answers;
-//            Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
-//            Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
+            //Database::get()->query('DELETE FROM poll_answer_record WHERE poll_user_record_id = ?d', $user_record_id);
+            //Database::get()->query('DELETE FROM poll_user_record WHERE id = ?d', $user_record_id);
             Session::flash('message', $langQFillInAllQs);
             Session::flash('alert-class', 'alert-warning');
             if(isset($_GET['from_session_view'])){
@@ -1626,15 +1679,30 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
             if (isset($_GET['onBehalfOfUser']) && isset($_SESSION['onBehalfOfUserId']) && $userDefault == 0) {
                 unset($_SESSION['data_answers'][$pqid]);
             }
-            if (($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE)) {       
-                $user_answers = Database::get()->queryArray("SELECT a.aid
+            if (($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE)) { 
+                if ($qtype == QTYPE_SINGLE) {
+                    $querySubmitDate = "ORDER BY a.submit_date DESC LIMIT 1";
+                } else {
+                    $querySubmitDate = "
+                    AND a.submit_date = (
+                        SELECT MAX(a2.submit_date)
+                        FROM poll_answer_record a2
+                        JOIN poll_user_record b2
+                            ON a2.poll_user_record_id = b2.id
+                        WHERE a2.qid = $pqid
+                            AND b2.uid = $userDefault
+                    );
+                    ";
+                }   
+                $user_answers = Database::get()->queryArray("SELECT a.aid, a.submit_date
                         FROM poll_user_record b, poll_answer_record a
                         LEFT JOIN poll_question_answer c
                             ON a.aid = c.pqaid
                         WHERE a.poll_user_record_id = b.id
                             AND a.qid = ?d
                             AND b.uid = ?d
-                            $sql_an", $pqid, $userDefault);          
+                            $sql_an
+                            $querySubmitDate", $pqid, $userDefault);          
                 if ($user_answers) {
                     $storeData = [];
                     foreach ($user_answers as $ua) {
@@ -1649,23 +1717,25 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                     }
                 }
             } elseif ($qtype == QTYPE_SCALE) {
-                $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                $user_answers = Database::get()->querySingle("SELECT a.answer_text, a.submit_date
                                     FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
                                     AND a.poll_user_record_id = b.id
                                     AND b.uid = ?d
-                                    $sql_an", $pqid, $userDefault);
+                                    $sql_an
+                                    ORDER BY a.submit_date DESC LIMIT 1", $pqid, $userDefault);
                 if ($user_answers) {
                     $slider_value = $user_answers->answer_text;
                     $_SESSION['data_answers'][$pqid] = $slider_value;
                 }
             } elseif ($qtype == QTYPE_FILL or $qtype == QTYPE_DATETIME or $qtype == QTYPE_SHORT or $qtype == QTYPE_FILE or $qtype == QTYPE_DATE) {
-                $user_answers = Database::get()->querySingle("SELECT a.answer_text
+                $user_answers = Database::get()->querySingle("SELECT a.answer_text, a.submit_date
                                     FROM poll_answer_record a, poll_user_record b
                                 WHERE qid = ?d
                                     AND a.poll_user_record_id = b.id
                                     AND b.uid = ?d
-                                    $sql_an", $pqid, $userDefault);
+                                    $sql_an
+                                    ORDER BY a.submit_date DESC LIMIT 1", $pqid, $userDefault);
                 if ($user_answers) {
                     $text = $user_answers->answer_text;
                     $_SESSION['data_answers'][$pqid] = $text;
@@ -1677,22 +1747,29 @@ function user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExist
                     $_SESSION['data_answers'][$pqid] = $_SESSION['data_file_answer'][$pqid];
                 }
             } elseif ($qtype == QTYPE_TABLE) {
+                $user_answers = Database::get()->queryArray("SELECT a.poll_user_record_id, a.answer_text, a.sub_qid, a.sub_qid_row FROM poll_answer_record a
+                                                        JOIN poll_user_record b ON b.id = a.poll_user_record_id
+                                                        WHERE b.pid = ?d
+                                                        AND b.uid = ?d
+                                                        $sql_an
+                                                        AND a.qid = ?d
+                                                        AND a.poll_user_record_id = (SELECT MAX(a2.poll_user_record_id) FROM poll_answer_record a2
+                                                                                       JOIN poll_user_record b2 ON b2.id = a2.poll_user_record_id
+                                                                                       WHERE b2.pid = ?d
+                                                                                       AND b2.uid = ?d
+                                                                                       AND a2.qid = ?d)", $theQuestion->pid, $userDefault, $pqid, $theQuestion->pid, $userDefault, $pqid);
+
                 $s_data = [];
                 $q_res = Database::get()->querySingle("SELECT q_row,q_column FROM poll_question WHERE pqid = ?d", $pqid);
                 $length = 1;
                 for ($i = 1; $i <= $q_res->q_row; $i++) {
                     for ($j = 1; $j <= $q_res->q_column; $j++) {
-                        $user_answers = Database::get()->querySingle("SELECT DISTINCT a.sub_qid, a.sub_qid_row, a.answer_text
-                                        FROM poll_answer_record a, poll_user_record b
-                                        WHERE qid = ?d
-                                        AND a.poll_user_record_id = b.id
-                                        AND b.uid = ?d
-                                        AND a.sub_qid = ?d
-                                        AND a.sub_qid_row = ?d
-                                        $sql_an", $pqid, $userDefault, $j, $i);
-                        
-                        if ($user_answers) {
-                            $s_data[$length] = $user_answers->answer_text;
+                        if (count($user_answers) > 0) {
+                            foreach ($user_answers as $an) {
+                                if ($an->sub_qid_row == $i && $an->sub_qid == $j) {
+                                    $s_data[$length] = $an->answer_text;
+                                }
+                            }
                         }
                         $length++;
                     }
@@ -1762,7 +1839,7 @@ function update_submission($pid) {
 function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     global $tool_content, $head_content, $course_code, $urlAppend, $langPleaseWait, 
            $language, $langFileName, $langDelete, $langConfirmDeletePermantly, $urlServer, 
-           $uid, $webDir, $langInfoPollUploadedFile;
+           $uid, $webDir, $langInfoPollUploadedFile, $course_id;
 
     $token = $_SESSION['csrf_token'];
     $is_onBehalfOfUser_mode = isset($_GET['onBehalfOfUser']) ? 1 : 0;
@@ -1771,10 +1848,13 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     $del_file = '';
     $filename = '';
     $filepath = '';
-    if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
-        $arrFile = unserialize($_SESSION['data_answers'][$pqid]);
-        $filename = $arrFile['filename'];
-        $filepath = $arrFile['filepath'];
+    if (isset($_SESSION['data_answers']) && isset($_SESSION['data_answers'][$pqid]) && is_string($_SESSION['data_answers'][$pqid])) {
+        $arrFile = unserialize($_SESSION['data_answers'][$pqid], ['allowed_classes' => false]);
+        if (is_array($arrFile) && isset($arrFile['filename'], $arrFile['filepath']) 
+            && is_string($arrFile['filename']) && is_string($arrFile['filepath'])) {
+            $filename = basename(trim($arrFile['filename']));
+            $filepath = trim($arrFile['filepath']);
+        }
     }
 
     if (!empty($filename) && file_exists("$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid/$sessionID$filepath")) {
@@ -1788,22 +1868,35 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
     } else {
         // If the user has uploaded a file and the user has canceled the poll, 
         // remove the uploaded file for the current question.
-        $folderPath = "$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid/$sessionID";
-        if (is_dir($folderPath)) {
-            $files = scandir($folderPath);
-            foreach ($files as $file) {
-                if ($file === '.' || $file === '..') continue;
-                $fileNPath = $folderPath . DIRECTORY_SEPARATOR . $file;
-                // Delete files
-                if (is_file($fileNPath)) {
-                    unlink($fileNPath);
-                    unset($_SESSION['data_answers'][$pqid]);
-                    Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
-                                            INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
-                                            WHERE poll_answer_record.qid = ?d
-                                            AND poll_user_record.uid = ?d
-                                            AND poll_user_record.pid = ?d
-                                            AND poll_user_record.session_id = ?d", $pqid, $currentUser, $pid, $sessionID);
+        $saveMultipleSubmission = false;
+        $poll = Database::get()->querySingle("SELECT options FROM poll WHERE pid = ?d AND course_id = ?d", $pid, $course_id);
+        if (isset($poll) && !is_null($poll->options)) {
+            $pollOptions = unserialize($poll->options);
+            foreach ($pollOptions as $opt) {
+                if (isset($opt['save_prev_user_answers']) && $opt['save_prev_user_answers'] == 1) {
+                    $saveMultipleSubmission = true;
+                    break;
+                }
+            }
+        }
+        if (!$saveMultipleSubmission) {
+            $folderPath = "$webDir/courses/$course_code/poll_$pid/$currentUser/$pqid/$sessionID";
+            if (is_dir($folderPath)) {
+                $files = scandir($folderPath);
+                foreach ($files as $file) {
+                    if ($file === '.' || $file === '..') continue;
+                    $fileNPath = $folderPath . DIRECTORY_SEPARATOR . $file;
+                    // Delete files
+                    if (is_file($fileNPath)) {
+                        unlink($fileNPath);
+                        unset($_SESSION['data_answers'][$pqid]);
+                        Database::get()->query("DELETE poll_answer_record FROM poll_answer_record
+                                                INNER JOIN poll_user_record ON poll_user_record.id=poll_answer_record.poll_user_record_id
+                                                WHERE poll_answer_record.qid = ?d
+                                                AND poll_user_record.uid = ?d
+                                                AND poll_user_record.pid = ?d
+                                                AND poll_user_record.session_id = ?d", $pqid, $currentUser, $pid, $sessionID);
+                    }
                 }
             }
         }

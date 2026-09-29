@@ -1011,7 +1011,7 @@ class Exercise
             // reads question information
             $objQuestionTmp->read($row->question_id);
             $question_type = $objQuestionTmp->selectType();
-            if ($question_type == FREE_TEXT or $question_type == ORAL) {
+            if ($question_type == FREE_TEXT or $question_type == ORAL or $question_type == UPLOAD_FILE) {
                 $exerciseResult[$row->question_id] = $row->answer;
             } elseif ($question_type == MATCHING) {
                 $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
@@ -1123,7 +1123,7 @@ class Exercise
                         $value[$i] = '';
                     }
                     unset($objAnswer);
-                } elseif ($question_type == FREE_TEXT or $question_type == ORAL) {
+                } elseif ($question_type == FREE_TEXT or $question_type == ORAL or $question_type == UPLOAD_FILE) {
                     $value = '';
                 } else {
                     $value = 0;
@@ -1149,7 +1149,7 @@ class Exercise
         Database::get()->query("DELETE FROM exercise_answer_record
                         WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
 
-        if ($question_type == FREE_TEXT or $question_type == ORAL) {
+        if ($question_type == FREE_TEXT or $question_type == ORAL or $question_type == UPLOAD_FILE) {
             $answer_record_id = Database::get()->query("INSERT INTO exercise_answer_record
                (eurid, question_id, answer, answer_id, weight, is_answered, q_position)
                VALUES (?d, ?d, ?s, 0, NULL, ?d, ?d)",
@@ -1401,13 +1401,13 @@ class Exercise
         $id = $this->id;
         $attempt_value = $_POST['attempt_value'];
         $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
-        if ($question_type == FREE_TEXT or $question_type == ORAL) {
+        if ($question_type == FREE_TEXT or $question_type == ORAL or $question_type == UPLOAD_FILE) {
             if (!empty($value)) {
                 Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, weight = NULL,
                                       is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);
 
                 // Get the answer_record_id for AI evaluation
-                $answer_record = Database::get()->querySingle("SELECT answer_record_id FROM exercise_answer_record 
+                $answer_record = Database::get()->querySingle("SELECT answer_record_id FROM exercise_answer_record
                                                              WHERE eurid = ?d AND question_id = ?d", $eurid, $key);
                 if ($answer_record && trim($value) !== '') {
                     $this->triggerAIEvaluation($answer_record->answer_record_id, $key, $value);
@@ -1469,10 +1469,10 @@ class Exercise
             } else {
                 $answer_weight = 0;
             }
-            Database::get()->query("UPDATE exercise_answer_record SET 
-                              answer_id = ?d, 
+            Database::get()->query("UPDATE exercise_answer_record SET
+                              answer_id = ?d,
                               weight = ?f,
-                              certainty = ?d, 
+                              certainty = ?d,
                               is_answered = 1
                         WHERE eurid = ?d AND question_id = ?d",
                     $value, $answer_weight, $certainty_value, $eurid, $key);
@@ -1488,9 +1488,9 @@ class Exercise
         global $course_id, $webDir, $course_code;
         $id = $this->id;
 
-        // Remove oral answers from document table and courses folder
-        $userRecords = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d", $id);
+        $userRecords = Database::get()->queryArray("SELECT eurid,uid FROM exercise_user_record WHERE eid = ?d", $id);
 
+        // Remove oral answers from document table and courses folder
         foreach ($userRecords as $rec) {
             $file = Database::get()->queryArray("SELECT id,`path` FROM document WHERE course_id = ?d
                                                   AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $rec->eurid);
@@ -1501,6 +1501,24 @@ class Exercise
                 Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
             }
 
+        }
+
+        // Remove file upload answers from document table and courses folder
+        foreach ($userRecords as $rec) {
+            $user_id = $rec->uid;
+            $u_answers = Database::get()->queryArray("SELECT ear.eurid,ear.answer FROM exercise_answer_record ear
+                                                      JOIN exercise_question eq ON eq.id=ear.question_id
+                                                      WHERE ear.eurid = ?d
+                                                      AND eq.type = ?d", $rec->eurid, UPLOAD_FILE);
+                                                      
+            if (count($u_answers) > 0) {
+                foreach ($u_answers as $an) {
+                    $fileInfo = unserialize($an->answer, ['allowed_classes' => false]);  
+                    if (isset($fileInfo['filepath']) && file_exists("$webDir/courses/$course_code/exercise/$id$fileInfo[filepath]")) {
+                        unlink("$webDir/courses/$course_code/exercise/$id$fileInfo[filepath]");
+                    }
+                }
+            }
         }
 
 
@@ -1787,6 +1805,27 @@ class Exercise
         return $totalScore;
     }
 
+
+    /**
+     * @brief calculate feedback depending on user score
+     * @param $score
+     * @return mixed|string
+     */
+    public function calculate_feedback($score)
+    {
+        $message = '';
+        $feedback_data = $this->getFeedback();
+        uasort($feedback_data, function ($a, $b) { // sort by grade in descending order
+            return $b['grade'] <=> $a['grade'];
+        });
+        foreach ($feedback_data as $feedback) {
+            if ($score >= $feedback['grade']) {
+                $message = $feedback['feedback_text'];
+                break;
+            }
+        }
+        return $message;
+    }
     /**
      * Trigger AI evaluation for FREE_TEXT question responses
      */
@@ -1805,14 +1844,14 @@ class Exercise
             }
 
             // Check if AI evaluation is enabled for this specific question
-            $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config 
+            $aiConfig = Database::get()->querySingle("SELECT * FROM exercise_ai_config
                                                      WHERE question_id = ?d AND enabled = 1", $question_id);
             if (!$aiConfig) {
                 return false; // AI evaluation not enabled for this question
             }
 
             // Check if evaluation already exists (to avoid duplicates)
-            $existingEval = Database::get()->querySingle("SELECT id FROM exercise_ai_evaluation 
+            $existingEval = Database::get()->querySingle("SELECT id FROM exercise_ai_evaluation
                                                          WHERE answer_record_id = ?d", $answer_record_id);
             if ($existingEval) {
                 return false; // Already evaluated
@@ -1830,15 +1869,17 @@ class Exercise
     }
 
     /**
-     * @brief Generates and saves a Safe Exam Browser (SEB) configuration file in XML format.
+     * @brief Generates and returns a Safe Exam Browser (SEB) configuration file in XML format.
      *
-     * @return void
+     * @return string
      */
-    public function createSafeExamBrowserConfigFile(): void
+    public function createSafeExamBrowserConfigFile(): string
     {
-        global $urlServer, $webDir, $course_code;
+        global $urlServer, $webDir, $course_code, $uid;
 
-        $start_url = $urlServer . "modules/exercise/exercise_submit.php?course=" . $course_code . "&exerciseId=" . $this->id;
+        $token = token_generate($course_code . $uid . $this->id, true);
+        $start_url = $urlServer . "modules/exercise/exercise_submit.php?course=" . $course_code . "&exerciseId=" . $this->id .
+            "&uid=$uid&token=$token";
         $quit_url = $urlServer . "modules/exercise/index.php?course=" . $course_code;
 
         $dom = new DOMImplementation();
@@ -1896,24 +1937,18 @@ class Exercise
             }
         }
 
-        if (!file_exists("$webDir/courses/$course_code/exercise_seb_$this->id")) {
-            mkdir("$webDir/courses/$course_code/exercise_seb_$this->id");
-        }
-        $xml->save("$webDir/courses/$course_code/exercise_seb_$this->id/config.seb");
+        return $xml->saveXML();
     }
 
     public function LaunchSafeExamBrowser()
     {
-        global $course_code, $webDir;
-
-        $sebConfigXml = file_get_contents("$webDir/courses/$course_code/exercise_seb_$this->id/config.seb");
+        $sebConfigXML = $this->createSafeExamBrowserConfigFile();
 
         header('Content-Type: application/seb');
         header('Content-Disposition: attachment; filename="config.seb"');
-        header('Content-Length: ' . strlen($sebConfigXml));
-        echo $sebConfigXml;
+        header('Content-Length: ' . strlen($sebConfigXML));
+        echo $sebConfigXML;
         exit;
     }
 
 }
-

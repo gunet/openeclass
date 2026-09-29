@@ -21,6 +21,21 @@
                     <fieldset>
                         <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>
                         <input type='hidden' name='auth' value='{{ intval($auth) }}'>
+
+                        @if ($callback_url)
+                            <div class='form-group mb-4'>
+                                <label for='callbackUrl' class='col-sm-12 control-label-notes'>Callback / Redirect URL:</label>
+                                <div class='col-sm-12'>
+                                    <div class='input-group mt-1'>
+                                        <input class='form-control mt-0' name='callbackUrl' id='callbackUrl' type='text' value="{{ $callback_url }}" readonly>
+                                        <button class='btn btn-outline-secondary' type='button' id='copyCallbackUrl' title="{{ trans('langCopy') }}" data-bs-toggle="tooltip" data-bs-placement="top">
+                                            <span class='fa fa-regular fa-copy'></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         @switch ($auth)
                             @case (1)
                                 @include('admin.users.auth.methods.eclass')
@@ -84,3 +99,25 @@
     </div>
 </main>
 @endsection
+
+@push('bottom_scripts')
+    <script>
+        $(function() {
+            $('#copyCallbackUrl').on('click', function() {
+                var copyText = $('#callbackUrl').val();
+                navigator.clipboard.writeText(copyText).then(function() {
+                    var btn = $('#copyCallbackUrl');
+                    var icon = btn.find('.fa-copy');
+
+                    icon.removeClass('fa-regular fa-copy').addClass('fa-check text-success');
+
+                    btn.attr('data-bs-original-title', "{{ trans('langCopiedSucc') }}").attr('title', "{{ trans('langCopiedSucc') }}");
+                    btn.tooltip('show');
+                    setTimeout(() => {
+                        btn.tooltip('hide');
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+@endpush

@@ -1,14 +1,14 @@
 @extends('layouts.default')
 
 @push('head_scripts')
-<script type='text/javascript'>
-    var urlAppend = '{{ js_escape($urlAppend) }}',
-        lang = {
-            addPicture: '{{ js_escape(trans('langAddPicture')) }}',
-            confirmDelete: '{{ js_escape(trans('langConfirmDelete')) }}'
-        };
-    $(profile_init);
-</script>
+    <script type='text/javascript'>
+        var urlAppend = '{{ js_escape($urlAppend) }}',
+            lang = {
+                addPicture: '{{ js_escape(trans('langAddPicture')) }}',
+                confirmDelete: '{{ js_escape(trans('langConfirmDelete')) }}'
+            };
+        $(profile_init);
+    </script>
 @endpush
 
 @section('content')
@@ -65,6 +65,7 @@
                                 </div>
                             </div>
 
+                            @if (!get_config('dont_display_profile_email'))
                             <div class='form-group mt-4'>
                                 <label for='email_form' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                                 <div class='row'>
@@ -78,7 +79,9 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
 
+                            @if (!get_config('dont_display_profile_am'))
                             <div class='form-group mt-4'>
                                 <label for='am_form' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                 <div class='row'>
@@ -93,7 +96,9 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
 
+                            @if (!get_config('dont_display_profile_phone'))
                             <div class='form-group mt-4'>
                                 <label for='phone_form' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
                                 <div class='row'>
@@ -102,6 +107,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
 
                             <div class='form-group mt-4'>
                                 <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langEmailFromCourses') }}</div>
@@ -137,6 +143,7 @@
                                 {!! lang_select_options('userLanguage', "class='form-control' id='selected_lang'") !!}
                             </div>
 
+                            @if (!get_config('dont_display_profile_image'))
                             <div class='form-group mt-4'>
                                 <label for='user_image_selected' class='col-sm-12 control-label-notes mb-2'>{{ $message_pic }}</label>
                                 <div class='col-sm-12'>
@@ -147,11 +154,14 @@
                                     <input type='file' name='userimage' size='30' id='user_image_selected'>
                                 </div>
                             </div>
+                            @endif
 
+                            @if (!get_config('dont_display_profile_about_me'))
                             <div class='form-group mt-4'>
                                 <label for='desc_form' class='col-sm-12 control-label-notes mb-2'>{{ trans('langProfileAboutMe') }}</label>
                                 {!! $info_text_area !!}
                             </div>
+                            @endif
 
                             <div class='form-group mt-4'>
                                 <div class='col-sm-12 control-label-notes mb-2'>
@@ -187,7 +197,9 @@
 
                             @if (count($allProviders) > 0)
                                 <div class='form-group mt-4'>
-                                    <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langProviderConnectWith') }}</div>
+                                    <div class='col-sm-12 control-label-notes mb-2'>
+                                        {{ trans('langProviderConnectWith') }}
+                                    </div>
                                     <div class='col-sm-12'>
                                         <div class='row'>
                                         @foreach ($allProviders as $provider)
@@ -207,9 +219,9 @@
                             @endif
 
                             <div class="mt-4"></div>
-                                {{ $SecFactorProfile }}
+                                {!! $SecFactorProfile !!}
                             <div class="mt-3"></div>
-                                {{ $SecFactorChallenge }}
+                                {!! $SecFactorChallenge !!}
                             <div class='col-12 mt-5 d-flex justify-content-end align-items-center gap-2'>
                                 <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                 <a href='display_profile.php' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>

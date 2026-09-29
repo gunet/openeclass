@@ -58,7 +58,7 @@
                                                     $questionCount++;
                                                     $questionPonderationList[$question->selectId()] = $question->selectWeighting();
                                                     ?>
-                                                @if ($question->selectType() == FREE_TEXT)
+                                                @if ($question->selectType() == FREE_TEXT or $question->selectType() == ORAL or $question->selectType() == UPLOAD_FILE)
                                                     @continue
                                                 @endif
 

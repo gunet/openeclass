@@ -63,17 +63,22 @@ if (isset($_POST['submit'])) {
                     $prof_not_found = false;
                 }
             }
+            if ($prof_uid) {
+                $prof_name = uid_to_name($prof_uid);
+            } else {
+                $prof_name = '';
+            }
             list($code, $cid) = create_course('', $_POST['lang'], $title, '', $departments, $vis, $prof_name, $_POST['password']);
             if ($cid) {
-                Database::get()->query("UPDATE course SET is_collaborative = ?d WHERE id = ?d",$_POST['courseType'],$cid);
+                Database::get()->query("UPDATE course SET is_collaborative = ?d WHERE id = ?d", $_POST['courseType'], $cid);
                 if ($prof_uid) {
                     Database::get()->query("INSERT INTO course_user
-                                SET course_id = $cid,
-                                    user_id = $prof_uid,
-                                    status = 1,
+                                SET course_id = ?d,
+                                    user_id = ?d,
+                                    status = " . USER_TEACHER . ",
                                     tutor = 1,
                                     reg_date = " . DBHelper::timeAfter() . " ,
-                                    document_timestamp = " . DBHelper::timeAfter() . "");
+                                    document_timestamp = " . DBHelper::timeAfter() . "", $cid, $prof_uid);
                 }
                 create_modules($cid);
             }

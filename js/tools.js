@@ -772,7 +772,7 @@ function poll_init(langPoll, isSubQuestion, isGradeOn) {
             var disQ = 'd-none';
         }
         var last_form_group = $('div.form-group.input-group').last();
-        last_form_group.after("<div class='form-group input-group mt-3'><input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='"+langPoll.answer+"'><input class='form-control mt-0 "+disQ+"' type='text' name='grades[]' value='' placeholder='"+langPoll.grade+"'><div class='form-control-static input-group-text h-40px bg-white input-border-color'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa-solid fa-xmark Accent-200-cl'></i></a></div></div>").next().find('input').removeAttr('value');
+        last_form_group.after("<div class='form-group input-group mt-3'><input class='form-control mt-0 w-75' type='text' name='answers[]' value='' placeholder='"+langPoll.answer+"'><input class='form-control mt-0 "+disQ+"' type='text' name='grades[]' value='' placeholder='"+langPoll.grade+"'><div class='form-control-static input-group-text h-40px bg-transparent input-border-color'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa-solid fa-xmark Accent-200-cl fs-6'></i></a></div></div>").next().find('input').removeAttr('value');
         delete_init();
     });
 }
@@ -782,7 +782,7 @@ function poll_grade(langPoll) {
     $('input[type=submit][value="+"]').on('click', function (e) {
         e.preventDefault();
         var last_form_group = $(this).closest('div.form-group').siblings('.form-group:last');
-        last_form_group.before("<div class='form-group input-group mt-3'><input class='form-control mt-0 w-75' type='text' name='messages[]' value='' placeholder='"+langPoll.message+"'><input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='"+langPoll.grade+"'><div class='form-control-static input-group-text h-40px bg-white input-border-color'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa-solid fa-xmark Accent-200-cl'></i></a></div></div>").next().find('input').removeAttr('value');
+        last_form_group.before("<div class='form-group input-group mt-3'><input class='form-control mt-0 w-75' type='text' name='messages[]' value='' placeholder='"+langPoll.message+"'><input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='"+langPoll.grade+"'><div class='form-control-static input-group-text h-40px bg-transparent input-border-color'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa-solid fa-xmark Accent-200-cl fs-6'></i></a></div></div>").next().find('input').removeAttr('value');
         delete_init();
     });
 }
@@ -1023,7 +1023,7 @@ function q(str) {
 }
 
 
-function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll, langListChoices) {
+function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll, langListChoices, ajaxOptions = null) {
     var selectIdOption = $(element_id);
     var optionsData = [];
     selectIdOption.find('option').each(function() {
@@ -1034,7 +1034,6 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
             disabled: $(this).is(':disabled')
         });
     });
-    // Wrap all options into a group
     var groupedData = [
         {
             label: langListChoices,
@@ -1043,12 +1042,198 @@ function slimSelectFun (element_id, langSearch, langWelcomeSelect, langSelectAll
             options: optionsData
         }
     ];
-    new SlimSelect({
+    var config = {
         select: element_id,
         settings: {
             placeholderText: langWelcomeSelect,
-            searchPlaceholder: langSearch
+            searchPlaceholder: langSearch,
+            searchHighlight: true
         },
         data: groupedData
-    });
+    };
+
+
+    if (ajaxOptions) {
+        config.events = {
+            search: (searchValue, selected, catalog) => {
+                return new Promise((resolve, reject) => {
+                    if (ajaxOptions.minimumInputLength && searchValue.length < ajaxOptions.minimumInputLength) {
+                        return reject('Η αναζήτηση θα πρέπει να περιλαμβάνει τουλάχιστον ' + ajaxOptions.minimumInputLength + ' χαρακτήρες');
+                    }
+
+
+                    /*
+                     * Build AJAX parameters
+                     */
+                    var params = {};
+                    if (typeof ajaxOptions.params === 'function') {
+                        params = ajaxOptions.params(searchValue, selected,catalog);
+                    } else if (ajaxOptions.params) {
+                        params = {
+                            ...ajaxOptions.params
+                        };
+                    }
+
+                    /*
+                     * AJAX request
+                     */
+                    $.ajax({
+                        url: ajaxOptions.url,
+                        type: ajaxOptions.type || 'GET',
+                        dataType: ajaxOptions.dataType || 'json',
+                        data: params
+                    }).done(function(resp) {
+                        var data = [];
+                        var dataRes = ajaxOptions.dataResponse;
+                        if (dataRes == 'items') {
+                            data = resp.items;
+                        } else if (dataRes == 'results') {
+                            data = resp.results;
+                        } else if (dataRes == 'tags') {
+                            data = resp;
+                        } else if (dataRes == 'aaData') {
+                            data = resp.aaData;
+                        }
+                        if (ajaxOptions.processResults) {
+                            data = ajaxOptions.processResults(data);
+                        }
+                        const options = data.filter(item => {
+                                return !selected.some(
+                                    selectedItem => {
+                                        return String(selectedItem.value) === String(item.id);
+                                    }
+                                );
+                            }).map(item => {
+                                return {
+                                    text: item.text,
+                                    value: String(item.id)
+                                };
+                            });
+
+                        if (!options.length) {
+                            return reject('Δεν βρέθηκαν αποτελέσματα');
+                        }
+
+                        resolve([
+                            {
+                                label: langListChoices,
+                                selectAll: true,
+                                selectAllText: langSelectAll,
+                                options: options
+                            }
+                        ]);
+
+                    }).fail(function(xhr) {
+                        //console.error('error:', xhr);
+                        reject('Σφάλμα κατά τη λήψη αποτελεσμάτων');
+                    });
+
+                });
+            },
+            afterChange: (newVal) => {
+                if (!ajaxOptions.tags || !ajaxOptions.tokenSeparators || !ajaxOptions.tokenSeparators.length) {
+                    return;
+                }
+
+                let selectedValues = [];
+                const escapedSeparators = ajaxOptions.tokenSeparators.map(separator => {
+                    return separator.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                });
+                const separatorRegex = new RegExp(escapedSeparators.join('|'));
+
+                for (let i = 0; i < newVal.length; i++) {
+                    const values = newVal[i].text.split(separatorRegex);
+                    for (let j = 0; j < values.length; j++) {
+                        const value = values[j].trim();
+                        if (!value || selectedValues.includes(value)) {
+                            continue;
+                        }
+                        selectedValues.push(value);
+                        slimSelectInstance.addOption({
+                            text: value,
+                            value: value
+                        });
+                    }
+                }
+
+                slimSelectInstance.setSelected(selectedValues);
+            }
+        };
+
+        if (ajaxOptions && (ajaxOptions.tags || ajaxOptions.createSearchChoice)) {
+            config.events.addable = function(value) {
+                value = value.trim();
+
+                if (!value) {
+                    return false;
+                }
+
+                return {
+                    text: value,
+                    value: value
+                };
+            };
+        }
+
+        if (ajaxOptions && ajaxOptions.afterOpen) {
+            config.events.afterOpen = function() {
+                var params = {};
+                if (typeof ajaxOptions.params === 'function') {
+                    params = ajaxOptions.params('');
+                } else if (ajaxOptions.params) {
+                    params = {
+                        ...ajaxOptions.params
+                    };
+                }
+                $.ajax({
+                        url: ajaxOptions.url,
+                        type: ajaxOptions.type || 'GET',
+                        dataType: ajaxOptions.dataType || 'json',
+                        data: params
+                    }).done(function(resp) {
+                        var data = [];
+                        var dataRes = ajaxOptions.dataResponse;
+                        if (dataRes == 'items') {
+                            data = resp.items;
+                        } else if (dataRes == 'results') {
+                            data = resp.results;
+                        } else if (dataRes == 'tags') {
+                            data = resp;
+                        } else if (dataRes == 'aaData') {
+                            data = resp.aaData;
+                        }
+                        if (ajaxOptions.processResults) {
+                            data = ajaxOptions.processResults(data);
+                        }
+
+                        if (!data.length) {
+                            return;
+                        }
+
+                        const options = data.map(item => {
+                            return {
+                                text: item.text,
+                                value: String(item.id)
+                            };
+                        });
+
+                        slimSelectInstance.setData([
+                            {
+                                label: langListChoices,
+                                selectAll: true,
+                                selectAllText: langSelectAll,
+                                options: options
+                            }
+                        ]);
+
+                    }).fail(function(xhr) {
+                        console.error('Σφάλμα κατά τη λήψη αποτελεσμάτων:', xhr);
+                    });
+            };
+        }
+    }
+
+    var slimSelectInstance = new SlimSelect(config);
+    return slimSelectInstance;
 }
+

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2026-03-31 11:43:44
+// Generated 2026-08-10 13:56:04
 
 $langTeacherStudentTutorials = "Useful Guides $langsOfTeacher - $langsOfStudent";
 $langAdminTutorials = "Useful Guides Administrator";
@@ -195,7 +195,7 @@ $langsCourse = "collaboration";
 $langsCourses = "collaborations";
 $langsOfCourse = "collaboration";
 $langsOfCourses = "collaborations";
-$langMyCourses = "My Collaborations";
+$langMyCourses = "Le mie collaborazioni";
 $langLocale = 'el_GR.UTF-8';
 $langInCourses = "in $langsCourse";
 $langInCoursesL = "in $langsCourse";
@@ -570,8 +570,8 @@ $langExplanation_0 = "If you have created a page for your $langsCourse in HTML f
 $langInvalidGuestAccount = "The $langsCourse for which the 'guest user' account was created no longer exists.";
 $langAccountActivateMessage = 'The user with the following information wants the
 reactivate his account:';
-$langMyCoursesProf = "The $langsCourses I support";
-$langMyCoursesUser = "The $langsCourses I'm taking";
+$langMyCoursesProf = "$langCourses che supporto";
+$langMyCoursesUser = "I miei $langsCourses";
 $langNoCourses = "There are no $langsCourses available in this category!";
 $langCourseCreate = "Create $langsOfCourse";
 $langListCourses = "$langCourses";
@@ -926,7 +926,7 @@ $langSharingDisCourse = "Social Sharing is disabled for $langsCourses with non-f
 $langNoWallPosts = "There are no posts on the $langsOfCourse wall";
 $langePortfolioCollectionUserInfo = 'In the e-Portfolio resource collection you can add resources from the subsystems: blog (personal) and personal documents, if these are enabled.
 The corresponding tabs appear only if resources from the relevant subsystems have been added to the collection.';
-$langMyCoursesSide = "My $langsCourses";
+$langMyCoursesSide = "I miei corsi";
 $langNumOpenCoursesBanner = "open<br>$langsCourses";
 $langNumOpenCourseBanner = "open<br>$langsCourse";
 $langNationalOpenCourses = "National Portal of Open Partnerships";
@@ -940,11 +940,8 @@ $langBBBDescription = "The open software <a href=\"https://www.bigbluebutton.org
 $langBBBLongDescription = "
 Connect to the BigBlueButton video conferencing service.";
 $langAutojudgeDescription = "<p>Automator is a tool that allows automatic correction of programming tasks. More specifically, through the tool the moderator can define scenarios that include input and output based on which the posted works are automatically graded.</p><p>This subsystem is connected to third-party compilation services that can be selected in the <a href =\"autojudgemoduleconf.php\">Settings</a>.</p>";
-$langOpenMeetingsDescription = "<p>The <strong>Telecollaboration</strong> subsystem of the Open eClass platform is functionally supported by the <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache open software OpenMeetings</a> which is a complete system of direct web-based communication and collaboration $langsOfTeachers and $langsOfStudents.</p>
-    <p>OpenMeetings belongs to the video conferencing / modern distance learning applications that do not require the installation of additional hardware (Software or Hardware). The application runs directly from the Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) using Adobe Flash Player. To connect Open eClass with an installed OpenMeetings platform select <a href=\"openmeetingsconf.php\">Settings</a>.</p>";
 $langLtiPublishShortDescription = "Publish $langsOfCourses via LTI protocol.";
 $langLtiPublishLongDescription = "Publish $langsOfCourses via LTI protocol.";
-$langOpenMeetingsConf = "Settings \"OpenMeetings\" for $siteName";
 $langCollaborationPlatform = "Collaboration platform";
 $langEnableCollaboration = "Enable collaboration platform";
 $langAlwaysEnabledCollaboration = "Always on";

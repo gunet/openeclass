@@ -60,7 +60,8 @@ function setting_default($setting_id) {
         SETTING_COURSE_IMAGE_PRINT_HEADER_ALIGNMENT => '0',
         SETTING_COURSE_IMAGE_PRINT_FOOTER_ALIGNMENT => '0',
         SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH => 40,
-        SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH => 40
+        SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH => 40,
+        SETTING_COURSE_REPORT_VIEW_TYPE => 200
     );
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];

@@ -213,7 +213,12 @@ if ($is_editor) {
             'icon' => 'fa-cubes'
         )
     ), false);
-    $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
+    $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b 
+                                                WHERE a.course_id = b.id 
+                                                AND a.course_id != ?d 
+                                                AND a.user_id = ?d 
+                                                AND a.status = " . USER_TEACHER . " 
+                                                ORDER BY Title", $course_id, $uid);
     foreach ($my_courses as $row) {
         $courses_options .= "'<option value=\"$row->Course_id\">".js_escape($row->Title)."</option>'+";
     }

@@ -56,14 +56,6 @@ $pageName = "$langEditUser: " . uid_to_name($u);
 $u_submitted = $_POST['u_submitted'] ?? '';
 
 if ($u) {
-    $is_saek_admin  = $is_departmentmanage_user && !$is_admin;
-    if ($is_saek_admin) {
-        if (!getTenantUserIfBelongs($u)) {
-            Session::flash('message', $langForbidden);
-            Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page('modules/admin/');
-        }
-    }
     if (isDepartmentAdmin())
         validateUserNodes(intval($u), true);
 
@@ -114,9 +106,10 @@ if ($u) {
         $data['current_auth'] = 1;
         $data['auth_names'][1] = get_auth_info(1);
         foreach (get_auth_active_methods() as $auth) {
-            if ($auth < 8) {
+	    $auth_name = $auth_ids[$auth];
+            if (!in_array($auth_name, $hybridAuthMethods)) {
                 $data['auth_names'][$auth] = get_auth_info($auth);
-                if ($info->password == $auth_ids[$auth]) {
+                if ($info->password == $auth_name) {
                     $data['current_auth'] = $auth;
                 }
             }
@@ -148,7 +141,7 @@ if ($u) {
                 'icon' => 'fa-sign-in',
                 'level' => 'primary',
                 'button-class' => 'btn-default change-user-link',
-                'show' => $is_admin
+                'show' => change_user_rights($u)
             ),
             array(
                 'title' => $langEditAuth,
@@ -318,7 +311,7 @@ if ($u) {
                                 am = ?s,
                                 verified_mail = ?d,
                                 whitelist = ?s,
-                                disable_course_registration = ?d            
+                                disable_course_registration = ?d
                           WHERE id = ?d",
             $lname,
             $fname,

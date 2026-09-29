@@ -32,11 +32,16 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
+$data['callback_url'] = null;
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
-    $data['auth'] = $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
+    $data['auth'] = $auth = intval($_REQUEST['auth']); // $auth gets the integer id of the auth method if it is set
+    $data['auth_data'] = $auth_data = get_auth_settings($auth);
     if ($auth == 7) {
+        load_js('tools.js');
+        load_js('slimselect');
         load_js('jstree3');
-        load_js('select2');
+        //load_js('select2');
+        load_js('datatables');
         $tree = new Hierarchy();
 
         list($js, $html) = $tree->buildUserNodePicker(['defaults' => [], 'skip_preloaded_defaults' => false]);
@@ -50,7 +55,6 @@ if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
                     JOIN hierarchy AS h ON mda.department_id = h.id
                     LEFT JOIN minedu_departments AS md ON CONVERT(mda.minedu_id, CHAR) = CONVERT(md.MineduID, CHAR)
                     ORDER BY School_Department");
-
 
         $data['minedu_department_association'] = $minedu_department_association = json_encode(array_map(function ($item) {
             return ['minedu_id' => $item->minedu_id ?? 0, 'department_id' => $item->department_id];
@@ -113,7 +117,7 @@ register_posted_variables([
     'apiBaseUrl' => true, 'authorizePath' => true, 'accessTokenPath' => true, 'profileMethod' => true,
     'apiID' => true, 'apiSecret' => true,
     // Keycloak options
-    'realm' => true, 'userstudentid' => true, 'uid_attr' => true, 'uid_attr_is_username' => true, 'username_prefix' => true,
+    'realm' => true, 'userstudentid' => true, 'uid_attr' => true, 'uid_attr_is_username' => true, 'username_prefix' => true, 'end_session_endpoint' => true,
 ], 'all');
 
 if (empty($ldap_login_attr)) {
@@ -265,6 +269,7 @@ if (isset($_POST['submit'])) {
                 'uid_attr' => $uid_attr,
                 'uid_attr_is_username' => !empty($uid_attr_is_username) ? 1 : 0,
                 'username_prefix' => $username_prefix,
+                'end_session_endpoint' => $end_session_endpoint,
             ];
             break;
         default:
@@ -313,7 +318,6 @@ if (isset($_POST['submit'])) {
         ));
 
     $pageName = get_auth_info($auth);
-    $data['auth_data'] = $auth_data = get_auth_settings($auth);
 
     $checked ='';
     if ($auth_data['cas_gunet'] ?? false) {
@@ -363,6 +367,11 @@ if (isset($_POST['submit'])) {
             }
             if (!isset($data['auth_data']['uid_attr_is_username'])) {
                 $data['auth_data']['uid_attr_is_username'] = 0;
+            }
+            if ($auth == 15) {
+                $data['callback_url'] = $urlServer . 'modules/auth/oauth2.php';
+            } elseif ($auth == 16) {
+                $data['callback_url'] = $urlServer . 'modules/auth/keycloak.php';
             }
         }
 

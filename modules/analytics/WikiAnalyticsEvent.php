@@ -40,7 +40,7 @@ class WikiAnalyticsEvent extends Event {
                 . " AND w.course_id = ?d"
                 . " AND DATE(ctime) = CURDATE()", $this->context['user_id'], $this->context['course_id']);
 
-                $this->context['value'] = $record->value;
+                $this->context['value'] = (isset($record) && isset($record->value)) ? $record->value : 0;
 
                 foreach ($this->elements as $element) {
                     $record = Database::get()->querySingle("SELECT id, value FROM user_analytics WHERE 
@@ -72,7 +72,7 @@ class WikiAnalyticsEvent extends Event {
                 . " AND DATE(ctime) >= ?t"
                 . " AND DATE(ctime) <= ?t"
                 . " group by DATE(ctime), owner_id", $course_id, $data->start_date, $data->end_date);
-                print_r($wiki_records);
+
                 foreach ($wiki_records as $wiki_record) {
                     $this->insertValue($wiki_record->user_id, $analytics_element_id, $wiki_record->value, $wiki_record->time);
                 }

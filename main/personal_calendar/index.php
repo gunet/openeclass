@@ -450,20 +450,18 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                         <label for='startdate' class='col-sm-12 control-label-notes'>$langDate :</label>
                                                         <div class='col-sm-12'>
                                                             <div class='input-group'>
-                                                                <div class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
-                                                                <input class='form-control mt-0 border-start-0' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
-
+                                                                <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                <input class='form-control mt-0' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
                                                             </div>
                                                         </div>
                                                     </div>
 
-
                                                     <div class='input-append bootstrap-timepicker form-group mt-4'>
                                                         <label for='duration' class='col-sm-12 control-label-notes'>$langDuration <small>$langInHour</small></label>
                                                         <div class='col-sm-12'>
-                                                            <div class='input-group add-on'>
-                                                                <div class='input-group-addon add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='fa-solid fa-clock'></span></div>
-                                                                <input class='form-control mt-0 border-start-0' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
+                                                            <div class='input-group'>
+                                                                <span class='add-on'><i class='fa-solid fa-clock'></i></span>
+                                                                <input class='form-control mt-0' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
 
                                                             </div>
                                                         </div>
@@ -503,9 +501,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             <label for='enddate' class='col-12 control-label-notes'>$langUntil</label>
                                                             <div class='col-12'>
                                                                 <div class='input-group'>
-                                                                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                                    <input class='form-control mt-0 border-start-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
-
+                                                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                    <input class='form-control mt-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -776,8 +773,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             <label for='durationCreate' class='col-sm-12 control-label-notes'>$langDuration <small>$langInHour</small></label>
                                                             <div class='col-sm-12'>
                                                                 <div class='input-group add-on'>
-                                                                    <div class='input-group-addon add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><span class='fa-solid fa-clock'></span></div>
-                                                                    <input class='form-control mt-0 border-start-0' name='duration' id='durationCreate' type='text' class='input-small'>
+                                                                    <span class='add-on'><i class='fa-solid fa-clock Neutral-600-cl'></i></span>
+                                                                    <input class='form-control mt-0' name='duration' id='durationCreate' type='text' class='input-small'>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -816,9 +813,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                     $tool_content .= "<div class='input-append date mt-4' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                                                                             <label for='enddate' class='col-sm-6 control-label-notes'>$langUntil</label>
                                                                             <div class='input-group'>
-                                                                                <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                                                                                <input class='form-control mt-0 border-start-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
-
+                                                                                <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                                <input class='form-control mt-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
                                                                             </div>
                                                                         </div>";
 
@@ -1048,10 +1044,60 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 </div>
                             </div>
                         </div>'
-                . '<div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div>'
+                . '<div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div>
+                
+                
+                '
                 . '</div></div>' .
                 "<script type='text/javascript'>" .
-                '$(document).ready(function(){
+                '
+                
+
+                var events = [];
+
+                function applyCalendarTooltips() {
+                    document.querySelectorAll("#cal-slide-content .event.event-info").forEach(function (event) {
+                        event.setAttribute("tabindex", "0");
+                        event.setAttribute("role","img");
+                        event.setAttribute("data-bs-toggle", "tooltip");
+                        event.setAttribute("data-bs-original-title", "' . $langAgendaCourseEvent . '");
+                        event.setAttribute("aria-label", "' . $langAgendaCourseEvent . '");
+                    });
+                    document.querySelectorAll("#cal-slide-content .event.event-important").forEach(function (event) {
+                        event.setAttribute("tabindex", "0");
+                        event.setAttribute("role","img");
+                        event.setAttribute("data-bs-toggle", "tooltip");
+                        event.setAttribute("data-bs-original-title", "' . $langAgendaDueDay . '");
+                        event.setAttribute("aria-label", "' . $langAgendaDueDay . '");
+                    });
+                    document.querySelectorAll("#cal-slide-content .event.event-success").forEach(function (event) {
+                        event.setAttribute("tabindex", "0");
+                        event.setAttribute("role","img");
+                        event.setAttribute("data-bs-toggle", "tooltip");
+                        event.setAttribute("data-bs-original-title", "' . $langAgendaSystemEvent . '");
+                        event.setAttribute("aria-label", "' . $langAgendaSystemEvent . '");
+                    });
+                    document.querySelectorAll("#cal-slide-content .event.event-special").forEach(function (event) {
+                        event.setAttribute("tabindex", "0");
+                        event.setAttribute("role","img");
+                        event.setAttribute("data-bs-toggle", "tooltip");
+                        event.setAttribute("data-bs-original-title", "' . $langAgendaPersonalEvent . '");
+                        event.setAttribute("aria-label", "' . $langAgendaPersonalEvent . '");
+                    });
+                    document.querySelectorAll("#cal-slide-content [data-bs-toggle=tooltip]").forEach(function(el){
+                        let oldTooltip = bootstrap.Tooltip.getInstance(el);
+                        if (oldTooltip) {
+                            oldTooltip.dispose();
+                        }
+                        new bootstrap.Tooltip(el, {
+                            container: "body",
+                            trigger: "hover focus"
+                        });
+                    });
+                }
+
+
+                $(document).ready(function(){
 
         var calendar = $("#bootstrapcalendar").calendar(
                 {
@@ -1063,7 +1109,17 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 $(".btn-group button").removeClass("active");
                                 $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                                 $("button[data-calendar-nav=\'today\']").text(this.getTitle());
-                                }
+
+
+                                setTimeout(function() {
+                                    $("#bootstrapcalendar .events-list a.event").off("click");
+                                    $("#bootstrapcalendar .events-list a.event").on("click", function(e) {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    });
+                                }, 200);
+
+                    }
                 }
             );
 
@@ -1086,6 +1142,31 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             $("#iCalDescription").modal("show");
         });
 
+        const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType !== 1) {
+                            return;
+                        }
+                        if (
+                            node.id === "cal-slide-content" ||
+                            node.querySelector("#cal-slide-content")
+                        ) {
+                            setTimeout(function(){
+                                applyCalendarTooltips();
+                            }, 0);
+                        }
+                    });
+                });
+            });
+
+            observer.observe(
+            document.querySelector("#bootstrapcalendar"),
+                {
+                    childList: true,
+                    subtree: true
+                }
+            );
         });
 
         </script>' . "

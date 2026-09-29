@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 15px;
+      }
+
+      .st1 {
+        fill: #fa9977;
+      }
+    </style>
+  </defs>
+  <g id="background">
+    <rect class="st1" width="500" height="500" rx="120" ry="120"/>
+  </g>
+  <g id="icon">
+    <g>
+      <polygon class="st0" points="250 139.16 270.06 170.32 305.89 179.77 282.46 208.48 284.54 245.48 250 232.06 215.46 245.48 217.54 208.48 194.11 179.77 229.94 170.32 250 139.16"/>
+      <g>
+        <line class="st0" x1="89.38" y1="98.01" x2="410.62" y2="98.01"/>
+        <line class="st0" x1="89.38" y1="289.3" x2="410.62" y2="289.3"/>
+        <g>
+          <line class="st0" x1="107.34" y1="98.01" x2="107.34" y2="289.3"/>
+          <line class="st0" x1="392.66" y1="98.01" x2="392.66" y2="289.3"/>
+        </g>
+        <line class="st0" x1="250" y1="98.01" x2="250" y2="81.03"/>
+        <polyline class="st0" points="301.88 289.3 301.88 325.21 198.12 325.21 198.12 289.3"/>
+        <g>
+          <line class="st0" x1="220.07" y1="325.21" x2="178.17" y2="426.97"/>
+          <line class="st0" x1="279.93" y1="325.21" x2="321.83" y2="426.97"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

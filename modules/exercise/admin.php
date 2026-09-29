@@ -26,7 +26,7 @@ require_once 'exercise.lib.php';
 
 $require_course_reviewer = true;
 $require_current_course = true;
-$require_help = TRUE;
+$require_help = true;
 $helpTopic = 'exercises';
 
 if (isset($_GET['htopic'])) {
@@ -45,6 +45,7 @@ if (isset($_GET['htopic'])) {
         case '11': $helpSubTopic = 'calculated'; break;
         case '12': $helpSubTopic = 'sorting'; break;
         case '13': $helpSubTopic = 'oral'; break;
+        case '14': $helpSubTopic = 'upload_file'; break;
     }
 }
 

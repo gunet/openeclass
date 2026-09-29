@@ -331,6 +331,20 @@ function question_answer_details($eurid, $qid) {
                 case FREE_TEXT:
                     $content .= html2text($data->answer);
                 break;
+                case UPLOAD_FILE:
+                    $hyperLink = '';
+                    $fileInfo = unserialize($data->answer, ['allowed_classes' => false]);  
+                    if (isset($fileInfo['filepath']) && isset($fileInfo['filename'])) {
+                        $filePath = $fileInfo['filepath'] ?? '';
+                        $fileName = $fileInfo['filename'] ?? '';
+                        $exercise_id = Database::get()->querySingle("SELECT eid FROM exercise_user_record WHERE eurid = ?d", $eurid)->eid;
+                        if (file_exists("$webDir/courses/$course_code/exercise/{$exercise_id}{$filePath}")) {
+                            $pathUrl = $urlServer . "courses/$course_code/exercise/{$exercise_id}{$filePath}";
+                            $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
+                            $content .= $hyperLink;
+                        }
+                    }
+                break;    
                 case ORAL:
                     $hyperLink = '';
                     $file = Database::get()->querySingle("SELECT `path` FROM document WHERE course_id = ?d

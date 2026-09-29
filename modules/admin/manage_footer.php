@@ -40,7 +40,8 @@ if(isset($_POST['submit'])){
         'dont_display_about_menu' => true,
         'dont_display_contact_menu' => true,
         'dont_display_manual_menu' => true,
-        'enable_social_sharing_links' => true
+        'enable_social_sharing_links' => true,
+        'dont_display_terms' => true
     ];
 
     register_posted_variables($config_vars, 'all', 'intval');

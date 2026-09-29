@@ -156,7 +156,7 @@ class DragAndDropMarkersAnswer extends \QuestionType
 
     public function AnswerQuestion($question_number, $exerciseResult = [], $options = []): string
     {
-        global $webDir, $course_code, $langCalcelDroppableItem, $head_content, $uid,
+        global $course_code, $langCalcelDroppableItem, $head_content,
                $langConfirmDelete, $langAnalyticsConfirm, $langMarkerDeleted, $langMarkerDeletedError, $langImageUploaded,
                $langImageNotSelected, $langInvalidAnswerValue, $langBlankNotEmpty, $langBlankOtherQuestion, 
                $chooseShapeAndAnswerToContinue, $chooseDrawAShapeForTheAnswerToContinue, $langAddGradeToMarkerAnswer, 

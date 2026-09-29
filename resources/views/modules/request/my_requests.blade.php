@@ -78,7 +78,6 @@
             scrollX: true,
             drawCallback: function(settings) {
                 tooltip_init();
-                popover_init();
             },
             paginationType: 'full_numbers',
             language: {

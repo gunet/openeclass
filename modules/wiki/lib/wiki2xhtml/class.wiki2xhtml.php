@@ -623,7 +623,7 @@ class wiki2xhtml {
             $content = $data[0];
             $lang = (!empty($data[2])) ? $this->protectAttr($data[2], true) : '';
             $title = (!empty($data[3])) ? $data[3] : '';
-            $no_image = (!empty($data[4])) ? (boolean) $data[4] : false;
+            $no_image = !empty($data[4]) && $data[4];
         }
 
         $array_url = $this->__specialUrls();
@@ -815,130 +815,5 @@ class wiki2xhtml {
         }
 
         return $str;
-    }
-
-    /* Aide et debug
-      --------------------------------------------------- */
-
-    function help() {
-        $help['b'] = array();
-        $help['i'] = array();
-
-        $help['b'][] = 'Laisser une ligne vide entre chaque bloc <em>de m�me nature</em>.';
-        $help['b'][] = '<strong>Paragraphe</strong> : du texte et une ligne vide';
-
-        if ($this->getOpt('active_title')) {
-            $help['b'][] = '<strong>Titre</strong> : <code>!!!</code>, <code>!!</code>, ' .
-                    '<code>!</code> pour des titres plus ou moins importants';
-        }
-
-        if ($this->getOpt('active_hr')) {
-            $help['b'][] = '<strong>Trait horizontal</strong> : <code>----</code>';
-        }
-
-        if ($this->getOpt('active_lists')) {
-            $help['b'][] = '<strong>Liste</strong> : ligne d�butant par <code>*</code> ou ' .
-                    '<code>#</code>. Il est possible de m�langer les listes ' .
-                    '(<code>*#*</code>) pour faire des listes de plusieurs niveaux. ' .
-                    'Respecter le style de chaque niveau';
-        }
-
-        if ($this->getOpt('active_pre')) {
-            $help['b'][] = '<strong>Texte pr�format�</strong> : espace devant chaque ligne de texte';
-        }
-
-        if ($this->getOpt('active_quote')) {
-            $help['b'][] = '<strong>Bloc de citation</strong> : <code>&gt;</code> ou ' .
-                    '<code>;:</code> devant chaque ligne de texte';
-        }
-
-        if ($this->getOpt('active_fr_syntax')) {
-            $help['i'][] = 'La correction de ponctuation est active. Un espace ' .
-                    'ins�cable remplacera automatiquement tout espace ' .
-                    'pr�c�dant les marque ";","?",":" et "!".';
-        }
-
-        if ($this->getOpt('active_em')) {
-            $help['i'][] = '<strong>Emphase</strong> : deux apostrophes <code>\'\'texte\'\'</code>';
-        }
-
-        if ($this->getOpt('active_strong')) {
-            $help['i'][] = '<strong>Forte emphase</strong> : deux soulign�s <code>__texte__</code>';
-        }
-
-        if ($this->getOpt('active_br')) {
-            $help['i'][] = '<strong>Retour forc� � la ligne</strong> : <code>%%%</code>';
-        }
-
-        if ($this->getOpt('active_ins')) {
-            $help['i'][] = '<strong>Insertion</strong> : deux plus <code>++texte++</code>';
-        }
-
-        if ($this->getOpt('active_del')) {
-            $help['i'][] = '<strong>Suppression</strong> : deux moins <code>--texte--</code>';
-        }
-
-        if ($this->getOpt('active_urls')) {
-            $help['i'][] = '<strong>Lien</strong> : <code>[url]</code>, <code>[nom|url]</code>, ' .
-                    '<code>[nom|url|langue]</code> ou <code>[nom|url|langue|titre]</code>.';
-
-            $help['i'][] = '<strong>Image</strong> : comme un lien mais avec une extension d\'image.' .
-                    '<br />Pour d�sactiver la reconnaissance d\'image mettez 0 dans un dernier ' .
-                    'argument. Par exemple <code>[image|image.gif||0]</code> fera un lien vers l\'image au ' .
-                    'lieu de l\'afficher.' .
-                    '<br />Il est conseill� d\'utiliser la nouvelle syntaxe.';
-        }
-
-        if ($this->getOpt('active_img')) {
-            $help['i'][] = '<strong>Image</strong> (nouvelle syntaxe) : ' .
-                    '<code>((url|texte alternatif))</code>, ' .
-                    '<code>((url|texte alternatif|position))</code> ou ' .
-                    '<code>((url|texte alternatif|position|description longue))</code>. ' .
-                    '<br />La position peut prendre les valeur L ou G (gauche), R ou D (droite) ou C (centr�).';
-        }
-
-        if ($this->getOpt('active_anchor')) {
-            $help['i'][] = '<strong>Ancre</strong> : <code>~ancre~</code>';
-        }
-
-        if ($this->getOpt('active_acronym')) {
-            $help['i'][] = '<strong>Acronyme</strong> : <code>??acronyme??</code> ou ' .
-                    '<code>??acronyme|titre??</code>';
-        }
-
-        if ($this->getOpt('active_q')) {
-            $help['i'][] = '<strong>Citation</strong> : <code>{{citation}}</code>, ' .
-                    '<code>{{citation|langue}}</code> ou <code>{{citation|langue|url}}</code>';
-        }
-
-        if ($this->getOpt('active_code')) {
-            $help['i'][] = '<strong>Code</strong> : <code>@@code ici@@</code>';
-        }
-
-        if ($this->getOpt('active_footnotes')) {
-            $help['i'][] = '<strong>Note de bas de page</strong> : <code>$$Corps de la note$$</code>';
-        }
-
-        $res = '<dl class="wikiHelp">';
-
-        $res .= '<dt>Blocs</dt><dd>';
-        if (count($help['b']) > 0) {
-            $res .= '<ul><li>';
-            $res .= implode('&nbsp;;</li><li>', $help['b']);
-            $res .= '.</li></ul>';
-        }
-        $res .= '</dd>';
-
-        $res .= '<dt>�l�ments en ligne</dt><dd>';
-        if (count($help['i']) > 0) {
-            $res .= '<ul><li>';
-            $res .= implode('&nbsp;;</li><li>', $help['i']);
-            $res .= '.</li></ul>';
-        }
-        $res .= '</dd>';
-
-        $res .= '</dl>';
-
-        return $res;
     }
 }

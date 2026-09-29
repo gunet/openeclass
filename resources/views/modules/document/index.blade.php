@@ -470,11 +470,13 @@
                                                             @if(get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download == 1)
                                                                 <a class='fileURL-link' href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={{ urlencode($file->url) }}" target="_blank">{{ $file->title !== ''? $file->title: $file->filename }}</a>
                                                                 {!! icon('fa-shield', trans('langDownloadPdfNotAllowed')) !!}
+                                                            @elseif ($file->format == "jm" && $can_upload)
+                                                                <a href='{{ $urlAppend  }}modules/mindmap/index.php?course={{ $course_code }}&jmpath={{ urlencode(preg_replace('|^/[^/]+/|', '', explode('file.php', $file->url)[1])) }}'>{{ $file->title }}</a>
                                                             @else
                                                                 {!! $file->link !!}
-                                                            @endif
-
+                                                           @endif
                                                         @endif
+
                                                         @if ($can_upload)
                                                             @if ($file->extra_path)
                                                                 @if ($file->common_doc_path)

@@ -3,6 +3,8 @@
 chdir(get_base_path());
 require_once 'include/main_lib.php';
 
+umask(0022);
+
 $webDir = '.';
 
 $command_line = (php_sapi_name() == 'cli' && !isset($_SERVER['REMOTE_ADDR']));
@@ -21,11 +23,13 @@ file_put_contents('js/bundle/uppy.min.css',
         return file_get_contents($file);
     }, glob('node_modules/@uppy/*/dist/*.min.css'))) . "\n");
 
+
 if (!is_dir('js/recordrtc')) {
     mkdir('js/recordrtc');
 }
 copy('node_modules/recordrtc/RecordRTC.min.js', 'js/recordrtc/RecordRTC.min.js');
 
+// h5p
 removeDir('js/h5p-standalone');
 mkdir('js/h5p-standalone');
 foreach(['frame.bundle.js', 'main.bundle.js', 'fonts', 'images', 'styles'] as $file) {
@@ -38,10 +42,15 @@ foreach(['frame.bundle.js', 'main.bundle.js', 'fonts', 'images', 'styles'] as $f
     }
 }
 
+// MathJax
 removeDir('js/mathjax');
 mkdir('js/mathjax');
 recurse_copy('node_modules/mathjax', 'js/mathjax');
+removeDir('resources/fonts/mathjax-newcm-font');
+mkdir('resources/fonts/mathjax-newcm-font', recursive: true);
+recurse_copy('node_modules/@mathjax/mathjax-newcm-font', 'resources/fonts/mathjax-newcm-font');
 
+// video.js
 removeDir('js/video.js');
 mkdir('js/video.js');
 foreach(['video.min.js', 'video-js.min.css', 'font', 'lang'] as $file) {
@@ -53,6 +62,14 @@ foreach(['video.min.js', 'video-js.min.css', 'font', 'lang'] as $file) {
         copy($path, $dest);
     }
 }
+
+// jsMind
+removeDir('js/jsmind');
+mkdir('js/jsmind');
+copy('node_modules/jsmind/es6/jsmind.js', 'js/jsmind/jsmind.js');
+copy('node_modules/jsmind/es6/jsmind.screenshot.js', 'js/jsmind/jsmind.screenshot.js');
+copy('node_modules/jsmind/style/jsmind.css', 'js/jsmind/jsmind.css');
+copy('node_modules/dom-to-image/dist/dom-to-image.min.js', 'js/jsmind/dom-to-image.min.js');
 
 function get_base_path() {
     $path = dirname(dirname(dirname(__FILE__)));

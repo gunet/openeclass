@@ -50,6 +50,15 @@ class LearningPathProgressMeasureEvent extends BasicEvent {
                 $threshold = floatval($row->avg_pm) * 100.0;
             }
 
+            // fallback: if progress_measure gives nothing but the combined progress (same
+            // number shown in LP tracking) is positive, use it as the threshold.
+            if ($threshold == 0) {
+                $combined = get_learnPath_combined_progress($data->resource, $data->uid);
+                if ($combined > 0) {
+                    $threshold = $combined;
+                }
+            }
+
             $this->setEventData($data);
             $this->context['threshold'] = $threshold;
             $this->emit(parent::PREPARERULES);

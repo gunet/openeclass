@@ -148,8 +148,8 @@
                                                                      <span class='checkmark'></span>
                                                                 </label>
                                                            </span>
-                                                            <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                            <input class='form-control mt-0 border-start-0' name='WorkStart_review' id='WorkStart_review' type='text' value='{{ $WorkStart_review }}' @if (!$enableWorkStart_review) disabled @endif>
+                                                            <span class='add-on1'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                            <input class='form-control mt-0' name='WorkStart_review' id='WorkStart_review' type='text' value='{{ $WorkStart_review }}' @if (!$enableWorkStart_review) disabled @endif>
                                                         </div>
                                                         <span class='help-block'>
                                                             @if (Session::hasError('WorkStart_review'))
@@ -167,12 +167,13 @@
                                                     <div class='col-12'>
                                                         <div class='input-group'>
                                                            <span class='input-group-addon'>
-                                                           <label class='label-container' aria-label='{{ trans('langSelect') }}'>
-                                                             <input class='mt-0' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1' @if ($enableWorkEnd_review) checked @endif>
-                                                             <span class='checkmark'></span></label>
+                                                                <label class='label-container' aria-label='{{ trans('langSelect') }}'>
+                                                                    <input class='mt-0' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1' @if ($enableWorkEnd_review) checked @endif>
+                                                                    <span class='checkmark'></span>
+                                                                </label>
                                                              </span>
-                                                            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                            <input class='form-control mt-0 border-start-0' name='WorkEnd_review' id='WorkEnd_review' type='text' value='{{ $WorkEnd_review }}' @if (!$enableWorkEnd_review) disabled @endif>
+                                                            <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                            <input class='form-control mt-0' name='WorkEnd_review' id='WorkEnd_review' type='text' value='{{ $WorkEnd_review }}' @if (!$enableWorkEnd_review) disabled @endif>
                                                         </div>
                                                         <span class='help-block'>
                                                             @if (Session::hasError('WorkEnd_review'))
@@ -225,8 +226,8 @@
                                                              <input class='mt-0' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1' @if ($enableWorkStart) checked @endif>
                                                              <span class='checkmark'></span></label>
                                                        </span>
-                                                        <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                        <input class='form-control mt-0 border-start-0' name='WorkStart' id='WorkStart' type='text' value='{{ $WorkStart }}' @if (!$enableWorkStart) disabled @endif>
+                                                        <span class='add-on1'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <input class='form-control mt-0' name='WorkStart' id='WorkStart' type='text' value='{{ $WorkStart }}' @if (!$enableWorkStart) disabled @endif>
                                                     </div>
                                                     <span class='help-block'>
                                                         @if (Session::hasError('WorkStart'))
@@ -247,8 +248,8 @@
                                                                 <input class='mt-0' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1' @if ($enableWorkEnd) checked @endif>
                                                             <span class='checkmark'></span></label>
                                                         </span>
-                                                        <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                                        <input class='form-control mt-0 border-start-0' name='WorkEnd' id='WorkEnd' type='text' value='{{ $WorkEnd }}' @if (!$enableWorkEnd) disabled @endif>
+                                                        <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <input class='form-control mt-0' name='WorkEnd' id='WorkEnd' type='text' value='{{ $WorkEnd }}' @if (!$enableWorkEnd) disabled @endif>
                                                     </div>
                                                     <span class='help-block'>
                                                         @if (Session::hasError('WorkEnd'))
@@ -539,7 +540,7 @@
                                             <div class='row form-group  @if (Session::getError('assignmentIPLock')) has-error @endif mt-4'>
                                                 <label for='assignmentIPLock' class='col-12 control-label-notes mb-1'>{{ trans('langIPUnlock') }}</label>
                                                 <div class='col-12'>
-                                                    <select name='assignmentIPLock[]' class='form-select' id='assignmentIPLock' multiple>
+                                                    <select name='assignmentIPLock[]' class='form-control' id='assignmentIPLock' multiple>
                                                         {!! $assignmentIPLockOptions !!}
                                                     </select>
                                                 </div>
@@ -582,9 +583,34 @@
     @include('modules.work.lti_app_js_functions')
     <script type='text/javascript'>
         $(function() {
-            $('#scales').select2({ width: '100%' });
-            $('#rubrics').select2({ width: '100%' });
-            $('#reviews').select2({ width: '100%' });
+
+            // $('#scales').select2({ width: '100%' });
+            // $('#rubrics').select2({ width: '100%' });
+            // $('#reviews').select2({ width: '100%' });
+            slimSelectFun(
+                '#scales',
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}',
+            );
+
+            slimSelectFun(
+                '#rubrics',
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}',
+            );
+
+            slimSelectFun(
+                '#reviews',
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}',
+            );
+
             $('input[name=grading_type]').on('change', function(e){
                 let choice = $(this).val();
                 if (choice == 0) {
@@ -816,12 +842,25 @@
                         .addClass('hidden');
                 }
             });
-            $('#assignmentIPLock').select2({
-                minimumResultsForSearch: Infinity,
-                tags: true,
-                tokenSeparators: [',', ' '],
-                width: '100%'
-            });
+
+            // $('#assignmentIPLock').select2({
+            //     minimumResultsForSearch: Infinity,
+            //     tags: true,
+            //     tokenSeparators: [',', ' '],
+            //     width: '100%'
+            // });
+
+            slimSelectFun(
+                '#assignmentIPLock',
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}',
+                {
+                    tags: true,
+                    tokenSeparators: [',', ' '],
+                }
+            );
 
             $('input[name=group_submissions]').click(changeAssignLabel);
             $('input[id=assign_button_some]').click(ajaxAssignees);

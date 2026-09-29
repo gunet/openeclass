@@ -31,7 +31,8 @@ class PointsGame {
                 Database::get()->query("UPDATE user_points_game_points SET current_level = ?d 
                                         WHERE user = ?d AND points_game = ?d", $level->id, $uid, $gid);
                 if (!$is_editor && visible_module(MODULE_ID_PROGRESS,$course_id)) {
-                    Session::Messages(sprintf($langLevelPromoted, $level->friendly_name),'alert-success');
+                    $points_game_title = Database::get()->querySingle("SELECT title FROM points_game WHERE id = ?d", $gid)->title;
+                    Session::Messages(sprintf($langLevelPromoted, $points_game_title, $level->friendly_name),'alert-success');
                 }
             }
         }

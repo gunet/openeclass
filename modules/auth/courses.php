@@ -139,10 +139,11 @@ if (count($tree->buildRootsArray()) > 1) {
 }
 
 if ($data['isInOpenCoursesMode']) {
-    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true, 'textIfEmpty' => true));
 } else {
-    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true, 'textIfEmpty' => true));
 }
+$data['childCount'] = $childCount;
 
 $queryCourseIds = '';
 $queryExtraSelect = '';
@@ -207,6 +208,8 @@ if ($runQuery) {
                                course.popular_course p,
                                course.is_collaborative clb,
                                course.password password,
+                               course.reg_start_date reg_start_date,
+                               course.reg_end_date reg_end_date,
                                course.id id
                                $queryExtraSelect
                           FROM course, course_department $queryExtraJoin

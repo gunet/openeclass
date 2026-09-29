@@ -102,8 +102,8 @@ if (isset($_POST['submitPoll'])) {
         $lti_template = $_POST['lti_template'] ?? NULL;
         $launchcontainer = $_POST['lti_launchcontainer'] ?? NULL;
         $display_position = (isset($_POST['display_position'])) ? $_POST['display_position'] : 0;
+        $save_prev_user_answers = (isset($_POST['save_prev_user_answers']) && isset($_POST['MulSubmissions'])) ? $_POST['save_prev_user_answers'] : null;
         //$require_answer = (isset($_POST['require_answer'])) ? $_POST['require_answer'] : 0;
-
         // We have added require answer for a specific question
         $require_answer = 0;
 
@@ -118,6 +118,30 @@ if (isset($_POST['submitPoll'])) {
                     ];
                 }
             }
+        }
+        if (!is_null($save_prev_user_answers)) {
+            // Do not change settings for multiple submissions if exist user's answers.
+            if (isset($pid) && isset($_GET['modifyPoll'])) {
+                $checkExAns = Database::get()->querySingle("SELECT pur.id FROM poll_user_record pur
+                                                            JOIN poll_answer_record par ON par.poll_user_record_id=pur.id
+                                                            WHERE pur.pid = ?d", $pid);
+                                                            
+                if ($checkExAns) {
+                    $PollOptions = Database::get()->querySingle("SELECT options FROM poll WHERE pid = ?d AND course_id = ?d", $pid, $course_id);
+                    if (!is_null($PollOptions->options)) {
+                        $optArr = unserialize($PollOptions->options);
+                        foreach ($optArr as $opt) {
+                            if (isset($opt['save_prev_user_answers'])) {
+                                $save_prev_user_answers = $opt['save_prev_user_answers'];
+                            }
+                        }
+                    }
+                }
+            }
+            
+            $msg_gr_arr[] = [
+                'save_prev_user_answers' => $save_prev_user_answers
+            ];
         }
         $response = (count($msg_gr_arr) > 0 ? serialize($msg_gr_arr) : null);
 
@@ -428,6 +452,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             };
             $(poll_grade(langPoll));
 
+            if ($('#MulSubmissions').is(':checked')) {
+                $('#save_prev_user_answers_on_off').removeClass('d-none').addClass('d-block');
+            } else {
+                $('#save_prev_user_answers_on_off').removeClass('d-block').addClass('d-none');
+            }
+            $('#MulSubmissions').on('change', function () {
+                if ($(this).is(':checked')) {
+                    $('#save_prev_user_answers_on_off').removeClass('d-none').addClass('d-block');
+                } else {
+                    $('#save_prev_user_answers_on_off').removeClass('d-block').addClass('d-none');
+                }
+            });
+
         });
         function ajaxAssignees()
         {
@@ -522,6 +559,30 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
 
+    $savePreviousUserAnswers = false;
+    if (isset($poll) && !is_null($poll->options)) {
+        $pollOptions = unserialize($poll->options);
+        foreach ($pollOptions as $opt) {
+            if (isset($opt['save_prev_user_answers']) && $opt['save_prev_user_answers'] == 1) {
+                $savePreviousUserAnswers = true;
+                break;
+            }
+        }
+    }
+
+    $disabledMultipleSubmissionCl = '';
+    $disabledMultipleSubmission = '';
+    if (isset($_GET['modifyPoll'])) {
+        $checkExAns = Database::get()->queryArray("SELECT pur.id FROM poll_user_record pur
+                                                    JOIN poll_answer_record par ON par.poll_user_record_id=pur.id
+                                                    WHERE pur.pid = ?d", $pid);
+        if (count($checkExAns) > 0) {
+            $disabledMultipleSubmission = 'disabled';
+            $disabledMultipleSubmissionCl = "style='opacity: 0.5 !important;'";
+        }
+    }
+    
+
     $disabledAssign = '';
     if (isset($pid)) {
         $rec_check = Database::get()->querySingle("SELECT id FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, 0);
@@ -548,18 +609,17 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
                 <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langStart <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='input-group'>
-                        <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                        <input class='form-control mt-0 border-start-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
-                        <span class='help-block Accent-200-cl'>".Session::getError('PollStart')."</span>
-
+                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <input class='form-control mt-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
                 </div>
+                <span class='help-block Accent-200-cl'>".Session::getError('PollStart')."</span>
             </div>
 
             <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
                 <label for='PollEnd' class='col-sm-12 control-label-notes mb-1'>$langPollEnd <span class='asterisk Accent-200-cl'>(*)</span></label>
                 <div class='input-group'>
-                    <span class='add-on input-group-text h-40px bg-input-default input-border-color border-end-0'><i class='fa-regular fa-calendar'></i></span>
-                    <input class='form-control mt-0 border-start-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
+                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <input class='form-control mt-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
                     <span class='help-block Accent-200-cl'>".Session::getError('PollEnd')."</span>
 
                 </div>
@@ -610,7 +670,27 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             <span class='checkmark'></span>
                             $langActivateMulSubmissions
                         </label>
+                    </div>";
+                    
+                    $tool_content .= "
+                    <div class='col-12 col-md-9 ms-auto me-auto d-none' id='save_prev_user_answers_on_off'>
+                        <p class='mb-2'><strong>$langPollSavePrevUserAnswers</strong></p>
+                        <div class='radio mb-1' $disabledMultipleSubmissionCl>
+                            <label>
+                                <input type='radio' name='save_prev_user_answers' value='1' " . ($savePreviousUserAnswers ? 'checked' : ''). " $disabledMultipleSubmission>
+                                <span>$langYes</span>
+                            </label>
+                        </div>
+                        <div class='radio' $disabledMultipleSubmissionCl>
+                            <label>
+                                <input type='radio' name='save_prev_user_answers' value='0' " . (!$savePreviousUserAnswers ? 'checked' : ''). " $disabledMultipleSubmission>
+                                <span>$langNo</span>
+                            </label>
+                        </div>
                     </div>
+                    ";
+                    
+                    $tool_content .= "
                     <div class='checkbox'>
                         <label class='label-container' aria-label='$langSelect'>
                             <input type='checkbox' name='DefaultAnswer' id='DefaultAnswer' value='1'" .
@@ -1260,8 +1340,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     if ($isEnabledGrade && !$isSubQuestion) {
             $tool_content .= "<input class='form-control mt-0' type='text' name='grades[$answer->pqaid]' value='$answer->weight' placeholder='$langScore'>";
                     }
-            $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
-                                " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+            $tool_content .= "<div class='form-control-static input-group-text h-40px bg-transparent input-border-color'>
+                                " . icon('fa-xmark Accent-200-cl fs-6', $langDelete, '#', ' class="del_btn"') . "
                               </div>
                 </div>";
               }
@@ -1272,8 +1352,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 if ($isEnabledGrade && !$isSubQuestion) {
             $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langScore'>";
                 }
-            $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
-                            " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+            $tool_content .= "<div class='form-control-static input-group-text h-40px bg-transparent input-border-color'>
+                            " . icon('fa-xmark Accent-200-cl fs-6', $langDelete, '#', ' class="del_btn"') . "
                               </div>
             </div>
             <div class='form-group input-group mt-3'>
@@ -1281,8 +1361,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 if ($isEnabledGrade && !$isSubQuestion) {
             $tool_content .= "<input class='form-control mt-0' type='text' name='grades[]' value='' placeholder='$langScore'>";
                     }
-        $tool_content .= "<div class='form-control-static input-group-text h-40px bg-white input-border-color'>
-                        " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
+        $tool_content .= "<div class='form-control-static input-group-text h-40px bg-transparent input-border-color'>
+                        " . icon('fa-xmark Accent-200-cl fs-6', $langDelete, '#', ' class="del_btn"') . "
                     </div>
                 </div>";
         }

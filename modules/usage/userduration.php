@@ -135,6 +135,7 @@ if (isset($_GET['u'])) { //  stats per user
                 array('title' => $langDumpPDF,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=pdf",
                     'icon' => 'fa-file-pdf',
+                    'link-attrs' => "target='_blank'",
                     'level' => 'primary-label'),
                 array('title' => $langDumpExcel,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=xls",
@@ -276,6 +277,7 @@ if (isset($_GET['u'])) { //  stats per user
                 array('title' => $langDumpPDF,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=pdf",
                     'icon' => 'fa-file-pdf',
+                    'link-attrs' => "target='_blank'",
                     'level' => 'primary-label'),
                 array('title' => $langDumpExcel,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=xls",
@@ -361,6 +363,7 @@ if (isset($_GET['u'])) { //  stats per user
                     'level' => 'primary-label'),
                 array('title' => $langDumpPDF,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf",
+                    'link-attrs' => "target='_blank'",
                     'icon' => 'fa-file-pdf',
                     'level' => 'primary-label'),
                 array('title' => $langDumpExcel,
@@ -549,83 +552,88 @@ function selection_course_modules() {
  * @throws \Mpdf\MpdfException
  */
 function pdf_output() {
-    global $tool_content, $langUserDuration, $currentCourseName,
-           $webDir, $course_id, $course_code;
+    global $langUserDuration, $currentCourseName, $course_code;
 
-    $pdf_content = "
-        <!DOCTYPE html>
-        <html lang='el'>
-        <head>
-          <meta charset='utf-8'>
-          <title>" . q("$currentCourseName - $langUserDuration") . "</title>
-          <style>
-            * { font-family: 'opensans'; }
-            body { font-family: 'opensans'; font-size: 10pt; }
-            small, .small { font-size: 8pt; }
-            h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-            h1 { font-size: 16pt; }
-            h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
-            th { text-align: left; border-bottom: 1px solid #999; }
-            td { text-align: left; }
-          </style>
-        </head>
+    $pdf_title = "$course_code user_report";
+    $course_title = q("$currentCourseName - $langUserDuration");
+    $module_type_title = q($langUserDuration);
+    html_to_pdf($pdf_title, $course_title, $module_type_title);
+
+
+    // $pdf_content = "
+    //     <!DOCTYPE html>
+    //     <html lang='el'>
+    //     <head>
+    //       <meta charset='utf-8'>
+    //       <title>" . q("$currentCourseName - $langUserDuration") . "</title>
+    //       <style>
+    //         * { font-family: 'opensans'; }
+    //         body { font-family: 'opensans'; font-size: 10pt; }
+    //         small, .small { font-size: 8pt; }
+    //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
+    //         h1 { font-size: 16pt; }
+    //         h2 { font-size: 12pt; border-bottom: 1px solid black; }
+    //         h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
+    //         th { text-align: left; border-bottom: 1px solid #999; }
+    //         td { text-align: left; }
+    //       </style>
+    //     </head>
         
-        <body>
-        <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-        <h2> " . q($langUserDuration) . "</h2>";
+    //     <body>
+    //     <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
+    //     <h2> " . q($langUserDuration) . "</h2>";
 
-    $pdf_content .= $tool_content;
-    $pdf_content .= "</body></html>";
+    // $pdf_content .= $tool_content;
+    // $pdf_content .= "</body></html>";
 
-    $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    $fontDirs = $defaultConfig['fontDir'];
-    $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    $fontData = $defaultFontConfig['fontdata'];
+    // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+    // $fontDirs = $defaultConfig['fontDir'];
+    // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+    // $fontData = $defaultFontConfig['fontdata'];
 
-    $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    // for old courses
-    if ($image_height_header > 50) {
-        $image_height_header = 20;
-    }
-    if ($image_height_footer > 50) {
-        $image_height_footer = 15;
-    }
-    $mpdf = new Mpdf\Mpdf([
-        'margin_top' => $image_height_header + 20,     // mm
-        'margin_bottom' => $image_height_footer + 15,  // mm
-        'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-        'fontdata' => $fontData + [
-                'opensans' => [
-                    'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-                    'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-                    'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-                    'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-                ],
-                'roboto' => [
-                    'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-                    'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-                ]
-            ]
-    ]);
+    // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
+    // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
+    // // for old courses
+    // if ($image_height_header > 50) {
+    //     $image_height_header = 20;
+    // }
+    // if ($image_height_footer > 50) {
+    //     $image_height_footer = 15;
+    // }
+    // $mpdf = new Mpdf\Mpdf([
+    //     'margin_top' => $image_height_header + 20,     // mm
+    //     'margin_bottom' => $image_height_footer + 15,  // mm
+    //     'tempDir' => _MPDF_TEMP_PATH,
+    //     'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
+    //     'fontdata' => $fontData + [
+    //             'opensans' => [
+    //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
+    //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
+    //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
+    //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
+    //             ],
+    //             'roboto' => [
+    //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
+    //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
+    //             ]
+    //         ]
+    // ]);
 
-    $mpdf->SetHTMLHeader(get_platform_logo());
-    $footerHtml = '
-    <div>
-        <table width="100%" style="border: none;">
-            <tr>
-                <td style="text-align: left;">{DATE j-n-Y}</td>
-                <td style="text-align: right;">{PAGENO} / {nb}</td>
-            </tr>
-        </table>
-    </div>
-    ' . get_platform_logo('','footer') . '';
-    $mpdf->SetHTMLFooter($footerHtml);
-    $mpdf->SetCreator(course_id_to_prof($course_id));
-    $mpdf->SetAuthor(course_id_to_prof($course_id));
-    $mpdf->WriteHTML($pdf_content);
-    $mpdf->Output("$course_code user_report.pdf", 'I'); // 'D' or 'I' for download / inline display
-    exit;
+    // $mpdf->SetHTMLHeader(get_platform_logo());
+    // $footerHtml = '
+    // <div>
+    //     <table width="100%" style="border: none;">
+    //         <tr>
+    //             <td style="text-align: left;">{DATE j-n-Y}</td>
+    //             <td style="text-align: right;">{PAGENO} / {nb}</td>
+    //         </tr>
+    //     </table>
+    // </div>
+    // ' . get_platform_logo('','footer') . '';
+    // $mpdf->SetHTMLFooter($footerHtml);
+    // $mpdf->SetCreator(course_id_to_prof($course_id));
+    // $mpdf->SetAuthor(course_id_to_prof($course_id));
+    // $mpdf->WriteHTML($pdf_content);
+    // $mpdf->Output("$course_code user_report.pdf", 'I'); // 'D' or 'I' for download / inline display
+    // exit;
 }

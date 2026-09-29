@@ -25,20 +25,44 @@ $helpSubTopic = 'user_profile_fields';
 require_once '../../include/baseTheme.php';
 require 'modules/admin/custom_profile_fields_functions.php';
 
+$default_lang = get_config('default_language');
+//create an array where default language is the first element
+$available_langs = [$default_lang => $session->native_language_names[$default_lang]]
+        + array_diff_key($session->native_language_names, [$default_lang => true]);
+
  if (isset($_POST['submit_field'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    $name = $_POST['field_name'];
+
+    $name_lang_arr = array();
+    foreach ($_POST['field_name'] as $lang_code => $name) {
+        if (!empty(trim($name))) {
+            $name_lang_arr[$lang_code] = $name;
+        }
+    }
+
+    $descr_lang_arr = array();
+    foreach ($_POST['fielddescr'] as $lang_code => $description) {
+        if (!empty(trim($description))) {
+            $descr_lang_arr[$lang_code] = $description;
+        }
+    }
+
     $shortname = $_POST['field_shortname'];
-    $description = $_POST['fielddescr'];
     $datatype = intval($_POST['datatype']);
     if (isset($_POST['required'])) {
         $required = intval($_POST['required']);
     } else {
         $required = 0;
     }
-    if ($datatype == CPF_MENU && isset($_POST['options'])) {
-        $data = explode(PHP_EOL, $_POST['options']);
-        $data = serialize($data);
+
+    if ($datatype == CPF_MENU && isset($_POST['options'][$default_lang])) {
+        $data_lang_arr = array();
+        foreach ($available_langs as $code => $lang) {
+            if (!empty(trim($_POST['options'][$code]))) {
+                $data_lang_arr[$code] = explode(PHP_EOL, $_POST['options'][$code]);
+            }
+        }
+        $data = serialize($data_lang_arr);
     } else {
         $data = '';
     }
@@ -68,7 +92,7 @@ require 'modules/admin/custom_profile_fields_functions.php';
                                     user_type = 10,
                                     registration = ?d,
                                     data = ?s
-                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $registration, $data, $fieldid);
+                                    WHERE id = ?d", serialize($name_lang_arr), $shortname, serialize($descr_lang_arr), $datatype, $required, $visibility, $registration, $data, $fieldid);
             Session::flash('message',$langCPFFieldEditSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
@@ -93,7 +117,7 @@ require 'modules/admin/custom_profile_fields_functions.php';
             }
 
             Database::get()->query("INSERT INTO custom_profile_fields (shortname, name, description, datatype, categoryid, sortorder, required, visibility, user_type, registration, data)
-                                    VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s)", $shortname, $name, $description, $datatype, $catid, $sortorder, $required, $visibility, 10, $registration, $data);
+                                    VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s)", $shortname, serialize($name_lang_arr), serialize($descr_lang_arr), $datatype, $catid, $sortorder, $required, $visibility, 10, $registration, $data);
             Session::flash('message',$langCPFFieldAddSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
@@ -104,7 +128,7 @@ require 'modules/admin/custom_profile_fields_functions.php';
         }
     }
 } elseif (isset($_GET['del_field'])) { //delete fields
-    $fieldid = intval($_GET['del_field']);
+    $fieldid = intval(getDirectReference($_GET['del_field']));
     //delete fields profile data
     Database::get()->query("DELETE custom_profile_fields_data FROM custom_profile_fields_data INNER JOIN custom_profile_fields
                             ON custom_profile_fields_data.field_id = custom_profile_fields.id
@@ -141,9 +165,15 @@ require 'modules/admin/custom_profile_fields_functions.php';
 } elseif (isset($_POST['submit_cat'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
+
+    $cat_name_lang_arr = array();
+    foreach ($_POST['cat_name'] as $lang_code => $value) {
+            $cat_name_lang_arr[$lang_code] = $value;
+    }
+
     if (isset($_POST['cat_id'])) { //save edited category
         $catid = intval(getDirectReference($_POST['cat_id']));
-        Database::get()->query("UPDATE custom_profile_fields_category SET name = ?s WHERE id = ?d", $_POST['cat_name'], $catid);
+        Database::get()->query("UPDATE custom_profile_fields_category SET name = ?s WHERE id = ?d", serialize($cat_name_lang_arr), $catid);
         Session::flash('message',$langCPFCatModSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/admin/custom_profile_fields.php");
@@ -155,7 +185,7 @@ require 'modules/admin/custom_profile_fields_functions.php';
         } else {
             $sortorder = 0;
         }
-        Database::get()->query("INSERT INTO custom_profile_fields_category (name, sortorder) VALUES (?s, ?d)", $_POST['cat_name'], $sortorder);
+        Database::get()->query("INSERT INTO custom_profile_fields_category (name, sortorder) VALUES (?s, ?d)", serialize($cat_name_lang_arr), $sortorder);
         Session::flash('message',$langCPFCatAddedSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/admin/custom_profile_fields.php");
@@ -242,7 +272,9 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
     $data['visibility'] = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
 
     $data['datatype'] = intval($_POST['datatype']);
-    $data['fielddescr_rich_text'] = rich_text_editor('fielddescr', 8, 20, '', options: array('id' => 'fielddescr'));
+    foreach ($available_langs as $code => $lang) {
+        $data['fielddescr_rich_text'][$code] = rich_text_editor('fielddescr['.$code.']', 8, 20, '', options: array('id' => 'fielddescr_'.$code));
+    }
 
     $view = 'admin.users.custom_profile_fields.createStep2';
 
@@ -261,9 +293,8 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
     $result = Database::get()->querySingle("SELECT * FROM custom_profile_fields WHERE id = ?d", $data['fieldid']);
     if ($result) {
 
-        $data['name'] = $name = q($result->name);
+        $data['name'] = $name = $result->name;
         $data['shortname'] = $shortname = q($result->shortname);
-        $description = standard_text_escape($result->description);
         $data['datatype'] = $datatype = $result->datatype;
         $data['required'] = $result->required;
         $data['vis'] = $vis = $result->visibility;
@@ -271,16 +302,21 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         $custom_profile_fields_data = $result->data;
 
         if ($data['datatype'] == CPF_MENU) {
-            $custom_profile_fields_data = unserialize($custom_profile_fields_data);
-            $data['textarea_val'] = '';
-            foreach ($custom_profile_fields_data as $line) {
-                $data['textarea_val'] .= $line."\n";
+            $custom_profile_fields_data = unserialize($custom_profile_fields_data, ['allowed_classes' => false]);
+            $data['textarea_val'] = array();
+            foreach ($custom_profile_fields_data as $lang => $options) {
+                $data['textarea_val'][$lang] = '';
+                foreach ($options as $line) {
+                    $data['textarea_val'][$lang] .= $line."\n";
+                }
+                $data['textarea_val'][$lang] = substr($data['textarea_val'][$lang], 0, strlen($data['textarea_val'][$lang])-1);
             }
-            $data['textarea_val'] = substr($data['textarea_val'], 0, strlen($data['textarea_val'])-1);
         }
 
         load_js('validation.js');
-        $data['fielddescr_rich_text'] =  rich_text_editor('fielddescr', 8, 20, standard_text_escape($result->description), options: array('id' => 'fielddescr'));
+        foreach ($available_langs as $code => $lang) {
+            $data['fielddescr_rich_text'][$code] =  rich_text_editor('fielddescr['.$code.']', 8, 20, standard_text_escape(getSerializedMessage($result->description, $code)), options: array('id' => 'fielddescr_'.$code));
+        }
 
         $data['field_types'] = $field_types = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langLink);
         $data['yes_no'] = array(0 => $langNo, 1 => $langYes);
@@ -328,5 +364,9 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
     }
   $view = 'admin.users.custom_profile_fields.index';
 }
+
+$data['default_lang'] = $default_lang;
+//create an array where default language is the first element
+$data['available_langs'] = $available_langs;
 
 view ($view, $data);

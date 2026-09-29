@@ -12,6 +12,7 @@
                 "aLengthMenu": [10, 15, 20 , -1],
                 "sPaginationType": "full_numbers",
                 "bAutoWidth": false,
+                "bStateSave": true,
                 "searchDelay": 1000,
                 "aoColumns": [
                     {"bSortable" : true, "sWidth": "50%" },
@@ -20,7 +21,7 @@
                     {"bSortable" : false },
                 ],
                 "fnDrawCallback": function( oSettings ) {
-                    popover_init();
+                    
                 },
                 "oLanguage": {
                     'lengthLabels': {

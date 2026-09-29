@@ -1,4 +1,18 @@
-@unless(isset($_SESSION['mobile']) || isset($_SESSION['safe_exam_browser_view']))
+@unless(isset($_SESSION['mobile']))
+
+    @if(isset($_SESSION['safe_exam_browser_view']))
+        <style>
+            .sidebar .module-tool {
+                pointer-events: none;
+                color: #999 !important;
+                opacity: 0.7;
+            }
+            .sidebar .parent-menu {
+                color: #777 !important;
+            }
+        </style>
+    @endif
+
     <div id="leftnav" class="col-12 sidebar float-menu pt-3">
 
         <div class='col-12 text-end d-none d-lg-block'>
@@ -14,7 +28,7 @@
 
         @php $is_course_teacher = check_editor($uid,$course_id); @endphp
 
-        @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code)
+        @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code && !isset($_SESSION['safe_exam_browser_view']))
 
              <!-- THIS IS SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE-BUTTON -->
         <div class='col-12 mt-lg-4 mt-3'>

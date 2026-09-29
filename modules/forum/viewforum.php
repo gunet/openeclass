@@ -140,7 +140,7 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         //delete forum posts rating first
         Database::get()->query("DELETE FROM rating WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);
         Database::get()->query("DELETE FROM rating_cache WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);
-        Database::get()->query("DELETE FROM forum_post WHERE id = $r->id");
+        Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $r->id);
         triggerForumGame($course_id, $uid, ForumEvent::DELPOST);
         triggerTopicGame($course_id, $uid, ForumTopicEvent::DELPOST, $topic_id);
         triggerForumAnalytics($course_id, $uid, ForumAnalyticsEvent::FORUMEVENT);
@@ -172,10 +172,10 @@ if (($is_editor) and isset($_GET['topicdel'])) {
     }
 
     Database::get()->query("UPDATE forum SET num_topics = ?d,
-                                num_posts = num_posts-$number_of_posts,
+                                `num_posts` = `num_posts`-?d,
                                 last_post_id = ?d
                             WHERE id = ?d
-                                AND course_id = ?d", $num_topics, $last_post, $forum_id, $course_id);
+                                AND course_id = ?d", $num_topics, $number_of_posts, $last_post, $forum_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE topic_id = ?d AND course_id = ?d", $topic_id, $course_id);
     Session::flash('message',$langTopicDeleted);
     Session::flash('alert-class', 'alert-success');

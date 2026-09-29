@@ -145,10 +145,10 @@ $head_content .= "
       var oTable = $('#invite_table{$course_id}').DataTable({
         bProcessing: true,
         bServerSide: true,
+        bStateSave: true,
         sScrollX: true,
         drawCallback: function(oSettings) {
           tooltip_init();
-          popover_init();
         },
         ajax: {
             url: '$_SERVER[REQUEST_URI]',

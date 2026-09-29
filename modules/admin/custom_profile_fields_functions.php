@@ -108,15 +108,22 @@ function render_profile_fields_form($context, $valitron = false) {
                 $column = 'col-lg-6 col-12';
                 $padding = 'px-3';
                 // if case is editor then set column to equals 12.
-                if($f->datatype == 2 or isset($_GET['edProfile'])){
+                if($f->datatype == 2 or isset($_REQUEST['edProfile'])){
                     $column = 'col-12';
                     $padding = 'px-0';
-                    if($f->datatype == 2 and !isset($_GET['edProfile'])){
+                    if($f->datatype == 2 and !isset($_REQUEST['edProfile'])){
                         $padding = 'px-3';
                     }
                 }
+				
+                if ($f->required){
+                    $asterisk = " <span class='asterisk Accent-200-cl'>(*)</span>";
+                } else {
+                    $asterisk = "";
+                }
+				
                 $return_string .= '<div class="'.$column.' '.$padding.'"><div class="'.$form_class.'">';
-                $return_string .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
+                $return_string .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q(getSerializedMessage($f->name)).$asterisk.'</label>';
 
 
                 //get data to prefill fields
@@ -142,7 +149,6 @@ function render_profile_fields_form($context, $valitron = false) {
 
                 $val = '';
                 $placeholder = '';
-                $helpBlock = '';
 
                 switch ($f->datatype) {
                     case CPF_TEXTBOX:
@@ -151,15 +157,7 @@ function render_profile_fields_form($context, $valitron = false) {
                         } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
                             $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
-                        if ($f->required == 0) {
-                            //$placeholder = 'placeholder="'.$langOptional.'"';
-                            $helpBlock = '<em>'.$langOptional.'</em>';
-                        } else {
-                            //$placeholder = 'placeholder="'.$langCompulsory.'"';
-                            $helpBlock = '<em>'.$langCompulsory.'</em>';
-                        }
                         $return_string .= '<input id="'.$f->shortname.'" class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
-                        $return_string .= '<small>'.$helpBlock.'</small>';
                         break;
                     case CPF_TEXTAREA:
                         if (isset($fdata) && $fdata != '') {
@@ -180,16 +178,8 @@ function render_profile_fields_form($context, $valitron = false) {
                         } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
                             $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
-                        if ($f->required == 0) {
-                            //$placeholder = 'placeholder="'.$langOptional.'"';
-                            $helpBlock = '<em>'.$langOptional.'</em>';
-                        } else {
-                            //$placeholder = 'placeholder="'.$langCompulsory.'"';
-                            $helpBlock = '<em>'.$langCompulsory.'</em>';
-                        }
                         load_js('bootstrap-datepicker');
                         $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
-                        $return_string .= '<small>'.$helpBlock.'</small>';
                         break;
                     case CPF_MENU:
                         if (isset($fdata) && $fdata != '') {
@@ -199,16 +189,19 @@ function render_profile_fields_form($context, $valitron = false) {
                         } else {
                             $def_selection = 0;
                         }
-                        $options = unserialize($f->data);
-                        $options = array_combine(range(1, count($options)), array_values($options));
-                        $options[0] = "";
-                        ksort($options);
-                        $return_string .= selection($options, 'cpf_'.$f->shortname, $def_selection);
-                        if ($f->required == 0) {
-                            $req_label = $langOptional;
+                        $options = unserialize($f->data, ['allowed_classes' => false]);
+                        if (isset($options[$_SESSION['langswitch']])) {
+                            $options_lang = $options[$_SESSION['langswitch']];
+                        } elseif (isset($options[get_config('default_language')])) {
+                            $options_lang = $options[get_config('default_language')];
                         } else {
-                            $req_label = $langCompulsory;
+                            $options_lang = is_array($options) ? reset($options) : [];
                         }
+                        if (!is_array($options_lang) || empty($options_lang)) { break; }
+                        $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
+                        $options_lang[0] = "";
+                        ksort($options_lang);
+                        $return_string .= selection($options_lang, 'cpf_'.$f->shortname, $def_selection);
                         break;
                     case CPF_LINK:
                         if (isset($fdata) && $fdata != '') {
@@ -216,25 +209,11 @@ function render_profile_fields_form($context, $valitron = false) {
                         } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
                             $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
-                        if ($f->required == 0) {
-                            //$placeholder = 'placeholder="'.$langOptional.'"';
-                            $helpBlock = '<em>'.$langOptional.'</em>';
-                        } else {
-                            //$placeholder = 'placeholder="'.$langCompulsory.'"';
-                            $helpBlock = '<em>'.$langCompulsory.'</em>';
-                        }
                         $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
-                        $return_string .= '<small>'.$helpBlock.'</small>';
                         break;
                 }
                 if (!empty($f->description)) {
-                    $return_string .= '<small><em">'.standard_text_escape($f->description);
-                    if (isset($req_label)) {
-                        $return_string .= $req_label;
-                    }
-                    $return_string .= '</em></small>';
-                } elseif (isset($req_label)) {
-                    $return_string .= '<small><em>'.$req_label.'</em></small>';
+                    $return_string .= "<span class='help-block'>".standard_text_escape(getSerializedMessage($f->description))."</span>";
                 }
                 $return_string .= $help_block.'</div></div>';
                 unset($req_label);
@@ -388,7 +367,7 @@ function render_profile_fields_content($context) {
                                             }
 
                                             $return_str .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                                                <h2 class='text-heading-h3'>".q($cat->name)."</h2>
+                                                                <h2 class='text-heading-h3'>".q(getSerializedMessage($cat->name))."</h2>
                                                             </div>
 
                                                             <div class='card-body'>";
@@ -406,7 +385,7 @@ function render_profile_fields_content($context) {
 
                                                                             $return_str .= "
                                                                                                 <div class='col-lg-4 col-12'>
-                                                                                                    <div class='title-default'>".q($f->name)."</div>
+                                                                                                    <div class='title-default'>".q(getSerializedMessage($f->name))."</div>
                                                                                                 </div>
 
                                                                                                 <div class='col-lg-8 col-12 title-default-line-height'>
@@ -427,11 +406,19 @@ function render_profile_fields_content($context) {
                                                                                                             $return_str .= "<p class='title-default-line-height'>".q($fdata_res->data)."</p>";
                                                                                                             break;
                                                                                                         case CPF_MENU:
-                                                                                                            $options = unserialize($f->data);
-                                                                                                            $options = array_combine(range(1, count($options)), array_values($options));
-                                                                                                            $options[0] = "";
-                                                                                                            ksort($options);
-                                                                                                            $return_str .= "<p class='title-default-line-height'>".q($options[$fdata_res->data])."</p>";
+                                                                                                            $options = unserialize($f->data, ['allowed_classes' => false]);
+                                                                                                            if (isset($options[$_SESSION['langswitch']])) {
+                                                                                                                $options_lang = $options[$_SESSION['langswitch']];
+                                                                                                            } elseif (isset($options[get_config('default_language')])) {
+                                                                                                                $options_lang = $options[get_config('default_language')];
+                                                                                                            } else {
+                                                                                                                $options_lang = is_array($options) ? reset($options) : [];
+                                                                                                            }
+                                                                                                            if (!is_array($options_lang) || empty($options_lang)) { break; }
+                                                                                                            $options_lang = array_combine(range(1, count($options_lang)), array_values($options_lang));
+                                                                                                            $options_lang[0] = "";
+                                                                                                            ksort($options_lang);
+                                                                                                            $return_str .= "<p class='title-default-line-height'>".q($options_lang[$fdata_res->data])."</p>";
                                                                                                             break;
                                                                                                         case CPF_LINK:
                                                                                                             $return_str .= "<p class='title-default-line-height'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></p>";
@@ -480,7 +467,7 @@ function cpf_validate_format() {
             $field_name = substr($key, 4);
             $result = Database::get()->querySingle("SELECT name, datatype FROM custom_profile_fields WHERE shortname = ?s", $field_name);
             $datatype = $result->datatype;
-            $field_name = $result->name;
+            $field_name = getSerializedMessage($result->name);
             if ($datatype == CPF_LINK) {
                 if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$value)) {
                     $ret[0] = false;
@@ -510,7 +497,7 @@ function cpf_validate_format_valitron(&$valitron_object) {
             $field_name = substr($key, 4);
             $result = Database::get()->querySingle("SELECT name, datatype, required FROM custom_profile_fields WHERE shortname = ?s", $field_name);
             $datatype = $result->datatype;
-            $field_name = $result->name;
+            $field_name = getSerializedMessage($result->name);
             if ($datatype == CPF_LINK) {
                 $valitron_object->rule('url', $key)->message(sprintf($langCPFLinkValidFail, q($field_name)))->label($field_name);
             } elseif ($datatype == CPF_DATE) {

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 500 500">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: #fff;
+        stroke-width: 5px;
+      }
+
+      .st0, .st1 {
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .st1 {
+        fill: none;
+        stroke-width: 16px;
+      }
+
+      .st2 {
+        fill: #99998b;
+      }
+    </style>
+  </defs>
+  <g id="background">
+    <rect class="st2" y="0" width="500" height="500" rx="120" ry="120"/>
+  </g>
+  <g id="icon">
+    <rect class="st1" x="186.83" y="188.75" width="126.33" height="53.48"/>
+    <polygon class="st1" points="261.41 409.15 238.59 409.15 215.42 242.24 284.58 242.24 261.41 409.15"/>
+    <line class="st1" x1="159.17" y1="188.75" x2="340.83" y2="188.75"/>
+    <line class="st1" x1="159.17" y1="242.24" x2="340.83" y2="242.24"/>
+    <path class="st1" d="M220.65,188.75s-98.67-45.19,4.61-108.81l-9.22,45.19s48.62-29.77,73.77-81.15c0,0,81.15,97.75-14.75,144.78"/>
+    <rect class="st1" x="190.52" y="409.15" width="118.96" height="24.9"/>
+  </g>
+  <g id="stars">
+    <path class="st0" d="M91.38,339.36h0c0-18.32-14.99-33.3-33.3-33.3h0c18.32,0,33.3-14.99,33.3-33.3h0c0,18.32,14.99,33.3,33.3,33.3h0c-18.32,0-33.3,14.99-33.3,33.3Z"/>
+    <path class="st0" d="M408.62,339.36h0c0-18.32-14.99-33.3-33.3-33.3h0c18.32,0,33.3-14.99,33.3-33.3h0c0,18.32,14.99,33.3,33.3,33.3h0c-18.32,0-33.3,14.99-33.3,33.3Z"/>
+  </g>
+</svg>

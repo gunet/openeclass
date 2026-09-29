@@ -196,7 +196,6 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $BBBEndDate = $end_date->format('d-m-Y H:i');
         $textarea = rich_text_editor('desc', 4, 20, '', options: array('id' => 'desc'));
         $value_title = '';
-        $init_external_users = '';
         if ($tc_type == 'jitsi') {
             $value_session_users = 30; // jitsi recommended value
         } else {
@@ -241,6 +240,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'bbb'
                                                 AND enabled = 'true' ORDER BY FIELD(enable_recordings, 'true', 'false'), weight ASC LIMIT 1")->id;
             break;
+        default;
+            return;
     }
 
     if (isset($_GET['choice']) and $_GET['choice'] == 'edit') {
@@ -352,8 +353,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                         <input class='mt-0' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
                         <span class='checkmark'></span></label>
                     </span>
-                    <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                    <input class='form-control mt-0 border-start-0' name='BBBEndDate' id='BBBEndDate' type='text' value='$BBBEndDate'".($enableEndDate ? '' : ' disabled').">
+                    <span class='add-on2'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <input class='form-control mt-0' name='BBBEndDate' id='BBBEndDate' type='text' value='$BBBEndDate'".($enableEndDate ? '' : ' disabled').">
                 </div>
                 <span class='help-block'>".(Session::hasError('BBBEndDate') ? Session::getError('BBBEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBEndHelpBlock")."</span>
             </div>
@@ -1181,7 +1182,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 foreach ($_POST['groups'] as $group) {
                     if (preg_match('/^_/', $group)) { // find group users (if any)
                         $g_id = intval((substr($group, 1, strlen($group))));
-                        $q = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = $g_id");
+                        $q = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g_id);
                         if ($q) {
                             foreach ($q as $row) {
                                 $r_group .= "'$row->user_id'" .',';

@@ -104,7 +104,7 @@ $(function() {
             hideGrade();
         } else {
             $('.fill_in_blank_strict').removeClass('d-block').addClass('d-none');
-            if (selectedOption.selected && (selectedOption.value == 6 || selectedOption.value == 13)) {
+            if (selectedOption.selected && (selectedOption.value == 6 || selectedOption.value == 13 || selectedOption.value == 14)) {
                 showGrade();
             } else {
                 hideGrade();
@@ -223,7 +223,7 @@ if (isset($_POST['submitQuestion'])) {
         // if the answer type is free text (which means it doesn't have predefined answers)
         // redirect to either pool or edit exercise page,
         // else redirect to modify answers page in order to add answers to question
-        if ($answerType == FREE_TEXT or $answerType == ORAL) {
+        if ($answerType == FREE_TEXT or $answerType == ORAL or $answerType == UPLOAD_FILE) {
             $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&htopic=6" : "modules/exercise/question_pool.php?course=$course_code";
             if ($answerType == FREE_TEXT) {
                 require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
@@ -355,6 +355,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                     CALCULATED => $langCalculated,
                                     FREE_TEXT => "$langFreeText",
                                     ORAL => "$langOral",
+                                    UPLOAD_FILE => "$langUploadFile",
                                 ],
                                 'answerType',
                                 (isset($answerType)) ? ($answerType == FILL_IN_BLANKS ? FILL_IN_BLANKS_TOLERANT : $answerType) : UNIQUE_ANSWER,
@@ -370,7 +371,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                         </div>
                     </div>";
 
-            $tool_content .= "<div class='row form-group ".(($answerType != FREE_TEXT and $answerType != ORAL) ? "hide": "")." mt-4'>
+            $tool_content .= "<div class='row form-group ".(($answerType != FREE_TEXT and $answerType != ORAL and $answerType != UPLOAD_FILE) ? "hide": "")." mt-4'>
                 <label for='questionGrade' class='col-12 control-label-notes mb-1'>$langGradebookGrade</label>
                 <div class='col-12'>
                   <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6 and $answerType != 13) ? " disabled": "").">

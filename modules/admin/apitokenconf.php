@@ -125,12 +125,14 @@ if (isset($_POST['submit'])) {
     }
     Database::get()->query('DELETE FROM api_token_course WHERE token_id = ?d', $token_id);
     if (!$all_courses) {
-        $course_update_sql = implode(',', array_fill(0, count($_POST['api_courses']), '(?d, ?d)'));
-        $course_update_values = array_map(function ($course_id) use ($token_id) {
-            return [$course_id, $token_id];
-        }, $_POST['api_courses']);
-        Database::get()->query('INSERT INTO api_token_course (course_id, token_id) VALUES ' . $course_update_sql,
-            $course_update_values);
+        if (isset($_POST['api_courses'])) {
+            $course_update_sql = implode(',', array_fill(0, count($_POST['api_courses']), '(?d, ?d)'));
+            $course_update_values = array_map(function ($course_id) use ($token_id) {
+                return [$course_id, $token_id];
+            }, $_POST['api_courses']);
+            Database::get()->query('INSERT INTO api_token_course (course_id, token_id) VALUES ' . $course_update_sql,
+                $course_update_values);
+        }
     }
 
     if ($token) {
@@ -203,7 +205,7 @@ $listcategories = "<option value=''>Χωρίς κατηγορία</option>\n" . 
     } else {
         $display_name = $category->name;
     }
-    
+
     return "<option value='{$category->id}'>" . q($display_name) . "</option>";
 }, $categories_list));
 
@@ -264,8 +266,9 @@ if (isset($_GET['edit'])) {
                         <label for='token_expires_at' class='col-12 control-label-notes'>$langExpirationDate:</label>
                         <div class='col-12'>
                             <div class='input-group'>
-                                <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
-                                <span class='input-group-text input-group-addon h-40px bg-input-default border-start-0 input-border-color'><i class='fa-regular fa-calendar'></i></span>
+                                <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
+
                             </div>
                         </div>
                     </div>
@@ -364,8 +367,9 @@ if (isset($_GET['edit'])) {
                             <div class='col-12 control-label-notes'>$langExpirationDate:</div>
                             <div class='col-12'>
                                 <div class='input-group'>
-                                    <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
-                                    <span class='input-group-text input-group-addon h-40px bg-input-default input-border-color'><i class='fa-regular fa-calendar'></i></span>
+                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                    <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
+
                                 </div>
                             </div>
                         </div>
@@ -431,17 +435,17 @@ $head_content .= "
                 }
             });
             slimSelectFun (
-                '#select-courses', 
-                '" . js_escape(trans('langSearch')) . "', 
-                '" . js_escape(trans('langWelcomeSelect')) . "', 
-                '" . js_escape(trans('langSelectAll')) . "', 
+                '#select-courses',
+                '" . js_escape(trans('langSearch')) . "',
+                '" . js_escape(trans('langWelcomeSelect')) . "',
+                '" . js_escape(trans('langSelectAll')) . "',
                 '" . js_escape(trans('langListChoices')) . "'
             );
             slimSelectFun (
-                '#select-categories', 
-                '" . js_escape(trans('langSearch')) . "', 
-                '" . js_escape(trans('langWelcomeSelect')) . "', 
-                '" . js_escape(trans('langSelectAll')) . "', 
+                '#select-categories',
+                '" . js_escape(trans('langSearch')) . "',
+                '" . js_escape(trans('langWelcomeSelect')) . "',
+                '" . js_escape(trans('langSelectAll')) . "',
                 '" . js_escape(trans('langListChoices')) . "'
             );
             $('#selectAll').click(function(e) {

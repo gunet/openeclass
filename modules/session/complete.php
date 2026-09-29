@@ -44,6 +44,8 @@ require_once 'modules/progress/ForumEvent.php';
 require_once 'modules/progress/ForumTopicEvent.php';
 require_once 'modules/progress/LearningPathEvent.php';
 require_once 'modules/progress/LearningPathDurationEvent.php';
+require_once 'modules/progress/LearningPathProgressMeasureEvent.php';
+require_once 'modules/progress/LearningPathLessonStatusEvent.php';
 require_once 'modules/progress/RatingEvent.php';
 require_once 'modules/progress/ViewingEvent.php';
 require_once 'modules/progress/CourseParticipationEvent.php';

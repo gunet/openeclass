@@ -46,8 +46,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
 }
 
+//load_js('select2');
 load_js('tools.js');
-load_js('select2');
+load_js('slimselect');
 load_js('bootstrap-datepicker');
 
 $data['start_week'] = $data['finish_week'] = '';

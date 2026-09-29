@@ -119,7 +119,9 @@ if (isset($_GET['id'])) {
     $data['department_name'] = $tree->getFullPath($data['tenant']->department_id);
     $data['categories'] = [];
 } else { // user account request
-    load_js('select2');
+    // load_js('select2');
+    load_js('tools.js');
+    load_js('slimselect');
     $data['tenant'] = null;
     $tenant_departments = array_map(function ($tenant) {
         return $tenant->department_id;

@@ -284,7 +284,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             if ($result) {
                 if (password_verify($test_password, $result->password)) {
                     $testauth = true;
-                } else if (strlen($result->password) < 60 && md5($test_password) == $result->password) {
+                } else if (strlen($result->password) < 60 && md5($test_password) === $result->password) {
                     $testauth = true;
                     // password is in old md5 format, update transparently
                     $password_encrypted = password_hash($test_password, PASSWORD_DEFAULT);
@@ -1492,6 +1492,9 @@ function shib_cas_login($type) {
                 'departments' => $userObj->getDepartmentIds($info->id),
                 'am' => $am]);
 
+            if ($options['am'] !== '' and $options['am'] !== $am) {
+                $am = $options['am'];
+            }
             if ($type == 'cas') {
                 $cas_settings = @unserialize(get_auth_settings(7)['auth_settings']);
                 if ($cas_settings['cas_gunet'] ?? false) {

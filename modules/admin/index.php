@@ -249,7 +249,8 @@ function get_eclass_release()
             return null;
         }
     }
-    return json_decode(get_config('eclass_release_info'));
+    $info = get_config('eclass_release_info');
+    return $info ? json_decode($info) : null;
 }
 
 

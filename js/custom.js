@@ -50,7 +50,6 @@ $(document).ready(function(){
 
     act_confirm();
     tooltip_init();
-    popover_init();
     truncate_toggle('.more_less_btn', '#truncated', '#not_truncated', '#descr_content');
     validator_rubric();
     nextAuthedicationMethod();
@@ -60,31 +59,31 @@ $(document).ready(function(){
     $('.modal').appendTo("body")
 
     //startdate , enddate disabled
-    if($("#startIdCheckbox, #enableWorkStart, #WorkStart, #exerciseStartDate, #enableStartDate, #start_date_active").is(':checked')){
-        $(".add-on1").css('background-color','#ffffff');
-    }else{
-        $(".add-on1").css('background-color','#E8EDF8');
-    }
-    $('#startIdCheckbox, #enableWorkStart, #WorkStart, #exerciseStartDate, #enableStartDate, #start_date_active').on('click',function(){
-        if($('#startIdCheckbox, #enableWorkStart, #WorkStart, #exerciseStartDate, #enableStartDate, #start_date_active').is(':checked')){
-            $('.add-on1').css('background-color','#ffffff');
-        }else{
-            $('.add-on1').css('background-color','#E8EDF8');
-        }
-    });
+    // if($("#startIdCheckbox, #enableWorkStart, #WorkStart, #exerciseStartDate, #enableStartDate, #start_date_active").is(':checked')){
+    //     $(".add-on1").css('background-color','#ffffff');
+    // }else{
+    //     $(".add-on1").css('background-color','#E8EDF8');
+    // }
+    // $('#startIdCheckbox, #enableWorkStart, #WorkStart, #exerciseStartDate, #enableStartDate, #start_date_active').on('click',function(){
+    //     if($('#startIdCheckbox, #enableWorkStart, #WorkStart, #exerciseStartDate, #enableStartDate, #start_date_active').is(':checked')){
+    //         $('.add-on1').css('background-color','#ffffff');
+    //     }else{
+    //         $('.add-on1').css('background-color','#E8EDF8');
+    //     }
+    // });
 
-    if($("#endIdCheckbox, #enableWorkEnd, #WorkEnd, #exerciseEndDate, #enableEndDate, #enablecertdeadline, #enableWorkFeedbackRelease, #end_date_active").is(':checked')){
-        $(".add-on2").css('background-color','#ffffff');
-    }else{
-        $(".add-on2").css('background-color','#E8EDF8');
-    }
-    $('#endIdCheckbox, #enableWorkEnd, #WorkEnd, #exerciseEndDate, #enableEndDate, #enablecertdeadline, #enableWorkFeedbackRelease, #end_date_active').on('click',function(){
-        if($('#endIdCheckbox, #enableWorkEnd, #WorkEnd, #exerciseEndDate, #enableEndDate, #enablecertdeadline, #enableWorkFeedbackRelease, #end_date_active').is(':checked')){
-            $('.add-on2').css('background-color','#ffffff');
-        }else{
-            $('.add-on2').css('background-color','#E8EDF8');
-        }
-    });
+    // if($("#endIdCheckbox, #enableWorkEnd, #WorkEnd, #exerciseEndDate, #enableEndDate, #enablecertdeadline, #enableWorkFeedbackRelease, #end_date_active").is(':checked')){
+    //     $(".add-on2").css('background-color','#ffffff');
+    // }else{
+    //     $(".add-on2").css('background-color','#E8EDF8');
+    // }
+    // $('#endIdCheckbox, #enableWorkEnd, #WorkEnd, #exerciseEndDate, #enableEndDate, #enablecertdeadline, #enableWorkFeedbackRelease, #end_date_active').on('click',function(){
+    //     if($('#endIdCheckbox, #enableWorkEnd, #WorkEnd, #exerciseEndDate, #enableEndDate, #enablecertdeadline, #enableWorkFeedbackRelease, #end_date_active').is(':checked')){
+    //         $('.add-on2').css('background-color','#ffffff');
+    //     }else{
+    //         $('.add-on2').css('background-color','#E8EDF8');
+    //     }
+    // });
 
 
     // Regarding the scroll up button
@@ -163,35 +162,6 @@ function act_confirm() {
             }
         });
     });
-}
-
-function popover_init() {
-
-    $('[data-bs-toggle="popover"]').on('click',function(e){
-        e.preventDefault();
-    }).popover();
-    var click_in_process = false;
-    var hidePopover = function () {
-        if (!click_in_process) {
-            $(this).popover('hide');
-        }
-    }
-    , togglePopover = function () {
-        $(this).popover('toggle');
-        $('#action_button_menu').parent().parent().addClass('menu-popover');
-    };
-    $('.menu-popover').popover({html:true}).on('click', togglePopover).on('blur', hidePopover);
-    $('.menu-popover').on('shown.bs.popover', function () {
-        $('.popover').mousedown(function () {
-            click_in_process = true;
-        });
-        $('.popover').mouseup(function () {
-            click_in_process = false;
-            $(this).popover('hide');
-        });
-        act_confirm();
-    });
-
 }
 
 function tooltip_init() {

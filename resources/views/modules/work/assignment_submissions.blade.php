@@ -136,10 +136,12 @@
 
             $('button#transfer_grades').click(function(e) {
                 e.preventDefault();
-                $('input[name=grade_review]').each(function() {
+
+                var table = $('#submissions_table_{{ $course_code }}').DataTable();
+                table.$('input[name=grade_review]').each(function() {
                     if (this.value) {
                         var input_grade_value_name = 'grades[' + this.id + '][grade]';
-                        var input_grade = $('input[name=\"' + input_grade_value_name + '\"]');
+                        var input_grade = table.$('input[name=\"' + input_grade_value_name + '\"]');
                         if (!input_grade.val()) {
                             input_grade.val(this.value);
                         }

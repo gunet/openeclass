@@ -67,7 +67,7 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
     $auth_methods_form = isset($_POST['auth_methods_form']) ? $_POST['auth_methods_form'] : 1;
 
     if ($auth_methods_form != 1) {
-        $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username');
+        $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'ext_uid');
     }
 
     // validation for departments
@@ -82,7 +82,7 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
             $field_value = trim($cell->getValue());
             if (!empty($field_value)) {
                 if (!in_array($field_value, $acceptable_fields)) {
-                Session::flash('message',"$langMultiRegFieldError <b>$field_value)</b>");
+                Session::flash('message',"$langMultiRegFieldError <b>$field_value</b>");
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page('modules/admin/multireguser.php');
                 exit;
@@ -157,6 +157,11 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
             if ($new === false) {
                 $unparsed_lines .= q($row->getRowIndex() . "\n". $error . "\n");
             } else {
+                if (isset($info['ext_uid']) and $info['ext_uid'] !== '' and $auth_methods_form != 1) {
+                    Database::get()->querySingle('INSERT INTO user_ext_uid
+                        SET user_id = ?d, auth_id = ?d, uid = ?s',
+                        $new[0], $auth_methods_form, $info['ext_uid']);
+                }
                 $new_users_info[] = $new;
                 // Now, the $userl array should contain only course codes
                 if (count($userl) > 0) {

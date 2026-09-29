@@ -53,27 +53,6 @@
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
 
                                 <div class='form-group'>
-                                    <label for='question' class='col-sm-12 control-label-notes'>{{ trans('langCourses') }}</label>
-                                    <div class='col-sm-12'>
-                                        <input id='question' class='form-control' type='number' name='total_courses' value="{{ get_config('total_courses') }}"/>
-                                    </div>
-                                </div>
-
-                                <div class='form-group mt-4'>
-                                    <label for='answer' class='col-sm-12 control-label-notes'>{{trans('langUserLogins')}} {{trans('langPerMonth')}}</label>
-                                    <div class='col-sm-12'>
-                                        <input id='answer' class='form-control' type='number' name='visits_per_week' value="{{ get_config('visits_per_week') }}"/>
-                                    </div>
-                                </div>
-
-                                <div class='form-group mt-4'>
-                                    <label for='users_registered' class='col-sm-12 control-label-notes'>{{ trans('langRegisteredUsers') }}</label>
-                                    <div class='col-sm-12'>
-                                        <input id='users_registered' class='form-control' type='text' name='users_registered' value="{!! !empty(get_config('users_registered')) ? get_config('users_registered') : 0 !!}"/>
-                                    </div>
-                                </div>
-
-                                <div class='form-group mt-4'>
                                     <label for='langDropdown' class='col-sm-12 control-label-notes'>{{trans('langSelectedLang')}}</label>
                                     <select class="form-select" name="langDropdown" id="langDropdown">
                                         {!! implode(' ', $sel) !!}
@@ -132,6 +111,27 @@
 
                                     </div>
                                 @endforeach
+
+                                <div class='form-group mt-4'>
+                                    <label for='question' class='col-sm-12 control-label-notes'>{{ trans('langCourses') }}</label>
+                                    <div class='col-sm-12'>
+                                        <input id='question' class='form-control' type='number' name='total_courses' value="{{ get_config('total_courses') }}"/>
+                                    </div>
+                                </div>
+
+                                <div class='form-group mt-4'>
+                                    <label for='answer' class='col-sm-12 control-label-notes'>{{trans('langUserLogins')}} {{trans('langPerMonth')}}</label>
+                                    <div class='col-sm-12'>
+                                        <input id='answer' class='form-control' type='number' name='visits_per_week' value="{{ get_config('visits_per_week') }}"/>
+                                    </div>
+                                </div>
+
+                                <div class='form-group mt-4'>
+                                    <label for='users_registered' class='col-sm-12 control-label-notes'>{{ trans('langRegisteredUsers') }}</label>
+                                    <div class='col-sm-12'>
+                                        <input id='users_registered' class='form-control' type='text' name='users_registered' value="{!! !empty(get_config('users_registered')) ? get_config('users_registered') : 0 !!}"/>
+                                    </div>
+                                </div>
 
                                 <div class='form-group mt-4'>
                                     <label for='link_banner' class='col-sm-12 control-label-notes'>{{ trans('langLinkBanner') }}</label>

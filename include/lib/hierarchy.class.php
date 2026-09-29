@@ -520,7 +520,7 @@ class Hierarchy {
      * @return string $js              - The returned JS code
      */
     private function buildJSNodePicker($options) {
-        global $urlAppend, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
+        global $urlServer, $urlAppend, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
 
         $params = $options['params'];
         $offset = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0; // The number of the parents that the editing child already belongs to (mainly for edit forms)
@@ -604,7 +604,8 @@ $(document).ready(function() {
                 "name" : "proton",
                 "dots" : true,
                 "icons" : false
-            }
+            },
+            "force_text": true
         },
         "sort" : function (a, b) {
             priorityA = this.get_node(a).li_attr.tabindex;
@@ -815,7 +816,7 @@ jContent;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn submitAdminBtn ms-1" id="treeModalSelect">' . $langSelect . '</button>
-                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>                    
+                    <button type="button" class="btn cancelAdminBtn treeModalClose">' . $langCancel . '</button>
                 </div>
             </div>
         </div></div>';
@@ -987,17 +988,17 @@ jContent;
             }
 
             $ret .= ($c == 0) ? '' : '» ';
-            $ret .= (empty($href)) ? self::unserializeLangField($parent->name) . ' ' : "<a href='" . $href . $parent->id . "'>" . self::unserializeLangField($parent->name) . "</a> ";
+            $ret .= (empty($href)) ? q(self::unserializeLangField($parent->name)) . ' ' : "<a href='" . $href . $parent->id . "'>" . q(self::unserializeLangField($parent->name)) . "</a> ";
             $c++;
         }
 
         $ret .= ($c == 0) ? '' : '» ';
         if ($c > 0 && $accessibility_on) {
-            $ret .= "<span aria-current='" . self::unserializeLangField($node->name) ."'>".self::unserializeLangField($node->name) . ' '."</span>";
+            $ret .= "<span aria-current='" . q(self::unserializeLangField($node->name)) ."'>".q(self::unserializeLangField($node->name)) . ' '."</span>";
         } else {
-            $ret .= self::unserializeLangField($node->name) . ' ';
+            $ret .= q(self::unserializeLangField($node->name)) . ' ';
         }
-        
+
         return $ret;
     }
 
@@ -1071,18 +1072,13 @@ jContent;
     public function buildSubtrees($nodes, $allnodes = array()) {
         $subs = array();
         $nodelfts = array();
-        $ids = '';
-
 
         if (count($nodes) <= 0) {
             return $subs;
         }
 
-        foreach ($nodes as $key => $id) {
-            $ids .= $id . ',';
-        }
-        // remove last ',' from $ids
-        $q = substr($ids, 0, -1);
+        // expect each node id as int
+        $q = implode(',', array_map('intval', $nodes));
 
         Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
@@ -1121,17 +1117,13 @@ jContent;
     public function buildSubtreesFull($nodes, $allnodes = array()) {
         $subs = array();
         $nodelfts = array();
-        $ids = '';
 
         if (count($nodes) <= 0) {
             return $subs;
         }
 
-        foreach ($nodes as $key => $id) {
-            $ids .= $id . ',';
-        }
-        // remove last ',' from $ids
-        $q = substr($ids, 0, -1);
+        // expect each node id as int
+        $q = implode(',', array_map('intval', $nodes));
 
         Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
@@ -1181,6 +1173,9 @@ jContent;
      * @return string   $ret           - The returned HTML output
      */
     public function buildNodesNavigationHtml($nodes, $url, $countCallback = null, $options = array('showEmpty' => true, 'respectVisibility' => true), $subtrees = array()) {
+        if (!isset($options['textIfEmpty'])) {
+            $options['textIfEmpty'] = false;
+        }
         global $langAvCours, $langAvCourses, $urlServer;
         $ret = '';
 
@@ -1258,12 +1253,13 @@ jContent;
                         $f_img = "<img src='$faq_img_path' style='width:80px; height:80px; object-fit:cover; border-radius: 5px;' alt='$faqulty_sql->name'>";
                     }
 
-                    $ret .= "<li class='list-group-item element'>
+                    $ret .= "<li class='list-group-item element category-element'>
                                 <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap gap-2'>
                                     <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                        $f_img
-                                        <a class='TextBold' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
-                                $ret .= (!empty($code)) ? "<span>(" . q($code) . ")</span>" : '';
+                                        $f_img ";
+                    $icon = "<div class='d-flex justify-content-center align-items-center gap-3' style='min-width: 30px;'><i class='fa-solid fa-folder-tree fa-lg'></i></div>";
+                    $ret .= ($options['textIfEmpty'] && $count == 0) ? "<span class='TextBold d-flex gap-3'>$icon " . q($name) . "</span>" : "<a class='TextBold d-flex gap-3' href='$url.php?fc=" . $id . "'>$icon " . q($name) . "</a>";
+                    $ret .= (!empty($code)) ? "<span>(" . q($code) . ")</span>" : "";
                             $ret.="</div>";
                             $ret .= "<div class='vsmall-text text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>
                                 </div>";

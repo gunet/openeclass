@@ -26,6 +26,7 @@ $helpTopic = 'progress';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'process_functions.php';
 require_once 'ExerciseEvent.php';
 require_once 'AssignmentEvent.php';
@@ -46,77 +47,25 @@ require_once 'GradebookEvent.php';
 require_once 'CourseCompletionEvent.php';
 require_once 'AttendanceEvent.php';
 
-$toolName = $langProgress;
+$pageName = $langProgress;
 
 load_js('tools.js');
 
-$head_content .= "
-<style>
-    .progress-module .alert-info,
-    .progress-module .alert-info h1, .progress-module .alert-info h2,
-    .progress-module .alert-info h3, .progress-module .alert-info h4,
-    .progress-module .alert-info h5, .progress-module .alert-info h6,
-    .progress-module .alert-info div, .progress-module .alert-info small,
-    .progress-module .alert-info span, .progress-module .alert-info p,
-    .progress-module .alert-info b, .progress-module .alert-info strong,
-    .progress-module .alert-info li, .progress-module .alert-info label,
-    .progress-module .alert-info i, .progress-module .alert-info svg {
-        color: #0073E6 !important;
-    }
-    .progress-module .alert-info {
-        background-color: #fff !important;
-        border: 1.5px solid #0073E6 !important;
+// Delete certificate logo
+if (isset($_GET['del_cert_logo']) && $is_editor) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+    
+    $certFilename = $_GET['del_cert_logo'];
+    $certId = intval($_GET['cert_id']);
+    $del = Database::get()->query("UPDATE `certificate` SET logo = ?s WHERE id = ?d AND logo = ?s", null, $certId, $certFilename);
+    if ($del) {
+        unlink("$webDir/courses/$course_code/cert_logo/$certFilename");
+        Session::flash('message', $langBBBDeleteSuccessful);
+        Session::flash('alert-class', 'alert-success');
     }
 
-    .progress-module .alert-success,
-    .progress-module .alert-success h1, .progress-module .alert-success h2,
-    .progress-module .alert-success h3, .progress-module .alert-success h4,
-    .progress-module .alert-success h5, .progress-module .alert-success h6,
-    .progress-module .alert-success div, .progress-module .alert-success small,
-    .progress-module .alert-success span, .progress-module .alert-success p,
-    .progress-module .alert-success b, .progress-module .alert-success strong,
-    .progress-module .alert-success li, .progress-module .alert-success label,
-    .progress-module .alert-success i, .progress-module .alert-success svg {
-        color: #1E7E0E !important;
-    }
-    .progress-module .alert-success {
-        background-color: #fff !important;
-        border: 1.5px solid #1E7E0E !important;
-    }
-
-    .progress-module .alert-warning,
-    .progress-module .alert-warning h1, .progress-module .alert-warning h2,
-    .progress-module .alert-warning h3, .progress-module .alert-warning h4,
-    .progress-module .alert-warning h5, .progress-module .alert-warning h6,
-    .progress-module .alert-warning div, .progress-module .alert-warning small,
-    .progress-module .alert-warning span, .progress-module .alert-warning p,
-    .progress-module .alert-warning b, .progress-module .alert-warning strong,
-    .progress-module .alert-warning li, .progress-module .alert-warning label,
-    .progress-module .alert-warning i, .progress-module .alert-warning svg {
-        color: #F57600 !important;
-    }
-    .progress-module .alert-warning {
-        background-color: #fff !important;
-        border: 1.5px solid #F57600 !important;
-    }
-
-    .progress-module .alert-danger,
-    .progress-module .alert-danger h1, .progress-module .alert-danger h2,
-    .progress-module .alert-danger h3, .progress-module .alert-danger h4,
-    .progress-module .alert-danger h5, .progress-module .alert-danger h6,
-    .progress-module .alert-danger div, .progress-module .alert-danger small,
-    .progress-module .alert-danger span, .progress-module .alert-danger p,
-    .progress-module .alert-danger b, .progress-module .alert-danger strong,
-    .progress-module .alert-danger li, .progress-module .alert-danger label,
-    .progress-module .alert-danger i, .progress-module .alert-danger svg {
-        color: #C44601 !important;
-    }
-    .progress-module .alert-danger {
-        background-color: #fff !important;
-        border: 1.5px solid #C44601 !important;
-    }
-</style>
-";
+    redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certId&edit=1&tab=certificates");
+}
 
 // Initialize tool_content
 $tool_content = '';
@@ -351,7 +300,23 @@ if ($is_editor) {
             }
             // Get allow_export value (only for badges, default to 1 if checked or not set)
             $allow_export = ($table == 'badge' && isset($_POST['allow_badge_export'])) ? 1 : (($table == 'badge') ? 0 : 1);
-            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0, $expires, 0, 0, $allow_export);
+            // upload certificate logo
+            $cert_logo_filename = null;
+            if (isset($_FILES['cert_logo']) and is_uploaded_file($_FILES['cert_logo']['tmp_name'])) { // upload file
+                $cert_logo = $_FILES['cert_logo']['name'];
+                validateUploadedFile($cert_logo); // check file type
+                $cert_logo = add_ext_on_mime($cert_logo);
+                $safe_cert_logo = safe_filename(get_file_extension($cert_logo));
+                $cert_dir = "$webDir/courses/$course_code/cert_logo/";
+                if (!file_exists($cert_dir)) {
+                    mkdir("$webDir/courses/$course_code/cert_logo/", 0755, true);
+                }
+                $spathfile = "$webDir/courses/$course_code/cert_logo/$safe_cert_logo";
+                if (move_uploaded_file($_FILES['cert_logo']['tmp_name'], $spathfile)) {
+                    $cert_logo_filename = $safe_cert_logo;
+                }
+            }
+            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0, $expires, 0, 0, $allow_export, $cert_logo_filename);
             Session::flash('message',$langNewCertificateSuc);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code".$tab_q);
@@ -379,7 +344,7 @@ if ($is_editor) {
                     return false;
                 }
         
-                if ($prev !== null && $points < $prev) {
+                if ($prev !== null && $points <= $prev) {
                     return false;
                 }
         
@@ -387,7 +352,7 @@ if ($is_editor) {
             }
         
             return true;
-        });
+        }, $langGamePointsLevelsAscRuleError);
         $v->rule('ascendingLevels', 'level_item_req_points');
         $v->rule('required', array('title', 'startdatepicker', 'enddatepicker'));
         $v->rule('dateFormat', 'startdatepicker', 'd-m-Y H:i');
@@ -405,13 +370,13 @@ if ($is_editor) {
             }
 
             return $end > $start;
-        });
+        }, $langPointsGameEndDateAfterStartDate);
         $v->rule('endAfterStart', 'enddatepicker');
         $v->labels(array(
             'title' => "$langTheField $langTitle",
             'startdatepicker' => "$langTheField $langStartDate",
             'enddatepicker' => "$langTheField $langEndDate",
-            'level_item_req_points' => "$langTheField $langPointsGameLevelRequiredPoints",
+            'level_item_req_points' => "$langPointsGameLevels:"
         ));
         if($v->validate()) {
             $startdate = date_format(date_create_from_format('d-m-Y H:i', $_POST['startdatepicker']), 'Y-m-d H:i');
@@ -420,7 +385,7 @@ if ($is_editor) {
                 'enable_leaderboard' => !empty($_POST['enable_leaderboard']) ? 1 : 0,
                 'anonymize_leaderboard' => !empty($_POST['anonymize_leaderboard']) ? 1 : 0
             ];
-            add_points_game($_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $config_arr);
+            add_points_game($_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $_POST['level_item_icon'], $config_arr);
             Session::flash('message',$langNewPointsGameSuc);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points");
@@ -443,7 +408,29 @@ if ($is_editor) {
         if($v->validate()) {
             // Get allow_export value (only for badges)
             $allow_export = ($element == 'badge' && isset($_POST['allow_badge_export'])) ? 1 : (($element == 'badge') ? 0 : 1);
-            modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $allow_export);
+            // upload certificate logo
+            $cert_logo_filename = null;
+            if ($element == 'certificate') {
+                $logoInfo = Database::get()->querySingle("SELECT logo FROM $element WHERE id = ?d", $element_id);
+                if ($logoInfo && !is_null($logoInfo->logo)) {
+                    $cert_logo_filename = $logoInfo->logo;
+                }
+                if (isset($_FILES['cert_logo']) and is_uploaded_file($_FILES['cert_logo']['tmp_name'])) { // upload file
+                    $cert_logo = $_FILES['cert_logo']['name'];
+                    validateUploadedFile($cert_logo); // check file type
+                    $cert_logo = add_ext_on_mime($cert_logo);
+                    $safe_cert_logo = safe_filename(get_file_extension($cert_logo));
+                    $cert_dir = "$webDir/courses/$course_code/cert_logo/";
+                    if (!file_exists($cert_dir)) {
+                        mkdir("$webDir/courses/$course_code/cert_logo/", 0755, true);
+                    }
+                    $spathfile = "$webDir/courses/$course_code/cert_logo/$safe_cert_logo";
+                    if (move_uploaded_file($_FILES['cert_logo']['tmp_name'], $spathfile)) {
+                        $cert_logo_filename = $safe_cert_logo;
+                    }
+                }
+            }
+            modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $allow_export, $cert_logo_filename);
             Session::flash('message',$langQuotaSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code$tab_q");
@@ -461,7 +448,7 @@ if ($is_editor) {
                     return false;
                 }
         
-                if ($prev !== null && $points < $prev) {
+                if ($prev !== null && $points <= $prev) {
                     return false;
                 }
         
@@ -469,7 +456,7 @@ if ($is_editor) {
             }
         
             return true;
-        });
+        }, $langGamePointsLevelsAscRuleError);
         $v->rule('ascendingLevels', 'level_item_req_points');
         $v->rule('required', array('title', 'startdatepicker', 'enddatepicker'));
         $v->rule('dateFormat', 'startdatepicker', 'd-m-Y H:i');
@@ -487,12 +474,13 @@ if ($is_editor) {
             }
 
             return $end > $start;
-        });
+        }, $langPointsGameEndDateAfterStartDate);
         $v->rule('endAfterStart', 'enddatepicker');
         $v->labels(array(
             'title' => "$langTheField $langTitle",
             'startdatepicker' => "$langTheField $langStartDate",
             'enddatepicker' => "$langTheField $langEndDate",
+            'level_item_req_points' => "$langPointsGameLevels:"
         ));
         if($v->validate()) {
             $startdate = date_format(date_create_from_format('d-m-Y H:i', $_POST['startdatepicker']), 'Y-m-d H:i');
@@ -501,7 +489,7 @@ if ($is_editor) {
                 'enable_leaderboard' => !empty($_POST['enable_leaderboard']) ? 1 : 0,
                 'anonymize_leaderboard' => !empty($_POST['anonymize_leaderboard']) ? 1 : 0
             ];
-            modify_points_game($_POST['points_game_id'], $_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $config_arr);
+            modify_points_game($_POST['points_game_id'], $_POST['title'], $_POST['description'], $startdate, $enddate, $_POST['level_item_name'], $_POST['level_item_req_points'], $_POST['level_item_icon'], $config_arr);
             Session::flash('message',$langQuotaSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code&tab=points");
@@ -822,34 +810,9 @@ HTML;
 if (isset($display) and $display) {
     if ($is_course_reviewer) {
         if (isset($element_id)) {
-            $pageName = $element_title;
-            if ($is_editor && $element == 'badge') {
-                $bundle_check = Database::get()->querySingle("SELECT bundle FROM badge WHERE id = ?d", $element_id);
-                if ($bundle_check && $bundle_check->bundle == -1) {
-                    $pageName = '';
-                }
-            }
-            
-            /*$action_bar = action_bar(
-                array(
-                    array('title' => $langBack,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                        'icon' => 'fa-reply',
-                        'level' => 'primary',
-                        'show'  =>  $unit_id ? false : true),
-                    /*array('title' => $langUsers,
-                        'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
-                        'icon' => 'fa-users',
-                        'level' => 'secondary',
-                        'show'  =>  $show_users)
-                ),
-                false
-            );
-            $tool_content .= $action_bar;*/
-
+            $pageName = '';
             // display certificate settings and resources
             display_activities($element, $element_id);
-            
             // Add leaderboard accordion for points games
             if ($element == 'points_game') {
                 display_leaderboard_accordion($element_id);

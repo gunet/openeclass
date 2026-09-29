@@ -44,7 +44,7 @@ if (defined('EXTERNAL_FILE')) { // accessed via ext.php
         define('COMMON_DOCUMENTS', true);
     } elseif ($course == 'user') {
         define('MY_DOCUMENTS', true);
-        $mydocs_uid = $_GET['uid'] ?? null;
+        $mydocs_uid = intval($_GET['uid']) ?? null;
         if (!$mydocs_uid) {
             http_response_code(400); // Bad request
             exit;

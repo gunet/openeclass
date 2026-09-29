@@ -37,27 +37,34 @@
 
             @include('layouts.partials.show_alert')
 
-            <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
-                <h1>{{ $toolName }}</h1>
-            </div>
+            @if (!isset($_SESSION['mobile']))
+                <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
+                    <h1>{{ $toolName }}</h1>
+                </div>
+            @endif
 
             <div class='col-12 mt-4'>
+
                 @if (isset($buildRoots))
                     {!! $buildRoots !!}
                 @endif
                 <div class='col-12'>
                     <h2 tabindex='0' class='text-heading-h3 mb-2' aria-label="{{ trans('NavCatCourses') }}">{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=', true) !!}</h2>
-                    <ul class='list-group list-group-flush'>
-                        {!! $childHTML !!}
-                    </ul>
+                    @if ($childCount > 0)
+                        <div class='d-flex justify-content-between align-items-center mt-4'>
+                            <h2 class='text-heading-h3 mb-2'>{{ trans('langFaculties') }}</h2>
+                        </div>
+                        <ul class='list-group list-group-flush'>
+                            {!! $childHTML !!}
+                        </ul>
+                    @endif
                 </div>
             </div>
 
             @if (count($courses) > 0)
                 <div class='col-12 mt-4'>
                     <div class='d-flex justify-content-between align-items-center'>
-                        <h2 class='text-heading-h3 mb-2'>{{ trans('langCourse') }}</h2>
-                        <h2 class='text-heading-h3 mb-2'>{{ trans('langGroupAccess') }}</h2>
+                        <h2 class='text-heading-h3 mb-2'>{{ trans('langCoursesList') }}</h2>
                     </div>
                     <ul class='list-group list-group-flush'>
                         @foreach($courses as $mycourse)
@@ -80,6 +87,7 @@
                                                                @if ((($mycourse->visible == COURSE_REGISTRATION or $mycourse->visible == COURSE_OPEN)
                                                                         and setting_get(SETTING_FACULTY_USERS_REGISTRATION, $mycourse->id) == 1
                                                                         and !in_array($fc, $user_faculty_ids))
+                                                                    or ($mycourse->visible == COURSE_REGISTRATION && (!course_reg_date_started($mycourse->id) || course_reg_date_ended($mycourse->id)))
                                                                     or (!is_enabled_course_registration($_SESSION['uid']))
                                                                     or $mycourse->visible == COURSE_CLOSED)
                                                                    disabled
@@ -130,6 +138,21 @@
                                                                 <span class='badge Warning-200-bg'>{{ trans('langPassword') }}</span>
                                                                 <input class='form-control' type='password' name='pass{{ $mycourse->id }}' autocomplete='off' />
                                                             @endif
+                                                        @endif
+                                                        {{-- course has registration period --}}
+                                                        @if (!isset($myCourses[$mycourse->id]) && $mycourse->visible == COURSE_REGISTRATION && (!course_reg_date_started($mycourse->id) || course_reg_date_ended($mycourse->id)))
+                                                            <div class="mt-1">
+                                                                <small class="badge Warning-200-bg">{{ trans('langCourseRegPeriod') }}
+                                                                    @if (!is_null($mycourse->reg_start_date))
+                                                                        {{ trans('langFrom2') }}
+                                                                        {{ DateTime::createFromFormat('Y-m-d', $mycourse->reg_start_date)->format('d-m-Y') }}
+                                                                    @endif
+                                                                    @if (!is_null($mycourse->reg_end_date))
+                                                                        {{ trans('langTill') }}
+                                                                        {{ DateTime::createFromFormat('Y-m-d', $mycourse->reg_end_date)->format('d-m-Y') }}
+                                                                    @endif
+                                                                </small>
+                                                            </div>
                                                         @endif
                                                         {{-- course has prerequisites --}}
                                                         {!! getCoursePrerequisites($mycourse->id) !!}

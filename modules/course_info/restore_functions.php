@@ -663,7 +663,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $GLOBALS['langCopyFiles'] . "</span></div></div>";
 
             require_once 'upgrade/functions.php';
-            load_global_messages();
 
             $url_prefix_map = [
                 $config_data['urlServer'] . 'modules/ebook/show.php/' . $course_data['code'] =>
@@ -1442,6 +1441,22 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         'delete' => ['id']
         ], $url_prefix_map, $backupData, $restoreHelper);
 
+        // H5P
+        $h5p_content_map = restore_table($restoreThis, 'h5p_content', [
+            'set' => ['course_id' => $new_course_id],
+            'return_mapping' => 'id',
+        ], $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'h5p_content_dependency', [
+            'map' => ['content_id' => $h5p_content_map],
+            'delete' => ['id'],
+        ], $url_prefix_map, $backupData, $restoreHelper);
+        foreach ($h5p_content_map as $hp5_content_oldid => $h5p_content_newid) {
+            $h5p_content_olddir = $courseDir . "/h5p/content/" . $hp5_content_oldid;
+            if (file_exists($h5p_content_olddir) && is_dir($h5p_content_olddir)) {
+                $h5p_content_newdir = $courseDir . "/h5p/content/" . $h5p_content_newid;
+                move_dir($h5p_content_olddir, $h5p_content_newdir);
+            }
+        }
 
         // Course Units
         if (!$weekly_view) {
@@ -1478,6 +1493,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $forum_map,
                     $forum_topic_map,
                     $poll_map,
+                    $h5p_content_map,
                 ],
             ], $url_prefix_map, $backupData, $restoreHelper);
 
@@ -1590,23 +1606,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'delete' => ['id'],
         ], $url_prefix_map, $backupData, $restoreHelper);
 
-        // H5P
-        $h5p_content_map = restore_table($restoreThis, 'h5p_content', [
-            'set' => ['course_id' => $new_course_id],
-            'return_mapping' => 'id',
-        ], $url_prefix_map, $backupData, $restoreHelper);
-        restore_table($restoreThis, 'h5p_content_dependency', [
-            'map' => ['content_id' => $h5p_content_map],
-            'delete' => ['id'],
-        ], $url_prefix_map, $backupData, $restoreHelper);
-        foreach ($h5p_content_map as $hp5_content_oldid => $h5p_content_newid) {
-            $h5p_content_olddir = $courseDir . "/h5p/content/" . $hp5_content_oldid;
-            if (file_exists($h5p_content_olddir) && is_dir($h5p_content_olddir)) {
-                $h5p_content_newdir = $courseDir . "/h5p/content/" . $h5p_content_newid;
-                move_dir($h5p_content_olddir, $h5p_content_newdir);
-            }
-        }
-
         // actions
         restore_table($restoreThis, 'actions_daily', [
             'set' => ['course_id' => $new_course_id],
@@ -1661,6 +1660,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $forum_map,
                     $forum_topic_map,
                     $poll_map,
+                    $h5p_content_map,
                 ],
             ], $url_prefix_map, $backupData, $restoreHelper);
         }
@@ -1727,7 +1727,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         }
 
         if ($fetch_course) { // import course
-            Database::get()->query("INSERT INTO course_import (course_id, imported_course_id, imported) 
+            Database::get()->query("INSERT INTO course_import (course_id, imported_course_id, imported)
                                                     VALUES (?d, ?d, ". DBHelper::timeAfter() . ")",
                                               $new_course_id, $_POST['import_course_id']);
             Session::Messages($langImportCourseCompleted, 'alert-info');
@@ -2179,7 +2179,7 @@ function unit_map_function(&$data, $maps) {
     // opoy yparxei if isset, isxyei h:
     // idia symbash/paradoxh me to attendance_gradebook_activities_map_function()
     // des to ekei comment gia ta spasmena FKs
-    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $video_category_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map, $poll_map) = $maps;
+    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $video_category_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map, $poll_map, $h5p_content_map) = $maps;
     if ($data['type'] == 'videolinks') {
         $data['type'] == 'videolink';
     }
@@ -2230,6 +2230,8 @@ function unit_map_function(&$data, $maps) {
         $data['res_id'] = @$forum_topic_map[$data['res_id']];
     } elseif ($type == 'poll') {
         $data['res_id'] = @$poll_map[$data['res_id']];
+    } elseif ($type == 'h5p') {
+        $data['res_id'] = @$h5p_content_map[$data['res_id']];
     }
     return true;
 }
@@ -2372,6 +2374,8 @@ function certificate_criterion_map_function(&$data, $maps) {
                     break;
         case 'learning path':
         case 'learning path duration':
+        case 'learning path progress measure':
+        case 'learning path lesson status':
                     $data['resource'] = $lp_learnPath_map[$data['resource']];
                     $data['module'] = MODULE_ID_LP;
                     break;
@@ -2430,6 +2434,8 @@ function badge_criterion_map_function(&$data, $maps) {
                     break;
         case 'learning path':
         case 'learning path duration':
+        case 'learning path progress measure':
+        case 'learning path lesson status':
                     $data['resource'] = $lp_learnPath_map[$data['resource']];
                     $data['module'] = MODULE_ID_LP;
                     break;

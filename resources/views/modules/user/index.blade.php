@@ -45,50 +45,27 @@
 
     window.currentPopoverUserID = null;
 
-    function popover_init() {
-        $('[data-bs-toggle="popover"]').on('click',function(e){
+    function dropdown_init() {
+
+        $(document).off('.actionDropdownEvents');
+
+        $(document).on('click.actionDropdownEvents','.action-button-dropdown', function (e) {
             e.preventDefault();
-        }).popover();
-
-        var click_in_process = false;
-        var hidePopover = function () {
-            if (!click_in_process) {
-                $(this).popover('hide');
-            }
-        }
-        , togglePopover = function () {
-            $(this).popover('toggle');
-            $('#action_button_menu').parent().parent().addClass('menu-popover');
-        };
-
-        $('.menu-popover').popover().on('click', function (e) {
             window.currentPopoverUserID = $(this).closest('tr').find('[data-userid]').data('userid') || null;
-            togglePopover.call(this, e);
-        }).on('blur', hidePopover);
+        });
 
-        $('.menu-popover').on('shown.bs.popover', function () {
-
+        $(document).on('shown.bs.dropdown.actionDropdownEvents','.action-button-dropdown', function () {
             var $trigger = $(this);
             var userID = $trigger.closest('tr').find('[data-userid]').data('userid') || window.currentPopoverUserID || null;
             userID = userID ? (parseInt(userID, 10) || userID) : null;
-
-            var $popover = $('.popover').last();
-            $popover.data('userid', userID);
-
-            $('.popover').mousedown(function () {
-                click_in_process = true;
-            });
-            $('.popover').mouseup(function () {
-                click_in_process = false;
-                $(this).popover('hide');
-            });
+            var $dropdown = $('[aria-labelledby="' + $trigger.attr('id') + '"]');
+            $dropdown.data('userid', userID);
             act_confirm();
         });
 
-        $(document).on('hidden.bs.popover', function () {
-            window.currentPopoverUserID = null;
+        $(document).on('click.actionDropdownEvents', '.contextual-menu-action-button', function (e) {
+            e.stopPropagation();
         });
-
     }
 
     function tooltip_init() {
@@ -124,7 +101,7 @@
             sScrollX: false,
             drawCallback: function(oSettings) {
                 tooltip_init();
-                popover_init();
+                dropdown_init();
             },
             ajax: {
                 url: '{{ $ajaxUrl }}',

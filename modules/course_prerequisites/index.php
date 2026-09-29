@@ -24,7 +24,9 @@ $require_help = true;
 $helpTopic = 'prequesities';
 
 require_once '../../include/baseTheme.php';
-load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
+//load_js('select2');
 
 $prereqs_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langCoursePrerequisites);
 $toolName = $langCoursePrerequisites;

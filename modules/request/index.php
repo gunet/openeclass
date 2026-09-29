@@ -64,7 +64,9 @@ if (isset($_GET['id'])) {
     }
 
     if ($can_modify) {
-        load_js('select2');
+        //load_js('select2');
+        load_js('tools.js');
+        load_js('slimselect');
         $data['editUrl'] = $urlAppend . 'modules/request/edit.php?course=' . $course_code . '&id=' . $id;
         $data['course_users'] = Database::get()->queryArray("SELECT user_id,
                 CONCAT(surname, ' ', givenname) name, email

@@ -32,6 +32,16 @@
                                         </div>
                                     </div>
                                 @endif
+                                @if ($param->name() == CobyApp::SHAREDSECRET)
+                                    <div class='form-group mt-4'>
+                                        <label for='{{ $param->name() }}' class='col-12 control-label-notes'>{{ $param->display() }}
+                                            <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langCobySecretInfo') }}'></span>
+                                        </label>
+                                        <div class='col-12'>
+                                            <input id='{{ $param->name() }}' class='form-control' type='password' name='{{ $param->name() }}' value='{{ $param->value() }}'>
+                                        </div>
+                                    </div>
+                                @endif
                                 @if ($param->name() == CobyApp::ENABLEDCOURSES)
                                     <div class='form-group mt-4' id='courses-list'>
                                         <label for='select-users' class='col-12 control-label-notes'>{{ trans('langUseOfService') }}&nbsp;&nbsp;
@@ -85,10 +95,10 @@
         $(document).ready(function () {
             slimSelectFun(
                 '#select-users',
-                '{{ trans('langSearch') }}',
-                '{{ trans('langWelcomeSelect') }}',
-                '{{ trans('langSelectAll') }}',
-                '{{ trans('langListChoices') }}'
+                '{{ js_escape(trans('langSearch')) }}',
+                '{{ js_escape(trans('langWelcomeSelect')) }}',
+                '{{ js_escape(trans('langSelectAll')) }}',
+                '{{ js_escape(trans('langListChoices')) }}'
             );
         });
     </script>
