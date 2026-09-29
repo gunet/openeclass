@@ -336,6 +336,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                 // LDAP connection established - now search for user dn
                 @ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
                 @ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0); // for search in Active Directory
+                $test_username = ldap_escape($test_username, "", LDAP_ESCAPE_FILTER);
                 if (@ldap_bind($ldap, $settings['ldapbind_dn'], $settings['ldapbind_pw'])) {
                     $search_filter = "($settings[ldap_login_attr]=$test_username)";
                     if (isset($settings['ldap_login_attr2']) and !empty($settings['ldap_login_attr2'])) {
