@@ -7297,6 +7297,7 @@ $langColmoocPartner = "Συνομιλητής";
 
 // Learning Analytics
 $langLearningAnalytics = 'Μαθησιακή Αναλυτική';
+$langMonitoringScenarios = "Σενάρια Παρακολούθησης";
 $langRequiredTitle = 'Το πεδίο "Τίτλος" ';
 $langRequiredStartDate = 'Το πεδίο "Έναρξη"';
 $langRequiredEndDate = 'Το πεδίο "Λήξη"';
@@ -7339,7 +7340,7 @@ $langAnalyticsMinValue = 'Κατώτερη τιμή';
 $langAnalyticsMaxValue = 'Ανώτερη τιμή';
 $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμες πηγές.';
 $langAnalyticsStatus = 'Επίπεδο';
-$langAnalyticsDifficultyLevel = "Επίπεδα Δυσκολίας";
+$langAnalyticsDifficultyLevel = "Κριτήρια";
 $langAnalyticsDifficultyLevelInfo = "Ρυθμίστε τα όρια δυσκολίας για κάθε τύπο περιεχομένου.";
 
 // h5p
