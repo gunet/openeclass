@@ -918,9 +918,6 @@ function edit_analytics_settings ($analytics_id = 0)
                         </div>
                     </div> $id_input
                     <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-                        
-                        
-                        
                             ".form_buttons(array(
                                 array(
                                         'class' => 'submitAdminBtn',
@@ -932,7 +929,6 @@ function edit_analytics_settings ($analytics_id = 0)
                                     'class' => 'cancelAdminBtn ms-1',
                                     'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                     )
-
                                 ))."
                         
                             
