@@ -8087,11 +8087,23 @@ th.grade-col a{
   color: #1D4ED8;
   font-size: 1rem;
   transition: background-color 0.2s ease, color 0.2s ease;
-background-color: #FFE6E6;
+  background-color: #FFE6E6;
   color: #FF5C5C;
 }
 .accordion-delete-icon i{
   color: #FF5C5C;
+}
+
+#exerciseForm .fa-solid.fa-circle-info::before {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 10px;
+  background-color: #DBEAFE;
+  color: #1E40AF;
 }
 
 /* ========================================

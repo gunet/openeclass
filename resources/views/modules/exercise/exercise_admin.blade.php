@@ -39,10 +39,10 @@
                                                             </span>
                                                             <span class="accordion-title">
                                                                 <span class="accordion-title-text">
-                                                                    Βασικά στοιχεία
+                                                                    {{ trans('langBasicItems') }}
                                                                 </span>
                                                                 <small class="accordion-subtitle">
-                                                                    Τίτλος, Περιγραφή, Μήνυμα ολοκλήρωσης
+                                                                    {{ trans('langBasicItemsInfo') }}
                                                                 </small>
                                                             </span>
                                                         </button>
@@ -88,10 +88,10 @@
                                                             </span>
                                                             <span class="accordion-title">
                                                                 <span class="accordion-title-text">
-                                                                    Χρόνος & Περιορισμός
+                                                                    {{ trans('langTimeAndConstraint') }}
                                                                 </span>
                                                                 <small class="accordion-subtitle">
-                                                                    Χρονική διάρκεια, Χρονικός περιορισμός
+                                                                    {{ trans('langTimeAndConstraintInfo') }}
                                                                 </small>
                                                             </span>
                                                         </button>
@@ -203,11 +203,11 @@
                                                             </span>
                                                             <span class="accordion-title">
                                                                 <span class="accordion-title-text">
-                                                                    Αξιολόγηση
+                                                                    {{ trans('langAssessment')}}
                                                                 </span>
 
                                                                 <small class="accordion-subtitle">
-                                                                    Βαθμολογία, Κλίμακα, Βαθμός βεβαιότητας
+                                                                    {{ trans('langAssessmentInfo') }}
                                                                 </small>
                                                             </span>
                                                         </button>
@@ -307,10 +307,10 @@
                                                             </span>
                                                             <span class="accordion-title">
                                                                 <span class="accordion-title-text">
-                                                                    Ανατροφοδότηση
+                                                                    {{ trans('langReviewFeedback') }}
                                                                 </span>
                                                                 <small class="accordion-subtitle">
-                                                                    Μηνύματα, Εμφάνιση αποτελεσμάτων
+                                                                    {{ trans('langReviewFeedbackInfo') }}
                                                                 </small>
                                                             </span>
                                                         </button>
@@ -356,10 +356,10 @@
                                                             </span>
                                                             <span class="accordion-title">
                                                                 <span class="accordion-title-text">
-                                                                    Πρόσβαση & Ανάθεση
+                                                                    {{ trans('langReviewAccess') }}
                                                                 </span>
                                                                 <small class="accordion-subtitle">
-                                                                    Χρήστες, Ομάδες, Έλεγχος πρόσβασης
+                                                                    {{ trans('langReviewAccessInfo') }}
                                                                 </small>
                                                             </span>
                                                         </button>
@@ -492,10 +492,10 @@
                                                             </span>
                                                             <span class="accordion-title">
                                                                 <span class="accordion-title-text">
-                                                                    Προσπάθειες χρηστών
+                                                                    {{ trans('langReviewUserAttemps') }}
                                                                 </span>
                                                                 <small class="accordion-subtitle">
-                                                                    Προσωρινή αποθήκευση, Περιορισμός προσπαθειών, Εμφάνιση αποτελεσμάτων
+                                                                    {{ trans('langReviewUserAttempsInfo') }}
                                                                 </small>
                                                             </span>
                                                         </button>
@@ -601,10 +601,10 @@
                                                             </span>
                                                             <span class="accordion-title">
                                                                 <span class="accordion-title-text">
-                                                                   Προχωρημένες ρυθμίσεις
+                                                                   {{ trans('langReviewAdvancedSettings') }}
                                                                 </span>
                                                                 <small class="accordion-subtitle">
-                                                                    Εμφάνιση ερωτήσεων, Ενεργοποίηση εξέτασης
+                                                                    {{ trans('langReviewAdvancedSettingsInfo') }}
                                                                 </small>
                                                             </span>
                                                         </button>
@@ -627,7 +627,7 @@
                                                             </div>
                                                             <div class='form-group mt-4'>
                                                                 <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>
-                                                                    Ερωτήσεις πολλαπλής επιλογής
+                                                                    {{ trans('langMultipleChoiceQuestions') }}
                                                                     <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langShuffleAnswersLegend') }}' style='margin-bottom: 10px;'></span>
                                                                 </label>
                                                                 <div class='col-12'>
@@ -642,7 +642,8 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class='row form-group'>
+                                                            <div class='row form-group mt-4'>
+                                                                <p class="form-label">{{ trans('langActivateExamMode') }}</p>
                                                                 <div class='col-12'>
                                                                     <div class='checkbox'>
                                                                         <label class='label-container'
@@ -833,11 +834,11 @@
                 var feedbackRow = `
                   <div class='feedback-row d-flex align-items-center justify-content-between mb-2 gap-2'>
                         <div class='w-75 flex-fill'>
-                            <label for='text_${count}' class='form-label mb-0'>Κείμενο ανατροφοδότησης</label>
+                            <label for='text_${count}' class='form-label mb-0'>{{ js_escape(trans('langReviewFeedbackText')) }}</label>
                             <input id='text_${count}' class='form-control' type='text' name='feedback_text[${count}]' size='60' maxlength='200' placeholder='{{ trans('langText') }}'>
                         </div>
                         <div class='flex-fill'>
-                            <label for='grade_${count}' class='form-label mb-0'>Βαθμός</label>
+                            <label for='grade_${count}' class='form-label mb-0'>{{ js_escape(trans('langGradebookGrade')) }}</label>
                             <input id='grade_${count}' class='form-control' type='text' name='feedback_grade[${count}]' size='4' maxlength='4' placeholder='{{ trans('langGradebookGrade') }}'>
                         </div>
                         <a class='delete-feedback-btn accordion-delete-icon mt-4'><i class='fa-solid fa-trash-can'></i></a>

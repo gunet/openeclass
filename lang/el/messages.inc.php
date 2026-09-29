@@ -2204,6 +2204,23 @@ $langSEBInfo2 = "Πρώτα, θα πρέπει να εγκαταστήσετε �
 $langSafeExamBrowserInfo = "Η άσκηση εκτελείται μόνο μέσω του Safe Exam Browser.";
 $langSafeExamBrowserLegend = "Οι χρήστες θα χρειαστεί να εγκαταστήσουν τον Safe Exam Browser στον υπολογιστή τους. Υποστηρίζεται μόνο σε Windows, MacOS και iOS";
 $langSafeExamBrowserQuitMessage = "Κλείσιμο και επιστροφή";
+$langBasicItems = "Βασικά στοιχεία";
+$langBasicItemsInfo = "Τίτλος, Περιγραφή, Μήνυμα ολοκλήρωσης";
+$langTimeAndConstraint = "Χρόνος & Περιορισμός";
+$langTimeAndConstraintInfo = "Χρονική διάρκεια, Χρονικός περιορισμός";
+$langAssessment = "Αξιολόγηση";
+$langAssessmentInfo = "Βαθμολογία, Κλίμακα, Βαθμός βεβαιότητας";
+$langReviewFeedback = "Ανατροφοδότηση";
+$langReviewFeedbackInfo = "Μηνύματα, Εμφάνιση αποτελεσμάτων";
+$langReviewFeedbackText = "Κείμενο ανατροφοδότησης";
+$langReviewAccess = "Πρόσβαση & Ανάθεση";
+$langReviewAccessInfo = "Χρήστες, Ομάδες, Έλεγχος πρόσβασης";
+$langReviewUserAttemps = "Προσπάθειες χρηστών";
+$langReviewUserAttempsInfo = "Προσωρινή αποθήκευση, Περιορισμός προσπαθειών, Εμφάνιση αποτελεσμάτων";
+$langReviewAdvancedSettings = "Προχωρημένες ρυθμίσεις";
+$langReviewAdvancedSettingsInfo = "Εμφάνιση ερωτήσεων, Ενεργοποίηση εξέτασης";
+$langMultipleChoiceQuestions = "Ερωτήσεις πολλαπλής επιλογής";
+
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
 $langExerciseModify = "Τροποποίηση Άσκησης";
