@@ -323,13 +323,13 @@
                                                             <div id='feedback-container' class='col-12 mt-3'>
                                                                 @if (count($exerciseFeedback) > 0)
                                                                     @foreach ($exerciseFeedback as $counter => $feedback)
-                                                                        <div class='feedback-row d-flex align-items-center justify-content-between mb-2 gap-2'>
-                                                                            <div class='w-75 flex-fill'>
-                                                                                <label for='text_{{ $counter }}' class='form-label'>Κείμενο ανατροφοδότησης</label>
+                                                                        <div class='feedback-row d-flex align-items-center justify-content-between mb-3 gap-2'>
+                                                                            <div class='flex-grow-1'>
+                                                                                <label for='text_{{ $counter }}' class='form-label'>Κείμενο ανατροφοδότησης</label><span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' title='{{ trans('langFeedbackTooltipText') }}'></span>
                                                                                 <input id='text_{{ $counter }}' class='form-control' type='text' name='feedback_text[{{ $counter }}]' size='60' maxlength='200' value="{{ $feedback['feedback_text'] }}">
                                                                             </div>
-                                                                            <div class='flex-fill'>
-                                                                                <label for='grade_{{ $counter }}' class='form-label'>Βαθμός</label>
+                                                                            <div style='min-width: 100px;'>
+                                                                                <label for='grade_{{ $counter }}' class='form-label'>Βαθμός</label><span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' title='{{ trans('langFeedbackTooltipGrade') }}'></span>
                                                                                 <input id='grade_{{ $counter }}' class='form-control' type='text' name='feedback_grade[{{ $counter }}]' size='4' maxlength='4' value="{{ $feedback['grade'] }}">
                                                                             </div>
                                                                             <a class='delete-feedback-btn accordion-delete-icon mt-4'>
@@ -832,13 +832,13 @@
                 e.preventDefault();
                 count++;
                 var feedbackRow = `
-                  <div class='feedback-row d-flex align-items-center justify-content-between mb-2 gap-2'>
-                        <div class='w-75 flex-fill'>
-                            <label for='text_${count}' class='form-label mb-0'>{{ js_escape(trans('langReviewFeedbackText')) }}</label>
+                  <div class='feedback-row d-flex align-items-center justify-content-between mb-3 gap-2'>
+                        <div class='flex-grow-1'>
+                            <label for='text_${count}' class='form-label mb-0'>{{ js_escape(trans('langReviewFeedbackText')) }}</label><span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' title='{{ trans('langFeedbackTooltipText') }}'></span>
                             <input id='text_${count}' class='form-control' type='text' name='feedback_text[${count}]' size='60' maxlength='200' placeholder='{{ trans('langText') }}'>
                         </div>
-                        <div class='flex-fill'>
-                            <label for='grade_${count}' class='form-label mb-0'>{{ js_escape(trans('langGradebookGrade')) }}</label>
+                        <div style='min-width: 100px;'>
+                            <label for='grade_${count}' class='form-label mb-0'>{{ js_escape(trans('langGradebookGrade')) }}</label><span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' title='{{ trans('langFeedbackTooltipGrade') }}'></span>
                             <input id='grade_${count}' class='form-control' type='text' name='feedback_grade[${count}]' size='4' maxlength='4' placeholder='{{ trans('langGradebookGrade') }}'>
                         </div>
                         <a class='delete-feedback-btn accordion-delete-icon mt-4'><i class='fa-solid fa-trash-can'></i></a>
