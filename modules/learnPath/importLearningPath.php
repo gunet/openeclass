@@ -506,20 +506,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
         $pathToManifest = ""; // empty by default because we can expect that the manifest.xml is in the root of zip file
         $pathToManifestFound = false;
 
-        $zipname = $_FILES['uploadedPackage']['name'];
+        // the client-supplied name is untrusted: strip any path before it is used as a destination
+        $zipname = my_basename($_FILES['uploadedPackage']['name']);
+        validateUploadedFile($zipname, response: 'json');
         $files_in_zip = array();
         if (move_uploaded_file($_FILES['uploadedPackage']['tmp_name'], "$webDir/$baseWorkDir/$zipname")) {
             if ($zipFile->open("$webDir/$baseWorkDir/$zipname")) {
                 for ($i = 0; $i < $zipFile->numFiles; $i++) {
                     $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
+                    if ($stat === false) {
+                        $errorFound = true;
+                        $errorMsgs[] = $langZipError;
+                        break;
+                    }
                     $files_in_zip[$i] = $stat['name'];
-                    // Validate filenames only for non-directory entries
-                    if (!($stat['size'] == 0 and substr($stat['name'], -1) == '/')) {
-                        validateUploadedFile($files_in_zip[$i], response: 'json');
+                    // Validate filenames only for non-directory entries; a directory entry ends with a slash
+                    // and has no extension, so it can never match the whitelist
+                    if (substr($stat['name'], -1) != '/') {
+                        validateUploadedFile($stat['name'], response: 'json');
                     }
                 }
 
-                if ($zipFile->extractTo("$webDir/$baseWorkDir")) {
+                if ($errorFound) {
+                    $zipFile->close();
+                } elseif ($zipFile->extractTo("$webDir/$baseWorkDir")) {
                     $zipFile->close();
                 } else {
                     $errorFound = true;
