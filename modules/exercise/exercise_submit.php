@@ -587,7 +587,17 @@ if ($is_exam && $stricterExamMode) {
                     }
                 });
 
+                let allowCancelExModalHide = false;
+                $('#cancelExModal').on('hide.bs.modal', function (e) {
+                    if (!allowCancelExModalHide) {
+                        e.preventDefault();
+                    }
+                }).on('hidden.bs.modal', function () {
+                    allowCancelExModalHide = false;
+                });
+
                 $('#cancelExercise').on('click', function (e) {
+                    allowCancelExModalHide = true;
                     e.preventDefault();
                     localStorage.removeItem('isTinyMCEFocused');
                     $('#cancelButton').trigger('click');
@@ -633,7 +643,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                             $langExWillBeCanceled
                         </div>
                         <div class='modal-footer d-flex justify-content-center'>
-                            <button type='button' id='cancelExercise' class='btn btn-primary' style='width: 60px;'>OK</button>
+                            <button type='button' id='cancelExercise' class='btn btn-primary' data-bs-dismiss='modal' style='width: 60px;'>OK</button>
                         </div>
                     </div>
                 </div>
