@@ -513,7 +513,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                 for ($i = 0; $i < $zipFile->numFiles; $i++) {
                     $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
                     $files_in_zip[$i] = $stat['name'];
-                    validateUploadedFile($files_in_zip[$i]);
+                    // Validate filenames only for non-directory entries
+                    if (!($stat['size'] == 0 and substr($stat['name'], -1) == '/')) {
+                        validateUploadedFile($files_in_zip[$i], response: 'json');
+                    }
                 }
 
                 if ($zipFile->extractTo("$webDir/$baseWorkDir")) {
