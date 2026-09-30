@@ -433,7 +433,94 @@ function replaceIdHiddenInput() {
     }
 }
 
+/**
+ * Roll back a partially imported learning path: its modules, assets, relations and the
+ * extracted files. Registered as a shutdown function so that every exit path is covered,
+ * including the ones that bail out early (rejected file entry, unreadable zip, missing manifest).
+ * Does nothing once the import has been committed.
+ */
+function scormImportRollback() {
+    global $lpImportCommitted, $lpImportWorkDir, $tempPathId, $course_id, $insertedModule_id, $insertedAsset_id, $webDir;
+
+    if ($lpImportCommitted or !$lpImportWorkDir) {
+        return;
+    }
+
+    // delete assets
+    $sqlDelAssets = "DELETE FROM `lp_asset` WHERE 1 = 0";
+    foreach ($insertedAsset_id as $insertedAsset) {
+        $sqlDelAssets .= " OR `asset_id` = " . intval($insertedAsset);
+    }
+    Database::get()->query($sqlDelAssets);
+
+    // delete modules
+    $sqlDelModules = "DELETE FROM `lp_module` WHERE 1 = 0";
+    foreach ($insertedModule_id as $insertedModule) {
+        $sqlDelModules .= " OR ( `module_id` = " . intval($insertedModule) . " AND `course_id` = " . intval($course_id) . " )";
+    }
+    Database::get()->query($sqlDelModules);
+
+    // delete learningPath_module
+    Database::get()->query("DELETE FROM `lp_rel_learnPath_module` WHERE `learnPath_id` = ?d", $tempPathId);
+
+    // delete learning path
+    Database::get()->query("DELETE FROM `lp_learnPath`
+                 WHERE `learnPath_id` = ?d
+                 AND `course_id` = ?d", $tempPathId, $course_id);
+
+    // delete the directory (and files) of this learning path and all its content;
+    // the work dir is relative to $webDir and the cwd may already be inside it (chdir below)
+    if (is_dir($webDir . '/' . $lpImportWorkDir)) {
+        claro_delete_file($webDir . '/' . $lpImportWorkDir);
+    }
+}
+
+/**
+ * Terminate the import. The package is uploaded with XHR, where a flash message and a
+ * redirect are invisible: the XHR follows the redirect and consumes the flash, so the
+ * outcome is returned as JSON for the uploading page to render. A plain form post keeps
+ * the flash message and the redirect.
+ *
+ * @param boolean  $success      - Whether the learning path was imported.
+ * @param array    $messages     - Messages to display to the user.
+ * @param string   $redirectPath - Where to send the browser, relative to the server root.
+ */
+function scormImportFinish($success, $messages, $redirectPath) {
+    global $course_code;
+
+    $messages = is_array($messages) ? array_values($messages) : [$messages];
+    $redirectPath = $redirectPath ?? "modules/learnPath/index.php?course=$course_code";
+
+    if (!empty($_POST['XHRUpload'])) {
+        // on success the client follows the redirect, so the flash is still shown on the target page
+        if ($success) {
+            Session::Messages($messages, 'alert-success');
+        }
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        http_response_code($success ? 200 : 400);
+        echo json_encode([
+            'success' => $success,
+            'message' => implode("\n", $messages),
+            'messages' => $messages,
+            'url' => $redirectPath,
+        ]);
+    } else {
+        Session::Messages($messages, $success ? 'alert-success' : 'alert-warning');
+        redirect_to_home_page($redirectPath);
+    }
+    exit;
+}
+
+register_shutdown_function('scormImportRollback');
+
 $errorMsgs = array();
+// state of the import in progress, read by scormImportRollback() on every exit of the page
+$lpImportCommitted = false;
+$lpImportWorkDir = '';
+$tempPathId = null;
+$insertedModule_id = array();
+$insertedAsset_id = array();
 $baseWorkDir = 'courses/' . $course_code . '/scormPackages/';
 if (!is_dir($baseWorkDir)) {
     make_dir($baseWorkDir);
@@ -443,10 +530,9 @@ if (!is_dir($baseWorkDir)) {
 // if the post is done a second time, the claroformid mecanism
 // will set $_POST to NULL, so we need to check it
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
-
-    // arrays used to store inserted ids
-    $insertedModule_id = array();
-    $insertedAsset_id = array();
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+        scormImportFinish(false, [$langGeneralError], null);
+    }
 
     $lpName = $langUnamedPath;
     $replace_id = null;
@@ -483,13 +569,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
             VALUES (?d, ?s, 0, ?d,'')", $course_id, $lpName, $rankMax)->lastInsertID;
     }
     $baseWorkDir .= "path_" . $tempPathId;
+    // Prepare for rollback if learning path import is interrupted
+    $lpImportWorkDir = $baseWorkDir;
 
     if (!is_dir($baseWorkDir)) {
         make_dir($baseWorkDir);
     }
 
     /*
-     * Check if the file is valid (not to big and exists)
+     * Check if the file is valid (not too big and exists)
      */
     if (!isset($_FILES['uploadedPackage']) || !is_uploaded_file($_FILES['uploadedPackage']['tmp_name'])) {
         $errorFound = true;
@@ -506,17 +594,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
         $pathToManifest = ""; // empty by default because we can expect that the manifest.xml is in the root of zip file
         $pathToManifestFound = false;
 
-        $zipname = $_FILES['uploadedPackage']['name'];
+        // the client-supplied name is untrusted: strip any path before it is used as a destination
+        $zipname = my_basename($_FILES['uploadedPackage']['name']);
+        validateUploadedFile($zipname, response: 'json');
         $files_in_zip = array();
         if (move_uploaded_file($_FILES['uploadedPackage']['tmp_name'], "$webDir/$baseWorkDir/$zipname")) {
             if ($zipFile->open("$webDir/$baseWorkDir/$zipname")) {
                 for ($i = 0; $i < $zipFile->numFiles; $i++) {
                     $stat = $zipFile->statIndex($i, ZipArchive::FL_ENC_RAW);
+                    if ($stat === false) {
+                        $errorFound = true;
+                        $errorMsgs[] = $langZipError;
+                        break;
+                    }
                     $files_in_zip[$i] = $stat['name'];
-                    validateUploadedFile($files_in_zip[$i]);
+                    // Validate filenames only for non-directory entries; a directory entry ends with a slash
+                    // and has no extension, so it can never match the whitelist
+                    if (substr($stat['name'], -1) != '/') {
+                        validateUploadedFile($stat['name'], response: 'json');
+                    }
                 }
 
-                if ($zipFile->extractTo("$webDir/$baseWorkDir")) {
+                if ($errorFound) {
+                    $zipFile->close();
+                } elseif ($zipFile->extractTo("$webDir/$baseWorkDir")) {
                     $zipFile->close();
                 } else {
                     $errorFound = true;
@@ -528,8 +629,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
             }
         }
         if ($errorFound) {
-            Session::Messages($errorMsgs, 'alert-warning');
-            redirect_to_home_page("modules/learnPath/index.php?course=$course_code");
+            scormImportFinish(false, $errorMsgs, null);
         }
     }
 
@@ -871,38 +971,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
         } // if sizeof($manifestData['items'] == 0 )
     } // if errorFound
     // last step
-    // - delete all added files/directories/records in db
+    // - commit the learning path record and keep the imported files
     // or
-    // - update the learning path record
+    // - leave a half imported learning path behind, scormImportRollback() deletes it on exit
 
-    if ($errorFound) {
-        // delete all database entries of this "module"
-        // delete modules and assets (build query)
-        // delete assets
-        $sqlDelAssets = "DELETE FROM `lp_asset` WHERE 1 = 0";
-        foreach ($insertedAsset_id as $insertedAsset) {
-            $sqlDelAssets .= " OR `asset_id` = " . intval($insertedAsset);
-        }
-        Database::get()->query($sqlDelAssets);
-
-        // delete modules
-        $sqlDelModules = "DELETE FROM `lp_module` WHERE 1 = 0";
-        foreach ($insertedModule_id as $insertedModule) {
-            $sqlDelModules .= " OR ( `module_id` = " . intval($insertedModule) . " AND `course_id` = " . intval($course_id) . " )";
-        }
-        Database::get()->query($sqlDelModules);
-
-        // delete learningPath_module
-        Database::get()->query("DELETE FROM `lp_rel_learnPath_module` WHERE `learnPath_id` = ?d", $tempPathId);
-
-        // delete learning path
-        Database::get()->query("DELETE FROM `lp_learnPath`
-                     WHERE `learnPath_id` = ?d
-                     AND `course_id` = ?d", $tempPathId, $course_id);
-
-        // delete the directory (and files) of this learning path and all its content
-        claro_delete_file($baseWorkDir);
-    } else {
+    if (!$errorFound) {
         // finalize insertion : update the empty learning path insert that was made to find its id
         if ($replace_id != null) {
             $rankMax = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
@@ -927,23 +1000,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                     `visible` = 1
                 WHERE `learnPath_id` = ?d
                 AND `course_id` = ?d", $rankMax, $lpName, $lpComment, $tempPathId, $course_id);
+
+        // the learning path is complete, rollback must leave it alone
+        $lpImportCommitted = true;
+        scormImportFinish(true, [$langInstalled], null);
     }
 
-    /* --------------------------------------
-      status messages
-      -------------------------------------- */
-    foreach ($errorMsgs as $msg) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . icon('fa-xmark', $langError) . ' ' . $msg . '</span></div></div>';
-    }
-
-    // installation completed or not message
-    if (!$errorFound) {
-        Session::Messages($langInstalled, 'alert-success');
-        redirect_to_home_page("modules/learnPath/index.php?course=$course_code");
-    } else {
-        Session::Messages($errorMsgs, 'alert-warning');
-        redirect_to_home_page("modules/learnPath/index.php?course=$course_code");
-    }
+    // an error leaves a half imported learning path behind, scormImportRollback() removes it on exit
+    scormImportFinish(false, $errorMsgs ?: [$langGeneralError], null);
 } else { // if method == 'post'
     // don't display the form if user already sent it
     /* --------------------------------------
@@ -980,6 +1044,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST) {
                             <label for='uploadedPackage' class='col-12 control-label-notes'>$langPathUploadFile</label>
                             <div class='col-12'>
                                 <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >" .
+                                generate_csrf_token_form_field() .
                                 fileSizeHidenInput() . replaceIdHiddenInput() . "
                                 <input id='uploadedPackage' type='file' name='uploadedPackage'><br>
 
