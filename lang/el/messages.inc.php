@@ -2190,6 +2190,7 @@ $langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένο
 $langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής και επικόλλησης κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
 $langStricterExamRestriction = "Αυστηρός περιορισμός";
 $langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνεται σε παράλληλες ενέργειες χρηστών όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου";
+$langStrictModeExceptForQtypes = "Δεν περιλαμβάνονται οι τύποι ερωτήσεων (Προφορικά)";
 $langExerciseNoCalcGradeMethod = "Κανονικός";
 $langExerciseCBCalcGradeMethod = "Με βαθμό βεβαιότητας";
 $langExerciseCBCalcGradeMethodLegend = "Κατά την εκτέλεση της άσκησης ο $langsStudent θα πρέπει να επιλέξει επιπλέον τον βαθμό βεβαιότητας της απάντησης του. Ισχύει μόνο για τις ερωτήσεις 'Πολλαπλής επιλογής' και 'Σωστό / Λάθος'";

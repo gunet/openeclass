@@ -6818,6 +6818,7 @@ $langUserParticipation = "User participation";
 $langWarningAboutUsedCert = "If you really want to delete it click the button below. Note that certificate user progress will be deleted also!";
 $langStricterExamRestriction = "Stricter exam mode";
 $langExerciseWillBeCanceledInStrictMode = "The exam is canceled in parallel user actions";
+$langStrictModeExceptForQtypes = "Question types (Oral) are not included.";
 $langWarningNewPageOpened = "<strong>Attention!</strong><br>Please keep the current page open throughout the exam.<br> Any parallel action, such as redirecting to a new page or opening a new window, will result in the automatic cancellation of your attempt.";
 $langWarningNewPageOpened2 = "<strong>Warning!</strong><br>You have entered the examination area.<br> Any parallel action, such as redirecting to a new page or opening a new window, will lead to the automatic cancellation of your attempt.";
 $langExWillBeCanceled = "Your attempt will be canceled.";

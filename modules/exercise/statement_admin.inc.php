@@ -317,6 +317,13 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         $options .= "<option value='{$q_cat->question_cat_id}' " . (($category == $q_cat->question_cat_id) ? 'selected' : '') . '>' . q($q_cat->question_cat_name) . "</option>\n";
     }
     enableCheckFileSize();
+
+    $qTypesNoStricterMode = array(ORAL => "$langOral");
+    $stricterExamMode = $objExercise->getOption('stricterExamRestriction') ? 1: 0;
+    if ($stricterExamMode) {
+        $qTypesNoStricterMode = [];
+    }
+
     $tool_content .= "
         <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
@@ -354,7 +361,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                     DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
                                     CALCULATED => $langCalculated,
                                     FREE_TEXT => "$langFreeText",
-                                    ORAL => "$langOral",
+                                    ...$qTypesNoStricterMode
                                 ],
                                 'answerType',
                                 (isset($answerType)) ? ($answerType == FILL_IN_BLANKS ? FILL_IN_BLANKS_TOLERANT : $answerType) : UNIQUE_ANSWER,

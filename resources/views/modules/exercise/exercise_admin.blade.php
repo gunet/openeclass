@@ -460,11 +460,14 @@
                                                         <span class='checkmark'></span>
                                                         {{ trans('langExerciseWillBeCanceledInStrictMode') }}
                                                     </label>
+                                                    <div class='help-block'>
+                                                        {{ trans('langStrictModeExceptForQtypes') }}
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             @if (CourseHasSafeExamBrowserEnabled())
-                                                <div class='col-12'>
+                                                <div class='col-12 mt-3'>
                                                     <div class='checkbox'>
                                                         <label class='label-container'
                                                                aria-label='{{ trans('langSelect') }}'>
