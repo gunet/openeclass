@@ -491,8 +491,12 @@ if ($exercisePreventCopy) {
 
 $is_exam = $objExercise->isExam();
 $stricterExamMode = $objExercise->getOption('stricterExamRestriction')? 1: 0;
+$showStrictExamControls = $is_exam && $stricterExamMode && ($objExercise->selectAttemptsAllowed() == 0 
+    or isset($_POST['acceptAttempt'])
+    or isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])
+);
 // Fullscreen when showing exercise in single page in exam mode
-if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
+if ($is_exam && $stricterExamMode) {
     $head_content .= "
         <script type='text/javascript'>
 
@@ -517,29 +521,30 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
 
             $(function() {
 
-                let openEx = localStorage.getItem('openEx');
-
-                if (!openEx) {
-                    $('#exercise_frame').removeClass('d-block').addClass('d-none');
-                    $('#btn-search').addClass('pe-none');
-                    $('.messages_2').removeClass('d-none').addClass('d-block');
-                } else {
-                    $('#fullscreenBtn').removeClass('d-block').addClass('d-none');
-                    $('#bgr-cheat-header').removeClass('d-block').addClass('d-none');
-                    $('#bgr-cheat-footer').removeClass('d-block').addClass('d-none');
-                    document.documentElement.requestFullscreen();
-                }
+                $('#exercise_frame').removeClass('d-none').addClass('d-block');
+                default_settings();
 
                 $('#fullscreenBtn').on('click', function (e) {
                     e.preventDefault();
-                    $('#exercise_frame').removeClass('d-none').addClass('d-block');
-                    localStorage.setItem('openEx', true);
-                    $('#fullscreenBtn').removeClass('d-block').addClass('d-none');
-                    $('#bgr-cheat-header').removeClass('d-block').addClass('d-none');
-                    $('#bgr-cheat-footer').removeClass('d-block').addClass('d-none');
-                    $('.messages_1').removeClass('d-none').addClass('d-block');
-                    $('.messages_2').removeClass('d-block').addClass('d-none');
-                    document.documentElement.requestFullscreen();
+                    if (document.fullscreenElement) {
+                        document.exitFullscreen().catch(function (error) {
+                            console.error('Unable to exit fullscreen:', error);
+                        });
+                    } else {
+                        document.documentElement.requestFullscreen().catch(function (error) {
+                            console.error('Unable to enter fullscreen:', error);
+                        });
+                    }
+                });
+
+                document.addEventListener('fullscreenchange', function () {
+                    const isFullscreen = Boolean(document.fullscreenElement);
+                    $('#fullscreenBtn').attr('aria-pressed', isFullscreen ? 'true' : 'false');
+                    if (isFullscreen) {
+                        $('#bgr-cheat-header, #bgr-cheat-footer').removeClass('d-block').addClass('d-none');
+                    } else {
+                        $('#bgr-cheat-header, #bgr-cheat-footer').removeClass('d-none').addClass('d-block');
+                    }
                 });
 
                 $('body').on('contextmenu', function(e) {
@@ -553,11 +558,14 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
                     }
                 });
 
-                default_settings();
-
                 // Detect when the tab becomes hidden
+                let exercisePageNavigation = false;
+                document.querySelector('.exercise')?.addEventListener('submit', function () {
+                    exercisePageNavigation = true;
+                });
+
                 document.addEventListener('visibilitychange', function() {
-                    if (document.visibilityState === 'hidden') {
+                    if (!exercisePageNavigation && document.visibilityState === 'hidden') {
                         showCancelWarning();
                     }
                 });
@@ -566,7 +574,7 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
                 window.addEventListener('blur', function() {
                     setTimeout(function() {
                         let TinyMCEFocused = localStorage.getItem('isTinyMCEFocused');
-                        if (TinyMCEFocused !== 'true') {
+                        if (!exercisePageNavigation && TinyMCEFocused !== 'true') {
                             showCancelWarning();
                         }
                     }, 500);
@@ -581,7 +589,6 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
 
                 $('#cancelExercise').on('click', function (e) {
                     e.preventDefault();
-                    localStorage.removeItem('openEx');
                     localStorage.removeItem('isTinyMCEFocused');
                     $('#cancelButton').trigger('click');
                     $('.deleteAdminBtn.bootbox-accept').trigger('click');
@@ -596,7 +603,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
             $(function() {
                 $('.btn-quick-note').remove();
                 $('a:not(#exercise_frame a)').css('cursor', 'not-allowed');
-                $('div:not(#exercise_frame)').css('cursor', 'not-allowed');
+                $('div').not('#exercise_frame').not('#exercise_frame div').css('cursor', 'not-allowed');
                 $('a:not(#exercise_frame a)').on('click', function (e) {
                     e.preventDefault();
                     return false;
@@ -610,25 +617,8 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
             });
     </script>";
 
-    if ($stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE &&
-        ($objExercise->selectAttemptsAllowed() == 0 or isset($_POST['acceptAttempt']))) {
+    if ($showStrictExamControls) {
             $tool_content .= "
-            <div class='col-12 d-flex justify-content-center align-items-center my-4 px-0'>
-                <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                    <div class='card-body'>
-                        <div class='text-center'>
-                            <div class='icon-modal-default border-default'>
-                                <i class='fa-solid fa-triangle-exclamation Warning-200-cl fs-2'></i>
-                            </div>
-                        </div>
-                        <p class='TextBold text-center messages_1 d-none'>$langWarningNewPageOpened</p>
-                        <p class='TextBold text-center messages_2 d-none'>$langWarningNewPageOpened2</p>
-                        <button id='fullscreenBtn' class='btn successAdminBtn mt-4 m-auto'>
-                            $langGoToExam&nbsp;&nbsp;<i class='fa-solid fa-right-to-bracket pt-0'></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
             <div class='modal fade modalExCancelOpen' id='cancelExModal' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' role='dialog'
                     aria-labelledby='cancelModalLabel' aria-hidden='true'>
                 <div class='modal-dialog' role='document'>
@@ -961,13 +951,35 @@ if (isset($_POST['formSent'])) {
     }
 }
 
-if (isset($timeleft)) { // time remaining
-    if ($timeleft <= 1) {
+if (isset($timeleft) || $showStrictExamControls) { // remaining time and strict exam notice
+    if (isset($timeleft) && $timeleft <= 1) {
         $timeleft = 1;
     }
-    $tool_content .= "<div class='alert alert-warning time-remaining-warning'><i class='fa-solid fa-triangle-exclamation fa-lg pt-1'></i><span>";
-    $tool_content .= "<div class='col-sm-12'><h4 class='d-flex align-items-center gap-2 mb-0'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
-    $tool_content .= "</span></div>";
+
+    if ($showStrictExamControls) {
+        $tool_content .= "
+        <div class='alert alert-warning time-remaining-warning mb-4'>
+            <i class='fa-solid fa-triangle-exclamation fa-lg pt-1'></i>
+            <span>
+                $langWarningNewPageOpened";
+                if ($exerciseType == SINGLE_PAGE_TYPE) {
+                $tool_content .= "<button id='fullscreenBtn' type='button' class='btn submitAdminBtn mt-3' aria-pressed='false'>
+                    $langFullScreen
+                </button>";
+                }
+            $tool_content .= "
+            </span>
+        </div>";
+    }
+
+    if (isset($timeleft)) {
+        $tool_content .= "<div class='alert alert-warning time-remaining-warning'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg pt-1'></i>
+                            <span>
+                                <h4 class='d-flex align-items-center gap-2 mb-0'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4>
+                            </span>
+                          </div>";
+    }
 }
 
 if (!empty($exerciseDescription)) { // description
