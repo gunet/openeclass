@@ -34,7 +34,7 @@ class MediaResourceFactory {
     public static function initFromVideo($queryItem) {
         global $urlServer, $course_code;
         return new MediaResource(
-                $queryItem->id, $queryItem->course_id, $queryItem->title, $queryItem->path, $queryItem->url, $urlServer . 'modules/video/file.php?course=' . $course_code . '&amp;id=' . intval($queryItem->id), $urlServer . 'modules/video/play.php?course=' . $course_code . '&amp;id=' . intval($queryItem->id));
+                $queryItem->id, $queryItem->course_id, $queryItem->title, $queryItem->path, $queryItem->url, $urlServer . 'modules/video/file.php?course=' . $course_code . '&amp;id=' . intval($queryItem->id) . '&amp;token=' . token_generate($queryItem->path, true), $urlServer . 'modules/video/play.php?course=' . $course_code . '&amp;id=' . intval($queryItem->id));
     }
 
     public static function initFromVideoLink($queryItem) {
