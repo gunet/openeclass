@@ -766,9 +766,8 @@ function printPollForm() {
         }
 
         // Session process
-        $sql_an = '';
         $s_id = $_GET['session'] ?? 0;
-        $sql_an = "AND b.session_id = $s_id";
+        $sql_an = "AND b.session_id = " . intval($s_id);
 
         // Initialize the user answers from db
         user_answers_from_db($questions, $sql_an, $userDefault, $pageBreakExists); 
@@ -1327,7 +1326,7 @@ function submitPoll() {
     $atleast_one_answer = false;
     // Session process
     $s_id = $_GET['session'] ?? 0;
-    $sql_u = "AND session_id = $s_id";
+    $sql_u = "AND session_id = " . intval($s_id);
 
     if ($poll->require_answer) {
         $atleast_one_answer = true;
