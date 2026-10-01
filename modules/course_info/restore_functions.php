@@ -40,6 +40,7 @@ function visibility_select($current) {
 // Unzip backup file
 function unpack_zip_inner($zipfile, $clone) {
     global $webDir, $uid, $langGeneralError;
+
     require_once 'include/lib/fileUploadLib.inc.php';
 
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
@@ -48,16 +49,35 @@ function unpack_zip_inner($zipfile, $clone) {
     }
 
     $zip = new ZipArchive;
-    if (!$zip->open($zipfile) or !$zip->extractTo($destdir)) {
-        Session::flash('message',$langGeneralError);
-        Session::flash('alert-class', 'alert-danger');
-        redirect_to_home_page('modules/course_info/restore_course.php');
+    $files_to_extract = [];
+    if ($zip->open($zipfile)) {
+        // check for file type in zip contents
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $filename = $zip->getNameIndex($i);
+            if (str_ends_with($filename, '/')) { // Skip directory entries (entries ending with a slash)
+                continue;
+            }
+            $base = basename($filename);
+            if (strcasecmp($base, 'index.php') === 0) { // Exclude index.php
+                continue;
+            }
+            validateUploadedFile(my_basename($filename), 3, 'html', ['']);
+            $files_to_extract[] = $filename;
+        }
+    }
+
+    if (!empty($files_to_extract)) {
+        if (!$zip->extractTo($destdir, $files_to_extract)) {
+            Session::flash('message', $langGeneralError);
+            Session::flash('alert-class', 'alert-danger');
+            redirect_to_home_page('modules/course_info/restore_course.php');
+        }
     }
     // see if any files use backslash as directory separator
     $filesToMove = [];
     for ($i = 0; $i < $zip->numFiles; $i++) {
         $filename = $zip->getNameIndex($i);
-        if (strpos($filename, '\\') !== false) {
+        if (str_contains($filename, '\\')) {
             $filesToMove[] = $filename;
         }
     }
