@@ -32,7 +32,7 @@
                                                                 type="button"
                                                                 data-bs-toggle="collapse"
                                                                 data-bs-target="#reviewBasic"
-                                                                aria-expanded="false"
+                                                                aria-expanded="true"
                                                                 aria-controls="reviewBasic">
                                                             <span class="accordion-icon">
                                                                 <i class="fa-solid fa-file-lines"></i>
@@ -47,7 +47,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="reviewBasic" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                    <div id="reviewBasic" class="accordion-collapse collapse show" data-bs-parent="#exerciseReviewAccordion">
                                                         <div class="accordion-body">
                                                             <div class='form-group @if (Session::getError('exerciseTitle')) ? has-error @endif '>
                                                                 <label for='exerciseTitle' class='col-12 control-label-notes mb-1'>
@@ -64,11 +64,32 @@
                                                                 </div>
                                                             </div>
                                                             <div class='form-group mt-4'>
-                                                                <label for='exerciseEndMessage' class='col-12 control-label-notes mb-1'>{{ trans('langEndMessage') }}
-                                                                    <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEndMessageInfo') }}' style='margin-bottom: 10px;'></span>
-                                                                </label>
+                                                                <label class='col-12 control-label-notes mb-1'>{{ trans('langViewShowQuestions') }}</label>
                                                                 <div class='col-12'>
-                                                                    {!! rich_text_editor('exerciseEndMessage', 4, 30, $exerciseEndMessage, options: array('id' => 'exerciseEndMessage')) !!}
+                                                                    <select name='exerciseType' class='form-select'>
+                                                                        <option value='{{ SINGLE_PAGE_TYPE }}'
+                                                                                @if ($exerciseType == SINGLE_PAGE_TYPE) selected @endif>{{ trans('langSimpleExercise') }}</option>
+                                                                        <option value='{{ MULTIPLE_PAGE_TYPE }}'
+                                                                                @if ($exerciseType == MULTIPLE_PAGE_TYPE) selected @endif>{{ trans('langSequentialExercise') }}</option>
+                                                                        <option value='{{ ONE_WAY_TYPE }}'
+                                                                                @if ($exerciseType == ONE_WAY_TYPE)?
+                                                                                selected @endif> {{ trans('langOneWayExercise') }}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class='form-group mt-4'>
+                                                                <label class='col-12 control-label-notes mb-1'>{{ trans('langViewShowAnswers') }}</label>
+                                                                <div class='col-12'>
+                                                                    <select name='dispresults' class='form-select'>
+                                                                        <option value='1'
+                                                                                @if ($displayResults == 1) selected @endif >{{ trans('langAnswersDisp') }}</option>
+                                                                        <option value='0'
+                                                                                @if ($displayResults == 0) selected @endif >{{ trans('langAnswersNotDisp') }}</option>
+                                                                        <option value='3'
+                                                                                @if ($displayResults == 3) selected @endif>{{ trans('langAnswersDispLastAttempt') }}</option>
+                                                                        <option value='4'
+                                                                                @if ($displayResults == 4) selected @endif>{{ trans('langAnswersDispEndDate') }}</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -203,11 +224,11 @@
                                                             </span>
                                                             <span class="accordion-title">
                                                                 <span class="accordion-title-text">
-                                                                    {{ trans('langAssessment')}}
+                                                                     {{ trans('langGradingMethos') }}
                                                                 </span>
 
                                                                 <small class="accordion-subtitle">
-                                                                    {{ trans('langAssessmentInfo') }}
+                                                                    {{ trans('langGradingMethodsInfo') }}
                                                                 </small>
                                                             </span>
                                                         </button>
@@ -317,27 +338,60 @@
                                                     </h2>
                                                     <div id="reviewComments" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
                                                         <div class="accordion-body">
-                                                            <div class='col-12 d-flex justify-content-start align-items-center gap-3 flex-wrap'>
-                                                                <button class='btn submitAdminBtn' id='add-feedback-btn'><i class="fa-solid fa-plus"></i> {{ trans('langAddFeedback') }}</button>
+                                                            <div class='form-group mb-4'>
+                                                                <label for='exerciseEndMessage' class='col-12 control-label-notes mb-1'>{{ trans('langEndMessage') }}
+                                                                    <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEndMessageInfo') }}' style='margin-bottom: 10px;'></span>
+                                                                </label>
+                                                                <div class='col-12'>
+                                                                    {!! rich_text_editor('exerciseEndMessage', 4, 30, $exerciseEndMessage, options: array('id' => 'exerciseEndMessage')) !!}
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="feedback-intro alert alert-info d-flex align-items-start gap-3 mb-4" role="note">
+                                                                <span class="feedback-intro-icon">
+                                                                    <i class="fa-solid fa-chart-line"></i>
+                                                                </span>
+                                                                <div>
+                                                                    <strong>{{ trans('langFeedbackScale') }}</strong>
+                                                                    <p class="mb-0">{{ trans('langFeedbackScaleInfo') }}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="card panelCard feedback-scale-card border-0 shadow-sm mb-4">
+                                                                <div class="card-body">
+                                                                    <div id="feedback-scale" class="feedback-scale" aria-live="polite" aria-label="{{ trans('langFeedbackScale') }}"></div>
+                                                                </div>
                                                             </div>
                                                             <div id='feedback-container' class='col-12 mt-3'>
                                                                 @if (count($exerciseFeedback) > 0)
                                                                     @foreach ($exerciseFeedback as $counter => $feedback)
-                                                                        <div class='feedback-row d-flex align-items-center justify-content-between mb-3 gap-2'>
-                                                                            <div class='flex-grow-1'>
-                                                                                <label for='text_{{ $counter }}' class='form-label'>Κείμενο ανατροφοδότησης</label><span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' title='{{ trans('langFeedbackTooltipText') }}'></span>
-                                                                                <input id='text_{{ $counter }}' class='form-control' type='text' name='feedback_text[{{ $counter }}]' size='60' maxlength='200' value="{{ $feedback['feedback_text'] }}">
+                                                                        <div class='feedback-row'>
+                                                                            <div class="feedback-range">
+                                                                                <span class="feedback-range-caption">{{ trans('langDisplayForGrade')}}</span>
+                                                                                <strong class="badge Primary-600-bg feedback-range-value">—</strong>
                                                                             </div>
-                                                                            <div style='min-width: 100px;'>
-                                                                                <label for='grade_{{ $counter }}' class='form-label'>Βαθμός</label><span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' title='{{ trans('langFeedbackTooltipGrade') }}'></span>
-                                                                                <input id='grade_{{ $counter }}' class='form-control' type='text' name='feedback_grade[{{ $counter }}]' size='4' maxlength='4' value="{{ $feedback['grade'] }}">
+                                                                            <div class='feedback-fields'>
+                                                                                <div class='feedback-grade-field'>
+                                                                                    <label for='grade_{{ $counter }}' class='form-label'>{{ trans('langFeedbackFromGrade') }}</label>
+                                                                                    <input id='grade_{{ $counter }}' class='form-control feedback-grade' type='number' name='feedback_grade[{{ $counter }}]' min='0' step='any' required value="{{ $feedback['grade'] }}">
+                                                                                </div>
+                                                                                <div class='feedback-text-field'>
+                                                                                    <label for='text_{{ $counter }}' class='form-label'>{{ trans('langReviewFeedbackText') }}</label>
+                                                                                    <input id='text_{{ $counter }}' class='form-control feedback-text' type='text' name='feedback_text[{{ $counter }}]' maxlength='200' required value="{{ $feedback['feedback_text'] }}">
+                                                                                </div>
                                                                             </div>
-                                                                            <a class='delete-feedback-btn accordion-delete-icon mt-4'>
-                                                                                <i class='fa-solid fa-trash-can'></i>
-                                                                            </a>
+                                                                            <button type="button" class='btn deleteAdminBtn delete-feedback-btn' aria-label='{{ trans('langDelete') }}'><i class='fa-solid fa-trash-can'></i></button>
                                                                         </div>
                                                                     @endforeach
                                                                 @endif
+                                                            </div>
+                                                            <div class="feedback-actions">
+                                                                <button type='button' class='btn submitAdminBtn' id='add-feedback-btn'>
+                                                                    <i class="fa-solid fa-plus"></i> 
+                                                                    {{ trans('langAddRange') }}
+                                                                </button>
+                                                                <span id="feedback-empty" @if (count($exerciseFeedback) > 0) hidden @endif>
+                                                                    {{ trans('langNoFeedbackMessagesDefined') }}
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -569,21 +623,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class='form-group mt-4'>
-                                                                <label class='col-12 control-label-notes mb-1'>{{ trans('langViewShow') }}</label>
-                                                                <div class='col-12'>
-                                                                    <select name='dispresults' class='form-select'>
-                                                                        <option value='1'
-                                                                                @if ($displayResults == 1) selected @endif >{{ trans('langAnswersDisp') }}</option>
-                                                                        <option value='0'
-                                                                                @if ($displayResults == 0) selected @endif >{{ trans('langAnswersNotDisp') }}</option>
-                                                                        <option value='3'
-                                                                                @if ($displayResults == 3) selected @endif>{{ trans('langAnswersDispLastAttempt') }}</option>
-                                                                        <option value='4'
-                                                                                @if ($displayResults == 4) selected @endif>{{ trans('langAnswersDispEndDate') }}</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -612,37 +652,6 @@
                                                     <div id="reviewSettings" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
                                                         <div class="accordion-body">    
                                                             <div class='form-group'>
-                                                                <label class='col-12 control-label-notes mb-1'>{{ trans('langViewShow') }}</label>
-                                                                <div class='col-12'>
-                                                                    <select name='exerciseType' class='form-select'>
-                                                                        <option value='{{ SINGLE_PAGE_TYPE }}'
-                                                                                @if ($exerciseType == SINGLE_PAGE_TYPE) selected @endif>{{ trans('langSimpleExercise') }}</option>
-                                                                        <option value='{{ MULTIPLE_PAGE_TYPE }}'
-                                                                                @if ($exerciseType == MULTIPLE_PAGE_TYPE) selected @endif>{{ trans('langSequentialExercise') }}</option>
-                                                                        <option value='{{ ONE_WAY_TYPE }}'
-                                                                                @if ($exerciseType == ONE_WAY_TYPE)?
-                                                                                selected @endif> {{ trans('langOneWayExercise') }}</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class='form-group mt-4'>
-                                                                <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>
-                                                                    {{ trans('langMultipleChoiceQuestions') }}
-                                                                    <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langShuffleAnswersLegend') }}' style='margin-bottom: 10px;'></span>
-                                                                </label>
-                                                                <div class='col-12'>
-                                                                    <div class='checkbox'>
-                                                                        <label class='label-container'
-                                                                            aria-label='{{ trans('langSelect') }}'>
-                                                                            <input name='shuffle_answers' type='checkbox'
-                                                                                @if ($hasShuffleAnswers) checked @endif>
-                                                                            <span class='checkmark'></span>
-                                                                            {{ trans('langShuffleAnswers') }}
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class='row form-group mt-4'>
                                                                 <p class="form-label">{{ trans('langActivateExamMode') }}</p>
                                                                 <div class='col-12'>
                                                                     <div class='checkbox'>
@@ -659,7 +668,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class='row form-group mt-4 d-none' id='stricter_exam'>
+                                                            <div class='form-group mt-4 d-none' id='stricter_exam'>
                                                                 <div class='col-12'>
                                                                     <div class='checkbox'>
                                                                         <label class='label-container'
@@ -693,7 +702,7 @@
                                                                     </div>
                                                                 @endif
                                                             </div>
-                                                            <div class='row form-group mt-4'>
+                                                            <div class='form-group mt-4'>
                                                                 <div class='col-sm-12 control-label-notes mb-1'>{{ trans('langExercisePreventCopy') }}</div>
                                                                 <div class='col-12'>
                                                                     <div class='checkbox'>
@@ -703,6 +712,23 @@
                                                                                 @if ($exercisePreventCopy) checked @endif>
                                                                             <span class='checkmark'></span>
                                                                             {{ trans('langExercisePreventCopyExplanation') }}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class='form-group mt-4'>
+                                                                <label for='exerciseRangeId' class='col-12 control-label-notes mb-1'>
+                                                                    {{ trans('langMultipleChoiceQuestions') }}
+                                                                    <span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langShuffleAnswersLegend') }}' style='margin-bottom: 10px;'></span>
+                                                                </label>
+                                                                <div class='col-12'>
+                                                                    <div class='checkbox'>
+                                                                        <label class='label-container'
+                                                                            aria-label='{{ trans('langSelect') }}'>
+                                                                            <input name='shuffle_answers' type='checkbox'
+                                                                                @if ($hasShuffleAnswers) checked @endif>
+                                                                            <span class='checkmark'></span>
+                                                                            {{ trans('langShuffleAnswers') }}
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -826,36 +852,39 @@
                 }
             });
 
-            var count = 0;
-            @if (count($exerciseFeedback) > 0)
-                count = {{ count($exerciseFeedback) }};
-            @endif
-
+            var count = $('#feedback-container .feedback-row').length;
+            $('#feedback-container').on('input change', '.feedback-grade, .feedback-text', updateFeedbackRanges);
+            updateFeedbackRanges();
             $('#add-feedback-btn').click(function (e) {
-                e.preventDefault();
+                e.preventDefault(); 
                 count++;
-                var feedbackRow = `
-                  <div class='feedback-row d-flex align-items-center justify-content-between mb-3 gap-2'>
-                        <div class='flex-grow-1'>
-                            <label for='text_${count}' class='form-label mb-0'>{{ js_escape(trans('langReviewFeedbackText')) }}</label><span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' title='{{ trans('langFeedbackTooltipText') }}'></span>
-                            <input id='text_${count}' class='form-control' type='text' name='feedback_text[${count}]' size='60' maxlength='200' placeholder='{{ trans('langText') }}'>
-                        </div>
-                        <div style='min-width: 100px;'>
-                            <label for='grade_${count}' class='form-label mb-0'>{{ js_escape(trans('langGradebookGrade')) }}</label><span class='fa-solid fa-circle-info ps-1' data-bs-toggle='tooltip' title='{{ trans('langFeedbackTooltipGrade') }}'></span>
-                            <input id='grade_${count}' class='form-control' type='text' name='feedback_grade[${count}]' size='4' maxlength='4' placeholder='{{ trans('langGradebookGrade') }}'>
-                        </div>
-                        <a class='delete-feedback-btn accordion-delete-icon mt-4'><i class='fa-solid fa-trash-can'></i></a>
-                  </div>`;
-                $('#feedback-container').append(feedbackRow);
+                $('#feedback-container').append(`<div class='feedback-row'>
+                                                    <div class="feedback-range">
+                                                        <span class="feedback-range-caption">{{ js_escape(trans('langCountsForGrade')) }}</span>
+                                                        <strong class="badge Primary-600-bg feedback-range-value">{{ js_escape(trans('langNewLimit')) }}</strong>
+                                                    </div>
+                                                    <div class='feedback-fields'>
+                                                        <div class='feedback-grade-field'>
+                                                            <label for='grade_${count}' class='form-label'>{{ js_escape(trans('langFeedbackFromGrade')) }}</label>
+                                                            <input id='grade_${count}' class='form-control feedback-grade' type='number' name='feedback_grade[${count}]' min='0' step='any' required>
+                                                        </div>
+                                                        <div class='feedback-text-field'>
+                                                            <label for='text_${count}' class='form-label'>{{ js_escape(trans('langReviewFeedbackText')) }}</label>
+                                                            <input id='text_${count}' class='form-control feedback-text' type='text' name='feedback_text[${count}]' maxlength='200' required>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" class='btn deleteAdminBtn delete-feedback-btn' aria-label='{{ js_escape(trans('langDelete')) }}'><i class='fa-solid fa-trash-can'></i></button>
+                                                </div>`);
+                updateFeedbackRanges();
             });
-
             $('#feedback-container').on('click', '.delete-feedback-btn', function () {
                 $(this).closest('.feedback-row').remove();
                 $('#feedback-container .feedback-row').each(function (index) {
                     var newIndex = index + 1;
                     $(this).find('input[name^="feedback_text"]').attr('name', 'feedback_text[' + newIndex + ']');
                     $(this).find('input[name^="feedback_grade"]').attr('name', 'feedback_grade[' + newIndex + ']');
-                })
+                });
+                updateFeedbackRanges();
             });
 
             $('#useSafeExamBrowser').change(function () {
@@ -896,6 +925,58 @@
         function hideAssignees() {
             $('#assignees_tbl').addClass('hide');
             $('#assignee_box').find('option').remove();
+        }
+
+        function updateFeedbackRanges() {
+            var rows = $('#feedback-container .feedback-row').get().map(function (row) {
+                return { 
+                    row: row, 
+                    grade: parseFloat($(row).find('.feedback-grade').val()), 
+                    message: $(row).find('.feedback-text').val() 
+                };
+            }).filter(function (item) { 
+                return !isNaN(item.grade) && item.grade >= 0; 
+            }).sort(function (a, b) { 
+                return a.grade - b.grade; 
+            });
+
+            var $scale = $('#feedback-scale').empty();
+            var rangeBelowText = '{{ js_escape(trans('langFeedbackRangeBelow')) }}';
+            var rangeAndAboveText = '{{ js_escape(trans('langFeedbackRangeAndAbove')) }}';
+            var feedbackMessageText = '{{ js_escape(trans('langFeedbackMessage')) }}';
+
+            rows.forEach(function (item, index) {
+                if (index > 0) {
+                    var previous = rows[index - 1];
+                    $scale.append(segment(previous.message || feedbackMessageText + ' ' + index));
+                }
+                $scale.append(marker(item.grade, false));
+                var next = rows[index + 1];
+                var label = next ? item.grade + ' ' + rangeBelowText + ' ' + next.grade : item.grade + ' ' + rangeAndAboveText + ' ';
+                $(item.row).find('.feedback-range-value').text(label);
+            });
+            if (rows.length > 0) {
+                var last = rows[rows.length - 1];
+                $scale.append(segment(last.message || feedbackMessageText + ' ' + rows.length));
+            }
+            $('#feedback-empty').prop('hidden', $('#feedback-container .feedback-row').length > 0);
+            $('#feedback-scale').toggleClass('feedback-scale-empty', rows.length === 0);
+        }
+
+        function marker(value, isStart) {
+            var $marker = $('<div>').addClass('feedback-scale-point' + (isStart ? ' feedback-scale-start' : ''));
+            $marker.append($('<span>').addClass('feedback-scale-dot'));
+            $marker.append($('<strong>').text(value));
+            return $marker;
+        }
+
+        function segment(message) {
+            var $segment = $('<span>').addClass('feedback-scale-line');
+            $segment.append($('<span>').addClass('feedback-scale-track'));
+            if (message) { 
+                $segment.append($('<small>').addClass('feedback-scale-message').text(message));
+            }
+            return $segment;
         }
 
     </script>
