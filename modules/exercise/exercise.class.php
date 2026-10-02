@@ -930,9 +930,7 @@ class Exercise
      */
     public function record_answers($choice, $certainty, $exerciseResult, $record_type = 'insert')
     {
-        // Special cases for both calculated and oral questions.
-        // In the calculated question the user answer comes from input-text, whereas in the
-        //  oral question the answer comes from recording-audio.
+        // Special case for the calculated questions.
         $choice_key = array_keys($choice);
         if (count($choice_key) > 0) {
             foreach ($choice_key as $k) {
@@ -1490,7 +1488,7 @@ class Exercise
 
         $userRecords = Database::get()->queryArray("SELECT eurid,uid FROM exercise_user_record WHERE eid = ?d", $id);
 
-        // Remove oral answers from document table and courses folder
+        // Remove oral answers (old , new way) from document table and courses folder
         foreach ($userRecords as $rec) {
             $file = Database::get()->queryArray("SELECT id,`path` FROM document WHERE course_id = ?d
                                                   AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $rec->eurid);
@@ -1501,6 +1499,19 @@ class Exercise
                 Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
             }
 
+            $u_answers = Database::get()->queryArray("SELECT ear.eurid,ear.answer FROM exercise_answer_record ear
+                                                      JOIN exercise_question eq ON eq.id=ear.question_id
+                                                      WHERE ear.eurid = ?d
+                                                      AND eq.type = ?d", $rec->eurid, ORAL);
+
+            if (count($u_answers) > 0) {
+                foreach ($u_answers as $an) {
+                    $fileInfo = unserialize($an->answer, ['allowed_classes' => false]);  
+                    if (isset($fileInfo['filepath']) && file_exists("$webDir/courses/$course_code/image" . $fileInfo['filepath'])) {
+                        unlink("$webDir/courses/$course_code/image" . $fileInfo['filepath']);
+                    }
+                }
+            }
         }
 
         // Delete file upload answers from the courses folder.
@@ -1541,7 +1552,8 @@ class Exercise
     {
         global $course_id, $webDir, $course_code;
 
-        // Remove oral recording audio
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Remove oral recording audio - (old way , new way)
         $file = Database::get()->queryArray("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $eurid);
         if ($file) {
             foreach ($file as $f) {
@@ -1549,21 +1561,37 @@ class Exercise
                 Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
             }
         }
+        $u_answers_oral = Database::get()->queryArray("SELECT ear.eurid,ear.answer FROM exercise_answer_record ear
+                                                    JOIN exercise_question eq ON eq.id=ear.question_id
+                                                    WHERE ear.eurid = ?d
+                                                    AND eq.type = ?d", $eurid, ORAL);
 
+        if (count($u_answers_oral) > 0) {
+            foreach ($u_answers_oral as $an) {
+                $fileInfo = unserialize($an->answer, ['allowed_classes' => false]);  
+                if (isset($fileInfo['filepath']) && file_exists("$webDir/courses/$course_code/image" . $fileInfo['filepath'])) {
+                    unlink("$webDir/courses/$course_code/image" . $fileInfo['filepath']);
+                }
+            }
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Delete file upload answers from the courses folder.
-        $u_answers = Database::get()->queryArray("SELECT ear.eurid,ear.answer FROM exercise_answer_record ear
+        $u_answers_upload_file = Database::get()->queryArray("SELECT ear.eurid,ear.answer FROM exercise_answer_record ear
                                                     JOIN exercise_question eq ON eq.id=ear.question_id
                                                     WHERE ear.eurid = ?d
                                                     AND eq.type = ?d", $eurid, UPLOAD_FILE);
                  
-        if (count($u_answers) > 0) {
-            foreach ($u_answers as $an) {
+        if (count($u_answers_upload_file) > 0) {
+            foreach ($u_answers_upload_file as $an) {
                 $fileInfo = unserialize($an->answer, ['allowed_classes' => false]);  
                 if (isset($fileInfo['filepath']) && file_exists("$webDir/courses/$course_code/exercise/$id$fileInfo[filepath]")) {
                     unlink("$webDir/courses/$course_code/exercise/$id$fileInfo[filepath]");
                 }
             }
         }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
 
         $exercise_title = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $id)->title;

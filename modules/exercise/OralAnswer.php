@@ -28,24 +28,18 @@ class OralAnswer extends QuestionType
         $url = '';
         $filename = '';
         $filenameRecording = '';
+        $oldFilePath = '';
         $displayItems = 'd-none';
-        if (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] != '') {
-            $filenameRecording = $exerciseResult[$questionId];
-            $filenameWithoutExtension = str_replace('.mp3', '', $exerciseResult[$questionId]);
-            $tempFile = explode('-', $filenameWithoutExtension);
-            if (count($tempFile) == 4) {
-                $subSystemId = $tempFile[2];
-                $UserRecordId = $tempFile[3]; // eurid
-                $file = Database::get()->querySingle("SELECT `filename`,`path` FROM document WHERE course_id = ?d
-                                                            AND subsystem = ?d AND subsystem_id = ?d
-                                                            AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $subSystemId, $UserRecordId);
-                if ($file) {
-                    $filename = $file->filename; // recording filename
-                    $filePath = $file->path;
-                    $url = $urlServer . "courses/$course_code/image" . $filePath;
-                }
-            }
 
+        if (isset($exerciseResult[$questionId]) && is_string($exerciseResult[$questionId]) && str_contains($exerciseResult[$questionId], '.mka')) {
+            $filenameRecording = $exerciseResult[$questionId];
+            $arrInfoFile = unserialize($exerciseResult[$questionId], ['allowed_classes' => false]);
+            if (isset($arrInfoFile['filename']) && isset($arrInfoFile['filepath'])) {
+                $filename = 'recording-file';
+                $filePath = $oldFilePath = $arrInfoFile['filepath'];
+                $url = $urlServer. "courses/$course_code/image" . $filePath;
+            }
+            
             $displayItems = 'd-block';
         }
 
@@ -157,6 +151,7 @@ $html_content .= "</div>
                             var qID = $(this).data('id');
                             var deleteData = new FormData();
                             deleteData.append('delete-recording', qID);
+                            deleteData.append('oldFilePath', '{$oldFilePath}');
                             var del_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&eurid={$eurid}';
                             $.ajax({
                                 url: del_url,
@@ -359,7 +354,9 @@ $html_content .= "</div>
                             // file name
                             formData.append('userFile', file.name);
                             // for question id
-                            formData.append('questionId', $questionId);
+                            formData.append('questionId', '{$questionId}');
+                            // old file if exists
+                            formData.append('oldFilePath', '{$oldFilePath}');
 
                             var save_url = '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&eurid={$eurid}';
 
@@ -373,15 +370,16 @@ $html_content .= "</div>
                                 dataType: 'json' // Expect JSON response
                             }).done(function(data) {                                
                                 var newFilePath = data.newFilePath;
+                                var infoFile = data.info_file;
                                 $('#recording_file_container_{$questionId}').removeClass('d-none').addClass('d-block');
 
                                 // Create and load new audio sourse
                                 $('body').find('#audioSource_{$questionId}').attr('src', newFilePath);
                                 $('#audio_{$questionId}')[0].load();
 
-                                // Show the recordinf link file and change its text. Disable save button after clicking it.
+                                // Show the recording link file and change its text. Disable save button after clicking it.
                                 $('#filename-link-{$questionId}').text('($question_number) recording-file.mp3');
-                                $('#hidden-recording-{$questionId}').val('recording-file-{$questionId}-{$eurid}.mp3');
+                                $('#hidden-recording-{$questionId}').val(infoFile);
                                 $('#button-save-recording-{$questionId}').prop('disabled', true);
 
                                 // Check the answer as answered
@@ -413,16 +411,26 @@ $html_content .= "</div>
         $filename = '';
 
         $oral = $choice;
-        $filename_without_extension = str_replace('.mp3', '', $oral);
-        $user_recording = explode('-', $filename_without_extension);
-        if (count($user_recording) == 4) {
-            $eurID = $user_recording[3];
-            $userfile = Database::get()->querySingle("SELECT `path`,`filename` FROM document 
-                                                        WHERE course_id = ?d AND subsystem = ?d 
-                                                        AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $eurID);
-            $url = $urlServer. "courses/$course_code/image" . ($userfile->path ?? '');
-            $filename = $userfile->filename ?? '';
+        if (isset($oral) && is_string($oral) && str_contains($oral, '.mp3')) {// old way
+            $filename_without_extension = str_replace('.mp3', '', $oral);
+            $user_recording = explode('-', $filename_without_extension);
+            if (count($user_recording) == 4) {
+                $eurID = $user_recording[3];
+                $userfile = Database::get()->querySingle("SELECT `path`,`filename` FROM document 
+                                                            WHERE course_id = ?d AND subsystem = ?d 
+                                                            AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $eurID);
+                $url = $urlServer. "courses/$course_code/image" . ($userfile->path ?? '');
+                $filename = $userfile->filename ?? '';
+            }
+        } elseif (isset($oral) && is_string($oral) && str_contains($oral, '.mka')) {// new way
+            $arrInfoFile = unserialize($oral, ['allowed_classes' => false]);
+            if (isset($arrInfoFile['filename']) && isset($arrInfoFile['filepath'])) {
+                $filename = 'recording-file';
+                $filepath = $arrInfoFile['filepath'];
+                $url = $urlServer. "courses/$course_code/image" . $filepath;
+            }
         }
+       
         if (!empty($oral) && !empty($url) && !empty($filename)) {
             $html_content .= "<tr><td><a id='recording-link-{$questionId}' class='TextBold' href='#' data-bs-toggle='modal' data-bs-target='#recording_AudioModal_{$questionId}'>$filename</a></td></tr>";
             $html_content .= "<div class='modal fade' id='recording_AudioModal_{$questionId}' tabindex='-1'>

@@ -97,63 +97,38 @@ function unset_exercise_var($exerciseId) {
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     if (isset($_POST['delete-recording'])) {
-        $courseCode = $_GET['course'];
-        $eurID = $_GET['eurid'];
-        $delPath = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d
-                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $_POST['delete-recording'], $eurID);
-        unlink("$webDir/courses/$courseCode/image" . $delPath->path);
-        Database::get()->query("DELETE FROM document WHERE id = ?d", $delPath->id);
+        $courseCode = q($_GET['course']);
+        $questionId = intval($_POST['delete-recording']);
+        $eurID = intval($_GET['eurid']);
+        $oldFilePath = q($_POST['oldFilePath']);
+
+        unlink("$webDir/courses/$courseCode/image" . $oldFilePath);
+        Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", null, $eurID, $questionId);
     }
      /* save audio recorded data */
     if (isset($_FILES['audio-blob'])) {
-        $courseCode = $_GET['course'];
-        $questionId = $_POST['questionId'];
-        $file_path = '/' . safe_filename('mp3');
-        $filename = 'recording-file.mp3';
-        $eurID = $_GET['eurid'];
-        $oldFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d
-                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $eurID);
-
-        if ($oldFile && file_exists("$webDir/courses/$courseCode/image" . $oldFile->path)) {
-            unlink("$webDir/courses/$courseCode/image" . $oldFile->path);
-            Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFile->id);
+        $courseCode = q($_GET['course']);
+        $questionId = intval($_POST['questionId']);
+        $eurID = intval($_GET['eurid']);
+        $filename = $_FILES['audio-blob']['name'];
+        $oldFilePath = q($_POST['oldFilePath']);
+        validateUploadedFile($filename); // check file type
+        $filename = add_ext_on_mime($filename);
+        $safe_filename = safe_filename(get_file_extension($filename));
+        $dir = "$webDir/courses/$courseCode/image";
+        if (!file_exists($dir)) {
+            mkdir("$webDir/courses/$courseCode/image", 0755, true);
         }
-        if (move_uploaded_file($_FILES['audio-blob']['tmp_name'], "$webDir/courses/$courseCode/image/$file_path")) {
-            $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
-            $file_date = date('Y-m-d G:i:s');
-            $file_format = 'mp3';
-            $q = Database::get()->query("INSERT INTO document SET
-                course_id = ?d,
-                subsystem = ?d,
-                subsystem_id = ?d,
-                path = ?s,
-                extra_path = '',
-                filename = ?s,
-                visible = 1,
-                comment = '',
-                category = 0,
-                title = ?s,
-                creator = ?s,
-                date = ?s,
-                date_modified = ?s,
-                subject = '',
-                description = '',
-                author = ?s,
-                format = ?s,
-                language = ?s,
-                copyrighted = 0,
-                editable = 0,
-                lock_user_id = ?d",
-                $course_id, ORAL_QUESTION, $questionId, $file_path,
-                $filename, $filename, $file_creator,
-                $file_date, $file_date, $file_creator, $file_format,
-                $language, $eurID);
-
-            if ($q) {
-                $newFilePath = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $q->lastInsertID)->path;
-                $fPath = $urlServer . "courses/$course_code/image" . $newFilePath;
-                echo json_encode(['newFilePath' => $fPath]);
-            }
+        
+        $pathfile = "$webDir/courses/$courseCode/image/$safe_filename";
+        if (move_uploaded_file($_FILES['audio-blob']['tmp_name'], $pathfile)) {
+            @chmod($pathfile, 0644);
+            $real_filename = $_FILES['audio-blob']['name'];
+            $filepath = '/' . $safe_filename;
+            $arrFileInfo = ['filename' => $filename, 'filepath' => $filepath];
+            $info_file = serialize($arrFileInfo);
+            Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", $info_file, $eurID, $questionId);
+            echo json_encode(['newFilePath' => $urlServer . "courses/$courseCode/image" . $filepath, 'info_file' => $info_file]);
         }
     }
 
@@ -350,32 +325,6 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                        assigned_to FROM exercise_user_record WHERE eurid = ?d',
                 ATTEMPT_ACTIVE, $eurid)->lastInsertID;
             if ($new_eurid) {
-                // Replace eurid of recorded audio with new eurid in document table.
-                // Replace recorded audio of old eurid with new eurid in exercise_answer_record table.
-                // It's a special case for oral question type.
-                // Do the same for the eurid of upload file question
-                $old_answers = Database::get()->queryArray("SELECT answer_record_id, answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-                if (count($old_answers) > 0) {
-                    foreach ($old_answers as $old_an) {
-                        if (isset($old_an->answer) && str_contains($old_an->answer, '.mp3')) { // oral question
-                            $old_recorded = $old_an->answer;
-                            $temp_old_recorded = explode('-', $old_recorded);
-                            if (count($temp_old_recorded) == 4 && $temp_old_recorded[3] == $eurid . '.mp3') {
-                                $new_answer = $temp_old_recorded[0] . '-' . $temp_old_recorded[1] . '-' . $temp_old_recorded[2] . '-' . $new_eurid . '.mp3';
-                                Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE answer_record_id = ?d", $new_answer, $old_an->answer_record_id);
-                            }
-                        }
-                    }
-                }
-                $old_documents = Database::get()->queryArray("SELECT id,lock_user_id FROM document WHERE course_id = ?d
-                                                                AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $eurid);
-                if (count($old_documents) > 0) {
-                    foreach ($old_documents as $old_doc) {
-                        Database::get()->query("UPDATE document SET lock_user_id = ?d WHERE id = ?d", $new_eurid, $old_doc->id);
-                    }
-                }
-
-                /////////////////////////////////////////////////////////
                 Database::get()->query('UPDATE exercise_answer_record
                     SET eurid = ?d WHERE eurid = ?d', $new_eurid, $eurid);
                 Database::get()->query('DELETE FROM exercise_user_record
@@ -1410,7 +1359,7 @@ function unset_session_variables_of_questions($eurid, $type = '') {
         $typeQuestion[$q->question_id] = $q->type;
     }
 
-    // Remove sessions of ordering and oral questions
+    // Remove sessions of ordering
     if (count($question_ids) > 0) {
         foreach ($question_ids as $qid) {
             // About ordering questions
@@ -1422,18 +1371,6 @@ function unset_session_variables_of_questions($eurid, $type = '') {
                     unset($data['userSubset_'.$uid]);
                     $updatedJsonString = json_encode($data);
                     Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $updatedJsonString, $qid);
-                }
-            }
-            // About oral questions
-            if ($type == 'cancel_exercise' && $typeQuestion[$qid] == ORAL) {
-                $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
-                                                        AND subsystem = ?d AND subsystem_id = ?d
-                                                        AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $eurid);
-                if ($fFile) {
-                    if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
-                        unlink("$webDir/courses/$course_code/image" . $fFile->path);
-                    }
-                    Database::get()->query("DELETE FROM document WHERE id = ?d", $fFile->id);
                 }
             }
         }
