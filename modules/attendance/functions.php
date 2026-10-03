@@ -746,17 +746,16 @@ function add_attendance_activity($attendance_id, $id, $type) {
             $actDesc = $checkForTc->description;
             $meetingid = $checkForTc->meeting_id;
 
-            Database::get()->query("INSERT INTO attendance_activities
+            Database::get()->query('INSERT INTO attendance_activities
                                         SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s,
-                                        module_auto_id = ?d, auto = ?d, module_auto_type = ?d",
+                                        module_auto_id = ?d, auto = ?d, module_auto_type = ?d',
                                     $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
-            $sql = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
+            $sql = Database::get()->queryArray('SELECT uid FROM attendance_users WHERE attendance_id = ?d', $attendance_id);
             foreach ($sql as $u) {
-                $TcUserRecord = Database::get()->querySingle("SELECT * FROM tc_attendance WHERE meetingid = ?s "
-                                                            . "AND bbbuserid = (SELECT bbbuserid "
-                                                                                . "FROM tc_log "
-                                                                                . "WHERE fullName = '" . uid_to_name($u->uid) . "' "
-                                                                                . "AND meetingid = ?s ORDER BY `date` LIMIT 1)", $meetingid, $meetingid);
+                $TcUserRecord = Database::get()->querySingle('SELECT * FROM tc_attendance
+                    WHERE meetingid = ?s AND bbbuserid = (SELECT bbbuserid FROM tc_log
+                        WHERE fullName = ?s AND meetingid = ?s ORDER BY `date` LIMIT 1)',
+                    $meetingid, uid_to_name($u->uid), $meetingid);
                 if ($TcUserRecord) {
                     update_attendance_book($u->uid, $id, GRADEBOOK_ACTIVITY_TC);
                 }
@@ -929,7 +928,7 @@ function display_user_presences($attendance_id) {
         $actNumber = count($result);
         if ($actNumber > 0) {
             $tool_content .= "<div class='text-heading-h5'>". display_user($userID) ."</div>";
-            $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
+            $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;book=$userID' onsubmit=\"return checkrequired(this, 'antitle');\">
                               <div class='table-responsive'><table class='table-default'>";
             $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDate</th><th>$langType</th>";
             $tool_content .= "<th>$langAttendanceBooking</th>";
@@ -1154,26 +1153,19 @@ function user_attendance_settings($attendance_id) {
                         <div class='input-append date form-group' id='startdatepicker'>
                             <label for='UsersStart' class='col-sm-6 control-label-notes'>$langRegistrationDate $langFrom2:</label>
 
-                                <div class='input-group'>
-                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                    <input class='form-control mt-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
-
-                                    
-                                </div>
-
-
+                            <div class='input-group'>
+                                <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
+                            </div>
                         </div>
 
                         <div class='input-append date form-group mt-4' id='enddatepicker'>
                             <label for='UsersEnd' class='col-sm-6 control-label-notes'>$langTill</label>
 
-                                <div class='input-group'>
-                                    <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                    <input class='form-control mt-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
-
-                                    
-                                </div>
-
+                            <div class='input-group'>
+                                <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
+                            </div>
 
                         </div>
                     </div>
@@ -1666,11 +1658,11 @@ function import_attendances($attendance_id, $activity, $import = false) {
         }
     } else { // import grades form
         enableCheckFileSize();
-        $tool_content .= "            
+        $tool_content .= "
             <div class='d-lg-flex gap-4 mt-4'>
                 <div class='flex-grow-1'>
                     <div class='form-wrapper'>
-                        <form class='form-horizontal' enctype='multipart/form-data' method='post' 
+                        <form class='form-horizontal' enctype='multipart/form-data' method='post'
                             action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance_id . "&amp;imp=$activity&amp;import_attendances=true'>
                             <fieldset>
                                 <legend class='mb-0' aria-label='$langForm'></legend>

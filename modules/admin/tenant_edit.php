@@ -111,7 +111,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'tenants.php', 'name' => $langTenants);
 
 // javascript
-load_js('jstree3'); 
+load_js('jstree'); 
 load_js('bootstrap-datetimepicker');
 
 if (isset($_GET['id'])) {

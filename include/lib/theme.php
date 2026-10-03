@@ -850,7 +850,9 @@ function theme_initialization() {
                 .pg-progress-label,
                 .pg-stat-label,
                 .pg-progress-pct,
-                .pg-lvl-pts { 
+                .pg-lvl-pts,
+                .exercise-accordion .accordion-item,
+                .exercise-accordion .accordion-subtitle { 
                     color: $theme_options_styles[ColorMutedTexts] !important;
                 }
             ";
@@ -6923,6 +6925,19 @@ function theme_initialization() {
                     background: $theme_options_styles[BgPanels];
                 }
 
+                .exercise-accordion .accordion-body {
+                    background-color: $theme_options_styles[BgPanels];
+                }
+
+                .exercise-accordion .accordion-button,
+                .exercise-accordion .accordion-button:not(.collapsed){
+                    background-color: $theme_options_styles[BgPanels];
+                }
+
+                .exercise-accordion .accordion-item {
+                    background-color: $theme_options_styles[BgPanels];
+                }
+
 
             ";
         }
@@ -7040,6 +7055,14 @@ function theme_initialization() {
 
                 .epf-panel-card {
                     border: 1px solid $theme_options_styles[clBorderPanels] !important;
+                }
+
+                .exercise-accordion .accordion-body {
+                    border-top: 1px solid $theme_options_styles[clBorderPanels];
+                }
+
+                .exercise-accordion .accordion-item {
+                    border: 1px solid $theme_options_styles[clBorderPanels];
                 }
 
 

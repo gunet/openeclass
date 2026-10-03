@@ -29,7 +29,7 @@ require_once 'modules/auth/auth.inc.php';
 
 $tree = new Hierarchy();
 $user = new User();
-load_js('jstree3');
+load_js('jstree');
 
 $pageName = $langReqRegProf;
 
@@ -65,21 +65,24 @@ if (isset($_POST['submit']))  {
     }
 
     // register user request
-    $res = Database::get()->query("INSERT INTO user_request SET
-            givenname = '" . uid_to_name($uid, 'givenname') . "', 
-            surname = '" .uid_to_name($uid, 'surname') . "', 
-            username = '" . uid_to_name($uid, 'username') . "', 
-            email = '" . uid_to_email($uid) . "',
-            faculty_id = ?d, 
+    $res = Database::get()->query('INSERT INTO user_request SET
+            givenname = ?s,
+            surname = ?s,
+            username = ?s,
+            email = ?s,
+            faculty_id = ?d,
             phone = ?s,
-            state = 1, 
-            status = " . USER_TEACHER . ",
-            verified_mail = " . EMAIL_VERIFIED . ", 
-            date_open = " . DBHelper::timeAfter() . ",
-            comment = ?s, 
-            lang = ?s, 
-            request_ip = '" . Log::get_client_ip() . "'",
-        $_POST['department'], $_POST['userphone'], $_POST['usercomment'], $language);
+            state = 1,
+            status = ?d,
+            verified_mail = ?d,
+            date_open = ' . DBHelper::timeAfter() . ',
+            comment = ?s,
+            lang = ?s,
+            request_ip = ?s',
+        uid_to_name($uid, 'givenname'), uid_to_name($uid, 'surname'), uid_to_name($uid, 'username'), uid_to_email($uid),
+        USER_TEACHER, EMAIL_VERIFIED,
+        $_POST['department'], $_POST['userphone'], $_POST['usercomment'], $language,
+        Log::get_client_ip());
 
     $request_id = $res?->lastInsertID;
 

@@ -326,20 +326,36 @@ function render_eportfolio_profile_card($uid, $resources_url = null, $resources_
         $link_script_html = "
             <script>
             $(function() {
-                if (typeof Clipboard !== 'undefined') {
-                    var cbCard = new Clipboard('#copy-btn-card', {
-                        target: function() { return document.getElementById('page-link-card'); }
-                    });
-                    cbCard.on('success', function(e) {
-                        e.clearSelection();
-                        \$('#copy-btn-card').attr('title', '" . js_escape($langCopiedSucc) . "').tooltip('fixTitle').tooltip('show');
-                    });
-                    cbCard.on('error', function(e) {
-                        \$('#copy-btn-card').attr('title', '" . js_escape($langCopiedErr) . "').tooltip('fixTitle').tooltip('show');
+                var copyBtnCard = document.getElementById('copy-btn-card');
+                var pageLinkCard = document.getElementById('page-link-card');
+                
+                if (copyBtnCard && pageLinkCard && navigator.clipboard) {
+                    copyBtnCard.addEventListener('click', async function () {                        
+                        var textToCopy = pageLinkCard.value !== undefined ? pageLinkCard.value : pageLinkCard.innerText;                
+                        try {
+                            await navigator.clipboard.writeText(textToCopy);                                            
+                            tooltipCard.dispose();
+                            copyBtnCard.setAttribute('title', '" . js_escape($langCopiedSucc) . "');
+                            tooltipCard = new bootstrap.Tooltip(copyBtnCard, { trigger: 'manual' });
+                            tooltipCard.show();
+                
+                            setTimeout(function () {
+                                tooltipCard.hide();
+                                tooltipCard.dispose();
+                                copyBtnCard.setAttribute('title', '" . js_escape($langCopy) . "');
+                                tooltipCard = new bootstrap.Tooltip(copyBtnCard);
+                            }, 1500);
+                
+                        } catch (err) {                            
+                            tooltipCard.dispose();
+                            copyBtnCard.setAttribute('title', '" . js_escape($langCopiedErr) . "');
+                            tooltipCard = new bootstrap.Tooltip(copyBtnCard, { trigger: 'manual' });
+                            tooltipCard.show();
+                        }
                     });
                 }
             });
-            </script>";
+        </script>";
     }
 
     $resources_button_html = '';

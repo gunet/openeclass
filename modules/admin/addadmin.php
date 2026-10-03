@@ -132,7 +132,7 @@ if (isset($_POST['submit']) and $username) {
 
 
 if (isset($_GET['add']) or isset($_GET['edit'])) {
-    load_js('jstree3');
+    load_js('jstree');
     $navigation[] = ['url' => 'addadmin.php', 'name' => $langAdmins];
     $adminDeps = [];
     if (isset($_GET['edit'])) {

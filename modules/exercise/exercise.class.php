@@ -1503,7 +1503,7 @@ class Exercise
 
         }
 
-        // Remove file upload answers from document table and courses folder
+        // Delete file upload answers from the courses folder.
         foreach ($userRecords as $rec) {
             $user_id = $rec->uid;
             $u_answers = Database::get()->queryArray("SELECT ear.eurid,ear.answer FROM exercise_answer_record ear
@@ -1549,6 +1549,22 @@ class Exercise
                 Database::get()->query("DELETE FROM document WHERE id = ?d", $f->id);
             }
         }
+
+        // Delete file upload answers from the courses folder.
+        $u_answers = Database::get()->queryArray("SELECT ear.eurid,ear.answer FROM exercise_answer_record ear
+                                                    JOIN exercise_question eq ON eq.id=ear.question_id
+                                                    WHERE ear.eurid = ?d
+                                                    AND eq.type = ?d", $eurid, UPLOAD_FILE);
+                 
+        if (count($u_answers) > 0) {
+            foreach ($u_answers as $an) {
+                $fileInfo = unserialize($an->answer, ['allowed_classes' => false]);  
+                if (isset($fileInfo['filepath']) && file_exists("$webDir/courses/$course_code/exercise/$id$fileInfo[filepath]")) {
+                    unlink("$webDir/courses/$course_code/exercise/$id$fileInfo[filepath]");
+                }
+            }
+        }
+        
 
         $exercise_title = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $id)->title;
         $eurid_uid = Database::get()->querySingle("SELECT uid FROM exercise_user_record WHERE eid = ?d AND eurid = ?d", $id, $eurid)->uid;

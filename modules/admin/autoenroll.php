@@ -84,7 +84,7 @@ if (isset($_GET['delete'])) {
     }
     redirect_to_home_page('modules/admin/autoenroll.php');
 } elseif (isset($_GET['add']) or isset($_GET['edit'])) {
-    load_js('jstree3');
+    load_js('jstree');
     load_js('tools.js');
     load_js('slimselect');
 

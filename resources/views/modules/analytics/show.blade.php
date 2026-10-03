@@ -29,10 +29,10 @@
                 <!-- Analytics Details Card -->
                 <div class="col-12 mb-4">
                     <div class="card panelCard card-default px-lg-4 py-lg-3">
-                        <div class="card-header border-0">
+                        <div class="card-header border-0 p-0">
                             <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
                                 <h2 class="text-heading-h3 mb-0 d-flex align-items-center flex-wrap gap-2">
-                                    <span>{{ $analytics->title }}</span>
+                                    <span class="action-bar-title">{{ $analytics->title }}</span>
                                     @if ($analytics->active)
                                         <span class="badge bg-success">{{ trans('langActive') }}</span>
                                     @else
@@ -51,7 +51,7 @@
                                 <p class="text-muted mb-0 mt-2">{{ $analytics->description }}</p>
                             @endif
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-0 mt-3">
                             <div class="row g-3">
                                 <div class="col-md-3 col-sm-6">
                                     <div class="p-3 bg-light rounded-3">
@@ -84,67 +84,124 @@
 
                 <!-- Criteria & Elements Section -->
                 <div class="col-12">
-                    <div class="card panelCard card-default px-lg-4 py-lg-3">
-                        <div class="card-header border-0 d-flex justify-content-between align-items-center">
-                            <h3 class="text-heading-h3 mb-0">
-                                <i class="fa-solid fa-list-check me-2"></i> {{ trans('langAnalyticsElements') }}
-                            </h3>
-                            <span class="badge bg-secondary">{{ count($elements) }}</span>
+                    <div class="card panelCard border-0 shadow-sm rounded-4 px-lg-4 py-lg-3 bg-white mb-4">
+                        <div class="card-header border-0 bg-transparent p-0 mb-3">
+                            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-3 p-2 d-flex align-items-center justify-content-center" style="background-color: #f1f5f9; color: #334155; width: 48px; height: 48px;">
+                                        <i class="fa-solid fa-chart-column fa-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-heading-h3 mb-0 fw-bold" style="color: #0f172a; font-size: 1.4rem;">
+                                            {{ trans('langAnalyticsDifficultyLevel') }}
+                                        </h3>
+                                        <p class="text-muted small mb-0 mt-1" style="color: #64748b;">
+                                            {{ trans('langAnalyticsDifficultyLevelInfo') }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @if ($is_editor)
+                                    {!! $add_element_button !!}
+                                @endif
+                            </div>
                         </div>
-                        <div class="card-body">
+
+                        <div class="card-body p-0">
                             @if (count($elements) == 0)
-                                <div class="text-center text-muted py-4">
-                                    <i class="fa-solid fa-folder-open fa-2x mb-2 d-block"></i>
+                                <div class="text-center text-muted py-5">
+                                    <i class="fa-solid fa-folder-open fa-3x mb-3 text-secondary d-block"></i>
                                     {{ trans('langAnalyticsNoElements') }}
                                 </div>
                             @else
                                 <div class="table-responsive">
-                                    <table class="table-default">
+                                    <table class="table align-middle border-0 mb-0" style="border-collapse: separate; border-spacing: 0;">
                                         <thead>
-                                            <tr class="list-header">
-                                                <th>{{ trans('langType') }}</th>
-                                                <th class="text-center">{{ trans('langAnalyticsCriticalLevel') }}</th>
-                                                <th class="text-center">{{ trans('langAnalyticsAdvancedLevel') }}</th>
-                                                <th class="text-center">{{ trans('langAnalyticsWeight') }}</th>
+                                            <tr style="background-color: #f8fafc;">
+                                                <th rowspan="2" class="align-middle border-0 ps-4 py-3 fw-bold" style="color: #475569; font-size: 0.95rem; width: 28%;">
+                                                    {{ trans('langType') }}
+                                                </th>
+                                                <th colspan="2" class="text-center border-0 pt-3 pb-1 fw-bold" style="background-color: #fff7ed; color: #c2410c; font-size: 0.95rem; border-top-left-radius: 12px;">
+                                                    <i class="fa-solid fa-arrow-down me-1"></i> {{ trans('langAnalyticsCriticalLevel') }}
+                                                </th>
+                                                <th colspan="2" class="text-center border-0 pt-3 pb-1 fw-bold" style="background-color: #f0fdf4; color: #15803d; font-size: 0.95rem; border-top-right-radius: 12px;">
+                                                    <i class="fa-solid fa-arrow-up me-1"></i> {{ trans('langAnalyticsAdvancedLevel') }}
+                                                </th>
+                                                <th rowspan="2" class="text-center align-middle border-0 py-3 fw-bold" style="color: #475569; font-size: 0.95rem;">
+                                                    {{ trans('langAnalyticsWeight') }}
+                                                </th>
                                                 @if ($is_editor)
-                                                    <th class="text-end" aria-label="{{ trans('langSettingSelect') }}"><i class="fa-solid fa-gears"></i></th>
+                                                    <th rowspan="2" class="text-center align-middle border-0 py-3 pe-4 fw-bold" style="color: #475569; font-size: 0.95rem;">
+                                                        {{ trans('langActions') }}
+                                                    </th>
                                                 @endif
+                                            </tr>
+                                            <tr style="background-color: #f8fafc;">
+                                                <th class="text-center border-0 small font-normal pb-3 pt-1" style="background-color: #fff7ed; color: #9a3412; font-size: 0.8rem; border-bottom-left-radius: 12px;">
+                                                    {{ trans('langFrom') }}
+                                                </th>
+                                                <th class="text-center border-0 small font-normal pb-3 pt-1" style="background-color: #fff7ed; color: #9a3412; font-size: 0.8rem;">
+                                                    {{ trans('langTill2') }}
+                                                </th>
+                                                <th class="text-center border-0 small font-normal pb-3 pt-1" style="background-color: #f0fdf4; color: #166534; font-size: 0.8rem;">
+                                                    {{ trans('langFrom') }}
+                                                </th>
+                                                <th class="text-center border-0 small font-normal pb-3 pt-1" style="background-color: #f0fdf4; color: #166534; font-size: 0.8rem; border-bottom-right-radius: 12px;">
+                                                    {{ trans('langTill2') }}
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($elements as $element)
                                                 <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <i class="{{ $element['icon'] }} text-primary fs-5"></i>
+                                                    <!-- Type Column -->
+                                                    <td class="p-2 ps-3" style="border-bottom: 1px solid #e2e8f0 !important;">
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 46px; height: 46px; background-color: #eff6ff; color: #2563eb; font-size: 1.25rem;">
+                                                                <i class="{{ $element['icon'] }}"></i>
+                                                            </div>
                                                             <div>
-                                                                <span class="fw-bold">{{ $element['title'] }}</span>
-{{--                                                                @if (!empty($element['resource_info']))--}}
-{{--                                                                    <span class="text-muted small">{{ $element['resource_info'] }}</span>--}}
-{{--                                                                @endif--}}
+                                                                <div class="fw-bold" style="color: #0f172a; font-size: 0.95rem;">{{ $element['title'] }}</div>
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td class="text-center">
-                                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2">
-                                                            {{ trans('langAnalyticsMinValue') }}: <strong>{{ $element['min_value'] }}</strong> &mdash; 
-                                                            {{ trans('langAnalyticsMaxValue') }}: <strong>{{ $element['lower_threshold'] }}</strong>
-                                                        </span>
+
+                                                    <!-- Critical/Lower Level (Min - Max) -->
+                                                    <td colspan="2" class="text-center p-2" style="border-bottom: 1px solid #e2e8f0 !important;">
+                                                        <div class="d-inline-flex align-items-center justify-content-center px-3 py-2 rounded-3" style="background-color: #fff7ed;">
+                                                            <div class="rounded-3 px-3 py-1 fw-bold" style="background-color: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; min-width: 48px; font-size: 1.05rem;">
+                                                                {{ $element['min_value'] }}
+                                                            </div>
+                                                            <span class="mx-2 fw-medium" style="color: #94a3b8;">&mdash;</span>
+                                                            <div class="rounded-3 px-3 py-1 fw-bold" style="background-color: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; min-width: 48px; font-size: 1.05rem;">
+                                                                {{ $element['lower_threshold'] }}
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td class="text-center">
-                                                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2">
-                                                            {{ trans('langAnalyticsMinValue') }}: <strong>{{ $element['upper_threshold'] }}</strong> &mdash; 
-                                                            {{ trans('langAnalyticsMaxValue') }}: <strong>{{ $element['max_value'] }}</strong>
-                                                        </span>
+
+                                                    <!-- Advanced Level (Min - Max) -->
+                                                    <td colspan="2" class="text-center p-2" style="border-bottom: 1px solid #e2e8f0 !important;">
+                                                        <div class="d-inline-flex align-items-center justify-content-center px-3 py-2 rounded-3" style="background-color: #f0fdf4;">
+                                                            <div class="rounded-3 px-3 py-1 fw-bold" style="background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; min-width: 48px; font-size: 1.05rem;">
+                                                                {{ $element['upper_threshold'] }}
+                                                            </div>
+                                                            <span class="mx-2 fw-medium" style="color: #94a3b8;">&mdash;</span>
+                                                            <div class="rounded-3 px-3 py-1 fw-bold" style="background-color: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; min-width: 48px; font-size: 1.05rem;">
+                                                                {{ $element['max_value'] }}
+                                                            </div>
+                                                        </div>
                                                     </td>
-                                                    <td class="text-center fw-bold fs-6">
-                                                        <span class="badge bg-primary px-3 py-2">{{ $element['weight'] }}</span>
+
+                                                    <!-- Weight -->
+                                                    <td class="text-center p-2" style="border-bottom: 1px solid #e2e8f0 !important;">
+                                                        <div class="d-inline-flex align-items-center justify-content-center rounded-3 fw-bold text-white shadow-sm" style="width: 42px; height: 42px; background-color: #0066ff; font-size: 1.15rem;">
+                                                            {{ $element['weight'] }}
+                                                        </div>
                                                     </td>
+
+                                                    <!-- Actions -->
                                                     @if ($is_editor)
-                                                        <td class="text-end">
-                                                            <a href="{{ $urlAppend }}modules/analytics/index.php?course={{ $course_code }}&amp;analytics_id={{ $analytics->id }}&amp;analytics_element_id={{ $element['id'] }}&amp;edit_analytics_element=true" class="btn submitAdminBtn" title="{{ trans('langModify') }}" data-bs-toggle="tooltip">
-                                                                <i class="fa-solid fa-gear"></i>
-                                                            </a>
+                                                        <td class="text-end p-2 pe-3" style="border-bottom: 1px solid #e2e8f0 !important;">
+                                                            {!! $element['action_button'] !!}
                                                         </td>
                                                     @endif
                                                 </tr>
@@ -161,5 +218,14 @@
         </main>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl);
+        });
+    });
+</script>
 
 @endsection

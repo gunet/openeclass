@@ -41,7 +41,7 @@ $user = new User();
 
 $toolName = $langCourseEdit;
 
-load_js('jstree3');
+load_js('jstree');
 load_js('pwstrength.js');
 load_js('tools.js');
 

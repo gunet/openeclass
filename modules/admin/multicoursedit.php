@@ -365,7 +365,7 @@ if (isset($_POST['draw']) || isset($_GET['draw']) || (!empty($_SERVER['HTTP_X_RE
 $tree = new Hierarchy();
 $user = new User();
 
-load_js('jstree3');
+load_js('jstree');
 load_js('tools.js');
 load_js('datatables');
 

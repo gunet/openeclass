@@ -252,7 +252,7 @@ if (isset($_GET['id']) and isset($_GET['type']) and $_GET['type'] == 'prof') { /
 }
 
 // javascript
-load_js('jstree3');
+load_js('jstree');
 load_js('pwstrength.js');
 load_js('bootstrap-datetimepicker');
 
