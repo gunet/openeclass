@@ -26,9 +26,11 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           tools: composer
+          # Every ext-* required by composer.lock, so the install needs no --ignore-platform-reqs.
+          extensions: ctype, curl, dom, fileinfo, gd, iconv, json, libxml, mbstring, phar, simplexml, tokenizer, xml, xmlreader, xmlwriter, zip, zlib
 
       - name: Install dependencies
-        run: composer install --no-interaction --no-progress --ignore-platform-reqs --no-scripts
+        run: composer install --no-interaction --no-progress --no-scripts
 
 
       - name: Run PHPUnit

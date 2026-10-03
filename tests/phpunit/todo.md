@@ -23,11 +23,15 @@ Numbers are from 2026-10-03 on top of `upstream/master` `04ce7b684`.
 | `phpcs.xml` | PSR-12, `LineLength` off, excludes `vendor`, `node_modules`, `tests`, `storage`, `*.blade.php` |
 | PHPCS baseline | **98,643 errors + 2,009 warnings in 1,216 of 1,259 files**; 96,861 auto-fixable |
 | Lint (`php -l`, PHP 8.4) | passes for `include/ modules/ resources/ tests/` |
-| Workflows | `lint.yml`, `phpcs.yml`, `phpunit.yml`; triggers set to push on `master`, `pull_request`, `workflow_dispatch` (2026-10-03) |
+| Workflows | `lint.yml`, `phpunit.yml`: push on `master`, `pull_request`, `workflow_dispatch`; `phpcs.yml`: `workflow_dispatch` only (2026-10-03) |
 
 ### 0.1 Problems in the current setup – P0
-- [ ] **PHPCS workflow will fail on every PR.** It now runs on `pull_request` against a ~100k-violation baseline. Until §1.3 is in place,
-      run it only on changed files (§1.3) or mark it `continue-on-error: true`.
+- [x] **`composer.lock` didn't install on PHP 8.2** (2026-10-03). Adding the dev packages had updated the whole lock, which pulled
+      `maennchen/zipstream-php` 3.2.2 (needs PHP ≥ 8.3) while `composer.json` says `"php": ">8.2"`. Rebuilt from upstream's lock with only
+      `squizlabs/php_codesniffer` + `phpunit/phpunit` and their dependencies, resolved on PHP 8.2: runtime packages are identical to upstream,
+      27 dev packages added. `phpunit.yml` no longer needs `--ignore-platform-reqs`; it lists the required `ext-*` in `setup-php` instead.
+      Checked: clean install + 21 tests green on PHP 8.2 and 8.5.
+- [x] **PHPCS workflow is manual** (`workflow_dispatch` only) until §1.3 is in place; on PRs it would fail against the ~100k-violation baseline.
 - [ ] **Bootstrap warning:** `tests/phpunit/bootstrap.php` defines `ECLASS_VERSION`, then `include/constants.php` (loaded by
       `main_lib.php`) defines it again → `PHP Warning: Constant ECLASS_VERSION already defined` on every run. Drop it from the bootstrap
       (or `require` `include/constants.php` there instead). Make PHPUnit fail on warnings (`failOnWarning="true"`) so this can't creep back.
@@ -45,8 +49,7 @@ Numbers are from 2026-10-03 on top of `upstream/master` `04ce7b684`.
       `Widgets/`, `domain_check/`, `index.php`, `rss.php`, `cron_disk_usage.php` are never linted. Lint everything except `vendor/` and `node_modules/`.
 - [ ] Lint step runs `php -l` once per file sequentially; use `xargs -0 -n1 -P$(nproc)` (8 s locally for the current scope).
 - [ ] `phpcs.yml` runs a 4-version PHP matrix; PHPCS output doesn't depend on the PHP version, so one job is enough (keep the matrix for
-      lint and PHPUnit). `phpcs.yml` `composer install` lacks the `--ignore-platform-reqs --no-scripts` that `phpunit.yml` uses, so it can
-      fail on 8.5 for the same reason.
+      lint and PHPUnit).
 - [ ] `actions/checkout@v6` vs `@v4` elsewhere in the repo – pick one.
 - [ ] `tests/phpunit/.cache` is ignored, but add coverage output (`tests/phpunit/coverage/`) once §2.4 lands.
 - [ ] `tests/dspace_smoke.php` (226 lines, upstream) is a manual smoke script, not a PHPUnit test; leave it out of the suites or turn it
