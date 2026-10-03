@@ -63,6 +63,12 @@ foreach(['video.min.js', 'video-js.min.css', 'font', 'lang'] as $file) {
     }
 }
 
+// Copy CodeMirror 5
+removeDir('js/codemirror');
+mkdir('js/codemirror');
+recurse_copy('node_modules/codemirror/lib', 'js/codemirror/lib');
+recurse_copy('node_modules/codemirror/mode', 'js/codemirror/mode');
+
 // jsMind
 removeDir('js/jsmind');
 mkdir('js/jsmind');

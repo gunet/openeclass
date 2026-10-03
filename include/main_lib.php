@@ -279,6 +279,10 @@ function load_js($file, $init=''): void
             case 'drag-and-drop-shapes':
                 $file = 'drag-and-drop-shapes.js';
                 break;
+            case 'codemirror':
+                $head_content .= css_link('codemirror/lib/codemirror.css');
+                $file = 'codemirror/lib/codemirror.js';
+                break;
         }
 
         $head_content .= js_link($file);
