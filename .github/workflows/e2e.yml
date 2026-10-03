@@ -1,0 +1,68 @@
+name: E2E Tests
+run-name: Playwright E2E tests (${{ github.ref_name }})
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: Playwright
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: tests/e2e-pw
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install test dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Chromium
+        run: bunx playwright install --with-deps chromium
+
+      - name: Type-check the suite
+        run: bun run test:e2e:typecheck
+
+      # Builds the image and starts eclass, db and mailpit (docker-compose.e2e.yaml).
+      # The suite would start it too, but a separate step keeps build errors apart from test failures.
+      - name: Start the e2e stack
+        run: bun run e2e:up
+
+      - name: Run tests
+        run: bun run test:e2e
+        env:
+          CI: true
+
+      # - name: Stack logs
+      #   if: failure()
+      #   run: bun run e2e:compose logs --no-color --timestamps
+
+      # - name: Upload report
+      #   if: failure()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: playwright-report
+      #     path: |
+      #       tests/e2e-pw/playwright-report
+      #       tests/e2e-pw/test-results
+      #     retention-days: 7
+
+      - name: Stop the e2e stack
+        if: always()
+        run: bun run e2e:compose down -v

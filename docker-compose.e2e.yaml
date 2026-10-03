@@ -1,0 +1,87 @@
+# E2E stack for the Playwright suite in tests/e2e-pw. It is an overlay:
+#
+#   docker compose -f docker-compose.development.yaml -f docker-compose.e2e.yaml up -d --wait
+#
+# It runs as its own compose project, with its own volumes and port, so resetting it
+# never touches the development stack. Add `--profile sso` for the LDAP/CAS services.
+name: openeclass-e2e
+
+services:
+  eclass:
+    ports: !override
+      - "${ECLASS_E2E_PORT:-8080}:80"
+    environment:
+      # Turns on the test-only control harness. It needs no extra mount: the base file bind-mounts the
+      # repo, so it is served from /tests/e2e-pw/fixtures/.
+      - ECLASS_E2E=1
+      - TZ=Europe/Athens
+    volumes:
+      - e2e_snapshots:/snapshots
+      # The base file bind-mounts the repo, so generated files would come from the host: possibly
+      # stale there (vendor/) or missing in a fresh checkout such as CI (the js/build/build.php output).
+      # These volumes are filled from the image instead, i.e. from composer.lock and package.json at
+      # build time. `storage/` must also be writable by nginx, which a CI checkout isn't. `bun run e2e:up`
+      # creates the mount points first, so docker doesn't create them as root in the working tree.
+      - e2e_vendor:/var/www/html/vendor
+      - e2e_js_mathjax:/var/www/html/js/mathjax
+      - e2e_js_h5p:/var/www/html/js/h5p-standalone
+      - e2e_js_recordrtc:/var/www/html/js/recordrtc
+      - e2e_js_videojs:/var/www/html/js/video.js
+      - e2e_mathjax_font:/var/www/html/resources/fonts/mathjax-newcm-font
+      - e2e_storage:/var/www/html/storage
+    depends_on:
+      mailpit:
+        condition: service_healthy
+
+  db:
+    environment:
+      - TZ=Europe/Athens
+    volumes:
+      - e2e_snapshots:/snapshots
+
+  # Catches every outgoing mail (SMTP on mailpit:1025); web UI and API on the host port.
+  mailpit:
+    image: docker.io/axllent/mailpit:latest
+    ports:
+      - "${ECLASS_E2E_MAILPIT_PORT:-8025}:8025"
+    environment:
+      - TZ=Europe/Athens
+      - MP_SMTP_AUTH_ACCEPT_ANY=1
+      - MP_SMTP_AUTH_ALLOW_INSECURE=1
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Same LDAP/CAS images as docker-compose.test.yaml, only with `--profile sso`.
+  ldap:
+    image: gunet/simple-ldap
+    profiles: [sso]
+    environment:
+      - TZ=Europe/Athens
+
+  sso:
+    image: gunet/simple-cas:tomcat
+    profiles: [sso]
+    ports:
+      - "8443:8443"
+    depends_on:
+      ldap:
+        condition: service_healthy
+    environment:
+      - TZ=Europe/Athens
+      - LDAP_URL=ldap://ldap:1389
+      - CAS_SERVER_NAME=${CAS_SERVER_NAME:-https://localhost:8443}
+
+volumes:
+  # Generated files from the image; `bun run e2e:reset` rebuilds the image and refills them.
+  e2e_vendor:
+  e2e_js_mathjax:
+  e2e_js_h5p:
+  e2e_js_recordrtc:
+  e2e_js_videojs:
+  e2e_mathjax_font:
+  e2e_storage:
+  # DB dumps and course-file tarballs taken by tests/e2e-pw/utils/stack.ts.
+  e2e_snapshots:
