@@ -3666,6 +3666,7 @@ $langExerciseCompleted = "Exercise has been successfully completed.";
 $langFillBlanksStrict = "Strict Answer Validation";
 $langFillBlanksTolerant = "Tolerant Answer Validation";
 $langFillBlanksStrictExample = "(Athens ≠ athens ≠ ATHENS)";
+$langFillBlanksAnswerWidth = "Adjust blank width to the length of the answer";
 $langFillBlanksTolerantExample = "(Athens = athens = ATHENS)";
 $langUsed = "Used";
 $langMaxFileSizeExceeded = 'File size exceeds maximum upload limit.';
