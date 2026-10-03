@@ -2,6 +2,7 @@
 use Widgets\Widget;
 use Widgets\WidgetWidgetArea;
 use Widgets\WidgetInterface;
+
 /* ========================================================================
  * Open eClass
  * E-learning and Course Management System
@@ -21,7 +22,6 @@ use Widgets\WidgetInterface;
  *                  e-mail: info@openeclass.org
  * ========================================================================
  */
-
 /**
  * Description of TextWidget
  *
@@ -57,7 +57,6 @@ class ClockWidget extends Widget implements WidgetInterface {
 
         $clock_type = isset($this->view_data['clock_type']) && $this->view_data['clock_type'] ? "digital" : "analog";
         widget_css_link($clock_type.'_clock.css', $this->folder);
-        widget_js_link('moment.min.js', $this->folder);
         widget_js_link($clock_type.'_clock.js', $this->folder);
 
         return widget_view("run", $this->view_data);
@@ -71,40 +70,3 @@ class ClockWidget extends Widget implements WidgetInterface {
     }
 
 }
-/*
- *  ========================================================================
- *  * Open eClass
- *  * E-learning and Course Management System
- *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
- *  *
- *  * Open eClass is an open platform distributed in the hope that it will
- *  * be useful (without any warranty), under the terms of the GNU (General
- *  * Public License) as published by the Free Software Foundation.
- *  * The full license can be read in "/info/license/license_gpl.txt".
- *  *
- *  * Contact address: GUnet Asynchronous eLearning Group
- *  *                  e-mail: info@openeclass.org
- *  * ========================================================================
- *
- */
-
-/*
- *  ========================================================================
- *  * Open eClass
- *  * E-learning and Course Management System
- *  * ========================================================================
- *  * Copyright 2003-2024, Greek Universities Network - GUnet
- *  *
- *  * Open eClass is an open platform distributed in the hope that it will
- *  * be useful (without any warranty), under the terms of the GNU (General
- *  * Public License) as published by the Free Software Foundation.
- *  * The full license can be read in "/info/license/license_gpl.txt".
- *  *
- *  * Contact address: GUnet Asynchronous eLearning Group
- *  *                  e-mail: info@openeclass.org
- *  * ========================================================================
- *
- */
-
-

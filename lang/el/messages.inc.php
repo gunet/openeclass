@@ -959,6 +959,7 @@ $langFirst = "Πρώτη";
 $langTotalResults = "συνολικά αποτελέσματα";
 $langDisplayed = "Εμφανίζονται";
 $langTill = "έως";
+$langTill2 = "Έως";
 $langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
 $langAnnHasPublished = "Έχει δημοσιευθεί ανακοίνωση στο $langsCourse";
 $langInvalidEmailRecipients = 'Παραλήπτες με μη έγκυρη διεύθυνση e-mail';
@@ -2204,6 +2205,25 @@ $langSEBInfo2 = "Πρώτα, θα πρέπει να εγκαταστήσετε �
 $langSafeExamBrowserInfo = "Η άσκηση εκτελείται μόνο μέσω του Safe Exam Browser.";
 $langSafeExamBrowserLegend = "Οι χρήστες θα χρειαστεί να εγκαταστήσουν τον Safe Exam Browser στον υπολογιστή τους. Υποστηρίζεται μόνο σε Windows, MacOS και iOS";
 $langSafeExamBrowserQuitMessage = "Κλείσιμο και επιστροφή";
+$langBasicItems = "Βασικά στοιχεία";
+$langBasicItemsInfo = "Τίτλος, Περιγραφή, Μήνυμα ολοκλήρωσης";
+$langTimeAndConstraint = "Χρόνος & Περιορισμός";
+$langTimeAndConstraintInfo = "Χρονική διάρκεια, Χρονικός περιορισμός";
+$langAssessment = "Αξιολόγηση";
+$langAssessmentInfo = "Βαθμολογία, Κλίμακα, Βαθμός βεβαιότητας";
+$langReviewFeedback = "Ανατροφοδότηση";
+$langReviewFeedbackInfo = "Μηνύματα, Εμφάνιση αποτελεσμάτων";
+$langFeedbackTooltipText = "Το μήνυμα που θα εμφανιστεί στον εκπαιδευόμενο.";
+$langFeedbackTooltipGrade = "Θα εμφανίζεται για βαθμολογίες μικρότερες ή ίσες από αυτήν την τιμή.";
+$langReviewFeedbackText = "Κείμενο ανατροφοδότησης";
+$langReviewAccess = "Πρόσβαση & Ανάθεση";
+$langReviewAccessInfo = "Χρήστες, Ομάδες, Έλεγχος πρόσβασης";
+$langReviewUserAttemps = "Προσπάθειες χρηστών";
+$langReviewUserAttempsInfo = "Προσωρινή αποθήκευση, Περιορισμός προσπαθειών, Εμφάνιση αποτελεσμάτων";
+$langReviewAdvancedSettings = "Προχωρημένες ρυθμίσεις";
+$langReviewAdvancedSettingsInfo = "Εμφάνιση ερωτήσεων, Ενεργοποίηση εξέτασης";
+$langMultipleChoiceQuestions = "Ερωτήσεις πολλαπλής επιλογής";
+
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
 $langExerciseModify = "Τροποποίηση Άσκησης";
@@ -7277,6 +7297,7 @@ $langColmoocPartner = "Συνομιλητής";
 
 // Learning Analytics
 $langLearningAnalytics = 'Μαθησιακή Αναλυτική';
+$langMonitoringScenarios = "Σενάρια Παρακολούθησης";
 $langRequiredTitle = 'Το πεδίο "Τίτλος" ';
 $langRequiredStartDate = 'Το πεδίο "Έναρξη"';
 $langRequiredEndDate = 'Το πεδίο "Λήξη"';
@@ -7319,6 +7340,8 @@ $langAnalyticsMinValue = 'Κατώτερη τιμή';
 $langAnalyticsMaxValue = 'Ανώτερη τιμή';
 $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμες πηγές.';
 $langAnalyticsStatus = 'Επίπεδο';
+$langAnalyticsDifficultyLevel = "Κριτήρια";
+$langAnalyticsDifficultyLevelInfo = "Ρυθμίστε τα όρια δυσκολίας για κάθε τύπο περιεχομένου.";
 
 // h5p
 $langH5p = "Περιεχόμενο H5P";

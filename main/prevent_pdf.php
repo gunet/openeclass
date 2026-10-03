@@ -24,7 +24,7 @@ require_once '../include/baseTheme.php';
 $data = array();
 $url = "";
 if(isset($_GET['urlPr'])){
-    $url = urldecode($_GET['urlPr']);
+    $url = (string) $_GET['urlPr'];
 }
 $data['url'] = $url;
 view("main.prevent_pdf", $data);

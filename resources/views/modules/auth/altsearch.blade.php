@@ -1,11 +1,11 @@
 @extends('layouts.default')
 
 @push('head_styles')
-    <link href="{{ $urlAppend }}js/jstree3/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
+    <link href="{{ $urlAppend }}js/jstree/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
 @endpush
 
 @push('head_scripts')
-    <script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
+    <script type='text/javascript' src='{{ $urlAppend }}js/jstree/jstree.min.js'></script>
 @endpush
 
 @section('content')
@@ -31,6 +31,7 @@
                         <div class='col-lg-6 col-12'>
                             <div class='form-wrapper form-edit rounded px-0 border-0'>
                                 <form role='form' class='form-horizontal' action='altsearch.php' method='post'>
+                                    {!! generate_csrf_token_form_field() !!}
 
                                     <div class='col-lg-6 col-12 px-3'>
                                         <div class='form-group mt-lg-0 mt-4'>

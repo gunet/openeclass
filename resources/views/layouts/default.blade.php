@@ -57,8 +57,6 @@
     <script src="{{ $urlAppend }}js/tinymce/tinymce.min.js"></script>
     {{-- Screenfull --}}
     <script src="{{ $urlAppend }}js/screenfull/screenfull.min.js"></script>
-    {{-- cLICKbOARD --}}
-    <script src="{{ $urlAppend }}js/clipboard.js/clipboard.min.js"></script>
     {{-- fullcalendar v3.10.2 and moment v 2.29.1--}}
     <script src="{{ $urlAppend }}js/fullcalendar/moment.min.js"></script>
     <script src="{{ $urlAppend }}js/fullcalendar/fullcalendar.min.js"></script>

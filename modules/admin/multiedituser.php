@@ -268,7 +268,7 @@ if (isset($_POST['submit'])) {
         if (isDepartmentAdmin()) {
             $nodePickerParams['allowables'] = $user->getDepartmentIds($uid);
         }
-        load_js('jstree3');
+        load_js('jstree');
         $data['currentDepartment'] = $tree->getNodeName($dep);
         list($js, $html) = $tree->buildUserNodePicker($nodePickerParams);
         $head_content .= $js;

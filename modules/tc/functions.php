@@ -1178,25 +1178,27 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                                                     AND u.email IS NOT NULL", $course_id);
 
             } else {
-                $r_group = '';
+                $placeholders = '';
+                $r_group = [];
                 foreach ($_POST['groups'] as $group) {
-                    if (preg_match('/^_/', $group)) { // find group users (if any)
+                    if (str_starts_with($group, '_')) { // find group users (if any)
                         $g_id = intval((substr($group, 1, strlen($group))));
                         $q = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g_id);
                         if ($q) {
                             foreach ($q as $row) {
-                                $r_group .= "'$row->user_id'" .',';
+                                $r_group[] = $row->user_id;
                             }
                         }
+                        $placeholders = implode(', ', array_fill(0, count($r_group), '?d'));
                     } else {
-                        $r_group .= "'$group'" .',';
+                        $r_group[] = $group;
+                        $placeholders = implode(', ', array_fill(0, count($r_group), '?s'));
                     }
                 }
-                $r_group = rtrim($r_group,',');
                 $result = Database::get()->queryArray("SELECT course_user.user_id, user.email
                                                             FROM course_user, user
-                                                       WHERE course_id = ?d AND user.id IN ($r_group) AND
-                                                             course_user.user_id = user.id", $course_id);
+                                                       WHERE course_id = ?d AND user.id IN ($placeholders) AND
+                                                             course_user.user_id = user.id", $course_id, $r_group);
 
             }
             foreach($result as $row) {

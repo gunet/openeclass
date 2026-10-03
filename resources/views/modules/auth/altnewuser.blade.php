@@ -24,6 +24,7 @@
                                 <div class='col-lg-6 col-12'>
                                     <div class='form-wrapper form-edit px-0 border-0'>
                                         <form class='form-horizontal' role='form' method='post' action='altsearch.php'>
+                                            {!! generate_csrf_token_form_field() !!}
                                                 @if($auth_instructions)<h4>{{ $auth_instructions }}</h4>@endif
                                                 <div class='row'>
                                                     <div class='col-12 px-3'>

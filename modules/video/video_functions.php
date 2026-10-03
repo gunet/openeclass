@@ -175,7 +175,8 @@ function getLinksOfCategory($cat_id, $is_editor, $filterv, $order, $course_id, $
                         }
                         $resultObj->vObj = $vObj;
                         $resultObj->link_href = MultimediaHelper::chooseMediaAhref($vObj);
-                        $resultObj->link_to_save = $vObj->getAccessURL() . '&amp;attachment';
+                        $token = token_generate($myrow->path, true);                         // generate new token
+                        $resultObj->link_to_save = $vObj->getAccessURL() . '&amp;token=' . $token . '&amp;attachment';
                         break;
                     case "videolink":
                         $resultObj->vObj = $vObj = MediaResourceFactory::initFromVideoLink($myrow);

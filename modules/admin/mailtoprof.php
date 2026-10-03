@@ -36,7 +36,7 @@ $toolName = $langAdmin;
 $pageName = $langSendInfoMail;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-load_js('jstree3');
+load_js('jstree');
 
 $allowables = [];
 if (isDepartmentAdmin()) {
