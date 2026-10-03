@@ -1,6 +1,6 @@
 # Open eClass E2E tests (Playwright, TypeScript)
 
-End-to-end tests that run against a dedicated docker stack. The plan and progress are in `../todo.md`.
+End-to-end tests that run against a dedicated docker stack. The plan and progress are in `todo.md`.
 
 ## How it works
 
@@ -57,5 +57,5 @@ tests/e2e-pw/
 ├── fixtures/              # test-only PHP harness (served at /tests/e2e-pw/fixtures/ by the repo bind mount)
 ├── test-data/             # files used for uploads
 ├── utils/                 # auth.ts, install.ts, stack.ts
-└── tests/                 # specs, one folder per area (see ../todo.md §0.6)
+└── tests/                 # specs, one folder per area (see todo.md §0.6)
 ```
