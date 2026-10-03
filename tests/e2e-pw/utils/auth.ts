@@ -17,7 +17,7 @@ export type Credentials = { username: string; password: string };
 export const USERS: Record<Role, Credentials> = {
   admin: {
     username: process.env.ECLASS_ADMIN_USERNAME || 'admin',
-    password: process.env.ECLASS_ADMIN_PASSWORD || 'admin123',
+    password: process.env.ECLASS_ADMIN_PASSWORD || 'secret',
   },
 };
 

@@ -46,7 +46,7 @@ Environment overrides:
 |---|---|
 | `ECLASS_BASE_URL` | `http://localhost:8080` |
 | `ECLASS_E2E_PORT` / `ECLASS_E2E_MAILPIT_PORT` | `8080` / `8025` |
-| `ECLASS_ADMIN_USERNAME` / `ECLASS_ADMIN_PASSWORD` | `admin` / `admin123` |
+| `ECLASS_ADMIN_USERNAME` / `ECLASS_ADMIN_PASSWORD` | `admin` / `secret` |
 | `ECLASS_DB_HOST` / `_USER` / `_PASSWORD` / `_NAME` | `db` / `root` / `secret` / `eclass` |
 
 ## Layout

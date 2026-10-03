@@ -22,7 +22,7 @@ Each item says which roles it should be run as. Role keys are defined in [§1](#
 - [x] `.gitignore`: `/tests/e2e-pw/{.auth,test-results,playwright-report}/` and `/test-results/`; deleted the empty root `test-results/`.
 - [x] `tests/basic/auth.spec.ts` uses `utils/auth.ts` (`USERS`, `STATE`, `login()`, `logout()`, `userMenu()`, `loginLink()`) and the stored admin
       session from `auth.setup.ts`. No Greek text: logged-out state is checked with the header login link. Credentials from
-      `ECLASS_ADMIN_USERNAME` / `ECLASS_ADMIN_PASSWORD` (default `admin` / `admin123`). Added a wrong-password test; logout logs in on
+      `ECLASS_ADMIN_USERNAME` / `ECLASS_ADMIN_PASSWORD` (default `admin` / `secret`). Added a wrong-password test; logout logs in on
       its own so it doesn't end the stored session.
 - [x] `tests/install/install.spec.ts` is its own `install` project, run only by `bun run test:e2e:install` (wipes the stack, sets
       `ECLASS_E2E_INSTALL=1`). The wizard steps live in `utils/install.ts` `runWizard()`, shared with `setup`: admin from `USERS`,
