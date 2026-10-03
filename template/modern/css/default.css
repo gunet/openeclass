@@ -4919,6 +4919,17 @@ body .delThemeBtn{
   margin-left: 5px;
   margin-right: 5px;
 }
+/* Blanks sized to their answer (per-question option). Monospace + content-box make the inline
+   width (N ch) hold exactly maxlength (N) characters, whatever the letters or the theme's padding,
+   so the text never scrolls. No 200px cap, tighter spacing for C-tests. */
+.container-fill-in-the-blank .form-control.fill-in-the-blank-sized {
+  font-family: var(--bs-font-monospace, monospace);
+  box-sizing: content-box;
+  max-width: 100%;
+  min-width: 0;
+  margin-left: 2px;
+  margin-right: 2px;
+}
 
 /**********************************************************************************************************************/
 /*************************************************** MY COURSES *******************************************************/
