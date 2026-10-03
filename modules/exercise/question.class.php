@@ -910,40 +910,41 @@ class Question {
      * @return string
      */
     static function blankAutoAdvanceScript(): string {
-        return "<script>
-(function () {
-    if (window.fillInBlankAutoAdvance) { return; }
-    window.fillInBlankAutoAdvance = true;
-    var selector = 'input.fill-in-the-blank-sized';
-    function neighbour(el, step) {
-        var container = el.closest('.container-fill-in-the-blank');
-        var blanks = container ? Array.prototype.slice.call(container.querySelectorAll(selector)) : [el];
-        return blanks[blanks.indexOf(el) + step] || null;
-    }
-    function isFull(el) {
-        return el.maxLength > 0 && el.value.length >= el.maxLength;
-    }
-    document.addEventListener('input', function (e) {
-        var el = e.target;
-        if (!el.matches || !el.matches(selector) || (e.inputType && e.inputType.indexOf('delete') === 0)) { return; }
-        var next = isFull(el) ? neighbour(el, 1) : null;
-        if (next) { next.focus(); next.select(); }
-    });
-    document.addEventListener('keydown', function (e) {
-        var el = e.target;
-        if (!el.matches || !el.matches(selector)) { return; }
-        if (e.key === 'Backspace' && el.value === '') {
-            var previous = neighbour(el, -1);
-            if (previous) { e.preventDefault(); previous.focus(); previous.setSelectionRange(previous.value.length, previous.value.length); }
-        } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey && isFull(el)
-                   && el.selectionStart === el.selectionEnd && el.selectionEnd === el.value.length) {
-            // typing past the end of a full blank continues in the next one
-            var next = neighbour(el, 1);
-            if (next) { next.focus(); next.select(); }
-        }
-    });
-})();
-</script>";
+        return "
+            <script>
+                (function () {
+                    if (window.fillInBlankAutoAdvance) { return; }
+                    window.fillInBlankAutoAdvance = true;
+                    var selector = 'input.fill-in-the-blank-sized';
+                    function neighbour(el, step) {
+                        var container = el.closest('.container-fill-in-the-blank');
+                        var blanks = container ? Array.prototype.slice.call(container.querySelectorAll(selector)) : [el];
+                        return blanks[blanks.indexOf(el) + step] || null;
+                    }
+                    function isFull(el) {
+                        return el.maxLength > 0 && el.value.length >= el.maxLength;
+                    }
+                    document.addEventListener('input', function (e) {
+                        var el = e.target;
+                        if (!el.matches || !el.matches(selector) || (e.inputType && e.inputType.indexOf('delete') === 0)) { return; }
+                        var next = isFull(el) ? neighbour(el, 1) : null;
+                        if (next) { next.focus(); next.select(); }
+                    });
+                    document.addEventListener('keydown', function (e) {
+                        var el = e.target;
+                        if (!el.matches || !el.matches(selector)) { return; }
+                        if (e.key === 'Backspace' && el.value === '') {
+                            var previous = neighbour(el, -1);
+                            if (previous) { e.preventDefault(); previous.focus(); previous.setSelectionRange(previous.value.length, previous.value.length); }
+                        } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey && isFull(el)
+                                && el.selectionStart === el.selectionEnd && el.selectionEnd === el.value.length) {
+                            // typing past the end of a full blank continues in the next one
+                            var next = neighbour(el, 1);
+                            if (next) { next.focus(); next.select(); }
+                        }
+                    });
+                })();
+            </script>";
     }
 
     /**
