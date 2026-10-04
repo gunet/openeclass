@@ -13,28 +13,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Finds the spec folders (tests/e2e-pw/tests/<folder> with at least one *.spec.ts) and type-checks the
-  # suite once, so the matrix below gets one job per folder: install, basic, admin, ...
-  discover:
-    name: Find spec folders
+  typecheck:
+    name: Type-check the suite
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:
       run:
         working-directory: tests/e2e-pw
-    outputs:
-      suites: ${{ steps.suites.outputs.suites }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: List spec folders
-        id: suites
-        run: |
-          suites=$(find tests -name '*.spec.ts' | cut -d/ -f2 | sort -u | jq -R . | jq -cs .)
-          echo "Spec folders: $suites"
-          echo "suites=$suites" >> "$GITHUB_OUTPUT"
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2
@@ -44,19 +33,33 @@ jobs:
       - name: Install test dependencies
         run: bun install --frozen-lockfile
 
-      - name: Type-check the suite
+      - name: Type-check
         run: bun run test:e2e:typecheck
 
+  # The jobs are listed here rather than discovered from the spec folders. Playwright splits the specs
+  # between the shards (`--shard=i/n`, by whole spec file since the suite runs serially), so new specs
+  # need no change here: when the run gets slow, add a shard and bump `n` in every entry.
+  # Every job has its own stack: the `setup` project installs, seeds and logs every role in first.
+  # `install` is the exception: its specs need an empty site, so it runs on its own (test:e2e:install
+  # wipes the stack and runs only the wizard project).
   e2e:
-    name: Playwright (${{ matrix.suite }})
-    needs: discover
-    if: needs.discover.outputs.suites != '[]'
+    name: ${{ matrix.name }}
+    needs: typecheck
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
-        suite: ${{ fromJSON(needs.discover.outputs.suites) }}
+        include:
+          - name: Install wizard
+            command: test:e2e:install
+            id: install
+          - name: E2E (1/2)
+            command: test:e2e --shard=1/2
+            id: shard-1
+          - name: E2E (2/2)
+            command: test:e2e --shard=2/2
+            id: shard-2
     defaults:
       run:
         working-directory: tests/e2e-pw
@@ -81,16 +84,8 @@ jobs:
       - name: Start the e2e stack
         run: bun run e2e:up
 
-      # Every job has its own stack: the `setup` project installs, seeds and logs every role in first.
-      # `install` is the exception: its specs need an empty site, so it runs on its own (test:e2e:install
-      # wipes the stack and runs only the wizard project).
       - name: Run tests
-        run: |
-          if [ "${{ matrix.suite }}" = "install" ]; then
-            bun run test:e2e:install
-          else
-            bun run test:e2e "tests/${{ matrix.suite }}"
-          fi
+        run: bun run ${{ matrix.command }}
         env:
           CI: true
 
@@ -98,16 +93,55 @@ jobs:
       #   if: failure()
       #   run: bun run e2e:compose logs --no-color --timestamps
 
-      # - name: Upload report
-      #   if: failure()
+      # Needs the blob reporter in playwright.config.ts; the `report` job below merges the blobs.
+      # - name: Upload blob report
+      #   if: ${{ !cancelled() }}
       #   uses: actions/upload-artifact@v4
       #   with:
-      #     name: playwright-report-${{ matrix.suite }}
-      #     path: |
-      #       tests/e2e-pw/playwright-report
-      #       tests/e2e-pw/test-results
+      #     name: blob-report-${{ matrix.id }}
+      #     path: tests/e2e-pw/blob-report
       #     retention-days: 7
 
       - name: Stop the e2e stack
         if: always()
         run: bun run e2e:compose down -v
+
+  # One HTML report for the whole run, merged from every job's blob report.
+  # report:
+  #   name: Merge reports
+  #   needs: e2e
+  #   if: ${{ !cancelled() }}
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   defaults:
+  #     run:
+  #       working-directory: tests/e2e-pw
+  #
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Set up Bun
+  #       uses: oven-sh/setup-bun@v2
+  #       with:
+  #         bun-version: latest
+  #
+  #     - name: Install test dependencies
+  #       run: bun install --frozen-lockfile
+  #
+  #     - name: Download blob reports
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         pattern: blob-report-*
+  #         merge-multiple: true
+  #         path: tests/e2e-pw/all-blob-reports
+  #
+  #     - name: Merge into an HTML report
+  #       run: bunx playwright merge-reports --reporter html ./all-blob-reports
+  #
+  #     - name: Upload HTML report
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: playwright-report
+  #         path: tests/e2e-pw/playwright-report
+  #         retention-days: 7

@@ -33,6 +33,8 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['html', { outputFolder: './playwright-report', open: 'never' }],
+    // On CI, each job also writes a blob report that the workflow's `report` job merges into one HTML report.
+    // ...(process.env.CI ? [['blob', { outputDir: './blob-report' }] as const] : []),
   ],
   use: {
     baseURL,

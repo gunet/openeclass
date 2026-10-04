@@ -155,18 +155,22 @@ tests/e2e-pw/
     ├── modules/             # one folder per course module
     ├── collaboration/       # sessions platform (coordinator/consultant/user)
     ├── api/                 # REST v1, mobile, LTI, OAI-PMH, RSS/iCal feeds
-    └── i18n/                # el/en smoke
+    ├── i18n/                # el/en smoke
+    └── a11y/                # axe scans, page structure, keyboard & focus (§18)
 ```
 
 ### 0.7 CI – P1 (done 2026-10-03)
 - [x] `.github/workflows/e2e.yml`: on push to `master`, on pull requests and manually; one run per ref (older ones cancelled).
       checkout → setup-bun → `bun install --frozen-lockfile` → `playwright install --with-deps chromium` → `test:e2e:typecheck` →
-      `e2e:up` (image build) → `test:e2e` with `CI=true` → always `down -v`. The "stack logs" and "upload report" steps on failure
-      are in the file but commented out.
-- [x] Matrix per spec folder (2026-10-04): a `discover` job lists `tests/<folder>` with at least one `*.spec.ts` (currently `basic`,
-      `install`) and runs `test:e2e:typecheck` once; then one `Playwright (<folder>)` job per folder, `fail-fast: false`, each on its
-      own stack. `install` runs `test:e2e:install` (empty site), the others `test:e2e tests/<folder>` (setup project first). New
-      folders join the matrix with their first spec. The commented artifact name is per folder (`playwright-report-<folder>`).
+      `e2e:up` (image build) → `test:e2e` with `CI=true` → always `down -v`. The "stack logs" step on failure is in the file but
+      commented out.
+- [x] ~~Matrix per spec folder (2026-10-04)~~ replaced 2026-10-05 by a fixed matrix with Playwright sharding (as WooCommerce does):
+      a `typecheck` job runs `test:e2e:typecheck` once; then the `e2e` jobs listed in the workflow, `fail-fast: false`, each on its own
+      stack: `Install wizard` (`test:e2e:install`, empty site) and `E2E (i/n)` (`test:e2e --shard=i/n`, setup project first in every
+      shard). Playwright splits by whole spec file (serial suite), so new specs and folders need no workflow change; when the run gets
+      slow, add a shard entry and bump `n`. Spec files must not depend on another file having run first.
+- [ ] Merged report: blob reporter in `playwright.config.ts` (CI only), "upload blob report" step and `report` job
+      (`playwright merge-reports --reporter html`) are in the files but commented out.
 - [x] Checked locally on a copy holding only what git would commit (no host `vendor/`, generated JS or `node_modules`): 6 passed, and
       the generated JS is served from the image volumes. Not run on GitHub yet.
 - [ ] Optional matrix: `sso` profile on/off, collaboration platform on/off.
@@ -847,16 +851,74 @@ Cross-cutting checks (assert recipients, subject and the link inside):
 - [ ] No PHP warnings/notices/`Fatal error` in any page visited by the suite: add an `afterEach` hook that fails on page text matching
       `/(Warning|Notice|Deprecated|Fatal error):/` and on uncaught console errors.
 - [ ] Mobile viewport project (`devices['Pixel 7']`) for login, portfolio, course home, side menu toggle (P3).
-- [ ] P3 – `@axe-core/playwright` scan on homepage, login, portfolio, course home, exercise attempt.
+- Accessibility scans and keyboard checks moved to §18.
 
 ---
 
-## 18. Suggested order of work
+## 18. Accessibility (`tests/a11y`) – P2
+Target: WCAG 2.1 AA (the level the Greek public sector must meet under Directive (EU) 2016/2102). Upstream has been doing accessibility
+work (e.g. "Group: Accessibility improvements" on `default_mentoring`), so failures found here are worth reporting upstream.
+
+### 18.1 Tooling
+- [ ] Add `@axe-core/playwright` to `devDependencies`.
+- [ ] `utils/a11y.ts`: `scan(page, { include?, exclude? })` wrapping `AxeBuilder` with tags `wcag2a, wcag2aa, wcag21a, wcag21aa`; attaches the
+      full JSON result to the test report (`testInfo.attach`) and fails only on violations with impact `serious` or `critical`.
+- [ ] Known-violations baseline (`a11y-baseline.json`, keyed by URL pattern + rule id) so the suite can go green on today's markup and
+      fail only on **new** violations; a `bun run test:e2e:a11y:update` script rewrites it. Shrink the baseline as upstream fixes land.
+- [ ] Exclude third-party embeds the platform doesn't control (H5P iframes, video.js, TinyMCE internals, MathJax output) via `exclude`.
+- [ ] Add `tests/a11y/` to the 0.6 layout; the CI shards (0.7) pick up its specs automatically.
+
+### 18.2 Automated scans (axe), per role
+- [ ] `anon`: homepage, login form, registration (student and teacher request), lost password, course catalog, open course home,
+      info pages (`info/*.php`, including `accessibility.php` when `activate_accessibility_text` is on), search results.
+- [ ] `student`: portfolio, my courses, profile edit, calendar, messages, course home, units, documents, announcements, forum topic,
+      assignment submit, exercise attempt (one page per question type: unique/multiple answer, fill in blanks, matching, ordering,
+      drag and drop text/markers, free text, oral), exercise results, questionnaire answer, wiki, glossary.
+- [ ] `teacher`: course create wizard, course settings, users list, exercise/question editor, assignment grading, gradebook, attendance,
+      announcement create (TinyMCE page, editor itself excluded).
+- [ ] `admin`: admin index, user search/edit, course search, platform config, theme options.
+- [ ] Modals and dynamic states scanned after opening: delete confirmations (bootbox), strict-exam cancellation modal, cloud/upload
+      dialogs, dropdown menus, accordion panels expanded, form validation errors shown.
+- [ ] Each theme in `admin/theme_options.php` that ships with the platform: colour contrast (`color-contrast` rule) on homepage + course home.
+
+### 18.3 Page structure (explicit assertions, not just axe)
+- [ ] `<html lang>` matches the interface language (`el`/`en`/…) and switches with the language selector and `course.lang`.
+- [ ] Every page has a unique, non-empty `<title>` naming the page (not just the site name).
+- [ ] Exactly one `<main>` landmark; header/nav/footer landmarks present; exactly one `<h1>`; heading levels don't skip.
+- [ ] Skip link ("Skip to main content") as the first focusable element and it moves focus into `<main>` – none found in
+      `resources/views` while scanning, so expect this to fail first (report upstream).
+- [ ] All form inputs have an accessible name (label, `aria-label` or `aria-labelledby`); required fields expose `required`/`aria-required`;
+      validation errors are linked with `aria-describedby` and announced (`role="alert"` or live region).
+- [ ] Icon-only buttons/links (edit, delete, visibility toggles in module tables) have an accessible name – check with `getByRole(..., { name })`.
+- [ ] Images: content images have meaningful `alt`, decorative ones `alt=""`/`aria-hidden`.
+- [ ] Data tables (users, gradebook, results) use `<th>` with `scope` or headers; sortable columns announce sort state (`aria-sort`).
+
+### 18.4 Keyboard & focus
+- [ ] Log in, open a course, open a module and log out using only `Tab`/`Shift+Tab`/`Enter`/`Space` (no mouse).
+- [ ] Focus is always visible (`:focus-visible` outline not removed) – compare screenshots of a focused vs unfocused control on key pages.
+- [ ] No keyboard traps: tabbing through the homepage, course home and exercise attempt eventually returns to the address bar/first element.
+- [ ] Side menu (course tools) and user dropdown open/close with keyboard; `aria-expanded` toggles accordingly; `Escape` closes them.
+- [ ] Modals: focus moves into the modal on open, is trapped inside, `Escape` closes (except the strict-exam modal, which must stay open
+      until OK), and focus returns to the trigger on close.
+- [ ] Exercise question types that rely on drag and drop (ordering, matching, drag and drop text/markers) can be answered by keyboard,
+      or the gap is recorded as a known issue.
+- [ ] Exercise timer / auto-submit warning is announced (live region), not only shown visually.
+
+### 18.5 Visual adaptability – P3
+- [ ] 200% zoom (viewport 640×360 CSS px) and 320 px width reflow: no horizontal scroll on homepage, login, course home, exercise attempt.
+- [ ] `prefers-reduced-motion: reduce` (`page.emulateMedia`) disables carousel/animations on the homepage.
+- [ ] `forced-colors: active` (Windows high contrast emulation): buttons and focus outlines stay visible.
+- [ ] Text spacing override (WCAG 1.4.12: line-height 1.5, letter-spacing 0.12em, word-spacing 0.16em) doesn't clip content on key pages.
+
+---
+
+## 19. Suggested order of work
 1. §0 infrastructure + §1 seed + `auth.setup.ts` storing sessions for every role.
 2. §2 auth and §3 security: first verify the four "found while scanning" items, then §3.1 matrix, §3.3 IDOR, §3.5 CSRF, §3.8 uploads.
 3. §6 course lifecycle, §9 exercises, §10 assignments, §11.1/11.2/11.6/11.10/11.12/11.17 (P0 modules).
 4. §7 admin users/courses, then config.
 5. The remaining modules, §13 APIs, §14 mail, then P2/P3.
+6. §18 accessibility: tooling + baseline first, then anon/student scans, then keyboard checks.
 
 *Generated from a scan of `include/init.php` (roles and course access), `include/constants.php`, `modules/*`, `main/*`, `api/v1` and
 `resources/views/layouts/partials/sidebarAdmin.blade.php` (admin menu by privilege).*
