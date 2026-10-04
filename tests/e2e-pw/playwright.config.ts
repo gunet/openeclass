@@ -5,11 +5,14 @@ import { defineConfig, devices } from '@playwright/test';
  * docker-compose.e2e.yaml, port 8080). Specs share one site and its data, so they
  * run serially on one worker.
  *
- *   setup    – installs the site through the web wizard if needed, points mail at mailpit,
+ *   setup    – installs the site through the web wizard if needed, seeds the accounts and courses
+ *              through the PHP harness (once, then restores a snapshot), points mail at mailpit,
  *              logs each account in once and stores the session in .auth/
  *   chromium – the specs, reusing the stored sessions
  *   install  – the wizard's own specs, only with ECLASS_E2E_INSTALL=1 (`bun run test:e2e:install`,
  *              which starts from an empty stack)
+ *
+ * The global teardown undoes the harness's config overrides.
  *
  * Override the target with ECLASS_BASE_URL. Reports and traces land under
  * tests/e2e-pw/ (gitignored).
@@ -23,6 +26,7 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   forbidOnly: !!process.env.CI,
+  globalTeardown: './global-teardown.ts',
   retries: process.env.CI ? 1 : 0,
   timeout: 60_000,
   expect: { timeout: 10_000 },

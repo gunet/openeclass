@@ -1,48 +1,57 @@
 import path from 'node:path';
-import { expect } from '@playwright/test';
-import type { Page } from '@playwright/test';
 
 /**
  * Accounts and the stored-session paths written by `auth.setup.ts`.
  *
  * Lives here rather than in the setup file because Playwright refuses a test
- * file importing another test file.
+ * file importing another test file. The seed data that creates these accounts is
+ * in `seed.ts`.
  */
 
-export type Role = 'admin';
+/** Accounts with a stored session: every role that lands on its portfolio after logging in. */
+export const SESSION_ROLES = [
+  'admin',
+  'poweruser',
+  'usermanager',
+  'depadmin',
+  'teacher',
+  'teacher_other',
+  'editor',
+  'course_reviewer',
+  'oc_reviewer',
+  'tutor',
+  'student',
+  'student2',
+  'student_unenrolled',
+  'guest',
+] as const;
+
+/** Accounts that can't get a normal session (refused or redirected at login); specs log them in themselves. */
+export const SPECIAL_ROLES = ['expired', 'unverified', 'force_pw'] as const;
+
+export type SessionRole = (typeof SESSION_ROLES)[number];
+export type Role = SessionRole | (typeof SPECIAL_ROLES)[number];
 
 export type Credentials = { username: string; password: string };
 
-/** Only the install admin exists until the harness seeds the other roles. */
+/** Password of every seeded account (the install admin keeps its own). */
+export const SEED_PASSWORD = process.env.ECLASS_E2E_PASSWORD || 'E2e-Pass-1!';
+
+const seeded = (role: Role): Credentials => ({ username: `e2e_${role}`, password: SEED_PASSWORD });
+
 export const USERS: Record<Role, Credentials> = {
   admin: {
     username: process.env.ECLASS_ADMIN_USERNAME || 'admin',
     password: process.env.ECLASS_ADMIN_PASSWORD || 'secret',
   },
+  ...(Object.fromEntries(
+    [...SESSION_ROLES, ...SPECIAL_ROLES].filter((role) => role !== 'admin').map((role) => [role, seeded(role)]),
+  ) as Record<Exclude<Role, 'admin'>, Credentials>),
 };
 
 const AUTH_DIR = path.join(__dirname, '..', '.auth');
 
-export const STATE: Record<Role, string> = {
-  admin: path.join(AUTH_DIR, 'admin.json'),
-};
-
-/** The user menu, shown only to logged-in users. */
-export const userMenu = (page: Page) => page.locator('#btnGroupDrop1');
-
-/** The header "Login" link, shown only to visitors. */
-export const loginLink = (page: Page) => page.locator('a.header-login-text[href$="main/login_form.php"]').first();
-
-export async function login(page: Page, { username, password }: Credentials): Promise<void> {
-  await page.goto('/main/login_form.php');
-  await page.fill('#username_id', username);
-  await page.fill('#password_id', password);
-  await page.locator('input[name="submit"]').click();
-  await expect(userMenu(page)).toBeVisible();
-}
-
-export async function logout(page: Page): Promise<void> {
-  await userMenu(page).click();
-  await page.locator('#logoutForm button[type="submit"]').click();
-  await expect(loginLink(page)).toBeVisible();
-}
+/** `tests/e2e-pw/.auth/<role>.json`, for `test.use({ storageState: STATE.teacher })`. */
+export const STATE = Object.fromEntries(
+  SESSION_ROLES.map((role) => [role, path.join(AUTH_DIR, `${role}.json`)]),
+) as Record<SessionRole, string>;

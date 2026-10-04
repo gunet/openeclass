@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { login, loginLink, logout, STATE, USERS, userMenu } from '../../utils/auth';
+import { STATE, USERS } from '../../utils/auth';
+import { login, loginLink, logout, userMenu } from '../../utils/eclass';
 
 test.describe('authentication', () => {
 

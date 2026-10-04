@@ -13,10 +13,50 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Finds the spec folders (tests/e2e-pw/tests/<folder> with at least one *.spec.ts) and type-checks the
+  # suite once, so the matrix below gets one job per folder: install, basic, admin, ...
+  discover:
+    name: Find spec folders
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: tests/e2e-pw
+    outputs:
+      suites: ${{ steps.suites.outputs.suites }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: List spec folders
+        id: suites
+        run: |
+          suites=$(find tests -name '*.spec.ts' | cut -d/ -f2 | sort -u | jq -R . | jq -cs .)
+          echo "Spec folders: $suites"
+          echo "suites=$suites" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install test dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Type-check the suite
+        run: bun run test:e2e:typecheck
+
   e2e:
-    name: Playwright
+    name: Playwright (${{ matrix.suite }})
+    needs: discover
+    if: needs.discover.outputs.suites != '[]'
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: ${{ fromJSON(needs.discover.outputs.suites) }}
     defaults:
       run:
         working-directory: tests/e2e-pw
@@ -36,16 +76,21 @@ jobs:
       - name: Install Chromium
         run: bunx playwright install --with-deps chromium
 
-      - name: Type-check the suite
-        run: bun run test:e2e:typecheck
-
       # Builds the image and starts eclass, db and mailpit (docker-compose.e2e.yaml).
       # The suite would start it too, but a separate step keeps build errors apart from test failures.
       - name: Start the e2e stack
         run: bun run e2e:up
 
+      # Every job has its own stack: the `setup` project installs, seeds and logs every role in first.
+      # `install` is the exception: its specs need an empty site, so it runs on its own (test:e2e:install
+      # wipes the stack and runs only the wizard project).
       - name: Run tests
-        run: bun run test:e2e
+        run: |
+          if [ "${{ matrix.suite }}" = "install" ]; then
+            bun run test:e2e:install
+          else
+            bun run test:e2e "tests/${{ matrix.suite }}"
+          fi
         env:
           CI: true
 
@@ -57,7 +102,7 @@ jobs:
       #   if: failure()
       #   uses: actions/upload-artifact@v4
       #   with:
-      #     name: playwright-report
+      #     name: playwright-report-${{ matrix.suite }}
       #     path: |
       #       tests/e2e-pw/playwright-report
       #       tests/e2e-pw/test-results

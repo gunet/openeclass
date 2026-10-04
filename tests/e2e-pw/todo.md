@@ -27,8 +27,7 @@ Each item says which roles it should be run as. Role keys are defined in [§1](#
 - [x] `tests/install/install.spec.ts` is its own `install` project, run only by `bun run test:e2e:install` (wipes the stack, sets
       `ECLASS_E2E_INSTALL=1`). The wizard steps live in `utils/install.ts` `runWizard()`, shared with `setup`: admin from `USERS`,
       DB from `ECLASS_DB_*`, site URL from the base URL. Its Greek assertions are still there (see §16).
-- [x] Deleted the empty `tests/main/`, `tests/modules/` and `test-data/` folders. The 0.6 folders exist locally but aren't tracked (no
-      `.gitkeep`); each one gets into git with its first file.
+- [x] The 0.6 folders exist locally but aren't tracked (no `.gitkeep`); each one gets into git with its first file.
 
 Verified (before 0.3, on the dev stack): fresh stack → 8 passed; stopped stack → webServer starts it, 5 passed, 3 skipped. Current results under 0.3.
 
@@ -74,54 +73,76 @@ Verified (before 0.3, on the dev stack): fresh stack → 8 passed; stopped stack
 Verified: empty stack → 6 passed (wizard install in setup); installed site → 6 passed; `test:e2e:install` → 3 passed, then a normal run → 6 passed;
 password-reset mail captured by Mailpit; `restore('installed')` removes a user added after the snapshot.
 
-### 0.4 PHP control harness `fixtures/e2e-harness.php` – P0
-- [ ] Keep the harness out of the production image: the `Dockerfile` copies the whole repo, `tests/` included. Add `tests` to
-      `.dockerignore` (the e2e stack doesn't need it in the image, since it bind-mounts the repo). Until then the only guard is `ECLASS_E2E=1`.
-A single PHP entry point that bootstraps only the config and `Database` (without `include/init.php`).
-It refuses to run unless `getenv('ECLASS_E2E') === '1'`, and also needs the header `X-Eclass-E2E: eclass-e2e`. It is never part of the image.
-Endpoints (JSON):
-- [ ] `POST /seed` – departments, users for every role, courses for every visibility, enrolments with role flags (idempotent). Returns ids/codes.
-- [ ] `POST /reset` – restore the DB + `courses/` snapshot, clear mailpit, reset config overrides. Accepts `{config: {...}}` overrides.
-- [ ] `GET/POST /config` – `get_config` / `set_config` (registration toggles, `course_guest`, `double_login_lock`, `maintenance`,
-      `enable_strong_passwords`, `login_fail_*`, `email_verification_required`, `enable_mobileapi`, `show_collaboration`, `enable_tenant`, …).
-- [ ] `POST /users`, `POST /courses`, `POST /enrol` (`status`, `tutor`, `editor`, `course_reviewer`, `reviewer`), `POST /admin-rights`
-      (`privilege`, `department_id`).
-- [ ] `POST /course-module` – enable/disable a module in a course (`course_module.visible`).
-- [ ] `POST /time` – move dates for expiry/deadline specs (`user.expires_at`, `course.start_date/end_date`, assignment deadlines,
-      exercise start/end). This avoids sleeping or faking the system clock.
-- [ ] `POST /cron` – run `modules/admin/cron.php` jobs (notifications digest, `updatetheinactive`).
-- [ ] `GET /log?module=&action=` – read the `log` / `actions_daily` tables, so specs can check that logging and statistics happened.
-- [ ] `GET /file?path=` – check that a file exists under `courses/<code>/…`, for upload/delete specs.
-- [ ] `POST /api-token` – create an `api_token` row (for the REST API specs).
-- [ ] `POST /deactivate` – called by the global teardown. It restores the SMTP settings and clears overrides, so the dev site goes back to normal.
+### 0.4 PHP control harness `fixtures/e2e-harness.php` – P0 (done 2026-10-04)
+- [x] Kept out of the production image: `tests` is in `.dockerignore` (the e2e stack bind-mounts the repo, so it still serves the harness).
+- [x] Guard: 404 unless `getenv('ECLASS_E2E') === '1'` (php-fpm has `clear_env = no`), 403 without the header `X-Eclass-E2E: eclass-e2e`.
+- [x] Bootstrap without `include/init.php`: `vendor/autoload.php`, `include/main_lib.php`, `config/config.php`, `Database`, plus
+      `modules/admin/extconfig/externals.php` (`Course::refresh()` reindexes, and the indexer reads external app settings).
+      Library code reads the acting user from `$uid` (e.g. the indexer's async queue, NOT NULL), so the harness acts as the first platform admin.
+      `Debug::setOutput()` turns DB errors into exceptions → JSON `{error}` with 400 (bad input) / 500.
+- [x] Routing is `?action=<name>` (nginx has no PATH_INFO for PHP), JSON body for POST. Endpoints:
+  - [x] `GET ping`.
+  - [x] `POST seed` – departments, users, courses, enrolments, admin rights, prerequisites, in that order. Idempotent (matched by
+        code/username, users get their password reset). The data itself lives in TypeScript (`utils/seed.ts`), the harness is generic.
+  - [x] `POST reset` – **PHP side only**: undo config overrides, empty mailpit, drop FileCache files. The eclass container has no DB
+        client, so the DB + `courses/` snapshot restore stays in `utils/stack.ts`; `Harness.reset()` does both, then re-applies mailpit.
+  - [x] `GET/POST config` – read keys; override (the first override of a key stores its original in the `e2e_config_backup` config
+        row); `{restore: true}` puts every original back.
+  - [x] `POST departments`, `users`, `courses`, `enrol`, `admin-rights` (`privilege: 'none'` removes). New courses get what
+        `create_course.php` gives them: folders, `courses/<code>/index.php`, `course_module` rows, the default forum category,
+        departments + reindex. `create_modules()` needs `global $modules` (built in `include/init.php`), so the harness keeps its
+        own copy of the two module lists (`create_course_modules()`); keep them in sync.
+  - [x] `POST course-module` – `module` is a `MODULE_ID_<NAME>` suffix (`'forum'`) or number.
+  - [x] `POST time` – whitelisted date columns of `user`, `course`, `assignment`, `exercise`; values absolute or relative (`'-1 day'`).
+  - [x] `POST cron` – requests `modules/admin/cron.php` inside the container, with the site's own Host header (init.php redirects
+        other hosts to `base_url`).
+  - [x] `GET log?table=log|actions_daily&user=&course=&module=&type=&since=&limit=` – `type` (not `action`, which is the router's) is a
+        `LOG_<NAME>` suffix or number; `log.details` comes back unserialized.
+  - [x] `GET file?path=` – under `courses/` (or `video/…`), realpath-checked so it can't leave them; size + sha1, or the folder entries.
+  - [x] `POST api-token` – `api_token` + `api_token_course` rows (every course by default).
+  - [x] `POST deactivate` – undo every override (mail included). Called by `global-teardown.ts`.
 
-### 0.5 TypeScript utils – P0
-- [ ] `utils/harness.ts` – typed client for the endpoints above (`Harness` class, `call<T>()` that checks `response.ok()`).
-- [ ] `utils/fixtures.ts` – `test` extended with `harness`, `mail` (mailpit client) and `as(role)` (a new context with that role's storage state).
-- [ ] `utils/auth.ts` – `STATE[role]` paths (`tests/e2e-pw/.auth/<role>.json`) and `USERS[role]` credentials.
-- [ ] `utils/mail.ts` – mailpit API: `messages(to)`, `latest(to)`, `extractLink(msg, /lostpass|mail_verify/)`, `clear()`.
-- [ ] `utils/eclass.ts` – common UI helpers:
-  - `login(page, user)` (`#username_id`, `#password_id`, `input[name=submit]`), `logout(page)` (`#btnGroupDrop1` → `#logoutForm`).
-  - `gotoCourse(page, code, module?)` → `/courses/<code>/` or `/modules/<module>/index.php?course=<code>`.
-  - `csrfToken(page)` – read `input[name=token]` (forms use `generate_csrf_token_form_field()`).
-  - `flash(page)` – the `alert-*` message locator; `expectDenied(page)` – matches the `$langCheckAdmin` / `$langCheckPowerUser` /
-    `$langCheckUserManageUser` / `$langCheckDepartmentManageUser` / `$langCheckGuest` / `$langNoAdminAccess` / `$langSessionIsLost` error box.
-  - `confirmModal(page)` – the bootbox/`modalconfirmation` dialogs used for deletes.
-  - `dataTable(page)` – the DataTables search/paging used by user, course and log lists.
-- [ ] **Language:** force English in every stored session (`?localize=en`, which sets `$_SESSION['langswitch']` via
-      `include/lib/session.class.php`), so assertions don't depend on Greek strings. Keep one Greek smoke spec (§17).
-- [ ] `utils/files.ts` – generated fixtures in `test-data/`: a small pdf/docx/png/zip, a SCORM package, an IMS QTI xml, a GIFT/Aiken txt,
-      a users CSV for bulk registration, an H5P file, a course backup zip.
+Verified: every action by hand with curl (including the error paths and `../` in `file`), seeding twice gives the same ids, then the
+suite below.
+
+### 0.5 TypeScript utils – P0 (done 2026-10-04)
+- [x] `utils/harness.ts` – `Harness` with `call<T>()` (throws with the harness's error message unless 2xx) and a typed method per
+      action, `Harness.create(baseURL)` for setup/teardown, `reset({ snapshot, config })`, `useMailpit()`.
+- [x] `utils/fixtures.ts` – `test` with `harness`, `mail` and `as(role)` (a page in a new context with that role's stored session).
+- [x] `utils/auth.ts` – `SESSION_ROLES` (14 roles with a stored session), `SPECIAL_ROLES` (`expired`, `unverified`, `force_pw`: specs log
+      them in themselves), `USERS[role]` (`e2e_<role>` / `ECLASS_E2E_PASSWORD`, default `E2e-Pass-1!`; admin from the install),
+      `STATE[role]` (`.auth/<role>.json`).
+- [x] `utils/seed.ts` – the §1 data: departments `E2EDEPA → E2EDEPA1`, `E2EDEPB`; the 16 accounts; the 11 courses; enrolments and flags
+      (editor/tutor keep student status, `oc_reviewer` is teacher + `reviewer`, like `modules/user/index.php`); admin rights; the
+      `E2EPREREQ → E2EOPEN` prerequisite. `SEEDED_SNAPSHOT` = `seeded-<hash of SEED>`, so editing the seed data re-seeds.
+- [x] `auth.setup.ts` – install if needed → `installed` snapshot → (first time per seed version) restore `installed`, seed, snapshot
+      → `harness.reset()` from the seeded snapshot → log every session role in, in English, and store the session.
+- [x] `global-teardown.ts` – `harness.deactivate()`; warns instead of failing when the harness isn't reachable.
+- [x] `utils/mail.ts` – `Mailbox`: `messages(to)`, `message(id)`, `latest(to)` (polls), `extractLink(msg, /lostpass|mail_verify/)`, `clear()`.
+- [x] `utils/eclass.ts` – `login()` / `submitLogin()` (no outcome check, for refused logins) / `logout()`, `userMenu()`, `loginLink()`,
+      `useLanguage()`, `gotoCourse()`, `csrfToken()`, `flash(kind)`, `expectDenied()` (the English denial messages), `confirmModal()`
+      (both bootbox versions in `js/bootbox/`), `dataTable()` (DataTables 2: search, rows, paging, info).
+- [x] **Language:** `login()` switches the session to English (`/?localize=en`) before it is stored. One Greek smoke spec is still §17.
+- [x] `utils/files.ts` – `testFile(kind)` generates into `sample-data/.generated/` (gitignored) on first use, with a small zip writer:
+      pdf, png, docx, txt, zip, SCORM 1.2, IMS QTI 1.2, GIFT, Aiken, users CSV (bulk registration format), h5p (layout only, no
+      libraries), and a `.php` for upload-filter specs. Checked: `file` recognises each, `unzip -t` passes.
+- [ ] A course backup zip: its format is the app's own, so the backup spec should make one through the UI and restore that.
+- [ ] Not seeded yet: `teacher_limited` (course-admin sub-rights), group tutors (`group_members.is_tutor`), LDAP/CAS accounts,
+      the collaboration roles. Add them with the specs that need them.
+- [x] `tests/basic/harness.spec.ts` – smoke tests of the plumbing: sessions logged in and in English, `expectDenied`, a seeded course,
+      expired login refused, config override + restore, lost-password mail through mailpit, `file` and `log`.
+
+Verified: `bun run test:e2e` → 26 passed (seeding run ~15 s for setup; later runs restore the snapshot, ~5 s). `tsc` passes.
 
 ### 0.6 Layout (target)
 ```
 tests/e2e-pw/
 ├── playwright.config.ts
-├── auth.setup.ts            # CLI install (if needed) + harness.seed() + log every role in once
+├── auth.setup.ts            # wizard install (if needed) + harness.seed() / snapshot + log every role in once
 ├── global-teardown.ts       # harness.deactivate()
 ├── tsconfig.json  README.md
 ├── fixtures/e2e-harness.php
-├── test-data/               # upload fixtures
+├── sample-data/             # upload fixtures (utils/files.ts generates them into .generated/)
 ├── utils/{harness,fixtures,auth,mail,eclass,files}.ts
 └── tests/
     ├── install/             # wizard on an empty stack (separate project)
@@ -140,8 +161,12 @@ tests/e2e-pw/
 ### 0.7 CI – P1 (done 2026-10-03)
 - [x] `.github/workflows/e2e.yml`: on push to `master`, on pull requests and manually; one run per ref (older ones cancelled).
       checkout → setup-bun → `bun install --frozen-lockfile` → `playwright install --with-deps chromium` → `test:e2e:typecheck` →
-      `e2e:up` (image build) → `test:e2e` with `CI=true` → on failure: stack logs + `playwright-report`/`test-results` artifact (7 days)
-      → always `down -v`.
+      `e2e:up` (image build) → `test:e2e` with `CI=true` → always `down -v`. The "stack logs" and "upload report" steps on failure
+      are in the file but commented out.
+- [x] Matrix per spec folder (2026-10-04): a `discover` job lists `tests/<folder>` with at least one `*.spec.ts` (currently `basic`,
+      `install`) and runs `test:e2e:typecheck` once; then one `Playwright (<folder>)` job per folder, `fail-fast: false`, each on its
+      own stack. `install` runs `test:e2e:install` (empty site), the others `test:e2e tests/<folder>` (setup project first). New
+      folders join the matrix with their first spec. The commented artifact name is per folder (`playwright-report-<folder>`).
 - [x] Checked locally on a copy holding only what git would commit (no host `vendor/`, generated JS or `node_modules`): 6 passed, and
       the generated JS is served from the image volumes. Not run on GitHub yet.
 - [ ] Optional matrix: `sso` profile on/off, collaboration platform on/off.
@@ -203,27 +228,26 @@ sees its expected landing page (portfolio for users, `modules/admin/` link for a
 
 ## 2. Authentication & account lifecycle (`modules/auth`, `main/login_form.php`) – P0
 
-- [ ] Login with valid credentials — **every seeded role**; land on `main/portfolio.php`; the user menu `#btnGroupDrop1` is visible.
-- [ ] Login: wrong password, unknown user, empty fields → error, no session cookie.
-- [ ] Login: `expired` account refused; `unverified` → `mail_verify_change.php`; `force_pw` → `password_change.php` and cannot browse elsewhere.
-- [ ] Brute-force lockout (`login_fail_check`, `login_fail_threshold`, `login_fail_deny_interval`): N failures → blocked; unblocked after the interval (harness `/time`).
-- [ ] `double_login_lock`: a second session for the same user logs out the first (`LOG_LOGIN_DOUBLE`); power users are exempt.
-- [ ] Admin-only login page `main/login_form_admin.php` (`#Uname`, `#Pass`, `admin_login`) works for admin and is refused/ignored for others.
-- [ ] Logout from the user menu (POST `#logoutForm`); then protected pages show `$langSessionIsLost`.
-- [ ] Session expiry: delete the cookie → a `require_login` page shows "session lost"; the mobile UA (`eClassMobileApp`) → redirect to `msession_expired.php`.
-- [ ] Student self-registration `auth/registration.php` → `newuser.php` (`eclass_stud_reg` on/off; `email_required`, `am_required`; captcha off in e2e).
-- [ ] Strong passwords (`enable_strong_passwords`, `min_password_len`) rejected/accepted on registration and password change.
-- [ ] Teacher account request `auth/formuser.php` (`eclass_prof_reg`) → appears in `admin/listreq.php` → admin approves → mail sent → login as a teacher works;
-      reject path sends a rejection mail.
+- [x] Login with valid credentials — **every seeded role** (`tests/auth/auth.spec.ts`). Guests have no portfolio, so the check is that the user menu `#btnGroupDrop1` shows and the login link is gone, not the landing URL.
+- [x] Login: wrong password, unknown user and empty credentials → refused, no session (`tests/auth/auth.spec.ts`).
+- [x] `expired` refused; `unverified` → `mail_verify_change.php` (with `email_verification_required` on); `force_pw` → `password_change.php` (`tests/auth/auth.spec.ts`).
+- [~] Brute-force lockout: spec written but `test.fixme`'d — `increaseLoginFailure()` (auth.inc.php) runs only when `login_page` is unset, and the real form posts `?login_page=1`, so failures through the standard form are never counted. Worth confirming as a separate bug; lockout can't be driven via the form until then.
+- [x] `double_login_lock`: a second login for the same user invalidates the first session (`tests/auth/account-lifecycle.spec.ts`).
+- [x] Admin login page `main/login_form_admin.php` logs the admin in (`tests/auth/auth.spec.ts`). Note: `admin_login` only flags `MAINTENANCE_PAGE` so the page works during maintenance — it is NOT an admin-only gate, so there is no non-admin refusal to assert.
+- [x] Logout from the user menu ends the session; protected pages then bounce to login (`tests/auth/auth.spec.ts`).
+- [x] Session expiry: clearing the cookie logs the user out of `require_login` pages (`tests/auth/auth.spec.ts`). The mobile-UA `msession_expired` redirect is not covered.
+- [~] Student self-registration (`newuser.php`): deferred (`test.fixme` in `tests/auth/account-lifecycle.spec.ts`) — the form requires picking a department via the hierarchy node-picker widget.
+- [x] `min_password_len` is enforced on password reset (too-short rejected) (`tests/auth/account-lifecycle.spec.ts`). Registration-side strength not covered (see registration below).
+- [~] Teacher account request → admin approval: deferred (`test.fixme`) — multi-actor flow through `listreq.php`.
 - [ ] Student "request account" mode (`account_request`) when direct student registration is off.
-- [ ] Email verification: register with `email_verification_required` → mail with a `mail_verify.php` link → follow it → verified.
-- [ ] Lost password `auth/lostpass.php`: request link → mailpit → set a new password → old password no longer works; an expired/invalid token is refused.
-- [ ] Change password from the profile (`main/profile/password.php`): wrong current password, mismatch, success.
+- [~] Email verification full cycle: deferred (`test.fixme`) — needs the activation link out of the registration mail; only the login-time "redirect when required" half is covered in `auth.spec.ts`.
+- [x] Lost password full cycle: request → mailpit link → set new password → old stops, new works; and an invalid token is refused (`tests/auth/account-lifecycle.spec.ts`).
+- [x] Change password from the profile (`main/profile/password.php`): wrong current password is rejected, a correct change works (`tests/auth/account-lifecycle.spec.ts`).
 - [ ] `block_username_change` on/off on the profile.
 - [ ] Unregister account `main/unreguser.php` (student) – refused while still enrolled where the policy requires it; the account is removed.
 - [ ] User consent / privacy policy (`enable_user_consent`, `activate_privacy_policy_consent`): first login after enabling forces acceptance.
 - [ ] Maintenance mode (`maintenance=1`): non-admins are redirected to `maintenance/`; admin keeps access.
-- [ ] Upgrade in progress (`upgrade_begin`): non-admins are sent home with a warning.
+- [x] Upgrade in progress (`upgrade_begin`): non-admins are warned and sent home, admin is not blocked (`tests/auth/account-lifecycle.spec.ts`).
 - [ ] P2 – LDAP login (`auth=4`) and CAS login (`auth=7`) with the `sso` compose profile; first login auto-creates the account (`alt_auth_stud_reg`).
 - [ ] P2 – `admin/auth.php` enable/disable methods; `auth_test.php` "test connection" for LDAP; `auth_change.php` moves users between methods.
 - [ ] P3 – 2FA module (`secondfamoduleconf.php`) when enabled: enrol and challenge.
@@ -238,6 +262,13 @@ real finding. Items marked **(found while scanning – verify first)** come from
 running site yet.
 
 ### 3.1 Authorization – role × URL matrix
+- [~] **Data-driven matrix spec** started: `tests/security/authorization.spec.ts` covers the admin area (GET)
+      across {anon, student, teacher, usermanager, depadmin, poweruser, admin} for representative
+      `require_admin` / `require_usermanage_user` / `require_departmentmanage_user` pages, asserting
+      allowed (stays on page) vs denied (anon → login form; logged-in → portfolio + warning flash). Privilege
+      tiers from include/init.php. Still to add: POST actions, the full page list, the no-`require_*` pages,
+      AJAX endpoints, and course-level vertical checks. (Found while writing it: the seed is now authoritative
+      about admin rows — see the harness `seed` action — after a stale admin row surfaced from an old snapshot.)
 - [ ] **Data-driven matrix spec**. For each page, assert allowed or denied for **every** role
       in §1, with both GET and POST. Grouped by the `require_*` flag the page sets:
   - `$require_admin` (admin only): `eclassconf`, `extapp`, `auth*`, `modules.php`, `modules_default`, `widgets`, `manage_home`, `manage_footer`,
@@ -320,6 +351,7 @@ running site yet.
 - [ ] A token from user A's session is refused in user B's session.
 
 ### 3.6 Open redirect & header injection
+- [x] `main/student_view.php` unchecked `next` → off-site redirect: regression spec `tests/security/open-redirect.spec.ts` (asserts the safe behaviour, `test.fail`-marked until patched). Confirmed present on all open upstream branches.
 - [ ] **`main/student_view.php` does `header('Location: ' . $_POST['next'])` with no check** → `next=https://evil.example` must not redirect off-site
       **(found while scanning – verify first)**.
 - [ ] Login `next` (`auth.inc.php` → `redirect_to_home_page($next)`): try `//evil.example`, `/\evil.example`, `https:evil.example`,
@@ -362,6 +394,7 @@ running site yet.
 - [ ] Deleting a course/user removes its files from disk (harness `/file`).
 
 ### 3.9 Server/web configuration (docker image)
+- [x] `courses/cron.log` served under the web root: regression spec `tests/security/file-exposure.spec.ts` (asserts the safe behaviour, `test.fail`-marked until patched). Confirmed present on all open upstream branches. The deployment-dependent paths (`.git`, `composer.lock`, …) are `test.fixme` placeholders in the same file.
 - [ ] With the nginx config in `docker/nginx/default.conf` (no deny rules besides `.ht*`) **(found while scanning – verify first)**, request:
       `/config/config.php` (must not leak source), `/config/` listing, `/courses/<code>/document/<stored name>` direct fetch of an invisible
       document, `/courses/<code>/work/…`, `/video/…`, `/storage/views/…`, `/storage/logs`, `/modules/admin/sysinfo/phpsysinfo.ini`,
@@ -684,7 +717,7 @@ Run each as `admin`. Re-run the user/course items as `poweruser`, `usermanager` 
 
 ### 11.13 Learning paths (`learnPath/`) – P1
 - [ ] Create LP, add modules from documents/exercises/links/media/description (`insertMy*.php`), reorder, visibility, prerequisites/blocking.
-- [ ] Import a SCORM 1.2/2004 package (`importLearningPath.php`) from `test-data/`.
+- [ ] Import a SCORM 1.2/2004 package (`importLearningPath.php`) from `sample-data/` (`testFile('scorm')`).
 - [ ] Student runs the LP in the viewer (`viewer.php`, `navigation/`), progress is tracked (`record_action.php`), exercise inside the LP is scored.
 - [ ] Teacher progress reports (`details*.php`), export xls/pdf, clean attempts.
 - [ ] Modules pool (`modules_pool.php`).

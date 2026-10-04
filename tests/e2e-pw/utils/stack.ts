@@ -3,7 +3,8 @@ import { execFileSync } from 'node:child_process';
 
 /**
  * Drives the e2e docker stack (docker-compose.development.yaml + docker-compose.e2e.yaml)
- * from Node: install check, raw SQL, config values, and DB + course-file snapshots.
+ * from Node: install check, raw SQL, and DB + course-file snapshots. Config values and seed
+ * data go through the PHP harness instead (`harness.ts`).
  */
 
 const ROOT = path.resolve(__dirname, '..', '..', '..');
@@ -38,8 +39,6 @@ export function sql(query: string): string {
   );
 }
 
-const quote = (value: string): string => `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
-
 /**
  * Drop the app's FileCache files (include/lib/file_cache.class.php writes them to the
  * container's /tmp). get_config() reads config through that cache for 300s, so it has
@@ -47,30 +46,6 @@ const quote = (value: string): string => `'${value.replace(/\\/g, '\\\\').replac
  */
 export function clearCache(resource = '*'): void {
   compose(['exec', '-T', 'eclass', 'sh', '-c', `rm -f /tmp/*_${resource}.cache`]);
-}
-
-/** Write rows of the `config` table, like set_config() (including clearing its cache). */
-export function setConfig(values: Record<string, string | number>): void {
-  const rows = Object.entries(values).map(([key, value]) => `(${quote(key)}, ${quote(String(value))})`);
-  sql(`INSERT INTO config (\`key\`, \`value\`) VALUES ${rows.join(', ')} ON DUPLICATE KEY UPDATE \`value\` = VALUES(\`value\`);`);
-  clearCache('config');
-}
-
-export function getConfig(key: string): string | null {
-  const row = sql(`SELECT \`value\` FROM config WHERE \`key\` = ${quote(key)};`);
-  return row === '' ? null : row.replace(/\n$/, '');
-}
-
-/** Send all mail to the mailpit service of the e2e stack. */
-export function useMailpit(): void {
-  setConfig({
-    email_transport: 'smtp',
-    smtp_server: 'mailpit',
-    smtp_port: 1025,
-    smtp_encryption: '',
-    smtp_username: '',
-    smtp_password: '',
-  });
 }
 
 const SNAPSHOT_NAME = /^[a-z0-9-]+$/;
