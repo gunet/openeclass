@@ -14,7 +14,7 @@ Each item says which roles it should be run as. Role keys are defined in [§1](#
 - [x] Removed the dead `.gitignore` entry `e2e-pw/tests/playwright.config.ts` (anchored to the repo root, it matched nothing).
 - [x] Moved `playwright.config.ts` to `tests/e2e-pw/`: `testDir: './tests'`, `outputDir: './test-results'`, html reporter at `./playwright-report`.
 - [x] Config: `workers: 1`, `fullyParallel: false`, `forbidOnly: !!process.env.CI`, `retries: process.env.CI ? 1 : 0`, `timeout: 60_000`,
-      `expect.timeout: 10_000`, `actionTimeout: 15_000`, `trace/video: 'retain-on-failure'`, projects `install → setup → chromium`.
+      `expect.timeout: 10_000`, `actionTimeout: 15_000`, `trace/video: 'retain-on-failure'`, projects `install → setup → <suite>` (one per spec folder since 2026-10-05, see 0.7).
       `globalTeardown` is left for 0.4: it only has something to do once the harness exists.
 - [x] Base URL from env: `ECLASS_BASE_URL` (default `http://localhost`).
 - [x] `webServer` starts the e2e overlay (0.3). It runs `up -d --wait && tail -f /dev/null`, because Playwright fails when the
@@ -164,11 +164,12 @@ tests/e2e-pw/
       checkout → setup-bun → `bun install --frozen-lockfile` → `playwright install --with-deps chromium` → `test:e2e:typecheck` →
       `e2e:up` (image build) → `test:e2e` with `CI=true` → always `down -v`. The "stack logs" step on failure is in the file but
       commented out.
-- [x] ~~Matrix per spec folder (2026-10-04)~~ replaced 2026-10-05 by a fixed matrix with Playwright sharding (as WooCommerce does):
-      a `typecheck` job runs `test:e2e:typecheck` once; then the `e2e` jobs listed in the workflow, `fail-fast: false`, each on its own
-      stack: `Install wizard` (`test:e2e:install`, empty site) and `E2E (i/n)` (`test:e2e --shard=i/n`, setup project first in every
-      shard). Playwright splits by whole spec file (serial suite), so new specs and folders need no workflow change; when the run gets
-      slow, add a shard entry and bump `n`. Spec files must not depend on another file having run first.
+- [x] ~~Matrix per spec folder (2026-10-04)~~, ~~sharding (2026-10-05)~~ → named suites, as WooCommerce does (2026-10-05): one Playwright
+      project per spec folder (`suites` in `playwright.config.ts`: `basic`, `auth`, `security`), each listed as its own job in the workflow
+      (`Install`, `Basic`, `Auth`, `Security`, running `test:e2e --project=<suite>`), so the run shows which tests each job covers.
+      A `typecheck` job runs first. Two guards: the config refuses to load when a folder with specs isn't in `suites`, and the `typecheck`
+      job fails when a project has no job in `e2e.yml`. A new folder = add it to `suites` + one matrix entry. A slow suite can be split
+      with `--shard=i/n` entries (by whole spec file; spec files must not depend on another file having run first).
 - [ ] Merged report: blob reporter in `playwright.config.ts` (CI only), "upload blob report" step and `report` job
       (`playwright merge-reports --reporter html`) are in the files but commented out.
 - [x] Checked locally on a copy holding only what git would commit (no host `vendor/`, generated JS or `node_modules`): 6 passed, and
@@ -866,7 +867,7 @@ work (e.g. "Group: Accessibility improvements" on `default_mentoring`), so failu
 - [ ] Known-violations baseline (`a11y-baseline.json`, keyed by URL pattern + rule id) so the suite can go green on today's markup and
       fail only on **new** violations; a `bun run test:e2e:a11y:update` script rewrites it. Shrink the baseline as upstream fixes land.
 - [ ] Exclude third-party embeds the platform doesn't control (H5P iframes, video.js, TinyMCE internals, MathJax output) via `exclude`.
-- [ ] Add `tests/a11y/` to the 0.6 layout; the CI shards (0.7) pick up its specs automatically.
+- [ ] Add `tests/a11y/` to the 0.6 layout; add `a11y` to `suites` and an `A11y` job (0.7) with its first spec.
 
 ### 18.2 Automated scans (axe), per role
 - [ ] `anon`: homepage, login form, registration (student and teacher request), lost password, course catalog, open course home,

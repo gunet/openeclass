@@ -1,3 +1,5 @@
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { defineConfig, devices } from '@playwright/test';
 
 /**
@@ -8,7 +10,8 @@ import { defineConfig, devices } from '@playwright/test';
  *   setup    – installs the site through the web wizard if needed, seeds the accounts and courses
  *              through the PHP harness (once, then restores a snapshot), points mail at mailpit,
  *              logs each account in once and stores the session in .auth/
- *   chromium – the specs, reusing the stored sessions
+ *   <suite>  – one project per spec folder in `suites` below (basic, auth, security, …), reusing the stored
+ *              sessions. Run one with `--project=<suite>`; CI runs each as its own job (.github/workflows/e2e.yml)
  *   install  – the wizard's own specs, only with ECLASS_E2E_INSTALL=1 (`bun run test:e2e:install`,
  *              which starts from an empty stack)
  *
@@ -19,6 +22,18 @@ import { defineConfig, devices } from '@playwright/test';
  */
 const baseURL = process.env.ECLASS_BASE_URL || 'http://localhost:8080';
 const installMode = process.env.ECLASS_E2E_INSTALL === '1';
+
+// Spec folders under tests/, one project each. A new folder goes here and gets a job in e2e.yml.
+const suites = ['basic', 'auth', 'security'];
+
+// A spec folder missing from `suites` would never run, so refuse to load instead.
+const unlisted = readdirSync(join(__dirname, 'tests'), { withFileTypes: true })
+  .filter((d) => d.isDirectory() && d.name !== 'install' && !suites.includes(d.name))
+  .filter((d) => readdirSync(join(__dirname, 'tests', d.name), { recursive: true }).some((f) => String(f).endsWith('.spec.ts')))
+  .map((d) => d.name);
+if (unlisted.length) {
+  throw new Error(`Spec folders without a project: ${unlisted.join(', ')}. Add them to \`suites\` in playwright.config.ts and to e2e.yml.`);
+}
 
 export default defineConfig({
   testDir: './tests',
@@ -46,12 +61,12 @@ export default defineConfig({
     ? [{ name: 'install', testMatch: /install\/.*\.spec\.ts/, use: { ...devices['Desktop Chrome'] } }]
     : [
         { name: 'setup', testMatch: /auth\.setup\.ts/, testDir: '.' },
-        {
-          name: 'chromium',
-          testIgnore: /install\//,
+        ...suites.map((suite) => ({
+          name: suite,
+          testDir: `./tests/${suite}`,
           use: { ...devices['Desktop Chrome'] },
           dependencies: ['setup'],
-        },
+        })),
       ],
   webServer: {
     // `e2e:up` (`up -d --wait`) exits once the containers are healthy, and Playwright treats an exited

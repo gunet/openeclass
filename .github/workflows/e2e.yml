@@ -36,9 +36,17 @@ jobs:
       - name: Type-check
         run: bun run test:e2e:typecheck
 
-  # The jobs are listed here rather than discovered from the spec folders. Playwright splits the specs
-  # between the shards (`--shard=i/n`, by whole spec file since the suite runs serially), so new specs
-  # need no change here: when the run gets slow, add a shard and bump `n` in every entry.
+      # The config fails on a spec folder that has no project; this fails on a project that has no job below.
+      - name: Every suite has a job
+        run: |
+          for project in $(bunx playwright test --list --reporter=json | jq -r '.config.projects[].name' | grep -vx setup); do
+            grep -qE -- "--project=${project}( |$)" ../../.github/workflows/e2e.yml \
+              || { echo "::error::Playwright project '${project}' has no job in e2e.yml"; exit 1; }
+          done
+
+  # One job per suite: a Playwright project = a spec folder (`suites` in playwright.config.ts, which refuses to
+  # load when a folder with specs is missing there). A new folder gets an entry here. When a suite gets slow,
+  # split it into shards, e.g. two entries `--project=security --shard=1/2` and `--shard=2/2`.
   # Every job has its own stack: the `setup` project installs, seeds and logs every role in first.
   # `install` is the exception: its specs need an empty site, so it runs on its own (test:e2e:install
   # wipes the stack and runs only the wizard project).
@@ -51,15 +59,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Install wizard
+          - name: Install
             command: test:e2e:install
             id: install
-          - name: E2E (1/2)
-            command: test:e2e --shard=1/2
-            id: shard-1
-          - name: E2E (2/2)
-            command: test:e2e --shard=2/2
-            id: shard-2
+          - name: Basic
+            command: test:e2e --project=basic
+            id: basic
+          - name: Auth
+            command: test:e2e --project=auth
+            id: auth
+          - name: Security
+            command: test:e2e --project=security
+            id: security
     defaults:
       run:
         working-directory: tests/e2e-pw
