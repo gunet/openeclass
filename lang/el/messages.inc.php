@@ -2284,6 +2284,7 @@ $langFillBlanks = "Συμπλήρωση Κενών";
 $langFillBlanksStrict = "Αυστηρή Ταυτοποίηση";
 $langFillBlanksTolerant = "Χαλαρή Ταυτοποίηση";
 $langFillBlanksStrictExample = "(Αθήνα ≠ αθηνα ≠ ΑΘΗΝΑ)";
+$langFillBlanksAnswerWidth = "Προσαρμογή πλάτους κενού στο μήκος της απάντησης";
 $langFillBlanksTolerantExample = "(Αθήνα = αθηνα = ΑΘΗΝΑ)";
 $langFillFromSelectedWords = "Επιλογή από προκαθορισμένες απαντήσεις";
 $langMatching = "Αντιστοίχιση";
