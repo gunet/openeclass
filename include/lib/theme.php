@@ -54,7 +54,11 @@ function theme_initialization() {
 
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
 
         $styles_str .= "

@@ -145,7 +145,11 @@ if ($show_orphan_file and $file_path) {
 
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-$theme_options_styles = unserialize($theme_options->styles);
+$theme_options_styles = unserialize($theme_options->styles,
+                         [
+                            'allowed_classes' => ['stdClass'],
+                            'max_depth' => 0,
+                        ]);
 $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
 $logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo-small.png" ;
 

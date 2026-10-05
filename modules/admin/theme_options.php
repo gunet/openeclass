@@ -117,8 +117,13 @@ if (isset($_GET['export'])) {
         if (!is_dir("courses/theme_data")) make_dir('courses/theme_data');
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_name = $theme_options->name;
+        
+        $styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
 
-        $styles = unserialize($theme_options->styles);
         $export_data = base64_encode(serialize($theme_options));
         $export_data_file = 'courses/theme_data/theme_options.txt';
         file_put_contents('courses/theme_data/theme_options.txt', $export_data);
@@ -426,7 +431,11 @@ if (isset($_POST['optionsSave'])) {
         redirect_to_home_page('modules/admin/theme_options.php');
     }
 
-    $theme_options_styles = unserialize($theme_options->styles);
+    $theme_options_styles = unserialize($theme_options->styles,
+        [
+            'allowed_classes' => ['stdClass'],
+            'max_depth' => 0,
+        ]);
     @removeDir("$webDir/courses/theme_data/$theme_id");
     Database::get()->query("DELETE FROM theme_options WHERE id = ?d", $theme_id);
     if($_GET['delThemeId'] == $active_theme) {
@@ -787,7 +796,11 @@ if (isset($_POST['optionsSave'])) {
 
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
     }
     initialize_settings();
 
