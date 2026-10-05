@@ -41,9 +41,7 @@
                                 </h2>
                                 @if ($is_editor)
                                     <div>
-                                        <a href="{{ $urlAppend }}modules/analytics/index.php?course={{ $course_code }}&amp;analytics_id={{ $analytics->id }}&amp;edit_analytics=1" class="btn submitAdminBtn" title="{{ trans('langModify') }}" data-bs-toggle="tooltip">
-                                            <i class="fa-solid fa-gear"></i>
-                                        </a>
+                                        {!! $rule_action_button !!}
                                     </div>
                                 @endif
                             </div>
@@ -92,7 +90,7 @@
                                         <i class="fa-solid fa-chart-column fa-xl"></i>
                                     </div>
                                     <div>
-                                        <h3 class="text-heading-h3 mb-0 fw-bold" style="color: #0f172a; font-size: 1.4rem;">
+                                        <h3 class="text-heading-h3 mb-0 fw-bold" style="color: #0f172a; font-size: 1rem;">
                                             {{ trans('langAnalyticsDifficultyLevel') }}
                                         </h3>
                                         <p class="text-muted small mb-0 mt-1" style="color: #64748b;">
