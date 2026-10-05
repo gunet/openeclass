@@ -5445,7 +5445,11 @@ function upgrade_active_theme() {
         $cssFile = "$webDir/courses/theme_data/$theme_id/style_str.css";
         if (file_exists($cssFile)) {
             $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-            $theme_options_styles = unserialize($theme_options->styles);
+            $theme_options_styles = unserialize($theme_options->styles,
+                [
+                    'allowed_classes' => ['stdClass'],
+                    'max_depth' => 0,
+                ]);
             $theme_options_styles['bgColorContainerPortfolioInfo'] = 'rgba(0,0,0,0)';
             $theme_options_styles['bgBorderColorSectionContainers'] = $theme_options_styles['BorderLeftToRightColumnCourseBgColor'] ?? 'rgba(0,0,0,0)';
             $theme_options_styles['bgColorSectionContainers'] = $theme_options_styles['bgColor'] ?? 'rgba(0,0,0,0)';
