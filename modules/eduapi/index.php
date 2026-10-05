@@ -79,10 +79,6 @@ if (isset($_POST['import'])) {
         }
     }
 
-    // Increase execution time and memory limits for large imports
-    // set_time_limit(600); // 10 minutes
-    // ini_set('memory_limit', '512M');
-
     try {
         if (empty($sessionId) || empty($offeringIds)) {
             throw new Exception($langEduApiNoOfferingsSelected);
@@ -124,53 +120,7 @@ if (isset($_POST['import'])) {
         $header = $syncStudents ? $langEduApiSyncCompletedFull : $langEduApiSyncCompletedPartial;
         $message = $header . ' ' . q($summary['sessionCode']) . '.<br>';
 
-        $message .= "<strong>$langEduApiCoursesLabel</strong> $langEduApiCreated {$summary['coursesCreated']}, $langEduApiReused {$summary['coursesReused']}<br>";
-
-        if ($syncStudents) {
-            $message .= "<strong>$langEduApiUsersLabel</strong> $langEduApiCreated {$summary['usersCreated']}";
-            if ($summary['usersAdopted'] > 0) {
-                $message .= ", $langEduApiAdopted {$summary['usersAdopted']}";
-            }
-            if ($summary['usersRenamed'] > 0) {
-                $message .= ", $langEduApiRenamed {$summary['usersRenamed']}";
-            }
-            if ($summary['usersPromoted'] > 0) {
-                $message .= ", $langEduApiPromoted {$summary['usersPromoted']}";
-            }
-            $message .= '<br>';
-
-            $message .= "<strong>$langEduApiEnrollmentsLabel</strong> $langEduApiCreated {$summary['enrollmentsCreated']}<br>";
-
-            if (!empty($summary['skippedPersons'])) {
-                $skippedCount = count($summary['skippedPersons']);
-                $message .= "<br><strong class='text-warning'>&#9888;</strong> $skippedCount $langEduApiSkippedPersons<br>";
-                $message .= '<small>' . implode('<br>', array_map('q', array_slice($summary['skippedPersons'], 0, 10)));
-                if ($skippedCount > 10) {
-                    $message .= '<br>' . sprintf($langEduApiAndMore, $skippedCount - 10);
-                }
-                $message .= '</small><br>';
-            }
-        }
-
-        if (!empty($summary['warnings'])) {
-            $message .= "<br><strong>$langEduApiWarningsLabel</strong><br><small>" . implode('<br>', array_map('q', array_slice($summary['warnings'], 0, 10)));
-            if (count($summary['warnings']) > 10) {
-                $message .= '<br>' . sprintf($langEduApiAndMore, count($summary['warnings']) - 10);
-            }
-            $message .= '</small><br>';
-        }
-
-        if (!empty($summary['errors'])) {
-            $message .= "<br><strong>$langEduApiErrorsLabel</strong><br><small>" . implode('<br>', array_map('q', array_slice($summary['errors'], 0, 10)));
-            if (count($summary['errors']) > 10) {
-                $message .= '<br>' . sprintf($langEduApiAndMore, count($summary['errors']) - 10);
-            }
-            $message .= '</small><br>';
-        }
-
-        if ($summary['teachersNotified'] > 0) {
-            $message .= "<br><strong>{$summary['teachersNotified']} $langEduApiTeachersNotified</strong>";
-        }
+        $message .= Sync::summaryMessage($summary, $syncStudents);
 
         $alertClass = ($summary['coursesCreated'] > 0 || $summary['coursesReused'] > 0) ? 'alert-success' : 'alert-warning';
         Session::flash('message', $message);

@@ -489,20 +489,27 @@ function validateRenamedFile($filename, $menuTypeID = 2) {
  */
 function isWhitelistAllowed($filename, $additional = []) {
     global $is_editor, $uid, $is_admin;
+    static $whitelist_cache = [];
 
-    $wh = get_config('student_upload_whitelist');
-    $wh2 = ($is_editor or $is_admin) ? get_config('teacher_upload_whitelist') : '';
-
-    $wh .= (strlen($wh2) > 0) ? ', ' . $wh2 : '';
-
-    $wh3 = $uid? fetchUserWhitelist($uid): null;
-    $wh .= (!is_null($wh3)) ? ', ' . $wh3 : '';
-
-    $whitelist = explode(',', preg_replace('/\s+/', '', $wh)); // strip any whitespace
+    $cache_key = (($is_editor || $is_admin) ? 't' : 's') . '-' . (int) $uid;
+    if (!isset($whitelist_cache[$cache_key])) {
+        $parts = [(string) get_config('student_upload_whitelist')];
+        if ($is_editor || $is_admin) {
+            $parts[] = (string) get_config('teacher_upload_whitelist');
+        }
+        if ($uid) {
+            $parts[] = (string) fetchUserWhitelist($uid);
+        }
+        // join with a comma so adjacent lists never merge into a bogus extension, then drop empty entries
+        $whitelist_cache[$cache_key] = array_values(array_filter(
+            explode(',', preg_replace('/\s+/', '', implode(',', $parts))),
+            fn($ext) => $ext !== ''
+        ));
+    }
+    $whitelist = $whitelist_cache[$cache_key];
     if ($additional) {
         $whitelist = array_merge($whitelist, $additional);
     }
-
     // Hard-code common PHP file extensions exclusion
     if (preg_match('/\.(php.?|phtml|phar)$/i', $filename)) {
         return false;

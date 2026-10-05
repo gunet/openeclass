@@ -5,18 +5,18 @@
   "homepage": "https://www.openeclass.org/",
   "dependencies": {
     "@uppy/core": "^4.2.2",
-    "@uppy/form": "^4.2.2",
     "@uppy/dashboard": "^4.1.1",
     "@uppy/drag-drop": "^4.0.3",
+    "@uppy/form": "^4.2.2",
     "@uppy/locales": "^4.2.0",
     "@uppy/xhr-upload": "^4.2.1",
-    "h5p-standalone": "^3.8.0",
+    "dom-to-image": "^2.6.0",
+    "h5p-standalone": "^3.8.2",
+    "jsmind": "^0.9.1",
     "mathjax": "^4.1",
     "recordrtc": "^5.6.2",
     "video.js": "^8.19",
-    "codemirror": "^5.65.20",
-    "jsmind": "^0.9.1",
-    "dom-to-image": "^2.6.0"
+    "codemirror": "^5.65.20"
   },
   "scripts": {
     "postinstall": "php ./js/build/build.php"

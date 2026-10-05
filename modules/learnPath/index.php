@@ -403,6 +403,28 @@ $head_content .= "<link href='" . $urlAppend . "js/bundle/uppy.min.css' rel='sty
 $tool_content .= "
     <script>
         let isUppyLoaded = false;
+        let uploadErrorMessage = '';
+
+        function renderUploadNotice(message, type) {
+            let container = document.getElementById('lpUploadNotices');
+            if (!container) {
+                return;
+            }
+            container.innerHTML = '';
+            if (!message) {
+                return;
+            }
+            let alert = document.createElement('div');
+            alert.className = 'alert alert-' + type;
+            let icon = document.createElement('i');
+            icon.className = type === 'success' ? 'fa-solid fa-circle-check fa-lg' : 'fa-solid fa-circle-xmark fa-lg';
+            let text = document.createElement('span');
+            text.style.whiteSpace = 'pre-line';
+            text.textContent = message;
+            alert.appendChild(icon);
+            alert.appendChild(text);
+            container.appendChild(alert);
+        }
 
         async function loadUppy() {
             try {
@@ -463,8 +485,16 @@ $tool_content .= "
                         'replace_id' 
                     ],
                     shouldRetry: () => false,
-                    getResponseData: (responseText, response) => {
-                        return { url: '' }; 
+                    // on a failed response the body is discarded, so keep the message the server sent
+                    onAfterResponse: (xhr) => {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            return;
+                        }
+                        try {
+                            uploadErrorMessage = JSON.parse(xhr.responseText).message || '';
+                        } catch (e) {
+                            uploadErrorMessage = '';
+                        }
                     }
                 })
 
@@ -477,7 +507,16 @@ $tool_content .= "
                   //  console.log('File added:', file)
                 })
 
+                uppy.on('upload-error', (file, error) => {
+                    renderUploadNotice(uploadErrorMessage || error.message, 'danger');
+                })
+
                 uppy.on('complete', (result) => {
+                    if (result.failed.length > 0) {
+                        // the reason is already rendered by upload-error, stay here to allow a retry
+                        return;
+                    }
+                    // the server queued the success message as a flash, the target page renders it
                     window.location.href = '" . documentBackLink('') . "';
                 })
                 
@@ -504,6 +543,7 @@ $tool_content .= "
     </script>
 ";
 
+$tool_content .= "<div class='col-12' id='lpUploadNotices'></div>";
 $tool_content .= "<div class='col-12 drag_and_drop_container d-none mb-3'><div id='uppy'></div></div>";
 
 // check if there are learning paths available

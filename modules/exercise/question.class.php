@@ -888,6 +888,66 @@ class Question {
     }
 
     /**
+     * Display length of a fill-in-blanks blank: the length of its longest accepted
+     * answer, e.g. 6 for [colour|color]. Alternatives are split as in grading.
+     * @param string $blank - the blank as it appears in the text, brackets included
+     * @return int - at least 1
+     */
+    static function blankDisplayLength(string $blank): int {
+        $blank = preg_replace('/^\[|\]$/', '', $blank);
+        $length = 1;
+        foreach (preg_split('/\s*\|\s*/', $blank) as $alternative) {
+            $alternative = trim(html_entity_decode(strip_tags($alternative), ENT_QUOTES, 'UTF-8'));
+            $length = max($length, mb_strlen($alternative));
+        }
+        return $length;
+    }
+
+    /**
+     * Script for blanks sized to their answer: a full blank moves the cursor to the next blank of
+     * the same question (so the next letter goes there), Backspace in an empty blank goes back.
+     * Safe to output more than once: it installs its listeners only the first time.
+     * @return string
+     */
+    static function blankAutoAdvanceScript(): string {
+        return "
+            <script>
+                (function () {
+                    if (window.fillInBlankAutoAdvance) { return; }
+                    window.fillInBlankAutoAdvance = true;
+                    var selector = 'input.fill-in-the-blank-sized';
+                    function neighbour(el, step) {
+                        var container = el.closest('.container-fill-in-the-blank');
+                        var blanks = container ? Array.prototype.slice.call(container.querySelectorAll(selector)) : [el];
+                        return blanks[blanks.indexOf(el) + step] || null;
+                    }
+                    function isFull(el) {
+                        return el.maxLength > 0 && el.value.length >= el.maxLength;
+                    }
+                    document.addEventListener('input', function (e) {
+                        var el = e.target;
+                        if (!el.matches || !el.matches(selector) || (e.inputType && e.inputType.indexOf('delete') === 0)) { return; }
+                        var next = isFull(el) ? neighbour(el, 1) : null;
+                        if (next) { next.focus(); next.select(); }
+                    });
+                    document.addEventListener('keydown', function (e) {
+                        var el = e.target;
+                        if (!el.matches || !el.matches(selector)) { return; }
+                        if (e.key === 'Backspace' && el.value === '') {
+                            var previous = neighbour(el, -1);
+                            if (previous) { e.preventDefault(); previous.focus(); previous.setSelectionRange(previous.value.length, previous.value.length); }
+                        } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey && isFull(el)
+                                && el.selectionStart === el.selectionEnd && el.selectionEnd === el.value.length) {
+                            // typing past the end of a full blank continues in the next one
+                            var next = neighbour(el, 1);
+                            if (next) { next.focus(); next.select(); }
+                        }
+                    });
+                })();
+            </script>";
+    }
+
+    /**
      * Get array of answers from blanks in fill-in-blanks answers
      */
     static function getBlanks($string) {
