@@ -111,7 +111,7 @@ function display_learning_analytics() {
  */
 function display_general_lists($analytics_id) {
     global $course_id, $course_code, $tool_content, $head_content, $langDetail,
-           $langMessage, $langAnalyticsAdvancedLevel, $langAnalyticsCriticalLevel,
+           $langMessage, $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel,
            $langSurnameName, $langActions, $langNoResult,
            $langDisplay, $langResults2, $langDisplayed, $langTill, $langFrom2, $langTotalResults, $langSearchFrom, $langSearch;
 
@@ -156,8 +156,8 @@ function display_general_lists($analytics_id) {
     $analytics_elements = Database::get()->queryArray("SELECT * FROM analytics_element WHERE analytics_id= ?d", $analytics_id);
 
     foreach ($analytics_elements as $analytics_element) {
-        $message_advanced = $message_critical = '';
-        $good_results = $bad_results = '';
+        $message_advanced = $message_middle = $message_critical = '';
+        $good_results = $middle_results = $bad_results = '';
         $module_id = $analytics_element->module_id;
         $resource = $analytics_element->resource;
         $analytics_element_id = $analytics_element->id;
@@ -170,13 +170,17 @@ function display_general_lists($analytics_id) {
                 AND u.status = " . USER_STUDENT ."", $course_id);
 
         $critical = array();
+        $middle = array();
         $advanced = array();
         foreach ($users as $user) {
             $user_result = Database::get()->querySingle("SELECT SUM(value) AS value FROM user_analytics WHERE user_id=?d and analytics_element_id = ?d", $user->id, $analytics_element_id);
-            if($user_result->value >= $upper_threshold) {
+            $val = floatval($user_result->value ?? 0);
+            if ($val >= $upper_threshold) {
                 array_push($advanced, array('id' => $user->id, 'givenname' => $user->givenname, 'surname' => $user->surname));
-            } else if($user_result->value <= $lower_threshold) {
+            } else if ($val <= $lower_threshold) {
                 array_push($critical, array('id' => $user->id, 'givenname' => $user->givenname, 'surname' => $user->surname));
+            } else {
+                array_push($middle, array('id' => $user->id, 'givenname' => $user->givenname, 'surname' => $user->surname));
             }
         }
 
@@ -205,6 +209,34 @@ function display_general_lists($analytics_id) {
                     </td>
                 </tr>";
             }
+        }
+
+        if (count($middle) > 0) {
+            $message_middle = $langAnalyticsMiddleLevel;
+            $middle_results = "<div class='table-responsive mt-2 mb-4'>";
+            $middle_results .= "<table class='table-default analytics-element-table' id='table_middle_$analytics_element_id'>";
+            $middle_results .= "<thead><tr class='list-header'><th>$langSurnameName</th><th class='text-end'>$langActions</th></tr></thead><tbody>";
+            foreach ($middle as $mid) {
+                $userid = $mid['id'];
+                $middle_results .= "<tr>
+                    <td>". display_user($userid) ."</td>
+                    <td class='text-end'>
+                        " . action_button(
+                            array(
+                                array('title' => $langDetail,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
+                                        'icon' => 'fa-regular fa-user'
+                                ),
+                                array('title' => $langMessage,
+                                    'url' => "../message/index.php?course=$course_code&upload=1&type=cm&user_id=$userid",
+                                    'icon' => 'fa-envelope'
+                                )
+                            )) 
+                        . "
+                    </td>
+                </tr>";
+            }
+            $middle_results .= "</tbody></table></div>";
         }
 
         if (count($advanced) > 0) {
@@ -236,6 +268,7 @@ function display_general_lists($analytics_id) {
         }
 
         $advanced_count = count($advanced);
+        $middle_count = count($middle);
         $critical_count = count($critical);
 
         $tool_content .= "
@@ -247,14 +280,17 @@ function display_general_lists($analytics_id) {
                                     <ul class='list-group list-group-flush'>
                                         <li class='list-group-item px-0 bg-transparent'>
                                             <div class='d-flex justify-content-between'>
-                                                <a class='accordion-btn d-flex justify-content-between align-items-center w-100 py-2 text-decoration-none' role='button' data-bs-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
+                                                <a class='accordion-btn d-flex flex-column align-items-start flex-md-row align-items-md-center justify-content-between w-100 py-2 text-decoration-none' role='button' data-bs-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
                                                     <div class='d-flex align-items-center gap-2'>
                                                         <i class='fa-solid fa-chevron-down settings-icon'></i>
                                                         <span class='fw-bold'>" . get_resource_info($resource, $module_id) . "</span>
                                                     </div>
-                                                    <div class='d-flex align-items-center gap-2 flex-wrap ms-auto me-3'>
+                                                    <div class='d-flex flex-column align-items-start flex-md-row align-items-md-center gap-2 ms-md-auto me-3 mt-2 mt-md-0'>
                                                         <span class='badge bg-success-subtle text-success border border-success-subtle px-2 py-1 me-1' style='font-size: 0.825rem;'>
                                                             <i class='fa-solid fa-arrow-up me-1'></i>$langAnalyticsAdvancedLevel: $advanced_count
+                                                        </span>
+                                                        <span class='badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1 me-1' style='font-size: 0.825rem;'>
+                                                            <i class='fa-solid fa-minus me-1'></i>$langAnalyticsMiddleLevel: $middle_count
                                                         </span>
                                                         <span class='badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1' style='font-size: 0.825rem;'>
                                                             <i class='fa-solid fa-arrow-down me-1'></i>$langAnalyticsCriticalLevel: $critical_count
@@ -263,14 +299,9 @@ function display_general_lists($analytics_id) {
                                                 </a>
                                             </div>
                                             <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='LearnAnalyticsResource$module_id' data-bs-parent='#accordionDes$module_id'>
-                                                <div class='text-heading-h6 text-success'>$message_advanced</div>
-                                                <div class='res-table-wrapper'>
-                                                    $good_results
-                                                </div>                                                    
-                                                <div class='text-heading-h6 text-danger'>$message_critical</div>
-                                                <div class='res-table-wrapper'>
-                                                    $bad_results
-                                                </div>       
+                                                " . ($advanced_count > 0 ? "<div class='text-heading-h6 text-success'>$message_advanced</div><div class='res-table-wrapper'>$good_results</div>" : "") . "
+                                                " . ($middle_count > 0 ? "<div class='text-heading-h6 text-warning'>$message_middle</div><div class='res-table-wrapper'>$middle_results</div>" : "") . "
+                                                " . ($critical_count > 0 ? "<div class='text-heading-h6 text-danger'>$message_critical</div><div class='res-table-wrapper'>$bad_results</div>" : "") . "
                                             </div>
                                         </li>
                                     </ul>
