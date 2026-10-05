@@ -72,21 +72,7 @@ class Sync {
      * @throws Exception on fatal errors (config, no offerings, missing top node)
      */
     public function run(string $sessionId, array $offeringIds, bool $syncStudents, array $codePrefixes = [], array $approvedOrgs = null): array {
-        $summary = [
-            'sessionCode' => '',
-            'nodesCreated' => 0,
-            'coursesCreated' => 0,
-            'coursesReused' => 0,
-            'usersCreated' => 0,
-            'usersAdopted' => 0,
-            'usersRenamed' => 0,
-            'usersPromoted' => 0,
-            'enrollmentsCreated' => 0,
-            'skippedPersons' => [],
-            'warnings' => [],
-            'errors' => [],
-            'teachersNotified' => 0,
-        ];
+        $summary = self::emptySummary();
 
         if (!$this->topNode) {
             throw new Exception($GLOBALS['langEduApiTopNodeNotFound']);
@@ -244,56 +230,218 @@ class Sync {
             if (!isset($courseIdByOffering[$offId])) {
                 continue; // course creation failed - already reported
             }
-            try {
-                $students = [];
-                $teachers = [];
-                foreach ($this->service->getEnrollments($offId) as $enrollment) {
-                    if (strcasecmp($enrollment->recordStatus ?? 'active', 'active') !== 0) {
-                        continue;
-                    }
-                    $enrollmentStatus = strtolower($enrollment->enrollmentStatus ?? 'accepted');
-                    if (!in_array($enrollmentStatus, ['accepted', 'active'])) {
-                        continue;
-                    }
-                    $pid = $enrollment->person ?? null;
-                    if (!$pid) {
-                        continue;
-                    }
-                    $isTeacher = Service::isTeacherRole($enrollment->role ?? 'student');
-                    if ($isTeacher) {
-                        $teachers[$pid] = true;
-                    } else {
-                        $students[$pid] = true;
-                    }
-                    if (!isset($distinctPersons[$pid])) {
-                        $distinctPersons[$pid] = ['person' => null, 'isTeacher' => $isTeacher];
-                    } else {
-                        $distinctPersons[$pid]['isTeacher'] = $distinctPersons[$pid]['isTeacher'] || $isTeacher;
-                    }
-                }
+            $this->collectRoster($offId, $distinctPersons, $offeringRoster, $summary);
+        }
 
-                // Person data comes from the offering's /students and /staff endpoints
-                foreach ($this->service->getStudents($offId) as $person) {
-                    $this->attachPersonData($distinctPersons, $person, false);
-                }
-                foreach ($this->service->getStaff($offId) as $person) {
-                    $this->attachPersonData($distinctPersons, $person, true);
-                }
+        $this->applyRosters($distinctPersons, $offeringRoster, $courseIdByOffering, $now, $summary);
 
-                $offeringRoster[$offId] = [
-                    'students' => array_keys($students),
-                    'teachers' => array_keys($teachers),
-                ];
-            } catch (Exception $e) {
-                $summary['errors'][] = "Offering {$offId}: " . $e->getMessage();
+        return $summary;
+    }
+
+    /**
+     * Roster-only sync of a single, already mapped course offering: users,
+     * enrollments (add-only) and missing-student notification. Never creates
+     * courses or hierarchy nodes, safe to run by the course teacher.
+     *
+     * @param string $sourcedId course offering sourcedId (from eduapi_course_offerings)
+     * @param int $courseId mapped eClass course id
+     * @param array $summary summary counters, see emptySummary()
+     * @throws Exception on missing top node
+     */
+    public function syncOfferingRoster(string $sourcedId, int $courseId, array &$summary): void {
+        if (!$this->topNode) {
+            throw new Exception($GLOBALS['langEduApiTopNodeNotFound']);
+        }
+
+        $now = date('Y-m-d H:i:s');
+        $distinctPersons = [];
+        $offeringRoster = [];
+
+        $this->collectRoster($sourcedId, $distinctPersons, $offeringRoster, $summary);
+        if (!isset($offeringRoster[$sourcedId])) {
+            return; // API fetch failed - already reported
+        }
+
+        $this->applyRosters($distinctPersons, $offeringRoster, [$sourcedId => $courseId], $now, $summary);
+
+        Database::get()->query(
+            "UPDATE eduapi_course_offerings SET last_sync = ?t WHERE sourced_id = ?s",
+            $now, $sourcedId);
+    }
+
+    /**
+     * School node of an Edu-API course, used as top node by the course-level
+     * sync: the nearest ancestor of the course's department that is not an
+     * Edu-API managed (organization / session) node, i.e. the node the admin
+     * sync ran under. Falls back to the root node.
+     */
+    public static function courseSchoolNode(int $courseId): ?object {
+        $node = Database::get()->querySingle(
+            "SELECT h.id, h.code, h.lft, h.rgt
+               FROM course_department cd
+               JOIN hierarchy d ON d.id = cd.department
+               JOIN hierarchy h ON h.lft <= d.lft AND h.rgt >= d.rgt
+              WHERE cd.course = ?d
+                AND h.id NOT IN (SELECT hierarchy_id FROM eduapi_nodes)
+              ORDER BY h.lft DESC
+              LIMIT 1", $courseId);
+        if (!$node) {
+            $node = Database::get()->querySingle("SELECT id, code, lft, rgt FROM hierarchy WHERE lft = 1");
+        }
+        return $node ?: null;
+    }
+
+    /**
+     * Initial summary structure shared by run() and syncOfferingRoster()
+     */
+    public static function emptySummary(): array {
+        return [
+            'sessionCode' => '',
+            'nodesCreated' => 0,
+            'coursesCreated' => 0,
+            'coursesReused' => 0,
+            'usersCreated' => 0,
+            'usersAdopted' => 0,
+            'usersRenamed' => 0,
+            'usersPromoted' => 0,
+            'enrollmentsCreated' => 0,
+            'skippedPersons' => [],
+            'missingStudents' => [],
+            'warnings' => [],
+            'errors' => [],
+            'teachersNotified' => 0,
+        ];
+    }
+
+    /**
+     * HTML body of the sync result message (without header line)
+     *
+     * @param array $summary see emptySummary()
+     * @param bool $syncStudents include users / enrollments / skipped persons
+     * @param bool $courseLevel single-course roster sync: omit the courses line, list the students missing from the API roster
+     */
+    public static function summaryMessage(array $summary, bool $syncStudents, bool $courseLevel = false): string {
+        $lang = $GLOBALS;
+        $message = '';
+
+        if (!$courseLevel) {
+            $message .= "<strong>$lang[langEduApiCoursesLabel]</strong> $lang[langEduApiCreated] {$summary['coursesCreated']}, $lang[langEduApiReused] {$summary['coursesReused']}<br>";
+        }
+
+        if ($syncStudents) {
+            $message .= "<strong>$lang[langEduApiUsersLabel]</strong> $lang[langEduApiCreated] {$summary['usersCreated']}";
+            if ($summary['usersAdopted'] > 0) {
+                $message .= ", $lang[langEduApiAdopted] {$summary['usersAdopted']}";
+            }
+            if ($summary['usersRenamed'] > 0) {
+                $message .= ", $lang[langEduApiRenamed] {$summary['usersRenamed']}";
+            }
+            if ($summary['usersPromoted'] > 0) {
+                $message .= ", $lang[langEduApiPromoted] {$summary['usersPromoted']}";
+            }
+            $message .= '<br>';
+
+            $message .= "<strong>$lang[langEduApiEnrollmentsLabel]</strong> $lang[langEduApiCreated] {$summary['enrollmentsCreated']}<br>";
+
+            if (!empty($summary['skippedPersons'])) {
+                $skippedCount = count($summary['skippedPersons']);
+                $message .= "<br><strong class='text-warning'>&#9888;</strong> $skippedCount $lang[langEduApiSkippedPersons]<br>";
+                $message .= '<small>' . self::messageList($summary['skippedPersons']) . '</small><br>';
+            }
+
+            if ($courseLevel && !empty($summary['missingStudents'])) {
+                $message .= "<br><strong>$lang[langEduApiMissingStudentsLabel]</strong><br>";
+                $message .= '<small>' . self::messageList($summary['missingStudents']) . '</small><br>';
             }
         }
 
+        if (!empty($summary['warnings'])) {
+            $message .= "<br><strong>$lang[langEduApiWarningsLabel]</strong><br><small>" . self::messageList($summary['warnings']) . '</small><br>';
+        }
+
+        if (!empty($summary['errors'])) {
+            $message .= "<br><strong>$lang[langEduApiErrorsLabel]</strong><br><small>" . self::messageList($summary['errors']) . '</small><br>';
+        }
+
+        if ($summary['teachersNotified'] > 0) {
+            $message .= "<br><strong>{$summary['teachersNotified']} $lang[langEduApiTeachersNotified]</strong>";
+        }
+
+        return $message;
+    }
+
+    /**
+     * First 10 items escaped and <br>-joined, plus an "and N more" line
+     */
+    private static function messageList(array $items): string {
+        $out = implode('<br>', array_map('q', array_slice($items, 0, 10)));
+        if (count($items) > 10) {
+            $out .= '<br>' . sprintf($GLOBALS['langEduApiAndMore'], count($items) - 10);
+        }
+        return $out;
+    }
+
+    /**
+     * Fetch the active roster of one offering from the API: enrollments
+     * (person id + role) plus person data from /students and /staff.
+     */
+    private function collectRoster(string $offId, array &$distinctPersons, array &$offeringRoster, array &$summary): void {
+        try {
+            $students = [];
+            $teachers = [];
+            foreach ($this->service->getEnrollments($offId) as $enrollment) {
+                if (strcasecmp($enrollment->recordStatus ?? 'active', 'active') !== 0) {
+                    continue;
+                }
+                $enrollmentStatus = strtolower($enrollment->enrollmentStatus ?? 'accepted');
+                if (!in_array($enrollmentStatus, ['accepted', 'active'])) {
+                    continue;
+                }
+                $pid = $enrollment->person ?? null;
+                if (!$pid) {
+                    continue;
+                }
+                $isTeacher = Service::isTeacherRole($enrollment->role ?? 'student');
+                if ($isTeacher) {
+                    $teachers[$pid] = true;
+                } else {
+                    $students[$pid] = true;
+                }
+                if (!isset($distinctPersons[$pid])) {
+                    $distinctPersons[$pid] = ['person' => null, 'isTeacher' => $isTeacher];
+                } else {
+                    $distinctPersons[$pid]['isTeacher'] = $distinctPersons[$pid]['isTeacher'] || $isTeacher;
+                }
+            }
+
+            // Person data comes from the offering's /students and /staff endpoints
+            foreach ($this->service->getStudents($offId) as $person) {
+                $this->attachPersonData($distinctPersons, $person, false);
+            }
+            foreach ($this->service->getStaff($offId) as $person) {
+                $this->attachPersonData($distinctPersons, $person, true);
+            }
+
+            $offeringRoster[$offId] = [
+                'students' => array_keys($students),
+                'teachers' => array_keys($teachers),
+            ];
+        } catch (Exception $e) {
+            $summary['errors'][] = "Offering {$offId}: " . $e->getMessage();
+        }
+    }
+
+    /**
+     * Upsert users, enroll them (add-only) and notify teachers about
+     * students enrolled in eClass but missing from the API roster.
+     *
+     * @param array $courseIdByOffering offering sourcedId => course id
+     */
+    private function applyRosters(array $distinctPersons, array $offeringRoster, array $courseIdByOffering, string $registeredAt, array &$summary): void {
         // ---- User upsert ----
         $userIdMap = $this->upsertUsers($distinctPersons, $summary);
 
         // ---- Enrollments (add-only) + missing-student detection ----
-        $registeredAt = $now;
         $missingStudentsByCourse = [];
 
         foreach ($offeringRoster as $offId => $roster) {
@@ -330,9 +478,20 @@ class Sync {
             }
         }
 
-        $summary['teachersNotified'] = $this->notifyTeachers($missingStudentsByCourse);
+        // Labels of the missing students, for the result message
+        if (!empty($missingStudentsByCourse)) {
+            $missingIds = array_values(array_unique(array_merge(...array_values($missingStudentsByCourse))));
+            $placeholders = implode(',', array_fill(0, count($missingIds), '?d'));
+            $missingUsers = Database::get()->queryArray(
+                "SELECT username, CONCAT(surname, ' ', givenname) AS fullname FROM user WHERE id IN ($placeholders)",
+                ...$missingIds);
+            foreach ($missingUsers as $missingUser) {
+                $fullname = trim($missingUser->fullname);
+                $summary['missingStudents'][] = ($fullname !== '' ? $fullname . ' ' : '') . '(' . $missingUser->username . ')';
+            }
+        }
 
-        return $summary;
+        $summary['teachersNotified'] = $this->notifyTeachers($missingStudentsByCourse);
     }
 
     /**

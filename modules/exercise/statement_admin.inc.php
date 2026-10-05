@@ -178,6 +178,16 @@ if (isset($_POST['submitQuestion'])) {
         $objQuestion->updateDescription($questionDescription);
         $objQuestion->updateFeedback($questionFeedback);
         $objQuestion->updateType($answerType);
+        // fill in blanks: size blanks to their answer. Merged into the existing JSON options.
+        if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
+            $questionOptions = json_decode($objQuestion->selectOptions() ?? '', true) ?: [];
+            if (isset($_POST['fill_in_blank_answer_width'])) {
+                $questionOptions['blankWidthByAnswer'] = true;
+            } else {
+                unset($questionOptions['blankWidthByAnswer']);
+            }
+            $objQuestion->updateOptions($questionOptions ? json_encode($questionOptions) : null);
+        }
         $objQuestion->updateDifficulty($_POST['difficulty']);
         $objQuestion->updateCategory($_POST['category']);
 
@@ -312,11 +322,21 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     if (Session::has('answerType')) {
         $answerType = Session::get('answerType');
     }
+    // fill in blanks: are blanks sized to their answer? (JSON in the question's options)
+    $questionOptions = json_decode($objQuestion->selectOptions() ?? '', true);
+    $blankWidthByAnswer = !empty($questionOptions['blankWidthByAnswer']);
     $options = "<option value='0'>-- $langQuestionWithoutCat --</option>\n";
     foreach ($q_cats as $q_cat) {
         $options .= "<option value='{$q_cat->question_cat_id}' " . (($category == $q_cat->question_cat_id) ? 'selected' : '') . '>' . q($q_cat->question_cat_name) . "</option>\n";
     }
     enableCheckFileSize();
+
+    $qTypesNoStricterMode = array(ORAL => "$langOral", UPLOAD_FILE => "$langUploadFile");
+    $stricterExamMode = $objExercise->getOption('stricterExamRestriction') ? 1: 0;
+    if ($stricterExamMode) {
+        $qTypesNoStricterMode = [];
+    }
+
     $tool_content .= "
         <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
@@ -354,8 +374,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                     DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
                                     CALCULATED => $langCalculated,
                                     FREE_TEXT => "$langFreeText",
-                                    ORAL => "$langOral",
-                                    UPLOAD_FILE => "$langUploadFile",
+                                    ...$qTypesNoStricterMode
                                 ],
                                 'answerType',
                                 (isset($answerType)) ? ($answerType == FILL_IN_BLANKS ? FILL_IN_BLANKS_TOLERANT : $answerType) : UNIQUE_ANSWER,
@@ -366,6 +385,10 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                                 <label class='label-container' aria-label='$langSettingSelect'>
                                                     <input type='checkbox' name='fill_in_blank_strict' value=".FILL_IN_BLANKS." ". ($answerType == FILL_IN_BLANKS ? 'checked' : '') .">
                                                     <span class='checkmark'></span>$langFillBlanksStrict $langFillBlanksStrictExample
+                                                </label>
+                                                <label class='label-container' aria-label='$langSettingSelect'>
+                                                    <input type='checkbox' name='fill_in_blank_answer_width' value='1' ". ($blankWidthByAnswer ? 'checked' : '') .">
+                                                    <span class='checkmark'></span>$langFillBlanksAnswerWidth
                                                 </label>
                             </div>
                         </div>

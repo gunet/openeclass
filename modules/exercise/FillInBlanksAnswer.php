@@ -38,6 +38,11 @@ class FillInBlanksAnswer extends QuestionType
         $html_content = "<div class='container-fill-in-the-blank'>";
 
         $questionId = $this->question_id;
+        // optional per question: size each blank to its longest accepted answer
+        $objQuestion = new Question();
+        $objQuestion->read($questionId);
+        $questionOptions = json_decode($objQuestion->selectOptions() ?? '', true);
+        $blankWidthByAnswer = !empty($questionOptions['blankWidthByAnswer']);
         $nbrAnswers = $this->answer_object->selectNbrAnswers();
         $answer_object_ids = range(1, $nbrAnswers);
         foreach ($answer_object_ids as $answerId) {
@@ -48,16 +53,26 @@ class FillInBlanksAnswer extends QuestionType
             // splits text and weightings that are joined with the character '::'
             list($answer) = Question::blanksSplitAnswer($answerTitle);
             // replaces [blank] by an input field
-            $replace_callback = function () use ($questionId, $exerciseResult, $question_number) {
+            $replace_callback = function ($m) use ($questionId, $exerciseResult, $question_number, $blankWidthByAnswer) {
                 static $id = 0;
                 $id++;
                 $value = (isset($exerciseResult[$questionId][$id])) ? ('value = "'.q($exerciseResult[$questionId][$id]) .'"') : '';
-                return "<input class='form-control fill-in-the-blank' type='text' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
+                $class = 'form-control fill-in-the-blank';
+                $size = '';
+                if ($blankWidthByAnswer) {
+                    $len = Question::blankDisplayLength($m[0]);
+                    $class .= ' fill-in-the-blank-sized';
+                    $size = "size='$len' maxlength='$len' style='width: {$len}ch'";
+                }
+                return "<input class='$class' type='text' name='choice[$questionId][$id]' $size $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
             };
             $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer));
             $html_content .= $answer;
         }
         $html_content .= "</div>";
+        if ($blankWidthByAnswer) {
+            $html_content .= Question::blankAutoAdvanceScript();
+        }
 
         return $html_content;
     }

@@ -26,11 +26,51 @@ $helpTopic = 'course_users';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'include/course_settings.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/eduapi/Service.php';
+require_once 'modules/eduapi/Sync.php';
+
+use modules\eduapi\Service;
+use modules\eduapi\Sync;
 
 $up = new Permissions();
 if (!$up->has_course_users_permission()) {
     Session::Messages($langCheckCourseAdmin, 'alert-danger');
     redirect_to_home_page('courses/'. $course_code);
+}
+
+// Edu-API course-level roster sync (course must be mapped to an offering)
+if (isset($_POST['sync_eduapi'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+        csrf_token_error();
+    }
+    $offering = Database::get()->querySingle("SELECT sourced_id, academic_session_code FROM eduapi_course_offerings WHERE course_id = ?d", $course_id);
+    if (!$offering) {
+        Session::flash('message', $langEduApiCourseNotMapped);
+        Session::flash('alert-class', 'alert-danger');
+        redirect_to_home_page("modules/user/index.php?course=$course_code");
+    }
+    try {
+        $service = new Service();
+        $service->checkAppEnabled();
+        $topNode = Sync::courseSchoolNode($course_id);
+        if (!$topNode) {
+            throw new Exception($langEduApiTopNodeNotFound);
+        }
+
+        $sync = new Sync($service, $topNode, new Hierarchy(), $language, $uid, "$_SESSION[givenname] $_SESSION[surname]");
+        $summary = Sync::emptySummary();
+        $sync->syncOfferingRoster($offering->sourced_id, $course_id, $summary);
+
+        $message = $langEduApiCourseSyncCompleted . ' ' . q($offering->academic_session_code) . '.<br>';
+        $message .= Sync::summaryMessage($summary, true, true);
+        Session::flash('message', $message);
+        Session::flash('alert-class', empty($summary['errors']) ? 'alert-success' : 'alert-warning');
+    } catch (Exception $e) {
+        Session::flash('message', $langEduApiImportFailed . ' ' . q($e->getMessage()));
+        Session::flash('alert-class', 'alert-danger');
+    }
+    redirect_to_home_page("modules/user/index.php?course=$course_code");
 }
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])
@@ -465,8 +505,26 @@ if (course_status($course_id) == COURSE_CLOSED) {
     }
 }
 
+// Edu-API sync button: only for courses mapped to an offering, app enabled
+$eduapiOffering = Database::get()->querySingle("SELECT sourced_id, academic_session_code, last_sync FROM eduapi_course_offerings WHERE course_id = ?d", $course_id);
+$showEduApiSync = false;
+if ($eduapiOffering) {
+    try {
+        (new Service())->checkAppEnabled();
+        $showEduApiSync = true;
+    } catch (Exception $e) {
+        // app disabled or not configured: no button
+    }
+}
+$data['eduapiOffering'] = $showEduApiSync ? $eduapiOffering : null;
+
 $data['ajaxUrl'] = "$_SERVER[SCRIPT_NAME]?course=$course_code";
 $data['action_bar'] = action_bar([
+    ['title' => $langEduApiSyncCourse,
+      'url' => '#eduapiSyncModal',
+      'icon' => 'fa-solid fa-rotate',
+      'link-attrs' => 'data-bs-toggle="modal" data-bs-target="#eduapiSyncModal"',
+      'show' => $showEduApiSync],
     ['title' => "$langAdd $langOneUser",
       'url' => "adduser.php?course=$course_code",
       'icon' => 'fa-solid fa-user',

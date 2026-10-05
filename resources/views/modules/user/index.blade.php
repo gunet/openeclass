@@ -336,6 +336,34 @@
 
                     @include('layouts.partials.show_alert')
 
+                    @if ($eduapiOffering)
+                        <div class='modal fade' id='eduapiSyncModal' tabindex='-1' aria-labelledby='eduapiSyncModalLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <form class='modal-content' method='post' action='{{ $urlAppend }}modules/user/index.php?course={{ $course_code }}'>
+                                    <div class='modal-header'>
+                                        <h2 class='modal-title' id='eduapiSyncModalLabel'>{{ trans('langEduApiSyncCourse') }}</h2>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <p>{{ trans('langEduApiSyncCourseConfirm') }}</p>
+                                        <ul class='mt-3'>
+                                            <li>{{ trans('langEduApiAcademicSession') }}: <strong>{{ $eduapiOffering->academic_session_code }}</strong></li>
+                                            <li>{{ trans('langEduApiLastSync') }}:
+                                                <strong>{{ $eduapiOffering->last_sync ? format_locale_date(strtotime($eduapiOffering->last_sync)) : '-' }}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class='modal-footer'>
+                                        {!! generate_csrf_token_form_field() !!}
+                                        <input type='hidden' name='sync_eduapi' value='1'>
+                                        <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>{{ trans('langCancel') }}</a>
+                                        <button type='submit' class='btn submitAdminBtnDefault'>{{ trans('langEduApiSyncCourse') }}</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class='col-12'>
                         <div class='table-responsive'>
                             <table id='users_table_{{ $course_code }}' class='table-default'>
