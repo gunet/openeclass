@@ -41,7 +41,7 @@ if (isset($_GET['attachment'])) {
 
 // locate course id
 $course_id = null;
-$res1 = Database::get()->querySingle("SELECT course.id FROM course WHERE course.code = ?s", q($_GET['course']));
+$res1 = Database::get()->querySingle("SELECT id, visible FROM course WHERE code = ?s", q($_GET['course']));
 if ($res1) {
     $course_id = intval($res1->id);
 }
@@ -68,7 +68,15 @@ if (!$res2) {
     exit();
 }
 
-$valid = isset($_GET['token']) && token_validate($res2->path, $_GET['token'], 30);
+$valid = false;
+
+if ($res1->visible == COURSE_OPEN) {
+    $valid = true;
+} else if (isset($_GET['token']) && token_validate($res2->path, $_GET['token'], 30)) {
+    $valid = true;
+} else if (isset($uid) && (user_is_registered_to_course($uid, $course_id) || $is_admin)) {
+    $valid = true;
+}
 
 if (!$valid) {
     header("Location: $urlServer");

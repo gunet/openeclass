@@ -437,7 +437,7 @@ $tool_content .= "<div class='col-12'>
                                         if ($q) {
                                             $u_name = $q->name;
                                         }
-                                        $tool_content .= "<input type='hidden' name='recipients' value='$_GET[id]'>
+                                        $tool_content .= "<input type='hidden' name='recipients' value='" . intval($_GET['id']) . "'>
                                                         <div class='form-group mt-4'>
                                                             <div class='col-sm-12 control-label-notes'>$langSendTo</div>
                                                             <div class='col-sm-12'>

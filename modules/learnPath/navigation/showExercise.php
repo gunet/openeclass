@@ -384,8 +384,19 @@ function showQuestion($questionId, $onlyAnswers = false) {
         } elseif ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
-            // replaces [blank] by an input field
-            $answer = preg_replace('/\[[^]]+\]/', '<input class="form-control" type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape($answer));
+            // replaces [blank] by an input field, sized to its answer if the question asks for it
+            $questionOptions = json_decode($objQuestionTmp->selectOptions() ?? '', true);
+            $blankWidthByAnswer = !empty($questionOptions['blankWidthByAnswer']);
+            $answer = preg_replace_callback('/\[[^]]+\]/', function ($m) use ($questionId, $blankWidthByAnswer) {
+                if ($blankWidthByAnswer) {
+                    $len = Question::blankDisplayLength($m[0]);
+                    return '<input class="form-control fill-in-the-blank-sized" type="text" name="choice[' . $questionId . '][]" size="' . $len . '" maxlength="' . $len . '" style="width: ' . $len . 'ch" />';
+                }
+                return '<input class="form-control" type="text" name="choice[' . $questionId . '][]" size="10" />';
+            }, standard_text_escape($answer));
+            if ($blankWidthByAnswer) {
+                $answer .= Question::blankAutoAdvanceScript();
+            }
         }
 
         if ($answerType == UNIQUE_ANSWER) { // unique answer
