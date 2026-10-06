@@ -91,6 +91,19 @@ function widget_css_link($file, $folder) {
     $head_content .= "<link href='$urlAppend{$folder}/css/$file$v' rel='stylesheet' type='text/css'>\n";
 }
 
+
+function getAvailableWidgets(string $basePath = 'Widgets/Openeclass'): array
+{
+    $basePath = rtrim($basePath, '/\\');
+    $widgets = [];
+
+    $subDirs = glob($basePath . '/*', GLOB_ONLYDIR);
+    foreach ($subDirs as $dir) {
+        $widgets[] = str_replace(DIRECTORY_SEPARATOR, '\\', $dir . DIRECTORY_SEPARATOR . basename($dir) . 'Widget');
+    }
+    return $widgets;
+}
+
 /**
  * @brief  include a JavaScript file from the main js directory
  * @global type $head_content
