@@ -130,15 +130,45 @@
                 goToStep(1);
             });
 
+            function updateSelectedCoursesList() {
+                var $checked = $('#course_results_table input.select_course_checkbox:checked');
+                var checkedCount = $checked.length;
+                $('#selected_courses_count').text(checkedCount);
+
+                var $list = $('#selected_courses_list');
+                $list.empty();
+
+                $checked.each(function() {
+                    var $row = $(this).closest('tr');
+                    var courseTitleHtml = $row.find('td:nth-child(2)').html() || '';
+                    var courseDeptText = $row.find('td:nth-child(3)').text() || '';
+
+                    var $li = $('<li class="list-group-item bg-white d-flex justify-content-between align-items-center py-2 px-3 border-bottom"></li>');
+                    var $titleDiv = $('<div></div>').html(courseTitleHtml);
+                    var $deptSpan = $('<span class="badge bg-secondary text-wrap ms-2" style="max-width: 250px;"></span>').text(courseDeptText.trim());
+
+                    $li.append($titleDiv).append($deptSpan);
+                    $list.append($li);
+                });
+            }
+
             $('#step2_next_btn').on('click', function() {
                 var checkedCount = $('#course_results_table input.select_course_checkbox:checked').length;
                 if (checkedCount === 0) {
-                    alert('{{ js_escape(trans('langNoCourseSelected') ?? 'Δεν έχετε επιλέξει κανένα μάθημα.') }}');
+                    alert('{{ js_escape( trans('langNoCourseSelected') ) }}');
                     return false;
                 }
-                $('#selected_courses_count').text(checkedCount);
+                updateSelectedCoursesList();
                 goToStep(3);
                 toggleBulkActionUI();
+            });
+
+            $(document).on('show.bs.collapse', '#selectedCoursesCollapse', function () {
+                $('#accordion_chevron').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+            });
+
+            $(document).on('hide.bs.collapse', '#selectedCoursesCollapse', function () {
+                $('#accordion_chevron').removeClass('fa-chevron-up').addClass('fa-chevron-down');
             });
 
             $('#step3_prev_btn').on('click', function() {
@@ -158,12 +188,12 @@
 
                 if (checkedCount === 0) {
                     e.preventDefault();
-                    alert('{{ js_escape(trans('langNoCourseSelected') ?? 'Δεν έχετε επιλέξει κανένα μάθημα.') }}');
+                    alert('{{ js_escape(trans('langNoCourseSelected') ) }}');
                     return false;
                 }
 
                 if (action === 'delete') {
-                    if (!confirm('{{ js_escape(trans('langCourseDelConfirm2') ?? 'Θέλετε σίγουρα να διαγράψετε τα επιλεγμένα μαθήματα;') }}')) {
+                    if (!confirm('{{ js_escape(trans('langCourseDelConfirm2') ) }}')) {
                         e.preventDefault();
                         return false;
                     }
@@ -193,7 +223,6 @@
 
             @include('layouts.partials.show_alert')
 
-            <!-- Wizard Progress Header -->
             <div class="col-12 mb-4">
                 <div class="card border-0 bg-light p-3">
                     <div class="d-flex justify-content-between align-items-center position-relative">
@@ -204,18 +233,17 @@
                         <div class="wizard-step-line flex-fill bg-secondary mx-2" style="height: 2px;"></div>
                         <div class="wizard-step text-center flex-fill position-relative opacity-50" id="wizard_step2">
                             <div class="step-badge rounded-circle bg-secondary text-white mx-auto d-flex align-items-center justify-content-center mb-1" style="width: 36px; height: 36px; font-weight: bold;">2</div>
-                            <span class="step-label fw-bold text-secondary">{{ trans('langSelectCourses') ?? 'Επιλογή Μαθημάτων' }}</span>
+                            <span class="step-label fw-bold text-secondary">{{ trans('langSelectCourses') }}</span>
                         </div>
                         <div class="wizard-step-line flex-fill bg-secondary mx-2" style="height: 2px;"></div>
                         <div class="wizard-step text-center flex-fill position-relative opacity-50" id="wizard_step3">
                             <div class="step-badge rounded-circle bg-secondary text-white mx-auto d-flex align-items-center justify-content-center mb-1" style="width: 36px; height: 36px; font-weight: bold;">3</div>
-                            <span class="step-label fw-bold text-secondary">{{ trans('langActions') ?? 'Ενέργειες' }}</span>
+                            <span class="step-label fw-bold text-secondary">{{ trans('langActions') }}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- STEP 1: Search Form -->
             <div id="step1_container" class="col-12">
                 <div class="row">
                     <div class="col-lg-6 col-12">
@@ -274,7 +302,7 @@
                                     <div class="form-group mt-5">
                                         <div class="col-12 d-flex justify-content-end align-items-center gap-2">
                                             <button class="btn submitAdminBtn" type="submit" name="search_submit" id="search_submit">
-                                                {{ trans('langNext') ?? 'Επόμενο' }}<i class="fa-solid fa-arrow-right ms-1"></i>
+                                                {{ trans('langNext') }}<i class="fa-solid fa-arrow-right ms-1"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -288,11 +316,9 @@
                 </div>
             </div>
 
-            <!-- Bulk Actions & Table Form wrapping Step 2 and Step 3 -->
             <form id="bulkActionsForm" action="{{ $_SERVER['SCRIPT_NAME'] }}" method="post" class="w-100">
                 {!! generate_csrf_token_form_field() !!}
 
-                <!-- STEP 2: Course Selection Table -->
                 <div id="step2_container" class="col-12 mt-3" style="display: none;">
                     <table id="course_results_table" class="table-default display" style="width: 100%;">
                         <thead>
@@ -306,28 +332,45 @@
                         </tbody>
                     </table>
 
-                    <!-- Step 2 Navigation Buttons -->
                     <div class="col-12 mt-4 d-flex justify-content-between align-items-center">
                         <button type="button" class="btn cancelAdminBtn" id="step2_prev_btn">
-                            <i class="fa-solid fa-arrow-left me-1"></i>{{ trans('langPrevious') ?? 'Προηγούμενο' }}
+                            <i class="fa-solid fa-arrow-left me-1"></i>{{ trans('langPrevious') }}
                         </button>
                         <button type="button" class="btn submitAdminBtn" id="step2_next_btn">
-                            {{ trans('langNext') ?? 'Επόμενο' }}<i class="fa-solid fa-arrow-right ms-1"></i>
+                            {{ trans('langNext') }}<i class="fa-solid fa-arrow-right ms-1"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- STEP 3: Actions Selection -->
                 <div id="step3_container" class="col-12 mt-3" style="display: none;">
-                    <!-- Selected Courses Summary Badge -->
-                    <div class="alert alert-info mb-4 d-flex align-items-center justify-content-between">
-                        <div>
-                            <i class="fa-solid fa-circle-info fa-lg me-2"></i>
-                            <span>{{ trans('langSelectedCourses') ?? 'Έχουν επιλεγεί' }}: <strong id="selected_courses_count">0</strong> {{ trans('langCourses') ?? 'μαθήματα' }}</span>
+                    <div class="card mb-4 border">
+                        <div class="card-header bg-white p-3 d-flex align-items-center justify-content-between" 
+                             id="selectedCoursesAccordionHeader" 
+                             data-bs-toggle="collapse" 
+                             data-bs-target="#selectedCoursesCollapse" 
+                             aria-expanded="false" 
+                             aria-controls="selectedCoursesCollapse"
+                             style="cursor: pointer;">
+                            <div class="d-flex align-items-center">
+                                <i class="fa-solid fa-book text-primary me-2"></i>
+                                <span class="fw-bold">{{ trans('langSelectedCourses') }}:
+                                    <span class="badge bg-primary rounded-pill ms-1 me-1" id="selected_courses_count">0</span> 
+                                    {{ trans('langsCourses') }}
+                                </span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <small class="text-muted">{{ trans('langShowHide') }}</small>
+                                <i class="fa-solid fa-chevron-down text-secondary" id="accordion_chevron"></i>
+                            </div>
+                        </div>
+                        <div id="selectedCoursesCollapse" class="collapse" aria-labelledby="selectedCoursesAccordionHeader">
+                            <div class="card-body p-3 bg-light border-top">
+                                <ul id="selected_courses_list" class="list-group list-group-flush mb-0 rounded" style="max-height: 300px; overflow-y: auto;">
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Action Selector -->
                     <div class="card p-3 bg-light border mb-4">
                         <div class="d-flex align-items-center gap-2" style="max-width: 400px;">
                             <label for="bulk_action_select" class="form-label mb-0 fw-bold text-nowrap">{{ trans('langAction') }}:</label>
@@ -338,157 +381,153 @@
                         </div>
                     </div>
 
-                    <!-- Deletion Warning Alert -->
                     <div id="delete_warning_box" class="col-12 mb-4" style="display: none;">
                         <div class="alert alert-warning mb-0">
                             <i class="fa-solid fa-circle-xmark fa-lg me-2"></i>{{ trans('langByDel') }}
                         </div>
                     </div>
 
-                    <!-- Refresh Options Checkboxes Section -->
                     <div id="refresh_options_box" class="col-12 mb-4" style="display: none;">
-                        <div class="form-wrapper form-edit rounded border p-4 bg-light">
-                            <div class="alert alert-info mb-4">
-                                <i class="fa-solid fa-circle-info fa-lg me-2"></i>
-                                <span>{{ trans('langRefreshInfo') }} {{ trans('langRefreshInfo_A') }}</span>
-                            </div>
-
-                            <!-- Users - Unregister -->
-                            <div class="mb-4">
-                                <div class="fw-bold mb-2">
-                                    {{ trans('langUsers') }} - {{ trans('langUnCourse') }}
-                                    <span class="help-block d-block fw-normal text-muted small">{{ trans('langUserDelCourseInfo') }}</span>
-                                </div>
-                                <div class="form-group mt-2">
-                                    <div class="checkbox">
-                                        <label class="label-container">
-                                            <input type="checkbox" name="delusersinactive">
-                                            <span class="checkmark"></span>
-                                            {{ trans('langInactiveUsers') }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group mt-3">
-                                    <div class="checkbox">
-                                        <label class="label-container">
-                                            <input type="checkbox" name="delusersdate">
-                                            <span class="checkmark"></span>
-                                            {{ trans('langWithRegistrationDate') }}
-                                        </label>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col-md-6 col-12">
-                                            {!! selection(array('before' => trans('langBefore'), 'after' => trans('langAfter')), 'reg_flag', 'before', 'class="form-select"') !!}
-                                        </div>
-                                        <div class="col-md-6 col-12 mt-2 mt-md-0">
-                                            <input aria-label="{{ trans('langDate') }}" class="form-control" type="text" name="reg_date" id="reg_date" value="{!! date("d-m-Y", time()) !!}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <!-- Announcements & Agenda -->
-                            <div class="row">
-                                <div class="col-md-6 col-12 mb-3">
-                                    <div class="fw-bold mb-2">{{ trans('langAnnouncements') }}</div>
-                                    <div class="checkbox">
-                                        <label class="label-container">
-                                            <input type="checkbox" name="delannounces">
-                                            <span class="checkmark"></span>
-                                            {{ trans('langAnnouncesDel') }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-12 mb-3">
-                                    <div class="fw-bold mb-2">{{ trans('langAgenda') }}</div>
-                                    <div class="checkbox">
-                                        <label class="label-container">
-                                            <input type="checkbox" name="delagenda">
-                                            <span class="checkmark"></span>
-                                            {{ trans('langAgendaDel') }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Assignments & Exercises -->
-                            <div class="row">
-                                <div class="col-md-6 col-12 mb-3">
-                                    <div class="fw-bold mb-2">{{ trans('langWorks') }}</div>
-                                    <div class="checkbox mb-2">
-                                        <label class="label-container">
-                                            <input type="checkbox" name="hideworks">
-                                            <span class="checkmark"></span>
-                                            {{ trans('langHideWork') }}
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label class="label-container">
-                                            <input type="checkbox" name="delworkssubs">
-                                            <span class="checkmark"></span>
-                                            {{ trans('langDelAllWorkSubs') }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-12 mb-3">
-                                    <div class="fw-bold mb-2">{{ trans('langExercises') }}</div>
-                                    <div class="checkbox">
-                                        <label class="label-container">
-                                            <input type="checkbox" name="purgeexercises">
-                                            <span class="checkmark"></span>
-                                            {{ trans('langPurgeExercisesResults') }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Statistics & Blog -->
-                            <div class="row">
-                                <div class="col-md-6 col-12 mb-3">
-                                    <div class="fw-bold mb-2">{{ trans('langUsage') }}</div>
-                                    <div class="checkbox">
-                                        <label class="label-container">
-                                            <input type="checkbox" name="clearstats">
-                                            <span class="checkmark"></span>
-                                            {{ trans('langClearStats') }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-12 mb-3">
-                                    <div class="fw-bold mb-2">{{ trans('langBlog') }}</div>
-                                    <div class="checkbox">
-                                        <label class="label-container">
-                                            <input type="checkbox" name="delblogposts">
-                                            <span class="checkmark"></span>
-                                            {{ trans('langDelBlogPosts') }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Wall -->
-                            <div class="row">
-                                <div class="col-12 mb-3">
-                                    <div class="fw-bold mb-2">{{ trans('langWall') }}</div>
-                                    <div class="checkbox">
-                                        <label class="label-container">
-                                            <input type="checkbox" name="delwallposts">
-                                            <span class="checkmark"></span>
-                                            {{ trans('langDelWallPosts') }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
+                        <div class="alert alert-warning mb-4">
+                            <i class="fa-solid fa-circle-info fa-lg me-2"></i>
+                            <span>{{ trans('langRefreshInfo') }} {{ trans('langRefreshInfo_A') }}</span>
                         </div>
+
+                        <div class="mb-4">
+                            <div class="fw-bold mb-2">
+                                {{ trans('langUsers') }} - {{ trans('langUnCourse') }}
+                                <span class="help-block d-block fw-normal text-muted small">{{ trans('langUserDelCourseInfo') }}</span>
+                            </div>
+                            <div class="form-group mt-2">
+                                <div class="checkbox">
+                                    <label class="label-container">
+                                        <input type="checkbox" name="delusersinactive">
+                                        <span class="checkmark"></span>
+                                        {{ trans('langInactiveUsers') }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <div class="checkbox">
+                                    <label class="label-container">
+                                        <input type="checkbox" name="delusersdate">
+                                        <span class="checkmark"></span>
+                                        {{ trans('langWithRegistrationDate') }}
+                                    </label>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-6 col-12">
+                                        {!! selection(array('before' => trans('langBefore'), 'after' => trans('langAfter')), 'reg_flag', 'before', 'class="form-select"') !!}
+                                    </div>
+                                    <div class="col-md-6 col-12 mt-2 mt-md-0">
+                                        <input aria-label="{{ trans('langDate') }}" class="form-control" type="text" name="reg_date" id="reg_date" value="{!! date("d-m-Y", time()) !!}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-md-6 col-12 mb-3">
+                                <div class="fw-bold mb-2">{{ trans('langAnnouncements') }}</div>
+                                <div class="checkbox">
+                                    <label class="label-container">
+                                        <input type="checkbox" name="delannounces">
+                                        <span class="checkmark"></span>
+                                        {{ trans('langAnnouncesDel') }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 mb-3">
+                                <div class="fw-bold mb-2">{{ trans('langAgenda') }}</div>
+                                <div class="checkbox">
+                                    <label class="label-container">
+                                        <input type="checkbox" name="delagenda">
+                                        <span class="checkmark"></span>
+                                        {{ trans('langAgendaDel') }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 col-12 mb-3">
+                                <div class="fw-bold mb-2">{{ trans('langWorks') }}</div>
+                                <div class="checkbox mb-2">
+                                    <label class="label-container">
+                                        <input type="checkbox" name="hideworks">
+                                        <span class="checkmark"></span>
+                                        {{ trans('langHideWork') }}
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label class="label-container">
+                                        <input type="checkbox" name="delworkssubs">
+                                        <span class="checkmark"></span>
+                                        {{ trans('langDelAllWorkSubs') }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12 mb-3">
+                                <div class="fw-bold mb-2">{{ trans('langExercises') }}</div>
+                                <div class="checkbox">
+                                    <label class="label-container">
+                                        <input type="checkbox" name="purgeexercises">
+                                        <span class="checkmark"></span>
+                                        {{ trans('langPurgeExercisesResults') }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="fw-bold mb-2">{{ trans('langWall') }}</div>
+                                <div class="checkbox">
+                                    <label class="label-container">
+                                        <input type="checkbox" name="delwallposts">
+                                        <span class="checkmark"></span>
+                                        {{ trans('langDelWallPosts') }}
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-12 mb-3">
+                                <div class="fw-bold mb-2">{{ trans('langBlog') }}</div>
+                                <div class="checkbox">
+                                    <label class="label-container">
+                                        <input type="checkbox" name="delblogposts">
+                                        <span class="checkmark"></span>
+                                        {{ trans('langDelBlogPosts') }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <div class="fw-bold mb-2">{{ trans('langUsage') }}</div>
+                                <div class="checkbox">
+                                    <label class="label-container">
+                                        <input type="checkbox" name="clearstats">
+                                        <span class="checkmark"></span>
+                                        {{ trans('langClearStats') }}
+                                    </label>
+                                </div>
+                                <span class="help-block d-block fw-normal text-muted small mt-1">
+                                    {{ trans('langDelstats') }}
+                                </span>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <!-- Step 3 Navigation Buttons -->
                     <div class="col-12 mt-4 d-flex justify-content-between align-items-center">
                         <button type="button" class="btn cancelAdminBtn" id="step3_prev_btn">
-                            <i class="fa-solid fa-arrow-left me-1"></i>{{ trans('langPrevious') ?? 'Προηγούμενο' }}
+                            <i class="fa-solid fa-arrow-left me-1"></i>{{ trans('langPrevious') }}
                         </button>
                         <button type="submit" class="btn submitAdminBtn" name="bulk_submit" id="bulk_submit">
                             {{ trans('langSubmit') }}

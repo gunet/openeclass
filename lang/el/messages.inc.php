@@ -380,6 +380,7 @@ $langCourseDel = "Διαγραφή $langsOfCourse";
 $langCourseDelSuccess = "Το $langsCourse διαγράφηκε με επιτυχία!";
 $langCourseDelConfirm = "Επιβεβαίωση Διαγραφής $langOfCourse";
 $langCourseDelConfirm2 = "Θέλετε σίγουρα να διαγράψετε το $langsCourse";
+$langCourseDelConfirm3 = "Θέλετε σίγουρα να διαγράψετε τα επιλεγμένα μαθήματα;";
 $langNoticeDel = "ΣΗΜΕΙΩΣΗ: Η διαγραφή του $langsOfCourse θα διαγράψει επίσης τους εγγεγραμμένους " . $langsOfStudentss . " από το $langsCourse, την αντιστοιχία του $langsOfCourse στη $langsFaculty, καθώς και όλο το υλικό του $langsOfCourse.";
 
 // edit course
@@ -8469,3 +8470,10 @@ $langEduApiLastSync = "Τελευταίος συγχρονισμός";
 $langEduApiCourseSyncCompleted = "Ολοκληρώθηκε ο συγχρονισμός χρηστών του μαθήματος για την περίοδο";
 $langEduApiCourseNotMapped = "Το μάθημα δεν είναι συνδεδεμένο με μάθημα του Edu-API.";
 $langEduApiMissingStudentsLabel = "Εγγεγραμμένοι σπουδαστές που λείπουν από τα δεδομένα του Edu-API:";
+
+//Course renewal
+$langDelstats = "Με την επιλογή αυτή διαγράφονται τα αναλυτικά ημερήσια logs επισκέψεων και διάρκειας παραμονής των χρηστών στο μάθημα, ενώ διατηρούνται τα μηνιαία συγκεντρωτικά στατιστικά στοιχεία.";
+$langNoCourseSelected = "Δεν έχετε επιλέξει κανένα μάθημα.";
+$langSelectCourses = "Επιλογή Μαθημάτων";
+$langSelectedCourses = "Έχουν επιλεγεί";
+$langShowHide = "Εμφάνιση/Απόκρυψη";
