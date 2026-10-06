@@ -19,8 +19,8 @@
 /* Wiki table of contents and diff */
 #toc {
     padding:5px;
-    background-color:#f0f0f0;
-    border:1px solid black;
+    background-color:var(--bs-tertiary-bg, #f0f0f0);
+    border:1px solid var(--bs-border-color, #000);
     margin-top: 10px;
     margin-bottom: 10px;
     margin-right:auto;
@@ -32,7 +32,7 @@
 }
 
 #toc tr, #toc td, #toc th, #toc caption {
-    background-color:#f0f0f0;
+    background-color:transparent;
     border:none;
 }
 
@@ -43,19 +43,19 @@
 }
 
 .diffEqual {
-    background-color: white;
+    background-color: var(--bs-body-bg, white);
 }
 
 .diffMoved {
-    background-color: #00CCFF;
+    background-color: var(--bs-info-bg-subtle, #00CCFF);
 }
 
 .diffAdded {
-    background-color: #A3FF9C;
+    background-color: var(--bs-success-bg-subtle, #A3FF9C);
 }
 
 .diffDeleted {
-    background-color: #FFA59C;
+    background-color: var(--bs-danger-bg-subtle, #FFA59C);
 }
 
 /* Wiki tables */
@@ -65,9 +65,37 @@
 }
 
 .wikitable td {
-    border: 1px solid black;
+    border: 1px solid var(--bs-border-color, #000);
 }
 
 .wikitable th {
-    border: 1px solid black;
+    border: 1px solid var(--bs-border-color, #000);
+}
+
+/* Live preview (edit page split view) */
+.wiki-live-card {
+    height: 100%;
+}
+
+.wiki-live-body {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+#wiki-live-preview {
+    min-height: 120px;
+}
+
+.wiki-live-status:empty {
+    display: none;
+}
+
+/* Narrow screens: tabbed Edit / Preview instead of side-by-side */
+@media (max-width: 991.98px) {
+    .wiki-live-row[data-view="edit"] .wiki-live-preview-col {
+        display: none;
+    }
+    .wiki-live-row[data-view="preview"] .wiki-live-edit-col {
+        display: none;
+    }
 }

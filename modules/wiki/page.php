@@ -158,6 +158,45 @@ if ($groupId != 0 && $is_groupAllowed) {
 }
 
 // --------------- End of  access rights management ----------------
+// --------------- Live preview (AJAX) ----------------
+// Serves the live-preview script (modules/wiki/lib/javascript/wiki_preview.js)
+// with a bare HTML fragment. It uses the same renderer as saved pages,
+// but never saves, versions, locks or triggers events.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['live_preview'])) {
+    header('Content-Type: text/html; charset=utf-8');
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
+        http_response_code(403);
+        echo $langWikiPreviewDenied;
+        exit;
+    }
+    // same rights as opening the editor: edit an existing page or create a new one
+    $preview_title = (isset($_POST['title'])) ? strip_tags(rawurldecode($_POST['title'])) : '__MainPage__';
+    $preview_exists = $wikiStore->pageExists($wikiId, $preview_title);
+    if (($preview_exists && !$is_allowedToEdit) || (!$preview_exists && !$is_allowedToCreate)) {
+        http_response_code(403);
+        echo $langWikiPreviewDenied;
+        exit;
+    }
+    $preview_content = (isset($_POST['wiki_content'])) ? $_POST['wiki_content'] : '';
+    if (strlen($preview_content) > 131072) {
+        http_response_code(413);
+        exit;
+    }
+    // Throttle: the client already sends one request at a time, but a crafted
+    // client could hammer the renderer (CPU). Cap the render rate per session;
+    // the JS treats 429 as a transient signal and retries after a short pause.
+    $preview_min_interval = 0.2; // seconds between renders
+    $preview_now = microtime(true);
+    if (isset($_SESSION['wiki_preview_last'])
+            && ($preview_now - $_SESSION['wiki_preview_last']) < $preview_min_interval) {
+        http_response_code(429);
+        exit;
+    }
+    $_SESSION['wiki_preview_last'] = $preview_now;
+    header('X-Wiki-Preview: 1');
+    echo "<div class=\"wiki2xhtml\">\n" . $wikiRenderer->render($preview_content) . "\n</div>";
+    exit;
+}
 // filter action
 
 if ($is_allowedToEdit || $is_allowedToCreate) {
@@ -707,6 +746,21 @@ switch ($action) {
                 }
 
                 $tool_content .= claro_disp_wiki_editor($wikiId, $wiki_title, $versionId, $content, $changelog, $script, true, false);
+                $tool_content .= claro_disp_wiki_syntax_help();
+
+                // live preview: split view beside the editor, no-JS "Preview"
+                // submit button above stays as fallback
+                $head_content .= "<script>var wikiPreviewL10n = "
+                    . json_encode(array(
+                        'livePreview' => $langWikiLivePreview,
+                        'editTab' => $langEdit,
+                        'previewTab' => $langPreview,
+                        'denied' => $langWikiPreviewDenied,
+                        'error' => $langWikiPreviewError,
+                      ))
+                    . ";</script>\n";
+                $head_content .= "<script src='" . $jspath . "/toc.js'></script>\n";
+                $head_content .= "<script src='" . $jspath . "/wiki_preview.js'></script>\n";
             }
 
             break;

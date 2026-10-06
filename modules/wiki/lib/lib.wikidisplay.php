@@ -81,6 +81,8 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
             . '" />' . "\n"
     ;
 
+    $out .= generate_csrf_token_form_field() . "\n";
+
     $out .= '<input class="btn submitAdminBtn" type="submit" name="action[preview]" value="'
             . $langPreview . '" />' . "\n"
     ;
@@ -169,6 +171,62 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
     $out .= "</div></div>";
     $out .= "</form>";
     $out .= "</div>";
+
+    return $out;
+}
+
+/**
+ * Generate html code of the wiki syntax cheat sheet
+ *
+ * The entries mirror the buttons built in Wiki2xhtmlArea::getToolbar() and
+ * reuse the $wiki_toolbar labels, so the help and the toolbar cannot disagree.
+ * Each example can be clicked to insert it at the cursor position
+ * (see modules/wiki/lib/javascript/wiki_preview.js).
+ * @return string html code of the syntax help panel
+ */
+function claro_disp_wiki_syntax_help() {
+    global $wiki_toolbar, $langWikiSyntaxHelp, $langWikiSyntaxExample, $langWikiSyntaxInsert;
+
+    // [key in $wiki_toolbar, example snippet]
+    $entries = array(
+        array('H1', '!!!! Heading'),
+        array('H2', '!!! Heading'),
+        array('H3', '!! Heading'),
+        array('H4', '! Heading'),
+        array('Strongemphasis', "'''bold'''"),
+        array('Emphasis', "''italic''"),
+        array('Inserted', '__underlined__'),
+        array('Deleted', '--struck through--'),
+        array('Inlinequote', '{{quote}}'),
+        array('Code', '@@code@@'),
+        array('Unorderedlist', "* item"),
+        array('Orderedlist', '# item'),
+        array('Blockquote', '> quote'),
+        array('Preformatedtext', ' preformatted'),
+        array('Linebreak', '%%%'),
+        array('Link', '[label|https://example.com]'),
+        array('Externalimage', '((https://example.com/image.png))'),
+    );
+
+    $out = "<div class='card mt-3'><div class='card-header p-0'>"
+        . "<button class='btn btn-link text-decoration-none' type='button' "
+        . "data-bs-toggle='collapse' data-bs-target='#wiki-syntax-help' "
+        . "aria-expanded='false' aria-controls='wiki-syntax-help'>"
+        . "<i class='fa-solid fa-circle-question'></i> $langWikiSyntaxHelp</button></div>"
+        . "<div id='wiki-syntax-help' class='collapse'><div class='card-body'>"
+        . "<div class='table-responsive'><table class='table align-middle mb-0'>"
+        . "<thead><tr><th></th><th>$langWikiSyntaxExample</th><th></th></tr></thead><tbody>";
+
+    foreach ($entries as $entry) {
+        list($key, $example) = $entry;
+        $label = isset($wiki_toolbar[$key]) ? $wiki_toolbar[$key] : $key;
+        $out .= "<tr><td class='py-2 pe-3'>" . q($label) . "</td>"
+            . "<td class='py-2 pe-3'><code>" . q($example) . "</code></td>"
+            . "<td class='py-2 text-end'><button type='button' class='btn btn-sm btn-outline-primary' "
+            . "data-wiki-insert='" . q($example) . "'>$langWikiSyntaxInsert</button></td></tr>";
+    }
+
+    $out .= "</tbody></table></div></div></div></div>";
 
     return $out;
 }
