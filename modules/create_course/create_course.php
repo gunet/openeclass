@@ -167,8 +167,7 @@ if (!isset($_POST['create_course'])) {
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-select" id="course_license_id"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
         $data['is_coby_enabled'] = false;
-        $data['courseStartDate'] = date('d-m-Y');
-        $data['course_enableStartDate'] = 'checked';
+        $data['courseStartDate'] = $data['course_enableStartDate'] = '';
         $data['courseEndDate'] = $data['course_enableEndDate'] = '';
         $data['courseRegStartDate'] = $data['course_enableRegStartDate'] = '';
         $data['courseRegEndDate'] = $data['course_enableRegEndDate'] = '';
