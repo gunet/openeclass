@@ -116,6 +116,9 @@ $qform = 0;
 $qform_param = '';
 $qform_dump_param = '';
 $qform_user = 0;
+$qform_submission = 0;
+$qform_submission_param = '';
+$qform_submission_dump_param = '';
 $qform_user_param = '';
 $qform_user_dump_param = '';
 if (isset($_POST['qform'])) {
@@ -138,6 +141,23 @@ if (isset($_GET['forQuestionUser'])) {
     $qform_user_param = "&amp;forQuestionUser=$qform_user";
     $qform_user_dump_param = "&amp;forQuestionUserDump=$qform_user";
 }
+if (isset($_POST['qformSubmission'])) {
+    $qform_submission = max(0, intval($_POST['qformSubmission']));
+} elseif (isset($_GET['forQuestionSubmission'])) {
+    $qform_submission = max(0, intval($_GET['forQuestionSubmission']));
+}
+if ($qform_submission > 0) {
+    $selectedSubmission = Database::get()->querySingle("SELECT uid FROM poll_user_record WHERE id = ?d AND pid = ?d AND session_id = ?d", $qform_submission, $pid, $sID);
+    if ($selectedSubmission) {
+        $qform_user = (int) $selectedSubmission->uid;
+    } else {
+        $qform_submission = 0;
+    }
+}
+if ($qform_submission > 0) {
+    $qform_submission_param = "&amp;forQuestionSubmission=$qform_submission";
+    $qform_submission_dump_param = "&amp;forQuestionSubmission=$qform_submission";
+}
 
 
 if (isset($_GET['from_session_view'])) {
@@ -150,13 +170,13 @@ if (isset($_GET['from_session_view'])) {
                         'show' => isset($_REQUEST['unit_id'])
                     ),
                     array('title' => $langDumpPDF,
-                          'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;session=$_GET[session]&amp;from_session_view=true&amp;format=poll_pdf$qform_param$qform_user_param",
+                          'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;session=$_GET[session]&amp;from_session_view=true&amp;format=poll_pdf$qform_param$qform_user_param$qform_submission_param",
                           'icon' => 'fa-solid fa-file-pdf',
                           'level' => 'primary-label',
                           'link-attrs' => "target='_blank'",
                           'show' => $is_course_reviewer),
                     array('title' => $langPollFullResults,
-                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;dumppoll_session=true&amp;session=$_GET[session]$qform_dump_param$qform_user_dump_param",
+                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;dumppoll_session=true&amp;session=$_GET[session]$qform_dump_param$qform_user_dump_param$qform_submission_dump_param",
                           'icon' => 'fa-download',
                           'level' => 'primary-label',
                           'show' => $is_course_reviewer)
@@ -170,13 +190,13 @@ if (isset($_GET['from_session_view'])) {
                         'level' => 'primary',
                         'show' => isset($_REQUEST['unit_id'])),
                     array('title' => "$langPollPercentResults ($langDumpPDF)",
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;format=poll_pdf$qform_param$qform_user_param",
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;format=poll_pdf$qform_param$qform_user_param$qform_submission_param",
                         'icon' => 'fa-file-pdf',
                         'level' => 'primary-label',
                         'link-attrs' => "target='_blank'",
                         'show' => $is_course_reviewer),
                     array('title' => $langPollFullResults,
-                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1$qform_dump_param$qform_user_dump_param",
+                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1$qform_dump_param$qform_user_dump_param$qform_submission_dump_param",
                           'icon' => 'fa-download',
                           'level' => 'primary-label',
                           'show' => $is_course_reviewer)
@@ -315,9 +335,12 @@ foreach ($questions as $question) {
 }
 $questions = $newQuestions;
 
-$formUsers = Database::get()->queryArray("SELECT DISTINCT pur.uid, u.givenname, u.surname FROM poll_user_record pur
+$formUsers = Database::get()->queryArray("SELECT pur.id AS submission_id, pur.uid, u.givenname, u.surname, MIN(par.submit_date) AS submit_date FROM poll_user_record pur
                                           JOIN user u ON pur.uid=u.id
-                                          WHERE pur.pid = ?d AND pur.session_id = ?d", $pid, $sID);
+                                          JOIN poll_answer_record par ON par.poll_user_record_id=pur.id
+                                          WHERE pur.pid = ?d AND pur.session_id = ?d
+                                          GROUP BY pur.id, pur.uid, u.givenname, u.surname
+                                          ORDER BY MIN(par.submit_date) ASC", $pid, $sID);
 
 // Show results per question or per user
 $PollType = $thePoll->type;
@@ -348,10 +371,11 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
         if (($is_editor or $is_consultant) && !$thePoll->anonymized) {
     $tool_content .= "  <div class='w-50'>
                 <label class='form-label' for='question_id'>$langPollPerUser</label>
-                <select class='form-select' name='qformUser' onchange='this.form.submit();'>";
+                <select class='form-select' name='qformSubmission' onchange='this.form.submit();'>";
                     $tool_content .= "<option value='0'>$langPollAllUsers</option>";
                     foreach ($formUsers as $u) {
-                        $tool_content .= "<option value='{$u->uid}' " . ($u->uid==$qform_user ? 'selected' : '') . ">$u->givenname&nbsp;$u->surname</option>";
+                        $submitDate = date('d/m/Y H:i:s', strtotime($u->submit_date));
+                        $tool_content .= "<option value='{$u->submission_id}' " . ($u->submission_id == $qform_submission ? 'selected' : '') . ">$u->givenname&nbsp;$u->surname&nbsp;&nbsp;&nbsp;($submitDate)</option>";
                     }
     $tool_content .= "</select>
            </div>";
@@ -360,7 +384,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK || $PollType == POLL_COU
         </form>
     </div>";
 
-    poll_results_per_question_or_user($pid, $questions, $qform, $qform_user, $sID, $thePoll->anonymized);
+    poll_results_per_question_or_user($pid, $questions, $qform, $qform_user, $sID, $thePoll->anonymized, $qform_submission);
 }
 
 if (isset($_GET['format']) and $_GET['format'] == 'poll_pdf') {
@@ -370,7 +394,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'poll_pdf') {
 }
 
 // Results per question
-function poll_results_per_question_or_user($pid, $questions, $form_question = 0, $form_user = 0, $session_id = 0, $pollAnonymized = 0) {
+function poll_results_per_question_or_user($pid, $questions, $form_question = 0, $form_user = 0, $session_id = 0, $pollAnonymized = 0, $form_submission = 0) {
     global $course_code, $course_id, $uid, $is_editor, $tool_content, $langStudent, $langAnswers,
            $webDir, $urlServer, $langPollUnknown, $is_consultant, $langPollUsersResponded;
 
@@ -384,6 +408,10 @@ function poll_results_per_question_or_user($pid, $questions, $form_question = 0,
     if ($form_user > 0) {
         $sqlForUser = "AND pur.uid = ?d";
         $sqlForUserArgs = [$form_user];
+    }
+    if ($form_submission > 0) {
+        $sqlForUser = "AND pur.id = ?d";
+        $sqlForUserArgs = [$form_submission];
     }
     
     $tool_content .= "<div class='col-12'>";
