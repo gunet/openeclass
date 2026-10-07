@@ -30,7 +30,11 @@ $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
 if (isset($_GET['update']) and $_GET['update']) {
     $hubUpdater = new H5PHubUpdater();
-    $hubUpdater->fetchLatestContentTypes();
+    $result = $hubUpdater->fetchLatestContentTypes();
+    if (isset($result->error)) {
+        Session::Messages('<div>' . purify($result->response) . '</div>', 'alert-danger');
+        redirect_to_home_page('modules/admin/h5pconf.php');
+    }
     set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langH5pUpdateComplete</span></div></div>";
 } else {
@@ -38,9 +42,9 @@ if (isset($_GET['update']) and $_GET['update']) {
     $tool_content .= "
         <div class='col-sm-12'>
         <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langH5pInfoUpdate</span></div>
-            <div class='d-flex justify-content-center'>            
+            <div class='d-flex justify-content-center'>
                 <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?update=true' data-bs-placement='bottom' data-bs-toggle='tooltip' title='$langMaj' aria-label='$langMaj'>
-                    <span class='fa fa-refresh space-after-icon settings-icons'></span>                   
+                    <span class='fa fa-refresh space-after-icon settings-icons'></span>
                 </a>";
                 if ($ts) {
                     $tool_content .= "<span class='help-block ps-2 text-success fw-bold'><em>$langlastUpdated: " . format_locale_date(strtotime($ts), 'short', false) . "</em></span>";
