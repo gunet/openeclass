@@ -1373,7 +1373,8 @@ function upload_session_empty_doc($sid){
         $title = "$langTool" . "_$sid";
     }
     $comments = strip_tags($_POST['comments']) ?? '';
-    $textfile = fopen("$webDir/courses/$course_code/session/session_$sid/$title.txt", "w") or die("Unable to open file!");
+    $safe_filename = safe_filename('txt');
+    $textfile = fopen("$sdir$safe_filename", "w") or die("Unable to open file!");
     $txt = "$comments";
     fwrite($textfile, $txt);
     fclose($textfile);
@@ -1381,11 +1382,9 @@ function upload_session_empty_doc($sid){
     $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
     $file_date = date('Y-m-d G:i:s');
 
-    $safe_filename = safe_filename(get_file_extension("$title.txt"));
     $s_real_filename = "$title.txt";
     $sfilepath = '/' . $safe_filename;
     $ses_filename = add_ext_on_mime($s_real_filename);
-    rename("$webDir/courses/$course_code/session/session_$sid/$title.txt","$webDir/courses/$course_code/session/session_$sid/$safe_filename");
 
     $upload_file = Database::get()->query("INSERT INTO document SET
         course_id = ?d,
@@ -4217,7 +4216,8 @@ function reference_creation_by_fields($sid){
         $title = "$langTool" . "_$sid";
     }
     $comments = strip_tags($_POST['content_reference']) ?? '';
-    $textfile = fopen("$webDir/courses/$course_code/session/session_$sid/$title.txt", "w") or die("Unable to open file!");
+    $safe_filename = safe_filename('txt');
+    $textfile = fopen("$sdir$safe_filename", "w") or die("Unable to open file!");
     $txt = "$comments";
     fwrite($textfile, $txt);
     fclose($textfile);
@@ -4225,11 +4225,9 @@ function reference_creation_by_fields($sid){
     $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
     $file_date = date('Y-m-d G:i:s');
 
-    $safe_filename = safe_filename(get_file_extension("$title.txt"));
     $s_real_filename = "$title.txt";
     $sfilepath = '/' . $safe_filename;
     $ses_filename = add_ext_on_mime($s_real_filename);
-    rename("$webDir/courses/$course_code/session/session_$sid/$title.txt","$webDir/courses/$course_code/session/session_$sid/$safe_filename");
     $comments = null;
 
     $upload_file = Database::get()->query("INSERT INTO document SET
