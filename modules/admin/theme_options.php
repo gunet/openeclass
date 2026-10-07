@@ -197,14 +197,6 @@ if (isset($_POST['import'])) {
             make_dir('courses/theme_data');
         }
         if (move_uploaded_file($_FILES['themeFile']['tmp_name'], "courses/theme_data/$file_name")) {
-            require_once 'modules/admin/extconfig/externals.php';
-            $connector = AntivirusApp::getAntivirus();
-            if ($connector->isEnabled()) {
-                $output=$connector->check("courses/theme_data/$file_name");
-                if($output->status==$output::STATUS_INFECTED){
-                    AntivirusApp::block($output->output);
-                }
-            }
             $archive = new ZipArchive();
             if ($archive->open("courses/theme_data/$file_name")) {
                 // Allowed theme payload: metadata text plus the asset types themes already use (css/js overrides, images, icons, web fonts).
@@ -1620,14 +1612,6 @@ function upload_images($new_theme_id = null) {
                 $file_name = "$name-$i.$ext";
             }
             move_uploaded_file($_FILES[$image]['tmp_name'], "$webDir/courses/theme_data/$theme_id/$file_name");
-            require_once 'modules/admin/extconfig/externals.php';
-            $connector = AntivirusApp::getAntivirus();
-            if($connector->isEnabled() == true ){
-                $output=$connector->check("$webDir/courses/theme_data/$theme_id/$file_name");
-                if($output->status==$output::STATUS_INFECTED){
-                    AntivirusApp::block($output->output);
-                }
-            }
             $_POST[$image] = $file_name;
         }
     }
@@ -1637,10 +1621,10 @@ function upload_images($new_theme_id = null) {
 
 // General settings
 function build_general_settings() {
-    global $langForm, $langViewPlatform, $langSettingSelect, $theme_options_styles, $langViewBoxedType,
-           $langHelpBoxedWidthInfo, $langViewFluidType, $langHelpFluidWidthInfo, $langLayoutConfig, $langLayout,
+    global $langForm, $langViewPlatform, $langSettingSelect, $theme_options_styles,
+           $langHelpBoxedWidthInfo, $langHelpFluidWidthInfo, $langLayoutConfig, $langLayout,
            $langBoxed, $langFluid, $langFluidContainerWidth, $langLogoConfig, $langLogo, $langLogoNormal, $logo_field,
-           $langLogoSmall, $small_logo_field, $langFavicon, $faviconUpload, $urlServer, $langDisplayOptionsImg, 
+           $langLogoSmall, $small_logo_field, $langFavicon, $faviconUpload, $urlServer,
            $langDisplayPlatformAsCardLayout, $langDisplayPlatformAsCardLayoutNoBorderRadius, $head_content,
            $langBgColorCardView, $langBgBorderColorCardView;
 

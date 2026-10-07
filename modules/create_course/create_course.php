@@ -326,14 +326,6 @@ if (!isset($_POST['create_course'])) {
             $file_name = $_FILES['course_image']['name'];
             validateUploadedFile($file_name, 2);
             move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$code/image/$file_name");
-            require_once 'modules/admin/extconfig/externals.php';
-            $connector = AntivirusApp::getAntivirus();
-            if ($connector->isEnabled()) {
-                $output = $connector->check("$webDir/courses/$course_code/image/$file_name");
-                if ($output->status == $output::STATUS_INFECTED) {
-                    AntivirusApp::block($output->output);
-                }
-            }
             $course_image = $file_name;
         }
 

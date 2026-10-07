@@ -186,15 +186,6 @@ if (isset($_POST['add_submit'])) { // add
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/video/index.php?course=" . $course_code);
         }
-
-        $connector = AntivirusApp::getAntivirus();
-        if($connector->isEnabled()) {
-            $output=$connector->check("$updir/$safe_filename");
-            if($output->status==$output::STATUS_INFECTED){
-                AntivirusApp::block($output->output);
-            }
-        }
-
         $path = '/' . $safe_filename;
         $url = $file_name;
         $id = Database::get()->query('INSERT INTO video
