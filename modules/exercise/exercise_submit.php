@@ -155,6 +155,74 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             }
         }
     }
+
+
+    // File has been removed from uppy
+    if (isset($_POST['file_uploaded_remove'])) {
+        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+        $exId = intval($_GET['exerciseId']);
+        $u_rec_id = intval($_POST['u_record_id']);
+        $qId = intval($_POST['question_id']);
+        $oldfilePath = $_POST['old_file_path'];
+        $file = "$webDir/courses/$course_code/exercise/{$exId}{$oldfilePath}";
+
+        $checkURecord = Database::get()->querySingle("SELECT aer.answer FROM exercise_answer_record aer
+                                                      JOIN exercise_user_record eur ON eur.eurid=aer.eurid
+                                                      JOIN exercise_question eq ON eq.id=aer.question_id
+                                                      WHERE eq.id = ?d
+                                                      AND eq.type = ?d
+                                                      AND eur.eurid = ?d
+                                                      AND eur.eid = ?d
+                                                      AND eur.uid = ?d", $qId, UPLOAD_FILE, $u_rec_id, $exId, $uid);
+
+        if ($checkURecord && is_string($checkURecord->answer)) {
+            $arr_file = unserialize($checkURecord->answer, ["allowed_classes" => false]);
+            if (is_array($arr_file) && isset($arr_file['filepath']) 
+                && is_string($arr_file['filepath']) && $arr_file['filepath'] == $oldfilePath 
+                && file_exists($file)) {
+                if (unlink($file)) {
+                    Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", null, $u_rec_id, $qId);
+                }
+            }
+        }
+    }
+
+    exit;
+}
+
+// Save uploaded file from uppy - only for users
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['new_upload_file'])) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+    header('Content-Type: application/json');
+    
+    $exercise_id = intval($_GET['exerciseId']);
+    $question_id = intval($_GET['questionId']);
+    $u_rec = intval($_GET['exrecid']);
+    $filename = $_FILES['new_upload_file']['name'];
+    validateUploadedFile($filename); // check file type
+    $filename = add_ext_on_mime($filename);
+    // File name used in file system and path field
+    $safe_filename = safe_filename(get_file_extension($filename));
+    $dir = "$webDir/courses/$course_code/exercise/{$exercise_id}";
+    if (!file_exists($dir)) {
+        mkdir("$webDir/courses/$course_code/exercise/{$exercise_id}/", 0755, true);
+    } 
+
+    $pathfile = "$webDir/courses/$course_code/exercise/{$exercise_id}/$safe_filename";
+    if (move_uploaded_file($_FILES['new_upload_file']['tmp_name'], $pathfile)) {
+        @chmod($pathfile, 0644);
+        $real_filename = $_FILES['new_upload_file']['name'];
+        $filepath = '/' . $safe_filename;
+        $arrFileInfo = ['filename' => $filename, 'filepath' => $filepath];
+        $info_file = serialize($arrFileInfo);
+        Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", $info_file, $u_rec, $question_id);
+        echo json_encode(['success' => true, 'fileInfo' => $info_file]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to save uploaded file.']);
+    }
+
     exit;
 }
 
