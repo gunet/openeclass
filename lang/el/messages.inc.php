@@ -7313,13 +7313,8 @@ $langAnalyticsEndDescription = 'Ημερομηνία μέχρι την οποί�
 $langAnalyticsMinValue = 'Κατώτερη τιμή';
 $langAnalyticsMaxValue = 'Ανώτερη τιμή';
 $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμες πηγές.';
-<<<<<<< local
-$langAnalyticsStatus = 'Επίπεδο';
-$langAnalyticsDifficultyLevel = "Επίπεδα Δυσκολίας";
-=======
 $langAnalyticsStatus = 'Επίπεδο';
 $langAnalyticsDifficultyLevel = "Κριτήρια";
->>>>>>> graft
 $langAnalyticsDifficultyLevelInfo = "Ρυθμίστε τα όρια δυσκολίας για κάθε τύπο περιεχομένου.";
 
 // h5p

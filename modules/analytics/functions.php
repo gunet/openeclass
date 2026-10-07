@@ -36,6 +36,8 @@ function display_learning_analytics() {
         $results = "<div class='text-center text-muted'>$langAnalyticsNoAnalytics</div>";
     } else {
         $results = "";
+        $results .= "<div class='table-responsive'>";
+        $results .= "<table class='table-default'><tbody>";
         foreach ($sql_data as $data) {
             $id = $data->id;
             $active = $data->active;
@@ -45,41 +47,43 @@ function display_learning_analytics() {
             $description = $data->description;
 
             $results .= "
-            <div class='row res-table-row border-0 mb-4 g-3'>
-                <div class='col-md-7 col-12'>
-                    <strong>$title</strong> <span class='$active_vis'>($active_msg)</span><br/>
-                    <small class='text-start text-muted'>$description</small>
-                </div>
-                <div class='col-md-5 col-12 text-start'>".
-                action_bar(array(
-                    array('title' => $langAnalyticsTotalAnalytics,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=courseStatistics",
-                        'icon' => 'fa-bar-chart',
-                        'level' => 'primary-label'),
-                    array('title' => $langAnalyticsViewPerUserGeneral,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=perUser",
-                        'icon' => 'fa-users',
-                        'level' => 'primary-label'),
-                    array('title' => $langModify,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;edit_analytics=1",
-                            'icon' => 'fa-edit'),
-                    array('title' => $langEditItems,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showElements",
-                            'icon' => 'fa-edit'),
-                    array('title' => $active ? $langDeactivate : $langActivate,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;activate=" .
-                                ($active ? '0' : '1'),
-                            'icon' => $active ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDelete,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;delete_analytics=1",
-                        'icon' => 'fa-xmark',
-                        'class' => 'delete',
-                        'confirm' => $langAnalyticsConfirm)
-                ))
-                ."</div>
-                
-            </div>";
+            <tr>
+                <td>
+                    <p class='TextBold'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showDetails'>$title</a>&nbsp;<span class='$active_vis text-nowrap'>($active_msg)</span></p>
+                    <p>$description</p>
+                </td>
+                <td class='text-end'>".
+                    action_button(array(
+                        array('title' => $langDetail,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showDetails",
+                                'icon' => 'fa-info-circle'),
+                        array('title' => $langModify,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;edit_analytics=1",
+                                'icon' => 'fa-edit'),
+                        array('title' => $langEditItems,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=showDetails",
+                                'icon' => 'fa-add'),
+                        array('title' => $langAnalyticsTotalAnalytics,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=courseStatistics",
+                            'icon' => 'fa-bar-chart'),
+                        array('title' => $langAnalyticsViewPerUserGeneral,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=perUser",
+                            'icon' => 'fa-users'),
+                        array('title' => $active ? $langDeactivate : $langActivate,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;activate=" .
+                                    ($active ? '0' : '1'),
+                                'icon' => $active ? 'fa-eye-slash' : 'fa-eye'),
+                        array('title' => $langDelete,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;delete_analytics=1",
+                            'icon' => 'fa-xmark',
+                            'class' => 'delete',
+                            'confirm' => $langAnalyticsConfirm)
+                    ))
+                ."</td>
+            </tr>";
         }
+
+        $results .= "</tbody></table></div>";
     }
 
     $tool_content .= "
@@ -209,6 +213,7 @@ function display_general_lists($analytics_id) {
                     </td>
                 </tr>";
             }
+            $bad_results .= "</tbody></table></div>";
         }
 
         if (count($middle) > 0) {
@@ -468,7 +473,7 @@ function display_analytics_information($analytics_id) {
                 <div class='card-body'>
                     
                         <div class='row row-cols-1 row-cols-md-3 g-md-4 g-3'>
-                            <div class='col'>
+                            <div class='col-12'>
                                 <div class='title-default mb-1 pn-info-title-sct'>$langDescription</div>
                                 <div class='pn-info-text-sct'>$description</div>
                             </div>
@@ -546,11 +551,11 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
     } else {
         $backclass = '';
         if (is_null($previous)) {
-            $backclass = 'style="display:none"';
+            $backclass = 'display:none;';
         }
         $nextclass = '';
         if (is_null($next)) {
-            $nextclass = 'style="display:none"';
+            $nextclass = 'display:none;';
         }
 
         $results = "
@@ -589,8 +594,14 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                                 <div>". display_user($userid). "</div>
                             </td>
                             <td>
-                                
-                                <div class='progress-circle-bar' role='progressbar' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100' style='--value: $percentage; --size: 6rem;'></div>
+                                <div class='lb-progress-wrap'>
+                                    <div class='lb-progress-bar-outer'>
+                                        <div class='lb-progress-bar-inner' style='width:$percentage%'></div>
+                                    </div>
+                                    <div class='lb-progress-footer'>
+                                        <span class='lb-progress-pct'>$percentage%</span>
+                                    </div>
+                                </div>
                             </td>
                             <td>
                                 <div>
@@ -599,17 +610,16 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                                     <span class='text-danger'>$langAnalyticsCriticalLevel: " . $values['text-danger'] . "</span>
                                 </div>
                             </td>
-                            <td>" . action_bar(
+                            <td class='text-end'>" . action_button(
                                 array(
                                     array('title' => $langDetail,
                                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$period",
-                                            'icon' => 'fa-regular fa-user',
-                                            'level' => 'primary-label'
+                                            'icon' => 'fa-regular fa-user'
                                         ),
                                     array('title' => $langMessage,
                                         'url' => "../message/index.php?course=$course_code&upload=1&type=cm&user_id=$userid",
-                                        'icon' => 'fa-envelope',
-                                        'level' => 'primary-label')
+                                        'icon' => 'fa-envelope'
+                                        )
                                 )
                             ) . "</td>
                         </tr>";
@@ -696,12 +706,12 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
     $backclass = '';
     if (is_null($previous)) {
-        $backclass = 'style="display:none"';
+        $backclass = 'display:none;';
     }
 
     $nextclass = '';
     if (is_null($next)) {
-        $nextclass = 'style="display:none"';
+        $nextclass = 'display:none;';
     }
     $results = "
     <div class='table-responsive mt-0'>
@@ -715,9 +725,11 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                     $langPercentage
                 </th>
                 <th>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$previous'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>"
+                    <div class='d-flex justify-content-end align-items-center gap-2'>
+                        <a style='min-width: 30px; height: 30px; $backclass' class='btn btn-sm submitAdminBtn'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$previous'><i class='fa fa-arrow-circle-left fa-fw' aria-hidden='true'></i></a>"
                         . format_locale_date(strtotime($start), 'short', false) . " &mdash; " . format_locale_date(strtotime($end), 'short', false) .
-                        "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
+                        "<a style='min-width: 30px; height: 30px; $nextclass' class='btn btn-sm submitAdminBtn'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' aria-hidden='true'></i></a>
+                    </div>
                 </th>
             </tr>
         </thead>";
@@ -725,6 +737,9 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
     $elements_data = Database::get()->queryArray("SELECT id, module_id, resource, upper_threshold, lower_threshold, max_value, min_value 
                                             FROM analytics_element
                                             WHERE analytics_id = ?d", $analytics_id);
+
+    $start = $start . ' 00:00:00';
+    $end   = $end . ' 23:59:59';
 
     foreach($elements_data as $element_data) {
         $element_id = $element_data->id;
@@ -735,7 +750,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $max_value = $element_data->max_value;
         $min_value = $element_data->min_value;
 
-        $elements_data = Database::get()->queryArray("SELECT value, updated 
+        $elem_data = Database::get()->queryArray("SELECT value, updated 
                                                         FROM user_analytics
                                                         WHERE user_id = ?d
                                                         AND analytics_element_id = ?d
@@ -744,9 +759,9 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
         $total_value = 0;
 
-        if(count($elements_data) > 0) {
-            foreach ($elements_data as $element_data) {
-                $total_value = $total_value + $element_data->value;
+        if(count($elem_data) > 0) {
+            foreach ($elem_data as $el) {
+                $total_value = $total_value + $el->value;
             }
         }
 
@@ -920,7 +935,7 @@ function edit_analytics_settings ($analytics_id = 0)
 {
     global $tool_content, $course_code, $course_id, $language, $langCertDeadlineHelp, $head_content, $langTitle, $langDescription,
     $langActivate, $langAnalyticsCalculation, $langStart, $langAnalyticsStartDescription, $langFinish, $langAnalyticsEndDescription,
-    $langSave, $langAdd, $urlAppend, $langImgFormsDes;
+    $langSave, $langAdd, $urlAppend, $langImgFormsDes, $langCreate;
 
     load_js('bootstrap-datepicker');
 
@@ -956,17 +971,37 @@ function edit_analytics_settings ($analytics_id = 0)
         $action = 'update_analytics';
         $id_input = "<input type='hidden' name='analytics_id' value='$analytics_id'>";
     } else {
-        $title = '';
-        $description = '';
-        $active = '';
-        $start_date = '';
-        $end_date = '';
-        $periodType = '';
+        $title = isset($_SESSION['title']['data']) ? $_SESSION['title']['data'] : '';
+        $description = isset($_SESSION['description']['data']) ? $_SESSION['description']['data'] : '';
+        $active = isset($_SESSION['active']['data']) ? $_SESSION['active']['data'] : '';
+        $start_date = isset($_SESSION['start_date']['data']) ? $_SESSION['start_date']['data'] : '';
+        $end_date = isset($_SESSION['end_date']['data']) ? $_SESSION['end_date']['data'] : '';
+        $periodType = isset($_SESSION['periodType']['data']) ? $_SESSION['periodType']['data'] : '';
         $action = 'insert_analytics';
         $id_input = '';
     }
-    //<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
+    
 
+    $title_error = '';
+    if (isset($_SESSION['title']['errors'])) {
+        foreach ($_SESSION['title']['errors'] as $error) {
+            $title_error = "<div class='help-block text-danger'> " . $error . "</div>";
+        }
+    }
+    $start_date_error = '';
+    if (isset($_SESSION['start_date']['errors'])) {
+        foreach ($_SESSION['start_date']['errors'] as $error) {
+            $start_date_error = "<div class='help-block text-danger'> " . $error . "</div>";
+        }
+    }
+    $end_date_error = '';
+    if (isset($_SESSION['end_date']['errors'])) {
+        foreach ($_SESSION['end_date']['errors'] as $error) {
+            $end_date_error = "<div class='help-block text-danger'> " . $error . "</div>";
+        }
+    }
+    
+  
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'>
@@ -977,6 +1012,7 @@ function edit_analytics_settings ($analytics_id = 0)
                         <div class='col-sm-12'>
                             <input id='title' class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
                         </div>
+                        $title_error
                     </div>
                     <div class='form-group mt-4'>
                         <label for='description' class='col-sm-12 control-label-notes'>$langDescription</label>
@@ -1004,6 +1040,7 @@ function edit_analytics_settings ($analytics_id = 0)
                                 <input class='form-control mt-0' name='start_date' id='start_date' type='text' value='$start_date'>
                             </div>
                             <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsStartDescription</span>
+                            $start_date_error
                         </div>
                     </div>
                     <div class='form-group mt-4'>
@@ -1014,25 +1051,23 @@ function edit_analytics_settings ($analytics_id = 0)
                                 <input class='form-control mt-0' name='end_date' id='end_date' type='text' value='$end_date'>
                             </div>
                             <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsEndDescription</span>
+                            $end_date_error
                         </div>
                     </div> $id_input
                     <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-                            ".form_buttons(array(
-                                array(
-                                        'class' => 'submitAdminBtn',
-                                        'text' => $langSave,
-                                        'name' => $action,
-                                        'value'=> $langAdd
-                                ),
-                                array(
-                                    'class' => 'cancelAdminBtn ms-1',
-                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                    )
-                                ))."
-                        
-                            
-                        
-                        
+                        ".form_buttons(array(
+                            array(
+                                    'class' => 'submitAdminBtn',
+                                    'text' => $langCreate,
+                                    'name' => $action,
+                                    'value'=> $langAdd
+                            ),
+                            array(
+                                'class' => 'cancelAdminBtn ms-1',
+                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code" . ($analytics_id > 0 ? "&amp;analytics_id=$analytics_id&amp;mode=showDetails" : "")
+                                )
+
+                            ))."
                     </div>
                 </form>
             </div>

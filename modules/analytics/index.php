@@ -31,6 +31,7 @@ $toolName = $langLearningAnalytics;
 // Validate data and insert a new record to the DB
 if (isset($_POST['insert_analytics'])) {
     $v = new Valitron\Validator($_POST);
+    
     $v->rule('required', array('title'));
     if($_POST['start_date'] and $_POST['end_date']) {
         $d_start = date_create_from_format('d-m-Y', $_POST['start_date']);
@@ -47,20 +48,20 @@ if (isset($_POST['insert_analytics'])) {
     }
 
     $v->labels(array(
-        'title' => $langRequiredTitle
+        'title' => $langRequiredTitle,
+        'start_date' => $langRequiredStartDate,
+        'end_date' => $langRequiredEndDate
     ));
 
     if($v->validate()) {
         $created = date('Y-m-d H:i:s');
-
         $analytics_id = insert_analytics($_POST['title'], $_POST['description'], $_POST['active'], $_POST['periodType'], $start_date, $end_date, $created);
-
         Session::flash('message',$langAnalyticsInsertSuccess);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;new=1");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&edit_analytics=1");
     }
 // Validate data and update to DB
 } else if (isset($_POST['update_analytics'])) {
@@ -82,7 +83,9 @@ if (isset($_POST['insert_analytics'])) {
     }
 
     $v->labels(array(
-        'title' => $langRequiredTitle
+        'title' => $langRequiredTitle,
+        'start_date' => $langRequiredStartDate,
+        'end_date' => $langRequiredEndDate
     ));
 
     if($v->validate()) {
@@ -90,10 +93,10 @@ if (isset($_POST['insert_analytics'])) {
 
         Session::flash('message',$langAnalyticsUpdateSuccess);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&edit_analytics=1");
     }
 //Go to edit analytics form
 } else if (isset($_REQUEST['edit_analytics'])) {
