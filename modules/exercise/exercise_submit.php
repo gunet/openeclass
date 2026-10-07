@@ -141,10 +141,26 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $qId = intval($_POST['question_id']);
         $oldfilePath = $_POST['old_file_path'];
         $file = "$webDir/courses/$course_code/exercise/{$exId}{$oldfilePath}";
-        if (file_exists($file)) {
-            unlink($file);
-            Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", null, $u_rec_id, $qId);
-        } 
+
+        $checkURecord = Database::get()->querySingle("SELECT aer.answer FROM exercise_answer_record aer
+                                                      JOIN exercise_user_record eur ON eur.eurid=aer.eurid
+                                                      JOIN exercise_question eq ON eq.id=aer.question_id
+                                                      WHERE eq.id = ?d
+                                                      AND eq.type = ?d
+                                                      AND eur.eurid = ?d
+                                                      AND eur.eid = ?d
+                                                      AND eur.uid = ?d", $qId, UPLOAD_FILE, $u_rec_id, $exId, $uid);
+
+        if ($checkURecord && is_string($checkURecord->answer)) {
+            $arr_file = unserialize($checkURecord->answer, ["allowed_classes" => false]);
+            if (is_array($arr_file) && isset($arr_file['filepath']) 
+                && is_string($arr_file['filepath']) && $arr_file['filepath'] == $oldfilePath 
+                && file_exists($file)) {
+                if (unlink($file)) {
+                    Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", null, $u_rec_id, $qId);
+                }
+            }
+        }
     }
 
     exit;
