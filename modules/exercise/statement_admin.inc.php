@@ -230,7 +230,9 @@ if (isset($_POST['submitQuestion'])) {
             $codeOptions = [];
             if (isset($_POST['code_exercise']) && $_POST['code_exercise'] == '1') {
                 $codeOptions['code_exercise'] = true;
-                $codeOptions['code_language'] = $_POST['code_language'] ?? 'javascript';
+                require_once __DIR__ . '/code_exercise_languages.inc.php';
+                $codeLanguage = $_POST['code_language'] ?? '';
+                $codeOptions['code_language'] = isset($CODE_EXERCISE_LANGUAGES[$codeLanguage]) ? $codeLanguage : 'text/x-c++src';
             } else {
                 $codeOptions['code_exercise'] = false;
             }
@@ -324,7 +326,7 @@ if (isset($_POST['submitQuestion'])) {
         $questionOptions = $objQuestion->selectOptions();
         $codeExerciseOptions = json_decode($questionOptions ?? '', true);
         $codeExerciseEnabled = ($codeExerciseOptions['code_exercise'] ?? false) === true;
-        $codeLanguage = $codeExerciseOptions['code_language'] ?? 'javascript';
+        $codeLanguage = $codeExerciseOptions['code_language'] ?? 'text/x-c++src';
     }
 }
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
@@ -461,7 +463,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             foreach ($CODE_EXERCISE_LANGUAGES as $value => $opts) {
                 $codeLanguageOptions[$value] = $opts['name'];
             }
-            $codeLanguageSelect = selection($codeLanguageOptions, 'code_language', $codeLanguage ?? 'javascript', '');
+            $codeLanguageSelect = selection($codeLanguageOptions, 'code_language', $codeLanguage ?? 'text/x-c++src', '');
 
             $tool_content .= "<div id='codeExerciseWrapper' class='row form-group ".(($answerType != FREE_TEXT) ? "hide": "")." mt-4'>
                 <div class='col-12'>

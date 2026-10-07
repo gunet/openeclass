@@ -4,19 +4,20 @@
   "license": "GPL-2.0-or-later",
   "homepage": "https://www.openeclass.org/",
   "dependencies": {
+    "@codemirror/legacy-modes": "^6.5.5",
     "@uppy/core": "^4.2.2",
     "@uppy/dashboard": "^4.1.1",
     "@uppy/drag-drop": "^4.0.3",
     "@uppy/form": "^4.2.2",
     "@uppy/locales": "^4.2.0",
     "@uppy/xhr-upload": "^4.2.1",
+    "codemirror": "^6.0.2",
     "dom-to-image": "^2.6.0",
     "h5p-standalone": "^3.8.2",
     "jsmind": "^0.9.1",
     "mathjax": "^4.1",
     "recordrtc": "^5.6.2",
-    "video.js": "^8.19",
-    "codemirror": "^5.65.20"
+    "video.js": "^8.19"
   },
   "scripts": {
     "postinstall": "php ./js/build/build.php"

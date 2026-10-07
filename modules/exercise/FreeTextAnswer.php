@@ -27,12 +27,12 @@ class FreeTextAnswer extends QuestionType
         $questionOptions = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
         $questionOpts = json_decode($questionOptions ?? '', true);
         $isCodeExercise = ($questionOpts['code_exercise'] ?? false) === true;
-        $codeLanguage = $questionOpts['code_language'] ?? 'javascript';
+        $codeLanguage = $questionOpts['code_language'] ?? 'text/x-c++src';
 
         if ($isCodeExercise) {
             // Render textarea for CodeMirror
             $html_content .= "
-                <div class='col-12' id='freetext_{$questionId}'>
+                <div class='col-12 code-exercise-editor-wrapper' id='freetext_{$questionId}'>
                     <textarea name='choice[$questionId]' id='code_editor_{$questionId}' class='code-exercise-editor form-control' rows='14' data-language='" . q($codeLanguage) . "'>" . q($text) . "</textarea>
                 </div>";
         } else {

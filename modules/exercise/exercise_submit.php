@@ -1051,72 +1051,49 @@ foreach ($questionList as $q_id) {
             $hasCodeExercise = true;
             $codeEditors[] = [
                 'id' => $q_id,
-                'language' => $qOpts['code_language'] ?? 'javascript'
+                'language' => $qOpts['code_language'] ?? 'text/x-c++src'
             ];
         }
     }
 }
 
-// Load CodeMirror if needed (only the mode(s) for the selected language(s))
+// Load CodeMirror if needed (the bundle loads only the languages it uses)
 if ($hasCodeExercise) {
-    require_once __DIR__ . '/code_exercise_languages.inc.php';
-    load_js('codemirror');
-    $head_content .= '<link rel="stylesheet" href="' . $urlAppend . 'js/codemirror/lib/codemirror.css">';
     $head_content .= '
     <style>
-    .code-exercise-header-bar{ 
-        height: 30px; 
-        background: #F7F7F7; 
-        border:1px solid #ddd; 
-        border-bottom:none; 
-        border-radius:4px 4px 0 0; 
+    .code-exercise-editor-wrapper .cm-editor {
+        border: 1px solid var(--bs-border-color);
+        border-radius: var(--bs-border-radius);
+        font-size: 0.9rem;
+    }
+    .code-exercise-editor-wrapper .cm-editor.cm-focused {
+        outline: 2px solid var(--bs-primary);
+        outline-offset: -1px;
+    }
+    .code-exercise-editor-wrapper .cm-content,
+    .code-exercise-editor-wrapper .cm-gutter {
+        min-height: 300px;
+    }
+    .code-exercise-editor-wrapper .cm-scroller {
+        max-height: 600px;
     }
     </style>';
-    $languagesToLoad = array_unique(array_column($codeEditors, 'language'));
-    $loadedModes = [];
-    foreach ($languagesToLoad as $lang) {
-        $opts = $CODE_EXERCISE_LANGUAGES[$lang] ?? null;
-        if ($opts) {
-            if (!in_array($opts['mode'], $loadedModes)) {
-                $head_content .= js_link('codemirror/mode/' . $opts['mode']);
-                $loadedModes[] = $opts['mode'];
-            }
-            if (!empty($opts['extra'])) {
-                foreach ($opts['extra'] as $extra) {
-                    if (!in_array($extra, $loadedModes)) {
-                        $head_content .= js_link('codemirror/mode/' . $extra);
-                        $loadedModes[] = $extra;
-                    }
-                }
-            }
-        }
-    }
-    // Add initialization script
     $head_content .= "
-    <script>
-    $(document).ready(function() {
-        document.querySelectorAll('.code-exercise-editor').forEach(function(textarea) {
-            var questionId = textarea.id.replace('code_editor_', '');
-            var language = textarea.getAttribute('data-language') || 'javascript';
-            var editor = CodeMirror.fromTextArea(textarea, {
-                lineNumbers: true,
-                mode: language
-            });
-            var wrapper = textarea.nextElementSibling;
-            if (wrapper && wrapper.classList.contains('CodeMirror')) {
-                var headerBar = document.createElement('div');
-                headerBar.className = 'code-exercise-header-bar';
-                wrapper.parentNode.insertBefore(headerBar, wrapper);
-            }
-            editor.on('change', function() {
-                if (editor.getValue().trim() !== '') {
+    <script type='module'>
+    const { fromTextArea } = await import('{$urlAppend}js/bundle/codemirror/codemirror.js');
+    document.querySelectorAll('.code-exercise-editor').forEach(function(textarea) {
+        var questionId = textarea.id.replace('code_editor_', '');
+        fromTextArea(textarea, {
+            language: textarea.getAttribute('data-language') || 'text/x-c++src',
+            onChange: function(value) {
+                if (value.trim() !== '') {
                     var qPanel = $('#qPanel' + questionId);
                     var qCheck = qPanel.find('span').first();
                     var qButton = $('#' + qCheck.attr('id').replace('qCheck', 'q_num'));
                     qCheck.addClass('fa fa-check');
                     qButton.removeClass('btn-default').addClass('btn-info');
                 }
-            });
+            }
         });
     });
     </script>";

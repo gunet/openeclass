@@ -15,6 +15,9 @@ if (!$command_line) {
 if (exec('bun build js/build/uppy.js --outdir js/bundle --minify', $output) === false) {
     die("Unable to execute bun:\n\n" . implode("\n", $output));
 }
+if (exec('bun build js/build/codemirror.js --outdir js/bundle/codemirror --splitting --minify', $output) === false) {
+    die("Unable to execute bun:\n\n" . implode("\n", $output));
+}
 if (file_exists('js/bundle/uppy.min.css')) {
     unlink('js/bundle/uppy.min.css');
 }
@@ -62,12 +65,6 @@ foreach(['video.min.js', 'video-js.min.css', 'font', 'lang'] as $file) {
         copy($path, $dest);
     }
 }
-
-// Copy CodeMirror 5
-removeDir('js/codemirror');
-mkdir('js/codemirror');
-recurse_copy('node_modules/codemirror/lib', 'js/codemirror/lib');
-recurse_copy('node_modules/codemirror/mode', 'js/codemirror/mode');
 
 // jsMind
 removeDir('js/jsmind');
