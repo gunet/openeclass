@@ -86,8 +86,8 @@ if (isset($_POST['submitAnnouncement'])) {
                         start_display = ?t,
                         stop_display = ?t,
                         visible = ?d
-                    WHERE id = ?d",
-                $newContent, $antitle, $date_announcement, $start_display, $stop_display, $is_visible, $id);
+                    WHERE id = ?d AND course_id = ?d",
+                $newContent, $antitle, $date_announcement, $start_display, $stop_display, $is_visible, $id, $course_id);
             $log_type = LOG_MODIFY;
             $message = $langAnnModify;
             if (isset($_POST['tags'])) {
