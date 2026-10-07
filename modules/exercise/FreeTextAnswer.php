@@ -1,11 +1,20 @@
 <?php
 
 require_once 'answer.class.php';
+require_once __DIR__ . '/code_exercise_languages.inc.php';
 
 class FreeTextAnswer extends QuestionType
 {
     public function __destruct() {
         unset($this->answer_object);
+    }
+
+    /**
+     * @return string|null the code exercise language, or null for a plain free text question
+     */
+    private function codeLanguage(): ?string {
+        $options = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $this->question_id)->options;
+        return code_exercise_language($options);
     }
 
     public function PreviewQuestion(): string
@@ -24,12 +33,9 @@ class FreeTextAnswer extends QuestionType
         }
 
         // Check if this is a code exercise
-        $questionOptions = Database::get()->querySingle("SELECT options FROM exercise_question WHERE id = ?d", $questionId)->options;
-        $questionOpts = json_decode($questionOptions ?? '', true);
-        $isCodeExercise = ($questionOpts['code_exercise'] ?? false) === true;
-        $codeLanguage = $questionOpts['code_language'] ?? 'text/x-c++src';
+        $codeLanguage = $this->codeLanguage();
 
-        if ($isCodeExercise) {
+        if ($codeLanguage !== null) {
             // Render textarea for CodeMirror
             $html_content .= "
                 <div class='col-12 code-exercise-editor-wrapper' id='freetext_{$questionId}'>
@@ -61,7 +67,12 @@ class FreeTextAnswer extends QuestionType
         $html_content = '';
 
         $text = $choice; // plain text
-        $html_content .= "<tr><td>" . purify($text). "</td></tr>";
+        $codeLanguage = $this->codeLanguage();
+        if ($codeLanguage !== null) {
+            $html_content .= "<tr><td>" . code_exercise_answer($text, $codeLanguage) . "</td></tr>";
+        } else {
+            $html_content .= "<tr><td>" . purify($text). "</td></tr>";
+        }
 
         if ($is_editor) {
             $arid = Database::get()->querySingle("SELECT answer_record_id FROM exercise_answer_record WHERE eurid = ?d", $eurid)->answer_record_id;

@@ -29,6 +29,7 @@ require_once 'modules/exercise/exercise.lib.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
+require_once __DIR__ . '/code_exercise_languages.inc.php';
 require_once 'include/lib/ai/services/AIService.php';
 require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
 
@@ -555,6 +556,7 @@ if (count($exercise_question_ids) > 0) {
         $answerType = $objQuestionTmp->selectType();
         $questionType = $objQuestionTmp->selectTypeLegend($answerType);
         $questionId = $objQuestionTmp->selectId();
+        $codeLanguage = code_exercise_language($objQuestionTmp->selectOptions());
         if ($is_editor) {
             $qid_display = " - id: $questionId";
             $edit_link = icon('fa-edit', $langEdit,
@@ -636,7 +638,10 @@ if (count($exercise_question_ids) > 0) {
 
         $tool_content .= "</div><div class='col-2 text-end d-flex flex-column'>";
         if ($answerType == FREE_TEXT or $answerType == ORAL or $answerType == UPLOAD_FILE) {
-            $choice = purify($choice);
+            // Code answers are escaped later, in FreeTextAnswer::QuestionResult()
+            if ($codeLanguage === null) {
+                $choice = purify($choice);
+            }
             if (!empty($choice)) {
                 if (!$question_graded) {
                     $tool_content .= " <small class='text-danger'>(<span class='text-danger'>$langAnswerUngraded</span>) </small>";

@@ -229,10 +229,10 @@ if (isset($_POST['submitQuestion'])) {
         if ($answerType == FREE_TEXT) {
             $codeOptions = [];
             if (isset($_POST['code_exercise']) && $_POST['code_exercise'] == '1') {
-                $codeOptions['code_exercise'] = true;
                 require_once __DIR__ . '/code_exercise_languages.inc.php';
+                $codeOptions['code_exercise'] = true;
                 $codeLanguage = $_POST['code_language'] ?? '';
-                $codeOptions['code_language'] = isset($CODE_EXERCISE_LANGUAGES[$codeLanguage]) ? $codeLanguage : 'text/x-c++src';
+                $codeOptions['code_language'] = isset(code_exercise_languages()[$codeLanguage]) ? $codeLanguage : CODE_EXERCISE_DEFAULT_LANGUAGE;
             } else {
                 $codeOptions['code_exercise'] = false;
             }
@@ -323,10 +323,9 @@ if (isset($_POST['submitQuestion'])) {
         $questionWeight = $objQuestion->selectWeighting();
 
         // Load code exercise options
-        $questionOptions = $objQuestion->selectOptions();
-        $codeExerciseOptions = json_decode($questionOptions ?? '', true);
-        $codeExerciseEnabled = ($codeExerciseOptions['code_exercise'] ?? false) === true;
-        $codeLanguage = $codeExerciseOptions['code_language'] ?? 'text/x-c++src';
+        require_once __DIR__ . '/code_exercise_languages.inc.php';
+        $codeLanguage = code_exercise_language($objQuestion->selectOptions());
+        $codeExerciseEnabled = $codeLanguage !== null;
     }
 }
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
@@ -460,10 +459,10 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             $codeLanguageHide = ($codeExerciseEnabled ?? false) ? '' : 'hide';
             $codeLanguageDisabled = ($codeExerciseEnabled ?? false) ? '' : 'disabled';
             $codeLanguageOptions = [];
-            foreach ($CODE_EXERCISE_LANGUAGES as $value => $opts) {
+            foreach (code_exercise_languages() as $value => $opts) {
                 $codeLanguageOptions[$value] = $opts['name'];
             }
-            $codeLanguageSelect = selection($codeLanguageOptions, 'code_language', $codeLanguage ?? 'text/x-c++src', '');
+            $codeLanguageSelect = selection($codeLanguageOptions, 'code_language', $codeLanguage ?? CODE_EXERCISE_DEFAULT_LANGUAGE, '');
 
             $tool_content .= "<div id='codeExerciseWrapper' class='row form-group ".(($answerType != FREE_TEXT) ? "hide": "")." mt-4'>
                 <div class='col-12'>

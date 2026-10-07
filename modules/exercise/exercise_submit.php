@@ -1040,19 +1040,13 @@ foreach ($questionList as $k => $q_id) {
 }
 
 // Check if any FREE_TEXT question is a code exercise
+require_once __DIR__ . '/code_exercise_languages.inc.php';
 $hasCodeExercise = false;
-$codeEditors = [];
 foreach ($questionList as $q_id) {
     $t_question = $questions[$q_id] ?? null;
     if ($t_question && $t_question->selectType() == FREE_TEXT) {
-        $qOptions = $t_question->selectOptions();
-        $qOpts = json_decode($qOptions ?? '', true);
-        if (($qOpts['code_exercise'] ?? false) === true) {
+        if (code_exercise_language($t_question->selectOptions()) !== null) {
             $hasCodeExercise = true;
-            $codeEditors[] = [
-                'id' => $q_id,
-                'language' => $qOpts['code_language'] ?? 'text/x-c++src'
-            ];
         }
     }
 }
@@ -1061,11 +1055,6 @@ foreach ($questionList as $q_id) {
 if ($hasCodeExercise) {
     $head_content .= '
     <style>
-    .code-exercise-editor-wrapper .cm-editor {
-        border: 1px solid var(--bs-border-color);
-        border-radius: var(--bs-border-radius);
-        font-size: 0.9rem;
-    }
     .code-exercise-editor-wrapper .cm-editor.cm-focused {
         outline: 2px solid var(--bs-primary);
         outline-offset: -1px;
@@ -1084,7 +1073,7 @@ if ($hasCodeExercise) {
     document.querySelectorAll('.code-exercise-editor').forEach(function(textarea) {
         var questionId = textarea.id.replace('code_editor_', '');
         fromTextArea(textarea, {
-            language: textarea.getAttribute('data-language') || 'text/x-c++src',
+            language: textarea.getAttribute('data-language'),
             onChange: function(value) {
                 if (value.trim() !== '') {
                     var qPanel = $('#qPanel' + questionId);
