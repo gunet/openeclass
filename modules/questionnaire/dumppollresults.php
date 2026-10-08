@@ -23,7 +23,9 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = true;
-$require_course_reviewer = true;
+if (!isset($_GET['from_session_view'])) {
+    $require_course_reviewer = true;
+}
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
 require_once 'modules/questionnaire/functions.php';
@@ -35,8 +37,16 @@ if (!isset($_GET['pid'])) {
     $pid = intval($_GET['pid']);
 }
 
+if (isset($_GET['from_session_view']) && $is_consultant) {
+    $is_course_reviewer = true;
+}
+
+if (!$is_course_reviewer) {
+    forbidden();
+}
+
 // Check if uid is the coordinator or the consultant of the current session.
-if (isset($_GET['session'])) {
+if (isset($_GET['from_session_view']) && isset($_GET['session'])) {
     $check = Database::get()->querySingle("SELECT user_id FROM course_user 
         WHERE user_id = ?d AND course_id = ?d AND status = ?d AND tutor = ?d", $uid, $course_id, USER_STUDENT, 1);
     if ($check && !is_session_consultant($_GET['session'],$course_id)) {

@@ -1,10 +1,10 @@
 @extends('layouts.default')
 @push('head_styles')
-    <link href="{{ $urlAppend }}js/jstree3/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
+    <link href="{{ $urlAppend }}js/jstree/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
 @endpush
 
 @push('head_scripts')
-    <script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
+    <script type='text/javascript' src='{{ $urlAppend }}js/jstree/jstree.min.js'></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/pwstrength.js"></script>
     <script type="text/javascript">
         var lang = {
@@ -35,7 +35,7 @@
 
             @include('layouts.partials.show_alert') 
 
-            @if (!$user_registration)
+            @if (!$user_registration || (!$eclass_stud_reg && empty($provider_name) && empty($provider_id)))
                 <div class='col-12 mt-4'>
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                         {{ trans('langStudentCannotRegister') }}</span>
@@ -81,6 +81,7 @@
                             <div class='col-lg-6 col-12'>
                                 <div class='form-wrapper form-edit rounded px-0 border-0'>
                                     <form class='form-horizontal' role='form' action='newuser.php' method='post' onsubmit='return validateNodePickerForm();'>
+                                        {!! generate_csrf_token_form_field() !!}
 
                                             <div class='row'>
                                                 <div class='col-lg-6 col-12 px-3'>

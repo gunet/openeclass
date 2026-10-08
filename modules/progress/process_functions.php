@@ -1974,7 +1974,11 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     $theme_id = get_config('theme_options_id');
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         if (isset($theme_options_styles['imageUpload'])) {
             $logo_img = "$urlThemeData/{$theme_options_styles['imageUpload']}";

@@ -1408,6 +1408,7 @@ b a {
   border: 0;
   border-radius: 0.25rem;
   opacity: 1;
+  z-index: auto !important;
 }
 
 .alert-dismissible .btn-close:focus, .alert-dismissible .btn-close:hover, .alert-dismissible .btn-close:active{
@@ -4918,6 +4919,17 @@ body .delThemeBtn{
   margin-left: 5px;
   margin-right: 5px;
 }
+/* Blanks sized to their answer (per-question option). Monospace + content-box make the inline
+   width (N ch) hold exactly maxlength (N) characters, whatever the letters or the theme's padding,
+   so the text never scrolls. No 200px cap, tighter spacing for C-tests. */
+.container-fill-in-the-blank .form-control.fill-in-the-blank-sized {
+  font-family: var(--bs-font-monospace, monospace);
+  box-sizing: content-box;
+  max-width: 100%;
+  min-width: 0;
+  margin-left: 2px;
+  margin-right: 2px;
+}
 
 /**********************************************************************************************************************/
 /*************************************************** MY COURSES *******************************************************/
@@ -7988,4 +8000,533 @@ th.grade-col a{
 
 .cart_certificate_selected {
   border: solid 3px red !important;
+}
+
+
+
+/* ==========================================================================================================================================
+   Exercise Accordion - Feedback range
+============================================================================================================================================ */
+
+.exercise-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.exercise-accordion .accordion-item {
+    border: 1px solid #DBEAFE;
+    border-radius: 12px !important;
+    overflow: hidden;
+    background-color: #FFFFFF;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.exercise-accordion .accordion-button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.15rem 1.35rem;
+    background-color: #FFFFFF;
+    color: #1E293B;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    border: 0;
+    box-shadow: none;
+    text-align: left;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.exercise-accordion .accordion-button:not(.collapsed) {
+    background-color: #EFF6FF;
+    color: #1E40AF;
+    box-shadow: none;
+}
+
+.exercise-accordion .accordion-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 10px;
+    background-color: #DBEAFE;
+    color: #1D4ED8;
+    font-size: 1rem;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.exercise-accordion
+.accordion-button:not(.collapsed)
+.accordion-icon {
+    background-color: #DBEAFE;
+    color: #1E40AF;
+}
+
+.accordion-delete-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  background-color: #DBEAFE;
+  color: #1D4ED8;
+  font-size: 1rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  background-color: #FFE6E6;
+  color: #FF5C5C;
+}
+.accordion-delete-icon i{
+  color: #FF5C5C;
+}
+
+#exerciseForm .fa-solid.fa-circle-info::before {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 10px;
+  background-color: #DBEAFE;
+  color: #1E40AF;
+}
+
+.exercise-accordion .accordion-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.exercise-accordion .accordion-title-text {
+    color: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.exercise-accordion .accordion-subtitle {
+    color: #64748B;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.exercise-accordion .accordion-button::after {
+    flex-shrink: 0;
+    width: 1rem;
+    height: 1rem;
+    margin-left: auto;
+    background-size: 1rem;
+    opacity: 0.75;
+    transition: transform 0.2s ease;
+}
+
+.exercise-accordion
+.accordion-button:not(.collapsed)::after {
+    opacity: 1;
+}
+
+.exercise-accordion .accordion-body {
+    padding: 1.25rem 1.35rem;
+    background-color: #FFFFFF;
+    color: #475569;
+    border-top: 1px solid #DBEAFE;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.exercise-accordion .accordion-body p {
+    margin-bottom: 0.75rem;
+}
+
+.exercise-accordion .accordion-body p:last-child {
+    margin-bottom: 0;
+}
+
+.exercise-accordion .accordion-status {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 0.75rem;
+    padding: 0.25rem 0.65rem;
+    border: 1px solid #BFDBFE;
+    border-radius: 999px;
+    background-color: #EFF6FF;
+    color: #1D4ED8;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+@media (max-width: 576px) {
+
+    .exercise-accordion {
+        gap: 0.75rem;
+    }
+
+    .exercise-accordion .accordion-button {
+        gap: 0.65rem;
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+
+    .exercise-accordion .accordion-icon {
+        width: 2.2rem;
+        height: 2.2rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+    }
+
+    .exercise-accordion .accordion-title-text {
+        font-size: 0.95rem;
+    }
+
+    .exercise-accordion .accordion-subtitle {
+        font-size: 0.75rem;
+    }
+
+    .exercise-accordion .accordion-body {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .exercise-accordion .accordion-status {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .exercise-accordion .accordion-item,
+    .exercise-accordion .accordion-button,
+    .exercise-accordion .accordion-icon,
+    .exercise-accordion .accordion-button::after {
+        transition: none;
+    }
+}
+
+.feedback-intro { display:flex; gap:1rem; align-items:flex-start; padding:1.1rem 1.2rem; border-radius:14px; }
+.feedback-intro-icon { display:grid; place-items:center; flex:0 0 2.5rem; height:2.5rem; border-radius:10px; background:#dcecff; color:#1769aa; }
+.feedback-intro.alert .fa-solid::before {
+  padding-top:  0px;
+}
+.feedback-intro strong { display:block; margin:0 0 .25rem; font-size:1rem; }
+.feedback-intro p { margin:0; line-height:1.55; }
+#feedback-container { display:grid; gap:.85rem; }
+.feedback-row { display:grid; grid-template-columns:minmax(150px, .65fr) minmax(0, 2fr) auto; gap:1rem; align-items:center; padding:1rem; border-radius:14px; }
+.feedback-range { display:flex; flex-direction:column; gap:.3rem; }
+.feedback-range-caption { font-size:.78rem; }
+.feedback-range-value { font-size:1rem; }
+.feedback-fields { display:grid; grid-template-columns:minmax(110px,.45fr) minmax(0,2fr); gap:.9rem; align-items:end; }
+.feedback-grade-field .form-label,.feedback-text-field .form-label { margin-bottom:.35rem; font-size:.85rem; font-weight:600; }
+.feedback-actions { display:flex; align-items:center; gap:1rem; margin-top:1rem; flex-wrap:wrap; }
+#feedback-empty { font-size:.9rem; }
+.delete-feedback-btn { display:grid; place-items:center; width:2.5rem; height:2.5rem; border-radius:10px; }
+@media(max-width:767.98px) { 
+  .feedback-row { grid-template-columns:1fr auto; gap:.75rem; } 
+  .feedback-range { grid-column:1 / -1; } 
+  .feedback-fields { grid-column:1 / 2; grid-template-columns:1fr; } 
+  .delete-feedback-btn { grid-column:2; grid-row:2; align-self:end; } 
+}
+
+/* Modern Bootstrap feedback scale */
+#reviewComments .feedback-intro { border-radius: .85rem; box-shadow: none; }
+#reviewComments .feedback-intro-icon { display:grid; place-items:center; flex:0 0 2.5rem; height:2.5rem; border-radius:.75rem; background:rgba(13,110,253,.12); color:var(--bs-primary); }
+#reviewComments .feedback-intro strong { display:block; margin-bottom:.2rem; }
+#reviewComments .feedback-intro p { line-height:1.5; }
+#reviewComments .feedback-scale-card { overflow:hidden; border-radius:1rem; }
+#reviewComments .feedback-scale { display:flex; align-items:flex-start; min-width:max-content; min-height:108px; padding:1.2rem .25rem .25rem; }
+#reviewComments .feedback-scale-point { position:relative; display:flex; flex:0 0 auto; flex-direction:column; align-items:center; width:92px; min-height:80px; text-align:center; }
+#reviewComments .feedback-scale-dot { position:absolute; top:5px; z-index:1; width:14px; height:14px; border:3px solid #fff; border-radius:50%; background:var(--bs-primary); box-shadow:0 0 0 2px rgba(13,110,253,.28); }
+#reviewComments .feedback-scale-point strong { margin-top:29px; font-size:.95rem; }
+#reviewComments .feedback-scale-point small { display:block; max-width:110px; overflow:hidden; color:var(--bs-secondary-color); font-size:.72rem; line-height:1.25; text-overflow:ellipsis; white-space:nowrap; }
+#reviewComments .feedback-scale-start .feedback-scale-dot { background:#198754; box-shadow:0 0 0 2px rgba(25,135,84,.25); }
+#reviewComments .feedback-scale-line { position:relative; flex:1 1 72px; min-width:56px; height:3px; margin-top:10px; background:repeating-linear-gradient(90deg,#8bb8ed 0,#8bb8ed 8px,transparent 8px,transparent 13px); }
+#reviewComments .feedback-scale-line span { position:absolute; top:-4px; right:0; width:11px; height:11px; border-top:3px solid #8bb8ed; border-right:3px solid #8bb8ed; transform:rotate(45deg); }
+#reviewComments .feedback-row { display:grid; grid-template-columns:minmax(155px,.55fr) minmax(0,2fr) auto; gap:1rem; align-items:center; padding:1rem; border-radius:.9rem; background:var(--bs-body-bg); box-shadow:0 .25rem .8rem rgba(33,53,71,.05); }
+#reviewComments .feedback-range { display:flex; flex-direction:column; gap:.25rem; }
+#reviewComments .feedback-range-caption { color:var(--bs-secondary-color); font-size:.78rem; }
+#reviewComments .feedback-range-value { display:inline-flex; align-self:flex-start; padding:.3rem .65rem; border-radius:50rem;  font-size:.85rem; font-weight:600; }
+#reviewComments .feedback-fields { display:grid; grid-template-columns:minmax(105px,.45fr) minmax(0,2fr); gap:.85rem; align-items:end; }
+#reviewComments .feedback-fields .form-label { margin-bottom:.35rem; font-size:.85rem; font-weight:600; }
+#reviewComments .feedback-actions { display:flex; align-items:center; gap:1rem; margin-top:1rem; flex-wrap:wrap; }
+#reviewComments #feedback-empty { color:var(--bs-secondary-color); font-size:.9rem; }
+#reviewComments .delete-feedback-btn { display:grid; place-items:center; width:2.5rem; height:2.5rem; padding:0; border-radius:.7rem; }
+@media(max-width:767.98px) {
+    #reviewComments .feedback-row { grid-template-columns:1fr auto; gap:.75rem; }
+    #reviewComments .feedback-range { grid-column:1 / -1; }
+    #reviewComments .feedback-fields { grid-column:1 / 2; grid-template-columns:1fr; }
+    #reviewComments .delete-feedback-btn { grid-column:2; grid-row:2; align-self:end; }
+    #reviewComments .feedback-scale-card .card-body { overflow-x:auto; }
+}
+
+/* Place feedback copy inside its score interval and wrap the full text. */
+#reviewComments .feedback-scale-line {
+    display: flex;
+    flex: 1 1 120px;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+    height: auto;
+    margin-top: 0;
+    background: none;
+}
+#reviewComments .feedback-scale-line > span {
+    position: relative;
+    top: 10px;
+    right: auto;
+    align-self: stretch;
+    height: 3px;
+    border: 0;
+    background: repeating-linear-gradient(90deg,#8bb8ed 0,#8bb8ed 8px,transparent 8px,transparent 13px);
+}
+#reviewComments .feedback-scale-line .feedback-scale-message {
+    display: block;
+    width: 100%;
+    max-width: 220px;
+    margin-top: 20px;
+    overflow: visible;
+    color: var(--bs-body-color);
+    font-size: .78rem;
+    line-height: 1.4;
+    text-align: center;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+#reviewComments .feedback-scale-point small { 
+  display: none; 
+}
+
+#reviewComments .feedback-scale-line > span {
+    height: 0;
+    border-top: 3px dashed #8bb8ed;
+    background: none;
+}
+
+#reviewComments .feedback-scale-line {
+    display: flex;
+    flex: 1 1 120px;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+    height: auto;
+    margin-top: 0;
+    background: none;
+}
+#reviewComments .feedback-scale-track {
+    position: relative;
+    display: block;
+    align-self: stretch;
+    flex: 0 0 auto;
+    height: 3px;
+    margin-top: 10px;
+    background: repeating-linear-gradient(90deg, #8bb8ed 0, #8bb8ed 8px, transparent 8px, transparent 13px);
+}
+#reviewComments .feedback-scale-track > span {
+    position: absolute;
+    top: -4px;
+    right: 0;
+    width: 11px;
+    height: 11px;
+    border-top: 3px solid #8bb8ed;
+    border-right: 3px solid #8bb8ed;
+    transform: rotate(45deg);
+}
+#reviewComments .feedback-scale-line .feedback-scale-message {
+    display: block;
+    width: 100%;
+    max-width: 220px;
+    margin-top: 12px;
+    overflow: visible;
+    color: var(--bs-body-color);
+    font-size: .78rem;
+    line-height: 1.4;
+    text-align: center;
+    text-overflow: clip;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+/* The legacy arrow selector also matches the track wrapper; reset it here. */
+#reviewComments .feedback-scale-line > .feedback-scale-track {
+    position: relative;
+    top: auto;
+    right: auto;
+    display: block;
+    align-self: stretch;
+    flex: 0 0 auto;
+    width: auto;
+    height: 3px;
+    margin-top: 10px;
+    border: 0;
+    background: repeating-linear-gradient(90deg, #8bb8ed 0, #8bb8ed 8px, transparent 8px, transparent 13px);
+    transform: none;
+}
+#reviewComments .feedback-scale-line > .feedback-scale-track > span {
+    position: absolute;
+    top: -4px;
+    right: 0;
+    width: 11px;
+    height: 11px;
+    border-top: 3px solid #8bb8ed;
+    border-right: 3px solid #8bb8ed;
+    background: transparent;
+    transform: rotate(45deg);
+}
+
+#reviewComments .feedback-scale-line {
+    flex: 0 0 72px;
+    min-width: 72px;
+}
+
+/* Feedback copy replaces the scale arrows and sits between score markers. */
+#reviewComments .feedback-scale-track { display: none; }
+#reviewComments .feedback-scale-line {
+    display: flex;
+    flex: 0 0 180px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    height: auto;
+    margin: 0;
+    background: none;
+}
+#reviewComments .feedback-scale-line .feedback-scale-message {
+    width: 100%;
+    max-width: 220px;
+    margin: 0;
+    color: var(--bs-body-color);
+    font-size: .82rem;
+    line-height: 1.4;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* Continuous interval rules with their feedback message beneath each rule. */
+#reviewComments .feedback-scale-track {
+    position: static;
+    display: block;
+    align-self: stretch;
+    flex: 0 0 auto;
+    width: auto;
+    height: 2px;
+    margin-top: 10px;
+    border: 0;
+    background: var(--bs-border-color);
+    transform: none;
+}
+#reviewComments .feedback-scale-line .feedback-scale-message {
+    margin-top: 10px;
+}
+#reviewComments .feedback-scale-line > .feedback-scale-track {
+    position: static;
+    top: auto;
+    right: auto;
+    display: block;
+    align-self: stretch;
+    width: auto;
+    height: 2px;
+    margin-top: 10px;
+    border: 0;
+    background: var(--bs-border-color);
+    transform: none;
+}
+#reviewComments .feedback-scale-line > .feedback-scale-track {
+    height: 3px;
+    background: #8bb8ed !important;
+    border-radius: 999px;
+    opacity: 1;
+}
+
+/* Vertical feedback scale for narrow and wide screens. */
+#reviewComments .feedback-scale {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: .5rem 0;
+}
+#reviewComments .feedback-scale-point {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: center;
+    align-self: stretch;
+    gap: .75rem;
+    width: auto;
+    min-height: 2.25rem;
+    text-align: left;
+}
+#reviewComments .feedback-scale-point .feedback-scale-dot {
+    position: static;
+    display: block;
+    flex: 0 0 14px;
+}
+#reviewComments .feedback-scale-point strong {
+    margin: 0;
+}
+#reviewComments .feedback-scale-line {
+    display: grid;
+    flex: 0 0 auto;
+    grid-template-columns: 14px minmax(0, 1fr);
+    align-items: stretch;
+    column-gap: .75rem;
+    width: 100%;
+    min-width: 0;
+    min-height: 1.5rem;
+    margin: 0;
+    padding: 0;
+    background: none;
+}
+#reviewComments .feedback-scale-line > .feedback-scale-track {
+    position: relative;
+    top: auto;
+    right: auto;
+    display: block;
+    align-self: stretch;
+    justify-self: center;
+    width: 3px;
+    height: auto;
+    min-height: 1.5rem;
+    margin: 0;
+    border: 0;
+    border-radius: 999px;
+    background: #8bb8ed !important;
+    transform: none;
+}
+#reviewComments .feedback-scale-line > .feedback-scale-track > span {
+    display: none;
+}
+#reviewComments .feedback-scale-line .feedback-scale-message {
+    display: block;
+    align-self: center;
+    width: 100%;
+    max-width: none;
+    margin: .4rem 0;
+    color: var(--bs-body-color);
+    font-size: .85rem;
+    line-height: 1.5;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal;
 }

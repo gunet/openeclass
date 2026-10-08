@@ -62,6 +62,23 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . '<body class="body-learningPath" style="margin: 0px; height: 100%!important;">' . "\n"
  . '<div id="content">';
 
+echo "<script type='text/javascript'>
+    window.MathJax = {
+            loader: {
+                paths: {
+                    '@mathjax': '{$urlAppend}resources/fonts',
+                    'mathjax-newcm': '{$urlAppend}resources/fonts/mathjax-newcm-font',
+                    '@mathjax/mathjax-newcm-font': '{$urlAppend}resources/fonts/mathjax-newcm-font'
+                }
+            },
+            chtml: {
+                fontURL: '{$urlAppend}resources/fonts/mathjax-newcm-font/chtml/woff2',
+                dynamicPrefix: '{$urlAppend}resources/fonts/mathjax-newcm-font/chtml/dynamic'
+            }
+        };
+    </script>";
+echo "<script type='text/javascript' id='MathJax-script' async src='{$urlAppend}js/mathjax/tex-chtml.js'></script>";
+
 $pageName = $langExercicesResult;
 global $qtype;
 
@@ -323,16 +340,16 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                 if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                     echo "<tr><td><div>";
                     if ($studentChoice) {
-                        $icon_choice= "fa-square-check";
+                        $icon_choice= "fa-regular fa-square-check";
                     } else {
-                        $icon_choice = "fa-square";
+                        $icon_choice = "fa-regular fa-square";
                     }
                     echo icon($icon_choice);
                     echo "</div></div></td><td><div>";
                     if ($answerCorrect) {
-                        $icon_choice= "fa-square-check";
+                        $icon_choice= "fa-regular fa-square-check";
                     } else {
-                        $icon_choice = "fa-square";
+                        $icon_choice = "fa-regular fa-square";
                     }
                     echo icon($icon_choice) . "</div>";
                     echo "</td>

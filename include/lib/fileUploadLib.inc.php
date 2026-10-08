@@ -439,11 +439,12 @@ function make_path($path, $path_components) {
  * @param string  $filename   - The given filename.
  * @param integer $menuTypeID - The menu type to display in case of error.
  * @param string  $response   - How to handle errors - one of 'html', 'session' or 'json'
+ * @param array   $additional - Additional extensions to add to whitelist
  */
-function validateUploadedFile($filename, $menuTypeID = 2, $response = 'html') {
+function validateUploadedFile($filename, $menuTypeID = 2, $response = 'html', $additional = []) {
     global $tool_content, $head_content, $langBack, $langUploadedFileNotAllowed, $langContactAdmin;
 
-    if (!isWhitelistAllowed($filename)) {
+    if (!isWhitelistAllowed($filename, $additional)) {
         if ($response == 'html') {
             $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadedFileNotAllowed <b>" . q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></span></div><br>";
             draw($tool_content, $menuTypeID, null, $head_content);
@@ -482,22 +483,33 @@ function validateRenamedFile($filename, $menuTypeID = 2) {
 /**
  * Check whether a filename is allowed by the whitelist or not.
  *
- * @param  string  $filename - The filename to check against the whitelist.
- * @return boolean           - Whether the whitelist allows the specific filename extension or not.
+ * @param  string  $filename   - The filename to check against the whitelist.
+ * @param  array   $additional - Additional extensions to add to whitelist
+ * @return boolean             - Whether the whitelist allows the specific filename extension or not.
  */
-function isWhitelistAllowed($filename) {
+function isWhitelistAllowed($filename, $additional = []) {
     global $is_editor, $uid, $is_admin;
+    static $whitelist_cache = [];
 
-    $wh = get_config('student_upload_whitelist');
-    $wh2 = ($is_editor or $is_admin) ? get_config('teacher_upload_whitelist') : '';
-
-    $wh .= (strlen($wh2) > 0) ? ', ' . $wh2 : '';
-
-    $wh3 = fetchUserWhitelist($uid);
-    $wh .= (!is_null($wh3)) ? ', ' . $wh3 : '';
-
-    $whitelist = explode(',', preg_replace('/\s+/', '', $wh)); // strip any whitespace
-
+    $cache_key = (($is_editor || $is_admin) ? 't' : 's') . '-' . (int) $uid;
+    if (!isset($whitelist_cache[$cache_key])) {
+        $parts = [(string) get_config('student_upload_whitelist')];
+        if ($is_editor || $is_admin) {
+            $parts[] = (string) get_config('teacher_upload_whitelist');
+        }
+        if ($uid) {
+            $parts[] = (string) fetchUserWhitelist($uid);
+        }
+        // join with a comma so adjacent lists never merge into a bogus extension, then drop empty entries
+        $whitelist_cache[$cache_key] = array_values(array_filter(
+            explode(',', preg_replace('/\s+/', '', implode(',', $parts))),
+            fn($ext) => $ext !== ''
+        ));
+    }
+    $whitelist = $whitelist_cache[$cache_key];
+    if ($additional) {
+        $whitelist = array_merge($whitelist, $additional);
+    }
     // Hard-code common PHP file extensions exclusion
     if (preg_match('/\.(php.?|phtml|phar)$/i', $filename)) {
         return false;
@@ -519,7 +531,11 @@ function isWhitelistAllowed($filename) {
  */
 function fetchUserWhitelist($uid) {
     $r = Database::get()->querySingle("SELECT whitelist FROM user WHERE id = ?d", $uid);
-    return $r->whitelist;
+    if ($r) {
+        return $r->whitelist;
+    } else {
+        return null;
+    }
 }
 
 /**

@@ -20,7 +20,7 @@
 
 
 // Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
+// Otherwise exit with appropriate message
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
@@ -86,13 +86,24 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 }
 
 load_js('sortable');
+
 if (isset($_POST['widgetAction'])) {
-    $namespaced_class = $_POST['widgetClassName'];
-    if ($_POST['widgetAction'] == 'install') {
-        $namespaced_class::install();
-    } elseif ($_POST['widgetAction'] == 'uninstall') {
-        $namespaced_class::uninstall();
+    if (in_array($_POST['widgetClassName'], getAvailableWidgets())) {
+        $namespaced_class = $_POST['widgetClassName'];
+        if ($_POST['widgetAction'] == 'install') {
+            $namespaced_class::install();
+        } elseif ($_POST['widgetAction'] == 'uninstall') {
+            $namespaced_class::uninstall();
+        }
     }
+    redirect_to_home_page('modules/admin/widgets.php');
+}
+
+if (isset($_POST['submit_widget_settings'])) {
+    $disable_user = isset($_POST['enable_user_widgets']) ? 0 : 1;
+    $disable_course = isset($_POST['enable_course_widgets']) ? 0 : 1;
+    set_config('disable_user_widgets', $disable_user);
+    set_config('disable_course_widgets', $disable_course);
     redirect_to_home_page('modules/admin/widgets.php');
 }
 $head_content .=
@@ -325,6 +336,7 @@ $head_content .=
         </script>
         ";
 
+
 $installed_widgets = Database::get()->queryArray("SELECT id, class FROM widget");
 $installed_widgets_arr = [];
 foreach ($installed_widgets as $installed_widget) {
@@ -375,9 +387,9 @@ function recursiveWidgetIterator ($directory = null, $view_data = array()) {
                 $widget_id = array_search($namespaced_class, $installed_widgets_arr);
                 if ($widget_id) {
                     $widget->id = $widget_id;
-                    array_push($view_data['installed_widgets'], $widget);
+                    $view_data['installed_widgets'][] = $widget;
                 } else {
-                    array_push($view_data['uninstalled_widgets'], $widget);
+                    $view_data['uninstalled_widgets'][] = $widget;
                 }
             }
         } elseif (!$file->isDot() && !in_array($file->getFilename(), ['views', 'css', 'images', 'js'])) {

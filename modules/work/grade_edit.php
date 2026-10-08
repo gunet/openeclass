@@ -20,6 +20,7 @@
 
 $require_current_course = true;
 $require_help = true;
+$require_editor = true;
 $helpTopic = 'assignments';
 $helpSubTopic = 'grades';
 
@@ -63,11 +64,11 @@ $head_content .= '
     ';
 $head_content .= "</script>";
 
-if (isset($_GET['ass_id']) ) { // delete student review
+if (isset($_GET['ass_id'])) { // delete student review
     $ass_id = intval($_GET['ass_id']);
     $id = intval($_GET['id']);
     $a_id = intval($_GET['a_id']);
-    if (delete_review($ass_id)) {
+    if (delete_review($ass_id, $id)) {
         Session::flash('message',$langStudentReviewDeleted);
         Session::flash('alert-class', 'alert-success');
     } else {
@@ -75,8 +76,7 @@ if (isset($_GET['ass_id']) ) { // delete student review
         Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page('modules/work/grade_edit.php?course='.$course_code.'&assignment='.$id.'&submission='.$a_id);
-}
-if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
+} else if (isset($_GET['assignment']) && isset($_GET['submission'])) {
     $as_id = intval($_GET['assignment']);
     $sub_id = intval($_GET['submission']);
     $assign = get_assignment_details($as_id);
@@ -85,17 +85,16 @@ if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
     $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$as_id", "name" => q($assign->title));
     show_edit_form($as_id, $sub_id, $assign);
     draw($tool_content, 2, null, $head_content);
-} else {
-    redirect_to_home_page('modules/work/index.php?course='.$course_code);
 }
 
 /**
  * @brief delete user assignment review
  * @param type $id
+ * @param type $assignment_id
  */
-function delete_review($id): bool
+function delete_review($id, $assignment_id): bool
 {
-    if (Database::get()->query("DELETE FROM assignment_grading_review WHERE id = ?d", $id)->affectedRows > 0) {
+    if (Database::get()->query("DELETE FROM assignment_grading_review WHERE id = ?d AND assignment_id = ?d", $id, $assignment_id)->affectedRows > 0) {
         return true;
     }
     return false;
@@ -396,8 +395,15 @@ function show_edit_form($id, $sid, $assign): void
                                     </div>
 
                                     <div class='row form-group mt-4'>
-                                        <label for='comments_file' class='col-12 control-label-notes'>$langCommentsFile</label>
-                                        <div class='col-12'>
+                                        <label for='comments_file' class='col-12 control-label-notes'>$langCommentsFile</label>";
+
+                                    if (isset($sub->grade_comments_filename)) {
+                                        $tool_content .= "<div class='col-12 p-2 mb-1'>
+                                                <a href='index.php?course=$course_code&getcomment=$sid'>$sub->grade_comments_filename</a>                                                            
+                                          </div>";
+                                    }
+
+                                    $tool_content .= "<div class='col-12'>
                                             <input type='file' name='comments_file' id='comments_file' size='35'>
                                             " . fileSizeHidenInput() . "
                                         </div>

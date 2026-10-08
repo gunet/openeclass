@@ -110,24 +110,62 @@
                     $(this).find('span.fa-solid.fa-check').remove();
                     $(tableSelector + ' input[type="checkbox"]').prop('checked', false);
                     $('#selectedcbids').val('');
+                    checkboxStates = [];
+                    $('#select-all-announcements').prop('checked', false);
                 }
 
             });
 
+            function updateSelectAllState() {
+                let rowCheckboxes = $('#ann_table{{ $course_id }} tbody input[type="checkbox"]');
+                if (rowCheckboxes.length > 0) {
+                    let checkedCount = rowCheckboxes.filter(':checked').length;
+                    $('#select-all-announcements').prop('checked', checkedCount === rowCheckboxes.length);
+                } else {
+                    $('#select-all-announcements').prop('checked', false);
+                }
+            }
 
-            $('#ann_table{{ $course_id }}').on('change', 'input[type="checkbox"]', function() {
+            $(document).on('click', '.td-bulk-select, .td-bulk-select *', function(e) {
+                e.stopPropagation();
+            });
+
+            $(document).on('change', '#select-all-announcements', function(e) {
+                e.stopPropagation();
+                let isChecked = this.checked;
+                let selectedCbidValues = $('#selectedcbids').val() ? $('#selectedcbids').val().split(',').filter(Boolean) : [];
+
+                $('#ann_table{{ $course_id }} tbody input[type="checkbox"]').each(function() {
+                    let cbid = $(this).attr('cbid');
+                    if (cbid) {
+                        this.checked = isChecked;
+                        checkboxStates[cbid] = isChecked;
+                        let idx = selectedCbidValues.indexOf(cbid.toString());
+                        if (isChecked && idx === -1) {
+                            selectedCbidValues.push(cbid.toString());
+                        } else if (!isChecked && idx !== -1) {
+                            selectedCbidValues.splice(idx, 1);
+                        }
+                    }
+                });
+                $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
+            });
+
+            $('#ann_table{{ $course_id }}').on('change', 'tbody input[type="checkbox"]', function() {
                 let cbid = $(this).attr('cbid');
+                if (!cbid) return;
                 checkboxStates[cbid] = this.checked;
 
-                let selectedCbidValues = $('#selectedcbids').val().split(',');
+                let selectedCbidValues = $('#selectedcbids').val() ? $('#selectedcbids').val().split(',').filter(Boolean) : [];
                 let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
                 if (this.checked && cbidIndex === -1) {
-                    selectedCbidValues.push(cbid);
+                    selectedCbidValues.push(cbid.toString());
                 } else if (!this.checked && cbidIndex !== -1) {
                     selectedCbidValues.splice(cbidIndex, 1);
                 }
                 $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
 
+                updateSelectAllState();
             });
 
             function restoreCheckboxStates() {
@@ -140,6 +178,7 @@
                         checkbox.prop('checked', false);
                     }
                 });
+                updateSelectAllState();
             }
 
             function checkCheckboxes() {
@@ -154,6 +193,7 @@
             var oTable = $('#ann_table{{ $course_id }}').DataTable ({
                 @if ($is_editor)
                     columnDefs: [
+                        { orderable: false, targets: [0, -1] },
                         { className: 'option-btn-cell text-end', targets: -1 },
                         { targets: 1, width: '50%' } // editor: column 1 is the announcement column
                     ],
@@ -193,6 +233,7 @@
                 },
                 @endif
                 fnDrawCallback: function( oSettings ) {
+                    typeof MathJax !== 'undefined' && MathJax.typeset();
                     tooltip_init();
                     $('.table_td_body').each(function() {
                         $(this).trunk8({
@@ -431,12 +472,19 @@
                                 </div>
                             @endif
 
-                            
+                            <div class='table-responsive'>
                                 <table id='ann_table{{ $course_id }}' class='table-default table-announcements-indexes'>
                                     <thead>
                                     <tr>
                                         @if ($is_editor)
-                                            <th class="td-bulk-select">#</th>
+                                            <th class="td-bulk-select">
+                                                <div class="checkbox">
+                                                    <label class="label-container" aria-label="{{ trans('langSelectAll') }}">
+                                                        <input type="checkbox" id="select-all-announcements">
+                                                        <span class="checkmark"></span>
+                                                    </label>
+                                                </div>
+                                            </th>
                                         @endif
 
                                         <th class='@if($is_editor) announceContent @else announceContentStudent @endif'>{{ trans('langAnnouncement') }}</th>
@@ -449,7 +497,7 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
-                            
+                            </div>
                         </div>
 
 

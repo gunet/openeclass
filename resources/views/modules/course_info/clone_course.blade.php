@@ -1,11 +1,11 @@
 @extends('layouts.default')
 
 @push('head_styles')
-<link href="{{ $urlAppend }}js/jstree3/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
+<link href="{{ $urlAppend }}js/jstree/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
 @endpush
 
 @push('head_scripts')
-<script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
+<script type='text/javascript' src='{{ $urlAppend }}js/jstree/jstree.min.js'></script>
 <script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
 @endpush
 

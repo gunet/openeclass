@@ -52,7 +52,7 @@ if (isset($_REQUEST['username'])) {
         $sql .= 'COLLATE utf8mb4_bin = ?s';
     }
     $myrow = Database::get()->querySingle($sql, $_REQUEST['username']);
-    if ($myrow) {
+    if ($myrow && change_user_rights($myrow->id)) {
         if ($is_departmentmanage_user and !$is_power_user) {
             // Department admin - check if the user belongs to admin's departments
             $user = new User();

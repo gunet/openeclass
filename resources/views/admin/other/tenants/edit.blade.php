@@ -2,40 +2,78 @@
     @push('head_scripts')
         <script>
             $(function() {
-                $('#admin_id').select2({
-                    placeholder: 'Αναζήτηση...',
-                    tags: true,
-                    multiple: true,
-                    maximumSelectionLength: 1,
-                    ajax: {
-                        delay: 300,
+
+                // $('#admin_id').select2({
+                //     placeholder: 'Αναζήτηση...',
+                //     tags: true,
+                //     multiple: true,
+                //     maximumSelectionLength: 1,
+                //     ajax: {
+                //         delay: 300,
+                //         url: 'listusers.php',
+                //         type: 'POST',
+                //         dataType: 'json',
+                //         data: function(params) {
+                //             return {
+                //                 search: {
+                //                     value: params.term
+                //                 },
+                //                 length: 10,
+                //                 start: 0
+                //             };
+                //         },
+                //         processResults: function(data) {
+                //             return {
+                //                 results: $.map(data.aaData, function(item) {
+                //                     const username = $(item[2]).text();
+                //                     const surname = $(item[0]).text();
+                //                     const name = $(item[1]).text();
+                //                     return {
+                //                         id: username,
+                //                         text: `${surname} ${name} (${username})`
+                //                     };
+                //                 })
+                //             };
+                //         }
+                //     }
+                // });
+
+                slimSelectFun(
+                    '#admin_id',
+                    '{{ js_escape(trans('langSearch')) }}',
+                    '{{ js_escape(trans('langWelcomeSelect')) }}',
+                    '{{ js_escape(trans('langSelectAll')) }}',
+                    '{{ js_escape(trans('langListChoices')) }}',
+                    {
                         url: 'listusers.php',
-                        type: 'POST',
                         dataType: 'json',
-                        data: function(params) {
+                        type: 'POST',
+                        delay: 300,
+                        dataResponse: 'aaData',
+                        tags: true,
+                        maximumSelectionLength: 1,
+                        params: function(searchValue) {
                             return {
                                 search: {
-                                    value: params.term
+                                    value: searchValue
                                 },
                                 length: 10,
                                 start: 0
                             };
                         },
                         processResults: function(data) {
-                            return {
-                                results: $.map(data.aaData, function(item) {
-                                    const username = $(item[2]).text();
-                                    const surname = $(item[0]).text();
-                                    const name = $(item[1]).text();
-                                    return {
-                                        id: username,
-                                        text: `${surname} ${name} (${username})`
-                                    };
-                                })
-                            };
+                            return data.map(function(item) {
+                                const username = $(item[2]).text();
+                                const surname = $(item[0]).text();
+                                const name = $(item[1]).text();
+                                return {
+                                    id: username,
+                                    text: `${surname} ${name} (${username})`
+                                };
+                            });
                         }
                     }
-                });
+                );
             });
         </script>
     @endpush

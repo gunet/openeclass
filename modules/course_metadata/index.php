@@ -61,7 +61,9 @@ $english = $langCMeta['en'];
 $instrPhoto = $langCMeta['course_instructor_photo'];
 $instrCode = $langCMeta['course_instructor_registrationCode'];
 
-load_js('select2');
+//load_js('select2');
+load_js('tools.js');
+load_js('slimselect');
 $head_content .= <<<EOF
 <link rel="stylesheet" type="text/css" href="{$urlAppend}modules/course_metadata/course_metadata.css">
 <script type='text/javascript'>
@@ -98,7 +100,14 @@ $head_content .= <<<EOF
             html: true
         });
         
-        $( "#multiselect" ).select2({width: '185'});
+        // $( "#multiselect" ).select2({width: '185'});
+        slimSelectFun(
+            '#multiselect',
+            '$langSearch',
+            '$langWelcomeSelect',
+            '$langSelectAll',
+            '$langListChoices'
+        );
         
         $( "#course_coursePhoto_delete" ).on('click', function() {
             $( "#course_coursePhoto_image" ).remove();
@@ -227,6 +236,20 @@ function submitForm() {
         }
     }
 
+    // previously stored images come back through hidden inputs: accept only valid images
+    foreach (CourseXMLConfig::$binaryFields as $bkey) {
+        if (!isset($_POST[$bkey])) {
+            continue;
+        }
+        if (is_array($_POST[$bkey])) {
+            foreach ($_POST[$bkey] as $i => $value) {
+                list($_POST[$bkey][$i], $_POST[$bkey . '_mime'][$i]) = sanitizeImageField($value);
+            }
+        } else {
+            list($_POST[$bkey], $_POST[$bkey . '_mime']) = sanitizeImageField($_POST[$bkey]);
+        }
+    }
+
     $skeleton = $webDir . '/modules/course_metadata/skeleton.xml';
     $extraData = CourseXMLElement::getAutogenData($course_id);
     // manually merge instructor photo, to achieve multiplicity sync
@@ -273,6 +296,27 @@ function isValidImage($type) {
     }
 
     return $ret;
+}
+
+/**
+ * Validate a base64-encoded image value submitted through a hidden form field.
+ *
+ * @param  mixed $value
+ * @return array [base64 value, detected mime], or ['', ''] if not a valid image
+ */
+function sanitizeImageField($value) {
+    if (!is_string($value) || $value === '') {
+        return array('', '');
+    }
+    $raw = base64_decode($value, true);
+    if ($raw === false) {
+        return array('', '');
+    }
+    $info = @getimagesizefromstring($raw);
+    if ($info === false || !isset($info['mime']) || !isValidImage($info['mime'])) {
+        return array('', '');
+    }
+    return array($value, $info['mime']);
 }
 
 function generateJSON($keys) {

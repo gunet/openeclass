@@ -177,7 +177,7 @@ if ($is_editor) {
     } else if (isset($_POST['submit'])) {
         $chat_user_id = $chat_group_id = 0; // default value
         $title = $_POST['title'];
-        $description = $_POST['description'];
+        $description = purify($_POST['description']);
         if (isset($_POST['chat_users']) and count($_POST['chat_users']) > 0) {
             $chat_user_id = '';
             foreach ($_POST['chat_users'] as $chatusers) {
@@ -260,7 +260,7 @@ if ($is_editor) {
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>";
         $tool_content .= "<div class='col-sm-12'>";
-        $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='$conf->conf_title' size='50' />";
+        $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='" . q($conf->conf_title) . "' size='50' />";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
 
@@ -281,8 +281,8 @@ if ($is_editor) {
             $existing_chat_users = explode(',', $conf->user_id);
             foreach ($existing_chat_users as $ecu) {
                 $chat_users = Database::get()->querySingle("SELECT id, CONCAT(surname, ' ', givenname) AS name, username
-                                                        FROM user WHERE id = $ecu
-                                                        ORDER BY surname, givenname");
+                                                        FROM user WHERE id = ?d
+                                                        ORDER BY surname, givenname", $ecu);
 
                 $tool_content .= "<option value='" . q($chat_users->id) . "' selected>" . q($chat_users->name) . " (" . q($chat_users->username) . ")</option>";
             }

@@ -72,7 +72,7 @@ $head_content .= "<script type='text/javascript'>
                    'oLanguage': {
                    'lengthLabels': {
                        '-1': '$langAllOfThem'
-                    },                   
+                    },
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
                    'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
@@ -106,7 +106,10 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // id validation
 if ($id > 0) {
-    $req = Database::get()->querySingle("SELECT faculty_id FROM user_request WHERE id = ?d", $id);
+    $req = Database::get()->querySingle("SELECT * FROM user_request WHERE id = ?d", $id);
+    if (!$req) {
+        redirect_to_home_page('modules/admin/listreq.php');
+    }
     if ($req->faculty_id > 0) {
         validateNode($req->faculty_id, isDepartmentAdmin());
     }
@@ -121,21 +124,21 @@ if (isDepartmentAdmin()) {
 
 // Display Actions Toolbar
 $data['action_bar'] =
-        action_bar(array(
-            array('title' => $langUserOpenRequests,
-                'url' => "$_SERVER[SCRIPT_NAME]",
-                'icon' => 'fa-solid fa-hand',
-                'level' => 'primary-label',
-                'button-class' => 'btn-success'),
-            array('title' => $langReqHaveClosed,
-                'url' => "$_SERVER[SCRIPT_NAME]?show=closed$reqtype",
-                'icon' => 'fa-close',
-                'level' => 'primary-label'),
-            array('title' => $langReqHaveBlocked,
-                'url' => "$_SERVER[SCRIPT_NAME]?show=rejected$reqtype",
-                'icon' => 'fa-ban',
-                'level' => 'primary-label')
-        ));
+    action_bar([
+        [ 'title' => $langUserOpenRequests,
+          'url' => "$_SERVER[SCRIPT_NAME]",
+          'icon' => 'fa-solid fa-hand',
+          'level' => 'primary-label',
+          'button-class' => 'btn-success' ],
+        [ 'title' => $langReqHaveClosed,
+          'url' => "$_SERVER[SCRIPT_NAME]?show=closed$reqtype",
+          'icon' => 'fa-close',
+          'level' => 'primary-label' ],
+        [ 'title' => $langReqHaveBlocked,
+          'url' => "$_SERVER[SCRIPT_NAME]?show=rejected$reqtype",
+          'icon' => 'fa-ban',
+          'level' => 'primary-label' ],
+    ]);
 
 // -----------------------------------
 // display closed requests
@@ -144,8 +147,7 @@ if (!empty($show) and $show == 'closed') {
     if (!empty($id) and $id > 0) {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        Session::flash('message', $langReintroductionApplication);
-        Session::flash('alert-class', 'alert-success');
+        Session::Messages($langReintroductionApplication, 'alert-success');
         redirect_to_home_page('modules/admin/listreq.php');
     } else {
         $q = "SELECT id, givenname, surname, username, email, faculty_id,
@@ -165,8 +167,7 @@ if (!empty($show) and $show == 'closed') {
     if (!empty($id) && ($id > 0)) {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        Session::flash('message', $langReintroductionApplication);
-        Session::flash('alert-class', 'alert-success');
+        Session::Messages('message', $langReintroductionApplication, 'alert-success');
         redirect_to_home_page('modules/admin/listreq.php');
     } else {
         $data['user_requests'] = Database::get()->queryArray("SELECT id, givenname, surname, username, email,
@@ -187,35 +188,34 @@ if (!empty($show) and $show == 'closed') {
                                            date_closed = " . DBHelper::timeAfter() . "
                                        WHERE id = ?d", $id);
 
-            if ($list_status == 1) {
-                Session::flash('message', $langProfessorRequestClosed);
-                Session::flash('alert-class', 'alert-info');
-                redirect_to_home_page('modules/admin/listreq.php');
+            if ($req->status == USER_TEACHER) {
+                Session::Messages($langProfessorRequestClosed, 'alert-info');
             } else {
-                Session::flash('message', $langRequestStudent);
-                Session::flash('alert-class', 'alert-info');
-                redirect_to_home_page('modules/admin/listreq.php');
+                Session::Messages($langRequestStudent, 'alert-info');
             }
+            redirect_to_home_page('modules/admin/listreq.php');
             break;
         case '2':
-            $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
-            if (!empty($submit)) {
+            if ($_POST['submit'] ?? null) {
                 if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
                 // post the comment and do the delete action
-                if (!empty($_POST['comment'])) {
-                    $sql = "UPDATE user_request
-                               SET state = 3,
-                                   date_closed = " . DBHelper::timeAfter() . ",
-                                   comment = ?s
-                               WHERE id = ?d";
-                    if (Database::get()->query($sql, $_POST['comment'], $id)->affectedRows > 0) {
-                        if (isset($_POST['sendmail']) and ( $_POST['sendmail'] == 1)) {
-                            $telephone = get_config('phone');
-                            $administratorName = get_config('admin_name');
-                            $emailhelpdesk = get_config('email_helpdesk');
-                            $emailsubject = $langemailsubjectBlocked;
+                $comment = trim($_POST['comment']);
+                if (!$comment) {
+                    $comment = $req->comment;
+                }
+                $update = Database::get()->query("UPDATE user_request
+                    SET state = 3,
+                        date_closed = " . DBHelper::timeAfter() . ",
+                        comment = ?s
+                    WHERE id = ?d", $comment, $req->id);
+                if ($update->affectedRows > 0) {
+                    if ($_POST['sendmail'] ?? false) {
+                        $telephone = get_config('phone');
+                        $administratorName = get_config('admin_name');
+                        $emailhelpdesk = get_config('email_helpdesk');
+                        $emailsubject = $langemailsubjectBlocked;
 
-                            $emailHeader = "
+                        $emailHeader = "
                                 <!-- Header Section -->
                                 <div id='mail-header'>
                                     <div>
@@ -224,7 +224,7 @@ if (!empty($show) and $show == 'closed') {
                                     </div>
                                 </div>";
 
-                            $emailMain = "
+                        $emailMain = "
                             <!-- Body Section -->
                             <div id='mail-body'>
                                 <br>
@@ -238,30 +238,25 @@ if (!empty($show) and $show == 'closed') {
                                 </div>
                             </div>";
 
-                            $emailbody = $emailHeader.$emailMain;
-
-                            $emailPlainBody = html2text($emailbody);
-
-                            send_mail_multipart('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailPlainBody, $emailbody);
-
-                        }
-                        $message = $list_status == 1 ? $langTeacherRequestHasRejected : $langRequestReject;
-                        $message .= " $langRequestMessageHasSent <b>" . q($_POST['prof_email']) . "</b>";
-                        Session::flash('message',$message);
-                        Session::flash('alert-class', 'alert-success');
-                        redirect_to_home_page('modules/admin/listreq.php');
-
+                        $emailbody = $emailHeader . $emailMain;
+                        $emailPlainBody = html2text($emailbody);
+                        send_mail_multipart('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailPlainBody, $emailbody);
                     }
+                    $message = ($req->status == USER_TEACHER ? $langTeacherRequestHasRejected : $langRequestReject) .
+                        " $langRequestMessageHasSent <b>" . q($_POST['prof_email']) . "</b>";
+                    Session::Messages($message, 'alert-success');
+                    redirect_to_home_page('modules/admin/listreq.php');
                 }
             } else {
                 // display the form
-                $data['user_request'] = $d = Database::get()->querySingle("SELECT comment, givenname, surname, email, status FROM user_request WHERE id = ?d", $id);
-                $data['id'] = intval($id);
-                $data['warning'] = ($d->status == 5) ? $langWarnReject : $langGoingRejectRequest;
+                $data['user_request'] = $req;
+                $data['id'] = $req->id;
+                $data['warning'] = ($req->status == USER_STUDENT) ? $langWarnReject : $langGoingRejectRequest;
                 $view = 'admin.users.listreq.rejectForm';
             }
             break;
         default:
+            redirect_to_home_page('modules/admin/listreq.php');
             break;
     } // end of switch
 }
@@ -270,8 +265,9 @@ if (!empty($show) and $show == 'closed') {
 // display all requests
 // -----------------------------------
 else {
-    $data['user_requests'] = Database::get()->queryArray("SELECT id, givenname, surname, username, faculty_id, date_open, comment, password, status FROM user_request
-                                              WHERE (state = 1 $depqryadd) ORDER BY date_open DESC");
+    $data['user_requests'] = Database::get()->queryArray("SELECT id, givenname, surname, username, faculty_id, date_open, comment, password, status
+        FROM user_request
+        WHERE (state = 1 $depqryadd) ORDER BY date_open DESC");
     $view = 'admin.users.listreq.index';
 }
 

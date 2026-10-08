@@ -1,3 +1,4 @@
+
         <form id="optionsForm{{ $widget_widget_area_id }}">
             <fieldset>
             <legend class='mb-0' aria-label="{{ trans('langForm') }}"></legend>

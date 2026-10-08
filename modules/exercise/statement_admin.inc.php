@@ -79,6 +79,25 @@ $(function() {
     function showGrade(){
         $('input[name=questionGrade]').prop('disabled', false).closest('div.form-group').removeClass('hide');
     }
+    function hideCodeExercise(){
+        $('#codeExerciseWrapper').addClass('hide');
+        $('input[name=code_exercise]').prop('disabled', true);
+        $('select[name=code_language]').prop('disabled', true);
+    }
+    function showCodeExercise(){
+        $('#codeExerciseWrapper').removeClass('hide');
+        $('input[name=code_exercise]').prop('disabled', false);
+        $('select[name=code_language]').prop('disabled', false);
+    }
+    function toggleCodeLanguage(){
+        if ($('input[name=code_exercise]').is(':checked')) {
+            $('#codeLanguageWrapper').removeClass('hide');
+            $('select[name=code_language]').prop('disabled', false);
+        } else {
+            $('#codeLanguageWrapper').addClass('hide');
+            $('select[name=code_language]').prop('disabled', true);
+        }
+    }
     function showFillInChoices(){
         $('#fillInBlanksOptions').removeClass('hide');
     }
@@ -102,15 +121,25 @@ $(function() {
         if (selectedOption.selected && selectedOption.value == 7) {
             $('.fill_in_blank_strict').removeClass('d-none').addClass('d-block');
             hideGrade();
+            hideCodeExercise();
         } else {
             $('.fill_in_blank_strict').removeClass('d-block').addClass('d-none');
-            if (selectedOption.selected && (selectedOption.value == 6 || selectedOption.value == 13)) {
+            if (selectedOption.selected && (selectedOption.value == 6 || selectedOption.value == 13 || selectedOption.value == 14)) {
                 showGrade();
+                if (selectedOption.value == 6) {
+                    showCodeExercise();
+                } else {
+                    hideCodeExercise();
+                }
             } else {
                 hideGrade();
+                hideCodeExercise();
             }
         }
     });
+
+    // Handle code exercise checkbox toggle
+    $('input[name=code_exercise]').on('change', toggleCodeLanguage);
 
     $('.deletePicture').on('click', function () {
         var eid = $(this).attr('data-exercise-id');
@@ -178,6 +207,16 @@ if (isset($_POST['submitQuestion'])) {
         $objQuestion->updateDescription($questionDescription);
         $objQuestion->updateFeedback($questionFeedback);
         $objQuestion->updateType($answerType);
+        // fill in blanks: size blanks to their answer. Merged into the existing JSON options.
+        if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
+            $questionOptions = json_decode($objQuestion->selectOptions() ?? '', true) ?: [];
+            if (isset($_POST['fill_in_blank_answer_width'])) {
+                $questionOptions['blankWidthByAnswer'] = true;
+            } else {
+                unset($questionOptions['blankWidthByAnswer']);
+            }
+            $objQuestion->updateOptions($questionOptions ? json_encode($questionOptions) : null);
+        }
         $objQuestion->updateDifficulty($_POST['difficulty']);
         $objQuestion->updateCategory($_POST['category']);
 
@@ -185,6 +224,24 @@ if (isset($_POST['submitQuestion'])) {
         if (isset($_POST['questionGrade'])) {
             $objQuestion->updateWeighting(str_replace(',', '.', $_POST['questionGrade']));
         }
+
+        // Save code exercise options (only for Free text questions)
+        if ($answerType == FREE_TEXT) {
+            $codeOptions = [];
+            if (isset($_POST['code_exercise']) && $_POST['code_exercise'] == '1') {
+                require_once __DIR__ . '/code_exercise_languages.inc.php';
+                $codeOptions['code_exercise'] = true;
+                $codeLanguage = $_POST['code_language'] ?? '';
+                $codeOptions['code_language'] = isset(code_exercise_languages()[$codeLanguage]) ? $codeLanguage : CODE_EXERCISE_DEFAULT_LANGUAGE;
+            } else {
+                $codeOptions['code_exercise'] = false;
+            }
+            $objQuestion->updateOptions(json_encode($codeOptions));
+        } else {
+            // Clear code exercise options for non-free-text questions
+            $objQuestion->updateOptions(null);
+        }
+
         if (isset($_GET['exerciseId'])) {
             $exerciseId = intval($_GET['exerciseId']);
             $objQuestion->save($exerciseId);
@@ -223,7 +280,7 @@ if (isset($_POST['submitQuestion'])) {
         // if the answer type is free text (which means it doesn't have predefined answers)
         // redirect to either pool or edit exercise page,
         // else redirect to modify answers page in order to add answers to question
-        if ($answerType == FREE_TEXT or $answerType == ORAL) {
+        if ($answerType == FREE_TEXT or $answerType == ORAL or $answerType == UPLOAD_FILE) {
             $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&htopic=6" : "modules/exercise/question_pool.php?course=$course_code";
             if ($answerType == FREE_TEXT) {
                 require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
@@ -264,6 +321,11 @@ if (isset($_POST['submitQuestion'])) {
         $difficulty = $objQuestion->selectDifficulty();
         $category = $objQuestion->selectCategory();
         $questionWeight = $objQuestion->selectWeighting();
+
+        // Load code exercise options
+        require_once __DIR__ . '/code_exercise_languages.inc.php';
+        $codeLanguage = code_exercise_language($objQuestion->selectOptions());
+        $codeExerciseEnabled = $codeLanguage !== null;
     }
 }
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
@@ -312,11 +374,21 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     if (Session::has('answerType')) {
         $answerType = Session::get('answerType');
     }
+    // fill in blanks: are blanks sized to their answer? (JSON in the question's options)
+    $questionOptions = json_decode($objQuestion->selectOptions() ?? '', true);
+    $blankWidthByAnswer = !empty($questionOptions['blankWidthByAnswer']);
     $options = "<option value='0'>-- $langQuestionWithoutCat --</option>\n";
     foreach ($q_cats as $q_cat) {
         $options .= "<option value='{$q_cat->question_cat_id}' " . (($category == $q_cat->question_cat_id) ? 'selected' : '') . '>' . q($q_cat->question_cat_name) . "</option>\n";
     }
     enableCheckFileSize();
+
+    $qTypesNoStricterMode = array(ORAL => "$langOral", UPLOAD_FILE => "$langUploadFile");
+    $stricterExamMode = $objExercise->getOption('stricterExamRestriction') ? 1: 0;
+    if ($stricterExamMode) {
+        $qTypesNoStricterMode = [];
+    }
+
     $tool_content .= "
         <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
@@ -354,7 +426,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                     DRAG_AND_DROP_MARKERS => "$langDragAndDropMarkers",
                                     CALCULATED => $langCalculated,
                                     FREE_TEXT => "$langFreeText",
-                                    ORAL => "$langOral",
+                                    ...$qTypesNoStricterMode
                                 ],
                                 'answerType',
                                 (isset($answerType)) ? ($answerType == FILL_IN_BLANKS ? FILL_IN_BLANKS_TOLERANT : $answerType) : UNIQUE_ANSWER,
@@ -366,14 +438,47 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                                     <input type='checkbox' name='fill_in_blank_strict' value=".FILL_IN_BLANKS." ". ($answerType == FILL_IN_BLANKS ? 'checked' : '') .">
                                                     <span class='checkmark'></span>$langFillBlanksStrict $langFillBlanksStrictExample
                                                 </label>
+                                                <label class='label-container' aria-label='$langSettingSelect'>
+                                                    <input type='checkbox' name='fill_in_blank_answer_width' value='1' ". ($blankWidthByAnswer ? 'checked' : '') .">
+                                                    <span class='checkmark'></span>$langFillBlanksAnswerWidth
+                                                </label>
                             </div>
                         </div>
                     </div>";
 
-            $tool_content .= "<div class='row form-group ".(($answerType != FREE_TEXT and $answerType != ORAL) ? "hide": "")." mt-4'>
+            $tool_content .= "<div class='row form-group ".(($answerType != FREE_TEXT and $answerType != ORAL and $answerType != UPLOAD_FILE) ? "hide": "")." mt-4'>
                 <label for='questionGrade' class='col-12 control-label-notes mb-1'>$langGradebookGrade</label>
                 <div class='col-12'>
                   <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6 and $answerType != 13) ? " disabled": "").">
+                </div>
+            </div>";
+
+            // Code exercise checkbox and language dropdown (only for FREE_TEXT type 6)
+            require_once __DIR__ . '/code_exercise_languages.inc.php';
+            $codeExerciseChecked = ($codeExerciseEnabled ?? false) ? 'checked' : '';
+            $codeLanguageHide = ($codeExerciseEnabled ?? false) ? '' : 'hide';
+            $codeLanguageDisabled = ($codeExerciseEnabled ?? false) ? '' : 'disabled';
+            $codeLanguageOptions = [];
+            foreach (code_exercise_languages() as $value => $opts) {
+                $codeLanguageOptions[$value] = $opts['name'];
+            }
+            $codeLanguageSelect = selection($codeLanguageOptions, 'code_language', $codeLanguage ?? CODE_EXERCISE_DEFAULT_LANGUAGE, '');
+
+            $tool_content .= "<div id='codeExerciseWrapper' class='row form-group ".(($answerType != FREE_TEXT) ? "hide": "")." mt-4'>
+                <div class='col-12'>
+                    <div class='checkbox'>
+                        <label class='label-container' aria-label='$langSettingSelect'>
+                            <input type='checkbox' name='code_exercise' value='1' id='codeExerciseCheck' $codeExerciseChecked ".(($answerType != FREE_TEXT) ? "disabled" : "").">
+                            <span class='checkmark'></span>$langCodeExercise
+                        </label>
+                    </div>
+                </div>
+            </div>";
+
+            $tool_content .= "<div id='codeLanguageWrapper' class='row form-group $codeLanguageHide mt-4'>
+                <label for='code_language' class='col-12 control-label-notes mb-1'>$langCodeExerciseLang</label>
+                <div class='col-12'>
+                    $codeLanguageSelect
                 </div>
             </div>";
 

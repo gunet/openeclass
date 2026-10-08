@@ -26,7 +26,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'archive_functions.php';
 require_once 'restore_functions.php';
 
-load_js('jstree3');
+load_js('jstree');
 $treeObj = new Hierarchy();
 $allow_clone = false;
 $allowables = null;

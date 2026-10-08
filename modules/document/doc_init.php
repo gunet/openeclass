@@ -28,7 +28,7 @@ function doc_init() {
         $is_editor, $is_admin, $navigation, $subsystem, $subsystem_id, $secret_directory,
         $group_id, $groupset, $base_url, $group_name, $upload_target_url, $group_sql, $is_member,
         $group_hidden_input, $basedir, $ebook_id, $uid, $session, $pageName, $sessionID,
-        $is_session_doc, $is_consultant, $uploaded_docs_by_users, $user_uploader,
+        $is_session_doc, $uploaded_docs_by_users, $user_uploader,
         $user_counselor_uploader, $uploaded_reference_docs_by_users;
 
     $can_upload = $is_editor || $is_admin;
@@ -92,14 +92,14 @@ function doc_init() {
         $course_code = '';
     } elseif (defined('MY_DOCUMENTS')) {
         $subsystem = MYDOCS;
-        $subsystem_id = $uid;
+        $subsystem_id = intval($uid);
         $groupset = '';
         $base_url = $_SERVER['SCRIPT_NAME'] . '?';
         $upload_target_url = 'index.php';
         $group_id = '';
-        $group_sql = "subsystem = $subsystem AND subsystem_id = $uid";
+        $group_sql = "subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = '';
-        $basedir = $webDir . '/courses/mydocs/' . $uid;
+        $basedir = $webDir . '/courses/mydocs/' . $subsystem_id;
         if (!is_dir($basedir)) {
             make_dir($basedir);
         }

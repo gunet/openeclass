@@ -131,6 +131,7 @@ $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d
 if (!$thePoll) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
+
 $PollType = $thePoll->type;
 $pollOptions = !is_null($thePoll->options) ? $thePoll->options : '';
 $default_answer = $thePoll->default_answer;
@@ -140,6 +141,39 @@ if (!$is_course_reviewer && !$thePoll->show_results) {
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
 }
+
+if (isset($_GET['from_session_view']) && isset($_GET['del_user_answers'])) {
+    // Delete user's answer from a poll in a specific session
+    $del = Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, intval($_GET['session']));
+    if ($del) {
+        Session::flash('message', $langDocCompletionSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".intval($_GET['session'])); 
+    }
+}
+
+// If poll has enabled google form feature, redirect to the new poll results
+$pollResultsAsGoogleForm = false;
+if (!is_null($thePoll->options)) {
+    $pollOptions = unserialize($thePoll->options);
+    foreach ($pollOptions as $opt) {
+        if (isset($opt['save_prev_user_answers']) && $opt['save_prev_user_answers'] == 1) {
+            $pollResultsAsGoogleForm = true;
+            break;
+        }
+    }
+}
+if ($pollResultsAsGoogleForm) {
+    $fromSessionView = '';
+    $sessionArg = '';
+    if (isset($_GET['from_session_view'])) {
+        $fromSessionView = "&from_session_view=true";
+        $sessionArg = "&session=$sID";
+    }
+    redirect_to_home_page("modules/questionnaire/poll_results_multiple_submissions.php?course=$course_code&pid=$pid$fromSessionView$sessionArg");
+}
+
+
 
 if (isset($_GET['from_session_view'])) {
     $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d 
@@ -1369,43 +1403,36 @@ function total_number_of_users_answer_per_question($qid) {
 function poll_user_participation() {
     global $course_id;
 
-    $poll = Database::get()->querySingle('SELECT * FROM poll WHERE course_id = ?d AND pid = ?d', $course_id, $_GET['pid']);
+    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $_GET['pid']);
     $allUsers = [];
 
     $sid = $_GET['session'] ?? 0;
 
     if ($poll->assign_to_specific) {
-        $assign = Database::get()->queryArray('SELECT * FROM poll_to_specific
-            WHERE poll_id = ?d', $poll->pid);
+        $assign = Database::get()->queryArray("SELECT * FROM poll_to_specific WHERE poll_id = ?d", $poll->pid);
         foreach ($assign as $item) {
             if ($item->user_id) {
                 $allUsers[] = $item->user_id;
             } elseif ($item->group_id) {
-                $group_members = Database::get()->queryArray('SELECT user_id
-                    FROM group_members WHERE is_tutor = 0 AND group_id = ?d',
-                    $item->group_id);
+                $group_members = Database::get()->queryArray("SELECT user_id FROM group_members WHERE is_tutor = 0 AND group_id = ?d", $item->group_id);
                 foreach ($group_members as $member) {
                     $allUsers[] = $member->user_id;
                 }
             }
         }
     } else {
-        $allUsers = Database::get()->queryArray('SELECT user_id FROM course_user
-            WHERE course_id = ?d AND editor = 0 AND status = ' . USER_STUDENT,
-            $course_id);
+        $allUsers = Database::get()->queryArray('SELECT user_id FROM course_user WHERE course_id = ?d AND editor = 0 AND status = ' . USER_STUDENT, $course_id);
         $allUsers = array_map(function ($user) {
             return $user->user_id;
         }, $allUsers);
     }
 
-    $polledUsers = Database::get()->queryArray('SELECT id, uid, email, email_verification FROM poll_user_record WHERE pid = ?d AND session_id = ?d', $poll->pid, $sid);
+    $polledUsers = Database::get()->queryArray("SELECT id, uid, email, email_verification FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $poll->pid, $sid);
     $okUsers = [];
     $emailUsers = [];
     $timestamp = [];
     foreach ($polledUsers as $user) {
-        $ts = Database::get()->querySingle('SELECT submit_date
-                FROM poll_answer_record WHERE poll_user_record_id = ?d LIMIT 1',
-                $user->id)->submit_date;
+        $ts = Database::get()->querySingle("SELECT submit_date FROM poll_answer_record WHERE poll_user_record_id = ?d LIMIT 1", $user->id)->submit_date;
         if ($user->uid) {
             $okUsers[] = $user->uid;
             $timestamp[$user->uid] = $ts;

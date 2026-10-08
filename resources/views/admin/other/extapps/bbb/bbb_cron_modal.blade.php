@@ -4,7 +4,6 @@
             <div class='modal-header'>
                 <h2 class='modal-title' id='bbbCronInfoModal'>{{ trans('langBBBCronEnableTitle') }}</h2>
                 <button type='button' class='close' data-dismiss='modal' aria-label='{{ trans('langClose') }}'></button>
-                
             </div>
             <div class='modal-body'>
                 {!! trans('langBBBCronEnableInstructions') !!}

@@ -29,6 +29,7 @@ require_once 'modules/exercise/exercise.lib.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
+require_once __DIR__ . '/code_exercise_languages.inc.php';
 require_once 'include/lib/ai/services/AIService.php';
 require_once 'include/lib/ai/services/AIExerciseEvaluationService.php';
 
@@ -316,7 +317,6 @@ $displayScore = $objExercise->selectScore();
 $gradePass = $objExercise->getPassingGrade();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $calc_grade_method = $objExercise->getCalcGradeMethod();
-$exerciseFeedback = $objExercise->getFeedback();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");
@@ -507,6 +507,10 @@ $canonicalized_message_range .= "
 
     if ($showScore) {
         $tool_content .= "<p><h5>$langTotalScore</h5> $canonicalized_message_range&nbsp;&nbsp;$message_range $grade_icon</p>";
+        // exercise feedback (if any)
+        if (!empty($objExercise->calculate_feedback($canonical_score))) {
+            $tool_content .= "<h5 class='p-0 m-1 text-primary'>" . $objExercise->calculate_feedback($canonical_score) . "</h5>";
+        }
     }
 
     $tool_content .= "</div>"; // left end
@@ -552,6 +556,7 @@ if (count($exercise_question_ids) > 0) {
         $answerType = $objQuestionTmp->selectType();
         $questionType = $objQuestionTmp->selectTypeLegend($answerType);
         $questionId = $objQuestionTmp->selectId();
+        $codeLanguage = code_exercise_language($objQuestionTmp->selectOptions());
         if ($is_editor) {
             $qid_display = " - id: $questionId";
             $edit_link = icon('fa-edit', $langEdit,
@@ -631,9 +636,12 @@ if (count($exercise_question_ids) > 0) {
                               </div>";
         }
 
-        $tool_content .= "</div><div class='col-2 text-end d-flex flex-column'>" . $answer_text;
-        if ($answerType == FREE_TEXT or $answerType == ORAL) {
-            $choice = purify($choice);
+        $tool_content .= "</div><div class='col-2 text-end d-flex flex-column'>";
+        if ($answerType == FREE_TEXT or $answerType == ORAL or $answerType == UPLOAD_FILE) {
+            // Code answers are escaped later, in FreeTextAnswer::QuestionResult()
+            if ($codeLanguage === null) {
+                $choice = purify($choice);
+            }
             if (!empty($choice)) {
                 if (!$question_graded) {
                     $tool_content .= " <small class='text-danger'>(<span class='text-danger'>$langAnswerUngraded</span>) </small>";
@@ -642,6 +650,7 @@ if (count($exercise_question_ids) > 0) {
                 }
             }
         } else {
+            $tool_content .= $answer_text;
             if (($showScore) and (!is_null($choice))) {
                 if ($answerType == MULTIPLE_ANSWER && $question_weight < 0 && $calc_grade_method == 1) {
                     $qw_legend1 = "<span class='Accent-200-cl'>$question_weight</span>";
@@ -673,7 +682,7 @@ if (count($exercise_question_ids) > 0) {
 
         if ($showScore) {
             if (!is_null($choice)) {
-                if (($answerType == FREE_TEXT or $answerType == ORAL) && $is_editor) {
+                if (($answerType == FREE_TEXT or $answerType == ORAL or $answerType == UPLOAD_FILE) && $is_editor) {
                     if (isset($question_graded) && !$question_graded) {
                         $value = '';
                     } else {

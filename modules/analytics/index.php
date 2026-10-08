@@ -31,10 +31,13 @@ $toolName = $langLearningAnalytics;
 // Validate data and insert a new record to the DB
 if (isset($_POST['insert_analytics'])) {
     $v = new Valitron\Validator($_POST);
+    
     $v->rule('required', array('title'));
     if($_POST['start_date'] and $_POST['end_date']) {
-        $start_date = date_format(date_create_from_format('d-m-Y', $_POST['start_date']), 'Y-m-d');
-        $end_date = date_format(date_create_from_format('d-m-Y', $_POST['end_date']), 'Y-m-d');
+        $d_start = date_create_from_format('d-m-Y', $_POST['start_date']);
+        $d_end = date_create_from_format('d-m-Y', $_POST['end_date']);
+        $start_date = $d_start ? date_format($d_start, 'Y-m-d') : null;
+        $end_date = $d_end ? date_format($d_end, 'Y-m-d') : null;
 
         $v->rule('dateAfter', 'end_date', $start_date);
     } else if ($_POST['start_date'] or $_POST['end_date']){
@@ -45,20 +48,20 @@ if (isset($_POST['insert_analytics'])) {
     }
 
     $v->labels(array(
-        'title' => $langRequiredTitle
+        'title' => $langRequiredTitle,
+        'start_date' => $langRequiredStartDate,
+        'end_date' => $langRequiredEndDate
     ));
 
     if($v->validate()) {
         $created = date('Y-m-d H:i:s');
-
         $analytics_id = insert_analytics($_POST['title'], $_POST['description'], $_POST['active'], $_POST['periodType'], $start_date, $end_date, $created);
-
         Session::flash('message',$langAnalyticsInsertSuccess);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;new=1");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&edit_analytics=1");
     }
 // Validate data and update to DB
 } else if (isset($_POST['update_analytics'])) {
@@ -66,8 +69,10 @@ if (isset($_POST['insert_analytics'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
     if($_POST['start_date'] and $_POST['end_date']) {
-        $start_date = date_format(date_create_from_format('d-m-Y', $_POST['start_date']), 'Y-m-d');
-        $end_date = date_format(date_create_from_format('d-m-Y', $_POST['end_date']), 'Y-m-d');
+        $d_start = date_create_from_format('d-m-Y', $_POST['start_date']);
+        $d_end = date_create_from_format('d-m-Y', $_POST['end_date']);
+        $start_date = $d_start ? date_format($d_start, 'Y-m-d') : null;
+        $end_date = $d_end ? date_format($d_end, 'Y-m-d') : null;
 
         $v->rule('dateAfter', 'end_date', $start_date);
     } else if ($_POST['start_date'] or $_POST['end_date']){
@@ -78,7 +83,9 @@ if (isset($_POST['insert_analytics'])) {
     }
 
     $v->labels(array(
-        'title' => $langRequiredTitle
+        'title' => $langRequiredTitle,
+        'start_date' => $langRequiredStartDate,
+        'end_date' => $langRequiredEndDate
     ));
 
     if($v->validate()) {
@@ -86,18 +93,22 @@ if (isset($_POST['insert_analytics'])) {
 
         Session::flash('message',$langAnalyticsUpdateSuccess);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&edit_analytics=1");
     }
 //Go to edit analytics form
 } else if (isset($_REQUEST['edit_analytics'])) {
+    $navigation = array(
+        array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code", 'name' => $langLearningAnalytics)
+    );
+    $pageName = isset($_REQUEST['analytics_id']) ? $langModify : $langAdd;
     if (isset($_REQUEST['analytics_id'])) {
         $analytics_id = $_REQUEST['analytics_id'];
         $action_bar = action_bar(array(
             array('title' => $langBack,
-                    'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics",
+                    'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code&analytics_id=$analytics_id&mode=showDetails",
                     'icon' => 'fa fa-reply',
                     'level' => 'primary')
             ));
@@ -140,12 +151,17 @@ if (isset($_POST['insert_analytics'])) {
     delete_analytics_element($analytics_id, $analytics_element_id);
     Session::flash('message',$langAnalyticsElementDeleteSuccess);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/analytics/index.php?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements");
+    redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
 } else if (isset($_REQUEST['edit_analytics_element'])){
     $analytics_id = $_REQUEST['analytics_id'];
+    $navigation = array(
+        array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code", 'name' => $langLearningAnalytics),
+        array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails", 'name' => $langDetail)
+    );
+    $pageName = isset($_REQUEST['analytics_element_id']) ? $langModify : $langAdd;
     $action_bar = action_bar(array(
         array('title' => $langBack,
-                'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements",
+                'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code&analytics_id=$analytics_id&mode=showDetails",
                 'icon' => 'fa fa-reply',
                 'level' => 'primary')
         ));
@@ -179,10 +195,10 @@ if (isset($_POST['insert_analytics'])) {
         update_analytics_element($_POST['analytics_id'], $_POST['analytics_element_id'], $_POST['resource'], $_POST['module_id'], $_POST['min_value'], $_POST['max_value'], $_POST['lower_threshold'], $_POST['upper_threshold'], $_POST['weight']);
         Session::flash('message', $langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showElements");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showElements");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
     }
 } else if (isset($_REQUEST['insert_analytics_element'])) {
     $analytics_element_id = $_POST['analytics_element_id'];
@@ -204,15 +220,17 @@ if (isset($_POST['insert_analytics'])) {
         Session::flash('message',$langAnalyticsElementInsertSuccess);
         Session::flash('alert-class', 'alert-success');
 
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showElements");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
 
-        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showElements");
+        redirect_to_home_page("modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails");
     }
 } else if (isset($_REQUEST['analytics_id']) and isset($_REQUEST['mode'])) {
     $analytics_id = $_REQUEST['analytics_id'];
     $mode = $_REQUEST['mode'];
+    $analytics_row = Database::get()->querySingle("SELECT title FROM analytics WHERE courseID = ?d AND id = ?d", $course_id, $analytics_id);
+    $analytics_title = $analytics_row ? $analytics_row->title : '';
 
     $analyticsPeriod = get_analytics_period($analytics_id);
     $period = $analyticsPeriod->periodType;
@@ -269,12 +287,19 @@ if (isset($_POST['insert_analytics'])) {
 
 
     if ($mode == 'perUser') {
+        load_js('datatables');
         if(isset($_REQUEST['user_id'])) {
             $user_id = $_REQUEST['user_id'];
+            $navigation = array(
+                array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code", 'name' => $langLearningAnalytics),
+                array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails", 'name' => $analytics_title),
+                array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=perUser", 'name' => $langAnalyticsViewPerUserGeneral)
+            );
+            $pageName = uid_to_name($user_id);
             $action_bar = action_bar(
                 array(
                     array('title' => $langBack,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser",
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&analytics_id=$analytics_id&mode=perUser",
                         'icon' => 'fa-reply',
                         'level' => 'primary')
                 )
@@ -283,6 +308,11 @@ if (isset($_POST['insert_analytics'])) {
             display_user_info($user_id);
             display_analytics_user($user_id, $analytics_id, $dates[$period]['start'], $dates[$period]['end'], $previous, $next);
         } else {
+            $navigation = array(
+                array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code", 'name' => $langLearningAnalytics),
+                array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails", 'name' => $analytics_title)
+            );
+            $pageName = $langAnalyticsViewPerUserGeneral;
             $orderby = '';
             if (isset($_REQUEST['orderby'])) {
                 $orderby = $_REQUEST['orderby'];
@@ -305,12 +335,17 @@ if (isset($_POST['insert_analytics'])) {
 
             $action_bar = action_bar(
                 array(
+                    array('title' => $langBack,
+                        'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label'
+                    ),
                     array('title' => $langAnalyticsTotalAnalytics,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics",
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&analytics_id=$analytics_id&mode=courseStatistics",
                         'icon' => 'fa-bar-chart',
                         'level' => 'primary-label'),
                     array('title' => $langExport,
-                        'url' => '?course='.$course_code.'&amp;analytics_id='.$analytics_id.'&amp;mode=perUser&amp;period='.$period.'&amp;orderby='.$orderby.'&amp;reverse='.$reverse_op.'&amp;download=true',
+                        'url' => '?course='.$course_code.'&analytics_id='.$analytics_id.'&mode=perUser&period='.$period.'&orderby='.$orderby.'&reverse='.$reverse_op.'&download=true',
                         'icon' => 'fa-envelope',
                         'level' => 'primary-label')
 
@@ -320,10 +355,21 @@ if (isset($_POST['insert_analytics'])) {
             display_analytics_peruser($analytics_id, $dates[$period]['start'], $dates[$period]['end'], $previous, $next, $orderby, $reverse, $period, $download);
         }
     } else if ( $mode == 'courseStatistics') {
+        load_js('datatables');
+        $navigation = array(
+            array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code", 'name' => $langLearningAnalytics),
+            array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails", 'name' => $analytics_title)
+        );
+        $pageName = $langAnalyticsTotalAnalytics;
         $action_bar = action_bar(
             array(
+                array('title' => $langBack,
+                      'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label'
+                ),
                 array('title' => $langAnalyticsViewPerUserGeneral,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser",
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&analytics_id=$analytics_id&mode=perUser",
                     'icon' => 'fa-users',
                     'level' => 'primary-label')
 
@@ -333,7 +379,145 @@ if (isset($_POST['insert_analytics'])) {
         display_analytics_information($analytics_id);
         display_general_lists($analytics_id);
     } else if ($mode == 'showElements'){
+        $navigation = array(
+            array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code", 'name' => $langLearningAnalytics),
+            array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails", 'name' => $analytics_title)
+        );
+        $pageName = $langAnalyticsParameters;
+        $action_bar = action_bar(
+            array(
+                array('title' => $langBack,
+                      'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=showDetails",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label'
+                )
+            )
+        );
+        $tool_content .= $action_bar;
         display_analytics_elements($analytics_id);
+    } else if ($mode == 'showDetails') {
+        $analytics = Database::get()->querySingle("SELECT * FROM analytics WHERE courseID = ?d AND id = ?d", $course_id, $analytics_id);
+        if ($analytics) {
+            $periodTypes = PeriodType::periodType;
+            $analytics->period_name = isset($periodTypes[$analytics->periodType]) ? $periodTypes[$analytics->periodType]['title'] : '-';
+            $analytics->start_date_formatted = (!empty($analytics->start_date) && ($d = date_create_from_format('Y-m-d', $analytics->start_date))) ? date_format($d, 'd-m-Y') : '';
+            $analytics->end_date_formatted = (!empty($analytics->end_date) && ($d = date_create_from_format('Y-m-d', $analytics->end_date))) ? date_format($d, 'd-m-Y') : '';
+            $analytics->created_formatted = (!empty($analytics->created) && ($d = date_create_from_format('Y-m-d H:i:s', $analytics->created))) ? date_format($d, 'd-m-Y H:i') : $analytics->created;
+
+            $raw_elements = Database::get()->queryArray("SELECT * FROM analytics_element WHERE analytics_id = ?d", $analytics_id);
+            $elements = array();
+            foreach ($raw_elements as $el) {
+                $m_id = $el->module_id;
+                $el_title = isset(ElementTypes::elements[$m_id]) ? ElementTypes::elements[$m_id]['title'] : '';
+                $el_icon = isset(ElementTypes::elements[$m_id]) ? ElementTypes::elements[$m_id]['icon'] : 'fa fa-chart-line';
+                $resource_info = get_resource_info($el->resource, $m_id);
+
+                $element_actions = action_button(array(
+                    array(
+                        'title' => $langModify ?? trans('langModify'),
+                        'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&amp;analytics_id={$analytics_id}&amp;analytics_element_id={$el->id}&amp;edit_analytics_element=true",
+                        'icon' => 'fa-edit'
+                    ),
+                    array(
+                        'title' => $langDelete ?? trans('langDelete'),
+                        'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&amp;analytics_id={$analytics_id}&amp;analytics_element_id={$el->id}&amp;delete_analytics_element=true",
+                        'icon' => 'fa-xmark',
+                        'class' => 'delete',
+                        'confirm' => $langAnalyticsConfirm ?? trans('langAnalyticsConfirm')
+                    )
+                ));
+
+                $elements[] = array(
+                    'id' => $el->id,
+                    'module_id' => $m_id,
+                    'title' => $el_title,
+                    'icon' => $el_icon,
+                    'resource_info' => $resource_info,
+                    'min_value' => $el->min_value,
+                    'lower_threshold' => $el->lower_threshold,
+                    'upper_threshold' => $el->upper_threshold,
+                    'max_value' => $el->max_value,
+                    'weight' => $el->weight,
+                    'action_button' => $element_actions
+                );
+            }
+
+            $navigation = array(
+                array('url' => "{$urlAppend}modules/analytics/index.php?course=$course_code", 'name' => $langLearningAnalytics)
+            );
+
+            $action_bar_options = array(
+                array(
+                    'title' => $langBack,
+                    'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label'
+                ),
+                array(
+                    'title' => $langAnalyticsTotalAnalytics,
+                    'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=courseStatistics",
+                    'icon' => 'fa-bar-chart',
+                    'level' => 'primary-label'
+                ),
+                array(
+                    'title' => $langAnalyticsViewPerUserGeneral,
+                    'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&mode=perUser",
+                    'icon' => 'fa-users',
+                    'level' => 'primary-label'
+                )
+            );
+
+            if ($is_editor) {
+                $action_bar_options[] = array(
+                    'title' => $langModify,
+                    'url' => "{$urlAppend}modules/analytics/index.php?course=$course_code&analytics_id=$analytics_id&edit_analytics=1",
+                    'icon' => 'fa-edit',
+                    'level' => 'primary-label'
+                );
+            }
+
+            $action_bar = action_bar($action_bar_options);
+
+            $rule_actions = array(
+                array(
+                    'title' => $langModify,
+                    'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&analytics_id={$analytics_id}&edit_analytics=1",
+                    'icon' => 'fa-edit'
+                ),
+                array(
+                    'title' => $langAnalyticsTotalAnalytics,
+                    'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&analytics_id={$analytics_id}&mode=courseStatistics",
+                    'icon' => 'fa-bar-chart'
+                ),
+                array(
+                    'title' => $langAnalyticsViewPerUserGeneral,
+                    'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&analytics_id={$analytics_id}&mode=perUser",
+                    'icon' => 'fa-users'
+                )
+            );
+            $rule_action_button = action_button($rule_actions);
+
+            $pageName = $analytics->title;
+            $add_buttons = array();
+            foreach (ElementTypes::elements as $elementType) {
+                $type = $elementType['link'];
+                $add_buttons[] = array(
+                    'title' => $elementType['title'],
+                    'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&analytics_id={$analytics_id}&edit_analytics_element=true&elementType={$type}",
+                    'icon' => $elementType['icon'],
+                    'class' => ''
+                );
+            }
+
+            $add_element_button = action_button($add_buttons, array(
+                'secondary_title' => '',
+                'secondary_icon' => 'fa-plus',
+                'secondary_btn_class' => 'submitAdminBtn'
+            ));
+
+            view('modules.analytics.show', compact('analytics', 'elements', 'add_element_button', 'rule_action_button', 'action_bar', 'is_editor', 'course_code'));
+            exit;
+        }
     } else {
         //Should never get here
     }

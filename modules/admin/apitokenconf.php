@@ -60,6 +60,7 @@ $tool_content .= $action_bar;
 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $app->getLongDescription() . "</span></div>";
 
 if (isset($_GET['delete'])) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     Database::get()->query("DELETE FROM api_token WHERE id = ?d", $_GET['delete']);
     Session::Messages($langApiTokenDeleted, 'alert-success');
     redirect_to_home_page($app->getConfigUrl());
@@ -125,12 +126,14 @@ if (isset($_POST['submit'])) {
     }
     Database::get()->query('DELETE FROM api_token_course WHERE token_id = ?d', $token_id);
     if (!$all_courses) {
-        $course_update_sql = implode(',', array_fill(0, count($_POST['api_courses']), '(?d, ?d)'));
-        $course_update_values = array_map(function ($course_id) use ($token_id) {
-            return [$course_id, $token_id];
-        }, $_POST['api_courses']);
-        Database::get()->query('INSERT INTO api_token_course (course_id, token_id) VALUES ' . $course_update_sql,
-            $course_update_values);
+        if (isset($_POST['api_courses'])) {
+            $course_update_sql = implode(',', array_fill(0, count($_POST['api_courses']), '(?d, ?d)'));
+            $course_update_values = array_map(function ($course_id) use ($token_id) {
+                return [$course_id, $token_id];
+            }, $_POST['api_courses']);
+            Database::get()->query('INSERT INTO api_token_course (course_id, token_id) VALUES ' . $course_update_sql,
+                $course_update_values);
+        }
     }
 
     if ($token) {
@@ -177,7 +180,7 @@ if (count($q) > 0) {
                     'url' => "$_SERVER[SCRIPT_NAME]?edit=$data->id",
                     'icon' => 'fa-edit'),
                 array('title' => $langDelete,
-                    'url' => "$_SERVER[SCRIPT_NAME]?delete=$data->id",
+                    'url' => "$_SERVER[SCRIPT_NAME]?delete=$data->id&" . generate_csrf_token_link_parameter(),
                     'icon' => 'fa-xmark',
                     'class' => 'delete',
                     'confirm' => $langConfirmDelete))) . "</td>";
@@ -203,7 +206,7 @@ $listcategories = "<option value=''>Χωρίς κατηγορία</option>\n" . 
     } else {
         $display_name = $category->name;
     }
-    
+
     return "<option value='{$category->id}'>" . q($display_name) . "</option>";
 }, $categories_list));
 
@@ -266,7 +269,7 @@ if (isset($_GET['edit'])) {
                             <div class='input-group'>
                                 <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                 <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -367,7 +370,7 @@ if (isset($_GET['edit'])) {
                                 <div class='input-group'>
                                     <span class='add-on'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                     <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -433,17 +436,17 @@ $head_content .= "
                 }
             });
             slimSelectFun (
-                '#select-courses', 
-                '" . js_escape(trans('langSearch')) . "', 
-                '" . js_escape(trans('langWelcomeSelect')) . "', 
-                '" . js_escape(trans('langSelectAll')) . "', 
+                '#select-courses',
+                '" . js_escape(trans('langSearch')) . "',
+                '" . js_escape(trans('langWelcomeSelect')) . "',
+                '" . js_escape(trans('langSelectAll')) . "',
                 '" . js_escape(trans('langListChoices')) . "'
             );
             slimSelectFun (
-                '#select-categories', 
-                '" . js_escape(trans('langSearch')) . "', 
-                '" . js_escape(trans('langWelcomeSelect')) . "', 
-                '" . js_escape(trans('langSelectAll')) . "', 
+                '#select-categories',
+                '" . js_escape(trans('langSearch')) . "',
+                '" . js_escape(trans('langWelcomeSelect')) . "',
+                '" . js_escape(trans('langSelectAll')) . "',
                 '" . js_escape(trans('langListChoices')) . "'
             );
             $('#selectAll').click(function(e) {

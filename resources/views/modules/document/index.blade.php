@@ -141,33 +141,78 @@
             $('.checkbox_td').toggleClass('d-none');
             if ($(this).find('span.fa.fa-check').length) {
                 $(this).find('span.fa.fa-check').remove();
+                $('.table-default input[type="checkbox"]').prop('checked', false);
+                $('#selectedcbids').val('');
+                $('#filepaths').val('');
+                checkboxStates = [];
+                $('#select-all-documents').prop('checked', false);
             } else {
                 $(this).append('<span class=\'fa fa-check text-success\' style=\'margin-left: 5px;\'></span>');
             }
         });
 
-        $('.table-default').on('change', 'input[type=checkbox]', function() {
+        function updateSelectAllState() {
+            let rowCheckboxes = $('.checkbox_td input[type="checkbox"]:not(:disabled)');
+            if (rowCheckboxes.length > 0) {
+                let checkedCount = rowCheckboxes.filter(':checked').length;
+                $('#select-all-documents').prop('checked', checkedCount === rowCheckboxes.length);
+            } else {
+                $('#select-all-documents').prop('checked', false);
+            }
+        }
+
+        $(document).on('change', '#select-all-documents', function() {
+            let isChecked = this.checked;
+            let selectedCbidValues = $('#selectedcbids').val() ? $('#selectedcbids').val().split(',').filter(Boolean) : [];
+            let filepaths = $('#filepaths').val() ? $('#filepaths').val().split(',').filter(Boolean) : [];
+
+            $('.checkbox_td input[type="checkbox"]:not(:disabled)').each(function() {
+                let cbid = $(this).attr('cbid');
+                let filepath = $(this).attr('filepath');
+                if (cbid) {
+                    this.checked = isChecked;
+                    checkboxStates[cbid] = isChecked;
+
+                    let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
+                    let filepathIndex = filepaths.indexOf(filepath);
+
+                    if (isChecked && cbidIndex === -1) {
+                        selectedCbidValues.push(cbid.toString());
+                        if (filepath) filepaths.push(filepath);
+                    } else if (!isChecked && cbidIndex !== -1) {
+                        selectedCbidValues.splice(cbidIndex, 1);
+                        if (filepathIndex !== -1) filepaths.splice(filepathIndex, 1);
+                    }
+                }
+            });
+            $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
+            $('#filepaths').val(filepaths.filter(Boolean).join(','));
+        });
+
+        $('.table-default').on('change', '.checkbox_td input[type="checkbox"]', function() {
             let cbid = $(this).attr('cbid');
             let filepath = $(this).attr('filepath');
+            if (!cbid) return;
             checkboxStates[cbid] = this.checked;
 
-            let selectedCbidValues = $('#selectedcbids').val().split(',');
-            let filepaths = $('#filepaths').val().split(',');
+            let selectedCbidValues = $('#selectedcbids').val() ? $('#selectedcbids').val().split(',').filter(Boolean) : [];
+            let filepaths = $('#filepaths').val() ? $('#filepaths').val().split(',').filter(Boolean) : [];
 
             let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
             let filepathIndex = filepaths.indexOf(filepath);
 
             if (this.checked && cbidIndex === -1) {
-                selectedCbidValues.push(cbid);
-                filepaths.push(filepath);
+                selectedCbidValues.push(cbid.toString());
+                if (filepath) filepaths.push(filepath);
 
             } else if (!this.checked && cbidIndex !== -1) {
                 selectedCbidValues.splice(cbidIndex, 1);
-                filepaths.splice(filepathIndex, 1);
+                if (filepathIndex !== -1) filepaths.splice(filepathIndex, 1);
             }
             $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
             $('#filepaths').val(filepaths.filter(Boolean).join(','));
 
+            updateSelectAllState();
         });
 
 
@@ -237,6 +282,7 @@
                     }
                 });
             }
+            updateSelectAllState();
         });
 
 
@@ -420,7 +466,14 @@
 
                                     <thead>
                                         <tr class="list-header">
-                                            <th style='width:5%;' class='checkbox_th d-none' aria-label='{{ trans('langIcon') }}'></th>
+                                            <th style='width:5%;' class='checkbox_th d-none text-center' aria-label='{{ trans('langSelectAll') }}'>
+                                                <div class='checkbox'>
+                                                    <label class='label-container' aria-label="{{ trans('langSelectAll') }}">
+                                                        <input type='checkbox' id='select-all-documents'>
+                                                        <span class='checkmark'></span>
+                                                    </label>
+                                                </div>
+                                            </th>
                                             <th style='width:50%;'>{!! headlink(trans('langFileName'), 'name') !!}</th>
 
                                             <th style='width:15%;'>{{ trans('langSize') }}</th>
@@ -470,11 +523,13 @@
                                                             @if(get_config('enable_prevent_download_url') && $file->format == 'pdf' && $file->prevent_download == 1)
                                                                 <a class='fileURL-link' href="{{ $urlAppend }}main/prevent_pdf.php?urlPr={{ urlencode($file->url) }}" target="_blank">{{ $file->title !== ''? $file->title: $file->filename }}</a>
                                                                 {!! icon('fa-shield', trans('langDownloadPdfNotAllowed')) !!}
+                                                            @elseif ($file->format == "jm" && $can_upload)
+                                                                <a href='{{ $urlAppend  }}modules/mindmap/index.php?course={{ $course_code }}&jmpath={{ urlencode(preg_replace('|^/[^/]+/|', '', explode('file.php', $file->url)[1])) }}'>{{ $file->title }}</a>
                                                             @else
                                                                 {!! $file->link !!}
-                                                            @endif
-
+                                                           @endif
                                                         @endif
+
                                                         @if ($can_upload)
                                                             @if ($file->extra_path)
                                                                 @if ($file->common_doc_path)

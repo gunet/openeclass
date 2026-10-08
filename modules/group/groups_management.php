@@ -40,41 +40,63 @@ $pageName = $langGroupsManagment;
 
 load_js('tools.js');
 load_js('slimselect');
-load_js('select2');
+//load_js('select2');
 
 $head_content .= "
 <script>
     $(function () {
-        $('#group-name').select2({
 
-            minimumInputLength: 2,
-            tags: true,
-            tokenSeparators: [','],
-            width: '100%',
-            selectOnClose: true,
-            createSearchChoice: function(term, data) {
-              if ($(data).filter(function() {
-                return this.text.localeCompare(term) === 0;
-              }).length === 0) {
-                return {
-                  id: term,
-                  text: term
-                };
-              }
-            },
-            ajax: {
-                url: 'searchGroup.php?course=$course_id',
+    // $('#group-name').select2({
+        //     minimumInputLength: 2,
+        //     tags: true,
+        //     tokenSeparators: [','],
+        //     width: '100%',
+        //     selectOnClose: true,
+        //     createSearchChoice: function(term, data) {
+        //       if ($(data).filter(function() {
+        //         return this.text.localeCompare(term) === 0;
+        //       }).length === 0) {
+        //         return {
+        //           id: term,
+        //           text: term
+        //         };
+        //       }
+        //     },
+        //     ajax: {
+        //         url: 'searchGroup.php?course=$course_id',
+        //         dataType: 'json',
+        //         data: function(term, page) {
+        //             return {
+        //                 q: term
+        //             };
+        //         },
+        //         processResults: function(data, page) {
+        //             return {results: data};
+        //         }
+        //     }
+        // });
+
+        slimSelectFun(
+            '#group-name',
+            '" . js_escape(trans('langSearch')) . "', 
+            '" . js_escape(trans('langWelcomeSelect')) . "', 
+            '" . js_escape(trans('langSelectAll')) . "', 
+            '" . js_escape(trans('langGroups')) . "',
+            {
+                url: '{$urlServer}modules/group/searchGroup.php?course={$course_id}',
                 dataType: 'json',
-                data: function(term, page) {
+                dataResponse: 'results',
+                minimumInputLength: 2,
+                tags: true,
+                tokenSeparators: [','],
+                params: function(term) {
                     return {
-                        q: term
+                        _type: 'query',
+                        'q[term]': term
                     };
-                },
-                processResults: function(data, page) {
-                    return {results: data};
                 }
             }
-        });
+        );
 
     });
 </script>";
@@ -139,7 +161,7 @@ $tool_content .= "<div class='row mb-4'>
                                                 <button type='submit' name='submitGroupNames' class='btn btn-sm searchGroupBtn h-40px' aria-label='Submit button'>
                                                     <span class='fa fa-search fs-6'></span>
                                                 </button>
-                                                <select id='group-name' class='form-select' name='groupNames[]' multiple></select>
+                                                <select id='group-name' class='form-control' name='groupNames[]' multiple></select>
                                             </div>
                                          </form>";
 $tool_content .= "  </div>

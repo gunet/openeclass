@@ -39,6 +39,7 @@ require_once 'modules/group/group_functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
 require_once 'include/log.class.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 // Login the user via token - used when launching the exercise from Safe Exam Browser (SEB)
 if (isset($got_token)) {
@@ -96,65 +97,107 @@ function unset_exercise_var($exerciseId) {
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     if (isset($_POST['delete-recording'])) {
-        $courseCode = $_GET['course'];
-        $eurID = $_GET['eurid'];
-        $delPath = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d
-                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $_POST['delete-recording'], $eurID);
-        unlink("$webDir/courses/$courseCode/image" . $delPath->path);
-        Database::get()->query("DELETE FROM document WHERE id = ?d", $delPath->id);
+        $courseCode = q($_GET['course']);
+        $questionId = intval($_POST['delete-recording']);
+        $eurID = intval($_GET['eurid']);
+        $oldFilePath = q($_POST['oldFilePath']);
+
+        unlink("$webDir/courses/$courseCode/image" . $oldFilePath);
+        Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", null, $eurID, $questionId);
     }
      /* save audio recorded data */
     if (isset($_FILES['audio-blob'])) {
-        $courseCode = $_GET['course'];
-        $questionId = $_POST['questionId'];
-        $file_path = '/' . safe_filename('mp3');
-        $filename = 'recording-file.mp3';
-        $eurID = $_GET['eurid'];
-        $oldFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d AND subsystem = ?d
-                                                    AND subsystem_id = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $questionId, $eurID);
-
-        if ($oldFile && file_exists("$webDir/courses/$courseCode/image" . $oldFile->path)) {
-            unlink("$webDir/courses/$courseCode/image" . $oldFile->path);
-            Database::get()->query("DELETE FROM document WHERE id = ?d", $oldFile->id);
+        $courseCode = q($_GET['course']);
+        $questionId = intval($_POST['questionId']);
+        $eurID = intval($_GET['eurid']);
+        $filename = $_FILES['audio-blob']['name'];
+        $oldFilePath = q($_POST['oldFilePath']);
+        validateUploadedFile($filename); // check file type
+        $filename = add_ext_on_mime($filename);
+        $safe_filename = safe_filename(get_file_extension($filename));
+        $dir = "$webDir/courses/$courseCode/image";
+        if (!file_exists($dir)) {
+            mkdir("$webDir/courses/$courseCode/image", 0755, true);
         }
-        if (move_uploaded_file($_FILES['audio-blob']['tmp_name'], "$webDir/courses/$courseCode/image/$file_path")) {
-            $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
-            $file_date = date('Y-m-d G:i:s');
-            $file_format = 'mp3';
-            $q = Database::get()->query("INSERT INTO document SET
-                course_id = ?d,
-                subsystem = ?d,
-                subsystem_id = ?d,
-                path = ?s,
-                extra_path = '',
-                filename = ?s,
-                visible = 1,
-                comment = '',
-                category = 0,
-                title = ?s,
-                creator = ?s,
-                date = ?s,
-                date_modified = ?s,
-                subject = '',
-                description = '',
-                author = ?s,
-                format = ?s,
-                language = ?s,
-                copyrighted = 0,
-                editable = 0,
-                lock_user_id = ?d",
-                $course_id, ORAL_QUESTION, $questionId, $file_path,
-                $filename, $filename, $file_creator,
-                $file_date, $file_date, $file_creator, $file_format,
-                $language, $eurID);
+        
+        $pathfile = "$webDir/courses/$courseCode/image/$safe_filename";
+        if (move_uploaded_file($_FILES['audio-blob']['tmp_name'], $pathfile)) {
+            @chmod($pathfile, 0644);
+            $real_filename = $_FILES['audio-blob']['name'];
+            $filepath = '/' . $safe_filename;
+            $arrFileInfo = ['filename' => $filename, 'filepath' => $filepath];
+            $info_file = serialize($arrFileInfo);
+            Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", $info_file, $eurID, $questionId);
+            echo json_encode(['newFilePath' => $urlServer . "courses/$courseCode/image" . $filepath, 'info_file' => $info_file]);
+        }
+    }
 
-            if ($q) {
-                $newFilePath = Database::get()->querySingle("SELECT `path` FROM document WHERE id = ?d", $q->lastInsertID)->path;
-                $fPath = $urlServer . "courses/$course_code/image" . $newFilePath;
-                echo json_encode(['newFilePath' => $fPath]);
+    // File has been removed from uppy
+    if (isset($_POST['file_uploaded_remove'])) {
+        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+        $exId = intval($_GET['exerciseId']);
+        $u_rec_id = intval($_POST['u_record_id']);
+        $qId = intval($_POST['question_id']);
+        $oldfilePath = $_POST['old_file_path'];
+        $file = "$webDir/courses/$course_code/exercise/{$exId}{$oldfilePath}";
+
+        $checkURecord = Database::get()->querySingle("SELECT aer.answer FROM exercise_answer_record aer
+                                                      JOIN exercise_user_record eur ON eur.eurid=aer.eurid
+                                                      JOIN exercise_question eq ON eq.id=aer.question_id
+                                                      WHERE eq.id = ?d
+                                                      AND eq.type = ?d
+                                                      AND eur.eurid = ?d
+                                                      AND eur.eid = ?d
+                                                      AND eur.uid = ?d", $qId, UPLOAD_FILE, $u_rec_id, $exId, $uid);
+
+        if ($checkURecord && is_string($checkURecord->answer)) {
+            $arr_file = unserialize($checkURecord->answer, ["allowed_classes" => false]);
+            if (is_array($arr_file) && isset($arr_file['filepath']) 
+                && is_string($arr_file['filepath']) && $arr_file['filepath'] == $oldfilePath 
+                && file_exists($file)) {
+                if (unlink($file)) {
+                    Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", null, $u_rec_id, $qId);
+                }
             }
         }
     }
+
+    exit;
+}
+
+// Save uploaded file from uppy - only for users
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['new_upload_file'])) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
+    header('Content-Type: application/json');
+    
+    $exercise_id = intval($_GET['exerciseId']);
+    $question_id = intval($_GET['questionId']);
+    $u_rec = intval($_GET['exrecid']);
+    $filename = $_FILES['new_upload_file']['name'];
+    validateUploadedFile($filename); // check file type
+    $filename = add_ext_on_mime($filename);
+    // File name used in file system and path field
+    $safe_filename = safe_filename(get_file_extension($filename));
+    $dir = "$webDir/courses/$course_code/exercise/{$exercise_id}";
+    if (!file_exists($dir)) {
+        mkdir("$webDir/courses/$course_code/exercise/{$exercise_id}/", 0755, true);
+    } 
+
+    $pathfile = "$webDir/courses/$course_code/exercise/{$exercise_id}/$safe_filename";
+    if (move_uploaded_file($_FILES['new_upload_file']['tmp_name'], $pathfile)) {
+        @chmod($pathfile, 0644);
+        $real_filename = $_FILES['new_upload_file']['name'];
+        $filepath = '/' . $safe_filename;
+        $arrFileInfo = ['filename' => $filename, 'filepath' => $filepath];
+        $info_file = serialize($arrFileInfo);
+        Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", $info_file, $u_rec, $question_id);
+        echo json_encode(['success' => true, 'fileInfo' => $info_file]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to save uploaded file.']);
+    }
+
     exit;
 }
 
@@ -298,31 +341,6 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
                        assigned_to FROM exercise_user_record WHERE eurid = ?d',
                 ATTEMPT_ACTIVE, $eurid)->lastInsertID;
             if ($new_eurid) {
-                // Replace eurid of recorded audio with new eurid in document table.
-                // Replace recorded audio of old eurid with new eurid in exercise_answer_record table.
-                // It's a special case for oral question type.
-                $old_answers = Database::get()->queryArray("SELECT answer_record_id, answer FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-                if (count($old_answers) > 0) {
-                    foreach ($old_answers as $old_an) {
-                        if (isset($old_an->answer) && str_contains($old_an->answer, '.mp3')) { // oral question
-                            $old_recorded = $old_an->answer;
-                            $temp_old_recorded = explode('-', $old_recorded);
-                            if (count($temp_old_recorded) == 4 && $temp_old_recorded[3] == $eurid . '.mp3') {
-                                $new_answer = $temp_old_recorded[0] . '-' . $temp_old_recorded[1] . '-' . $temp_old_recorded[2] . '-' . $new_eurid . '.mp3';
-                                Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE answer_record_id = ?d", $new_answer, $old_an->answer_record_id);
-                            }
-                        }
-                    }
-                }
-                $old_documents = Database::get()->queryArray("SELECT id,lock_user_id FROM document WHERE course_id = ?d
-                                                                AND subsystem = ?d AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $eurid);
-                if (count($old_documents) > 0) {
-                    foreach ($old_documents as $old_doc) {
-                        Database::get()->query("UPDATE document SET lock_user_id = ?d WHERE id = ?d", $new_eurid, $old_doc->id);
-                    }
-                }
-
-                /////////////////////////////////////////////////////////
                 Database::get()->query('UPDATE exercise_answer_record
                     SET eurid = ?d WHERE eurid = ?d', $new_eurid, $eurid);
                 Database::get()->query('DELETE FROM exercise_user_record
@@ -438,8 +456,12 @@ if ($exercisePreventCopy) {
 
 $is_exam = $objExercise->isExam();
 $stricterExamMode = $objExercise->getOption('stricterExamRestriction')? 1: 0;
+$showStrictExamControls = $is_exam && $stricterExamMode && ($objExercise->selectAttemptsAllowed() == 0 
+    or isset($_POST['acceptAttempt'])
+    or isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])
+);
 // Fullscreen when showing exercise in single page in exam mode
-if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
+if ($is_exam && $stricterExamMode) {
     $head_content .= "
         <script type='text/javascript'>
 
@@ -464,29 +486,30 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
 
             $(function() {
 
-                let openEx = localStorage.getItem('openEx');
-
-                if (!openEx) {
-                    $('#exercise_frame').removeClass('d-block').addClass('d-none');
-                    $('#btn-search').addClass('pe-none');
-                    $('.messages_2').removeClass('d-none').addClass('d-block');
-                } else {
-                    $('#fullscreenBtn').removeClass('d-block').addClass('d-none');
-                    $('#bgr-cheat-header').removeClass('d-block').addClass('d-none');
-                    $('#bgr-cheat-footer').removeClass('d-block').addClass('d-none');
-                    document.documentElement.requestFullscreen();
-                }
+                $('#exercise_frame').removeClass('d-none').addClass('d-block');
+                default_settings();
 
                 $('#fullscreenBtn').on('click', function (e) {
                     e.preventDefault();
-                    $('#exercise_frame').removeClass('d-none').addClass('d-block');
-                    localStorage.setItem('openEx', true);
-                    $('#fullscreenBtn').removeClass('d-block').addClass('d-none');
-                    $('#bgr-cheat-header').removeClass('d-block').addClass('d-none');
-                    $('#bgr-cheat-footer').removeClass('d-block').addClass('d-none');
-                    $('.messages_1').removeClass('d-none').addClass('d-block');
-                    $('.messages_2').removeClass('d-block').addClass('d-none');
-                    document.documentElement.requestFullscreen();
+                    if (document.fullscreenElement) {
+                        document.exitFullscreen().catch(function (error) {
+                            console.error('Unable to exit fullscreen:', error);
+                        });
+                    } else {
+                        document.documentElement.requestFullscreen().catch(function (error) {
+                            console.error('Unable to enter fullscreen:', error);
+                        });
+                    }
+                });
+
+                document.addEventListener('fullscreenchange', function () {
+                    const isFullscreen = Boolean(document.fullscreenElement);
+                    $('#fullscreenBtn').attr('aria-pressed', isFullscreen ? 'true' : 'false');
+                    if (isFullscreen) {
+                        $('#bgr-cheat-header, #bgr-cheat-footer').removeClass('d-block').addClass('d-none');
+                    } else {
+                        $('#bgr-cheat-header, #bgr-cheat-footer').removeClass('d-none').addClass('d-block');
+                    }
                 });
 
                 $('body').on('contextmenu', function(e) {
@@ -500,11 +523,14 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
                     }
                 });
 
-                default_settings();
-
                 // Detect when the tab becomes hidden
+                let exercisePageNavigation = false;
+                document.querySelector('.exercise')?.addEventListener('submit', function () {
+                    exercisePageNavigation = true;
+                });
+
                 document.addEventListener('visibilitychange', function() {
-                    if (document.visibilityState === 'hidden') {
+                    if (!exercisePageNavigation && document.visibilityState === 'hidden') {
                         showCancelWarning();
                     }
                 });
@@ -513,7 +539,7 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
                 window.addEventListener('blur', function() {
                     setTimeout(function() {
                         let TinyMCEFocused = localStorage.getItem('isTinyMCEFocused');
-                        if (TinyMCEFocused !== 'true') {
+                        if (!exercisePageNavigation && TinyMCEFocused !== 'true') {
                             showCancelWarning();
                         }
                     }, 500);
@@ -526,9 +552,18 @@ if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
                     }
                 });
 
+                let allowCancelExModalHide = false;
+                $('#cancelExModal').on('hide.bs.modal', function (e) {
+                    if (!allowCancelExModalHide) {
+                        e.preventDefault();
+                    }
+                }).on('hidden.bs.modal', function () {
+                    allowCancelExModalHide = false;
+                });
+
                 $('#cancelExercise').on('click', function (e) {
+                    allowCancelExModalHide = true;
                     e.preventDefault();
-                    localStorage.removeItem('openEx');
                     localStorage.removeItem('isTinyMCEFocused');
                     $('#cancelButton').trigger('click');
                     $('.deleteAdminBtn.bootbox-accept').trigger('click');
@@ -543,7 +578,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
             $(function() {
                 $('.btn-quick-note').remove();
                 $('a:not(#exercise_frame a)').css('cursor', 'not-allowed');
-                $('div:not(#exercise_frame)').css('cursor', 'not-allowed');
+                $('div').not('#exercise_frame').not('#exercise_frame div').css('cursor', 'not-allowed');
                 $('a:not(#exercise_frame a)').on('click', function (e) {
                     e.preventDefault();
                     return false;
@@ -557,25 +592,8 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
             });
     </script>";
 
-    if ($stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE &&
-        ($objExercise->selectAttemptsAllowed() == 0 or isset($_POST['acceptAttempt']))) {
+    if ($showStrictExamControls) {
             $tool_content .= "
-            <div class='col-12 d-flex justify-content-center align-items-center my-4 px-0'>
-                <div class='card panelCard card-default px-lg-4 py-lg-3'>
-                    <div class='card-body'>
-                        <div class='text-center'>
-                            <div class='icon-modal-default border-default'>
-                                <i class='fa-solid fa-triangle-exclamation Warning-200-cl fs-2'></i>
-                            </div>
-                        </div>
-                        <p class='TextBold text-center messages_1 d-none'>$langWarningNewPageOpened</p>
-                        <p class='TextBold text-center messages_2 d-none'>$langWarningNewPageOpened2</p>
-                        <button id='fullscreenBtn' class='btn successAdminBtn mt-4 m-auto'>
-                            $langGoToExam&nbsp;&nbsp;<i class='fa-solid fa-right-to-bracket pt-0'></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
             <div class='modal fade modalExCancelOpen' id='cancelExModal' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' role='dialog'
                     aria-labelledby='cancelModalLabel' aria-hidden='true'>
                 <div class='modal-dialog' role='document'>
@@ -590,7 +608,7 @@ if ($is_exam) { // disallow links outside exercise frame. disallow button quick 
                             $langExWillBeCanceled
                         </div>
                         <div class='modal-footer d-flex justify-content-center'>
-                            <button type='button' id='cancelExercise' class='btn btn-primary' style='width: 60px;'>OK</button>
+                            <button type='button' id='cancelExercise' class='btn btn-primary' data-bs-dismiss='modal' style='width: 60px;'>OK</button>
                         </div>
                     </div>
                 </div>
@@ -908,13 +926,35 @@ if (isset($_POST['formSent'])) {
     }
 }
 
-if (isset($timeleft)) { // time remaining
-    if ($timeleft <= 1) {
+if (isset($timeleft) || $showStrictExamControls) { // remaining time and strict exam notice
+    if (isset($timeleft) && $timeleft <= 1) {
         $timeleft = 1;
     }
-    $tool_content .= "<div class='alert alert-warning time-remaining-warning'><i class='fa-solid fa-triangle-exclamation fa-lg pt-1'></i><span>";
-    $tool_content .= "<div class='col-sm-12'><h4 class='d-flex align-items-center gap-2 mb-0'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
-    $tool_content .= "</span></div>";
+
+    if ($showStrictExamControls) {
+        $tool_content .= "
+        <div class='alert alert-warning time-remaining-warning mb-4'>
+            <i class='fa-solid fa-triangle-exclamation fa-lg pt-1'></i>
+            <span>
+                $langWarningNewPageOpened";
+                if ($exerciseType == SINGLE_PAGE_TYPE) {
+                $tool_content .= "<button id='fullscreenBtn' type='button' class='btn submitAdminBtn mt-3' aria-pressed='false'>
+                    $langFullScreen
+                </button>";
+                }
+            $tool_content .= "
+            </span>
+        </div>";
+    }
+
+    if (isset($timeleft)) {
+        $tool_content .= "<div class='alert alert-warning time-remaining-warning'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg pt-1'></i>
+                            <span>
+                                <h4 class='d-flex align-items-center gap-2 mb-0'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4>
+                            </span>
+                          </div>";
+    }
 }
 
 if (!empty($exerciseDescription)) { // description
@@ -970,7 +1010,7 @@ foreach ($questionList as $k => $q_id) {
                 }
             }
         }
-    } elseif (($t_question->selectType() == FREE_TEXT or $t_question->selectType() == ORAL)
+    } elseif (($t_question->selectType() == FREE_TEXT or $t_question->selectType() == ORAL or $t_question->selectType() == UPLOAD_FILE)
         and array_key_exists($q_id, $exerciseResult) and trim($exerciseResult[$q_id]) !== '') { // button color is `blue` if we have type anything
         $answered = true;
     } elseif (($t_question->selectType() == MATCHING or $t_question->selectType() == FILL_IN_FROM_PREDEFINED_ANSWERS) and array_key_exists($q_id, $exerciseResult)) {
@@ -1013,6 +1053,55 @@ foreach ($questionList as $k => $q_id) {
     } else {
         $unansweredIds[] = $q_id;
     }
+}
+
+// Check if any FREE_TEXT question is a code exercise
+require_once __DIR__ . '/code_exercise_languages.inc.php';
+$hasCodeExercise = false;
+foreach ($questionList as $q_id) {
+    $t_question = $questions[$q_id] ?? null;
+    if ($t_question && $t_question->selectType() == FREE_TEXT) {
+        if (code_exercise_language($t_question->selectOptions()) !== null) {
+            $hasCodeExercise = true;
+        }
+    }
+}
+
+// Load CodeMirror if needed (the bundle loads only the languages it uses)
+if ($hasCodeExercise) {
+    $head_content .= '
+    <style>
+    .code-exercise-editor-wrapper .cm-editor.cm-focused {
+        outline: 2px solid var(--bs-primary);
+        outline-offset: -1px;
+    }
+    .code-exercise-editor-wrapper .cm-content,
+    .code-exercise-editor-wrapper .cm-gutter {
+        min-height: 300px;
+    }
+    .code-exercise-editor-wrapper .cm-scroller {
+        max-height: 600px;
+    }
+    </style>';
+    $head_content .= "
+    <script type='module'>
+    const { fromTextArea } = await import('{$urlAppend}js/bundle/codemirror/codemirror.js');
+    document.querySelectorAll('.code-exercise-editor').forEach(function(textarea) {
+        var questionId = textarea.id.replace('code_editor_', '');
+        fromTextArea(textarea, {
+            language: textarea.getAttribute('data-language'),
+            onChange: function(value) {
+                if (value.trim() !== '') {
+                    var qPanel = $('#qPanel' + questionId);
+                    var qCheck = qPanel.find('span').first();
+                    var qButton = $('#' + qCheck.attr('id').replace('qCheck', 'q_num'));
+                    qCheck.addClass('fa fa-check');
+                    qButton.removeClass('btn-default').addClass('btn-info');
+                }
+            }
+        });
+    });
+    </script>";
 }
 
 if ($questionList) {
@@ -1335,7 +1424,7 @@ function unset_session_variables_of_questions($eurid, $type = '') {
         $typeQuestion[$q->question_id] = $q->type;
     }
 
-    // Remove sessions of ordering and oral questions
+    // Remove sessions of ordering
     if (count($question_ids) > 0) {
         foreach ($question_ids as $qid) {
             // About ordering questions
@@ -1347,18 +1436,6 @@ function unset_session_variables_of_questions($eurid, $type = '') {
                     unset($data['userSubset_'.$uid]);
                     $updatedJsonString = json_encode($data);
                     Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $updatedJsonString, $qid);
-                }
-            }
-            // About oral questions
-            if ($type == 'cancel_exercise' && $typeQuestion[$qid] == ORAL) {
-                $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
-                                                        AND subsystem = ?d AND subsystem_id = ?d
-                                                        AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $eurid);
-                if ($fFile) {
-                    if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
-                        unlink("$webDir/courses/$course_code/image" . $fFile->path);
-                    }
-                    Database::get()->query("DELETE FROM document WHERE id = ?d", $fFile->id);
                 }
             }
         }

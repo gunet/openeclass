@@ -26,7 +26,7 @@ class ExtAppManager {
         'general' => ['APITokenApp', 'H5PApp', 'aiapp', 'TurnitinApp', 'SebApp', 'CobyApp', 'LtiPublishApp', 'LimesurveyApp', 'PanoptoApp', 'SolrApp', 'OpenBadgesApp', 'ExternalReposApp'],
         'teleconference' => ['BBBApp', 'ZoomApp', 'WebexApp','GoogleMeetApp', 'JitsiApp', 'MicrosoftTeamsApp', 'OpenDelosApp', 'UniFlixApp'],
         'cloud' => ['GoogleDriveApp', 'OneDriveApp', 'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp'],
-        'other' => ['AnalyticsApp', 'AntivirusApp', 'secondfaApp', 'UserWayApp', 'AutojudgeApp'],
+        'other' => ['AnalyticsApp', 'secondfaApp', 'UserWayApp', 'AutojudgeApp', 'EduApiApp'],
     ];
 
 

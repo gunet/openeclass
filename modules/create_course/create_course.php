@@ -167,8 +167,7 @@ if (!isset($_POST['create_course'])) {
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-select" id="course_license_id"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
         $data['is_coby_enabled'] = false;
-        $data['courseStartDate'] = date('d-m-Y');
-        $data['course_enableStartDate'] = 'checked';
+        $data['courseStartDate'] = $data['course_enableStartDate'] = '';
         $data['courseEndDate'] = $data['course_enableEndDate'] = '';
         $data['courseRegStartDate'] = $data['course_enableRegStartDate'] = '';
         $data['courseRegEndDate'] = $data['course_enableRegEndDate'] = '';
@@ -240,6 +239,7 @@ if (!isset($_POST['create_course'])) {
         }
 
         $data['enable_activity'] = Database::get()->querySingle('SELECT id FROM activity_content LIMIT 1');
+        $data['pending_cadmos_courses'] = Database::get()->queryArray("SELECT id, source, created FROM cadmos_course WHERE user_id = ?d AND course_id IS NULL ORDER BY id DESC", $uid);
 
         view('modules.create_course.index', $data);
 
@@ -326,14 +326,6 @@ if (!isset($_POST['create_course'])) {
             $file_name = $_FILES['course_image']['name'];
             validateUploadedFile($file_name, 2);
             move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$code/image/$file_name");
-            require_once 'modules/admin/extconfig/externals.php';
-            $connector = AntivirusApp::getAntivirus();
-            if ($connector->isEnabled()) {
-                $output = $connector->check("$webDir/courses/$course_code/image/$file_name");
-                if ($output->status == $output::STATUS_INFECTED) {
-                    AntivirusApp::block($output->output);
-                }
-            }
             $course_image = $file_name;
         }
 
@@ -467,7 +459,14 @@ if (!isset($_POST['create_course'])) {
                             SET cat_title = ?s,
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
 
-        if (isset($_FILES['cadmos_file']) && is_uploaded_file($_FILES['cadmos_file']['tmp_name'])) {
+        $cadmos_id = isset($_POST['cadmos_id']) ? intval($_POST['cadmos_id']) : 0;
+        if ($cadmos_id > 0) {
+            $cadmos_record = Database::get()->querySingle("SELECT source FROM cadmos_course WHERE id = ?d AND user_id = ?d", $cadmos_id, $uid);
+            if ($cadmos_record) {
+                import_cadmos_data($new_course_id, $code, $cadmos_record->source);
+                Database::get()->query("UPDATE cadmos_course SET course_id = ?d WHERE id = ?d", $new_course_id, $cadmos_id);
+            }
+        } elseif (isset($_FILES['cadmos_file']) && is_uploaded_file($_FILES['cadmos_file']['tmp_name'])) {
             import_cadmos_file($new_course_id, $code, $_FILES['cadmos_file']['tmp_name']);
         }
 

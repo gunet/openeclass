@@ -92,8 +92,6 @@ if ($userdata) {
 
         if ($userdata->eportfolio_enable == 0) {
             $tool_content .= "<div class='col-12'><div class='alert alert-warning alert-dismissible'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div></div>";
-        } elseif ($userdata->eportfolio_enable == 1) {
-            load_js('clipboard.js');
         }
 
         if (isset($_GET['view']) && $_GET['view'] == 'public') {

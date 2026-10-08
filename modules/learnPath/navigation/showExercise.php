@@ -232,11 +232,26 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
         echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
      }
 
-    echo "
-     <script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>
-     
-     <title>$langExercice</title>" . $head_content ."
- </head>
+echo "<script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>";
+echo "<title>$langExercice</title>" . $head_content;
+echo "<script type='text/javascript'>
+    window.MathJax = {
+            loader: {
+                paths: {
+                    '@mathjax': '{$urlAppend}resources/fonts',
+                    'mathjax-newcm': '{$urlAppend}resources/fonts/mathjax-newcm-font',
+                    '@mathjax/mathjax-newcm-font': '{$urlAppend}resources/fonts/mathjax-newcm-font'
+                }
+            },
+            chtml: {
+                fontURL: '{$urlAppend}resources/fonts/mathjax-newcm-font/chtml/woff2',
+                dynamicPrefix: '{$urlAppend}resources/fonts/mathjax-newcm-font/chtml/dynamic'
+            }
+        };
+    </script>";
+echo "<script type='text/javascript' id='MathJax-script' async src='{$urlAppend}js/mathjax/tex-chtml.js'></script>";
+
+ echo "</head>
  <body class='body-learningPath' style='margin: 0px; height: 100% !important;'>
  <div id='content'>";
 
@@ -369,8 +384,19 @@ function showQuestion($questionId, $onlyAnswers = false) {
         } elseif ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
-            // replaces [blank] by an input field
-            $answer = preg_replace('/\[[^]]+\]/', '<input class="form-control" type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape($answer));
+            // replaces [blank] by an input field, sized to its answer if the question asks for it
+            $questionOptions = json_decode($objQuestionTmp->selectOptions() ?? '', true);
+            $blankWidthByAnswer = !empty($questionOptions['blankWidthByAnswer']);
+            $answer = preg_replace_callback('/\[[^]]+\]/', function ($m) use ($questionId, $blankWidthByAnswer) {
+                if ($blankWidthByAnswer) {
+                    $len = Question::blankDisplayLength($m[0]);
+                    return '<input class="form-control fill-in-the-blank-sized" type="text" name="choice[' . $questionId . '][]" size="' . $len . '" maxlength="' . $len . '" style="width: ' . $len . 'ch" />';
+                }
+                return '<input class="form-control" type="text" name="choice[' . $questionId . '][]" size="10" />';
+            }, standard_text_escape($answer));
+            if ($blankWidthByAnswer) {
+                $answer .= Question::blankAutoAdvanceScript();
+            }
         }
 
         if ($answerType == UNIQUE_ANSWER) { // unique answer

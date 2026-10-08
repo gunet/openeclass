@@ -247,7 +247,7 @@ Class Blog {
                 }
                 $result = Database::get()->queryArray($sql, 0, $this->user_id);
             }
-            load_js('jstree3');
+            load_js('jstree');
             $head_content .= "
                     <script>
                         $(function() {
@@ -256,7 +256,8 @@ Class Blog {
                                     'themes': {
                                         'name': 'proton',
                                         'responsive': true
-                                    }
+                                    },
+                                    'force_text': true
                                 }
                             })
                             .bind('select_node.jstree', function (e, data) {

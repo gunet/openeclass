@@ -16,7 +16,7 @@ RUN apt-get -q update && \
     rm -Rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/phpsysinfo/phpsysinfo.git /var/www/html/phpsysinfo && \
-    cp /var/www/html/phpsysinfo/phpsysinfo.ini.new /var/www/html/phpsysinfo/phpsysinfo.ini
+    cp /var/www/html/phpsysinfo/phpsysinfo.ini /var/www/html/phpsysinfo/phpsysinfo.ini
 
 ENV APACHE_RUN_DIR /var/run/apache2
 ENV APACHE_RUN_USER www-data

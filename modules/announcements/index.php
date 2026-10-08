@@ -50,9 +50,9 @@ if ($is_editor) {
             $cbids = explode(',', $_POST['selectedcbids']);
             if ($_POST['bulk_action'] == 'delete') {
                 foreach ($cbids as $row_id) {
-                    $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
+                    $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d AND course_id = ?d", $row_id, $course_id);
                     $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
-                    Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
+                    Database::get()->query("DELETE FROM announcement WHERE id = ?d AND course_id = ?d", $row_id, $course_id);
                     $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $row_id);
                     Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
                         'title' => $announce->title,
@@ -61,13 +61,13 @@ if ($is_editor) {
             }
             if ($_POST['bulk_action'] == 'visible') {
                 foreach ($cbids as $row_id) {
-                    Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 1, $row_id);
+                    Database::get()->query("UPDATE announcement SET visible = 1 WHERE id = ?d AND course_id = ?d", $row_id, $course_id);
                     $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $row_id);
                 }
             }
             if ($_POST['bulk_action'] == 'invisible') {
                 foreach ($cbids as $row_id) {
-                    Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 0, $row_id);
+                    Database::get()->query("UPDATE announcement SET visible = 0 WHERE id = ?d AND course_id = ?d", $row_id, $course_id);
                     $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $row_id);
                 }
             }
@@ -77,31 +77,29 @@ if ($is_editor) {
     // Pin sticky announcement
     if (isset($_POST['pin_announce'])) {
         if (isset($_GET['pin']) && ($_GET['pin'] == 1)) {
-            $top_order = Database::get()->querySingle("SELECT MAX(`order`) as max from announcement WHERE course_id = ?d", $course_id)->max + 1;
-            Database::get()->query("UPDATE announcement SET `order` = ?d  where id = ?d and course_id = ?d", $top_order, $_GET['pin_an_id'], $course_id);
+            $top_order = Database::get()->querySingle("SELECT MAX(`order`) AS max FROM announcement WHERE course_id = ?d", $course_id)->max + 1;
+            Database::get()->query("UPDATE announcement SET `order` = ?d  WHERE id = ?d AND course_id = ?d", $top_order, $_GET['pin_an_id'], $course_id);
         } elseif (isset($_GET['pin']) && ($_GET['pin'] == 0)) {
-            Database::get()->query("UPDATE announcement SET `order` = 0  where id = ?d and course_id = ?d", $_GET['pin_an_id'], $course_id);
+            Database::get()->query("UPDATE announcement SET `order` = 0  WHERE id = ?d AND course_id = ?d", $_GET['pin_an_id'], $course_id);
         }
         exit();
     }
 
     if (isset($_POST['action'])) {
-        if ($_POST['action'] == 'delete') {
-            /* delete announcement */
+        if ($_POST['action'] == 'delete') { /* delete announcement */
             $row_id = intval($_POST['value']);
-            $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
+            $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d AND course_id = ?d", $row_id, $course_id);
             $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
-            Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
+            Database::get()->query("DELETE FROM announcement WHERE id = ?d AND course_id = ?d", $row_id, $course_id);
             $searchEngine->indexResource(ConstantsUtil::REQUEST_REMOVE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $row_id);
             Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
                 'title' => $announce->title,
                 'content' => $txt_content));
             exit();
-        } elseif ($_POST['action']=='visible') {
-            /* modify visibility */
+        } elseif ($_POST['action'] == 'visible') { /* modify visibility */
             $row_id = intval($_POST['value']);
             $visible = intval($_POST['visible']) ? 1 : 0;
-            Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);
+            Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d AND course_id = ?d", $visible, $row_id, $course_id);
             $searchEngine->indexResource(ConstantsUtil::REQUEST_STORE, ConstantsUtil::RESOURCE_ANNOUNCEMENT, $row_id);
             exit();
         }
@@ -180,7 +178,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
-                '0' => "<div class='d-none bulk_select'><div class='checkbox'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div>",
                 '0' => "<div class='bulk_select'><div class='checkbox'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div>",
                 '1' => "<div class='table_td announceContent'>
                         <div class='table_td_header announceTitleHeader clearfix'>

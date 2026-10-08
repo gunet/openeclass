@@ -91,23 +91,29 @@ function widget_css_link($file, $folder) {
     $head_content .= "<link href='$urlAppend{$folder}/css/$file$v' rel='stylesheet' type='text/css'>\n";
 }
 
+
+function getAvailableWidgets(string $basePath = 'Widgets/Openeclass'): array
+{
+    $basePath = rtrim($basePath, '/\\');
+    $widgets = [];
+
+    $subDirs = glob($basePath . '/*', GLOB_ONLYDIR);
+    foreach ($subDirs as $dir) {
+        $widgets[] = str_replace(DIRECTORY_SEPARATOR, '\\', $dir . DIRECTORY_SEPARATOR . basename($dir) . 'Widget');
+    }
+    return $widgets;
+}
+
 /**
- * @brief  include a JavaScript file from the main js directory
- * @global type $head_content
- * @global type $theme_settings
- * @global type $language
- * @global type $langReadMore
- * @global type $langReadLess
- * @global type $langViewHide
- * @global type $langViewShow
- * @staticvar boolean $loaded
- * @param type $file
- * @param type $init
- * @return type
+ * @brief load JavaScript file
+ * @param $file
+ * @param $init
+ * @return void
  */
-function load_js($file, $init='') {
+function load_js($file, $init=''): void
+{
     global $head_content, $theme_settings, $language,
-            $langReadMore, $langReadLess, $langViewHide, $langViewShow, $urlAppend, $webDir;
+            $langReadMore, $langReadLess, $langViewHide, $langViewShow, $urlAppend;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -117,128 +123,144 @@ function load_js($file, $init='') {
     }
 
     // Load file only if not provided by template
-    if (!(isset($theme_settings['js_loaded']) and
-          in_array($file, $theme_settings['js_loaded']))) {
-        if ($file == 'jstree') {
-            $head_content .= js_link('jstree/jquery.cookie.min.js');
-            $file = 'jstree/jquery.jstree.min.js';
-        } elseif ($file == 'jstree3') {
-            $head_content .= css_link('jstree3/themes/proton/style.min.css');
-            $file = 'jstree3/jstree.min.js';
-        } elseif ($file == 'jstree3d') {
-            $head_content .= css_link('jstree3/themes/default/style.min.css');
-            $file = 'jstree3/jstree.min.js';
-        } elseif ($file == 'shadowbox') {
-            $head_content .= css_link('shadowbox/shadowbox.css');
-            $file = 'shadowbox/shadowbox.js';
-        } elseif ($file == 'fancybox2') {
-            $head_content .= css_link('fancybox2/jquery.fancybox.css');
-            $file = 'fancybox2/jquery.fancybox.pack.js';
-        } elseif ($file == 'colorbox') {
-            $head_content .= css_link('colorbox/colorbox.css');
-            $file = 'colorbox/jquery.colorbox.min.js';
-        } elseif ($file == 'slick') {
-            $head_content .= css_link('slick-master/slick/slick.css');
-            $file = 'slick-master/slick/slick.min.js';
-        } elseif ($file == 'datatables') {
-            $head_content .= css_link('datatables/datatables.min.css');
-            $file = 'datatables/datatables.min.js';
-        } elseif ($file == 'jszip') {
-            $file = 'jszip/dist/jszip.min.js';
-        } elseif ($file == 'pdfmake') {
-            $file = 'pdfmake/build/pdfmake.js';
-        } elseif ($file == 'vfs_fonts') {
-            $file = 'pdfmake/build/vfs_fonts.js';
-        } elseif ($file == 'RateIt') {
-            $file = 'jquery.rateit.min.js';
-        } elseif ($file == 'autosize') {
-            $file = 'autosize/autosize.min.js';
-        } elseif ($file == 'waypoints-infinite') {
-            $head_content .= js_link('waypoints/jquery.waypoints.min.js');
-            $file = 'waypoints/shortcuts/infinite.min.js';
-        } elseif ($file == 'select2') {
-            // $head_content .= css_link('select2-4.0.3/css/select2.min.css') .
-            // css_link('select2-4.0.3/css/select2-bootstrap.min.css') .
-            // css_link('select2-4.0.3/css/override_select2_design.css?v=4.0-dev') .
-            // js_link('select2-4.0.3/js/select2.full.min.js');
-            // $file = "select2-4.0.3/js/i18n/$language.js";
-            $head_content .= css_link('select2-4.0.13/dist/css/select2.min.css') .
-            css_link('select2-4.0.13/dist/css/override_select2_design.css?v=4.0-dev') .
-            js_link('select2-4.0.13/dist/js/select2.full.min.js');
-            $file = "select2-4.0.13/dist/js/i18n/$language.js";
-        } elseif ($file == 'slimselect') {
-            $head_content .= css_link('slim-select/slimselect.css');
-            $file = 'slim-select/slimselect.js';
-        } elseif ($file == 'html2pdf') {
-            $file = 'html2pdf/html2pdf.bundle.min.js';
-        } elseif ($file == 'bootstrap-calendar') {
-            $file = 'bootstrap-calendar-master/js/calendar.js';
-            if ($language != 'en') {
-                switch ($language) {
-                    case 'el': $head_content .= js_link('bootstrap-calendar-master/js/language/el-GR.js'); break;
-                    case 'fr': $head_content .= js_link('bootstrap-calendar-master/js/language/fr-FR.js'); break;
-                    case 'de': $head_content .= js_link('bootstrap-calendar-master/js/language/de-DE.js'); break;
-                    case 'it': $head_content .= js_link('bootstrap-calendar-master/js/language/it-IT.js'); break;
-                    case 'es': $head_content .= js_link('bootstrap-calendar-master/js/language/es-ES.js'); break;
-                    default: break;
+    if (!(isset($theme_settings['js_loaded']) and in_array($file, $theme_settings['js_loaded']))) {
+        switch ($file) {
+            case 'jstree':
+                $head_content .= css_link('jstree/themes/proton/style.min.css');
+                $file = 'jstree/jstree.min.js';
+                break;
+            case 'shadowbox':
+                $head_content .= css_link('shadowbox/shadowbox.css');
+                $file = 'shadowbox/shadowbox.js';
+                break;
+            case 'fancybox2':
+                $head_content .= css_link('fancybox2/jquery.fancybox.css');
+                $file = 'fancybox2/jquery.fancybox.pack.js';
+                break;
+            case 'colorbox':
+                $head_content .= css_link('colorbox/colorbox.css');
+                $file = 'colorbox/jquery.colorbox.min.js';
+                break;
+            case 'slick':
+                $head_content .= css_link('slick-master/slick/slick.css');
+                $file = 'slick-master/slick/slick.min.js';
+                break;
+            case 'datatables':
+                $head_content .= css_link('datatables/datatables.min.css');
+                $file = 'datatables/datatables.min.js';
+                break;
+            case 'jszip':
+                $file = 'jszip/dist/jszip.min.js';
+                break;
+            case 'pdfmake':
+                $file = 'pdfmake/build/pdfmake.js';
+                break;
+            case 'vfs_fonts':
+                $file = 'pdfmake/build/vfs_fonts.js';
+                break;
+            case 'RateIt':
+                $file = 'jquery.rateit.min.js';
+                break;
+            case 'autosize':
+                $file = 'autosize/autosize.min.js';
+                break;
+            case 'waypoints-infinite':
+                $head_content .= js_link('waypoints/jquery.waypoints.min.js');
+                $file = 'waypoints/shortcuts/infinite.min.js';
+                break;
+            case 'select2':
+                $head_content .= css_link('select2-4.0.13/dist/css/select2.min.css') .
+                css_link('select2-4.0.13/dist/css/override_select2_design.css?v=4.0-dev') .
+                js_link('select2-4.0.13/dist/js/select2.full.min.js');
+                $file = "select2-4.0.13/dist/js/i18n/$language.js";
+                break;
+            case 'slimselect':
+                $head_content .= css_link('slim-select/slimselect.css');
+                $file = 'slim-select/slimselect.js';
+                break;
+            case 'html2pdf':
+                $file = 'html2pdf/html2pdf.bundle.min.js';
+                break;
+            case 'bootstrap-calendar':
+                $file = 'bootstrap-calendar-master/js/calendar.js';
+                if ($language != 'en') {
+                    switch ($language) {
+                        case 'el': $head_content .= js_link('bootstrap-calendar-master/js/language/el-GR.js'); break;
+                        case 'fr': $head_content .= js_link('bootstrap-calendar-master/js/language/fr-FR.js'); break;
+                        case 'de': $head_content .= js_link('bootstrap-calendar-master/js/language/de-DE.js'); break;
+                        case 'it': $head_content .= js_link('bootstrap-calendar-master/js/language/it-IT.js'); break;
+                        case 'es': $head_content .= js_link('bootstrap-calendar-master/js/language/es-ES.js'); break;
+                        default: break;
+                    }
                 }
-            }
-            $head_content .= css_link('bootstrap-calendar-master/css/calendar_small.css');
-            $head_content .= "<link href='{$urlAppend}template/modern/css/new_calendar.css' rel='stylesheet' type='text/css'>";
-        } elseif ($file == 'bootstrap-datetimepicker') {
-            $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.css') .
-            js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
-            if ($language != 'en') {
-                $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
-            } else {
-                $file = "bootstrap-datetimepicker/js/bootstrap-datetimepicker.js";
-            }
-        } elseif ($file == 'bootstrap-timepicker') {
-            $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
-            $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
-        } elseif ($file == 'bootstrap-datepicker') {
-            $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
-            js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
-            if ($language == 'en') {
-                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language-GB.min.js";
-            } else {
-                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
-            }
-        } elseif ($file == 'bootstrap-validator') {
-            $file = "bootstrap-validator/validator.js";
-        } elseif ($file == 'bootstrap-slider') {
-            $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
-            $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
-        } elseif ($file == 'bootstrap-colorpicker') {
-            $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
-            $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
-        } elseif ($file == 'bootstrap-combobox') {
-            $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
-            $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
-        } elseif ($file == 'bootstrap-table') {
-            $head_content .= css_link('bootstrap-table/bootstrap-table.min.css');
-            if ($language != 'en') {
-                switch ($language) {
-                    case 'el': $file = 'bootstrap-table/locale/bootstrap-table-el-GR.min.js'; break;
-                    case 'fr': $file = 'bootstrap-table/locale/bootstrap-table-fr-FR.min.js'; break;
-                    case 'de': $file = 'bootstrap-table/locale/bootstrap-table-de-DE.min.js'; break;
-                    case 'it': $file = 'bootstrap-table/locale/bootstrap-table-it-IT.min.js'; break;
-                    case 'es': $file = 'bootstrap-table/locale/bootstrap-table-es-ES.min.js'; break;
-                    default: break;
+                $head_content .= css_link('bootstrap-calendar-master/css/calendar_small.css');
+                $head_content .= "<link href='{$urlAppend}template/modern/css/new_calendar.css' rel='stylesheet' type='text/css'>";
+                break;
+            case 'bootstrap-datetimepicker':
+                $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.css') .
+                js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
+                if ($language != 'en') {
+                    $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
+                } else {
+                    $file = "bootstrap-datetimepicker/js/bootstrap-datetimepicker.js";
                 }
-            }
-            $head_content .= js_link('bootstrap-table/bootstrap-table.min.js');
-            $head_content .= js_link('bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js');
-        } elseif ($file == 'spectrum') {
-            $head_content .= css_link('spectrum/spectrum.css');
-            $file = 'spectrum/spectrum.js';
-        } elseif ($file == 'sortable') {
-            $file = "sortable/Sortable.min.js";
-        } elseif ($file == 'filetree') {
-            $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
-            $file = 'jquery_filetree/jqueryFileTree.js';
-        } elseif ($file == 'trunk8') {
-            $head_content .= "
+                break;
+            case 'bootstrap-timepicker':
+                $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
+                $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
+                break;
+            case 'bootstrap-datepicker':
+                $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
+                js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
+                if ($language == 'en') {
+                    $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language-GB.min.js";
+                } else {
+                    $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
+                }
+                break;
+            case 'bootstrap-validator':
+                $file = "bootstrap-validator/validator.js";
+                break;
+            case 'bootstrap-slider':
+                $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
+                $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
+                break;
+            case 'bootstrap-colorpicker':
+                $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+                $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
+                break;
+            case 'bootstrap-combobox':
+                $head_content .= css_link('bootstrap-combobox/css/bootstrap-combobox.css');
+                $file = 'bootstrap-combobox/js/bootstrap-combobox.js';
+                break;
+            case 'bootstrap-table':
+                $head_content .= css_link('bootstrap-table/bootstrap-table.min.css');
+                if ($language != 'en') {
+                    switch ($language) {
+                        case 'el': $file = 'bootstrap-table/locale/bootstrap-table-el-GR.min.js'; break;
+                        case 'fr': $file = 'bootstrap-table/locale/bootstrap-table-fr-FR.min.js'; break;
+                        case 'de': $file = 'bootstrap-table/locale/bootstrap-table-de-DE.min.js'; break;
+                        case 'it': $file = 'bootstrap-table/locale/bootstrap-table-it-IT.min.js'; break;
+                        case 'es': $file = 'bootstrap-table/locale/bootstrap-table-es-ES.min.js'; break;
+                        default: break;
+                    }
+                }
+                $head_content .= js_link('bootstrap-table/bootstrap-table.min.js');
+                $head_content .= js_link('bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js');
+                break;
+            case 'spectrum':
+                $head_content .= css_link('spectrum/spectrum.css');
+                $file = 'spectrum/spectrum.js';
+                break;
+            case 'sortable':
+                $file = "sortable/Sortable.min.js";
+                break;
+            case 'filetree':
+                $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
+                $file = 'jquery_filetree/jqueryFileTree.js';
+                break;
+            case 'trunk8':
+                $head_content .= "
 <script>
     var readMore = '".js_escape($langReadMore)."';
     var readLess = '".js_escape($langReadLess)."';
@@ -259,15 +281,17 @@ function load_js($file, $init='') {
 
 });
 </script>";
-            $file = 'trunk8.js';
-        } elseif ($file == 'clipboard.js') {
-            $file = 'clipboard.js/clipboard.min.js';
-        } elseif ($file == 'jquery-ui') {
-            $file = 'jquery-ui.min.js';
-        } elseif ($file == 'jquery-touch') {
-            $file = 'jquery.ui.touch-punch.min.js';
-        } elseif ($file == 'drag-and-drop-shapes') {
-            $file = 'drag-and-drop-shapes.js';
+                $file = 'trunk8.js';
+                break;
+            case 'jquery-ui':
+                $file = 'jquery-ui.min.js';
+                break;
+            case 'jquery-touch':
+                $file = 'jquery.ui.touch-punch.min.js';
+                break;
+            case 'drag-and-drop-shapes':
+                $file = 'drag-and-drop-shapes.js';
+                break;
         }
 
         $head_content .= js_link($file);
@@ -332,7 +356,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "", $c
     }
 
     $token = token_generate($user->id, true);
-    $student_name = $user->surname || $user->givenname ? q($user->surname) . " " .  q($user->givenname) : $user->username;
+    $student_name = q($user->surname || $user->givenname ? $user->surname . " " .  $user->givenname : $user->username);
     if (!empty($code)) {
       $course_code_link = "&amp;course=$GLOBALS[course_code]";
     }
@@ -1190,7 +1214,7 @@ function mailto($address, $alternative = '(e-mail address hidden)') {
     if (empty($address)) {
         return '&nbsp;';
     } else {
-        $prog = urlenc("var a='" . urlenc(str_replace('@', '&#64;', $address)) .
+        $prog = urlenc("var a='" . urlenc(str_replace('@', '&#64;', q($address))) .
                 "';document.write('<a href=\"mailto:'+unescape(a)+'\">'+unescape(a)+'</a>');");
         return "<script type='text/javascript'>eval(unescape('" .
                 q($prog) . "'));</script><noscript>" . q($alternative) . "</noscript>";
@@ -1858,7 +1882,7 @@ function add_units_navigation($entry_page = false) {
         }
 
         $q = Database::get()->querySingle("SELECT title FROM course_units
-                       WHERE id = $unit_id AND course_id = ?d $visibility_check", $course_id);
+                       WHERE id = ?d AND course_id = ?d $visibility_check", $unit_id, $course_id);
         if ($q) {
             $unit_name = $q->title;
             $navigation[] = array('url' => "../units/index.php?course=$course_code&amp;id=$unit_id", 'name' => $unit_name);
@@ -2698,10 +2722,11 @@ function openDocsPicker(field_name, url, type, win) {
 }
 
 tinymce.init({
-    
+
     license_key: 'gpl',
     selector: 'textarea.mceEditor',
     content_css: [
+        '{$urlAppend}template/modern/css/fonts_all/typography.css',
         '{$urlAppend}template/modern/css/bootstrap.min.css',
         '{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css',
         '{$urlAppend}template/modern/css/default.css',
@@ -2758,7 +2783,7 @@ tinymce.init({
     if (isset($options['id'])) {
         $textarea_id = "id=" . $options['id'];
     }
-    
+
     if (!is_null($text)) {
         $textarea_text = q(str_replace('{', '&#123;', $text));
     } else {
@@ -3295,6 +3320,28 @@ function get_admin_rights($user_id) {
     } else {
         return -1;
     }
+}
+
+/**
+ * @brief check if we have rights to connect as user with uid = $user_id
+ * @param $user_id
+ * @return bool
+ */
+function change_user_rights($user_id): bool
+{
+
+    $admin_rights = get_admin_rights($user_id);
+
+    if (isset($_SESSION['is_power_user']) && $_SESSION['is_power_user'] && $admin_rights == ADMIN_USER) {
+        return false;
+    }
+    if (isset($_SESSION['is_usermanage_user']) && $_SESSION['is_manage_user'] && ($admin_rights == ADMIN_USER || $admin_rights == POWER_USER)) {
+        return false;
+    }
+    if (isset($_SESSION['is_departmentmanage_user']) && $_SESSION['is_departmentmanage_user'] && ($admin_rights == ADMIN_USER || $admin_rights == POWER_USER || $admin_rights == USERMANAGE_USER)) {
+        return false;
+    }
+    return true;
 }
 
 /**
@@ -4812,6 +4859,10 @@ function reindex_array_keys_from_one($a) {
  * @return array|string|string[]
  */
 function fix_float($str) {
+    $str = trim($str);
+    if ($str === '') {
+        return null;
+    }
     if (!$str) {
         return 0.0;
     }
@@ -5159,7 +5210,11 @@ function get_platform_logo($size = 'normal', $position = 'header') {
             $theme_id = get_config('theme_options_id');
             if ($theme_id) {
                 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-                $theme_options_styles = unserialize($theme_options->styles);
+                $theme_options_styles = unserialize($theme_options->styles,
+                    [
+                        'allowed_classes' => ['stdClass'],
+                        'max_depth' => 0,
+                    ]);
                 $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
                 if ($size == 'small' && isset($theme_options_styles['imageUploadSmall'])) {
                     $logo_img = "$urlThemeData/{$theme_options_styles['imageUploadSmall']}";
@@ -5198,7 +5253,11 @@ function get_form_image() {
 
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         if (isset($theme_options_styles['imageUploadForm'])) {
             $form_image = "$urlThemeData/$theme_options_styles[imageUploadForm]";
@@ -5219,7 +5278,11 @@ function get_registration_form_image() {
 
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         if (isset($theme_options_styles['imageUploadRegistration'])) {
             $reg_image = "$urlThemeData/$theme_options_styles[imageUploadRegistration]";
@@ -5240,7 +5303,11 @@ function get_FAQ_image() {
 
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         if (isset($theme_options_styles['imageUploadFaq'])) {
             $faq_image = "$urlThemeData/$theme_options_styles[imageUploadFaq]";
@@ -5345,7 +5412,11 @@ function get_tinymce_color_text() {
     $theme_id = get_config('theme_options_id');
     if ($theme_id > 0) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         if (isset($theme_options_styles['ClTextEditor'])) {
             $tinymce_color_text = "$theme_options_styles[ClTextEditor]";
@@ -5542,7 +5613,11 @@ function get_style($style_name) {
     $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
 
     if ($theme_options) {
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
     }
 
     return $theme_options_styles[$style_name] ?? null;
@@ -5596,11 +5671,11 @@ function load_lang_strings(string $lang, array $strings) : array {
     $Institution = $GLOBALS['Institution'];
 
     $arr = array();
-    
+
     if (isset($language_codes[$lang])) {
         //add common.inc.php to prevent warnings for variables that are undefined in messages.inc.php
         include "$webDir/lang/$lang/common.inc.php";
-        
+
         $extra_messages = "config/{$language_codes[$lang]}.inc.php";
         if (file_exists($extra_messages)) {
             include $extra_messages;
@@ -5618,13 +5693,13 @@ function load_lang_strings(string $lang, array $strings) : array {
         if ($extra_messages) {
             include $extra_messages;
         }
-            
+
         foreach ($strings as $str) {
             if (isset($$str)) {
                 $arr[$str] = $$str;
             }
         }
-        
+
     }
 
     return $arr;
@@ -5704,6 +5779,10 @@ function html_to_pdf($pdf_title, $course_title, $module_type_title, $html = null
                     margin:0;
                 }
 
+                #pdf-content > *:last-child {
+                    margin-bottom: 0 !important;
+                }
+
                 .header-logo,
                 .footer-logo{
                     position:absolute;
@@ -5729,8 +5808,44 @@ function html_to_pdf($pdf_title, $course_title, $module_type_title, $html = null
                 .ButtonsContent,
                 .div-profile-img,
                 .reply-post-btn,
-                .div-menu-popover {
+                .div-menu-popover,
+                .form_selection_per_user_or_question,
+                .gauge-container,
+                .status_filtering_cl {
                     display: none !important;
+                }
+
+                /* PDF page breaks */
+                .card {
+                    break-inside: avoid !important;
+                    page-break-inside: avoid !important;
+                }
+
+                .card-header {
+                    break-after: avoid !important;
+                    page-break-after: avoid !important;
+                }
+
+                .card-body {
+                    break-inside: auto;
+                    page-break-inside: auto;
+                }
+
+                table {
+                    page-break-inside: auto;
+                }
+
+                tr {
+                    break-inside: avoid !important;
+                    page-break-inside: avoid !important;
+                }
+
+                thead {
+                    display: table-header-group;
+                }
+
+                tfoot {
+                    display: table-footer-group;
                 }
 
             </style>

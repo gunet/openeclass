@@ -978,7 +978,9 @@ if (isset($_GET['modifyAnswers'])) {
             $sel = $_POST['sel'];
         }
         if (isset($_POST['weighting'])) {
-            $weighting = fix_float($_POST['weighting']);
+//            $weighting = fix_float($_POST['weighting']);
+            $weighting = array_map('fix_float', $_POST['weighting']);
+
         }
         if ($objAnswer->selectNbrAnswers() == 2) { // new matching question
             $nbrOptions = $nbrMatches = 2; // default options
@@ -1312,7 +1314,7 @@ if (isset($_GET['modifyAnswers'])) {
                       </div>
                     </div></div>";
 
-    if ($answerType != FREE_TEXT and $answerType != ORAL) {
+    if ($answerType != FREE_TEXT and $answerType != ORAL and $answerType != UPLOAD_FILE) {
         $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard card-default px-lg-4 py-lg-3'>
                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                              <h2 class='text-heading-h3'>$langQuestionAnswers";
@@ -2274,8 +2276,10 @@ if (isset($_GET['modifyAnswers'])) {
         if ($answerType == CALCULATED && !$modifyWildCards) {
             $hiddenClass = 'd-none';
         }
-        $tool_content .= "
-            <script>
+
+        if (in_array($answerType, [1, 2, 5])) {
+            $tool_content .= "
+                <script>
 $(document).ready(function() {
     function validateAllWeightings() {
         var hasProblem = false;
@@ -2313,11 +2317,12 @@ $(document).ready(function() {
     validateAllWeightings();
 });
 </script>
-            
-            <div class='negativeAnswer col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap d-none' style='background-color: #fff3cd; color: #856404; padding: 15px; border: 1px solid #ffeeba; border-radius: 4px; margin-top: 10px;'>
-                $langNegativeGrading
-            </div>
-            ";
+                
+                <div class='negativeAnswer col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap d-none' style='background-color: #fff3cd; color: #856404; padding: 15px; border: 1px solid #ffeeba; border-radius: 4px; margin-top: 10px;'>
+                    $langNegativeGrading
+                </div>
+                ";
+        }
 
         $tool_content .= "
                         <div class='col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap $hiddenClass mt-4'>

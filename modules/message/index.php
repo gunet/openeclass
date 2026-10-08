@@ -35,7 +35,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 
 load_js('tools.js');
 load_js('slimselect');
-load_js('select2');
+//load_js('select2');
 
 if ($is_admin and $require_current_course) {
     $require_course_admin = true; // hide role switcher
@@ -263,8 +263,8 @@ $tool_content .= "<div class='col-12'>
                                                                 }
                                                             });
                                                             }
-                                                            $('#select-recipients').select2('destroy');
-                                                            $('#select-recipients').select2();
+                                                            // $('#select-recipients').select2('destroy');
+                                                            // $('#select-recipients').select2();
                                                         });
                                                         });
                                                     </script>";
@@ -389,23 +389,46 @@ $tool_content .= "<div class='col-12'>
                                 } elseif ($type == 'pm' && $course_id == 0) {//personal messages
                                     $head_content .= "<script type='text/javascript'>
                                                         $(document).ready(function () {
-                                                            $('#recipients').select2({
-                                                                placeholder:'$langSearch',
-                                                                multiple: true,
-                                                                minimumInputLength: 3,
-                                                                ajax: {
-                                                                    url: 'load_recipients.php?autocomplete=1',
+
+                                                        // $('#recipients').select2({
+                                                            //     placeholder:'$langSearch',
+                                                            //     multiple: true,
+                                                            //     minimumInputLength: 3,
+                                                            //     ajax: {
+                                                            //         url: 'load_recipients.php?autocomplete=1',
+                                                            //         dataType: 'json',
+                                                            //         quietMillis: 250,
+                                                            //         processResults: function (data) { // parse the results into the format expected by Select2.
+                                                            //             // since we are using custom formatting functions we do not need to alter the remote JSON data
+                                                            //             return {
+                                                            //                 results: data.items
+                                                            //             };
+                                                            //         },
+                                                            //         cache: true
+                                                            //     },
+                                                            // });
+        
+                                                            slimSelectFun(
+                                                                '#recipients',
+                                                                '" . js_escape(trans('langSearch')) . "', 
+                                                                '" . js_escape(trans('langWelcomeSelect')) . "', 
+                                                                '" . js_escape(trans('langSelectAll')) . "', 
+                                                                '" . js_escape(trans('langUsers')) . "',
+                                                                {
+                                                                    url: '{$urlServer}modules/message/load_recipients.php?autocomplete=1',
                                                                     dataType: 'json',
-                                                                    quietMillis: 250,
-                                                                    processResults: function (data) { // parse the results into the format expected by Select2.
-                                                                        // since we are using custom formatting functions we do not need to alter the remote JSON data
+                                                                    dataResponse: 'items',
+                                                                    minimumInputLength: 3,
+                                                                    params: function(searchValue) {
                                                                         return {
-                                                                            results: data.items
+                                                                            term: searchValue,
+                                                                            _type: 'query',
+                                                                            q: searchValue
                                                                         };
-                                                                    },
-                                                                    cache: true
-                                                                },
-                                                            });
+                                                                    }
+                                                                }
+                                                            );
+
                                                         });
                                                     </script>";
 
@@ -414,7 +437,7 @@ $tool_content .= "<div class='col-12'>
                                         if ($q) {
                                             $u_name = $q->name;
                                         }
-                                        $tool_content .= "<input type='hidden' name='recipients' value='$_GET[id]'>
+                                        $tool_content .= "<input type='hidden' name='recipients' value='" . intval($_GET['id']) . "'>
                                                         <div class='form-group mt-4'>
                                                             <div class='col-sm-12 control-label-notes'>$langSendTo</div>
                                                             <div class='col-sm-12'>
@@ -426,7 +449,7 @@ $tool_content .= "<div class='col-12'>
                                                         <div class='form-group mt-4'>
                                                             <label for='recipients' class='col-sm-12 control-label-notes'>$langSendTo</label>
                                                             <div class='col-sm-12'>
-                                                                <select name='recipients[]' class='form-select' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
+                                                                <select name='recipients[]' class='form-control' id='recipients'></select><span class='help-block'>$langSearchSurname</span>
                                                             </div>
                                                         </div>";
                                     }

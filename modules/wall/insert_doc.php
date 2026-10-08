@@ -21,7 +21,7 @@
 function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
     global $course_code, $langNoDocuments, $urlServer;
 
-    load_js('jstree3');
+    load_js('jstree');
 
     if (is_null($subsystem)) { //main documents
         $div_id = 'jstree_doc';
@@ -62,7 +62,8 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
                            'data' : function (node) {
                              return { 'id' : node.id };
                            }
-                         }
+                         },
+                         'force_text': true
                        },
                        'plugins' : [ 'checkbox', 'types' ]
                      });";

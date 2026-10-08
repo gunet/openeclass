@@ -32,7 +32,7 @@ $course = new Course();
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
-load_js('jstree3');
+load_js('jstree');
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();

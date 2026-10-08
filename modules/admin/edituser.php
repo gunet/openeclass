@@ -45,7 +45,7 @@ if (!isset($_REQUEST['u'])) {
 
 $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
 
-load_js('jstree3');
+load_js('jstree');
 load_js('bootstrap-datetimepicker');
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -56,14 +56,6 @@ $pageName = "$langEditUser: " . uid_to_name($u);
 $u_submitted = $_POST['u_submitted'] ?? '';
 
 if ($u) {
-    $is_saek_admin  = $is_departmentmanage_user && !$is_admin;
-    if ($is_saek_admin) {
-        if (!getTenantUserIfBelongs($u)) {
-            Session::flash('message', $langForbidden);
-            Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page('modules/admin/');
-        }
-    }
     if (isDepartmentAdmin())
         validateUserNodes(intval($u), true);
 
@@ -149,7 +141,7 @@ if ($u) {
                 'icon' => 'fa-sign-in',
                 'level' => 'primary',
                 'button-class' => 'btn-default change-user-link',
-                'show' => $is_admin
+                'show' => change_user_rights($u)
             ),
             array(
                 'title' => $langEditAuth,

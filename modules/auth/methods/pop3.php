@@ -182,7 +182,7 @@ class pop3_class {
         if ($apop) {
             if (!strcmp($this->greeting, ""))
                 return($this->SetError("Server does not seem to support APOP authentication"));
-            if ($this->PutLine("APOP $user " . md5("<" . $this->greeting . ">" . $password)) == 0)
+            if ($this->PutLine("APOP $user " . md5("<" . $this->greeting . ">" . $password)) === 0)
                 return($this->SetError("Could not send the APOP command"));
             $response = $this->GetLine();
             if (GetType($response) != "string")

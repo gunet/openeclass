@@ -389,7 +389,7 @@ function questionLegend($id, $exerciseId) {
             $question_excl_legend = '';
         }
         // check if a question has answers
-        if ($aType != FREE_TEXT and $aType != ORAL and $aType != MATCHING and (!$objQuestionTmp->hasAnswers())) {
+        if ($aType != FREE_TEXT and $aType != ORAL and $aType != UPLOAD_FILE and $aType != MATCHING and (!$objQuestionTmp->hasAnswers())) {
             $question_excl_legend_2 = "&nbsp;&nbsp;<span class='fas fa-exclamation-triangle space-after-icon'
                         data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langNoQuestionAnswers'></span>";
         } else {

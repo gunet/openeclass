@@ -26,6 +26,7 @@ $require_current_course = TRUE;
 $require_editor = TRUE;
 include '../../include/baseTheme.php';
 require_once 'modules/gradebook/functions.php';
+require_once __DIR__ . '/code_exercise_languages.inc.php';
 $pageName = $langExercicesResult;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
@@ -104,7 +105,7 @@ if (isset($_GET['exerciseId'])) {
                 . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
                 . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
                 . "WHERE eur.eid = ?d AND ear.weight IS NULL "
-                . "AND exq.type = " . FREE_TEXT . " OR exq.type = " . ORAL . " AND exq.id = ?d "
+                . "AND exq.type = " . FREE_TEXT . " OR exq.type = " . ORAL . " OR exq.type = " . UPLOAD_FILE . " AND exq.id = ?d "
                 . "GROUP BY exq.id, eur.eurid", $exerciseId, $question_id)->eurid;
         $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
 
@@ -113,7 +114,7 @@ if (isset($_GET['exerciseId'])) {
                 . "FROM exercise_answer_record AS ear "
                 . "JOIN exercise_question AS exq "
                 . "ON ear.question_id = exq.id "
-                . "WHERE exq.type = ?d OR exq.type = ?d AND ear.eurid = ?d AND exq.id = ?d", FREE_TEXT, ORAL, $eurid, $question_id);
+                . "WHERE exq.type = ?d OR exq.type = ?d OR exq.type = ?d AND ear.eurid = ?d AND exq.id = ?d", FREE_TEXT, ORAL, UPLOAD_FILE, $eurid, $question_id);
         $objExercise = new Exercise();
         $objExercise->read($exercise_user_record->eid);
     }
@@ -164,6 +165,7 @@ if (count($exercise_question_ids) > 0) {
         }
         $questionDescription_temp = mathfilter(nl2br(make_clickable($questionDescription)), 12, "../../courses/mathimg/");
         $questionWeighting = $objQuestionTmp->selectWeighting();
+        $codeLanguage = code_exercise_language($objQuestionTmp->selectOptions());
         // destruction of the Question object
         unset($objQuestionTmp);
         //check if question has been graded
@@ -195,10 +197,14 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "<tr class='active'>
                           <td><b>$langAnswer</b></td>
                             </tr>";
-        $tool_content .= "<tr class='even'><td>" . purify($choice) . "</td></tr>";
+        if ($codeLanguage !== null) {
+            $tool_content .= "<tr class='even'><td>" . code_exercise_answer($choice, $codeLanguage) . "</td></tr>";
+        } else {
+            $tool_content .= "<tr class='even'><td>" . purify($choice) . "</td></tr>";
+            $choice = purify($choice);
+        }
         $tool_content .= "<tr class='active'><th>";
 
-        $choice = purify($choice);
         if (!empty($choice)) {
             if (!$question_graded) {
                 $tool_content .= "<span class='text-danger'>$langAnswerUngraded</span>";

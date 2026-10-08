@@ -258,10 +258,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $keywords = array_fill(0, 4, '%');
     }
 
-    if (!$is_power_user) {
+    $tenant = getUserTenant($uid);
+    if ($tenant) {
         $currentTenantUsers = getTenantUsers();
         $tenantUserIds = array_map(fn($u) => intval($u->id), $currentTenantUsers);
-
         // if no users → return empty result
         if (empty($tenantUserIds)) {
             echo json_encode([
@@ -274,6 +274,27 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
         $ids = implode(',', $tenantUserIds);
         $criteria[] = "user.id IN ($ids)";
+    } else if ($dep || isDepartmentAdmin()) {
+        $depqryadd = ', user_department';
+
+        $subs = array();
+        if ($dep) {
+            $subs = $tree->buildSubtrees(array($dep));
+            add_param('department', $dep);
+        } else if (isDepartmentAdmin()) {
+            $subs = $user->getAdminDepartmentIds($uid);
+        }
+
+        $ids = '';
+        foreach ($subs as $key => $id) {
+            $ids .= $id . ',';
+            validateNode($id, isDepartmentAdmin());
+        }
+        // remove last ',' from $ids
+        $deps = substr($ids, 0, -1);
+
+        $criteria[] = 'user.id = user_department.user';
+        $criteria[] = 'department IN (' . $deps . ')';
     }
 
     if (count($criteria)) {
@@ -433,7 +454,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'icon' => 'fa-key',
                     'url' => 'change_user.php?username=' . urlencode($myrow->username),
                     'class' => 'change-user-link',
-                    'hide' => isDepartmentAdmin()
+                    'show' => change_user_rights($myrow->id)
                 ),
                 array(
                     'title' => $langActions,

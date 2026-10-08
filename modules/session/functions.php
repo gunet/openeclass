@@ -1373,7 +1373,8 @@ function upload_session_empty_doc($sid){
         $title = "$langTool" . "_$sid";
     }
     $comments = strip_tags($_POST['comments']) ?? '';
-    $textfile = fopen("$webDir/courses/$course_code/session/session_$sid/$title.txt", "w") or die("Unable to open file!");
+    $safe_filename = safe_filename('txt');
+    $textfile = fopen("$sdir$safe_filename", "w") or die("Unable to open file!");
     $txt = "$comments";
     fwrite($textfile, $txt);
     fclose($textfile);
@@ -1381,11 +1382,9 @@ function upload_session_empty_doc($sid){
     $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
     $file_date = date('Y-m-d G:i:s');
 
-    $safe_filename = safe_filename(get_file_extension("$title.txt"));
     $s_real_filename = "$title.txt";
     $sfilepath = '/' . $safe_filename;
     $ses_filename = add_ext_on_mime($s_real_filename);
-    rename("$webDir/courses/$course_code/session/session_$sid/$title.txt","$webDir/courses/$course_code/session/session_$sid/$safe_filename");
 
     $upload_file = Database::get()->query("INSERT INTO document SET
         course_id = ?d,
@@ -2604,14 +2603,13 @@ function display_session_available_documents($element, $element_id, $session_id 
 
     if ($session_id) {
         $sql_only_not_selected_resources = '';
-        if(isset($_GET['act']) && $_GET['act'] == 'submitFile'){
-            if(isset($_GET['badge_id'])){
-                $badge_id = $_GET['badge_id'];
-            }else{
-                $badge_id = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d AND course_id = ?d",$session_id,$course_id)->id;
+        if (isset($_GET['act']) && $_GET['act'] == 'submitFile') {
+            if (isset($_GET['badge_id'])) {
+                $badge_id = intval($_GET['badge_id']);
+            } else {
+                $badge_id = Database::get()->querySingle("SELECT id FROM badge WHERE session_id = ?d AND course_id = ?d", $session_id, $course_id)->id;
             }
-            $sql_query = "SELECT resource FROM badge_criterion WHERE activity_type = 'document-submit' AND badge = $badge_id";
-            $sql_only_not_selected_resources = "AND session_resources.res_id NOT IN ($sql_query)";
+            $sql_only_not_selected_resources = "AND session_resources.res_id NOT IN (SELECT resource FROM badge_criterion WHERE activity_type = 'document-submit' AND badge = $badge_id)";
         }
         if ($session_resource_id) {
             $result = Database::get()->queryArray("SELECT document.id, subsystem, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key
@@ -2622,7 +2620,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                                                 AND session_resources.doc_id = ?d
                                                 AND session_resources.from_user = ?d
                                                 $sql_only_not_selected_resources"
-                                            , $session_id, $session_resource_id,0,0);
+                                            , $session_id, $session_resource_id, 0, 0);
         } else {
             $result = Database::get()->queryArray("SELECT document.id, subsystem, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key
                                             FROM document, session_resources
@@ -2632,7 +2630,7 @@ function display_session_available_documents($element, $element_id, $session_id 
                                                 AND session_resources.visible = 1
                                                 AND session_resources.doc_id = ?d
                                                 AND session_resources.from_user = ?d
-                                                $sql_only_not_selected_resources", $session_id,0,0);
+                                                $sql_only_not_selected_resources", $session_id, 0, 0);
         }
 
     }
@@ -4218,7 +4216,8 @@ function reference_creation_by_fields($sid){
         $title = "$langTool" . "_$sid";
     }
     $comments = strip_tags($_POST['content_reference']) ?? '';
-    $textfile = fopen("$webDir/courses/$course_code/session/session_$sid/$title.txt", "w") or die("Unable to open file!");
+    $safe_filename = safe_filename('txt');
+    $textfile = fopen("$sdir$safe_filename", "w") or die("Unable to open file!");
     $txt = "$comments";
     fwrite($textfile, $txt);
     fclose($textfile);
@@ -4226,11 +4225,9 @@ function reference_creation_by_fields($sid){
     $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
     $file_date = date('Y-m-d G:i:s');
 
-    $safe_filename = safe_filename(get_file_extension("$title.txt"));
     $s_real_filename = "$title.txt";
     $sfilepath = '/' . $safe_filename;
     $ses_filename = add_ext_on_mime($s_real_filename);
-    rename("$webDir/courses/$course_code/session/session_$sid/$title.txt","$webDir/courses/$course_code/session/session_$sid/$safe_filename");
     $comments = null;
 
     $upload_file = Database::get()->query("INSERT INTO document SET

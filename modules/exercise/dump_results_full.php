@@ -331,16 +331,43 @@ function question_answer_details($eurid, $qid) {
                 case FREE_TEXT:
                     $content .= html2text($data->answer);
                 break;
+                case UPLOAD_FILE:
+                    $hyperLink = '';
+                    $fileInfo = unserialize($data->answer, ['allowed_classes' => false]);  
+                    if (isset($fileInfo['filepath']) && isset($fileInfo['filename'])) {
+                        $filePath = $fileInfo['filepath'] ?? '';
+                        $fileName = $fileInfo['filename'] ?? '';
+                        $exercise_id = Database::get()->querySingle("SELECT eid FROM exercise_user_record WHERE eurid = ?d", $eurid)->eid;
+                        if (file_exists("$webDir/courses/$course_code/exercise/{$exercise_id}{$filePath}")) {
+                            $pathUrl = $urlServer . "courses/$course_code/exercise/{$exercise_id}{$filePath}";
+                            $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
+                            $content .= $hyperLink;
+                        }
+                    }
+                break;    
                 case ORAL:
                     $hyperLink = '';
-                    $file = Database::get()->querySingle("SELECT `path` FROM document WHERE course_id = ?d
-                                                            AND subsystem = ?d AND subsystem_id = ?d
-                                                            AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $data->question_id, $eurid);
-                    if ($file && file_exists("$webDir/courses/$course_code/image" . $file->path)) {
-                        $pathUrl = $urlServer . "courses/$course_code/image" . $file->path;
-                        $fileName = "recording-file-$data->question_id-$eurid";
-                        $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
-                        $content .= $hyperLink;
+                    if (isset($data->answer) && is_string($data->answer) && str_contains($data->answer, '.mp3')) {// old way
+                        $file = Database::get()->querySingle("SELECT `path` FROM document WHERE course_id = ?d
+                                                                AND subsystem = ?d AND subsystem_id = ?d
+                                                                AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $data->question_id, $eurid);
+                        if ($file && file_exists("$webDir/courses/$course_code/image" . $file->path)) {
+                            $pathUrl = $urlServer . "courses/$course_code/image" . $file->path;
+                            $fileName = "recording-file-$data->question_id-$eurid";
+                            $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
+                            $content .= $hyperLink;
+                        }
+                    } elseif (isset($data->answer) && is_string($data->answer) && str_contains($data->answer, '.mka')) {// new way
+                        $fileInfo = unserialize($data->answer, ['allowed_classes' => false]);  
+                        if (isset($fileInfo['filepath']) && isset($fileInfo['filename'])) {
+                            $filePath = $fileInfo['filepath'] ?? '';
+                            $fileName = 'recording-file';
+                            if (file_exists("$webDir/courses/$course_code/image" . $filePath)) {
+                                $pathUrl = $urlServer . "courses/$course_code/image" . $filePath;
+                                $hyperLink = 'HYPERLINK("' . $pathUrl . '", "' . $fileName . '")';
+                                $content .= $hyperLink;
+                            }
+                        }
                     }
                 break;
             }
