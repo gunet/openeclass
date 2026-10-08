@@ -64,7 +64,9 @@ class H5PHubUpdater {
 
         $contentTypes = $this->getLatestContentTypes();
         if (empty($contentTypes)) {
-            return;
+            return null;
+        } elseif (isset($contentTypes->error)) {
+            return $contentTypes;
         }
 
         $framework = $this->factory->getFramework();
@@ -162,9 +164,13 @@ class H5PHubUpdater {
         // Get the latest content-types json.
         $endpoint = $this->getApiEndpoint();
         list($response, $code, $responseHeaders) = CurlUtil::httpPostRequest($endpoint, $postdata);
-
-        if (!empty($code) && intval($code) == 200) {
-            return json_decode($response);
+        if (!empty($code)) {
+            $code = intval($code);
+            if ($code == 200) {
+                return json_decode($response);
+            } else {
+                return (object)['error' => $code, 'response' => $response];
+            }
         }
 
         return null;

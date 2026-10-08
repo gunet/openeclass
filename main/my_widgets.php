@@ -18,7 +18,12 @@
  *
  */
 
+$require_login = true;
+$require_valid_uid = true;
+
 require_once '../include/baseTheme.php';
+
+check_uid();
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     $data = [];
@@ -32,6 +37,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     } elseif ($_POST['action'] == 'move') {
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
         $widget_area_id = $_POST['widget_area_id'];
+        $data['widget_widget_area_id'] = $widget_widget_area_id;
         $oldPos = $_POST['oldPos'];
         $newPos = $_POST['newPos'];
         $prev_widget_area_id = Database::get()->querySingle("SELECT `widget_area_id` FROM `widget_widget_area` WHERE id = ?d", $widget_widget_area_id)->widget_area_id;
@@ -50,6 +56,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     } elseif ($_POST['action'] == 'changePos') {
         $widget_area_id = $_POST['widget_area_id'];
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
+        $data['widget_widget_area_id'] = $widget_widget_area_id;
         $newPos = $_POST['newPos'];
         $oldPos = $_POST['oldPos'];
         if ($newPos < $oldPos) {
@@ -58,7 +65,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             Database::get()->query("UPDATE `widget_widget_area` SET `position` = `position` - 1 WHERE `position` <= ?d AND `position` > ?d AND `widget_area_id` = ?d", $newPos, $oldPos, $widget_area_id);
         }
         Database::get()->query("UPDATE `widget_widget_area` SET `position` = ?d WHERE id = ?d", $newPos, $widget_widget_area_id);
-
     } elseif ($_POST['action'] == 'getForm') {
         $widget_id = $_POST['widget_id'];
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
@@ -67,6 +73,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $data['form_view'] = $widget_obj->getOptionsForm($widget_widget_area_id);
     } elseif ($_POST['action'] == 'saveOptions') {
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
+        $data['widget_widget_area_id'] = $widget_widget_area_id;
         $options = $_POST['options'];
         $option_data = array();
         foreach ($options as $option) {
@@ -81,15 +88,19 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 }
 
 load_js('sortable');
+
 if (isset($_POST['widgetAction'])) {
-    $namespaced_class = $_POST['widgetClassName'];
-    if ($_POST['widgetAction'] == 'install') {
-        $namespaced_class::install();
-    } elseif ($_POST['widgetAction'] == 'uninstall') {
-        $namespaced_class::uninstall();
+    if (in_array($_POST['widgetClassName'], getAvailableWidgets())) {
+        $namespaced_class = $_POST['widgetClassName'];
+        if ($_POST['widgetAction'] == 'install') {
+            $namespaced_class::install();
+        } elseif ($_POST['widgetAction'] == 'uninstall') {
+            $namespaced_class::uninstall();
+        }
     }
-    redirect_to_home_page('modules/admin/widgets.php');
+    redirect_to_home_page('main/my_widgets.php');
 }
+
 $head_content .=
         "
         <script type='text/javascript'>
@@ -241,7 +252,7 @@ $head_content .=
             }            
             function initializeWidget(e, data) {
                     var item = $(e.item);  // dragged HTMLElement
-                    var widget_id = item.data('widget-id');            
+                    var widget_id = item.data('widget-id');                    
                     var obj = jQuery.parseJSON(data);                                  
                     item
                         .attr('data-widget-widget-area-id', obj.widget_widget_area_id)
@@ -358,9 +369,9 @@ function recursiveWidgetIterator ($directory = null, $view_data = array()) {
                 $widget_id = array_search($namespaced_class, $installed_widgets_arr);
                 if ($widget_id) {
                     $widget->id = $widget_id;
-                    array_push($view_data['installed_widgets'], $widget);
+                    $view_data['installed_widgets'][] = $widget;
                 } else {
-                    array_push($view_data['uninstalled_widgets'], $widget);
+                    $view_data['uninstalled_widgets'][] = $widget;
                 }
             }
         } elseif (!$file->isDot() && !in_array($file->getFilename(), ['views', 'css', 'images', 'js'])) {
