@@ -1055,6 +1055,55 @@ foreach ($questionList as $k => $q_id) {
     }
 }
 
+// Check if any FREE_TEXT question is a code exercise
+require_once __DIR__ . '/code_exercise_languages.inc.php';
+$hasCodeExercise = false;
+foreach ($questionList as $q_id) {
+    $t_question = $questions[$q_id] ?? null;
+    if ($t_question && $t_question->selectType() == FREE_TEXT) {
+        if (code_exercise_language($t_question->selectOptions()) !== null) {
+            $hasCodeExercise = true;
+        }
+    }
+}
+
+// Load CodeMirror if needed (the bundle loads only the languages it uses)
+if ($hasCodeExercise) {
+    $head_content .= '
+    <style>
+    .code-exercise-editor-wrapper .cm-editor.cm-focused {
+        outline: 2px solid var(--bs-primary);
+        outline-offset: -1px;
+    }
+    .code-exercise-editor-wrapper .cm-content,
+    .code-exercise-editor-wrapper .cm-gutter {
+        min-height: 300px;
+    }
+    .code-exercise-editor-wrapper .cm-scroller {
+        max-height: 600px;
+    }
+    </style>';
+    $head_content .= "
+    <script type='module'>
+    const { fromTextArea } = await import('{$urlAppend}js/bundle/codemirror/codemirror.js');
+    document.querySelectorAll('.code-exercise-editor').forEach(function(textarea) {
+        var questionId = textarea.id.replace('code_editor_', '');
+        fromTextArea(textarea, {
+            language: textarea.getAttribute('data-language'),
+            onChange: function(value) {
+                if (value.trim() !== '') {
+                    var qPanel = $('#qPanel' + questionId);
+                    var qCheck = qPanel.find('span').first();
+                    var qButton = $('#' + qCheck.attr('id').replace('qCheck', 'q_num'));
+                    qCheck.addClass('fa fa-check');
+                    qButton.removeClass('btn-default').addClass('btn-info');
+                }
+            }
+        });
+    });
+    </script>";
+}
+
 if ($questionList) {
     // Display a notification that informs the user that the exercise will be canceled.
     // if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
