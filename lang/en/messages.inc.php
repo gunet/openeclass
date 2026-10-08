@@ -168,6 +168,7 @@ $langCourseDel = "Delete course";
 $langCourseDelSuccess = "Course deleted with success!";
 $langCourseDelConfirm = "Course Deletion Confirmation";
 $langCourseDelConfirm2 = "are you sure you want to delete course with code";
+$langCourseDelConfirm3 = "Are you sure you want to delete the selected courses?";
 $langNoticeDel = "NOTE: Course deletion will also unregister ".$langsOfStudentss." from this course, along with course faculty correspondence and course material.";
 $langCourseEdit = "Course Edit";
 $langCourseInfo = "Settings";
@@ -5606,6 +5607,8 @@ $langCourseDeletedBy = "Deleted by";
 $langNoticeCourseDeleted = "If the $langsCourse was deleted by you, you can ignore this email. If the deletion was done by mistake and you wish to restore your $langsCourse, please contact the platform administrators.";
 $langExercisePreventCopy = 'Prevent Text Copying';
 $langExercisePreventCopyExplanation = 'Prevent copying and pasting text during execution of the exercise';
+$langCodeExercise = 'Code Exercise';
+$langCodeExerciseLang = 'Programming Language';
 $langDoubleLoginLock = 'You have logged into the platform from another device
     with the same account. Double logins are disabled, so your current login has
     been disconnected.';
@@ -7752,3 +7755,8 @@ $langEduApiLastSync = "Last synchronization";
 $langEduApiCourseSyncCompleted = "Course users synchronization completed for academic session";
 $langEduApiCourseNotMapped = "This course is not linked to an Edu-API course offering.";
 $langEduApiMissingStudentsLabel = "Enrolled students missing from the Edu-API data:";
+$langDelstats = "Selecting this option deletes the detailed daily logs of user visits and time spent in the course, while retaining the monthly aggregate statistics.";
+$langNoCourseSelected = "You have not selected any course.";
+$langSelectCourses = "Course Selection";
+$langSelectedCourses = "They have been selected";
+$langShowHide = "Show/Hide";
