@@ -127,7 +127,11 @@ $themeId = get_config('theme_options_id');
 $login_img = $urlAppend . 'resources/img/loginIMG.png';
 if($themeId > 0) {
   $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $themeId);
-  $theme_options_styles = unserialize($theme_options->styles);
+  $theme_options_styles = unserialize($theme_options->styles,
+                            [
+                                'allowed_classes' => ['stdClass'],
+                                'max_depth' => 0,
+                            ]);
   $urlThemeData = $urlAppend . 'courses/theme_data/' . $themeId;
   if(isset($theme_options_styles['loginImgL'])){
     $login_img = "$urlThemeData/$theme_options_styles[loginImgL]";

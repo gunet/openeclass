@@ -4,7 +4,7 @@
 /video/
 /secure/
 /html/
-/node_modules/
+node_modules/
 
 # Config Files
 /config/*.php
