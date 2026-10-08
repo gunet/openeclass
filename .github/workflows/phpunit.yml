@@ -1,0 +1,37 @@
+name: PHPUnit Tests
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [8.5, 8.4, 8.3, 8.2]
+
+    name: PHP ${{ matrix.php }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer
+          # Every ext-* required by composer.lock, so the install needs no --ignore-platform-reqs.
+          extensions: ctype, curl, dom, fileinfo, gd, iconv, json, libxml, mbstring, phar, simplexml, tokenizer, xml, xmlreader, xmlwriter, zip, zlib
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --no-scripts
+
+
+      - name: Run PHPUnit
+        run: ./vendor/bin/phpunit
