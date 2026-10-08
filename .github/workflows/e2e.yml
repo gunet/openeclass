@@ -1,0 +1,159 @@
+name: E2E Tests
+run-name: Playwright E2E tests (${{ github.ref_name }})
+
+on:
+  # Automatic runs disabled for now: run manually from the Actions tab.
+  # push:
+  #   branches:
+  #     - master
+  # pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typecheck:
+    name: Type-check the suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: tests/e2e-pw
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install test dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Type-check
+        run: bun run test:e2e:typecheck
+
+      # The config fails on a spec folder that has no project; this fails on a project that has no job below.
+      - name: Every suite has a job
+        run: |
+          for project in $(bunx playwright test --list --reporter=json | jq -r '.config.projects[].name' | grep -vx setup); do
+            grep -qE -- "--project=${project}( |$)" ../../.github/workflows/e2e.yml \
+              || { echo "::error::Playwright project '${project}' has no job in e2e.yml"; exit 1; }
+          done
+
+  # One job per suite: a Playwright project = a spec folder (`suites` in playwright.config.ts, which refuses to
+  # load when a folder with specs is missing there). A new folder gets an entry here. When a suite gets slow,
+  # split it into shards, e.g. two entries `--project=security --shard=1/2` and `--shard=2/2`.
+  # Every job has its own stack: the `setup` project installs, seeds and logs every role in first.
+  # `install` is the exception: its specs need an empty site, so it runs on its own (test:e2e:install
+  # wipes the stack and runs only the wizard project).
+  e2e:
+    name: ${{ matrix.name }}
+    needs: typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Install
+            command: test:e2e:install
+            id: install
+          - name: Basic
+            command: test:e2e --project=basic
+            id: basic
+          - name: Auth
+            command: test:e2e --project=auth
+            id: auth
+          - name: Security
+            command: test:e2e --project=security
+            id: security
+    defaults:
+      run:
+        working-directory: tests/e2e-pw
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install test dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install Chromium
+        run: bunx playwright install --with-deps chromium
+
+      # Builds the image and starts eclass, db and mailpit (docker-compose.e2e.yaml).
+      # The suite would start it too, but a separate step keeps build errors apart from test failures.
+      - name: Start the e2e stack
+        run: bun run e2e:up
+
+      - name: Run tests
+        run: bun run ${{ matrix.command }}
+        env:
+          CI: true
+
+      # - name: Stack logs
+      #   if: failure()
+      #   run: bun run e2e:compose logs --no-color --timestamps
+
+      # Needs the blob reporter in playwright.config.ts; the `report` job below merges the blobs.
+      # - name: Upload blob report
+      #   if: ${{ !cancelled() }}
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: blob-report-${{ matrix.id }}
+      #     path: tests/e2e-pw/blob-report
+      #     retention-days: 7
+
+      - name: Stop the e2e stack
+        if: always()
+        run: bun run e2e:compose down -v
+
+  # One HTML report for the whole run, merged from every job's blob report.
+  # report:
+  #   name: Merge reports
+  #   needs: e2e
+  #   if: ${{ !cancelled() }}
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 10
+  #   defaults:
+  #     run:
+  #       working-directory: tests/e2e-pw
+  #
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Set up Bun
+  #       uses: oven-sh/setup-bun@v2
+  #       with:
+  #         bun-version: latest
+  #
+  #     - name: Install test dependencies
+  #       run: bun install --frozen-lockfile
+  #
+  #     - name: Download blob reports
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         pattern: blob-report-*
+  #         merge-multiple: true
+  #         path: tests/e2e-pw/all-blob-reports
+  #
+  #     - name: Merge into an HTML report
+  #       run: bunx playwright merge-reports --reporter html ./all-blob-reports
+  #
+  #     - name: Upload HTML report
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: playwright-report
+  #         path: tests/e2e-pw/playwright-report
+  #         retention-days: 7
