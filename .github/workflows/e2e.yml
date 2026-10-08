@@ -2,10 +2,11 @@ name: E2E Tests
 run-name: Playwright E2E tests (${{ github.ref_name }})
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
+  # Automatic runs disabled for now: run manually from the Actions tab.
+  # push:
+  #   branches:
+  #     - master
+  # pull_request:
   workflow_dispatch:
 
 concurrency:
