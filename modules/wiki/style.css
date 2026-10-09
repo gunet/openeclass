@@ -98,4 +98,7 @@
     .wiki-live-row[data-view="preview"] .wiki-live-edit-col {
         display: none;
     }
+    #wiki-syntax-help .modal-dialog {
+        margin-top: 10px;
+    }
 }

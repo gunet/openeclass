@@ -133,7 +133,14 @@
         previewCard.appendChild(previewBody);
         previewCol.appendChild(previewCard);
 
-        editorBlock.parentNode.insertBefore(tabs, editorBlock);
+        // on the same line as the "Syntax help" button when there is one
+        var actionsBar = form.querySelector('.wiki-editor-actions');
+        if (actionsBar) {
+            tabs.classList.remove('mb-2');
+            actionsBar.insertBefore(tabs, actionsBar.firstChild);
+        } else {
+            editorBlock.parentNode.insertBefore(tabs, editorBlock);
+        }
         editorBlock.parentNode.insertBefore(row, editorBlock);
         editCol.appendChild(editorBlock);
         row.appendChild(editCol);
@@ -279,7 +286,12 @@
         // initial render
         update();
 
-        // ---- syntax help: click an example to insert it ----
+        // ---- syntax help modal: click an example to insert it ----
+        // Insert, then close the modal. Bootstrap returns focus to the button
+        // that opened the modal once it is hidden, so take it back to the
+        // textarea afterwards (cursor position is kept by insertAtCursor).
+        var helpModal = document.getElementById('wiki-syntax-help');
+        var refocus = false;
         document.addEventListener('click', function (ev) {
             var btn = ev.target.closest ? ev.target.closest('[data-wiki-insert]') : null;
             if (!btn) {
@@ -287,6 +299,18 @@
             }
             ev.preventDefault();
             insertAtCursor(textarea, btn.getAttribute('data-wiki-insert') || '');
+            if (helpModal && window.bootstrap && window.bootstrap.Modal) {
+                refocus = true;
+                window.bootstrap.Modal.getOrCreateInstance(helpModal).hide();
+            }
         });
+        if (helpModal) {
+            helpModal.addEventListener('hidden.bs.modal', function () {
+                if (refocus) {
+                    refocus = false;
+                    setTimeout(function () { textarea.focus(); }, 0);
+                }
+            });
+        }
     });
 })();
