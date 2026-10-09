@@ -35,7 +35,8 @@ require_once dirname(__FILE__) . "/lib.url.php";
 function claro_disp_wiki_editor($wikiId, $title, $versionId
 , $content, $changelog = '', $script = null, $showWikiToolBar = true
 , $forcePreview = true) {
-    global $langPreview, $langCancel, $langSave, $langWikiMainPage, $langNote, $course_code;
+    global $langPreview, $langCancel, $langSave, $langWikiMainPage, $langNote, $course_code,
+           $langWikiSyntaxHelp;
 
     // create script
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
@@ -52,6 +53,11 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
 
     if ($showWikiToolBar === true) {
         $wikiarea = new Wiki2xhtmlArea($content, 'wiki_content', 80, 15, null);
+        // opens the syntax help modal (see claro_disp_wiki_syntax_help());
+        // wiki_preview.js puts the mobile Edit / Preview tabs on this same line
+        $out .= "<div class='mt-3 d-flex flex-wrap align-items-stretch justify-content-between gap-2 wiki-editor-actions'><button type='button' class='btn btn-sm btn-outline-primary' "
+            . "data-bs-toggle='modal' data-bs-target='#wiki-syntax-help'>"
+            . "$langWikiSyntaxHelp <i class='fa-solid fa-circle-question'></i></button></div>";
         $out .= "<div class='form-group mt-3'><div class='col-12'>". $wikiarea->toHTML() . "</div></div>";
     } else { // Does it ever gets in here?
         $out .= "<label for='wiki_content' class='col-sm-6 control-label-notes'>Texte :</label><br>
@@ -80,6 +86,8 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
             . $versionId
             . '" />' . "\n"
     ;
+
+    $out .= generate_csrf_token_form_field() . "\n";
 
     $out .= '<input class="btn submitAdminBtn" type="submit" name="action[preview]" value="'
             . $langPreview . '" />' . "\n"
@@ -169,6 +177,63 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
     $out .= "</div></div>";
     $out .= "</form>";
     $out .= "</div>";
+
+    return $out;
+}
+
+/**
+ * Generate html code of the wiki syntax cheat sheet modal
+ *
+ * Opened by the "Syntax help" button above the editor (claro_disp_wiki_editor()).
+ * The entries mirror the buttons built in Wiki2xhtmlArea::getToolbar() and
+ * reuse the $wiki_toolbar labels, so the help and the toolbar cannot disagree.
+ * Each example can be clicked to insert it at the cursor position
+ * (see modules/wiki/lib/javascript/wiki_preview.js).
+ * @return string html code of the syntax help modal
+ */
+function claro_disp_wiki_syntax_help() {
+    global $wiki_toolbar, $langWikiSyntaxHelp, $langWikiSyntaxExample, $langWikiSyntaxInsert;
+
+    // [key in $wiki_toolbar, example snippet]
+    $entries = array(
+        array('H1', '!!!! Heading'),
+        array('H2', '!!! Heading'),
+        array('H3', '!! Heading'),
+        array('H4', '! Heading'),
+        array('Strongemphasis', "'''bold'''"),
+        array('Emphasis', "''italic''"),
+        array('Inserted', '__underlined__'),
+        array('Deleted', '--struck through--'),
+        array('Inlinequote', '{{quote}}'),
+        array('Code', '@@code@@'),
+        array('Unorderedlist', "* item"),
+        array('Orderedlist', '# item'),
+        array('Blockquote', '> quote'),
+        array('Preformatedtext', ' preformatted'),
+        array('Linebreak', '%%%'),
+        array('Link', '[label|https://example.com]'),
+        array('Externalimage', '((https://example.com/image.png))'),
+    );
+
+    $out = "<div class='modal fade' id='wiki-syntax-help' tabindex='-1' aria-labelledby='wiki-syntax-help-title' aria-hidden='true'>"
+        . "<div class='modal-dialog modal-dialog-centered modal-dialog-scrollable'><div class='modal-content'>"
+        . "<div class='modal-header'><h5 class='modal-title' id='wiki-syntax-help-title'>"
+        . "<i class='fa-solid fa-circle-question'></i> $langWikiSyntaxHelp</h5>"
+        . "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button></div>"
+        . "<div class='modal-body'>"
+        . "<div class='table-responsive'><table class='table table-sm small align-middle mb-0'>"
+        . "<thead><tr><th></th><th>$langWikiSyntaxExample</th><th></th></tr></thead><tbody>";
+
+    foreach ($entries as $entry) {
+        list($key, $example) = $entry;
+        $label = isset($wiki_toolbar[$key]) ? $wiki_toolbar[$key] : $key;
+        $out .= "<tr><td class='pe-3'>" . q($label) . "</td>"
+            . "<td class='pe-3'><code>" . q($example) . "</code></td>"
+            . "<td class='text-end'><button type='button' class='btn btn-sm btn-outline-primary py-0 px-2' "
+            . "data-wiki-insert='" . q($example) . "'>$langWikiSyntaxInsert</button></td></tr>";
+    }
+
+    $out .= "</tbody></table></div></div></div></div></div>";
 
     return $out;
 }
