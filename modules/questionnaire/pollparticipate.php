@@ -1883,8 +1883,11 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
            $uid, $webDir, $langInfoPollUploadedFile, $course_id;
 
     $token = $_SESSION['csrf_token'];
-    $is_onBehalfOfUser_mode = isset($_GET['onBehalfOfUser']) ? 'forSession' : 'forCourse';
     $sessionID = intval($_GET['session']) ?? 0;
+    $is_onBehalfOfUser_mode = isset($_GET['onBehalfOfUser']) ? 'forSession' : 'forCourse';
+    if ($sessionID > 0) {
+        $is_onBehalfOfUser_mode = 'forSession';
+    }
 
     $del_file = '';
     $filename = '';
