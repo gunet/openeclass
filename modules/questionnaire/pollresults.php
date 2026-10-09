@@ -143,6 +143,30 @@ if (!$is_course_reviewer && !$thePoll->show_results) {
 }
 
 if (isset($_GET['from_session_view']) && isset($_GET['del_user_answers'])) {
+    // Delete files from courses folder only if the question is file upload type
+    $u_answers = Database::get()->queryArray("SELECT par.answer_text,par.qid,pur.uid FROM poll_answer_record par
+                                              JOIN poll_user_record pur ON pur.id=par.poll_user_record_id
+                                              JOIN poll_question pq ON pq.pqid=par.qid
+                                              WHERE pq.qtype = ?d
+                                              AND pur.pid = ?d
+                                              AND pur.session_id = ?d", QTYPE_FILE, $pid, intval($_GET['session']));
+
+    if (count($u_answers) > 0) {
+        foreach ($u_answers as $an) {
+            $arr_file = unserialize($an->answer_text, ['allowed_classes' => false]);
+            if (isset($arr_file['filepath']) && is_string($arr_file['filepath'])) {
+                $c_code = q($_GET['course'] ?? '');
+                $s_id = intval($_GET['session'] ?? 0);
+                $u_id = $an->uid ?? 0;
+                $q_id = $an->qid ?? 0;
+                $fpath = q($arr_file['filepath'] ?? '');
+                $file = "$webDir/courses/$c_code/poll_$pid/$u_id/$q_id/$s_id$fpath";
+                if (file_exists($file)) { 
+                    unlink($file);
+                }
+            }
+        }
+    }
     // Delete user's answer from a poll in a specific session
     $del = Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, intval($_GET['session']));
     if ($del) {
@@ -1403,7 +1427,7 @@ function total_number_of_users_answer_per_question($qid) {
 function poll_user_participation() {
     global $course_id;
 
-    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $_GET['pid']);
+    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, intval($_GET['pid']));
     $allUsers = [];
 
     $sid = $_GET['session'] ?? 0;
@@ -1421,7 +1445,7 @@ function poll_user_participation() {
             }
         }
     } else {
-        $allUsers = Database::get()->queryArray('SELECT user_id FROM course_user WHERE course_id = ?d AND editor = 0 AND status = ' . USER_STUDENT, $course_id);
+        $allUsers = Database::get()->queryArray("SELECT user_id FROM course_user WHERE course_id = ?d AND editor = 0 AND status = ?d", $course_id, USER_STUDENT);
         $allUsers = array_map(function ($user) {
             return $user->user_id;
         }, $allUsers);
