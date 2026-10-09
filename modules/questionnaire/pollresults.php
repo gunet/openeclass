@@ -141,6 +141,40 @@ if (!$is_course_reviewer && !$thePoll->show_results) {
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
 }
 
+if (isset($_GET['from_session_view']) && isset($_GET['del_user_answers'])) {
+    // Delete files from courses folder only if the question is file upload type
+    $u_answers = Database::get()->queryArray("SELECT par.answer_text,par.qid,pur.uid FROM poll_answer_record par
+                                              JOIN poll_user_record pur ON pur.id=par.poll_user_record_id
+                                              JOIN poll_question pq ON pq.pqid=par.qid
+                                              WHERE pq.qtype = ?d
+                                              AND pur.pid = ?d
+                                              AND pur.session_id = ?d", QTYPE_FILE, $pid, intval($_GET['session']));
+
+    if (count($u_answers) > 0) {
+        foreach ($u_answers as $an) {
+            $arr_file = unserialize($an->answer_text, ['allowed_classes' => false]);
+            if (isset($arr_file['filepath']) && is_string($arr_file['filepath'])) {
+                $c_code = q($_GET['course'] ?? '');
+                $s_id = intval($_GET['session'] ?? 0);
+                $u_id = $an->uid ?? 0;
+                $q_id = $an->qid ?? 0;
+                $fpath = q($arr_file['filepath'] ?? '');
+                $file = "$webDir/courses/$c_code/poll_$pid/$u_id/$q_id/$s_id$fpath";
+                if (file_exists($file)) { 
+                    unlink($file);
+                }
+            }
+        }
+    }
+    // Delete user's answer from a poll in a specific session
+    $del = Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, intval($_GET['session']));
+    if ($del) {
+        Session::flash('message', $langDocCompletionSuccess);
+        Session::flash('alert-class', 'alert-success');
+        redirect_to_home_page("modules/session/session_space.php?course=".$course_code."&session=".intval($_GET['session'])); 
+    }
+}
+
 if (isset($_GET['from_session_view'])) {
     $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d 
                                                             AND (email_verification = 1 OR email_verification IS NULL) 
@@ -1357,7 +1391,7 @@ function total_number_of_users_answer_per_question($qid) {
 function poll_user_participation() {
     global $course_id;
 
-    $poll = Database::get()->querySingle('SELECT * FROM poll WHERE course_id = ?d AND pid = ?d', $course_id, $_GET['pid']);
+    $poll = Database::get()->querySingle('SELECT * FROM poll WHERE course_id = ?d AND pid = ?d', $course_id, intval($_GET['pid']));
     $allUsers = [];
 
     $sid = $_GET['session'] ?? 0;
