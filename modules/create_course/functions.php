@@ -190,6 +190,12 @@ function import_cadmos_file($course_id, $course_code, $path) {
     mkdir($target, 0755);
     $zip = new ZipArchive;
     if ($zip->open($path)) {
+        for ($i = 0; $i < $zip->numFiles; $i++) { // check for file type in zip contents
+            $filename = $zip->getNameIndex($i);
+            if (!empty(my_basename($filename))) {
+                validateUploadedFile(my_basename($filename), 3, 'html', ['json']);
+            }
+        }
         $zip->extractTo($target);
         $zip->close();
         $cadmos = json_decode(file_get_contents("$target/source.json"));
