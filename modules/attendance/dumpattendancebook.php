@@ -36,14 +36,12 @@ https://github.com/PHPOffice/PhpSpreadsheet/blob/540dfb463ac9850519e9e3bbddc4013
 const DUPLICATE_FORMAT_STR = ' (%u)';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\ConditionalFormatValueObject;
 use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\ConditionalIconSet;
 use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\IconSetValues;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\CellRange;
 use PhpOffice\PhpSpreadsheet\Cell\CellAddress;
@@ -53,7 +51,6 @@ use PhpOffice\PhpSpreadsheet\Cell\AddressRange;
 use PhpOffice\PhpSpreadsheet\Cell\ColumnRange;
 use PhpOffice\PhpSpreadsheet\Cell\RowRange;
 use PhpOffice\PhpSpreadsheet\Shared\Date as SharedDate;
-
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 use OndrejVrto\FilenameSanitize\FilenameSanitize;
@@ -156,11 +153,15 @@ if (isset($_GET['activity_id'])) {
         if (strlen($attendance_activity_title) === 0) {
             $attendance_activity_title = $langGradebookNoTitle;
         }
-
         $spreadsheet->getProperties()->setCustomProperty("ActivityTitle", $attendance_activity_title);
+    } else {
+        redirect_to_home_page('/modules/attendance/index.php?course=' . urlencode($_GET['course']) . '&attendance_id=' . urlencode($attendance_id));
     }
 } else {
     $attendances_array = Database::get()->queryArray("SELECT attendance_activities.id, attendance_book.uid, attendance_activities.title, attendance_book.attend, attendance_activities.date FROM attendance_activities LEFT JOIN attendance_book ON attendance_activities.id = attendance_book.attendance_activity_id WHERE attendance_activities.attendance_id = ?d ORDER BY ISNULL(attendance_activities.date), attendance_activities.date;", $attendance_id);
+    if (!$attendances_array) {
+        redirect_to_home_page('/modules/attendance/index.php?course=' . urlencode($_GET['course']) . '&attendance_id=' . urlencode($attendance_id));
+    }
     $attendance_limit = Database::get()->querySingle("SELECT `limit` FROM attendance WHERE id = ?d", $attendance_id)->limit;
 }
 
