@@ -373,8 +373,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
                     '';
             $title = (!empty($data[3]) ) ? $data[3] :
                     '';
-            $no_image = (!empty($data[4]) ) ? (boolean) $data[4] :
-                    false;
+            $no_image = !empty($data[4]) && $data[4];
         }
 
         $array_url = $this->__specialUrls();
@@ -568,7 +567,7 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
             $attr = ' style="color: #000000"';
         }
         elseif (count($data) > 1) {
-            $attr = ' style="color: ' . trim( $data[ 0 ] ) .'"';
+            $attr = ' style="color: ' . $this->protectAttr(trim($data[0])) .'"';
             $content = $data[ 1 ];
         }
 

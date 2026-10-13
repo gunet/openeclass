@@ -200,15 +200,15 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
     }
 
     // process ACL
-    $group_read_checked = ( $acl['group_read'] == true ) ? ' checked="checked"' : '';
-    $group_edit_checked = ( $acl['group_edit'] == true ) ? ' checked="checked"' : '';
-    $group_create_checked = ( $acl['group_create'] == true ) ? ' checked="checked"' : '';
-    $course_read_checked = ( $acl['course_read'] == true ) ? ' checked="checked"' : '';
-    $course_edit_checked = ( $acl['course_edit'] == true ) ? ' checked="checked"' : '';
-    $course_create_checked = ( $acl['course_create'] == true ) ? ' checked="checked"' : '';
-    $other_read_checked = ( $acl['other_read'] == true ) ? ' checked="checked"' : '';
-    $other_edit_checked = ( $acl['other_edit'] == true ) ? ' checked="checked"' : '';
-    $other_create_checked = ( $acl['other_create'] == true ) ? ' checked="checked"' : '';
+    $group_read_checked = $acl['group_read'] ? ' checked="checked"' : '';
+    $group_edit_checked = $acl['group_edit'] ? ' checked="checked"' : '';
+    $group_create_checked = $acl['group_create'] ? ' checked="checked"' : '';
+    $course_read_checked = $acl['course_read'] ? ' checked="checked"' : '';
+    $course_edit_checked = $acl['course_edit'] ? ' checked="checked"' : '';
+    $course_create_checked = $acl['course_create'] ? ' checked="checked"' : '';
+    $other_read_checked = $acl['other_read'] ? ' checked="checked"' : '';
+    $other_edit_checked = $acl['other_edit'] ? ' checked="checked"' : '';
+    $other_create_checked = $acl['other_create'] ? ' checked="checked"' : '';
 
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
 
