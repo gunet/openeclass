@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2026-08-10 13:56:01
+// Generated 2026-10-13 16:29:15
 
 $langTeacherStudentTutorials = "Useful Guides $langsOfTeacher - $langsOfStudent";
 $langAdminTutorials = "Useful Guides Administrator";
@@ -155,7 +155,7 @@ $langContinueToCompletetionWithMeeting = "The session will end with the completi
  Do you want to proceed with this action?";
 $langCompletedSessionWithMeeting = "Upon completion of the live meeting";
 $langCompletedSessionMeeting = "Completion by live meeting";
-$langInfoForbiddenAddPrereq = "The operation you attempted cannot be completed because the current session has already been completed by all users, while the prerequisite session you selected still has unmet completion criteria.";
+$langInfoForbiddenAddPrereq = "The operation you attempted cannot be completed as the current session is logged out by all users.";
 $langAllCompletedResources = "The session resources have been executed successfully by the user.";
 $langShowReportUserTable = "User session reports";
 $langShowReportUserCurrentSession = "Current session user attendance";
@@ -298,21 +298,28 @@ $langMultiRegCourseUser = "Bulk enrollment of users in $langsCourses";
 $langMultiMoveCourses = "Bulk transfer $langsOfCourses";
 $langConfirmMultiMoveCourses = "Confirm transfer of $langsOfCourses to another department.";
 $langCourseCodes = "Codes $langsOfCourses";
-$langAskManyUsersToCourses = "The $langsCourses should exist and users should already have an account on the platform to enroll in them. Enter the usernames and codes of $langsOfCourses on separate lines.";
-$langMultiRegUserInfo = "<p>You can upload below a spreadsheet (e.g. Excel) file (.xls, xlsx) with a list of user details, one row per each new user account.</p>
-<p>The assignment user information to columns is defined by the cells (headings) in the first row, where possible labels are:</p>
-<ul>
-<li><tt>first</tt>: First name</li>
-<li><tt>last</tt>: Last name / surname</li>
-<li><tt>email</tt>: e-mail address</li>
-<li><tt>id</tt>: $langOfStudent ID</li>
-<li><tt>phone</tt>: Phone number</li>
+$langAskManyUsersToCourses = "$langsCourses should exist and users should already have an account on the platform to enroll in them. Type the usernames and passwords of $langsOfCourses on separate lines.";
+$langMultiRegUserInfo = "<p>Enter in the field below a directory of
+the user details, one line per user you wish to create.
+</p>
+<p>The order of the elements is defined in the field before it
+area, and the possible tags are:</p>
+<ul><li>
+<li><tt>first</tt>: Name</li>
+<li><tt>last</tt>: Last Name</li>
+<li><tt>email</tt>: E-mail address</li>
+<li><tt>id</tt>: Registration number</li>
+<li><tt>phone</tt>: Phone</li>
 <li><tt>username</tt>: Username</li>
-<li><tt>password</tt>: Password</li>
-<li><tt>ext_uid</tt>: External user identifier (depending on authentication method)</li>
+<li><tt>password</tt>: User password</li>
 </ul>
-<p>The following rows should contain the information of the users to be created.</p>
-<p>To have the users automatically registered to some $langsCourses, please add the correspoding codes in cells after the user details in the end of each row. The e-mail address is optional - you can use a hyphen (-) in its place if you want to omit it. If you don't specify the usernames, they will be automatically created by appending a serial number to the user prefix entered below. If you don't specify passwords, a random password will be created for each account.</p>";
+<p>If you want users to automatically enroll in some $langsCourses, please add
+their codes at the end of the line after the fields you have defined. The
+e-mail is optional - if you want to omit it, put a instead
+hyphen (-). Lines starting with # are ignored. If you do not set the name
+user of users, they will automatically get usernames consisting of
+prefix that you can set below and a serial number. If you don't specify
+the password, a random password is automatically set that is different for each account</p>";
 $langMultiRegCourseInvalid = "User %s: invalid $langsOfCourse code '%s'";
 $langSearchCourses = "Search $langsOfCourses";
 $langLessonCode = "Password $langsOfCourse";
@@ -728,10 +735,10 @@ $langNoCoursesRegistered = "<p>You have not selected $langsCourse to enroll in.<
 next time you enter the platform.</p>";
 $langLastUserVisits = "Recent visits to $langsCourse";
 $langReqRegProf = "User registration request (with $langsOfCourses create permissions)";
-$langNewProf = "New $langsOfTeacher account details";
+$langNewProf = "Εισαγωγή στοιχείων νέου λογαριασμού $langsOfTeacher";
 $ldaplastpage = "Previous Page";
-$mailsubject = "$langTeacher Request - eLearning Platform";
-$mailsubject2 = "$langStudent Request - eLearning platform";
+$mailsubject = "Application " . $langOfTeacher . " - Asynchronous Distance Learning Service";
+$mailsubject2 = "Αίτηση " . $langOfStudent . " - Application";
 $searchuser = "Search Moderators / Users";
 $langAsProf = "as $langsTeacher";
 $langCourseVisits = "Collaboration Visits";
@@ -894,7 +901,7 @@ $langNewBBBSessionPrivate = "<strong>only</strong> registered $langsOfCourse</st
 $langBBBNotServerAvailableStudent = "Telecollaboration service is not possible. Contact the $langsTeacher of $langsOfCourse.";
 $langBBBNotServerAvailableTeacher = "Telecollaboration is not enabled in the collaboration.";
 $langBBBGetUsersError = "Unable to retrieve telecollaboration information ";
-$langBBBSessionSuggestedUsers2 = "for more than 80 participants, the suggested value is 50% of the users enrolled in the $langsCourse";
+$langBBBSessionSuggestedUsers2 = "for more than 80, 50% of those registered in is proposed $langsCourse";
 $langBBBMaxUsersJoinError = "The maximum number of telecollaboration participants has been reached. Please try logging in later or contact $langsOfTeacher at $langsOfCourse.";
 $langBBBAddCourse = "Add collaboration";
 $langBBBDeleteCourseSuccess = "The telecollaboration server has been disabled for the collaboration";
@@ -905,7 +912,7 @@ $langToAllCoursesInfo = "
 Choose whether the server can be used by all $langsCourses or by some";
 $langToSomeCourses = "In specific $langsCourses";
 $langToSomeCoursesInfo = "The server will be usable by specific $langsCourses. To set which $langsCourses will use it go to \"Search $langsOfCourses\" and select \"Actions\".";
-$langToNoCourses = "In none of the $langsCourses";
+$langToNoCourses = "Σε καμία από τις $langsCourses";
 $langBBBCronEnable = 'Note: You can enable automatic recording of presentations in telecollaboration without additional actions of moderators (opening a recording window). {Read more}';
 $langCourseBlog = "Blog $langsOfCourse";
 $langBlogPermStudents = "$langsTeacher and $langsStudents have edit access";
