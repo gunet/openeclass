@@ -332,7 +332,7 @@ function display_analytics_elements($analytics_id) {
            $langAnalyticsParameters;
 
     $buttons = array();
-    foreach (ElementTypes::elements as $elementType) {
+    foreach (ElementTypes::elements() as $elementType) {
         $type = $elementType['link'];
         array_push( $buttons,
                 array('title' => $elementType['title'],
@@ -784,7 +784,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
         $results .="<tr'>
                         <td>
-                            <div >". ElementTypes::elements[$module_id]['title'] . "</div>
+                            <div >". ElementTypes::elements()[$module_id]['title'] . "</div>
                         </td>
                         <td>
                             <div class='$class'>$percentage_value%</div>
@@ -1111,9 +1111,9 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
     }
 
     if ($type == null) {
-        $elementTypeTitle = ElementTypes::elements[$module_id]['title'];
+        $elementTypeTitle = ElementTypes::elements()[$module_id]['title'];
     } else {
-            foreach(ElementTypes::elements as $element) {
+            foreach(ElementTypes::elements() as $element) {
                 if($element['link'] == $type) {
                     $elementTypeTitle = $element['title'];
            }
@@ -1413,7 +1413,7 @@ function get_activation_status () {
 function get_period_types_array () {
     $periodTypes = array();
 
-    foreach ( PeriodType::periodType as $key => $periodType) {
+    foreach ( PeriodType::periodType() as $key => $periodType) {
         $periodTypes[$key] = $periodType['title'];
     }
     return $periodTypes;
@@ -1491,7 +1491,7 @@ function switch_activation($analytics_id, $active) {
  * @return string
  */
 function get_resource_info($resource, $module_id) {
-    $module_title = ElementTypes::elements[$module_id]['title'];
+    $module_title = ElementTypes::elements()[$module_id]['title'];
     $resource_title = '';
     switch ($module_id) {
         case ANALYTICS_ASSIGNMENTGRADE:

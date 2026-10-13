@@ -7283,6 +7283,22 @@ $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμε
 $langAnalyticsStatus = 'Επίπεδο';
 $langAnalyticsDifficultyLevel = "Κριτήρια";
 $langAnalyticsDifficultyLevelInfo = "Ρυθμίστε τα όρια δυσκολίας για κάθε τύπο περιεχομένου.";
+$langDailyCount = "Ημερήσιος Υπολογισμός";
+$langWeeklyCount = "Εβδομαδιαίος Υπολογισμός";
+$langMonthlyCount = "Μηνιαίος Υπολογισμός";
+$langTotalCount = "Συνολικός Υπολογισμός";
+$langBlogPosts = "Δημοσιεύσεις στο Blog";
+$langBlogComments = "Σχόλια στο Blog";
+$langCourseComments = "Σχόλια στο μάθημα";
+$langWallComments = "Σχόλια στον τοίχο";
+$langExerciseGrade = "Βαθμός σε άσκηση";
+$langAssignmentGrade = "Βαθμός σε εργασία";
+$langAssignmentSubmissionBeforeDeadline = "Υποβολή εργασίας πριν την προθεσμία";
+$langForumPosts = "Δημοσιεύσεις στο Forum";
+$langWikiPages = "Σελίδες στο Wiki";
+$langCourseLogins = "Συνδέσεις στο μάθημα";
+$langHits = "Χτυπήματα";
+$langCourseDuration = "Διάρκεια στο μάθημα";
 
 // h5p
 $langH5p = "Περιεχόμενο H5P";
