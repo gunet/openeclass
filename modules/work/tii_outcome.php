@@ -62,7 +62,7 @@ require_once 'modules/progress/AssignmentEvent.php';
 require_once 'include/log.class.php';
 
 // submit grade
-list($assignment_id, $uid, $assignment, $lti, $user) = lti_verify_extract_sourcedid($sourcedid, PHP_INT_MAX);
+list($assignment_id, $uid, $assignment, $lti, $user) = lti_verify_extract_sourcedid((string) $sourcedid);
 $sid = Database::get()->querySingle("SELECT id FROM assignment_submit WHERE uid = ?d AND assignment_id = ?d", $uid, $assignment_id)->id;
 $grade = ($gradef * $assignment->max_grade);
 if ($gradef == 0) {
