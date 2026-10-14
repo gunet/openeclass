@@ -461,7 +461,7 @@
                             }
                         });
                         dialog.init(function() {
-                            typeof MathJax !== 'undefined' && MathJax.typeset();
+                            typeof MathJax !== 'undefined' && typeof MathJax.typeset === 'function' && MathJax.typeset();
                         });
                     }
                 });

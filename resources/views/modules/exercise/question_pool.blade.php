@@ -101,7 +101,7 @@
         $(function() {
             $('#questions_{{ $course_code }}').DataTable ({
                 'stateSave': true,
-                'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
+                'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && typeof MathJax.typeset === 'function' && MathJax.typeset(); },
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
@@ -187,7 +187,7 @@
                             }
                         });
                         dialog.init(function() {
-                            typeof MathJax !== 'undefined' && MathJax.typeset();
+                            typeof MathJax !== 'undefined' && typeof MathJax.typeset === 'function' && MathJax.typeset();
                         });
                     }
                 });
