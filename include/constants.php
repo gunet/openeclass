@@ -23,7 +23,7 @@
 */
 
 /* version */
-define('ECLASS_VERSION', '4.4.1');
+define('ECLASS_VERSION', '4.4.2');
 
 /* course status */
 define('COURSE_CLOSED', 0);
