@@ -47,7 +47,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="reviewBasic" class="accordion-collapse collapse show" data-bs-parent="#exerciseReviewAccordion">
+                                                    <div id="reviewBasic" class="accordion-collapse collapse show">
                                                         <div class="accordion-body">
                                                             <div class='form-group @if (Session::getError('exerciseTitle')) ? has-error @endif '>
                                                                 <label for='exerciseTitle' class='col-12 control-label-notes mb-1'>
