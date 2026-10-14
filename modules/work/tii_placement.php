@@ -39,16 +39,15 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
     require_once 'include/sendMail.inc.php';
 
     // validate outcomes_tool_placement_url
-    $launch_url = strtok($data['outcomes_tool_placement_url'], "?");
-//    $patternmatch = "https://api.turnitin.com/api/lti/1p0/outcome_tool_data/";
-//    if (substr($launch_url, 0, strlen($patternmatch)) !== $patternmatch) {
-//        error_log("invalid placement url detected, exiting...");
-//        die();
-//    }
+    $launch_url = strtok((string) $data['outcomes_tool_placement_url'], "?");
+    if (!lti_tii_url_allowed($launch_url, "/api/lti/1p0/outcome_tool_data/")) {
+        error_log("invalid placement url detected, exiting...");
+        die();
+    }
 
     // extract sourcedid info
-    $sourcedid = $data['lis_result_sourcedid'];
-    list($assignment_id, $uid, $assignment, $lti, $user) = lti_verify_extract_sourcedid($sourcedid, PHP_INT_MAX);
+    $sourcedid = (string) $data['lis_result_sourcedid'];
+    list($assignment_id, $uid, $assignment, $lti, $user) = lti_verify_extract_sourcedid($sourcedid);
     $course_code = Database::get()->querySingle("SELECT code FROM course WHERE id = ?d", $assignment->course_id)->code;
 
     // POST to outcomes tool placement url
@@ -59,15 +58,15 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
         $data1 = json_decode($response, true);
 
 
-        if (array_key_exists("outcome_originalfile", $data1) && array_key_exists("launch_url", $data1['outcome_originalfile'])) {
+        if (is_array($data1) && array_key_exists("outcome_originalfile", $data1) && is_array($data1['outcome_originalfile'])
+            && array_key_exists("launch_url", $data1['outcome_originalfile'])) {
 
             // validate outcome_originalfile url
-            $orig_launch_url = strtok($data1['outcome_originalfile']['launch_url'], "?");
-//            $patternmatch = "https://api.turnitin.com/api/lti/1p0/download/orig/";
-//            if (substr($orig_launch_url, 0, strlen($patternmatch)) !== $patternmatch) {
-//                error_log("invalid outcome_originalfile launch_url detected, exiting...");
-//                die();
-//            }
+            $orig_launch_url = strtok((string) $data1['outcome_originalfile']['launch_url'], "?");
+            if (!lti_tii_url_allowed($orig_launch_url, "/api/lti/1p0/download/orig/")) {
+                error_log("invalid outcome_originalfile launch_url detected, exiting...");
+                die();
+            }
 
             // POST to outcome_originalfile url
             $lti_launch_data = lti_prepare_launch_data(
@@ -87,7 +86,7 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
             $lti_launch_data['oauth_signature'] = $oauth_sig;
             $temp_filename = "submission-" . intval($data['paperid']) . ".out";
             $temp_file = $webDir . "/courses/" . $course_code . '/temp/' . $temp_filename;
-            $max_tries = 100;
+            $max_tries = 5;
             $i = 0;
             do {
                 list($file_response, $file_http_code, $file_response_headers) = CurlUtil::httpPostRequest($orig_launch_url, $lti_launch_data, true, $temp_file);
@@ -105,7 +104,16 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
                 if (is_array($file_response_headers) && array_key_exists("content-disposition", $file_response_headers) && is_array($file_response_headers['content-disposition'])) {
                     $cont_disp = $file_response_headers['content-disposition'][0];
                     $lasteq = strrpos($cont_disp, "=") + 1;
-                    $original_filename = substr($cont_disp,$lasteq,strlen($cont_disp));
+                    $cont_disp_filename = trim(substr($cont_disp, $lasteq, strlen($cont_disp)), " \t;\"'");
+                    // RFC 5987 encoded form, e.g. UTF-8''file%20name.pdf
+                    if (preg_match("/^[\w-]+'[\w-]*'(.+)$/", $cont_disp_filename, $matches)) {
+                        $cont_disp_filename = rawurldecode($matches[1]);
+                    }
+                    $cont_disp_filename = basename(str_replace('\\', '/', $cont_disp_filename));
+                    $cont_disp_filename = preg_replace('/[\x00-\x1f\x7f"\'<>|:*?]/', '', $cont_disp_filename);
+                    if ($cont_disp_filename !== '' && $cont_disp_filename !== '.' && $cont_disp_filename !== '..') {
+                        $original_filename = $cont_disp_filename;
+                    }
                 }
 
                 // submit work
@@ -118,7 +126,8 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
                 $local_name = replace_dangerous_char($local_name);
                 $workPath = $webDir . '/courses/' . $course_code . '/work';
                 make_dir("$workPath/" . $assignment->secret_directory);
-                $ext = get_file_extension($original_filename);
+                // keep the remote file extension only if allowed for student uploads (never php & co)
+                $ext = isWhitelistAllowed($original_filename) ? get_file_extension($original_filename) : '';
                 $work_filename = $assignment->secret_directory . "/$local_name" . (empty($ext) ? '' : '.' . $ext);
                 copy($temp_file, "$workPath/$work_filename");
                 unlink($temp_file);

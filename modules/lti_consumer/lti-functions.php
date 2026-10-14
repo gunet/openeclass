@@ -28,6 +28,11 @@ const LTI_DESCRIPTION_MAX_LENGTH = 999;
 const TURNITIN_LTI_TYPE = "turnitin";
 const LIMESURVEY_LTI_TYPE = "limesurvey";
 
+// Turnitin LTI 1.1 callbacks (outcomes / outcomes tool placement)
+const LTI_TII_HOST = "api.turnitin.com";
+const LTI_TII_TOKEN_GRACE = 60 * 86400;            // accept callbacks until 60 days after deadline / feedback release
+const LTI_TII_TOKEN_NODEADLINE_TTL = 180 * 86400;  // token lifetime for assignments without deadline
+
 const RESOURCE_LINK_TYPE_ASSIGNMENT = "assignment";
 const RESOURCE_LINK_TYPE_LTI_TOOL = "lti_tool";
 const RESOURCE_LINK_TYPE_POLL = "poll";
@@ -794,7 +799,7 @@ function lti_prepare_launch_data($course_id, $course_code, $language, $uid, $oau
 
         if ($resource_link_type == RESOURCE_LINK_TYPE_ASSIGNMENT) {
             $assignment_secret = Database::get()->querySingle("SELECT secret_directory FROM assignment WHERE id = ?d", $resource_link_id)->secret_directory;
-            $token = token_generate($assignment_secret, true);
+            $token = token_generate($assignment_secret . ':' . $uid, true);
             $launch_data['lis_result_sourcedid'] = $token . "-" . $resource_link_id . "-" . $uid;
             $launch_data['ext_outcomes_tool_placement_url'] = $urlServer . "modules/work/tii_placement.php";
             $launch_data['lis_outcome_service_url'] = $urlServer . "modules/work/tii_outcome.php";
@@ -1035,7 +1040,7 @@ function lti_get_versions_selection() {
     );
 }
 
-function lti_verify_extract_sourcedid($sourcedid, $ts_valid_time) {
+function lti_verify_extract_sourcedid($sourcedid) {
     // extract sourcedid info
     $sourcediddata = explode("-", $sourcedid);
     if (count($sourcediddata) != 4) {
@@ -1052,7 +1057,8 @@ function lti_verify_extract_sourcedid($sourcedid, $ts_valid_time) {
         error_log("no assignment found, exiting ($sourcedid)...");
         die();
     }
-    if (!token_validate($assignment->secret_directory, $token, $ts_valid_time )) {
+    $ts_valid_time = lti_tii_token_valid_time($assignment, hexdec($sourcediddata[0]));
+    if ($ts_valid_time <= 0 || !token_validate($assignment->secret_directory . ':' . $uid, $token, $ts_valid_time)) {
         error_log("invalid token, exiting ($sourcedid)...");
         die();
     }
@@ -1068,6 +1074,46 @@ function lti_verify_extract_sourcedid($sourcedid, $ts_valid_time) {
     }
 
     return array($assignment_id, $uid, $assignment, $lti, $user);
+}
+
+/**
+ * @brief Validity period (in seconds, relative to token creation) of a Turnitin sourcedid token.
+ * Tokens are accepted until LTI_TII_TOKEN_GRACE after the assignment deadline or
+ * feedback release date (whichever is later), or for LTI_TII_TOKEN_NODEADLINE_TTL if neither is set.
+ * @param stdClass $assignment
+ * @param int $token_ts
+ * @return int
+ */
+function lti_tii_token_valid_time(stdClass $assignment, int $token_ts): int {
+    $last_date = 0;
+    foreach ([$assignment->deadline, $assignment->tii_feedbackreleasedate] as $date) {
+        if (!empty($date)) {
+            $last_date = max($last_date, (int) strtotime($date));
+        }
+    }
+    if ($last_date > 0) {
+        return $last_date + LTI_TII_TOKEN_GRACE - $token_ts;
+    }
+    return LTI_TII_TOKEN_NODEADLINE_TTL;
+}
+
+/**
+ * @brief Check that a Turnitin callback-supplied url points to the Turnitin API.
+ * @param string $url
+ * @param string $path_prefix
+ * @return bool
+ */
+function lti_tii_url_allowed(string $url, string $path_prefix): bool {
+    $parts = parse_url($url);
+    if (!is_array($parts)) {
+        return false;
+    }
+    return isset($parts['scheme'], $parts['host'], $parts['path'])
+        && strtolower($parts['scheme']) === 'https'
+        && strtolower($parts['host']) === LTI_TII_HOST
+        && !isset($parts['user']) && !isset($parts['port'])
+        && strpos($parts['path'], $path_prefix) === 0
+        && strpos($parts['path'], '..') === false;
 }
 
 function getLTILinksForTools(): array {

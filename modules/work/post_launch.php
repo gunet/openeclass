@@ -35,8 +35,39 @@ if (check_guest()) {
     die();
 }
 
-$resource_link_id = intval($_GET['id']);
-$assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $resource_link_id);
+// only course members (or editors / admins) may launch
+if (!($is_admin or $is_editor or user_is_registered_to_course($uid, $course_id))) {
+    die();
+}
+
+$resource_link_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+if ($is_editor) {
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment
+                                                    WHERE course_id = ?d AND id = ?d",
+        $course_id, $resource_link_id);
+} else {
+    // same visibility rules as display_student_assignment()
+    $user_group_info = user_group_info($uid, $course_id);
+    $gids_sql_ready = !empty($user_group_info) ? implode(',', array_keys($user_group_info)) : "''";
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment
+                                                    WHERE course_id = ?d
+                                                      AND id = ?d
+                                                      AND active = 1
+                                                      AND (assign_to_specific = 0 OR
+                                                           id IN
+                                                             (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
+                                                              UNION
+                                                              SELECT assignment_id FROM assignment_to_specific
+                                                                 WHERE group_id != 0 AND group_id IN ($gids_sql_ready)))",
+        $course_id, $resource_link_id, $uid);
+    // password locked assignments must have been unlocked first
+    if ($assignment and $assignment->password_lock !== '' and empty($_SESSION['has_unlocked'][$assignment->id])) {
+        die();
+    }
+}
+if (!$assignment or $assignment->assignment_type != ASSIGNMENT_TYPE_TURNITIN) {
+    die();
+}
 $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $assignment->lti_template);
 if (!$lti) {
     die();

@@ -1340,11 +1340,14 @@ function display_assignment_submissions_graph_results($id)
  * @return string
  */
 function show_turnitin_integration($id) {
-    global $course_code, $langTurnitinIntegration, $urlAppend;
+    global $course_id, $course_code, $langTurnitinIntegration, $urlAppend;
 
     $html_content = '';
 
-    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    if (!$assignment) {
+        return $html_content;
+    }
     $lti = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d", $assignment->lti_template);
 
     if ($assignment->launchcontainer == LTI_LAUNCHCONTAINER_EMBED) {

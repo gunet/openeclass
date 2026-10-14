@@ -310,6 +310,7 @@ if (!file_exists($videoDir)) {
 
 mkdir_or_error('storage');
 mkdir_or_error('storage/views');
+protect_courses_dir('courses');
 mkdir_or_error('courses/temp');
 touch_or_error('courses/temp/index.php');
 mkdir_or_error('courses/temp/pdf');
