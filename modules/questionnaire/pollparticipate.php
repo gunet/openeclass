@@ -658,7 +658,7 @@ function printPollForm() {
 
         $pageName = $thePoll->name;
         if (!is_null($unit_id)) {
-            $back_link = "../units/index.php?course=$course_code&amp;id=$unit_id";
+            $back_link = "../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]";
         } else if (isset($_REQUEST['res_type'])) {
             $back_link = "../wall/index.php?course=$course_code";
         } else {
@@ -746,11 +746,11 @@ function printPollForm() {
                              </div>";
         }
         if (!is_null($unit_id)) {
-            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire&amp;id=$unit_id&amp;from_poll=true";
+            $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire&amp;id=$_REQUEST[unit_id]&amp;from_poll=true";
         } else if (isset($_REQUEST['res_type'])) {
             $session_view = '';
             if (isset($_GET['from_session_view'])) {
-                $session_view = "&amp;session=" . intval($_GET['session']) . "&amp;from_session_view=true";
+                $session_view = "&amp;session=$_GET[session]&amp;from_session_view=true";
             }
             $onBehalfOfUserView = '';
             if (isset($_GET['onBehalfOfUser'])) {
@@ -860,7 +860,6 @@ function printPollForm() {
             unset($_SESSION['temp_data_answers']);
             unset($_SESSION['unanswered_required_qids']);
         }
-
         // Question number regarding pagebreak
         $questionNumberArr = [];
         $qcounter = 1;
@@ -872,7 +871,6 @@ function printPollForm() {
             $questionNumberArr[$q->pqid] = $qcounter;
             $qcounter++;
         }
-
 
         foreach ($questions as $theQuestion) {
             if ($temp_IsLime) {
@@ -1280,7 +1278,7 @@ function printPollForm() {
         $tool_content .= "<div class='col-12 d-flex justify-content-center mt-5'>";
         if ($is_editor && !isset($_GET['onBehalfOfUser'])) {
             if (isset($_GET['from_session_view'])) {
-                $tool_content .= "<a class='btn cancelAdminBtn' href='../session/session_space.php?course=$course_code&amp;cancelPoll=true&amp;session=" . intval($_GET['session']) . "'>" . q($langBack) . "</a>";
+                $tool_content .= "<a class='btn cancelAdminBtn' href='../session/session_space.php?course=$course_code&amp;cancelPoll=true&amp;session=$_GET[session]'>" . q($langBack) . "</a>";
             } else {
                 $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code&cancelPoll=true'>" . q($langBack) . "</a>";
             }
@@ -1308,10 +1306,10 @@ function printPollForm() {
             if (!$temp_IsLime) {
                 $tool_content .= "<input class='btn submitAdminBtn' name='submit' type='submit' value='" . q($langSubmit) . "'>";
                 if (!is_null($unit_id)) {
-                    $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../units/index.php?course=$course_code&amp;id=$unit_id'>" . q($langCancel) . "</a>";
+                    $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
                 } else {
                     if (isset($_GET['from_session_view'])) {
-                        $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../session/session_space.php?course=$course_code&amp;cancelPoll=true&amp;session=" . intval($_GET['session']) . "'>" . q($langCancel). "</a>";
+                        $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../session/session_space.php?course=$course_code&amp;cancelPoll=true&amp;session=$_GET[session]'>" . q($langCancel). "</a>";
                     } else {
                         $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='index.php?course=$course_code&cancelPoll=true'>" . q($langCancel) . "</a>";
                     }
@@ -1666,10 +1664,10 @@ function submitPoll() {
         }
         $tool_content .= "<br><div class='d-flex text-center'>";
         if (!is_null($unit_id)) {
-            $tool_content .= "<a class='btn cancelAdminBtn' href='../units/index.php?course=$course_code&amp;id=$unit_id'>$langBack</a>";
+            $tool_content .= "<a class='btn cancelAdminBtn' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>$langBack</a>";
         } else if (isset($_REQUEST['res_type'])) {
             if (isset($_GET['from_session_view'])) {
-                $tool_content .= "<a class='btn btn-primary' href='../session/session_space.php?course=$course_code&amp;session=" . intval($_GET['session']) . "'>$langBack</a>";
+                $tool_content .= "<a class='btn btn-primary' href='../session/session_space.php?course=$course_code&amp;session=$_GET[session]'>$langBack</a>";
             } else {
                 $tool_content .= "<a class='btn btn-primary' href='../wall/index.php?course=$course_code'>$langBack</a>";
             }
@@ -1678,7 +1676,7 @@ function submitPoll() {
         }
         if ($poll->show_results) {
             if (!is_null($unit_id)) {
-                $tool_content .= "<a class='btn submitAdminBtn ms-3' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$unit_id&amp;pid=$pid'>$langUsage</a>";
+                $tool_content .= "<a class='btn submitAdminBtn ms-3' href='../units/view.php?course=$course_code&amp;res_type=questionnaire_results&amp;unit_id=$_REQUEST[unit_id]&amp;pid=$pid'>$langUsage</a>";
             } else if (isset($_REQUEST['res_type'])) {
                 if (isset($_GET['from_session_view'])) { 
                     $tool_content .= "<a class='btn btn-primary ms-3' href='../questionnaire/pollresults.php?course=$course_code&session=" . intval($_GET['session']) . "&pid=$pid&from_session_view=true'>$langUsage<a>";
@@ -1883,7 +1881,7 @@ function poll_upload_file($pid, $form_link, $qtype, $pqid, $currentUser) {
            $uid, $webDir, $langInfoPollUploadedFile, $course_id;
 
     $token = $_SESSION['csrf_token'];
-    $sessionID = intval($_GET['session']) ?? 0;
+    $sessionID = intval($_GET['session'] ?? 0);
     $is_onBehalfOfUser_mode = isset($_GET['onBehalfOfUser']) ? 'forSession' : 'forCourse';
     if ($sessionID > 0) {
         $is_onBehalfOfUser_mode = 'forSession';

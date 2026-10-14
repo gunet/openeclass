@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2026-08-10 13:56:02
+// Generated 2026-10-13 16:29:15
 
 $langYes = "Si";
 $langNo = "No";
@@ -228,8 +228,8 @@ $langUserAuthentication = "Autentificación del Usuario";
 $langChangeUser = 'Conectar como un usuario diferentes';
 $langChangeUserNotFound = 'Cuenta con el nombre de usurario "%s"no se encontró';
 $langMultiRegUser = 'Creación masiva de cuentas de usuario';
-$langMultiRegUserInfo = "<p>Please enter in the area below a list of user details, one line per each new user account.</p>
-<p>The order of the user information is defined in the field before the area, where possible labels are:</p>
+$langMultiRegUserInfo = "<p>You can upload below a spreadsheet (e.g. Excel) file (.xls, xlsx) with a list of user details, one row per each new user account.</p>
+<p>The assignment user information to columns is defined by the cells (headings) in the first row, where possible labels are:</p>
 <ul>
 <li><tt>first</tt>: First name</li>
 <li><tt>last</tt>: Last name / surname</li>
@@ -240,7 +240,8 @@ $langMultiRegUserInfo = "<p>Please enter in the area below a list of user detail
 <li><tt>password</tt>: Password</li>
 <li><tt>ext_uid</tt>: External user identifier (depending on authentication method)</li>
 </ul>
-<p>To have the users automatically registered to some courses, please add the course codes after the user details in the end of each line. The e-mail address is optional - you can use a hyphen (-) in its place if you want to omit it. Lines beginning with # are ignored. If you don't specify usernames, they will be automatically created by appending a serial number to the user prefix entered below. If you don't specify passwords, a random password will be created for each account.</p>";
+<p>The following rows should contain the information of the users to be created.</p>
+<p>To have the users automatically registered to some courses, please add the course codes in cells after the user details in the end of each row. The e-mail address is optional - you can use a hyphen (-) in its place if you want to omit it. If you don't specify the usernames, they will be automatically created by appending a serial number to the user prefix entered below. If you don't specify passwords, a random password will be created for each account.</p>";
 $langMultiRegCourseInvalid = 'Usiario %s: código del curso inválido "%s"';
 $langMultiRegFields = 'Definición del orden del campo';
 $langMultiRegFieldError = '¡Error!: Etiqueta de campo inválida:';
@@ -401,7 +402,7 @@ $langAlreadyActiv = "El método de Autentificaicón ya está activo";
 $langErrActiv = "¡Error! El método de autentificación no puede ser activado";
 $langAuthSettings = "Ajustes de autentificación";
 $langWrongAuth = "Has tecleado un usurario/contraseña incorrectos";
-$langExplainShib = "Enter the names of the variables returned by the Shibboleth server. The variables will be written in <em>secure/index.php</em>. Please note that if the Shibboleth Canonical Name contains the user full name (both first and last name), you need to enter the character delimiting the first from the last name.";
+$langExplainShib = "Enter the names of the variables returned by the Shibboleth server. The variables will be written in <em>%s</em>. Please note that if the Shibboleth Canonical Name contains the user full name (both first and last name), you need to enter the character delimiting the first from the last name.";
 $langCharSeparator = "Delimiter character";
 $langWash = "Limpiado";
 $langWashFrom = "Chat libre desde";
@@ -2189,8 +2190,7 @@ $langNotSSL = "Connection wasn't made using SSL because no certificate was provi
 $langViaCAS = "authentication via CAS Single Sign On";
 $langCASnochange = "Please close your browser in order to change CAS settings";
 $langBeforeRegDate = "registered before";
-$langInfoAboutRegistration = "You are trying to access a closed course. To register, you need to contact the course administrator.<br />
-Please note that you should mention your full name or username on the platform so that administrator can register you to the course.";
+$langInfoAboutRegistration = "You are trying to access a closed course. To request enrollment, please complete the form below. Your request will be recorded and sent to the course administrators.";
 $langReplace = "Reemplazar";
 $langReplaceFile = "Replace %s with";
 $langReplaceOK = "File replaced successfully";
@@ -2236,8 +2236,8 @@ $langNoEBook = 'There are no e-Books available in this course.';
 $langZipFile = 'ZIP file';
 $langSection = 'Section';
 $langSubsection = 'Subsection';
-$langEBookDelConfirm = 'Confirm delete of e-book "%s"';
-$langEBookSectionDelConfirm = 'Confirm delete of section "%s"';
+$langEBookDelConfirm = 'Confirm delete of e-book';
+$langEBookSectionDelConfirm = 'Confirm delete of section';
 $langEBookDeleted = 'The e-book titled "%s" has been deleted.';
 $langEBookReplace = 'Replace files';
 $langEBookReplaceDoneZip = 'The contents of the ZIP file have been extracted in the e-book.';
@@ -2599,10 +2599,6 @@ $langStudentUploadWhitelist = "$langOfStudent Whitelist";
 $langTeacherUploadWhitelist = "$langTeacher Whitelist";
 $langUploadedFileNotAllowed = "The file type you attempt to upload is not allowed. For more information, please contact the platform administrator.";
 $langUploadedZipFileNotAllowed = "The zip file you attempt to upload and extract contains unsupported files. For more information, please contact the platform administrator.";
-$langSoftware = "Software";
-$langBrowser = "Browser";
-$langChrome = "Chrome";
-$langOpera = "Opera";
 $langPurgeFile = "Attention! Message will be also removed from all users";
 $langOtherDropBoxFiles = "Other messages";
 $langUserWhitelist = "User Whitelist";
@@ -2655,29 +2651,6 @@ $langCommonDocs = "Common Documents";
 $langExplainCommonDocs = "File will be accessible to all courses via 'Documents'";
 $langExternalFile = "Enlace externo";
 $langExternalFileInfo = "External file URL";
-$langCheckTools = "Software tools prerequisites check";
-$langCheckIntro = "To view all the material contained in the platform, you must have the appropriate tools installed on your computer.";
-$langCheckIntro2 = "The following table displays which of the required tools are not installed or are not of the required version. For those tools, please install the required software by clicking on each button and following the instructions.";
-$langIE = 'Internet Explorer version 7 or later';
-$langFirefox = 'Mozilla Firefox, version 2.6 or later';
-$langSafari = 'Safari, version 4 or later';
-$langBrowserSupported = 'Your browser version is adequate.';
-$langBrowserNotSupported = "Your browser is not supported. Please upgrade it.";
-$langAcrobatReader = 'Adobe Acrobat Reader version 7 or later';
-$langAcrobatReaderInstalled = "The correct version of Acrobat Reader is installed.";
-$langAcrobatReaderNotInstalled = 'Acrobat Reader is not installed or is an older version. To install the latest version press';
-$langAgreeAndInstall = 'In the new page click "Agree and Install now".';
-$langFlashPlayer = "Adobe Flash Player, version 10 or newer";
-$langFlashPlayerInstalled = "An adequate version of Flash Player is installed.";
-$langFlashPlayerNotInstalled = "Flash Player is not installed or too old. To install the latest version click";
-$langShockInstalled = "An adequate version of Shockwave Player is installed.";
-$langShockNotInstalled = "Shockwave Player is not installed or too old. To install the latest version click";
-$langCheckNotOk1 = "Installation Process";
-$langCheckNotOk2 = "Use the diagnostics table to check which of the required software tools are not installed (they are displayed in red). Please follow the instructions given in the official software web pages to proceed with their installation.";
-$langCheckNotOk3 = "You have to install all required programs which are not installed in the correct version.";
-$langCheckNotOk4 = "After completing the installation of all required software tools, please check installation by clicking";
-$langCheckNotOk5 = 'If there are no messages in red letters in the diagnostics table, all installations have been performed correctly and a message to that effect will be displayed.';
-$langCheckOk = "You have all required programs installed on your computer and you can use the platform without problems.";
 $langPurgeExerciseResults = "Delete course exercise results";
 $langClearStats = "Clear Statistics";
 $langStatsCleared = "Statistics cleared";
@@ -3456,7 +3429,7 @@ $langMaxRooms = "Max number of rooms";
 $langPresharedKey = "Pre-shared key";
 $langBBBSessionMaxUsers = "Max number of participants";
 $langBBBSessionSuggestedUsers = 'Suggested number of participants';
-$langBBBSessionSuggestedUsers2 = "for more than 20, the suggested value is 50% of users registered in this $langsCourse";
+$langBBBSessionSuggestedUsers2 = "for more than 80 participants, the suggested value is 50% of the users enrolled in the $langsCourse";
 $langBBBNoServerForRecording = "Teleconference will not be recorded.";
 $langBBBAlertTitle = "Please enter the teleconference title";
 $langBBBAlertMaxParticipants = "Please enter the maximum number of participants";
@@ -3745,8 +3718,10 @@ $langLinksCongiguration = 'Links Configuration';
 $langLoginConfiguration = "Login Screen Configuration";
 $langTag = 'Tag';
 $langOpenDelosDescription = "<p>OpenDelos is the open-source platform designed by GUnet for the administration, recording and play-back of videolectures.</p>
-<p>The platform supports the <a href='http://ocw-project.gunet.gr/'>Open Academic $langCourses</a> project along with the <a href='http://openeclass.org/'>Open eClass platform</a> and the national $langsCourse seach portal also developed by GUnet.</p>";
-$langBBBDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href='http://www.bigbluebutton.org/' target='_blank'>BigBlueButton</a> platform which is a complete system of direct web-based communication and collaboration between $langsTeachers and $langsStudents.</p> <p>BigBlueButton does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a BigBlueButton installation plase select <a href='bbbmoduleconf.php'>Settings</a>.</p>";
+<p>The platform supports the <a href='https://project.opencourses.gr/' target='_blank'>Open Academic Courses</a> project along with the <a href='https://openeclass.org/' target='_blank'>Open eClass platform</a> and the national course seach portal also developed by GUnet.</p>";
+$langBBBDescription = "
+<p><a href=\"https://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> is open-source software for web conferencing and online collaboration.</p>
+<p>It runs directly in a modern web browser without the installation of additional software. To connect Open eClass to a BigBlueButton installation, please select “Settings”.</p>";
 $langFtpShortDescription = "Link to FTP service";
 $langFtpLongDescription = "Enter the FTP link";
 $langGoogleDriveShortDescription = "Short Description about google drive";
@@ -4307,8 +4282,7 @@ $scolles21 = "I understand other students";
 $scolles22 = "students understand me";
 $scolles23 = "I understand the tutor";
 $scolles24 = "tutor understands me";
-$colles_desc = "The COLLES(Constructive On Line Learning Environment Survey) questionnaire is used in order to widen the perceptions for the
-				learning environment which has been shaped from the participants. It consists from 24 questions. Each question has as answer a number from 1 (Almost never) to 5 (Almost always)";
+$colles_desc = "The COLLES (Constructivist On-Line Learning Environment Survey) questionnaire is used to explore participants’ perceptions of the learning environment. It consists of 24 questions. Each question is answered on a five-point scale: 1 (Almost never), 2 (Rarely), 3 (Sometimes), 4 (Often), 5 (Almost always).";
 $langCollesLegend = "1 (Almost Never), 2 (Rarely), 3 (Sometimes), 4 (Often), 5 (Almost Always)";
 $colles_detail_answer = "Here you can see the student's replies";
 $question1 = "In evaluating what someone says, I focus on the quality of their argument, not on the person who's presenting it.";
@@ -4650,7 +4624,7 @@ $langMult = "Display multimedia";
 $langVideoLink = "Display video link";
 $langEbook = "Ebook access";
 $langAnsQuest = "Questionnaire answer";
-$langWikiPages = "Number of wiki pages";
+$langWikiPages = "Wiki Pages";
 $langAllActivities = "All activities";
 $langNoActivCert = "There are no activites. Click in 'Add' if you want to add them.";
 $langNoInsCert = "There are no activities";
@@ -4743,7 +4717,7 @@ $langRubricCreated = "Rubric created successfully";
 $langDefaultMatchingOpt1 = "Athens";
 $langDefaultMatchingOpt2 = "London";
 $langTurnitinShortDescription = 'Connect with anti-plagiarism service.
-Anti-plagiarism service is a commercial product by Turnitin. For further information take a look at <a href="https://turnitin.com">https://turnitin.com</a>';
+Anti-plagiarism service is a commercial product by Turnitin. For further information take a look at <a href="https://turnitin.com" target="_blank">https://turnitin.com</a>';
 $langGroupFull = "full group";
 $langScoreDiffers = 'The recorded exercise score is different to the currently calculated one. Would you like to regrade the exercise?';
 $langRegrade = 'Regrade';
@@ -5031,11 +5005,11 @@ $langBBBLBMethodWOInfo = "$langBBBLBMethodWO: Take into account server priority 
 $langBBBLBMethodWLLInfo = "$langBBBLBMethodWLL: First take into account server priority, then server with least load";
 $langBBBLBMethodWLRInfo = "$langBBBLBMethodWLR: First take into account server priority, then server with least rooms";
 $langBBBLBMethodWLCInfo = "$langBBBLBMethodWLC: First take into account server priority, then server with least user connections";
-$langToNoCourses = "For none of the $langsCourses";
+$langToNoCourses = "In none of the $langsCourses";
 $langExerciseAttemptsUnlimited = 'Unlimited';
 $langWorkMultipleFiles = "Multiple files - maximum:";
 $langWorkFilesCountExceeded = 'The number of files you have submitted exceeds the maximum allowed.';
-$langWorkFileLimit = 'Files (up to %d)';
+$langWorkFileLimit = 'Files (maximum)';
 $langExerciseAttemptGone = 'Your current attempt has been cancelled, either
     because the course administrator has deleted it, or because
     you have continued the attempt from another computer';
@@ -5121,7 +5095,7 @@ Note, that if $langsStudent has been graded with negative score in one question,
 $langExercisePasswordModalTitle = "Please enter exercise password";
 $langWarnOneWayExercise = "Warning: Each question appears in a separate page with no possibility of going back to past questions.";
 $langTopicDeleted = "Topic was deleted";
-$langLimeSurvey = "Lime Survey";
+$langLimeSurvey = "LimeSurvey";
 $langActivateMulSubmissions = "Activate multiple submissions by $langsOfStudentss";
 $langActivateDefaultAnswer = "Activate default answer 'Don't know / No answer'";
 $langPollOutcomeClose = "You may close this window or return to the previous page.";
@@ -5149,8 +5123,8 @@ $langBBBHideParticipants = "Hide participants list";
 $langBBBNotStarted = "The teleconference has not started yet";
 $langBBBHasEnded = "The teleconference has ended";
 $langBBBDefaultNewRoom = "Defaults for new teleconferences";
-$langLimesurveyShortDescription = "Connect with on-line statistical survey Service.
-Survey service is a commercial product by LimeSurvey GmbH. For further information take a look at <a href=\"https://www.limesurvey.org\">https://www.limesurvey.org</a>";
+$langLimesurveyShortDescription = "Connect with a LimeSurvey on-line statistical survey Service.
+LimeSurvey is available either as a self-hosted open source platform or as a commercial product by LimeSurvey GmbH. For further information please see <a href='https://www.limesurvey.org/' target='_blank'>https://www.limesurvey.org</a>";
 $langLimesurveyLongDescription = "Connection with LimeSurvey on-line statistical survey service.";
 $langLimesurveyConf = "$siteName \"LimeSurvey\" settings";
 $langLimesurveyAppAddSuccessful = "LimeSurvey Tool add was successful.";
@@ -5229,8 +5203,8 @@ $langNewUnitPrerequisiteSuccess = "The prerequisite was successfully created!";
 $langDelUnitPrerequisiteSuccess = "The prerequisite was successfully deleted.";
 $langNewUnitPrerequisiteFailAlreadyIn = "Unable to add; the unit is already included in the prerequisites list.";
 $langsUnit = "unit";
-$langUserWayShortDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
-$langUserWayLongDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/'>https://userway.org/</a></p>";
+$langUserWayShortDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/' target='_blank'>https://userway.org/</a></p>";
+$langUserWayLongDescription = "<p>Accessibility options via the UserWay service. For more information, please visit <a href='https://userway.org/' target='_blank'>https://userway.org/</a></p>";
 $langReuseActivate = "Activate Reuse";
 $langReuseDeactivate = "Deactivate Reuse";
 $langGradebookAllBetweenRegDates = "All enrolled in the $langsCourse during the following period";
@@ -5243,7 +5217,7 @@ $langInvalidCourseUnitPrerequisites = 'Unit completion is not activated.';
 $langUnitNotCompleted = 'Unit prerequisites not yet completed';
 $langUnitNotStarted = "The unit has not begun yet";
 $langOfUnitCompletion = 'Unit completion activities';
-$langFlippedClassroom = "Flipped Classrοom Model";
+$langFlippedClassroom = "Flipped Classroom Model";
 $langCΕnabled = "Enabled";
 $langGoals = "Intended Learning Outcomes (ILO)";
 $langGoalTitle = "ILO";
@@ -5288,7 +5262,7 @@ $langConfirmDeleteUnit = "Are you sure you want to remove this unit?";
 $langConfirmDeleteGoal = "Are you sure you want to remove this Intended Learning Outcome?";
 $langQuestionPreview = 'Preview of Question';
 $langDumpPDF = 'Export in PDF format';
-$langQuestionUsedInExercises = 'Used in this exercises';
+$langQuestionUsedInExercises = 'Used in the following exercises';
 $langAddDirectoryIndexes = 'Adding subdirectory index files to hinder directory traversal in misconfigured servers';
 $langUpgradeDBInfoMessage = "Database schema upgrade has started";
 $langUpgradePopUpCloseWarning = "Warning! Please don't close this window because the upgrade will be interrupted.";
@@ -5642,14 +5616,12 @@ $langBooking = "Reservation";
 $langBookings = "Reservations";
 $langAddAvailableDateForGroupAdmin = "Add availability to the group";
 $langAddAvailability = "Add available date";
-$langRedInfoRentezvousOtherProgram = "<div class='Accent-200-cl TextBold'>The available contact days you have registered as a team leader in other courses are shown in RED.</div>";
+$langRedInfoRentezvousOtherProgram = "<div class='Accent-200-cl TextBold'>The available contact days you have entered as a group leader in other courses are shown in RED.</div>";
 $langSuccessInfoRentezvous = "<div class='Success-200-cl TextBold'>The available contact days you have entered in the current course are shown in GREEN color</br>
-in the current group as responsible.</div>";
-$langWarningInfoRentezvous = "<div class='Warning-200-cl TextBold'>In ORANGE the available communication days that have been registered by someone else are displayed</br>
-group leader in current course in current group.</div>";
-$langInfoInfoRentezvous = "<div class='Primary-400-cl TextBold'>The available contact days you have listed as</br> are shown in BLUE
-group leader in the current course in another group.</div>";
-$langPinkInfoRentezvous = "<div class='Pink-cl TextBold'>The booking made by a team member is shown in PINK color.</div>";
+in the current group you are responsible for.</div>";
+$langWarningInfoRentezvous = "<div class='Warning-200-cl TextBold'>The available contact days entered by another group leader for the current course and current group are shown in ORANGE.</div>";
+$langInfoInfoRentezvous = "<div class='Primary-400-cl TextBold'>The available contact days you have enterd as group leader in the current course but in another group</br> are shown in BLUE.</div>";
+$langPinkInfoRentezvous = "<div class='Pink-cl TextBold'>A booking made by a group member is shown in PINK.</div>";
 $langChangeDateSuccess = "Date changed successfully.";
 $langNoChangeDateOtherUser = "You cannot change another user's date.";
 $langExistBookingForThisDate = "You cannot change this date.";
@@ -6040,7 +6012,7 @@ $langNoExistNotifications = "There aren't available notifications for the curren
 $langViewPlatform = "Select platform display";
 $langViewBoxedType = "Limited width";
 $langViewFluidType = "Full width";
-$langHelpBoxedWidthInfo = "The width of the header and footer is configured according to the layout settings with a maximum width (1920px)";
+$langHelpBoxedWidthInfo = "The maximum width is set according to the “Fluid” option in the layout settings";
 $langHelpFluidWidthInfo = "The width of the header and footer is configured according to the width of the current screen";
 $langNavSettingsnavsettingsMainSection = "Main Section";
 $langAddOpacityImage = "Add color to background image from background color option";
@@ -6282,8 +6254,8 @@ In this way you increase the difficulty of the question as one or more predefine
 <li><strong class="text-dark">Option[3]</strong> = Milan and <strong class="text-dark">score</strong> = 0. The word `Milan` will be left over as an incorrect answer of text.</li>
 </ul>';
 $langPlaceholderDragAndDropText = "The capital of Greece is [1] while the capital of Germany is [2].";
-$langAthens = "Αθήνα";
-$langBerlin = "Βερολίνο";
+$langAthens = "Athens";
+$langBerlin = "Berlin";
 $langErrorWithChoicesAsAnswers = "There is an error in the correspondence of the answers.";
 $langPredefinedAnswerExists = "You cannot enter an empty answer. Please try again.";
 $langCalcelDroppableItem = "You can undo your answer by left-clicking on the word.";
@@ -6372,8 +6344,7 @@ For example, if we want to calculate the unknown <strong class="text-dark">x</st
 </div>';
 $langNoExistVariables = "The exercise pronunciation contains no data or the text field is empty.";
 $langFinalValueOfWildCard = "Value of item";
-$langSeperateCorrectlyTheTypeOfAnswer = "There are no {items} available in the pronunciation or in the answer types. </br>
-Therefore, in the <strong>Answer type</strong> field, you must add the numerical formula you added to the pronunciation along with its final result, separated by the symbol (<strong>:</strong>)";
+$langSeperateCorrectlyTheTypeOfAnswer = "There are no available {items} in the question text or in the answer types. </br>Therefore, in the <strong>Answer type</strong> field, enter the numerical formula used in the question text together with its final result, separated by <strong>||</strong>.";
 $langOrdering = "Ordering";
 $langLayoutItems = "Layout items";
 $langHorizontal = "Horizontal";
@@ -6403,7 +6374,7 @@ $langExerciseRequireLogin = 'You must first log in to the platform in order to a
 $langNoUsersForExerSubmission = 'There are no users without submission to the exercise.';
 $langNotifyUnSubmittedUsers = 'We remind you that you have not submitted your answers to the lesson exercise.';
 $langNotifyUsersViaEmail = 'Notify users at their email address to submit their responses.';
-$langUsersListWithNoSubmission = 'The list of users who have not submitted their answers to the exercise.';
+$langUsersListWithNoSubmission = 'The following %d users have not submitted the exercise.';
 $langNotifyEmailToUsers = 'The reminder was sent to';
 $langNoRootNodes = 'There was a problem with the department hierarchy!';
 $langOneNodeSelect = 'Please select only one category';
@@ -6640,7 +6611,7 @@ $langSelectAIProvider = 'Choose an AI provider';
 $langNoLangModels = 'There are no language models available';
 $langLanguageModel = 'Language Model';
 $langLanguageModelName = 'Language model name';
-$langAITokenDeleted = "Τhe key of the ΑΙ provider has been deleted";
+$langAITokenDeleted = "Τhe key of the AI provider has been deleted";
 $langAIConfigSaved = "AI provider configuration saved successfully";
 $langAIEvaluation = "AI Evaluation";
 $langEnableAIEvaluation = "Enable AI Evaluation";
@@ -6859,7 +6830,7 @@ $langPollNoUsersParticipation = "No participation";
 $langSearchConsultant = "Search consultant";
 $langAllConsultants = "All consultants";
 $langAddUniFlixVideoLink = "Add UniFlix link";
-$langUniFlixHttpsError = "Connectivity with Uni Flix cannot be enabled because the local server uses HTTPS protocol, while Uni Flix uses HTTP protocol. Newer versions of web browsers do not allow mixed protocol usage.";
+$langUniFlixHttpsError = "Connectivity with UniFlix cannot be enabled because the local server uses HTTPS protocol, while UniFlix uses HTTP protocol. Newer versions of web browsers do not allow mixed protocol usage.";
 $langUniFlixAuth = "UniFlix authentication";
 $langUniFlixNewFileVersion = "There is a newwer verion of file in UniFlix.";
 $langUniFlixRequireAuth = ", UniFlix authentication is required, in order to display private multimedia files";
@@ -6872,7 +6843,7 @@ $langUserThemeCustomizationDisabled = 'User theme customization is disabled by t
 $langSelectThemesForUsers = 'Select Themes for Users';
 $langSelectThemesForUsersHelp = 'Choose which themes users will be able to select. Users will only see the themes you select here.';
 $langNoThemesAvailable = 'No themes are currently available for selection. Please contact the platform administrator.';
-$langUniFlixDescription = "UniFlix is the open source software platform designed and developed by GUNET for the Management, Recording and Broadcasting of Video Conferences.</p>";
+$langUniFlixDescription = "<p>UniFlix is an open-source platform designed and developed by GUnet for the management, recording and streaming of video lectures.</p>";
 $langOpenUserMenu = "Open user menu";
 $langOpenMenu = "Open main navigation menu";
 $langDialogBox = "Dialog box";
@@ -6950,8 +6921,8 @@ $langActivityMaxPointsTimePeriod = "Time period (days)";
 $langPointsGameLevels = "Levels";
 $langPointsGameLevelName = "Level name";
 $langPointsGameLevelRequiredPoints = "Required points";
-$langPointsWon = "Congratulations! You have just won %s points!";
-$langLevelPromoted = "Congratulations! You have just been promoted to level <i>%s</i>!";
+$langPointsWon = "%s: Congratulations! You have just won %s points!";
+$langLevelPromoted = "%s: Congratulations! You have just been promoted to level <i>%s</i>!";
 $langNoPointsGames = 'There are no points games. You can create a new one by clicking on "New points game"';
 $langNoCertificatesStud = "There are no certificates.";
 $langNoBadgesStud = "There are no badges.";
@@ -7087,7 +7058,7 @@ $langTwitterUrlValidFail = 'Field %s is invalid (required format https://twitter
 $langLinkedInUrlValidFail = 'Field %s is invalid (required format https://www.linkedin.com/in/xxxxxx)';
 $langLangProfLevel = 'Language Proficiency Level';
 $langLangCEFRA1 = 'A1 - Beginner';
-$langLangCEFRA2 = 'Α2 - Elementary';
+$langLangCEFRA2 = 'A2 - Elementary';
 $langLangCEFRB1 = 'B1 - Intermediate';
 $langLangCEFRB2 = 'B2 - Upper-Intermediate';
 $langLangCEFRC1 = 'C1 - Advanced';
@@ -7571,3 +7542,24 @@ $langWidgetsCourse = 'Course Widgets';
 $langBgColorLoginButton = 'Login button background color';
 $langTextColorLoginButton = 'Login button text color';
 $langHoverBgColorLoginButton = 'Login button hover background color';
+$langTill2 = 'Until';
+$langStrictModeExceptForQtypes = "Question types (Oral) are not included.";
+$langRestoreCreateUsers = "Create user accounts when they don't already exist, based on username match";
+$langMonitoringScenarios = "Monitoring Scenarios";
+$langRequiredStartDate = "The 'Start Date' field";
+$langRequiredEndDate = 'The "End Date" field';
+$langAnalyticsDifficultyLevel = 'Difficulty Levels';
+$langAnalyticsDifficultyLevelInfo = 'Set difficulty thresholds for each content type.';
+$langDailyCount = "Daily Calculation";
+$langWeeklyCount = "Weekly Calculation";
+$langMonthlyCount = "Monthly Calculation";
+$langTotalCount = "Total Calculation";
+$langBlogComments = "Blog Comments";
+$langCourseComments = "Course Comments";
+$langWallComments = "Wall Comments";
+$langExerciseGrade = "Exercise Grade";
+$langAssignmentGrade = "Assignment Grade";
+$langAssignmentSubmissionBeforeDeadline = "Assignment Submission Before Deadline";
+$langForumPosts = "Forum Posts";
+$langCourseLogins = "Course Logins";
+$langCourseDuration = "Course Duration";

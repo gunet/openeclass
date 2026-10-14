@@ -1785,6 +1785,10 @@ session_start();
     foreach (array('shib_email', 'shib_uname', 'shib_cn', 'shib_surname',
                    'shib_givenname', 'shib_studentid') as $var) {
         if (isset($settings[$var]) and $settings[$var]) {
+            if (!preg_match('/^\$?_?SERVER\[["\'][A-Za-z0-9_.-]+["\']\]$/', $settings[$var])) {
+                Session::Messages("Invalid value for $var: <strong>" . q($settings[$var]) . "</strong>");
+                redirect_to_home_page('modules/admin/auth_process.php?auth=6');
+            }
             $filecontents .= '$_SESSION["' . $var . '"] = @' .
                 $settings[$var] . ";\n";
         }

@@ -178,12 +178,6 @@ function default_modules_collaboration() {
 }
 
 /**
- * @brief Import CADMOS file (.cdm) into course
- * @param string $code course code
- * @param string $filename CADMOS file path
- * @return boolean
- */
-/**
  * @brief Import CADMOS JSON data into course
  * @param int $course_id course ID
  * @param string $course_code course code
@@ -358,6 +352,12 @@ function import_cadmos_data($course_id, $course_code, $cadmos) {
     return true;
 }
 
+/**
+ * @brief Import CADMOS file (.cdm) into course
+ * @param string $code course code
+ * @param string $filename CADMOS file path
+ * @return boolean
+ */
 function import_cadmos_file($course_id, $course_code, $path) {
     global $webDir;
 
