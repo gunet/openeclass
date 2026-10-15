@@ -55,7 +55,7 @@
                                         <div class='card-body p-1 p-md-2'>
                                             <div class='w-100'>
 
-                                                {{-- 1η μέθοδος πιστοποίησης (πάντα επάνω, ανοιχτή, χωρίς accordion) --}}
+                                                {{-- 1st authentication method (always visible, expanded, no accordion) --}}
                                                 <div class='col-12 login-method-first'>
                                                     <div class='d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3'>
                                                         <h2 class='mb-0'>
@@ -90,7 +90,7 @@
                                                     </div>
                                                 </div>
 
-                                                {{-- Υπόλοιπες μέθοδοι πιστοποίησης σε accordion --}}
+                                                {{-- Additional authentication methods in an accordion --}}
                                                 @if (count($authLink) > 1)
                                                     <div class='col-12 my-3'>
                                                         <div id='or' class='ms-auto me-auto mb-2'>
