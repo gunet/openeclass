@@ -1764,7 +1764,7 @@ $langMultiCourseInfo = "Εισαγάγετε στην παρακάτω περι�
 του μετά τον τίτλο, διαχωρισμένο με το χαρακτήρα \"|\".";
 $langMultiCourseDeleteInfo = "Εισαγάγετε στην παρακάτω περιοχή μια λίστα με τους
 κωδικούς των $langsOfCourses που επιθυμείτε να διαγραφούν.";
-$langMultiCourseTitles = "Τίτλοι / Καθηγητές $langOfCourses";
+$langMultiCourseTitles = "Τίτλοι | Καθηγητές $langOfCourses";
 $langMultiCourseCodes = "Κωδικοί $langOfCourses";
 $langMultiCourseData = "Στοιχεία $langOfCourses";
 $langMultiCourseCreated = "το $langsCourse δημιουργήθηκε";
