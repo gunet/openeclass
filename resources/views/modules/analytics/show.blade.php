@@ -159,6 +159,11 @@
                                                             </div>
                                                             <div>
                                                                 <div class="fw-bold" style="color: #0f172a; font-size: 0.95rem;">{{ $element['title'] }}</div>
+                                                                @if (!empty($element['resource_title']))
+                                                                    <div class="text-muted small mt-1" style="color: #64748b; font-size: 0.85rem;">
+                                                                        {{ $element['resource_title'] }}
+                                                                    </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </td>

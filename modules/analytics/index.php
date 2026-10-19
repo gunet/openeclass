@@ -410,17 +410,18 @@ if (isset($_POST['insert_analytics'])) {
                 $m_id = $el->module_id;
                 $el_title = isset(ElementTypes::elements()[$m_id]) ? ElementTypes::elements()[$m_id]['title'] : '';
                 $el_icon = isset(ElementTypes::elements()[$m_id]) ? ElementTypes::elements()[$m_id]['icon'] : 'fa fa-chart-line';
+                $resource_title = get_resource_title($el->resource, $m_id);
                 $resource_info = get_resource_info($el->resource, $m_id);
 
                 $element_actions = action_button(array(
                     array(
                         'title' => $langModify ?? trans('langModify'),
-                        'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&amp;analytics_id={$analytics_id}&amp;analytics_element_id={$el->id}&amp;edit_analytics_element=true",
+                        'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&analytics_id={$analytics_id}&analytics_element_id={$el->id}&edit_analytics_element=true",
                         'icon' => 'fa-edit'
                     ),
                     array(
                         'title' => $langDelete ?? trans('langDelete'),
-                        'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&amp;analytics_id={$analytics_id}&amp;analytics_element_id={$el->id}&amp;delete_analytics_element=true",
+                        'url' => "{$urlAppend}modules/analytics/index.php?course={$course_code}&analytics_id={$analytics_id}&analytics_element_id={$el->id}&delete_analytics_element=true",
                         'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langAnalyticsConfirm ?? trans('langAnalyticsConfirm')
@@ -432,6 +433,7 @@ if (isset($_POST['insert_analytics'])) {
                     'module_id' => $m_id,
                     'title' => $el_title,
                     'icon' => $el_icon,
+                    'resource_title' => $resource_title,
                     'resource_info' => $resource_info,
                     'min_value' => $el->min_value,
                     'lower_threshold' => $el->lower_threshold,
