@@ -158,7 +158,7 @@ function view($view_file, $view_data = array())
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
     $open_group = 'active'; // Open first tool group by default
     if (isset($course_id) and !$is_mobile) {
-        $toolArr = courseToolsMenu($course_id);
+        $toolArr = courseToolsMenu();
         foreach ($toolArr['inactive'] as $tool) {
             if ($current_module_dir == module_path($tool['link'])) {
                 $open_group = 'inactive';
@@ -167,7 +167,7 @@ function view($view_file, $view_data = array())
     }
 
     if ($is_in_tinymce) {
-        $toolArr = pickerMenu();
+        $toolArr = pickerToolsMenu();
     }
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
