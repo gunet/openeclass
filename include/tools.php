@@ -114,18 +114,15 @@ function getExternalLinks() {
 
 
 /**
- * @brief Creates a multidimensional array of the user's tools
- * in regard to the user's user level
- * (student | professor | platform administrator)
+ * @brief Construct course tools menu. Used only in mobile API
  * @param bool $rich Whether to include rich text notifications in title
  * @return array
  */
-function lessonToolsMenu(bool $rich=true, $display_admin_menu = false): array
+function lessonToolsMenu(bool $rich=true): array
 {
     global $uid, $is_editor, $is_course_admin, $is_course_reviewer,
            $course_code, $modules, $urlAppend, $status, $course_id, $langCourseOptions,
-           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course,
-           $admin_modules, $langAdministrationTools, $langSyllabus;
+           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course;
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 

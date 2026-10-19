@@ -110,7 +110,7 @@
                                         @endforeach
                                     </table>
                                 @else
-                                    {{ trans('langNoInfoAvailable')}}
+                                    {{ trans('langNotExist')}}
                                 @endif
                             </div>
 
