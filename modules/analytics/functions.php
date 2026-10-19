@@ -453,7 +453,8 @@ function display_analytics_information($analytics_id) {
     $active_msg = $sql_data->active ? $langActive : $langInactive;
     $start_date = format_locale_date(strtotime($sql_data->start_date), 'short', false);
     $end_date = format_locale_date(strtotime($sql_data->end_date), 'short', false);
-    $periodType = periodType::periodType[$sql_data->periodType]['title'];
+    $periodTypes = PeriodType::periodType();
+    $periodType = isset($periodTypes[$sql_data->periodType]) ? $periodTypes[$sql_data->periodType]['title'] : '-';
 
     $tool_content .= "
         <div class='col-12'>
