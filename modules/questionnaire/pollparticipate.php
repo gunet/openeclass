@@ -63,6 +63,7 @@ $head_content .= "
 ";
 
 if (isset($_GET['from_session_view'])) {
+    session_exists(intval($_GET['session'] ?? 0));
     if (isset($_GET['session'])) {
         check_user_belongs_in_session($_GET['session']);
     }
@@ -1279,7 +1280,7 @@ function printPollForm() {
         $tool_content .= "<div class='col-12 d-flex justify-content-center mt-5'>";
         if ($is_editor && !isset($_GET['onBehalfOfUser'])) {
             if (isset($_GET['from_session_view'])) {
-                $tool_content .= "<a class='btn cancelAdminBtn' href='../session/session_space.php?course=$course_code&amp;cancelPoll=true&amp;session=$_GET[session]'>" . q($langBack) . "</a>";
+                $tool_content .= "<a class='btn cancelAdminBtn' href='../session/session_space.php?course=$course_code&amp;cancelPoll=true&amp;session=" . intval($_GET['session']) . "'>" . q($langBack) . "</a>";
             } else {
                 $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code&cancelPoll=true'>" . q($langBack) . "</a>";
             }
@@ -1310,7 +1311,7 @@ function printPollForm() {
                     $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>" . q($langCancel) . "</a>";
                 } else {
                     if (isset($_GET['from_session_view'])) {
-                        $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../session/session_space.php?course=$course_code&amp;cancelPoll=true&amp;session=$_GET[session]'>" . q($langCancel). "</a>";
+                        $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='../session/session_space.php?course=$course_code&amp;cancelPoll=true&amp;session=" . intval($_GET['session']) . "'>" . q($langCancel). "</a>";
                     } else {
                         $tool_content .= "<a class='btn cancelAdminBtn ms-3' href='index.php?course=$course_code&cancelPoll=true'>" . q($langCancel) . "</a>";
                     }
@@ -1668,7 +1669,7 @@ function submitPoll() {
             $tool_content .= "<a class='btn cancelAdminBtn' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>$langBack</a>";
         } else if (isset($_REQUEST['res_type'])) {
             if (isset($_GET['from_session_view'])) {
-                $tool_content .= "<a class='btn btn-primary' href='../session/session_space.php?course=$course_code&amp;session=$_GET[session]'>$langBack</a>";
+                $tool_content .= "<a class='btn btn-primary' href='../session/session_space.php?course=$course_code&amp;session=" . intval($_GET['session']) . "'>$langBack</a>";
             } else {
                 $tool_content .= "<a class='btn btn-primary' href='../wall/index.php?course=$course_code'>$langBack</a>";
             }

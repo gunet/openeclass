@@ -41,6 +41,7 @@ $pageName = $langPollCharts;
 $sID = 0;
 if (isset($_GET['from_session_view'])) {
     $sID = $_GET['session'] ?? 0;
+    session_exists($sID);
     if (isset($_GET['session'])) {
         check_user_belongs_in_session($_GET['session']);
     }

@@ -1349,10 +1349,20 @@ function check_activation_of_collaboration(){
 }
 
 function session_exists($sid){
-    global $course_code;
-    $result = Database::get()->queryArray("SELECT * FROM mod_session WHERE id =?d",$sid);
-    if(count($result) == 0){
-        redirect_to_home_page("modules/session/index.php?course=".$course_code);
+    global $course_id;
+
+    if (!isset($_GET['session']) && !isset($_GET['id'])) {
+        forbidden();
+    }
+
+    if (!is_scalar($sid) || filter_var($sid, FILTER_VALIDATE_INT) === false || (int) $sid < 0) {
+        forbidden();
+    }
+
+    $result = Database::get()->querySingle("SELECT id FROM mod_session WHERE id = ?d AND course_id = ?d", $sid, $course_id);
+
+    if (!$result) {
+        forbidden();
     }
 }
 
