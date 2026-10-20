@@ -448,7 +448,7 @@ function printPollForm() {
                 // Clean question from session data
                 var qQuestion = $(this).attr('data-question-clean');
                 $.ajax({
-                    url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
+                    url: '{$urlAppend}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid',
                     method: 'POST',
                     data: { clean_question_id: qQuestion, clean_sub_question_id: sSubq },
                 });
@@ -460,7 +460,7 @@ function printPollForm() {
         $(function() {
             function save_data(callback) {
                 var obj = {};
-                var checkBoxesVal = [];
+                var checkBoxesVal = {};
                 document.querySelectorAll('[data-question-type]').forEach(function(elem) {
                     if (elem) {
                         var qType = $(elem).attr('data-question-type');
@@ -484,9 +484,11 @@ function printPollForm() {
                                 if (!obj[qRow]) {
                                     obj[qRow] = {};
                                 }
-                                checkBoxesVal.push(elem.value);
-                                const result = checkBoxesVal.join(',');
-                                obj[qRow] = result;
+                                if (!checkBoxesVal[qRow]) {
+                                    checkBoxesVal[qRow] = [];
+                                }
+                                checkBoxesVal[qRow].push(elem.value);
+                                obj[qRow] = checkBoxesVal[qRow].join(',');
                             }
                         } else if (qType == 6) { // table
                             if (foundNumbers.length == 2 && elem.value != '') {
@@ -502,7 +504,7 @@ function printPollForm() {
                 });
                 // Send data via AJAX
                 $.ajax({
-                    url: '$_SERVER[SCRIPT_NAME]?course=$course_code&UseCase=1&pid=$pid',
+                    url: '{$urlAppend}modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid',
                     method: 'POST',
                     data: { data_answers: obj },
                     success: function(response) {
