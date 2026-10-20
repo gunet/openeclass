@@ -208,7 +208,7 @@ if ($is_consultant) {
             Session::flash('alert-class', 'alert-success');
         }
 
-        redirect_to_home_page($_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=$_GET[session]");
+        redirect_to_home_page($_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&session=" . intval($_GET['session']) . "");
     }
 
 

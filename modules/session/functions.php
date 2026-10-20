@@ -632,7 +632,7 @@ function show_session_poll($title, $comments, $resource_id, $poll_id, $visibilit
                                                                                  AND is_accepted = 1)
                                                                      AND session_id = ?d", $poll->pid, $_GET['session'], $_GET['session'])->total;
             if ($poll->show_results && $poll_user_answers_count >0) {
-                $poll_results_link = "</br></br><a class='link-color small-text' href='../questionnaire/pollresults.php?course=$course_code&session=$_GET[session]&pid={$poll->pid}&from_session_view=true'><i class='fa-solid fa-chart-line'></i>&nbsp;$langUsersAnswers</a>)";
+                $poll_results_link = "</br></br><a class='link-color small-text' href='../questionnaire/pollresults.php?course=$course_code&session=" . intval($_GET['session']) . "&pid={$poll->pid}&from_session_view=true'><i class='fa-solid fa-chart-line'></i>&nbsp;$langUsersAnswers</a>)";
             }
         }
     }
@@ -656,7 +656,7 @@ function show_session_poll($title, $comments, $resource_id, $poll_id, $visibilit
                 $res_prereq_icon = icon('fa-star', $langResourceBelongsToSessionPrereq);
             }
         }
-        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;session=$_GET[session]&amp;from_session_view=true'>";
+        $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;session=" . intval($_GET['session']) . "&amp;from_session_view=true'>";
         $polllink = $link . $title . '</a>';
         $imagelink = $link . "</a>" . icon('fa-question-circle') . "";
     }
@@ -773,7 +773,7 @@ function show_session_doc($title, $comments, $resource_id, $file_id) {
         if ($file->format == '.dir') {
             $image = 'fa-folder-open';
             $download_hidden_link = '';
-            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;session=$_GET[session]'>" .
+            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;session=" . intval($_GET['session']) . "'>" .
                 q($title) . "</a>";
         } else {
             $image = choose_image('.' . $file->format);
@@ -827,7 +827,7 @@ function show_session_reference_doc($title, $comments, $resource_id, $file_id) {
         if ($file->format == '.dir') {
             $image = 'fa-folder-open';
             $download_hidden_link = '';
-            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;session=$_GET[session]'>" .
+            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;session=" . intval($_GET['session']) . "'>" .
                 q($title) . "</a>";
         } else {
             $image = choose_image('.' . $file->format);
@@ -922,7 +922,7 @@ function show_session_work($title, $comments, $resource_id, $work_id, $visibilit
             $class = $exclamation_icon = '';
         }
 
-        $link = "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;session=$_GET[session]' $class>";
+        $link = "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;res_type=assignment&amp;id=$work_id&amp;session=" . intval($_GET['session']) . "' $class>";
         $exlink = $link . "$title</a> $exclamation_icon";
         $imagelink = $link . "</a>".icon('fa-flask')."";
     }
@@ -1235,23 +1235,23 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
                                         'icon' => 'fa-download',
                                         'show' => ($res_type == 'doc' or $res_type == 'doc_reference')),
                                     array('title' => $showorhideMessage,
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=$_GET[session]&amp;res_id=$resource_id&amp;vis_res=$vis_res_val",
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;session=" . intval($_GET['session']) . "&amp;res_id=$resource_id&amp;vis_res=$vis_res_val",
                                         'icon' => $showorhideIcon,
                                         'show' => ($res_type != 'doc_reference')),
                                     array('title' => $langSubmissionOnBehalfOfUser,
-                                          'url' => $urlServer . "modules/questionnaire/pollparticipate.php?course=$course_code&amp;UseCase=1&amp;session=$_GET[session]&amp;pid=$poll_id&amp;res_type=questionnaire&amp;from_session_view=true&amp;onBehalfOfUser=true",
+                                          'url' => $urlServer . "modules/questionnaire/pollparticipate.php?course=$course_code&amp;UseCase=1&amp;session=" . intval($_GET['session']) . "&amp;pid=$poll_id&amp;res_type=questionnaire&amp;from_session_view=true&amp;onBehalfOfUser=true",
                                           'icon' => 'fa-solid fa-user-plus',
                                           'show' => ($res_type == 'poll')),
                                     array('title' => $langUsersAnswers,
-                                        'url' => $urlServer . "modules/questionnaire/pollresults.php?course=$course_code&amp;session=$_GET[session]&amp;pid=$poll_id&amp;from_session_view=true",
+                                        'url' => $urlServer . "modules/questionnaire/pollresults.php?course=$course_code&amp;session=" . intval($_GET['session']) . "&amp;pid=$poll_id&amp;from_session_view=true",
                                         'icon' => 'fa-line-chart',
                                         'show' => ($status != 'del' && $res_type != 'doc_reference' && $poll_id > 0 && $exist_answers)),
                                     array('title' => $langCommentsByConsultant,
-                                        'url' => $urlServer . "modules/session/poll_comments.php?course=$course_code&amp;session=$_GET[session]&amp;pid=$poll_id",
+                                        'url' => $urlServer . "modules/session/poll_comments.php?course=$course_code&amp;session=" . intval($_GET['session']) . "&amp;pid=$poll_id",
                                         'icon' => 'fa-comments',
                                         'show' => ($status != 'del' && $res_type != 'doc_reference' && $poll_id > 0)),
                                     array('title' => $langPurgeExercises,
-                                        'url' => $urlServer . "modules/questionnaire/pollresults.php?course=$course_code&amp;session=$_GET[session]&amp;pid=$poll_id&amp;from_session_view=true&amp;del_user_answers=true",
+                                        'url' => $urlServer . "modules/questionnaire/pollresults.php?course=$course_code&amp;session=" . intval($_GET['session']) . "&amp;pid=$poll_id&amp;from_session_view=true&amp;del_user_answers=true",
                                         'icon' => 'fa-trash',
                                         'class' => 'delete',
                                         'confirm' => $langConfirmDelete,
@@ -1289,11 +1289,11 @@ function session_actions($res_type, $resource_id, $status, $res_id = false) {
                             <div class='d-flex justify-content-end align-items-center gap-3 w-100'>";
                     $content .= action_button(array(
                                     array('title' => $langCommentsByConsultant,
-                                        'url' => $urlServer . "modules/session/poll_comments.php?course=$course_code&amp;session=$_GET[session]&amp;pid=$poll_id",
+                                        'url' => $urlServer . "modules/session/poll_comments.php?course=$course_code&amp;session=" . intval($_GET['session']) . "&amp;pid=$poll_id",
                                         'icon' => 'fa-comments',
                                         'show' => ($status != 'del' && $res_type != 'doc_reference' && $poll_id > 0)),
                                     array('title' => $langUsersAnswers,
-                                        'url' => $urlServer . "modules/questionnaire/pollresults.php?course=$course_code&amp;session=$_GET[session]&amp;pid=$poll_id&amp;from_session_view=true",
+                                        'url' => $urlServer . "modules/questionnaire/pollresults.php?course=$course_code&amp;session=" . intval($_GET['session']) . "&amp;pid=$poll_id&amp;from_session_view=true",
                                         'icon' => 'fa-line-chart',
                                         'show' => ($status != 'del' && $res_type != 'doc_reference' && $poll_id > 0 && $existAnswers))
                                 ));
@@ -3227,7 +3227,7 @@ function display_session_available_polls($element, $element_id, $session_id = 0,
             $tool_content .= "<tr>";
             $tool_content .= "<td>
                                 &nbsp;".icon('fa-question-circle')."&nbsp;&nbsp;
-                                <a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$entry[id]&amp;UseCase=1&amp;session=$_GET[session]&amp;from_session_view=true'>
+                                <a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$entry[id]&amp;UseCase=1&amp;session=" . intval($_GET['session']) . "&amp;from_session_view=true'>
                                     " . q($entry['title']) . "
                                 </a>";
                                 if (!empty($entry['description'])) {

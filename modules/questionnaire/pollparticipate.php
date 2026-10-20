@@ -555,6 +555,9 @@ function printPollForm() {
         $_SESSION['onBehalfOfUserId'] = intval($_POST['userSelected']);
         unset($_SESSION['loop_init_answers_session']);
     }
+    if (isset($_GET['emptyQ']) && isset($_GET['su']) && isset($_GET['from_session_view'])) {
+        $_SESSION['onBehalfOfUserId'] = intval($_GET['su']);
+    }
     $userDefault = $_SESSION['onBehalfOfUserId'] ?? $uid;
 
     $pid = $_REQUEST['pid'];
@@ -689,10 +692,6 @@ function printPollForm() {
                                                                  AND mod_session_users.is_accepted = ?d", intval($_GET['session']), 1);
 
             $actionPoll = $urlAppend . "modules/units/view.php?course=$course_code&res_type=questionnaire&pid=$pid&UseCase=1&session=" . intval($_GET['session']) . "&from_session_view=true&onBehalfOfUser=true";
-            $disabledUserSelection = '';
-            if (isset($_GET['emptyQ'])) {
-                $disabledUserSelection = 'disabled';
-            }
             $tool_content .= "
                 <div class='col-12 mb-4'>
                     <div class='card panelCard card-default px-lg-4 py-lg-3 mb-4'>
@@ -701,14 +700,14 @@ function printPollForm() {
                         </div>
                         <div class='card-body'>
                             <form id='onBehalfOfSelectionForm' method='post' action='$actionPoll'>
-                                <select id='onBehalfOfSelection' class='form-select' name='userSelected' $disabledUserSelection>";
+                                <select id='onBehalfOfSelection' class='form-select' name='userSelected'>";
                                     $tool_content .= "<option value='0' selected>$langSelect</option>";
                                     foreach ($session_participants as $p) {
                                         $tool_content .= "<option value='{$p->participants}' " . ($userDefault == $p->participants ? 'selected' : '') . ">{$p->givenname}&nbsp;{$p->surname}</option>";
                                     }
             $tool_content .= " </select>
                             </form>";
-                            if ($userDefault > 0) {
+                            if (isset($_SESSION['onBehalfOfUserId']) && $_SESSION['onBehalfOfUserId'] != $uid) {
                                 $tool_content .= "
                                 <div class='d-flex justify-content-start align-items-center gap-3 mt-3 flex-wrap'>
                                     $langProcessForFiliInTool
@@ -1037,7 +1036,7 @@ function printPollForm() {
                                             $text = '';
                                             $QText = Database::get()->querySingle("SELECT question_text FROM poll_question WHERE pqid = ?d", $theAnswer->sub_qid)->question_text;
                                             if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$theAnswer->sub_qid])) {
-                                                $text = $_SESSION['data_answers'][$theAnswer->sub_qid];
+                                                $text = q($_SESSION['data_answers'][$theAnswer->sub_qid]);
                                             }
                                             $tool_content .= "
                                             <p tabindex='0' class='TextMedium Neutral-900-cl mb-2'>$QText</p>
@@ -1102,7 +1101,7 @@ function printPollForm() {
                             } elseif ($qtype == QTYPE_FILL) {
                                 $text = '';
                                 if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
-                                    $text = $_SESSION['data_answers'][$pqid];
+                                    $text = q($_SESSION['data_answers'][$pqid]);
                                 }
                                 $tool_content .= "
                                     <div class='form-group margin-bottom-fat'>
@@ -1151,7 +1150,7 @@ function printPollForm() {
                                                                     $ansCounter = $ansCounter+1;
                                                                     $text = '';
                                                                     if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$theQuestion->pqid][$ansCounter])) {
-                                                                        $text = $_SESSION['data_answers'][$theQuestion->pqid][$ansCounter];
+                                                                        $text = q($_SESSION['data_answers'][$theQuestion->pqid][$ansCounter]);
                                                                     }
                                                                     if ($pageBreakExists) {
                                                                         $_SESSION['q_row_columns'][$pqid][] = "$pqid,$val_row,$val_col,$ansCounter";
@@ -1176,7 +1175,7 @@ function printPollForm() {
                             } elseif ($qtype == QTYPE_DATETIME || $qtype == QTYPE_SHORT || $qtype == QTYPE_DATE) {
                                 $text = '';
                                 if (isset($_SESSION['data_answers']) && !empty($_SESSION['data_answers'][$pqid])) {
-                                    $text = $_SESSION['data_answers'][$pqid];
+                                    $text = q($_SESSION['data_answers'][$pqid]);
                                 }
 
                                 if ($qtype == QTYPE_DATETIME) {

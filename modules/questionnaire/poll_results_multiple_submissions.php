@@ -170,13 +170,13 @@ if (isset($_GET['from_session_view'])) {
                         'show' => isset($_REQUEST['unit_id'])
                     ),
                     array('title' => $langDumpPDF,
-                          'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;session=$_GET[session]&amp;from_session_view=true&amp;format=poll_pdf$qform_param$qform_user_param$qform_submission_param",
+                          'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;pid=$pid&amp;session=" . intval($_GET['session']) . "&amp;from_session_view=true&amp;format=poll_pdf$qform_param$qform_user_param$qform_submission_param",
                           'icon' => 'fa-solid fa-file-pdf',
                           'level' => 'primary-label',
                           'link-attrs' => "target='_blank'",
                           'show' => $is_course_reviewer),
                     array('title' => $langPollFullResults,
-                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;dumppoll_session=true&amp;session=$_GET[session]$qform_dump_param$qform_user_dump_param$qform_submission_dump_param",
+                          'url' => "dumppollresults_multiple_submissions.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;dumppoll_session=true&amp;session=" . intval($_GET['session']) ."$qform_dump_param$qform_user_dump_param$qform_submission_dump_param",
                           'icon' => 'fa-download',
                           'level' => 'primary-label',
                           'show' => $is_course_reviewer)

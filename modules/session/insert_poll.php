@@ -72,7 +72,7 @@ function list_session_polls($sid,$cid) {
             }
             $tool_content .= "<tr>";
             $tool_content .= "<td style='width:100px;'><label class='label-container' aria-label='$langSelect'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
-            $tool_content .= "<td><a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$entry[id]&amp;UseCase=1&amp;session=$_GET[session]&amp;from_session_view=true'>" . q($entry['title']) . "</a>$description_text</td>";
+            $tool_content .= "<td><a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$entry[id]&amp;UseCase=1&amp;session=" . intval($_GET['session']) . "&amp;from_session_view=true'>" . q($entry['title']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
