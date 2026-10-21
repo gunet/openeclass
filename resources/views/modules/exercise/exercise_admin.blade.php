@@ -1,5 +1,12 @@
 @extends('layouts.default')
 
+@push('head_styles')
+    <style>
+        #exerciseReviewAccordion .accordion-button.accordion-button-static { cursor: default; }
+        #exerciseReviewAccordion .accordion-button.accordion-button-static::after { display: none !important; content: none !important; }
+    </style>
+@endpush
+
 @section('content')
 
     <div class='{{ $container }} module-container py-lg-0'>
@@ -28,12 +35,9 @@
 
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header">
-                                                        <button class="accordion-button"
+                                                        <button class="accordion-button accordion-button-static"
                                                                 type="button"
-                                                                data-bs-toggle="collapse"
-                                                                data-bs-target="#reviewBasic"
-                                                                aria-expanded="true"
-                                                                aria-controls="reviewBasic">
+                                                                tabindex="-1">
                                                             <span class="accordion-icon">
                                                                 <i class="fa-solid fa-file-lines"></i>
                                                             </span>
@@ -47,7 +51,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="reviewBasic" class="accordion-collapse collapse show">
+                                                    <div id="reviewBasic" class="accordion-collapse">
                                                         <div class="accordion-body">
                                                             <div class='form-group @if (Session::getError('exerciseTitle')) ? has-error @endif '>
                                                                 <label for='exerciseTitle' class='col-12 control-label-notes mb-1'>
@@ -117,7 +121,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="reviewTime" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                    <div id="reviewTime" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
                                                             <div class='input-append date form-group @if (Session::getError('exerciseStartDate')) has-error @endif'
                                                                 id='startdatepicker' data-date='{{ $exerciseStartDate }}'
@@ -233,7 +237,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="reviewAssessment" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                    <div id="reviewAssessment" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
                                                             <div class='form-group'>
                                                                 <label for='exerciseRangeId'
@@ -336,7 +340,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="reviewComments" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                    <div id="reviewComments" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
                                                             <div class='form-group mb-4'>
                                                                 <label for='exerciseEndMessage' class='col-12 control-label-notes mb-1'>{{ trans('langEndMessage') }}
@@ -418,7 +422,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="reviewAccess" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                    <div id="reviewAccess" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
                                                             <div class='form-group'>
                                                                 <div class='control-label-notes mb-1'>{{ trans('langWorkAssignTo') }}</div>
@@ -554,7 +558,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="reviewAttempt" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                    <div id="reviewAttempt" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
                                                             <div class='form-group' id='exerciseTempSaveDiv'>
                                                                 <div class='col-12 control-label-notes mb-2'>
@@ -649,7 +653,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="reviewSettings" class="accordion-collapse collapse" data-bs-parent="#exerciseReviewAccordion">
+                                                    <div id="reviewSettings" class="accordion-collapse collapse">
                                                         <div class="accordion-body">    
                                                             <div class='form-group'>
                                                                 <p class="form-label">{{ trans('langActivateExamMode') }}</p>

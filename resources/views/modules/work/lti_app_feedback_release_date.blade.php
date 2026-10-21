@@ -1,5 +1,5 @@
 @if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id))
-    <div class='row input-append date form-group {{ $work_feedback_release_hidden }} {{ $work_feedback_release_haserror }} mt-4' id='feedbackreleasedatepicker' data-date='{{ $WorkFeedbackRelease }}' data-date-format='dd-mm-yyyy'>
+    <div class='row input-append date form-group {{ $work_feedback_release_hidden }} {{ $work_feedback_release_haserror }} mt-3' id='feedbackreleasedatepicker' data-date='{{ $WorkFeedbackRelease }}' data-date-format='dd-mm-yyyy'>
         <label for='tii_feedbackreleasedate' class='col-12 control-label-notes mb-1'>{{ trans('langTiiFeedbackReleaseDate') }}</label>
         <div class='col-12'>
             <div class='input-group'>

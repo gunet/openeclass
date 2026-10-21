@@ -2,6 +2,10 @@
 
 @push('head_styles')
     <link href="{{ $urlAppend }}js/jstree/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
+    <style>
+        #courseCreateAccordion .accordion-button.accordion-button-static { cursor: default; }
+        #courseCreateAccordion .accordion-button.accordion-button-static::after { display: none !important; content: none !important; }
+    </style>
 @endpush
 
 @push('head_scripts')
@@ -941,12 +945,9 @@
 
                         <div class="accordion-item">
                             <h2 class="accordion-header">
-                                <button class="accordion-button"
+                                <button class="accordion-button accordion-button-static"
                                         type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#courseBasic"
-                                        aria-expanded="true"
-                                        aria-controls="courseBasic">
+                                        tabindex="-1">
                                     <span class="accordion-icon">
                                         <i class="fa-solid fa-file-lines"></i>
                                     </span>
@@ -960,7 +961,7 @@
                                     </span>
                                 </button>
                             </h2>
-                            <div id="courseBasic" class="accordion-collapse collapse show" data-bs-parent="#courseCreateAccordion">
+                            <div id="courseBasic" class="accordion-collapse">
                                 <div class="accordion-body">
                                     <div class='form-group'>
                                         <label for='title' class='col-12 control-label-notes'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>{{ trans('langCompulsory') }}</span>@if (isset($is_cadmos) && $is_cadmos) <span class='badge bg-primary ms-2'>Cadmos</span>@endif</label>
@@ -1018,7 +1019,7 @@
                                     </span>
                                 </button>
                             </h2>
-                            <div id="courseDescription" class="accordion-collapse collapse" data-bs-parent="#courseCreateAccordion">
+                            <div id="courseDescription" class="accordion-collapse collapse">
                                 <div class="accordion-body">
                                     <div id='image_field' class='row form-group'>
                                         <label for='course_image' class='col-12 control-label-notes'>{{ trans('langCourseImage') }}</label>
@@ -1081,7 +1082,7 @@
                                     </span>
                                 </button>
                             </h2>
-                            <div id="courseFormat" class="accordion-collapse collapse" data-bs-parent="#courseCreateAccordion">
+                            <div id="courseFormat" class="accordion-collapse collapse">
                                 <div class="accordion-body">
                                     @if(get_config('show_collaboration') && !get_config('show_always_collaboration'))
                                         <div class='form-group mt-4'>
@@ -1178,21 +1179,17 @@
                                     </span>
                                     <span class="accordion-title">
                                         <span class="accordion-title-text">
-                                            {{ trans('langCourseAccessReg') }}
+                                            {{ trans('langCourseAccessTypeTitle') }}
                                         </span>
                                         <small class="accordion-subtitle">
-                                            {{ trans('langCourseAccessRegInfo') }}
+                                            {{ trans('langCourseAccessTypeInfo') }}
                                         </small>
                                     </span>
                                 </button>
                             </h2>
-                            <div id="courseAccess" class="accordion-collapse collapse" data-bs-parent="#courseCreateAccordion">
+                            <div id="courseAccess" class="accordion-collapse collapse">
                                 <div class="accordion-body">
-                                    <div class='form-group'>
-                                        <div class='col-sm-12 control-label-notes mb-2'>
-                                            {{ trans('langAccess') }}
-                                        </div>
-                
+                                    <div class='form-group' role='radiogroup' aria-label="{{ trans('langAccess') }}">
                                         <div class='radio mb-3'>
                                             <label>
                                                 <input class='input-StatusCourse' id='courseopen' type='radio' name='formvisible' value='2'
@@ -1233,9 +1230,35 @@
                                             <div class='help-block'>{{ trans('langCourseInactive') }}</div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
 
-                                    <div class='form-group mt-3' id="course_password_panel">
-                                        <div class='checkbox mb-2 mt-4'>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#courseRegistrations"
+                                        aria-expanded="false"
+                                        aria-controls="courseRegistrations">
+                                    <span class="accordion-icon">
+                                        <i class="fa-solid fa-user-plus"></i>
+                                    </span>
+                                    <span class="accordion-title">
+                                        <span class="accordion-title-text">
+                                            {{ trans('langCourseRegistrationsTitle') }}
+                                        </span>
+                                        <small class="accordion-subtitle">
+                                            {{ trans('langCourseRegistrationsInfo') }}
+                                        </small>
+                                    </span>
+                                </button>
+                            </h2>
+                            <div id="courseRegistrations" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    <div class='form-group' id="course_password_panel">
+                                        <div class='checkbox mb-2'>
                                             <label class='label-container' aria-label="{{ trans('langSelect') }}">
                                                 <input type='checkbox' id='faculty_users_registration' name='faculty_users_registration'>
                                                 <span class='checkmark'></span>{{ trans('langFacultyUsersRegistrationLegend') }}
@@ -1318,7 +1341,7 @@
                                     </span>
                                 </button>
                             </h2>
-                            <div id="courseDuration" class="accordion-collapse collapse" data-bs-parent="#courseCreateAccordion">
+                            <div id="courseDuration" class="accordion-collapse collapse">
                                 <div class="accordion-body">
                                     <div class='row input-append date form-group'>
                                         <label for='courseStartDate' class='col-12 control-label-notes mb-1'>
@@ -1384,7 +1407,7 @@
                                     </span>
                                 </button>
                             </h2>
-                            <div id="courseLicense" class="accordion-collapse collapse" data-bs-parent="#courseCreateAccordion">
+                            <div id="courseLicense" class="accordion-collapse collapse">
                                 <div class="accordion-body">
                                     <div class='form-group'>
                                       <div class='col-sm-12 control-label-notes mb-2'>

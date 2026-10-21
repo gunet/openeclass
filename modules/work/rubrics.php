@@ -84,11 +84,18 @@ if (isset($_GET['delete'])) { // delete rubric
     redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
 }
 
-if (isset($_REQUEST['rubric_id'])) {
+if (!empty($_REQUEST['rubric_id'])) {
     $rubric_data = Database::get()->querySingle("SELECT * FROM rubric WHERE id = ?d AND course_id = ?d", $_REQUEST['rubric_id'], $course_id);
+    if (!$rubric_data) {
+        unset($rubric_data);
+    }
 }
 
 if (isset($_POST['submitRubric'])) {
+    // where to return on error: the edited rubric, or an empty new rubric form
+    $rubric_form_url = empty($_POST['rubric_id'])
+        ? "modules/work/rubrics.php?course=$course_code&new_rubric=true"
+        : "modules/work/rubrics.php?course=$course_code&rubric_id=" . intval($_POST['rubric_id']);
     if (isset($_POST['rubric_id']) and is_rubric_used_in_grading($_POST['rubric_id'], $course_id)) { // rubric is used in assignments. Only updating options are allowed.
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('name'));
@@ -106,7 +113,7 @@ if (isset($_POST['submitRubric'])) {
             redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$_REQUEST[rubric_id]");
+            redirect_to_home_page($rubric_form_url);
         }
     } else {
         $v = new Valitron\Validator($_POST);
@@ -133,9 +140,10 @@ if (isset($_POST['submitRubric'])) {
                 $sum_weight += $criteria[$crit]['crit_weight'];
             }
             if ($sum_weight != 100) {
+                Session::flashPost();
                 Session::flash('message', $langRubricWeight);
                 Session::flash('alert-class', 'alert-warning');
-                redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$_REQUEST[rubric_id]");
+                redirect_to_home_page($rubric_form_url);
             } else {
                 $serialized_criteria = serialize($criteria);
                 $preview_rubric = isset($_POST['options0']) ? 1 : 0;
@@ -151,7 +159,7 @@ if (isset($_POST['submitRubric'])) {
             redirect_to_home_page("modules/work/rubrics.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/work/rubrics.php?course=$course_code&rubric_id=$_REQUEST[rubric_id]");
+            redirect_to_home_page($rubric_form_url);
         }
     }
 }
@@ -207,6 +215,21 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                 del_scale($(this));
             });
 
+            $('#rubric_form').on('submit', function(e) {
+                var weights = $(this).find('input[name^=\'weight[\']');
+                if (!weights.length) {
+                    return;
+                }
+                var sum = 0;
+                weights.each(function() {
+                    sum += parseFloat($(this).val()) || 0;
+                });
+                if (sum != 100) {
+                    e.preventDefault();
+                    bootbox.alert('" . js_escape($langRubricWeight) . " (' + sum + '%)');
+                }
+            });
+
             $('#addCriteria').on('click', function() {
                 if(j==-1) {
                    j=$(\"div[id^='critDiv']\").length;
@@ -222,11 +245,11 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                         '<div class=\'form-group\'>'+
                         '   <label for=\'title\' class=\'col-12 control-label-notes mb-1\'>". js_escape($langRubricCritTitle). "</label>'+
                         '    <div class=\'col-12\'>'+
-                        '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+
+                        '      <input name=\'title['+j+']\' class=\'form-control\' value=\'\' type=\'text\' required> '+
                         '    </div>'+
                         '    <label for=\'weight\' class=\'col-12 control-label-notes mb-1 mt-4\'>" . js_escape($langGradebookWeight). " (%)</label>'+
                         '    <div class=\'col-12 mt-0\'>'+
-                        '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+
+                        '      <input name=\'weight['+j+']\' class=\'form-control\' value=\'\' type=\'number\' required> '+
                         '    </div>'+
                         '</div>'+
                         '<div class=\'form-group mt-4\'>'+
@@ -403,12 +426,12 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     <div class='form-group" . (Session::getError('title') ? " has-error" : "") . "'>
                         <label for='title' class='col-sm-12 control-label-notes'>$langRubricCritTitle</label>
                         <div class='col-sm-12'>
-                          <input name='title[]' type='text' class='form-control' id='title' value='$title' required>
+                          <input name='title[0]' type='text' class='form-control' id='title' value='$title' required>
                           " . (Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "") . "
                         </div>
                         <label for='weight' class='col-sm-12 control-label-notes mt-4'>$langGradebookWeight (%)</label>
                         <div class='col-sm-12'>
-                            <input name='weight[]' class='form-control' id='weight' value='" . q($title['crit_weight']) . "' type='number' required>
+                            <input name='weight[0]' class='form-control' id='weight' value='" . q($title['crit_weight']) . "' type='number' required>
                         </div>
                     </div>
                     <div class='form-group mt-4'>

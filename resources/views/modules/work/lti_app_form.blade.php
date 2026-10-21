@@ -1,8 +1,8 @@
 @if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id))
     {{-- {!! $divs_for_lti_templates !!} --}}
 
-    <div class='row form-group mt-4'>
-        <div class='col-12 control-label-notes mb-1'>{{ trans('langAssignmentType') }}</div>
+    <div class='row form-group'>
+        <div class='col-12 control-label-notes mb-1'>{{ trans('langAssignmentPlatform') }}</div>
         <div class='{{ $assignment_type_radios_class }}'>
 
             @php
@@ -38,9 +38,9 @@
         </div>
     </div>
 
-    <div class='col-12 form-group {{ $lti_hidden }} mt-4 mb-4 p-3' id='lti_label' style='box-shadow: 0 0 10px 0 rgba(0,0,0,0.1); padding-top:10px; padding-bottom:10px;'>
+    <div class='col-12 form-group {{ $lti_hidden }} mt-3 mb-4 p-3' id='lti_label' style='box-shadow: 0 0 10px 0 rgba(0,0,0,0.1); padding-top:10px; padding-bottom:10px;'>
         <div class='{{ $ltiopts_div_class  }}'>{{ trans('langLTIOptions') }}</div>
-        <div class='form-group {{ $lti_hidden }} mt-4'>
+        <div class='form-group {{ $lti_hidden }} mt-3'>
             <label for='lti_templates' class='{{ $tiiapp_label_class }}'>{{ trans('langTiiApp') }}</label>
             <div class='{{ $lti_template_div_class }}'>
                 <select name='lti_template' class='form-select' id='lti_templates' {{ $lti_disabled }} @if (isset($assignment_id) && !empty($tii_selected_content)) disabled @endif>
@@ -51,7 +51,7 @@
                 @endif
             </div>
         </div>
-        <div class='form-group mt-4' id='SelectContentModalDiv'>
+        <div class='form-group mt-3' id='SelectContentModalDiv'>
             <div class='col-sm-12'>
                 @if (!isset($assignment_id) || empty($tii_selected_content))
                 <button type='button' class='btn submitAdminBtn' style='display: inline; margin-bottom: 10px; margin-right: 10px;' data-bs-toggle='modal' data-bs-target='#SelectContentModal'>{{ trans('langTiiSelectContent') }}</button>
@@ -74,7 +74,7 @@
               </select>
             </div>
         </div> -->
-        <div class='form-group {{ $lti_hidden }} mt-4'>
+        <div class='form-group {{ $lti_hidden }} mt-3'>
             <div class='{{ $tii_compare_against_div_class }}'>{{ trans('langTiiCompareAgainst') }}</div>
             <div class='col-sm-12'>
                 <div class='checkbox'>
@@ -107,7 +107,7 @@
                 </div>-->
             </div>
         </div>
-        <div class='form-group {{ $lti_hidden }} mt-4'>
+        <div class='form-group {{ $lti_hidden }} mt-3'>
             <label for='tii_report_gen_speed' class='{{ $tii_report_gen_speed_label_class }}'>{{ trans('langTiiSimilarityReport') }}</label>
             <div class='col-sm-12'>
                 <select name='tii_report_gen_speed' class='form-select' id='tii_report_gen_speed' {{ $lti_disabled }}>

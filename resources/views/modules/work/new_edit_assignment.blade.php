@@ -1,5 +1,14 @@
 @extends('layouts.default')
 
+@push('head_styles')
+    <style>
+        #workAccordion .accordion-button.accordion-button-static { cursor: default; }
+        #workAccordion .accordion-button.accordion-button-static::after { display: none !important; content: none !important; }
+        #workGrading .radio label:has(input[type='radio']:disabled) { color: #9CA3AF; opacity: 0.6; cursor: not-allowed; }
+        #workGrading .radio input[type='radio']:disabled { cursor: not-allowed; }
+    </style>
+@endpush
+
 @section('content')
 <div class='{{ $container }} module-container py-lg-0'>
     <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
@@ -31,12 +40,9 @@
 
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header">
-                                                        <button class="accordion-button"
+                                                        <button class="accordion-button accordion-button-static"
                                                                 type="button"
-                                                                data-bs-toggle="collapse"
-                                                                data-bs-target="#workBasic"
-                                                                aria-expanded="true"
-                                                                aria-controls="workBasic">
+                                                                tabindex="-1">
                                                             <span class="accordion-icon">
                                                                 <i class="fa-solid fa-file-lines"></i>
                                                             </span>
@@ -50,7 +56,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="workBasic" class="accordion-collapse collapse show" data-bs-parent="#workAccordion">
+                                                    <div id="workBasic" class="accordion-collapse">
                                                         <div class="accordion-body">
                                                                 <div class='row form-group @if($title_error) has-error @endif'>
                                                                     <label for='title' class='col-12 control-label-notes mb-1'>{{ trans('langTitle') }} <span class='asterisk Accent-200-cl'>(*)</span></label>
@@ -59,13 +65,13 @@
                                                                         <span class='help-block Accent-200-cl'>{{ $title_error }}</span>
                                                                     </div>
                                                                 </div>
-                                                                <div class='row form-group mt-4'>
+                                                                <div class='row form-group mt-3'>
                                                                     <label for='desc' class='col-12 control-label-notes mb-1'>{{ trans('langDescription') }}</label>
                                                                     <div class='col-12'>
                                                                         {!! rich_text_editor('desc', 4, 20, $desc, options: array('id' => 'desc')) !!}
                                                                     </div>
                                                                 </div>
-                                                                <div class='row form-group mt-4'>
+                                                                <div class='row form-group mt-3'>
                                                                     <label for='userfile' class='col-12 control-label-notes mb-1'>{{ trans('langWorkFile') }}</label>
                                                                     <div class='col-12'>
                                                                         @if ($assignment_filename)
@@ -77,8 +83,6 @@
                                                                         <input type='file' id='userfile' name='userfile'>
                                                                     </div>
                                                                 </div>
-
-                                                                @include('modules.work.lti_app_form')
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,7 +108,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="workGrading" class="accordion-collapse collapse" data-bs-parent="#workAccordion">
+                                                    <div id="workGrading" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
                                                                 <div class='row form-group'>
                                                                     <div class='col-12 control-label-notes mb-1'>
@@ -119,7 +123,7 @@
                                                                         </div>
                     
                                                                         <div class='radio @if (!$grading_scales_exist) not_visible @endif'>
-                                                                            <label @if (!$grading_scales_exist) <label data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langNoGradeScales') }}' @endif>
+                                                                            <label @if (!$grading_scales_exist) data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langNoGradeScales') }}' @endif>
                                                                                 <input type='radio' id='scales_button' name='grading_type' value='1' @if ($grading_type == ASSIGNMENT_SCALING_GRADE) checked @endif @if (!$grading_scales_exist) disabled @endif>
                                                                                 {{ trans('langGradeScales') }}
                                                                             </label>
@@ -141,7 +145,7 @@
                                                                     </div>
                                                                 </div>
                     
-                                                                <div class='row form-group @if ($max_grade_error) has-error @endif @if ($grading_type == ASSIGNMENT_STANDARD_GRADE) mt-4 @else hidden mt-4 @endif'>
+                                                                <div class='row form-group @if ($max_grade_error) has-error @endif @if ($grading_type == ASSIGNMENT_STANDARD_GRADE) mt-3 @else hidden mt-3 @endif'>
                                                                     <label for='max_grade' class='col-12 control-label-notes mb-1'>{{ trans('langMaxGrade') }}</label>
                                                                     <div class='col-12'>
                                                                         <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='{{ trans('langMaxGrade') }}' value='{{ $max_grade }}'>
@@ -149,7 +153,7 @@
                                                                     </div>
                                                                 </div>
                     
-                                                                <div class='row form-group @if ($scale_error) has-error @endif @if ($grading_type == ASSIGNMENT_SCALING_GRADE) mt-4 @else hidden mt-4 @endif'>
+                                                                <div class='row form-group @if ($scale_error) has-error @endif @if ($grading_type == ASSIGNMENT_SCALING_GRADE) mt-3 @else hidden mt-3 @endif'>
                                                                     <label for='scales' class='col-12 control-label-notes mb-1'>{{ trans('langGradeScales') }}</label>
                                                                     <div class='col-12'>
                                                                         <select name='scale' class='form-select' id='scales' @if (!$grading_type) disabled @endif>
@@ -159,7 +163,7 @@
                                                                     </div>
                                                                 </div>
                     
-                                                                <div class='row form-group @if ($rubric_error) has-error @endif @if ($grading_type == ASSIGNMENT_RUBRIC_GRADE) mt-4 @else hidden mt-4 @endif'>
+                                                                <div class='row form-group @if ($rubric_error) has-error @endif @if ($grading_type == ASSIGNMENT_RUBRIC_GRADE) mt-3 @else hidden mt-3 @endif'>
                                                                     <label for='rubrics' class='col-12 control-label-notes mb-1'>{{ trans('langGradeRubrics') }}</label>
                                                                     <div class='col-12'>
                                                                         <select name='rubric' class='form-select' id='rubrics' @if (!$grading_type) disabled @endif>
@@ -169,7 +173,7 @@
                                                                     </div>
                                                                 </div>
                     
-                                                                <div class='row form-group @if ($review_error_user) has-error @endif @if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) mt-4 @else hidden mt-4 @endif'>
+                                                                <div class='row form-group @if ($review_error_user) has-error @endif @if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) mt-3 @else hidden mt-3 @endif'>
                                                                     <label for='reviews_per_user' class='col-12 control-label-notes mb-1'>{{ trans('langReviewsPerUser') }}</label>
                                                                     <div class='col-12'>
                                                                         <input name='reviews_per_user' type='text' class='form-control' id='reviews_per_user' value='{{ $reviews_per_user }}' @if (!$grading_type) disabled @endif>
@@ -177,7 +181,7 @@
                                                                     </div>
                                                                 </div>
                     
-                                                                <div class='row form-group @if ($review_error_rubric) has-error @endif @if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) mt-4 @else hidden mt-4 @endif'>
+                                                                <div class='row form-group @if ($review_error_rubric) has-error @endif @if ($grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) mt-3 @else hidden mt-3 @endif'>
                                                                     <label for='reviews' class='col-12 control-label-notes mb-1'>{{ trans('langGradeRubrics') }}</label>
                                                                     <div class='col-12'>
                                                                         <select name='rubric_review' class='form-select' id='reviews' @if (!$grading_type) disabled @endif>
@@ -187,10 +191,10 @@
                                                                                 {!! $rubric_options !!}
                                                                             @endif
                                                                         </select>
-                                                                        <span class='help-block'>&nbsp;{{ $review_error_rubric }}</span>
+                                                                        <span class='help-block'>{{ $review_error_rubric }}</span>
                                                                     </div>
                     
-                                                                    <div class='row input-append date @if (Session::getError('WorkStart_review')) has-error @endif mt-4' id='startdatepicker' data-date='{{ $WorkStart_review }}' data-date-format='dd-mm-yyyy'>
+                                                                    <div class='row input-append date @if (Session::getError('WorkStart_review')) has-error @endif mt-3' id='startdatepicker' data-date='{{ $WorkStart_review }}' data-date-format='dd-mm-yyyy'>
                                                                         <label for='WorkStart_review' class='col-12 control-label-notes mb-1'>{{ trans('langReviewStart') }}</label>
                                                                         <div class='col-12'>
                                                                             <div class='input-group'>
@@ -207,14 +211,13 @@
                                                                                 @if (Session::hasError('WorkStart_review'))
                                                                                     {{ Session::getError('WorkStart_review') }}
                                                                                 @else
-                                                                                    <i class='fa fa-share fa-rotate-270'></i> {{ trans('langReviewDateHelpBlock') }})
+                                                                                    <i class='fa fa-share fa-rotate-270'></i> {{ trans('langReviewDateHelpBlock') }}
                                                                                 @endif
                                                                             </span>
-                                                                            &nbsp
                                                                         </div>
                                                                     </div>
                     
-                                                                    <div class='row input-append date @if (Session::getError('WorkEnd_review')) has-error @endif mt-4' id='enddatepicker' data-date='{{ $WorkEnd_review }}' data-date-format='dd-mm-yyyy'>
+                                                                    <div class='row input-append date @if (Session::getError('WorkEnd_review')) has-error @endif mt-3' id='enddatepicker' data-date='{{ $WorkEnd_review }}' data-date-format='dd-mm-yyyy'>
                                                                         <label for='WorkEnd_review' class='col-12 control-label-notes mb-1'>{{ trans('langReviewEnd') }}</label>
                                                                         <div class='col-12'>
                                                                             <div class='input-group'>
@@ -262,9 +265,12 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="workSubmission" class="accordion-collapse collapse" data-bs-parent="#workAccordion">
+                                                    <div id="workSubmission" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
-                                                                <div class='row form-group'>
+                                                                @php $turnitin_platform_shown = is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id); @endphp
+                                                                @include('modules.work.lti_app_form')
+
+                                                                <div class='row form-group @if ($turnitin_platform_shown) mt-3 @endif'>
                                                                     <div class='col-12 control-label-notes mb-1'>
                                                                         {{ trans('langWorkSubType') }}
                                                                     </div>
@@ -295,7 +301,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div class='form-group mt-4'>
+                                                                <div class='form-group mt-3'>
                                                                     <div class='col-12'>
                                                                         <div class='checkbox'>
                                                                             <label class='label-container' aria-label='{{ trans('langSelect') }}'>
@@ -331,7 +337,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="workDates" class="accordion-collapse collapse" data-bs-parent="#workAccordion">
+                                                    <div id="workDates" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
                                                                 <div class='row input-append date form-group @if (Session::getError('WorkStart')) has-error @endif' id='startdatepicker' data-date='{{ $WorkStart }}' data-date-format='dd-mm-yyyy'>
                                                                     <label for='WorkStart' class='col-12 control-label-notes mb-1'>{{ trans('langStartDate') }}</label>
@@ -355,7 +361,7 @@
                                                                     </div>
                                                                 </div>
                     
-                                                                <div class='row input-append date form-group @if (Session::getError('WorkEnd')) has-error @endif mt-4' id='enddatepicker' data-date='{{ $WorkEnd }}' data-date-format='dd-mm-yyyy'>
+                                                                <div class='row input-append date form-group @if (Session::getError('WorkEnd')) has-error @endif mt-3' id='enddatepicker' data-date='{{ $WorkEnd }}' data-date-format='dd-mm-yyyy'>
                                                                 <label for='WorkEnd' class='col-12 control-label-notes mb-1'>{{ trans('langGroupWorkDeadline_of_Submission') }}</label>
                                                                     <div class='col-12'>
                                                                         <div class='input-group'>
@@ -379,7 +385,7 @@
 
                                                                 @include('modules.work.lti_app_feedback_release_date')
 
-                                                                <div class='mt-4 form-group @if (!$WorkEnd) hide @endif mt-4' id='late_sub_row'>
+                                                                <div class='mt-3 form-group @if (!$WorkEnd) hide @endif mt-3' id='late_sub_row'>
                                                                     <div class='col-12'>
                                                                         <div class='checkbox'>
                                                                             <label class='label-container' aria-label='{{ trans('langSelect') }}'>
@@ -415,7 +421,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="workAssign" class="accordion-collapse collapse" data-bs-parent="#workAccordion">
+                                                    <div id="workAssign" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
                                                                 <div class='row form-group'>
                                                                     <div class='col-12 control-label-notes mb-1'>
@@ -437,7 +443,7 @@
                                                                     </div>
                                                                 </div>
                                                                 @if ($group_submissions)
-                                                                    <div class='row form-group mt-4'>
+                                                                    <div class='row form-group mt-3'>
                                                                         <div class='col-12 control-label-notes mb-1'>
                                                                             {{ trans('langWorkAssignTo') }}
                                                                         </div>
@@ -463,7 +469,7 @@
                                                                         </div>
                                                                     </div>
                                                                 @else
-                                                                    <div class='row form-group mt-4'>
+                                                                    <div class='row form-group mt-3'>
                                                                         <div class='col-12 control-label-notes mb-1'>
                                                                             {{ trans('langWorkAssignTo') }}
                                                                         </div>
@@ -489,7 +495,7 @@
                                                                         </div>
                                                                     </div>
                                                                 @endif
-                                                                <div class='form-group mt-4'>
+                                                                <div class='form-group mt-3'>
                                                                     <div class='col-12 md-3'>
                                                                         <div class='table-responsive'>
                                                                             <table id='assignees_tbl' class='table-default @if ($assign_to_specific == 0 or !isset($assignment_id)) hide @endif'>
@@ -548,7 +554,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="workAutoJudge" class="accordion-collapse collapse" data-bs-parent="#workAccordion">
+                                                    <div id="workAutoJudge" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
                                                                     <div class='row form-group'>
                                                                         <div class='col-12 control-label-notes -1'>
@@ -676,7 +682,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class='row form-group mt-4'>
+                                                                    <div class='row form-group mt-3'>
                                                                         <div class='col-12 control-label-notes mb-1'>
                                                                             {{ trans('langAutoJudgeProgrammingLanguage') }}
                                                                         </div>
@@ -711,7 +717,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="workAccess" class="accordion-collapse collapse" data-bs-parent="#workAccordion">
+                                                    <div id="workAccess" class="accordion-collapse collapse">
                                                         <div class="accordion-body">
                                                                 <div class='row form-group'>
                                                                     <label for='assignmentPasswordLock' class='col-12 control-label-notes mb-1'>{{ trans('langPassCode') }}</label>
@@ -720,7 +726,7 @@
                                                                     </div>
                                                                 </div>
                     
-                                                                <div class='row form-group  @if (Session::getError('assignmentIPLock')) has-error @endif mt-4'>
+                                                                <div class='row form-group  @if (Session::getError('assignmentIPLock')) has-error @endif mt-3'>
                                                                     <label for='assignmentIPLock' class='col-12 control-label-notes mb-1'>{{ trans('langIPUnlock') }}</label>
                                                                     <div class='col-12'>
                                                                         <select name='assignmentIPLock[]' class='form-control' id='assignmentIPLock' multiple>
@@ -735,7 +741,7 @@
 
                                             </div>
 
-                                            <div class='form-group mt-4'>
+                                            <div class='form-group mt-3'>
                                                 <div class='col-12 d-flex justify-content-end align-items-center'>
                                                     {!!
                                                     form_buttons(array(
