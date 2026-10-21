@@ -31,7 +31,7 @@ require_once '../../exercise/question.class.php';
 require_once '../../exercise/answer.class.php';
 
 $require_current_course = true;
-require_once '../../../include/init.php';
+require_once '../../../include/baseTheme.php';
 
 // Genikws o kwdikas apo edw kai katw kanei akribws o,ti kai to
 // exercise_submit.php. Oi mones diafores einai xrhsh twn echo
@@ -65,13 +65,13 @@ if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
     $exerciseId = isset($_POST['exerciseId']) ? intval($_POST['exerciseId']) : '';
-    $exerciseType = isset($_POST['exerciseType']) ? $_POST['exerciseType'] : '';
-    $questionNum = isset($_POST['questionNum']) ? $_POST['questionNum'] : '';
-    $nbrQuestions = isset($_POST['nbrQuestions']) ? $_POST['nbrQuestions'] : '';
-    $exerciseTimeConstraint = isset($_POST['exerciseTimeConstraint']) ? $_POST['exerciseTimeConstraint'] : '';
-    $eid_temp = isset($_POST['eid_temp']) ? $_POST['eid_temp'] : '';
-    $recordStartDate = isset($_POST['record_start_date']) ? $_POST['record_start_date'] : '';
-    $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
+    $exerciseType = $_POST['exerciseType'] ?? '';
+    $questionNum = $_POST['questionNum'] ?? '';
+    $nbrQuestions = $_POST['nbrQuestions'] ?? '';
+    $exerciseTimeConstraint = $_POST['exerciseTimeConstraint'] ?? '';
+    $eid_temp = $_POST['eid_temp'] ?? '';
+    $recordStartDate = $_POST['record_start_date'] ?? '';
+    $choice = $_POST['choice'] ?? '';
     if (isset($_SESSION['exerciseResult'][$exerciseId])) {
         $exerciseResult = $_SESSION['exerciseResult'][$exerciseId];
     } else {
@@ -214,7 +214,7 @@ if (@$_POST['questionNum']) {
 
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 
-$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.org/TR/html4/frameset.dtd'>

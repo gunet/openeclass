@@ -22,7 +22,7 @@
 // to click next after finishing an exercise.
 
 $require_current_course = true;
-require_once '../../../include/init.php';
+require_once '../../../include/baseTheme.php';
 
 $theme_id = get_config('theme_options_id') ?? 0;
 
