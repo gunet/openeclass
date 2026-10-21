@@ -41,6 +41,7 @@ $pageName = $langPollCharts;
 $sID = 0;
 if (isset($_GET['from_session_view'])) {
     $sID = $_GET['session'] ?? 0;
+    session_exists($sID);
     if (isset($_GET['session'])) {
         check_user_belongs_in_session($_GET['session']);
     }
@@ -205,8 +206,8 @@ $export_pdf = '';
 $hidden_elements = '';
 $from_session_view_type = '';
 if (isset($_GET['from_session_view'])) {
-    $from_session = "&amp;dumppoll_session=true&amp;session=$_GET[session]";
-    $export_pdf = "&amp;session=$_GET[session]&amp;format=pdf";
+    $from_session = "&amp;dumppoll_session=true&amp;session=" . intval($_GET['session']) . "";
+    $export_pdf = "&amp;session=" . intval($_GET['session']) . "&amp;format=pdf";
     $hidden_elements = 'hidden-element';
     $action_bar = action_bar(array(
                     array(

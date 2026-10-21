@@ -157,7 +157,7 @@ $consultant_selected = 0;
 $choose_user_or_consultant = 0;
 
 if(isset($_GET['user_rep'])) {
-    $user_pdf = "&amp;session=$_GET[session]&amp;user_rep=$_GET[user_rep]";
+    $user_pdf = "&amp;session=" . intval($_GET['session']) . "&amp;user_rep=" . intval($_GET['user_rep']) . "";
     $forUser = "AND user_id = ?d";
     $forUserArgs = [$_GET['user_rep']];
     $user_selected = $_GET['user_rep'];
