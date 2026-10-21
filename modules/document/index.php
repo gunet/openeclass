@@ -756,13 +756,6 @@ if ($can_upload or $user_upload) {
             $fileUploadOK = @copy($userFile, $basedir . $file_path);
         }
         require_once 'modules/admin/extconfig/externals.php';
-        $connector = AntivirusApp::getAntivirus();
-        if($connector->isEnabled()) {
-            $output=$connector->check($basedir . $file_path);
-            if($output->status==$output::STATUS_INFECTED){
-                AntivirusApp::block($output->output);
-            }
-        }
 
         if ($extra_path or $fileUploadOK) {
             $vis = 1;
@@ -1258,14 +1251,6 @@ if ($can_upload or $user_upload) {
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_current_dir();
                 } else {
-                    require_once 'modules/admin/extconfig/externals.php';
-                    $connector = AntivirusApp::getAntivirus();
-                    if($connector->isEnabled() == true ){
-                        $output=$connector->check($basedir . $newpath);
-                        if($output->status==$output::STATUS_INFECTED){
-                            AntivirusApp::block($output->output);
-                        }
-                    }
                     if (hasMetaData($oldpath, $basedir, $group_sql)) {
                         rename($basedir . $oldpath . ".xml", $basedir . $newpath . ".xml");
                         Database::get()->query("UPDATE document SET path = ?s, filename=?s WHERE $group_sql AND path = ?s"

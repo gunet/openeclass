@@ -60,6 +60,7 @@ $tool_content .= $action_bar;
 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $app->getLongDescription() . "</span></div>";
 
 if (isset($_GET['delete'])) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     Database::get()->query("DELETE FROM api_token WHERE id = ?d", $_GET['delete']);
     Session::Messages($langApiTokenDeleted, 'alert-success');
     redirect_to_home_page($app->getConfigUrl());
@@ -179,7 +180,7 @@ if (count($q) > 0) {
                     'url' => "$_SERVER[SCRIPT_NAME]?edit=$data->id",
                     'icon' => 'fa-edit'),
                 array('title' => $langDelete,
-                    'url' => "$_SERVER[SCRIPT_NAME]?delete=$data->id",
+                    'url' => "$_SERVER[SCRIPT_NAME]?delete=$data->id&" . generate_csrf_token_link_parameter(),
                     'icon' => 'fa-xmark',
                     'class' => 'delete',
                     'confirm' => $langConfirmDelete))) . "</td>";

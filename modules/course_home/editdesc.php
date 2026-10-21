@@ -54,14 +54,6 @@ if (isset($_GET['delete_image'])) {
             $file_name = "$name-$i.$ext";
         }
         move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$course_code/image/$file_name");
-        require_once 'modules/admin/extconfig/externals.php';
-        $connector = AntivirusApp::getAntivirus();
-        if($connector->isEnabled()){
-            $output=$connector->check("$webDir/courses/$course_code/image/$file_name");
-            if($output->status==$output::STATUS_INFECTED){
-                AntivirusApp::block($output->output);
-            }
-        }
         $extra_sql = ", course_image = ?s";
         $db_vars[] = $file_name;
     }

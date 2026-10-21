@@ -155,25 +155,23 @@ function view($view_file, $view_data = array())
     }
 
     $toolArr = [];
+    $current_module_dir = module_path($_SERVER['REQUEST_URI']);
+    $open_group = 'active'; // Open first tool group by default
     if (isset($course_id) and !$is_mobile) {
-        $toolArr = lessonToolsMenu();
+        $toolArr = courseToolsMenu();
+        foreach ($toolArr['inactive'] as $tool) {
+            if ($current_module_dir == module_path($tool['link'])) {
+                $open_group = 'inactive';
+            }
+        }
     }
+
     if ($is_in_tinymce) {
-        $toolArr = pickerMenu();
+        $toolArr = pickerToolsMenu();
     }
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     unset($_SESSION['embedonce']);
-
-    $current_module_dir = module_path($_SERVER['REQUEST_URI']);
-    $default_open_group = 0; // Open first tool group by default
-
-    foreach ($toolArr as $tool_group_id => $tool_group) {
-        if (in_array($current_module_dir, array_map('module_path', $tool_group[2]))) {
-            $default_open_group = $tool_group_id;
-        }
-    }
-
 
     $eclass_version = ECLASS_VERSION;
     $template_base = $urlAppend . 'template/' . $theme;
@@ -473,7 +471,7 @@ function view($view_file, $view_data = array())
         'show_toggle_student_view',
         'themeimg',
         'currentCourseName',
-        'default_open_group',
+        'open_group',
         'is_admin',
         'is_power_user',
         'is_usermanage_user',

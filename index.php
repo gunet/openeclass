@@ -289,10 +289,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['redirect_home'])) {
     $data['primary_method'] = $primary_method;
 
     if (!($upgrade_begin or get_config('dont_display_login_form'))) {
-        if (count($authLinks) > 3) {
-            // home page login form with more than 3 buttons not supported
-            $data['authLinks'] = array($authLinks[0]);
-        }
+        // All auth methods are supported in the accordion layout
     }
 
     $data['total_collaboration_courses'] = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course WHERE is_collaborative = ?d", 1)->total;

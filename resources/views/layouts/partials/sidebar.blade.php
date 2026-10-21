@@ -48,42 +48,52 @@
             <div class="panel-group accordion" id="sidebar-accordion">
                 <div class="panel">
                     @foreach ($toolArr as $key => $tool_group)
-                        <a id="Tool{{$key}}" class="collapsed parent-menu mt-5 menu-header d-block" data-bs-toggle="collapse" href="#collapse{{ $key }}" role="button">
-                            <div class="panel-sidebar-heading bg-transparent border-bottom-default px-lg-0">
-                                <div class="panel-title pb-2 bg-transparent">
-                                    <div class='d-flex justify-content-start align-items-start gap-1 Tools-active-deactive'>
-                                        <span class="fa fa-chevron-up" style='transition: transform .3s ease-in-out;'></span>
-                                        {{ $tool_group[0]['text'] }}
-
+                        @if ($key == 'inactive' && !$is_editor && !$is_course_reviewer)
+                            @continue
+                        @else
+                            <a id="Tool{{ $key }}" class="collapsed parent-menu mt-5 menu-header d-block" data-bs-toggle="collapse" href="#collapse{{ $key }}" role="button">
+                                <div class="panel-sidebar-heading bg-transparent border-bottom-default px-lg-0">
+                                    <div class="panel-title pb-2 bg-transparent">
+                                        <div class='d-flex justify-content-start align-items-start gap-1 Tools-active-deactive'>
+                                            <span class="fa fa-chevron-up" style='transition: transform .3s ease-in-out;'></span>
+                                            @if ($is_editor || $is_course_reviewer)
+                                                @if ($key == 'active')
+                                                    {{ trans('langActiveTools') }}
+                                                @elseif ($key == 'inactive')
+                                                    {{ trans('langInactiveTools') }}
+                                                @endif
+                                            @else
+                                                {{ trans('langCourseTools') }}
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
-                        <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }} rounded-0 Collapse{{ $key }} mt-3" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
+                            </a>
+                        @endif
+
+                        <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $key == $open_group? ' show': '' }} rounded-0 Collapse0 mt-3" aria-labelledby="Tool{{ $key }}" data-bs-parent="#sidebar-accordion">
                             <div class="m-0 p-0 contextual-sidebar w-auto border-0">
                                 <ul class="list-group list-group-flush">
-                                    @foreach ($tool_group[1] as $key2 => $tool)
+                                    @foreach ($tool_group as $tool)
                                         <li>
-                                            <a aria-label="{!! $tool !!}" href="{!! $tool_group[2][$key2] !!}"
-                                                class='list-group-item d-flex justify-content-start align-items-start module-tool px-3 py-1 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}
-                                                data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right" title="{!! $tool !!}" style='gap:1rem;'>
-                                                <i class="{{ $tool_group[3][$key2] }} mt-1"></i>
-                                                <span class='menu-items TextBold w-100'>{!! $tool !!}</span>
+                                            <a aria-label="{{ $tool['title'] }}" href="{{ $tool['link'] }}" class='list-group-item d-flex justify-content-start align-items-start module-tool px-3 py-1 border-0 {{ module_path($tool['link']) == $current_module_dir ? " active" : ""}}'
+                                               data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right" title="{{ $tool['title'] }}" style='gap:1rem;'>
+                                                <i class="{{ $tool['icon'] }} mt-1"></i>
+                                                <span class='menu-items TextBold w-100'>
+                                                    {{ $tool['title'] }} {!! $tool['extra_text'] !!}
+                                                </span>
                                             </a>
                                         </li>
                                     @endforeach
                                 </ul>
                             </div>
                         </div>
-                        <div class='p-3'></div>
-                    @endforeach
+                  @endforeach
+                  <div class='p-3'></div>
                 </div>
-                {{ isset($eclass_leftnav_extras) ? $eclass_leftnav_extras : "" }}
             </div>
         </div>
-
     </div>
-
 
 
     <script type="text/javascript">

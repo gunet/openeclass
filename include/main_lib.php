@@ -91,6 +91,19 @@ function widget_css_link($file, $folder) {
     $head_content .= "<link href='$urlAppend{$folder}/css/$file$v' rel='stylesheet' type='text/css'>\n";
 }
 
+
+function getAvailableWidgets(string $basePath = 'Widgets/Openeclass'): array
+{
+    $basePath = rtrim($basePath, '/\\');
+    $widgets = [];
+
+    $subDirs = glob($basePath . '/*', GLOB_ONLYDIR);
+    foreach ($subDirs as $dir) {
+        $widgets[] = str_replace(DIRECTORY_SEPARATOR, '\\', $dir . DIRECTORY_SEPARATOR . basename($dir) . 'Widget');
+    }
+    return $widgets;
+}
+
 /**
  * @brief load JavaScript file
  * @param $file
@@ -4428,6 +4441,41 @@ function make_dir($dir) {
     return @mkdir($dir, 0755, true);
 }
 
+/**
+ * @brief Prevent (Apache) execution of scripts stored in course content directories
+ * (everything below courses/<CODE>/ except the courses/<CODE>/index.php stubs).
+ * The rules are appended to courses/.htaccess if not already there.
+ * @param string $courses_dir
+ * @return bool
+ */
+function protect_courses_dir($courses_dir) {
+    $marker = '# eclass: deny script execution in course content';
+    $htaccess = $courses_dir . '/.htaccess';
+    $existing = file_exists($htaccess) ? file_get_contents($htaccess) : '';
+    if ($existing !== false && strpos($existing, $marker) !== false) {
+        return true;
+    }
+    $rules = <<<EOT
+$marker
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule "^(?![^/]+/index\.php$)[^/]+/.+\.(php.?|phtml|phar)$" - [F,NC]
+</IfModule>
+<IfModule !mod_rewrite.c>
+    <FilesMatch "(?<!^index)\.(php.?|phtml|phar)$">
+        <IfModule mod_authz_core.c>
+            Require all denied
+        </IfModule>
+        <IfModule !mod_authz_core.c>
+            Deny from all
+        </IfModule>
+    </FilesMatch>
+</IfModule>
+
+EOT;
+    return @file_put_contents($htaccess, ($existing ? rtrim($existing) . "\n\n" : '') . $rules) !== false;
+}
+
 function setOpenCoursesExtraHTML() {
     global $urlAppend, $openCoursesExtraHTML, $langListOpenCourses,
         $langCourses,$langCourse,$langNationalOpenCourses,
@@ -5197,7 +5245,11 @@ function get_platform_logo($size = 'normal', $position = 'header') {
             $theme_id = get_config('theme_options_id');
             if ($theme_id) {
                 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-                $theme_options_styles = unserialize($theme_options->styles);
+                $theme_options_styles = unserialize($theme_options->styles,
+                    [
+                        'allowed_classes' => ['stdClass'],
+                        'max_depth' => 0,
+                    ]);
                 $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
                 if ($size == 'small' && isset($theme_options_styles['imageUploadSmall'])) {
                     $logo_img = "$urlThemeData/{$theme_options_styles['imageUploadSmall']}";
@@ -5236,7 +5288,11 @@ function get_form_image() {
 
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         if (isset($theme_options_styles['imageUploadForm'])) {
             $form_image = "$urlThemeData/$theme_options_styles[imageUploadForm]";
@@ -5257,7 +5313,11 @@ function get_registration_form_image() {
 
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         if (isset($theme_options_styles['imageUploadRegistration'])) {
             $reg_image = "$urlThemeData/$theme_options_styles[imageUploadRegistration]";
@@ -5278,7 +5338,11 @@ function get_FAQ_image() {
 
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         if (isset($theme_options_styles['imageUploadFaq'])) {
             $faq_image = "$urlThemeData/$theme_options_styles[imageUploadFaq]";
@@ -5383,7 +5447,11 @@ function get_tinymce_color_text() {
     $theme_id = get_config('theme_options_id');
     if ($theme_id > 0) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         if (isset($theme_options_styles['ClTextEditor'])) {
             $tinymce_color_text = "$theme_options_styles[ClTextEditor]";
@@ -5580,7 +5648,11 @@ function get_style($style_name) {
     $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
 
     if ($theme_options) {
-        $theme_options_styles = unserialize($theme_options->styles);
+        $theme_options_styles = unserialize($theme_options->styles,
+            [
+                'allowed_classes' => ['stdClass'],
+                'max_depth' => 0,
+            ]);
     }
 
     return $theme_options_styles[$style_name] ?? null;

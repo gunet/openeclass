@@ -86,18 +86,18 @@ class RSSWidget extends Widget implements WidgetInterface {
         $this->initialize_widget_data($widget_widget_area_id);
         /* START CUSTOM CODE */
 
-        $url = isset($this->view_data['feed_url']) ? $this->view_data['feed_url'] : "https://www.openeclass.org/feed/";
+        $url = $this->view_data['feed_url'] ?? "https://www.openeclass.org/feed/";
         $max = isset($this->view_data['feed_items']) && $this->view_data['feed_items'] ? $this->view_data['feed_items'] : 3;
         //$url = "http://www.developphp.com/feed_all_vids.php";
         $xml = simplexml_load_file($url);
         $arr = array();
         for($i = 0; $i < $max; $i++){
-            array_push($arr, [
+            $arr[] = [
                 'title' => (string)$xml->channel->item[$i]->title,
                 'link' => (string)$xml->channel->item[$i]->link,
                 'description' => (string)$xml->channel->item[$i]->description,
                 'pubDate' => (string)$xml->channel->item[$i]->pubDate,
-            ]);
+            ];
         }
         $this->view_data['feed_items'] = (array)$arr;
 

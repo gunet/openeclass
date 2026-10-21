@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2026-08-10 13:56:01
+// Generated 2026-10-13 16:29:14
 
 $langTeacherStudentTutorials = "Useful Guides $langsOfTeacher - $langsOfStudent";
 $langAdminTutorials = "Useful Guides Administrator";

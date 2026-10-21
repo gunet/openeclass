@@ -92,6 +92,10 @@ if (isset($_GET['forQuestionUserDump']) && $_GET['forQuestionUserDump'] > 0) {
     $sqlUser = "AND b.uid = ?d";
     $sql_user_args = [$_GET['forQuestionUserDump']];
 }
+if (isset($_GET['forQuestionSubmission']) && $_GET['forQuestionSubmission'] > 0) {
+    $sqlUser = "AND b.id = ?d";
+    $sql_user_args = [$_GET['forQuestionSubmission']];
+}
 
 $sqlPqid = '';
 $sqlPqidArg = [];

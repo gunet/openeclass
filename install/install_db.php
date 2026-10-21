@@ -163,7 +163,7 @@ $db->query("CREATE TABLE `agenda` (
 $db->query("CREATE TABLE `course` (
   `id` INT NOT NULL auto_increment,
   `uuid` VARCHAR(40) NOT NULL DEFAULT 0,
-  `code` VARCHAR(20) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `code` VARCHAR(40) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
   `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
   `title` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL DEFAULT '',
   `keywords` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
@@ -2930,6 +2930,8 @@ $db->query("CREATE TABLE api_token (
     `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `read_only` BOOLEAN NOT NULL DEFAULT 0,
+    `all_courses` BOOLEAN NOT NULL DEFAULT 1,
     CONSTRAINT FOREIGN KEY (`department_id`) REFERENCES `hierarchy` (`id`),
     PRIMARY KEY (`id`)) $tbl_options");
 
@@ -3032,7 +3034,7 @@ $db->query("CREATE TABLE `mod_session` (
         `course_id` INT NOT NULL,
         `consent` INT NOT NULL DEFAULT 1,
         PRIMARY KEY(id),
-        FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE) 
+        FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE)
     $tbl_options");
 
 $db->query("CREATE TABLE `mod_session_users` (
@@ -3041,7 +3043,7 @@ $db->query("CREATE TABLE `mod_session_users` (
         `participants` INT NOT NULL DEFAULT 0,
         `is_accepted` INT NOT NULL DEFAULT 0,
         PRIMARY KEY(id),
-        FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) 
+        FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE)
     $tbl_options");
 
 $db->query("CREATE TABLE `session_resources` (
@@ -3060,7 +3062,7 @@ $db->query("CREATE TABLE `session_resources` (
         `deliverable_comments` TEXT DEFAULT NULL,
         `passage` TEXT DEFAULT NULL,
         PRIMARY KEY(id),
-        FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE) 
+        FOREIGN KEY (session_id) REFERENCES mod_session(id) ON DELETE CASCADE)
     $tbl_options");
 
 $db->query("CREATE TABLE `mod_session_completion` (
@@ -3069,7 +3071,7 @@ $db->query("CREATE TABLE `mod_session_completion` (
         `session_id` INT NOT NULL,
         PRIMARY KEY (`id`),
         FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
-        FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) 
+        FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE)
     $tbl_options");
 
 $db->query("CREATE TABLE `session_user_material` (
@@ -3080,7 +3082,7 @@ $db->query("CREATE TABLE `session_user_material` (
       `content` MEDIUMTEXT,
       PRIMARY KEY (`id`),
       FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
-      FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE) 
+      FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE)
     $tbl_options");
 
 $db->query("CREATE TABLE `session_poll_comments` (
@@ -3096,7 +3098,7 @@ $db->query("CREATE TABLE `session_poll_comments` (
         FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE,
         FOREIGN KEY (`session_id`) REFERENCES `mod_session` (`id`) ON DELETE CASCADE,
         FOREIGN KEY (`poll_id`) REFERENCES `poll` (`pid`) ON DELETE CASCADE,
-        FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE) 
+        FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE)
     $tbl_options");
 
 // External Repositories

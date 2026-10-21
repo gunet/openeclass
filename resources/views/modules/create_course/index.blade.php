@@ -679,7 +679,7 @@
             })
 
             uppy.on('complete', (result) => {
-              window.location.href = '{{ $urlAppend }}';
+              window.location.href = '{{ $urlAppend }}modules/create_course/create_course.php';
             })
             isUppyLoaded = true;
           } catch (error) {

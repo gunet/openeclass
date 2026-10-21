@@ -36,7 +36,6 @@ if (isset($_POST['submit'])) {
     checkSecondFactorChallenge();
     $line = strtok($_POST['courses'], "\n");
 
-    // $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
     $departments = $_POST['department'] ?? array();
     // validation in case it skipped JS validation for department(s)
     if (count($departments) < 1 || empty($departments[0])) {
@@ -125,14 +124,14 @@ view('admin.courses.multicourse', $data);
 function find_prof($uname) {
 
     $names = explode(' ', $uname);
-    if (count($names) == 1) {
+    if (count($names) == 1) { // find by username
         $q = Database::get()->querySingle("SELECT id FROM user WHERE status = " . USER_TEACHER . " AND username = ?s", $names[0]);
         if ($q) {
             return $q->id;
         }
-    } else if (count($names) == 2) {
-        $q = Database::get()->querySingle("SELECT id FROM user WHERE status = " . USER_TEACHER . " AND 
-                    (surname = ?s AND givenname = ?s) OR (givenname = ?s AND surname = ?s)'", $names[0], $names[1], $names[0], $names[1]);
+    } else if (count($names) == 2) { // find by name / surname
+            $q = Database::get()->querySingle("SELECT id FROM user WHERE status = " . USER_TEACHER . " AND givenname = ?s AND surname = ?s",
+                $names[0], $names[1]);
         if ($q) {
             return $q->id;
         }

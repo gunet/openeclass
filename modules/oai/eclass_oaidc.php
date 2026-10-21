@@ -61,18 +61,22 @@ class ECLASS_OAIDC {
 
                 foreach ($meta_record as $rkey => $rvalue) {
                     if (!strncmp($rkey, 'dc_', 3)) {
-                        $is_serialized = false;
-                        $valArr = @unserialize(base64_decode($rvalue));
-
-                        if ($valArr !== false) {
-                            $is_serialized = true;
+                        // only accept base64-encoded serialized arrays, never objects
+                        $valArr = false;
+                        $decoded = base64_decode((string) $rvalue, true);
+                        if ($decoded !== false && strncmp($decoded, 'a:', 2) === 0) {
+                            $valArr = @unserialize($decoded, ['allowed_classes' => false]);
                         }
+                        $is_serialized = is_array($valArr);
 
                         if ($is_serialized) {
                             foreach ($valArr as $vkey => $vvalue) {
                                 // handle multi-dimensional arrays for combined multi-lang & simple multiplicity
                                 if (is_array($vvalue)) {
                                     foreach ($vvalue as $vkey2 => $vvalue2) {
+                                        if (!is_scalar($vvalue2)) {
+                                            continue;
+                                        }
                                         $added_node = $this->oai_pmh->addChild($this->working_node, str_replace("dc_", "dc:", $rkey), $vvalue2);
                                         // numeric vkeys show simple multiplicity
                                         // string vkeys show multi-lang multiplicity requiring xml:lang attribute
@@ -80,7 +84,7 @@ class ECLASS_OAIDC {
                                             $added_node->setAttribute('xml:lang', $vkey2);
                                         }
                                     }
-                                } else {
+                                } else if (is_scalar($vvalue)) {
                                     $added_node = $this->oai_pmh->addChild($this->working_node, str_replace("dc_", "dc:", $rkey), $vvalue);
                                     // numeric vkeys show simple multiplicity
                                     // string vkeys show multi-lang multiplicity requiring xml:lang attribute

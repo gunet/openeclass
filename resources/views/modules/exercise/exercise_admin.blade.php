@@ -47,7 +47,7 @@
                                                             </span>
                                                         </button>
                                                     </h2>
-                                                    <div id="reviewBasic" class="accordion-collapse collapse show" data-bs-parent="#exerciseReviewAccordion">
+                                                    <div id="reviewBasic" class="accordion-collapse collapse show">
                                                         <div class="accordion-body">
                                                             <div class='form-group @if (Session::getError('exerciseTitle')) ? has-error @endif '>
                                                                 <label for='exerciseTitle' class='col-12 control-label-notes mb-1'>
@@ -856,7 +856,7 @@
             $('#feedback-container').on('input change', '.feedback-grade, .feedback-text', updateFeedbackRanges);
             updateFeedbackRanges();
             $('#add-feedback-btn').click(function (e) {
-                e.preventDefault(); 
+                e.preventDefault();
                 count++;
                 $('#feedback-container').append(`<div class='feedback-row'>
                                                     <div class="feedback-range">
@@ -883,7 +883,7 @@
                     var newIndex = index + 1;
                     $(this).find('input[name^="feedback_text"]').attr('name', 'feedback_text[' + newIndex + ']');
                     $(this).find('input[name^="feedback_grade"]').attr('name', 'feedback_grade[' + newIndex + ']');
-                });
+                })
                 updateFeedbackRanges();
             });
 

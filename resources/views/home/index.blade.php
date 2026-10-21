@@ -134,167 +134,96 @@
                     @if(!$authCase)
                         <div class="col-12 order-first homepage-login-container">
                             <div class='{{ $container }} padding-default padding-default-form-login'>
-                                <div class='row row-cols-1 row-cols-lg-2 g-4'>
+                                <div class='row row-cols-1 row-cols-lg-2 g-4 align-items-start'>
                                     <div class="col @if($PositionFormLogin or $display_login_form == 1) ms-auto me-auto @endif">
 
                                         @if($auth_enabled_method == 1)
                                             @if(count($authLinks) > 0)
-                                                <div class='card form-homepage-login border-card h-100 px-lg-4 py-lg-3 p-3'>
-                                                    <div class='card-body d-flex justify-content-center align-items-center p-1 p-md-2'>
-                                                        @php $i = 0; @endphp
-                                                        <div class='w-100 h-100'>
-                                                            <div class='col-12 container-pages d-flex align-items-center h-100'>
+                                                <div class='card form-homepage-login border-card px-lg-4 py-lg-3 p-3'>
+                                                    <div class='card-body p-1 p-md-2'>
+                                                        <div class='w-100'>
 
-                                                                @foreach($authLinks as $auth => $key)
-
-                                                                    @if($i > 0 && $primary_method >= 2 && count($authLinks) == 2)
-                                                                        @break
-                                                                    @endif
-
-                                                                    <div class="col-12 page @if($i == 0) slide-page @elseif($i == 1) next-page-1 @else next-page-2 @endif h-100">
-                                                                        <div class="row h-100">
-                                                                            <div class='col-12 align-self-start'>
-                                                                                <div class='d-flex justify-content-between align-items-center flex-wrap gap-2'>
-                                                                                    <h2 class='mb-3'>
-                                                                                        @if(!empty($key['title']))
-                                                                                            {!! $key['title'] !!}
-                                                                                        @else
-                                                                                            {{ trans('langLogin') }}
-                                                                                        @endif
-                                                                                    </h2>
-                                                                                    @if(!empty($key['authInstructions']))
-                                                                                        <a href='#' class='text-decoration-underline vsmall-text mb-3' data-bs-toggle='modal' data-bs-target="#authInstruction{{ $key['authId'] }}">
-                                                                                            {{ trans('langInstructions') }}
-                                                                                        </a>
-                                                                                        <div class='modal fade' id="authInstruction{{ $key['authId']}}" tabindex='-1' role='dialog' aria-labelledby='authInstructionLabel' aria-hidden='true'>
-                                                                                            <div class='modal-dialog'>
-                                                                                                <div class='modal-content'>
-                                                                                                    <div class='modal-header'>
-                                                                                                        <h2 class='modal-title' id='authInstructionLabel'>{{ trans('langInstructionsAuth') }}</h2>
-                                                                                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                    <div class='modal-body'>
-                                                                                                        <div class='col-12'>
-                                                                                                            <div class='alert alert-info'>
-                                                                                                                <i class='fa-solid fa-circle-info fa-lg'></i>
-                                                                                                                <span>{!! $key['authInstructions'] !!}</span>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
+                                                            {{-- 1st authentication method (always visible, expanded, no accordion) --}}
+                                                            <div class='col-12 login-method-first'>
+                                                                <div class='d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3'>
+                                                                    <h2 class='mb-0'>
+                                                                        @if(!empty($authLinks[0]['title']))
+                                                                            {!! $authLinks[0]['title'] !!}
+                                                                        @else
+                                                                            {{ trans('langLogin') }}
+                                                                        @endif
+                                                                    </h2>
+                                                                    @if(!empty($authLinks[0]['authInstructions']))
+                                                                        <a href='#' class='text-decoration-underline vsmall-text' data-bs-toggle='modal' data-bs-target="#authInstruction{{ $authLinks[0]['authId'] }}">
+                                                                            {{ trans('langInstructions') }}
+                                                                        </a>
+                                                                        <div class='modal fade' id="authInstruction{{ $authLinks[0]['authId'] }}" tabindex='-1' role='dialog' aria-labelledby='authInstructionLabel{{ $authLinks[0]['authId'] }}' aria-hidden='true'>
+                                                                            <div class='modal-dialog'>
+                                                                                <div class='modal-content'>
+                                                                                    <div class='modal-header'>
+                                                                                        <h2 class='modal-title' id='authInstructionLabel{{ $authLinks[0]['authId'] }}'>{{ trans('langInstructionsAuth') }}</h2>
+                                                                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
+                                                                                    </div>
+                                                                                    <div class='modal-body'>
+                                                                                        <div class='col-12'>
+                                                                                            <div class='alert alert-info'>
+                                                                                                <i class='fa-solid fa-circle-info fa-lg'></i>
+                                                                                                <span>{!! $authLinks[0]['authInstructions'] !!}</span>
                                                                                             </div>
                                                                                         </div>
-                                                                                    @endif
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                                <div class='text-center w-100'>
+                                                                    {!! $authLinks[0]['html'] !!}
+                                                                </div>
+                                                            </div>
 
-                                                                            <div class='col-12 align-self-center' @if ($primary_method >= 3 && count($authLinks) == 2) style="height: 100px; display: flex; align-items:center; justify-content: center;" @endif>
-                                                                                <div class='text-center w-100'>{!! $key['html'] !!}</div>
-                                                                            </div>
+                                                            {{-- Additional authentication methods in an accordion --}}
+                                                            @if (count($authLinks) > 1)
+                                                                <div class='col-12 my-3'>
+                                                                    <div id='or' class='ms-auto me-auto mb-2'>
+                                                                        {{ trans('langOr') }}
+                                                                    </div>
+                                                                </div>
 
-
-
-                                                                            <div class='col-12 align-self-end'>
-                                                                                @if(count($authLinks) > 1)
-                                                                                    <div id="or" class='ms-auto me-auto mb-2'>{{ trans('langOr')}}</div>
-                                                                                @endif
-                                                                                @if(count($authLinks) == 2)
-                                                                                    <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
-                                                                                        {!! $authLinks[1]['html'] !!}
-                                                                                    </div>
-                                                                                @endif
-
-                                                                                @if(count($authLinks) >= 3)
-                                                                                    <div class="d-flex justify-content-md-between justify-content-center align-items-center gap-3 flex-wrap">
-
-                                                                                            @if($i==0)
-                                                                                                <button class="btn submitAdminBtn firstNext next">
-                                                                                                    @if(!empty($authLinks[$i+1]['title']))
-                                                                                                        {!! $authLinks[$i+1]['title'] !!}
-                                                                                                    @else
-                                                                                                        {{ trans('langLogin') }}
-                                                                                                    @endif
-                                                                                                </button>
-                                                                                                <button class="btn submitAdminBtn next-1 next">
-                                                                                                    @if(!empty($authLinks[$i+2]['title']))
-                                                                                                        {!! $authLinks[$i+2]['title'] !!}
-                                                                                                    @else
-                                                                                                        {{ trans('langLogin') }}
-                                                                                                    @endif
-                                                                                                </button>
-
+                                                                <div class='col-12'>
+                                                                    <div class='accordion' id='accordionHomeLoginMethods'>
+                                                                        @foreach($authLinks as $index => $authInfo)
+                                                                            @if (!$loop->first)
+                                                                                <div class='accordion-item'>
+                                                                                    <h2 class='accordion-header' id='heading-home-{{ $index }}'>
+                                                                                        <button class='accordion-button collapsed' type='button' data-bs-toggle='collapse' data-bs-target='#collapse-home-{{ $index }}' aria-expanded='false' aria-controls='collapse-home-{{ $index }}'>
+                                                                                            @if(!empty($authInfo['title']))
+                                                                                                {!! $authInfo['title'] !!}
+                                                                                            @else
+                                                                                                {{ trans('langLogin') }}
                                                                                             @endif
-
-                                                                                            @if($i==1)
-                                                                                                <button class="btn submitAdminBtn prev-1 next">
-                                                                                                    @if(!empty($authLinks[$i-1]['title']))
-                                                                                                        {!! $authLinks[$i-1]['title'] !!}
-                                                                                                    @else
-                                                                                                        {{ trans('langLogin') }}
-                                                                                                    @endif
-                                                                                                </button>
-                                                                                                <button class="btn submitAdminBtn next-2 next">
-                                                                                                    @if(!empty($authLinks[$i+1]['title']))
-                                                                                                        {!! $authLinks[$i+1]['title'] !!}
-                                                                                                    @else
-                                                                                                        {{ trans('langLogin') }}
-                                                                                                    @endif
-                                                                                                </button>
-
-                                                                                            @endif
-
-                                                                                            @if($i==2)
-                                                                                                <button class="btn submitAdminBtn prev-2 next">
-                                                                                                    @if(!empty($authLinks[$i-1]['title']))
-                                                                                                        {!! $authLinks[$i-1]['title'] !!}
-                                                                                                    @else
-                                                                                                        {{ trans('langLogin') }}
-                                                                                                    @endif
-                                                                                                </button>
-                                                                                                <button class="btn submitAdminBtn next-3 next">
-                                                                                                    @if(!empty($authLinks[$i-2]['title']))
-                                                                                                        {!! $authLinks[$i-2]['title'] !!}
-                                                                                                    @else
-                                                                                                        {{ trans('langLogin') }}
-                                                                                                    @endif
-                                                                                                </button>
-
-                                                                                            @endif
-
-
-                                                                                            @if(count($authLinks) > 3)
-                                                                                                <div class='col-12'>
-                                                                                                    <div id='oreven' class='ms-auto me-auto mb-2'>{{ trans('langOrYet') }}</div>
+                                                                                        </button>
+                                                                                    </h2>
+                                                                                    <div id='collapse-home-{{ $index }}' class='accordion-collapse collapse' aria-labelledby='heading-home-{{ $index }}' data-bs-parent='#accordionHomeLoginMethods'>
+                                                                                        <div class='accordion-body'>
+                                                                                            @if (!empty($authInfo['authInstructions']))
+                                                                                                <div class='d-flex justify-content-end mb-2'>
+                                                                                                    <a href='#' class='text-decoration-underline vsmall-text' data-bs-toggle='modal' data-bs-target='#authInstruction{{ $authInfo['authId'] }}'>
+                                                                                                        {{ trans('langInstructions') }}
+                                                                                                    </a>
                                                                                                 </div>
-
-                                                                                                <div class='col-12 d-flex justify-content-center align-items-center'>
-                                                                                                    <button type='button' class='btn submitAdminBtn border-0 text-decoration-underline bg-transparent' data-bs-toggle='modal' data-bs-target='#LoginAnotherOption-{{ $i }}'>
-                                                                                                        @if(!empty($authLinks[count($authLinks)-1]['title']))
-                                                                                                            {!! $authLinks[count($authLinks)-1]['title'] !!}
-                                                                                                        @else
-                                                                                                            {{ trans('langLogin') }}
-                                                                                                        @endif
-                                                                                                    </button>
-
-
-                                                                                                    <div class='modal fade' id='LoginAnotherOption-{{ $i }}' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='LoginAnotherOptionLabel-{{ $i }}' aria-hidden='true'>
-                                                                                                        <div class='modal-dialog'>
-                                                                                                            <div class='modal-content'>
-                                                                                                                <div class='modal-header'>
-                                                                                                                    <h2 class='modal-title' id='LoginAnotherOptionLabel-{{ $i }}'>
-                                                                                                                        @if(!empty($authLinks[count($authLinks)-1]['title']))
-                                                                                                                            {!! $authLinks[count($authLinks)-1]['title'] !!}
-                                                                                                                        @else
-                                                                                                                            {{ trans('langLogin') }}
-                                                                                                                        @endif
-                                                                                                                    </h2>
-                                                                                                                    <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}">
-                                                                                                                    </button>
-                                                                                                                </div>
-                                                                                                                <div class='modal-body d-flex justify-content-center align-items-center'>
-                                                                                                                    <div>
-                                                                                                                        {!! $authLinks[count($authLinks)-1]['html'] !!}
+                                                                                                <div class='modal fade' id='authInstruction{{ $authInfo['authId'] }}' tabindex='-1' role='dialog' aria-labelledby='authInstructionLabel{{ $authInfo['authId'] }}' aria-hidden='true'>
+                                                                                                    <div class='modal-dialog'>
+                                                                                                        <div class='modal-content'>
+                                                                                                            <div class='modal-header'>
+                                                                                                                <h2 class='modal-title' id='authInstructionLabel{{ $authInfo['authId'] }}'>{{ trans('langInstructionsAuth') }}</h2>
+                                                                                                                <button type='button' class='close' data-bs-dismiss='modal' aria-label="{{ trans('langClose') }}"></button>
+                                                                                                            </div>
+                                                                                                            <div class='modal-body'>
+                                                                                                                <div class='col-12'>
+                                                                                                                    <div class='alert alert-info'>
+                                                                                                                        <i class='fa-solid fa-circle-info fa-lg'></i>
+                                                                                                                        <span>{!! $authInfo['authInstructions'] !!}</span>
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                             </div>
@@ -302,18 +231,18 @@
                                                                                                     </div>
                                                                                                 </div>
                                                                                             @endif
-
-
+                                                                                            <div class='text-center w-100'>
+                                                                                                {!! $authInfo['html'] !!}
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
-                                                                                @endif
-
-                                                                            </div>
-
-                                                                        </div>
+                                                                                </div>
+                                                                            @endif
+                                                                        @endforeach
                                                                     </div>
-                                                                    @php $i++; @endphp
-                                                                @endforeach
-                                                            </div>
+                                                                </div>
+                                                            @endif
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -336,8 +265,8 @@
                                     </div>
 
                                     @if ($display_login_form != 1)
-                                        <div class="col card-login-img d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif"
-                                        role="img" aria-label="{{ trans('langLoginImg') }}" style="background: url({{ $loginIMG }});"></div>
+                                        <div class="col card-login-img d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif align-self-start"
+                                        role="img" aria-label="{{ trans('langLoginImg') }}" style="background-image: url('{{ $loginIMG }}'); background-position: center top !important; min-height: 400px;"></div>
                                     @endif
                                 </div>
                             </div>

@@ -208,7 +208,7 @@ if (isset($_GET['add_template'])) {
             $head_content .= head_content_for_modal_lti_1_3();
 
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAvailablePanoptoTemplates</span></div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAvailableTurnitinTemplates</span></div></div>";
         }
     }
 }

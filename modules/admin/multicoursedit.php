@@ -224,7 +224,10 @@ if (isset($_POST['draw']) || isset($_GET['draw']) || (!empty($_SERVER['HTTP_X_RE
 
     // Search parameters submitted via form
     $searchtitle = $_POST['formsearchtitle'] ?? $_GET['formsearchtitle'] ?? '';
-    $searchcode = $_POST['formsearchcode'] ?? $_GET['formsearchcode'] ?? '';
+    $searchtype = isset($_POST['formsearchtype']) ? intval($_POST['formsearchtype']) : (isset($_GET['formsearchtype']) ? intval($_GET['formsearchtype']) : -1);
+    $searchprof = $_POST['formsearchprof'] ?? $_GET['formsearchprof'] ?? '';
+    $reg_flag = $_POST['reg_flag'] ?? $_GET['reg_flag'] ?? '';
+    $date = $_POST['date'] ?? $_GET['date'] ?? '';
 
     // Handle formsearchfaculte (Category / Department ID)
     $raw_faculte = $_REQUEST['formsearchfaculte'] ?? 0;
@@ -251,10 +254,32 @@ if (isset($_POST['draw']) || isset($_GET['draw']) || (!empty($_SERVER['HTTP_X_RE
         $terms[] = '%' . $searchtitle . '%';
     }
 
-    if (!empty($searchcode)) {
-        $query .= ' AND (course.code LIKE ?s OR public_code LIKE ?s)';
-        $terms[] = '%' . $searchcode . '%';
-        $terms[] = '%' . $searchcode . '%';
+    if ($searchtype != -1) {
+        if ($searchtype == 4) {
+            $query .= ' AND course.visible < ?d';
+            $terms[] = 3;
+        } else {
+            $query .= ' AND course.visible = ?d';
+            $terms[] = $searchtype;
+        }
+    }
+
+    if (!empty($searchprof)) {
+        $query .= ' AND course.prof_names LIKE ?s';
+        $terms[] = '%' . $searchprof . '%';
+    }
+
+    if (!empty($reg_flag) && !empty($date)) {
+        $query .= ' AND created ' . ($reg_flag == 1 ? '>=' : '<=') . ' ?s';
+        $date_created_at = DateTime::createFromFormat("d-m-Y H:i", $date);
+        if (!$date_created_at) {
+            $date_created_at = DateTime::createFromFormat("d-m-Y", $date);
+        }
+        if ($date_created_at) {
+            $terms[] = $date_created_at->format("Y-m-d H:i:s");
+        } else {
+            $terms[] = $date;
+        }
     }
 
     if ($searchfaculte > 0) {
@@ -368,6 +393,10 @@ $user = new User();
 load_js('jstree');
 load_js('tools.js');
 load_js('datatables');
+load_js('bootstrap-datetimepicker');
+
+$data['reg_flag_data'][1] = $langAfter;
+$data['reg_flag_data'][2] = $langBefore;
 
 $toolName = $langAdmin;
 $pageName = $langMultiCourseEdit;

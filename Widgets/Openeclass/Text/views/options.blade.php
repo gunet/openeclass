@@ -9,7 +9,9 @@
      <div class="tab-content mt-2">
         @foreach ($active_ui_languages as $key => $active_ui_language)
             <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}" id="{{ $active_ui_language . $widget_widget_area_id }}-tab-pane" role="tabpanel"  aria-labelledby="{{ $active_ui_language . $widget_widget_area_id}}-tab" tabindex="0">
-               {!! $final_data_widget['text_'.$active_ui_language] !!}
+                @if (isset($final_data_widget['text_'.$active_ui_language]))
+                    {!! $final_data_widget['text_'.$active_ui_language] !!}
+                @endif
             </div>
         @endforeach
     </div>

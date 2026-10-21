@@ -332,7 +332,7 @@ function display_analytics_elements($analytics_id) {
            $langAnalyticsParameters;
 
     $buttons = array();
-    foreach (ElementTypes::elements as $elementType) {
+    foreach (ElementTypes::elements() as $elementType) {
         $type = $elementType['link'];
         array_push( $buttons,
                 array('title' => $elementType['title'],
@@ -453,7 +453,8 @@ function display_analytics_information($analytics_id) {
     $active_msg = $sql_data->active ? $langActive : $langInactive;
     $start_date = format_locale_date(strtotime($sql_data->start_date), 'short', false);
     $end_date = format_locale_date(strtotime($sql_data->end_date), 'short', false);
-    $periodType = periodType::periodType[$sql_data->periodType]['title'];
+    $periodTypes = PeriodType::periodType();
+    $periodType = isset($periodTypes[$sql_data->periodType]) ? $periodTypes[$sql_data->periodType]['title'] : '-';
 
     $tool_content .= "
         <div class='col-12'>
@@ -784,7 +785,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
         $results .="<tr'>
                         <td>
-                            <div >". ElementTypes::elements[$module_id]['title'] . "</div>
+                            <div >". ElementTypes::elements()[$module_id]['title'] . "</div>
                         </td>
                         <td>
                             <div class='$class'>$percentage_value%</div>
@@ -1111,9 +1112,9 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
     }
 
     if ($type == null) {
-        $elementTypeTitle = ElementTypes::elements[$module_id]['title'];
+        $elementTypeTitle = ElementTypes::elements()[$module_id]['title'];
     } else {
-            foreach(ElementTypes::elements as $element) {
+            foreach(ElementTypes::elements() as $element) {
                 if($element['link'] == $type) {
                     $elementTypeTitle = $element['title'];
            }
@@ -1413,7 +1414,7 @@ function get_activation_status () {
 function get_period_types_array () {
     $periodTypes = array();
 
-    foreach ( PeriodType::periodType as $key => $periodType) {
+    foreach ( PeriodType::periodType() as $key => $periodType) {
         $periodTypes[$key] = $periodType['title'];
     }
     return $periodTypes;
@@ -1485,39 +1486,59 @@ function switch_activation($analytics_id, $active) {
 
 
 /**
+ * @brief get title of the specific resource
+ * @param $resource
+ * @param $module_id
+ * @return string
+ */
+function get_resource_title($resource, $module_id) {
+    if (empty($resource)) {
+        return '';
+    }
+    $resource_title = '';
+    switch ($module_id) {
+        case ANALYTICS_ASSIGNMENTGRADE:
+        case ANALYTICS_ASSIGNMENTDL:
+            $result = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $resource);
+            if ($result && !empty($result->title)) {
+                $resource_title = $result->title;
+            }
+            break;
+        case ANALYTICS_EXERCISEGRADE:
+            $result = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $resource);
+            if ($result && !empty($result->title)) {
+                $resource_title = $result->title;
+            }
+            break;
+        case ANALYTICS_LPPERCENTAGE:
+            $result = Database::get()->querySingle("SELECT name as title FROM lp_learnPath WHERE learnPath_id = ?d", $resource);
+            if ($result && !empty($result->title)) {
+                $resource_title = $result->title;
+            }
+            break;
+        case ANALYTICS_FILEVIEW:
+            $result = Database::get()->querySingle("SELECT (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) as title FROM document WHERE id = ?d", $resource);
+            if ($result && !empty($result->title)) {
+                $resource_title = $result->title;
+            }
+            break;
+    }
+    return $resource_title;
+}
+
+/**
  * @brief get info about resource to be displayed
  * @param $resource
  * @param $module_id
  * @return string
  */
 function get_resource_info($resource, $module_id) {
-    $module_title = ElementTypes::elements[$module_id]['title'];
-    $resource_title = '';
-    switch ($module_id) {
-        case ANALYTICS_ASSIGNMENTGRADE:
-            $result = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $resource);
-            $resource_title = ' (' . $result->title. ') ';
-            break;
-        case ANALYTICS_ASSIGNMENTDL:
-            $result = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $resource);
-            $resource_title = ' (' . $result->title. ') ';
-            break;
-        case ANALYTICS_EXERCISEGRADE:
-            $result = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d", $resource);
-            $resource_title = ' (' . $result->title. ') ';
-            break;
-        case ANALYTICS_LPPERCENTAGE:
-            $result = Database::get()->querySingle("SELECT name as title FROM lp_learnPath WHERE learnPath_id = ?d", $resource);
-            $resource_title = ' (' . $result->title. ') ';
-            break;
-        case ANALYTICS_FILEVIEW:
-            $result = Database::get()->querySingle("SELECT  (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) as title FROM document WHERE id = ?d", $resource);
-            $resource_title = ' (' . $result->title. ') ';
-            break;
-
+    $module_title = ElementTypes::elements()[$module_id]['title'] ?? '';
+    $resource_title = get_resource_title($resource, $module_id);
+    if (!empty($resource_title)) {
+        return $module_title . ' (' . $resource_title . ')';
     }
-
-    return '' . $module_title .  $resource_title ;
+    return $module_title;
 }
 
 /**

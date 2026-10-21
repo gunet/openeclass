@@ -43,7 +43,7 @@ function unpack_zip_inner($zipfile, $clone) {
 
     require_once 'include/lib/fileUploadLib.inc.php';
 
-    $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
+    $destdir = $webDir . "/courses/tmpUnzipping/$uid" . session_id();
     if (!is_dir($destdir)) {
         make_dir($destdir);
     }
@@ -68,34 +68,11 @@ function unpack_zip_inner($zipfile, $clone) {
 
     if (!empty($files_to_extract)) {
         if (!$zip->extractTo($destdir, $files_to_extract)) {
-            Session::flash('message', $langGeneralError);
-            Session::flash('alert-class', 'alert-danger');
+            Session::Messages($langGeneralError, 'alert-danger');
             redirect_to_home_page('modules/course_info/restore_course.php');
         }
     }
-    // see if any files use backslash as directory separator
-    $filesToMove = [];
-    for ($i = 0; $i < $zip->numFiles; $i++) {
-        $filename = $zip->getNameIndex($i);
-        if (str_contains($filename, '\\')) {
-            $filesToMove[] = $filename;
-        }
-    }
     $zip->close();
-
-    foreach ($filesToMove as $filename) {
-        $filename = $destdir . '/' . $filename;
-        $newname = str_replace('\\', '/', $filename);
-        $parentdir = my_dirname($newname);
-        if (!is_dir($parentdir)) {
-            mkdir($parentdir, 0700, true);
-        }
-        if (!is_dir($filename)) {
-            rename($filename, $newname);
-        } else {
-            rmdir($filename);
-        }
-    }
 
     $retArr = [];
     foreach (find_backup_folders($destdir) as $folder) {
@@ -140,15 +117,14 @@ function unpack_zip_show_files($zipfile) {
     return $retString;
 }
 
-// Find folders under $basedir containing a "backup.php" or a "config_vars" file
+// Find folders under $basedir containing a "config_vars" file
 function find_backup_folders($basedir) {
     $dirlist = [];
     if (is_dir($basedir) and $handle = opendir($basedir)) {
         while (($file = readdir($handle)) !== false) {
             $entry = "$basedir/$file";
             if (is_dir($entry) and $file != '.' and $file != '..') {
-                if (file_exists("$entry/backup.php") or
-                    file_exists("$entry/config_vars")) {
+                if (file_exists("$entry/config_vars")) {
                     $dirlist[] = [
                         'path' => $basedir,
                         'dir' => $file];
@@ -494,7 +470,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                                         <label class='label-container' aria-label='$langSelect'>
                                             <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
                                             <span class='checkmark'></span>
-                                            $langMultiRegType
+                                            $GLOBALS[langRestoreCreateUsers]
                                         </label>
                                     </div>
                                 </div>") . "

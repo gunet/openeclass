@@ -26,6 +26,7 @@ $require_current_course = TRUE;
 $require_editor = TRUE;
 include '../../include/baseTheme.php';
 require_once 'modules/gradebook/functions.php';
+require_once __DIR__ . '/code_exercise_languages.inc.php';
 $pageName = $langExercicesResult;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
@@ -164,6 +165,7 @@ if (count($exercise_question_ids) > 0) {
         }
         $questionDescription_temp = mathfilter(nl2br(make_clickable($questionDescription)), 12, "../../courses/mathimg/");
         $questionWeighting = $objQuestionTmp->selectWeighting();
+        $codeLanguage = code_exercise_language($objQuestionTmp->selectOptions());
         // destruction of the Question object
         unset($objQuestionTmp);
         //check if question has been graded
@@ -195,10 +197,14 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "<tr class='active'>
                           <td><b>$langAnswer</b></td>
                             </tr>";
-        $tool_content .= "<tr class='even'><td>" . purify($choice) . "</td></tr>";
+        if ($codeLanguage !== null) {
+            $tool_content .= "<tr class='even'><td>" . code_exercise_answer($choice, $codeLanguage) . "</td></tr>";
+        } else {
+            $tool_content .= "<tr class='even'><td>" . purify($choice) . "</td></tr>";
+            $choice = purify($choice);
+        }
         $tool_content .= "<tr class='active'><th>";
 
-        $choice = purify($choice);
         if (!empty($choice)) {
             if (!$question_graded) {
                 $tool_content .= "<span class='text-danger'>$langAnswerUngraded</span>";

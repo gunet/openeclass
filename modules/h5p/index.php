@@ -106,25 +106,25 @@ if ($is_editor) {
         switch($_GET['choice']) {
             case 'do_disable':
                 Database::get()->querySingle("UPDATE h5p_content set enabled = 0 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
-                Session::flash('message',$langH5pSaveSuccess);
+                Session::flash('message', $langViMod);
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/h5p/?course=$course_code");
                 break;
             case 'do_enable':
                 Database::get()->querySingle("UPDATE h5p_content set enabled = 1 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
-                Session::flash('message',$langH5pSaveSuccess);
+                Session::flash('message', $langViMod);
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/h5p/?course=$course_code");
                 break;
             case 'do_reuse_disable':
                 Database::get()->querySingle("UPDATE h5p_content set reuse_enabled = 0 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
-                Session::flash('message',$langH5pSaveSuccess);
+                Session::flash('message', $langH5PDisableDistribution);
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/h5p/?course=$course_code");
                 break;
             case 'do_reuse_enable':
                 Database::get()->querySingle("UPDATE h5p_content set reuse_enabled = 1 WHERE id = ?d AND course_id = ?d", $_GET['id'], $course_id);
-                Session::flash('message',$langH5pSaveSuccess);
+                Session::flash('message', $langH5PEnableDistribution);
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("modules/h5p/?course=$course_code");
                 break;

@@ -20,6 +20,16 @@
 class CurlUtil {
 
     /**
+     * User-Agent sent with every request.
+     *
+     * @return string
+     */
+    private static function getUserAgent(): string {
+        $version = defined('ECLASS_VERSION') ? ECLASS_VERSION : 'unknown';
+        return 'Open eClass/' . $version . ' (+https://www.openeclass.org)';
+    }
+
+    /**
      * HTTP GET method
      *
      * @param string $url
@@ -38,6 +48,7 @@ class CurlUtil {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_USERAGENT, self::getUserAgent());
         // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         if ($downloadFile) {
@@ -78,8 +89,11 @@ class CurlUtil {
 
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+        curl_setopt($ch, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, self::getUserAgent());
         curl_setopt($ch, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
             $len = strlen($header);
             $header = explode(':', $header, 2);
@@ -133,6 +147,7 @@ class CurlUtil {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'X-Content-Type-Options: nosniff']);
+        curl_setopt($ch, CURLOPT_USERAGENT, self::getUserAgent());
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
 
         $response = curl_exec($ch);
@@ -166,6 +181,7 @@ class CurlUtil {
         curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_NOBODY, false);
+        curl_setopt($ch, CURLOPT_USERAGENT, self::getUserAgent());
 
         $curlResponse = curl_exec($ch);
         $info         = curl_getinfo($ch);

@@ -176,7 +176,7 @@ class Access {
                 $access->allowedDepartments = self::getDepartmentDescendants($result->department_id);
             }
 
-            if ($result->all_courses) {
+            if ($result->all_courses ?? true) {
                 $access->allCourses = true;
             } else {
                 $access->allCourses = false;

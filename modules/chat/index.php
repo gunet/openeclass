@@ -177,7 +177,7 @@ if ($is_editor) {
     } else if (isset($_POST['submit'])) {
         $chat_user_id = $chat_group_id = 0; // default value
         $title = $_POST['title'];
-        $description = $_POST['description'];
+        $description = purify($_POST['description']);
         if (isset($_POST['chat_users']) and count($_POST['chat_users']) > 0) {
             $chat_user_id = '';
             foreach ($_POST['chat_users'] as $chatusers) {
@@ -260,7 +260,7 @@ if ($is_editor) {
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle <span class='asterisk Accent-200-cl'>(*)</span></label>";
         $tool_content .= "<div class='col-sm-12'>";
-        $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='$conf->conf_title' size='50' />";
+        $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='" . q($conf->conf_title) . "' size='50' />";
         $tool_content .= "</div>";
         $tool_content .= "</div>";
 

@@ -407,7 +407,7 @@ if (file_exists('config/config.php')) {
 // Regarding session docs
 $is_session_doc = false;
 if (isset($_SESSION['fileSessionId']) and $_SESSION['fileSessionId'] && isset($require_current_course) and $require_current_course) {
-    $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d",$_SESSION['fileSessionId']);
+    $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d", $_SESSION['fileSessionId']);
     $course_id = $q->course_id;
     $_SESSION['dbname'] = course_id_to_code($course_id);
     $sessionID = $_SESSION['fileSessionId'];
@@ -419,7 +419,7 @@ if (isset($_SESSION['fileSessionId']) and $_SESSION['fileSessionId'] && isset($r
 $user_uploader = 0;
 $uploaded_docs_by_users = false;
 if (isset($_SESSION['CurrentSessionId']) && $_SESSION['CurrentSessionId'] && isset($require_current_course) && $require_current_course) {
-    $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d",$_SESSION['CurrentSessionId']);
+    $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d", $_SESSION['CurrentSessionId']);
     $course_id = $q->course_id;
     $_SESSION['dbname'] = course_id_to_code($course_id);
     $sessionID = $_SESSION['CurrentSessionId'];
@@ -433,7 +433,7 @@ if (isset($_SESSION['CurrentSessionId']) && $_SESSION['CurrentSessionId'] && iss
 $user_counselor_uploader = 0;
 $uploaded_reference_docs_by_users = false;
 if (isset($_SESSION['CurrentReferenceSessionId']) && $_SESSION['CurrentReferenceSessionId'] && isset($require_current_course) && $require_current_course) {
-    $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d",$_SESSION['CurrentReferenceSessionId']);
+    $q = Database::get()->querySingle("SELECT course_id FROM mod_session WHERE id = ?d", $_SESSION['CurrentReferenceSessionId']);
     $course_id = $q->course_id;
     $_SESSION['dbname'] = course_id_to_code($course_id);
     $sessionID = $_SESSION['CurrentReferenceSessionId'];
@@ -490,17 +490,16 @@ if (isset($require_current_course) and $require_current_course) {
             },
             $dbname);
 
+        if (!isset($course_id)) {
+            Session::Messages($langLessonDoesNotExist, 'alert-danger');
+            redirect_to_home_page();
+        }
+
         // if course is collaborative include collaborative messages
         if (isset($is_collaborative_course) and $is_collaborative_course) {
             require "$webDir/lang/$language/common_collaboration.inc.php";
         }
         require "$webDir/lang/$language/messages.inc.php";
-
-        if (!isset($course_code) or empty($course_code)) {
-            Session::flash('alert-class', 'alert-danger');
-            Session::flash('message', $langLessonDoesNotExist);
-            redirect_to_home_page();
-        }
 
         // Get essential messages when a course is collaborative course
         if (isset($is_collaborative_course) and $is_collaborative_course) {

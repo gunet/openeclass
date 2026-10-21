@@ -728,7 +728,7 @@ jContent;
                     <button type="button" class="close treeModalClose" aria-label="'.$langClose.'"></button>
 
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="max-height: calc(100vh - 280px); overflow-y: auto;">
                     <div id="js-tree"></div>
                 </div>
                 <div class="modal-footer">
@@ -811,7 +811,7 @@ jContent;
                     <button type="button" class="close treeModalClose" aria-label="'.$langClose.'"></button>
 
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="max-height: calc(100vh - 280px); overflow-y: auto;">
                     <div id="js-tree"></div>
                 </div>
                 <div class="modal-footer">

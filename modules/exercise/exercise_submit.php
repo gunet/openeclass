@@ -141,10 +141,26 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $qId = intval($_POST['question_id']);
         $oldfilePath = $_POST['old_file_path'];
         $file = "$webDir/courses/$course_code/exercise/{$exId}{$oldfilePath}";
-        if (file_exists($file)) {
-            unlink($file);
-            Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", null, $u_rec_id, $qId);
-        } 
+
+        $checkURecord = Database::get()->querySingle("SELECT aer.answer FROM exercise_answer_record aer
+                                                      JOIN exercise_user_record eur ON eur.eurid=aer.eurid
+                                                      JOIN exercise_question eq ON eq.id=aer.question_id
+                                                      WHERE eq.id = ?d
+                                                      AND eq.type = ?d
+                                                      AND eur.eurid = ?d
+                                                      AND eur.eid = ?d
+                                                      AND eur.uid = ?d", $qId, UPLOAD_FILE, $u_rec_id, $exId, $uid);
+
+        if ($checkURecord && is_string($checkURecord->answer)) {
+            $arr_file = unserialize($checkURecord->answer, ["allowed_classes" => false]);
+            if (is_array($arr_file) && isset($arr_file['filepath']) 
+                && is_string($arr_file['filepath']) && $arr_file['filepath'] == $oldfilePath 
+                && file_exists($file)) {
+                if (unlink($file)) {
+                    Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", null, $u_rec_id, $qId);
+                }
+            }
+        }
     }
 
     exit;
@@ -156,9 +172,26 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['new_upload_file'])) {
 
     header('Content-Type: application/json');
     
-    $exercise_id = intval($_GET['exerciseId']);
-    $question_id = intval($_GET['questionId']);
-    $u_rec = intval($_GET['exrecid']);
+    $exercise_id = intval($_GET['exerciseId'] ?? 0);
+    $question_id = intval($_GET['questionId'] ?? 0);
+    // Check if question is file upload type and belongs to the current exercise
+    $q_check = Database::get()->querySingle("SELECT eq.type
+                                             FROM exercise_question eq
+                                             JOIN exercise_with_questions ewq ON ewq.question_id = eq.id
+                                             WHERE ewq.exercise_id = ?d
+                                             AND eq.id = ?d", $exercise_id, $question_id);
+    if (!$q_check or ($q_check && $q_check->type != UPLOAD_FILE)) {
+        forbidden();
+    }
+    $u_rec = intval($_GET['exrecid'] ?? 0);
+    if ($u_rec == 0) {
+        forbidden();
+    }
+    // Check if exercise record belongs to the current user
+    $u_check = Database::get()->querySingle("SELECT `uid` FROM exercise_user_record WHERE eurid = ?d AND eid = ?d", $u_rec, $exercise_id);
+    if (!$u_check or ($u_check && $u_check->uid != $uid)) {
+        forbidden();
+    }
     $filename = $_FILES['new_upload_file']['name'];
     validateUploadedFile($filename); // check file type
     $filename = add_ext_on_mime($filename);
@@ -1039,6 +1072,55 @@ foreach ($questionList as $k => $q_id) {
     }
 }
 
+// Check if any FREE_TEXT question is a code exercise
+require_once __DIR__ . '/code_exercise_languages.inc.php';
+$hasCodeExercise = false;
+foreach ($questionList as $q_id) {
+    $t_question = $questions[$q_id] ?? null;
+    if ($t_question && $t_question->selectType() == FREE_TEXT) {
+        if (code_exercise_language($t_question->selectOptions()) !== null) {
+            $hasCodeExercise = true;
+        }
+    }
+}
+
+// Load CodeMirror if needed (the bundle loads only the languages it uses)
+if ($hasCodeExercise) {
+    $head_content .= '
+    <style>
+    .code-exercise-editor-wrapper .cm-editor.cm-focused {
+        outline: 2px solid var(--bs-primary);
+        outline-offset: -1px;
+    }
+    .code-exercise-editor-wrapper .cm-content,
+    .code-exercise-editor-wrapper .cm-gutter {
+        min-height: 300px;
+    }
+    .code-exercise-editor-wrapper .cm-scroller {
+        max-height: 600px;
+    }
+    </style>';
+    $head_content .= "
+    <script type='module'>
+    const { fromTextArea } = await import('{$urlAppend}js/bundle/codemirror/codemirror.js');
+    document.querySelectorAll('.code-exercise-editor').forEach(function(textarea) {
+        var questionId = textarea.id.replace('code_editor_', '');
+        fromTextArea(textarea, {
+            language: textarea.getAttribute('data-language'),
+            onChange: function(value) {
+                if (value.trim() !== '') {
+                    var qPanel = $('#qPanel' + questionId);
+                    var qCheck = qPanel.find('span').first();
+                    var qButton = $('#' + qCheck.attr('id').replace('qCheck', 'q_num'));
+                    qCheck.addClass('fa fa-check');
+                    qButton.removeClass('btn-default').addClass('btn-info');
+                }
+            }
+        });
+    });
+    </script>";
+}
+
 if ($questionList) {
     // Display a notification that informs the user that the exercise will be canceled.
     // if ($is_exam && $stricterExamMode && $exerciseType == SINGLE_PAGE_TYPE) {
@@ -1371,6 +1453,18 @@ function unset_session_variables_of_questions($eurid, $type = '') {
                     unset($data['userSubset_'.$uid]);
                     $updatedJsonString = json_encode($data);
                     Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $updatedJsonString, $qid);
+                }
+            }
+            // About oral questions
+            if ($type == 'cancel_exercise' && $typeQuestion[$qid] == ORAL) {
+                $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
+                                                        AND subsystem = ?d AND subsystem_id = ?d
+                                                        AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $eurid);
+                if ($fFile) {
+                    if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
+                        unlink("$webDir/courses/$course_code/image" . $fFile->path);
+                    }
+                    Database::get()->query("DELETE FROM document WHERE id = ?d", $fFile->id);
                 }
             }
         }

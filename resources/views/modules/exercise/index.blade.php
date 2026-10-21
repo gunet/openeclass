@@ -360,7 +360,7 @@
         $(document).ready(function() {
             $('#ex').DataTable ({
                 columns: [ {{ $columns }} ],
-                fnDrawCallback: function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
+                fnDrawCallback: function (settings) { typeof MathJax !== 'undefined' && typeof MathJax.typeset === 'function' && MathJax.typeset(); },
                 lengthMenu: [10, 20, 30, -1],
                 sPaginationType: 'full_numbers',
                 bAutoWidth: true,
@@ -427,7 +427,7 @@
                             }
                         });
                         dialog.init(function() {
-                            typeof MathJax !== 'undefined' && MathJax.typeset();
+                            typeof MathJax !== 'undefined' && typeof MathJax.typeset === 'function' && MathJax.typeset();
                         });
                     }
                 });

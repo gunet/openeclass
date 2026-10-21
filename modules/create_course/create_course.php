@@ -167,8 +167,7 @@ if (!isset($_POST['create_course'])) {
         $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-select" id="course_license_id"');
         $data['cancel_link'] = "{$urlServer}main/portfolio.php";
         $data['is_coby_enabled'] = false;
-        $data['courseStartDate'] = date('d-m-Y');
-        $data['course_enableStartDate'] = 'checked';
+        $data['courseStartDate'] = $data['course_enableStartDate'] = '';
         $data['courseEndDate'] = $data['course_enableEndDate'] = '';
         $data['courseRegStartDate'] = $data['course_enableRegStartDate'] = '';
         $data['courseRegEndDate'] = $data['course_enableRegEndDate'] = '';
@@ -327,14 +326,6 @@ if (!isset($_POST['create_course'])) {
             $file_name = $_FILES['course_image']['name'];
             validateUploadedFile($file_name, 2);
             move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$code/image/$file_name");
-            require_once 'modules/admin/extconfig/externals.php';
-            $connector = AntivirusApp::getAntivirus();
-            if ($connector->isEnabled()) {
-                $output = $connector->check("$webDir/courses/$course_code/image/$file_name");
-                if ($output->status == $output::STATUS_INFECTED) {
-                    AntivirusApp::block($output->output);
-                }
-            }
             $course_image = $file_name;
         }
 

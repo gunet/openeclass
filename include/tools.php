@@ -114,18 +114,15 @@ function getExternalLinks() {
 
 
 /**
- * @brief Creates a multidimensional array of the user's tools
- * in regard to the user's user level
- * (student | professor | platform administrator)
+ * @brief Construct course tools menu. Used only in mobile API
  * @param bool $rich Whether to include rich text notifications in title
  * @return array
  */
-function lessonToolsMenu(bool $rich=true, $display_admin_menu = false): array
+function lessonToolsMenu(bool $rich=true): array
 {
     global $uid, $is_editor, $is_course_admin, $is_course_reviewer,
            $course_code, $modules, $urlAppend, $status, $course_id, $langCourseOptions,
-           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course,
-           $admin_modules, $langAdministrationTools, $langSyllabus;
+           $langActiveTools, $langInactiveTools, $langLocale, $is_collaborative_course;
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 
@@ -259,45 +256,157 @@ function lessonToolsMenu(bool $rich=true, $display_admin_menu = false): array
         $sideMenuGroup[] = $sideMenuSubGroup;
     }
 
-    if ($is_course_admin && $display_admin_menu) {  // display course admin tools
-        $sideMenuSubGroup = array();
-        $sideMenuText = array();
-        $sideMenuLink = array();
-        $sideMenuImg = array();
-        $arrMenuType = array('type' => 'text',
-            'text' => $langAdministrationTools,
-            'class' => 'course_admin');
-        $sideMenuSubGroup[] = $arrMenuType;
-
-        $sideMenuText[] = $langSyllabus;
-        $sideMenuLink[] = q($urlAppend . 'modules/course_description/index.php?course=' . $course_code);
-        $sideMenuImg[] = 'fa-pen-to-square';
-
-        foreach ($admin_modules as $adm_mod) {
-            $sideMenuText[] = $adm_mod['title'];
-            $sideMenuLink[] = q($urlAppend . 'modules/' . $adm_mod['link'] . '/?course=' . $course_code);
-            $sideMenuImg[] = $adm_mod['image'];
-        }
-
-        $sideMenuSubGroup[] = $sideMenuText;
-        $sideMenuSubGroup[] = $sideMenuLink;
-        $sideMenuSubGroup[] = $sideMenuImg;
-        $sideMenuGroup[] = $sideMenuSubGroup;
-    }
-
     return $sideMenuGroup;
 }
 
+
 /**
- *
- * @brief Creates a multidimensional array of the user's tools/links
- * for the menu presented for the embedded theme.
+ * @brief construct course tool menu
+ * @return array[]
+ */
+function courseToolsMenu(): array
+{
+    global $modules, $urlAppend, $course_code, $course_id, $uid, $status, $is_collaborative_course,
+           $is_editor, $is_course_reviewer, $is_course_admin, $langLocale;
+
+    $view_course = Database::get()->querySingle("SELECT view_type FROM course WHERE id = ?d", $course_id);
+
+    $course_tools = $inactive_course_tools = $external_course_tools = $lti_tools = [];
+    $mail_status = '';
+    $not_public_modules = [ MODULE_ID_CHAT, MODULE_ID_ASSIGN, MODULE_ID_MESSAGE, MODULE_ID_FORUM,
+                            MODULE_ID_GROUPS, MODULE_ID_ATTENDANCE, MODULE_ID_GRADEBOOK, MODULE_ID_REQUEST,
+                            MODULE_ID_STICKY_NOTES, MODULE_ID_PROGRESS, MODULE_ID_LP, MODULE_ID_TC ];
+
+    $current_module_dir = module_path($_SERVER['REQUEST_URI']);
+
+    if ((isset($is_collaborative_course) and $is_collaborative_course)) {
+        $table_modules = 'module_disable_collaboration';
+    } else {
+        $table_modules = 'module_disable';
+    }
+    // check if we have defined mail address and want to receive messages
+    if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+        $mail_status = '&nbsp;' . icon('fa-exclamation-triangle');
+    }
+
+    // get all course modules except disabled ones
+    $q = Database::get()->queryArray("SELECT module_id, visible FROM course_module WHERE course_id = ?d 
+                                                    AND module_id NOT IN (SELECT module_id FROM $table_modules) 
+                                                 ORDER BY visible 
+                                                DESC
+                                                ", $course_id);
+    foreach ($q as $tool) {
+        $mid = $tool->module_id;
+        if ($mid == MODULE_ID_TC and count(get_enabled_tc_services()) == 0) { // don't display teleconference when no tc servers are enabled
+            continue;
+        }
+        if ($mid == MODULE_ID_SESSION and $is_collaborative_course and (is_null($view_course->view_type) or $view_course->view_type != 'sessions')) { // don't display sessions if not enabled
+            continue;
+        }
+        if ((!isset($uid) || $uid == 0) && in_array($mid, $not_public_modules)) { // don't display not_public_modules to unregistered users
+            continue;
+        }
+
+        if (isset($modules[$mid]['title'])) {
+            $item = [
+                'visible'     => $tool->visible,
+                'title'       => $modules[$mid]['title'],
+                'link'        => $urlAppend . 'modules/' . $modules[$mid]['link'] . '/index.php?course=' . $course_code,
+                'icon'        => $modules[$mid]['image'],
+                'extra_text'  => '',
+                'extra'       => '',
+            ];
+
+            if ($mid == MODULE_ID_MESSAGE) {
+                $mbox = new Mailbox($uid, course_code_to_id($course_code));
+                $new_msgs = $mbox->unreadMsgsNumber();
+                if ($new_msgs != 0) {
+                    $item['extra_text'] =
+                    "<strong>
+                        $mail_status<span tabindex='0' class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_msgs</span>
+                    </strong>";
+                } else {
+                    $item['extra_text'] = $mail_status;
+                }
+            } elseif ($mid == MODULE_ID_ANNOUNCE) {
+                $item['extra_text'] = $mail_status;
+            } elseif ($mid == MODULE_ID_DOCS && ($new_docs = get_new_document_count($course_id))) {
+                $item['extra_text'] = "<strong><span tabindex='0' class='badge Neutral-900-bg new-badge-item rounded-circle float-end d-flex justify-content-center align-items-center'>$new_docs</span></strong>";
+            }
+
+            if (module_path($item['link']) == $current_module_dir) {
+                $item['extra'] = ' in';
+            }
+
+            if ($tool->visible == 1) {
+                $course_tools[] = $item;
+            } else if ($is_editor || $is_course_admin || $is_course_reviewer) {
+                $inactive_course_tools[] = $item;
+            }
+        }
+    }
+
+    // display external links (if any)
+    $external_links = getExternalLinks();
+    if ($external_links) {
+        foreach ($external_links as $link) {
+            $item =
+                [
+                    'visible' => 1,
+                    'title' => $link->title,
+                    'link' => $link->url,
+                    'icon' => 'fa fa-external-link',
+                    'extra_text' => '',
+                    'extra' => 'target="_blank"',
+                ];
+            $external_course_tools[] = $item;
+        }
+    }
+
+    // display lti apps as links (if any)
+    $lti_result = getLTILinksForTools();
+    if ($lti_result) {
+        foreach ($lti_result as $lti_link) {
+            $item =
+            [
+                'visible' => 1,
+                'title' => $lti_link->title,
+                'link' => $lti_link->url,
+                'icon' => $lti_link->menulink,
+                'extra_text' => '',
+                'extra' => '',
+            ];
+            $lti_tools[] = $item;
+        }
+    }
+
+    // order course modules according to module title
+    setlocale(LC_COLLATE, $langLocale);
+    usort($course_tools, function ($a, $b) {
+        return strcoll($a['title'], $b['title']);
+    });
+    usort($inactive_course_tools, function ($a, $b) {
+        return strcoll($a['title'], $b['title']);
+    });
+
+    // merge all
+    return [
+        'active'   => $course_tools + $external_course_tools + $lti_tools, // active modules (including external and lti tools)
+        'inactive' => $inactive_course_tools, // inactive modules
+    ];
+}
+
+/**
+ * @brief construct picker tool menu (called by TinyMCE buttons)
  * @return array
  */
-function pickerMenu() {
+function pickerToolsMenu(): array
+{
+    global $modules, $urlAppend, $course_code, $course_id, $is_collaborative_course,
+           $session, $langCommonDocs, $langMyDocs,
+           $is_editor, $is_course_reviewer, $is_course_admin;
 
-    global $urlServer, $course_code, $course_id, $is_editor, $is_course_admin, $modules, $session,
-           $uid, $is_collaborative_course, $langBasicOptions, $langMyDocs, $langCommonDocs;
+    $picker_tools = $inactive_picker_tools = [];
 
     if( isset($is_collaborative_course) and $is_collaborative_course) {
         $table = 'module_disable_collaboration';
@@ -307,91 +416,65 @@ function pickerMenu() {
 
     // params
     $originating_module = isset($_REQUEST['originating_module']) ? intval($_REQUEST['originating_module']) : null;
-    $originating_forum = isset($_REQUEST['originating_forum']) ? intval($_REQUEST['originating_forum']) : null;
     $append_module = $originating_module ? "&originating_module=$originating_module" : '';
+    $originating_forum = isset($_REQUEST['originating_forum']) ? intval($_REQUEST['originating_forum']) : null;
     $append_forum = $originating_forum ? "&originating_forum=$originating_forum" : '';
     $docsfilter = isset($_REQUEST['docsfilter']) ? ('&docsfilter=' . q($_REQUEST['docsfilter'])) : '';
     $append_course = $course_code ? "&course=$course_code" : '';
     $params = "?embedtype=tinymce" . $append_course . $append_module . $append_forum . $docsfilter;
 
-    $sideMenuGroup = array();
-
-    $sideMenuSubGroup = array();
-    $sideMenuText = array();
-    $sideMenuLink = array();
-    $sideMenuImg = array();
-
-    $arrMenuType = array();
-    $arrMenuType['type'] = 'text';
-    $arrMenuType['text'] = $langBasicOptions;
-    $arrMenuType['class'] = 'picker';
-    $sideMenuSubGroup[] = $arrMenuType;
-
-    if (isset($course_id) and $course_id >= 1) {
-        $visible = ($is_editor) ? '' : 'AND visible = 1';
-        $result = Database::get()->queryArray("SELECT * FROM course_module
+    $q = Database::get()->queryArray("SELECT module_id, visible FROM course_module
                                WHERE course_id = ?d AND
                                      module_id IN (" . MODULE_ID_DOCS . ', ' . MODULE_ID_VIDEO . ', ' . MODULE_ID_LINKS . ") AND
-                                     module_id NOT IN (SELECT module_id FROM $table)
-                                     $visible
-                               ORDER BY module_id", $course_id);
+                                     module_id NOT IN (SELECT module_id FROM $table)                                     
+                               ORDER BY visible", $course_id);
 
-        foreach ($result as $module) {
-            $mid = $module->module_id;
-            $sideMenuText[] = q($modules[$mid]['title']);
-            $sideMenuLink[] = $urlServer . 'modules/' . $modules[$mid]['link'] . '/index.php' . $params;
-            $sideMenuImg[] = $modules[$mid]['image'] . "_on.png";
+    foreach ($q as $tool) {
+        $mid = $tool->module_id;
+        $item = [
+            'visible' => $tool->visible,
+            'title' => $modules[$mid]['title'],
+            'link' => $urlAppend . 'modules/' . $modules[$mid]['link'] . '/index.php' . $params,
+            'icon' => $modules[$mid]['image'],
+            'extra_text' => '',
+            'extra' => '',
+        ];
+        if ($tool->visible == 1) {
+            $picker_tools[] = $item;
+        } else if ($is_editor || $is_course_admin || $is_course_reviewer) {
+            $inactive_picker_tools[] = $item;
         }
     }
 
-    // link for common documents
     if (get_config('enable_common_docs')) {
-        $sideMenuText[] = $langCommonDocs;
-        $sideMenuLink[] = $urlServer . 'modules/admin/commondocs.php' . $params;
-        $sideMenuImg[] = 'fa-folder-open';
+        $picker_tools[] = [
+                'visible' => 1,
+                'title' => $langCommonDocs,
+                'link' => $urlAppend . 'modules/admin/commondocs.php' . $params,
+                'icon' => 'fa-folder-open',
+                'extra_text' => '',
+                'extra' => '',
+        ];
     }
 
     // link for my documents
     if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
-            $sideMenuText[] = $langMyDocs;
-            $sideMenuLink[] = $urlServer . 'main/mydocs/index.php' . $params;
-            $sideMenuImg[] = 'fa-folder-open';
+        $picker_tools[] = [
+            'visible' => 1,
+            'title' => $langMyDocs,
+            'link' => $urlAppend . 'main/mydocs/index.php' . $params,
+            'icon' => 'fa-folder-open',
+            'extra_text' => '',
+            'extra' => '',
+        ];
     }
 
-    // link for group documents
-    if ($originating_module === MODULE_ID_FORUM && !empty($originating_forum)) {
-        $result = Database::get()->querySingle("SELECT * FROM `group` WHERE forum_id = ?d LIMIT 1", $originating_forum);
-        if ($result) {
-            // check user access: editors and admins PASS, group_members also
-            $usercheck = false;
-            if ($is_editor || $is_course_admin) {
-                $usercheck = true;
-            } else {
-                $group_members = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $result->id);
-                foreach ($group_members as $member) {
-                    if (intval($member->user_id) === intval($uid)) {
-                        $usercheck = true;
-                        break;
-                    }
-                }
-            }
-
-            if ($usercheck) {
-                // display extra menu entry for group documents
-                $sideMenuText[] = q($GLOBALS['langGroupDocumentsLink'] . "'" . $result->name . "'");
-                $sideMenuLink[] = q($urlServer . 'modules/group/document.php' . $params . "&group_id=" . q($result->id));
-                $sideMenuImg[] = 'fa-folder-open';
-            }
-        }
-    }
-
-    $sideMenuSubGroup[] = $sideMenuText;
-    $sideMenuSubGroup[] = $sideMenuLink;
-    $sideMenuSubGroup[] = $sideMenuImg;
-
-    $sideMenuGroup[] = $sideMenuSubGroup;
-    return $sideMenuGroup;
+    // merge all
+    return [
+        'active'    => $picker_tools,
+        'inactive'  => $inactive_picker_tools,
+    ];
 }
 
 /**

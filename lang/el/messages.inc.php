@@ -380,6 +380,7 @@ $langCourseDel = "Διαγραφή $langsOfCourse";
 $langCourseDelSuccess = "Το $langsCourse διαγράφηκε με επιτυχία!";
 $langCourseDelConfirm = "Επιβεβαίωση Διαγραφής $langOfCourse";
 $langCourseDelConfirm2 = "Θέλετε σίγουρα να διαγράψετε το $langsCourse";
+$langCourseDelConfirm3 = "Θέλετε σίγουρα να διαγράψετε τα επιλεγμένα μαθήματα;";
 $langNoticeDel = "ΣΗΜΕΙΩΣΗ: Η διαγραφή του $langsOfCourse θα διαγράψει επίσης τους εγγεγραμμένους " . $langsOfStudentss . " από το $langsCourse, την αντιστοιχία του $langsOfCourse στη $langsFaculty, καθώς και όλο το υλικό του $langsOfCourse.";
 
 // edit course
@@ -1030,40 +1031,6 @@ $langAuthChangeYes = "Ο τρόπος πιστοποίησης άλλαξε με
 $langAuthWarnInactive = 'Προσοχή! Ανενεργός τρόπος πιστοποίησης';
 
 /* * **********************************************************
- * check
- * **************************************************************** */
-
-$langCheckTools = "Έλεγχος προαπαιτούμενων εργαλείων λογισμικού";
-$langCheckIntro = "Για να δείτε όλο το υλικό που περιέχεται στις σελίδες της Πλατφόρμας, πρέπει να έχετε εγκατεστημένα στον υπολογιστή σας τα κατάλληλα εργαλεία.";
-$langCheckIntro2 = "Στον πίνακα που ακολουθεί, μπορείτε να δείτε ποια από τα απαιτούμενα εργαλεία δεν είναι εγκατεστημένα ή δεν έχουν την κατάλληλη έκδοση. Για τα εργαλεία αυτά ακολουθήστε τις οδηγίες εγκατάστασης επιλέγοντας το αντίστοιχο κουμπί και εγκαταστήστε το λογισμικό ακολουθώντας τις οδηγίες.";
-$langSoftware = "Λογισμικό";
-$langBrowser = "Φυλλομετρητής (Browser)";
-$langIE = "Internet Explorer, έκδοση 7 ή νεότερη";
-$langFirefox = "Mozilla Firefox, έκδοση 2.6 ή νεότερη";
-$langSafari = "Safari, έκδοση 4 ή νεότερη";
-$langChrome = "Chrome";
-$langOpera = "Opera";
-$langBrowserSupported = "Ο φυλλομετρητής σας είναι στην κατάλληλη έκδοση.";
-$langBrowserNotSupported = "Ο φυλλομετρητής σας δεν υποστηρίζεται. Παρακαλούμε αναβαθμίστε τον";
-$langAcrobatReader = "Adobe Acrobat Reader, έκδοση 7 ή νεότερη";
-$langAcrobatReaderInstalled = "Ο Αcrobat Reader είναι εγκατεστημένος στην κατάλληλη έκδοση.";
-$langAcrobatReaderNotInstalled = "Ο Acrobat Reader δεν είναι εγκατεστημένος ή είναι παλαιότερης έκδοσης. Για να εγκαταστήσετε την τελευταία έκδοση πατήστε";
-$langAgreeAndInstall = 'Στη νέα σελίδα επιλέξτε "Agree and Install now".';
-$langFlashPlayer = "Adobe Flash Player, έκδοση 10 ή νεότερη";
-$langFlashPlayerInstalled = "Ο Flash Player είναι εγκατεστημένος στην κατάλληλη έκδοση.";
-$langFlashPlayerNotInstalled = "Ο Flash Player δεν είναι εγκατεστημένος ή είναι παλαιότερης έκδοσης. Για να εγκαταστήσετε την τελευταία έκδοση πατήστε";
-$langShockInstalled = "Ο Shockwave Player είναι εγκατεστημένος στην κατάλληλη έκδοση.";
-$langShockNotInstalled = "Ο Shockwave Player δεν είναι εγκατεστημένος ή είναι παλαιότερης έκδοσης. Για να εγκαταστήσετε την τελευταία έκδοση πατήστε";
-$langCheckNotOk1 = "Διαδικασία εγκατάστασης";
-$langInstallMsg = "Παρακαλώ περιμένετε! H εγκατάσταση μπορεί να διαρκέσει μερικά λεπτά.";
-$langCheckNotOk2 = "Ελέγξτε από το διαγνωστικό πινάκα ποια προαπαιτούμενα εργαλεία λογισμικού δεν είναι εγκατεστημένα (εμφανίζονται με κόκκινα γράμματα). Ακολουθήστε τις οδηγίες εγκατάστασης που σας δίνονται από τις επίσημες ιστοσελίδες των προγραμμάτων και προχωρήστε στην εγκατάστασή τους.";
-$langCheckNotOk3 = "Πρέπει να εγκαταστήσετε κάθε προαπαιτούμενο πρόγραμμα που δεν είναι εγκατεστημένο στη σωστή έκδοση.";
-$langCheckNotOk4 = "Όταν ολοκληρώσετε την εγκατάσταση όλων των προαπαιτούμενων εργαλείων λογισμικού, για να επαληθεύσετε εάν έχουν γίνει σωστά οι εγκαταστάσεις πατήστε";
-$langCheckNotOk5 = 'Εάν δεν υπάρχουν μηνύματα με κόκκινα γράμματα στο διαγνωστικό πίνακα, έχουν γίνει ορθά οι εγκαταστάσεις και θα εμφανιστεί το μήνυμα: "Έχετε εγκαταστήσει όλα τα προαπαιτούμενα προγράμματα στον υπολογιστή σας και μπορείτε να περιηγηθείτε στην Πλατφόρμα χωρίς προβλήματα".';
-$langCheckOk = "Έχετε εγκαταστήσει όλα τα προαπαιτούμενα προγράμματα στον υπολογιστή σας και μπορείτε να περιηγηθείτε στην Πλατφόρμα χωρίς προβλήματα.";
-
-
-/* * **********************************************************
  * chat
  * **************************************************************** */
 $langWash = "Καθάρισμα";
@@ -1097,12 +1064,12 @@ $langEditAgent = "Επεξεργασία Agent";
  * **************************************************************** */
 $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 $langCopyrightNotice = '
-<a class="text-decoration-underline" href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2024<br>&nbsp;<br>
-Η πλατφόρμα ' . $siteName . ' βασίζεται στην ανοικτή πλατφόρμα <a class="text-decoration-underline" href="http://www.openeclass.org" target=_blank>Open eClass</a>
+<a class="text-decoration-underline" href="https://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2026<br>&nbsp;<br>
+Η πλατφόρμα ' . $siteName . ' βασίζεται στην ανοικτή πλατφόρμα <a class="text-decoration-underline" href="https://www.openeclass.org" target=_blank>Open eClass</a>
 η οποία είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών ' . $langOfCourses . ' και αποτελεί
 την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
 Ασύγχρονης Τηλεκπαίδευσης. Aναπτύχθηκε και υποστηρίζεται ενεργά από την Ομάδα
-Ασύγχρονης Τηλεκπαίδευσης του GUnet και <a class="text-decoration-underline" href="http://download.eclass.gunet.gr" target="_blank">διανέμεται ελεύθερα</a>
+Ασύγχρονης Τηλεκπαίδευσης του GUnet και <a class="text-decoration-underline" href="https://www.openeclass.org/%ce%b4%ce%b9%ce%ac%ce%b8%ce%b5%cf%83%ce%b7/" target="_blank">διανέμεται ελεύθερα</a>
 ως Λογισμικό Ανοικτού Κώδικα σύμφωνα με τη γενική δημόσια άδεια GNU General
 Public License (GNU GPL).<br><br>
 Το περιεχόμενο των ηλεκτρονικών ' . $langsOfCourses . ' που φιλοξενεί η πλατφόρμα ' . $siteName . ',
@@ -1452,11 +1419,13 @@ $langImportAttendances = "Εισαγωγή παρουσιών από αρχεί�
 $langAttendancesImported = "Οι παρουσίες καταχωρήθηκαν";
 $langImportExtraAttendanceUsers = "Οι παρακάτω χρήστες δεν συμμετείχαν στο παρουσιολόγιο";
 $langAttendanceUsers = "Χρήστες του Παρουσιολογίου";
-$langImportAttendancesHelp = "Μπορείτε να αποστείλετε ένα αρχείο τύπου Excel (π.χ. xls, xlsx) με τις παρουσίες των χρηστών.
-    Η παρουσία των χρηστών πρέπει να συμπληρωθεί στην τελευταία στήλη του αρχείου που θα κατεβάσετε από το παρακάτω σύνδεσμο.<br><br>
-    <strong>MHN</strong> αλλάξετε τη δομή του αρχείου (π.χ. αριθμό στηλών) γιατί η εισαγωγή των παρουσιών θα αποτύχει. <br><br>
-    Σημειώστε επίσης, ότι αν θέλετε να εισάγετε παρουσία σημειώστε το <strong>1</strong>. Οτιδήποτε άλλο δεν θεωρείται παρουσία.";
-
+$langImportAttendancesHelp = 'Μπορείτε να εισάγετε παρουσίες μαζικά αποστέλλοντας ένα αρχείο τύπου Excel (xlsx) που περιέχει τις παρουσίες που θέλετε να τροποποιήσετε.';
+$langImportAttendancesStepOne = 'Κάντε λήψη του αρχείου κάνοντας κλικ στο κουμπί';
+$langImportAttendancesStepTwo = 'Ανοίξτε το αρχείο και <strong>ΜΗΝ</strong> αλλάξετε την δομή του (π.χ. αριθμό στηλών), καθώς η εισαγωγή θα αποτύχει.';
+$langImportAttendancesStepThree = 'Κάντε κλικ στο κελί της τελευταίας στήλης για τον χρήστη που θέλετε να τροποποιήσετε.';
+$langImportAttendancesStepFour = 'Πληκτρολογήστε τον αριθμό <strong>0</strong> για να δηλώσετε απουσία (κόκκινο X), ή τον αριθμό <strong>1</strong> για να προσθέσετε μια παρουσία (πράσινο τικ).';
+$langImportAttendancesStepFive = 'Πιέστε το πλήκτρο Enter και έπειτα αποθηκεύστε το αρχείο.';
+$langImportAttendancesStepSix = 'Ανεβάστε το αρχείο στην παρακάτω φόρμα.';
 $langGradebook = "Βαθμολόγιο";
 $langGradebooks = "Βαθμολόγια";
 $langAvailableGradebooks = "Διαθέσιμα βαθμολόγια";
@@ -1795,7 +1764,7 @@ $langMultiCourseInfo = "Εισαγάγετε στην παρακάτω περι�
 του μετά τον τίτλο, διαχωρισμένο με το χαρακτήρα \"|\".";
 $langMultiCourseDeleteInfo = "Εισαγάγετε στην παρακάτω περιοχή μια λίστα με τους
 κωδικούς των $langsOfCourses που επιθυμείτε να διαγραφούν.";
-$langMultiCourseTitles = "Τίτλοι / Καθηγητές $langOfCourses";
+$langMultiCourseTitles = "Τίτλοι | Καθηγητές $langOfCourses";
 $langMultiCourseCodes = "Κωδικοί $langOfCourses";
 $langMultiCourseData = "Στοιχεία $langOfCourses";
 $langMultiCourseCreated = "το $langsCourse δημιουργήθηκε";
@@ -2190,6 +2159,8 @@ $langEndMessage = "Μήνυμα ολοκλήρωσης";
 $langEndMessageInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
 $langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένου';
 $langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής και επικόλλησης κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
+$langCodeExercise = 'Άσκηση κώδικα προγραμματισμού';
+$langCodeExerciseLang = 'Γλώσσα προγραμματισμού';
 $langStricterExamRestriction = "Αυστηρός περιορισμός";
 $langExerciseWillBeCanceledInStrictMode = "Η εξέταση ακυρώνεται σε παράλληλες ενέργειες χρηστών όπως ανακατεύθυνση σε νέα σελίδα ή άνοιγμα νέου παραθύρου";
 $langStrictModeExceptForQtypes = "Δεν περιλαμβάνονται οι τύποι ερωτήσεων (Προφορικά, Ανέβασμα αρχείου)";
@@ -2871,11 +2842,11 @@ $langAddAvailableDateForGroupAdmin = "Προσθήκη διαθεσιμότητ�
 $langAddAvailability = "Προσθήκη διαθέσιμης ημερομηνίας";
 $langRedInfoRentezvousOtherProgram = "<div style='color:#C44601;' class='TextBold'>Με ΚΟΚΚΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως υπεύθυνος ομάδας σε άλλα μαθήματα.</div>";
 $langSuccessInfoRentezvous = "<div style='color:#1E7E0E;' class='TextBold'>Με ΠΡΑΣΙΝΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει στο τρέχων μάθημα</br>
-                           στην τρέχων ομάδα ως υπεύθυνος.</div>";
+                           στην τρέχουσα ομάδα ως υπεύθυνος.</div>";
 $langWarningInfoRentezvous = "<div style='color:#F57600;' class='TextBold'>Με ΠΟΡΤΟΚΑΛΙ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχει καταχωρίσει κάποιος άλλος</br>
-                              υπεύθυνος ομάδας στο τρέχων μάθημα στη τρέχων ομάδα.</div>";
+                              υπεύθυνος ομάδας στο τρέχον μάθημα στην τρέχουσα ομάδα.</div>";
 $langInfoInfoRentezvous = "<div style='color:#74AFE9;' class='TextBold'>Με ΓΑΛΑΖΙΟ χρώμα εμφανίζονται οι διαθέσιμες ημέρες επικοινωνίας που έχετε καταχωρίσει ως</br>
-                              υπεύθυνος ομάδας στο τρέχων μάθημα σε άλλη ομάδα.</div>";
+                              υπεύθυνος ομάδας στο τρέχον μάθημα σε άλλη ομάδα.</div>";
 $langPinkInfoRentezvous = "<div style='color:#ffc0cb;' class='TextBold'>Με ΡΟΖ χρώμα εμφανίζεται η κράτηση που έχει γίνει από κάποιο μέλος της ομάδας.</div>";
 $langChangeDateSuccess = "Η ημερομηνία άλλαξε επιτυχώς.";
 $langNoChangeDateOtherUser = "Δεν μπορείτε να αλλάξατε την ημερομηνία άλλου χρήστη.";
@@ -3141,6 +3112,7 @@ $langLicense = "Άδεια Χρήσης";
 $langLastCheck = "Τελευταίος έλεγχος";
 $langRequirements = "Απαιτήσεις Συστήματος";
 $langInstallEnd = "Ολοκλήρωση";
+$langInstallMsg = "Παρακαλώ περιμένετε! H εγκατάσταση μπορεί να διαρκέσει μερικά λεπτά.";
 $langModuleNotInstalled = "Δεν είναι εγκατεστημένο";
 $langReadHelp = "Διαβάστε περισσότερα";
 $langWarnConfig = "Προσοχή! Το αρχείο <strong>config.php</strong> υπάρχει ήδη στο σύστημά σας! Το πρόγραμμα εγκατάστασης δεν πραγματοποιεί αναβάθμιση. Αν θέλετε να ξανατρέξετε την εγκατάσταση της πλατφόρμας, παρακαλούμε διαγράψτε το αρχείο config.php!";
@@ -4274,8 +4246,8 @@ $ldaperror = "Δεν είναι δυνατή η σύνδεση στον εξυπ
 $ldapmailpass = "Το συνθηματικό σας είναι το ίδιο με αυτό της υπηρεσίας e-mail.";
 $ldapback = "Επιστροφή στην";
 $ldaplastpage = "προηγούμενη σελίδα";
-$mailsubject = "Αίτηση " . $langOfTeacher . " - Υπηρεσία Τηλεκπαίδευσης";
-$mailsubject2 = "Αίτηση " . $langOfStudent . " - Υπηρεσία Τηλεκπαίδευσης";
+$mailsubject = "Αίτηση $langOfTeacher - Υπηρεσία Τηλεκπαίδευσης";
+$mailsubject2 = "Αίτηση $langOfStudent - Υπηρεσία Τηλεκπαίδευσης";
 $contactphone = "Τηλέφωνο επικοινωνίας";
 $contactpoint = "Επικοινωνία";
 $searchuser = "Αναζήτηση Καθηγητών / Χρηστών";
@@ -4523,6 +4495,7 @@ $langErrorLang = "Πρόβλημα! Δεν υπάρχουν γλώσσες γι�
 $langRestoreUserExists = "%s: Ο λογαριασμός υπήρχε ήδη. Τρέχον ονοματεπώνυμο: %s. Ονοματεπώνυμο στο αρχείο: %s.";
 $langRestoreUserNew = "%s: Ο λογαριασμός δημιουργήθηκε. Ονοματεπώνυμο: %s";
 $langOldValue = 'Παλιά τιμή';
+$langRestoreCreateUsers = 'Δημιουργία λογαριασμών που δεν υπάρχουν ήδη βάσει του username τους';
 
 /* * ***************************************************************
  * search.php
@@ -4840,6 +4813,7 @@ $langWeekly = "Εβδομαδιαίο";
 $langMonthly = "Μηνιαίο";
 $langYearly = "Ετήσιο";
 $langSummary = "Συνολικά";
+$langSynopsis = "Σύνοψη";
 $langPerDay = "ανά ημέρα";
 $langPerWeek = "ανά εβδομάδα";
 $langPerMonth = "ανά μήνα";
@@ -7036,13 +7010,12 @@ $langAnalyticsDescription = '<p>Μπορείτε να συνδέσετε την 
     εξωτερική υπηρεσία ανάλυσης επισκέψεων (Web Analytics, π.χ. Google
     Analytics, Piwik) προκειμένου να διατηρούνται αναλυτικά στατιστικά
     για τους επισκέπτες.</p>';
-$langUserWayShortDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/'>https://userway.org/</a></p>";
-$langUserWayLongDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/'>https://userway.org/</a></p>";
-$langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
-<p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών $langOfCourses</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης $langsOfCourses που επίσης αναπτύσσει το GUNET.</p>";
+$langUserWayShortDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/' target='_blank'>https://userway.org/</a></p>";
+$langUserWayLongDescription = "<p>Επιλογές προσβασιμότητας μέσω της υπηρεσίας UserWay. Δείτε περισσότερες πληροφορίες στο <a href='https://userway.org/' target='_blank'>https://userway.org/</a></p>";
+$langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUnet για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
+<p>Η πλατφόρμα υποστηρίζει τη δράση <a href='https://project.opencourses.gr/' target='_blank'>Ανοικτών Ακαδημαϊκών Μαθημάτων</a> σε συνδυασμό με την <a href='https://openeclass.org/' target='_blank'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης μαθημάτων που επίσης αναπτύσσει το GUnet.</p>";
 $langUniFlixDescription = "<p>Το UniFlix είναι η πλατφόρμα ανοικτού λογισμικού που έχει σχεδιαστεί και απαπτυχθεί από το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>";
-$langBBBDescription = "Το ανοικτό λογισμικό <a href=\"https://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
-<p>Δεν απαιτείται εγκατάσταση πρόσθετου υλικού (Software ή Hardware) και εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α)r. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p>";
+$langBBBDescription = "<p>Το <a href='https://bigbluebutton.org/' target='_blank'>BigBlueButton</a> είναι λογισμικό ανοικτού κώδικα για διαδικτυακή τηλεδιάσκεψη και συνεργασία. Λειτουργεί απευθείας στους σύγχρονους φυλλομετρητές, χωρίς να απαιτείται εγκατάσταση πρόσθετου λογισμικού. Για τη σύνδεση της πλατφόρμας με εγκατάσταση BigBlueButton, επιλέξτε «Ρυθμίσεις».</p>";
 $langBBBLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης BigBlueButton.";
 $langAutojudgeDescription = "<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα συνδέεται με τρίτες υπηρεσίες μεταγλώττισης οι οποίες μπορούν να επιλεχθούν στις <a href=\"autojudgemoduleconf.php\">Ρυθμίσεις</a>.</p>";
 $langFtpShortDescription = "Σύνδεση με υπηρεσία FTP";
@@ -7059,18 +7032,18 @@ $langWebDAVShortDescription = "Υποστήριξη λειτουργίας κα�
 $langWebDAVLongDescription = "Long Description about web dav";
 $langAntivirusDescription = "<p>Σύνδεση με εγκατεστημένο λογισμικό προστασίας έναντι ιών</p>";
 $langWafDescription = "<p>Ενεργοποίηση τείχους προστασίας εφαρμογής ιστού</p>";
-$langUnplagShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism). Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Unicheck (πρώην Unplag). Δείτε περισσότερες πληροφορίες στο <a href=\"https://unicheck.com\">https://unicheck.com</a>";
+$langUnplagShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism). Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Unicheck (πρώην Unplag). Δείτε περισσότερες πληροφορίες στο <a href='https://unicheck.com/' target='_blank'>https://unicheck.com/</a>";
 $langUnplagLongDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής.";
-$langTurnitinShortDescription = "Σύνδεση με υπηρεσία λογοκλοπής (plagiarism).
+$langTurnitinShortDescription = 'Σύνδεση με υπηρεσία λογοκλοπής (plagiarism).
 Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Turnitin.
-Δείτε περισσότερες πληροφορίες στο <a href=\"https://turnitin.com\">https://turnitin.com</a>";
-$langLimesurveyShortDescription = "Σύνδεση με υπηρεσία στατιστικής έρευνας (survey).
-Η υπηρεσία στατιστικής έρευνας είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία LimeSurvey GmbH.
-Δείτε περισσότερες πληροφορίες στο <a href=\"https://www.limesurvey.org\">https://www.limesurvey.org</a>";
+Δείτε περισσότερες πληροφορίες στο <a href="https://turnitin.com/" target="_blank">https://turnitin.com</a>';
+$langLimesurveyShortDescription = "Σύνδεση με υπηρεσία στατιστικής έρευνας (survey) LimeSurvey.
+Η υπηρεσία στατιστικής έρευνας είναι διαθέσιμη ως λογισμικό ανοικτού κώδικα ή ως εμπορικό προϊόν και προσφέρεται από την εταιρεία LimeSurvey GmbH.
+Δείτε περισσότερες πληροφορίες στο <a href='https://www.limesurvey.org/' target='_blank'>https://www.limesurvey.org</a>";
 $langLimesurveyLongDescription = "Σύνδεση με υπηρεσία στατιστικής έρευνας.";
 $langPanoptoShortDescription = "Σύνδεση με υπηρεσία διαχείρισης βίντεο.
 Η υπηρεσία βίντεο είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Panopto Inc.
-Δείτε περισσότερες πληροφορίες στο <a href=\"https://www.panopto.com\">https://www.panopto.com</a>";
+Δείτε περισσότερες πληροφορίες στο <a href='https://www.panopto.com/' target='_blank'>https://www.panopto.com</a>";
 $langPanoptoLongDescription = "Σύνδεση με υπηρεσία διαχείρισης βίντεο.";
 $langColmoocDescription = 'Διασύνδεση με τα υποσυστήματα Conversational Agent και Learning Analytics του έργου <a href="https://colmooc.eu/">colMOOC</a>.';
 $langH5PShortDescription = "Διαδραστικό περιεχόμενου τύπου H5P";
@@ -7274,17 +7247,15 @@ $langLimesurveyAppAddSuccessful = "Η καταχώριση της LimeSurvey Ε�
 $langLimesurveyAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
 $langLimesurveyEnabled = "Ενεργοποιημένο";
 $langNewLimesurveyTool = "Προσθήκη νέας εφαρμογής LimeSurvey (LTI)";
-$langNoAvailableLimesurveyTemplates = "Δεν υπάρχουν διαθέσιμες εφαρμογές LTI.";
 $langLimesurveyApp = "Εφαρμογή LimeSurvey";
 $langLimesurveyLTIOptions = "Επιλογές LimeSurvey";
 $langLimesurveyIntegration = "Ενσωμάτωση με LimeSurvey";
 $langPanoptoConf = "Ρυθμίσεις \"Panopto\" του $siteName";
-$langPanoptoConfDetails = "Λεπτομέρειες Εφαρμογής Panopto";
-$langPanoptoAppAddSuccessful = "Η καταχώριση της Panopto Εφαρμογής ολοκληρώθηκε με επιτυχία.";
-$langPanoptoAppDeleteSuccessful = "Η διαγραφή της Panopto Εφαρμογής ολοκληρώθηκε με επιτυχία.";
+$langPanoptoConfDetails = "Λεπτομέρειες εφαρμογής Panopto";
+$langPanoptoAppAddSuccessful = "Η καταχώριση της εφαρμογής Panopto ολοκληρώθηκε με επιτυχία.";
+$langPanoptoAppDeleteSuccessful = "Η διαγραφή της εφαρμογής Panopto ολοκληρώθηκε με επιτυχία.";
 $langPanoptoEnabled = "Ενεργοποιημένο";
 $langNewPanoptoTool = "Προσθήκη νέας εφαρμογής Panopto (LTI)";
-$langNoAvailablePanoptoTemplates = "Δεν υπάρχουν διαθέσιμες εφαρμογές LTI.";
 $langPanoptoApp = "Εφαρμογή Panopto";
 $langPanoptoLTIOptions = "Επιλογές Panopto";
 $langPanoptoIntegration = "Ενσωμάτωση με Panopto";
@@ -7357,6 +7328,22 @@ $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμε
 $langAnalyticsStatus = 'Επίπεδο';
 $langAnalyticsDifficultyLevel = "Κριτήρια";
 $langAnalyticsDifficultyLevelInfo = "Ρυθμίστε τα όρια δυσκολίας για κάθε τύπο περιεχομένου.";
+$langDailyCount = "Ημερήσιος Υπολογισμός";
+$langWeeklyCount = "Εβδομαδιαίος Υπολογισμός";
+$langMonthlyCount = "Μηνιαίος Υπολογισμός";
+$langTotalCount = "Συνολικός Υπολογισμός";
+$langBlogPosts = "Δημοσιεύσεις στο Blog";
+$langBlogComments = "Σχόλια στο Blog";
+$langCourseComments = "Σχόλια στο μάθημα";
+$langWallComments = "Σχόλια στον τοίχο";
+$langExerciseGrade = "Βαθμός σε άσκηση";
+$langAssignmentGrade = "Βαθμός σε εργασία";
+$langAssignmentSubmissionBeforeDeadline = "Υποβολή εργασίας πριν την προθεσμία";
+$langForumPosts = "Δημοσιεύσεις στο Forum";
+$langWikiPages = "Σελίδες στο Wiki";
+$langCourseLogins = "Συνδέσεις στο μάθημα";
+$langHits = "Χτυπήματα";
+$langCourseDuration = "Διάρκεια στο μάθημα";
 
 // h5p
 $langH5p = "Περιεχόμενο H5P";
@@ -7367,6 +7354,8 @@ $langH5pInteractiveContentByStudents = "Διαδραστικό περιεχόμ�
 $langH5pNoContent = 'Δεν υπάρχει διαδραστικό περιεχόμενο τύπου H5P';
 $langH5pSaveSuccess = "Το διαδραστικό περιεχόμενο τύπου H5P αποθηκεύτηκε με επιτυχία";
 $langH5pDeleteSuccess = "Το διαδραστικό περιεχόμενο τύπου H5P διαγράφτηκε με επιτυχία";
+$langH5PEnableDistribution = "Ο διαμοιρασμός ενεργοποιήθηκε";
+$langH5PDisableDistribution = "Ο διαμοιρασμός απενεργοποιήθηκε";
 $langOfH5p = "διαδραστικού περιεχομένου";
 $langTypeH5P = "Τύπος H5P";
 $langImportH5P = "Μπορείτε να εισάγετε ένα έτοιμο αρχείο διαδραστικού περιεχομένου τύπου H5P μέσω της παρακάτω φόρμας.";
@@ -8054,7 +8043,7 @@ $langSelectScore = "Επιλογή Ποιότητας";
 $langOptional = "Προαιρετικό";
 $langReasoning = "Αιτιολόγηση";
 $langAISuggestion = "Πρόταση Τ.Ν.";
-$langAISyllabusStructured = "Δομημένα Τμήματα Συλλάβου";
+$langAISyllabusStructured = "Δομημένα Τμήματα Περιγράμματος Μαθήματος";
 $langAISyllabusBibliography = "Βιβλιογραφία";
 $langAISyllabusTeachingMethod = "Μέθοδοι Διδασκαλίας";
 $langAISyllabusAssessmentMethod = "Μέθοδοι Αξιολόγησης";
@@ -8270,17 +8259,6 @@ $langExerciseFeedbackInfo = 'εμφανίζεται μετά την ολοκλή
 $langSurveySubmitted = 'Ευχαριστούμε για την συμμετοχή σας!';
 $langUserAccountInfo3 = 'Εναλλακτικά, μπορείτε να επιλέξετε';
 $langUserAccountInfo4 = 'Σύνδεση με άλλο λογαριασμό';
-$langOpenMeetingsDescription = '<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href="http://openmeetings.apache.org/" target="_blank">Apache OpenMeetings</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας  και .</p>
-<p>Το OpenMeetings ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα OpenMeetings επιλέξτε <a href="openmeetingsconf.php">Ρυθμίσεις</a>.</p>';
-$langOpenMeetingsConf = 'Ρυθμίσεις "OpenMeetings" του ';
-$langAddOpenMeetingsServerInfo = 'Στοιχεία νέου εξυπηρετητή OpenMeetings';
-$langUpdateOpenMeetingsServer = 'Στοιχεία εξυπηρετητή OpenMeetings';
-$langAvailableOpenMeetingsServers = 'Διαθέσιμοι εξυπηρετητές OpenMeetings';
-$langOpenMeetingsServer = 'Όνομα του εξυπηρετητή';
-$langOpenMeetingsAdminUser = 'Username διαχειριστή OpenMeetings';
-$langOpenMeetingsAdminPass = 'Password διαχειριστή OpenMeetings';
-$langOpenMeetingsModuleKey = 'Module key';
-$langOpenMeetingsWebApp = 'Όνομα WebApp';
 $langExternalRepos = 'Εξωτερικά Αποθετήρια';
 $langExternalReposInfo = 'Ρυθμίστε συνδέσεις σε εξωτερικά αποθετήρια πολυμέσων και εκπαιδευτικού περιεχομένου. Οι διδάσκοντες μπορούν να αναζητήσουν και να συνδέσουν περιεχόμενο από αυτά τα αποθετήρια στις θεματικές ενότητες των μαθημάτων τους.';
 $langExternalReposShortDescription = 'Σύνδεση με εξωτερικά αποθετήρια περιεχομένου (DSpace, YouTube, Wikipedia, κ.λπ.)';
@@ -8491,3 +8469,10 @@ $langEduApiLastSync = "Τελευταίος συγχρονισμός";
 $langEduApiCourseSyncCompleted = "Ολοκληρώθηκε ο συγχρονισμός χρηστών του μαθήματος για την περίοδο";
 $langEduApiCourseNotMapped = "Το μάθημα δεν είναι συνδεδεμένο με μάθημα του Edu-API.";
 $langEduApiMissingStudentsLabel = "Εγγεγραμμένοι σπουδαστές που λείπουν από τα δεδομένα του Edu-API:";
+
+//Course renewal
+$langDelstats = "Με την επιλογή αυτή διαγράφονται τα αναλυτικά ημερήσια logs επισκέψεων και διάρκειας παραμονής των χρηστών στο μάθημα, ενώ διατηρούνται τα μηνιαία συγκεντρωτικά στατιστικά στοιχεία.";
+$langNoCourseSelected = "Δεν έχετε επιλέξει κανένα μάθημα.";
+$langSelectCourses = "Επιλογή Μαθημάτων";
+$langSelectedCourses = "Έχουν επιλεγεί";
+$langShowHide = "Εμφάνιση/Απόκρυψη";
