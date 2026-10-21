@@ -31,14 +31,15 @@ require_once '../../exercise/question.class.php';
 require_once '../../exercise/answer.class.php';
 
 $require_current_course = true;
-require_once '../../../include/init.php';
+
+require_once '../../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/exercise/game.php';
 ModalBoxHelper::loadModalBox();
 
-$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
 $cssFile = '';
 if($theme_id > 0){

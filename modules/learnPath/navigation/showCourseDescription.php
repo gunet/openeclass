@@ -30,52 +30,53 @@
  */
 
 $require_current_course = true;
-require_once '../../../include/init.php';
+require_once '../../../include/baseTheme.php';
 
 $pageName = $langCourseProgram;
 
-$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_id = $_SESSION['theme_options_id'] ?? get_config('theme_options_id');
 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+$cssFile = '';
+if ($theme_id > 0) {
+    $cssFile = "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
+}
 
-?>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
-        <link href="../../../template/modern/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-        <link href="../../../template/modern/css/fonts_all/typography.css?<?php echo time(); ?>" type="text/css">
-        <link href="../../../template/modern/css/lp.css?<?php echo time(); ?>" rel="stylesheet" type="text/css">
-        <link href="../../../template/modern/css/default.css?<?php echo time(); ?>" rel="stylesheet" type="text/css">
-
-        <?php if($theme_id > 0){ ?>
-            <link href="../../../courses/theme_data/<?php echo $theme_id; ?>/style_str.css?<?php echo time(); ?>" rel="stylesheet" type="text/css" />
-        <?php } ?>
-
-        <title><?php echo $langCourseProgram ?></title>
+echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">'
+    . "\n<html>\n"
+    . '<head>' . "\n"
+    . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
+    . "<script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>
+        <link href='{$urlAppend}template/modern/css/bootstrap.min.css' rel='stylesheet'>
+        <link href='{$urlAppend}template/modern/css/fonts_all/typography.css?" . time() . "' rel='stylesheet'>
+        <link href='{$urlAppend}template/modern/css/lp.css?" . time() . "' rel='stylesheet'>\n
+       <link href='{$urlAppend}template/modern/css/default.css?" . time() . "' rel='stylesheet'>\n
+       $cssFile\n';       
+    <title>$langCourseProgram</title>
     </head>
-    <body class='body-learningPath' style="margin: 0px; height: 100%!important; height: auto;">
-        <div id="content" style="width:800px; margin: 0 auto;">
-        <?php
-            $q = Database::get()->queryArray("SELECT id, title, comments FROM course_description WHERE course_id = ?d ORDER BY `order`", $course_id);
+    <body class='body-learningPath' style='margin: 0px; height: 100%!important; height: auto;'>
+        <div id='content' style='width:800px; margin: 0 auto;'>";
 
-            if ($q && count($q) > 0) {
-                foreach ($q as $row) {
-                    echo "
-                    <table class='table-default'>
-                    <tr>
-                    <td><strong>" . q($row->title) . "</strong></td>\n
-                    </tr>
-                    <tr>";
-                    if ($is_editor) {
-                        echo "\n<td colspan='6'>" . standard_text_escape($row->comments) . "</td>";
-                    } else {
-                        echo "\n<td>" . standard_text_escape($row->comments) . "</td>";
-                    }
-                    echo "</tr></table><br />\n";
+        $q = Database::get()->queryArray("SELECT id, title, comments FROM course_description WHERE course_id = ?d ORDER BY `order`", $course_id);
+
+        if ($q && count($q) > 0) {
+            foreach ($q as $row) {
+                echo "
+                <table class='table-default'>
+                <tr>
+                <td><strong>" . q($row->title) . "</strong></td>\n
+                </tr>
+                <tr>";
+                if ($is_editor) {
+                    echo "\n<td colspan='6'>" . standard_text_escape($row->comments) . "</td>";
+                } else {
+                    echo "\n<td>" . standard_text_escape($row->comments) . "</td>";
                 }
-            } else {
-                echo "   <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langThisCourseDescriptionIsEmpty</span></div>";
+                echo "</tr></table><br />\n";
             }
-        ?>
-        </div>
+        } else {
+            echo "   <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langThisCourseDescriptionIsEmpty</span></div>";
+        }
+
+        echo "</div>
     </body>
-</html>
+</html>";
