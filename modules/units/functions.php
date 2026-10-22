@@ -770,12 +770,9 @@ function show_resources($unit_id)
  */
 function show_resource($info) {
 
-    global $langUnknownResType, $is_editor, $langConfirmLpCleanAttemptTitle, $langConfirmLpCleanAttemptBody;
+    global $langUnknownResType, $langConfirmLpCleanAttemptTitle, $langConfirmLpCleanAttemptBody;
 
     $html = '';
-    if ($info->visible == 0 and $info->type != 'doc' and ! $is_editor) { // special case handling for old unit resources with type 'doc' .
-        return;
-    }
     switch ($info->type) {
         case 'doc':
             $html .= show_doc($info->title, $info->comments, $info->id, $info->res_id, $info->activity_title);
@@ -784,7 +781,7 @@ function show_resource($info) {
         case 'text':
             $html .= show_text($info->comments, $info->id, $info->visible, $info->activity_title);
             break;
-        case 'description': // deprecated module. only for compatibility !
+        case 'description': // deprecated module. only for compatibility!
             $html .= show_description($info->title, $info->comments, $info->id, $info->res_id, $info->visible, $info->activity_title);
             break;
         case 'lp':
