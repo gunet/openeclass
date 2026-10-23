@@ -383,7 +383,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     }
     enableCheckFileSize();
 
-    $qTypesNoStricterMode = array(ORAL => "$langOral", UPLOAD_FILE => "$langUploadFile");
+    $qTypesNoStricterMode = array(ORAL => $langOral, UPLOAD_FILE => $langUploadFile);
     $stricterExamMode = $objExercise->getOption('stricterExamRestriction') ? 1: 0;
     if ($stricterExamMode) {
         $qTypesNoStricterMode = [];

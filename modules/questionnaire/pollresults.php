@@ -143,6 +143,30 @@ if (!$is_course_reviewer && !$thePoll->show_results) {
 }
 
 if (isset($_GET['from_session_view']) && isset($_GET['del_user_answers'])) {
+    // Delete files from courses folder only if the question is file upload type
+    $u_answers = Database::get()->queryArray("SELECT par.answer_text,par.qid,pur.uid FROM poll_answer_record par
+                                              JOIN poll_user_record pur ON pur.id=par.poll_user_record_id
+                                              JOIN poll_question pq ON pq.pqid=par.qid
+                                              WHERE pq.qtype = ?d
+                                              AND pur.pid = ?d
+                                              AND pur.session_id = ?d", QTYPE_FILE, $pid, intval($_GET['session']));
+
+    if (count($u_answers) > 0) {
+        foreach ($u_answers as $an) {
+            $arr_file = unserialize($an->answer_text, ['allowed_classes' => false]);
+            if (isset($arr_file['filepath']) && is_string($arr_file['filepath'])) {
+                $c_code = q($_GET['course'] ?? '');
+                $s_id = intval($_GET['session'] ?? 0);
+                $u_id = $an->uid ?? 0;
+                $q_id = $an->qid ?? 0;
+                $fpath = q($arr_file['filepath'] ?? '');
+                $file = "$webDir/courses/$c_code/poll_$pid/$u_id/$q_id/$s_id$fpath";
+                if (file_exists($file)) { 
+                    unlink($file);
+                }
+            }
+        }
+    }
     // Delete user's answer from a poll in a specific session
     $del = Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $pid, intval($_GET['session']));
     if ($del) {
@@ -172,9 +196,6 @@ if ($pollResultsAsGoogleForm) {
     }
     redirect_to_home_page("modules/questionnaire/poll_results_multiple_submissions.php?course=$course_code&pid=$pid$fromSessionView$sessionArg");
 }
-
-
-
 if (isset($_GET['from_session_view'])) {
     $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d 
                                                             AND (email_verification = 1 OR email_verification IS NULL) 
@@ -1183,92 +1204,6 @@ function pdf_poll_output() {
     $course_title = q("$currentCourseName");
     $module_type_title = "";
     html_to_pdf($pdf_title, $course_title, $module_type_title);
-
-    // $pdf_content = "
-    //     <!DOCTYPE html>
-    //     <html lang='el'>
-    //     <head>
-    //       <meta charset='utf-8'>
-    //       <title>" . q("$currentCourseName") . "</title>
-    //       <style>
-    //         * { font-family: 'opensans'; }
-    //         body { font-family: 'opensans'; font-size: 10pt; }
-    //         small, .small { font-size: 8pt; }
-    //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-    //         h1 { font-size: 16pt; }
-    //         h2 { font-size: 12pt; border-bottom: 1px solid black; }
-    //         h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
-    //         th { text-align: left; border-bottom: 1px solid #999; }
-    //         td { text-align: left; }
-    //         .ButtonsContent{ display: none; }
-    //         .hidden_names{ display: none; }
-    //         .trigger_names{display: none;}
-    //         #hide{ display: none; }
-    //         em{ display: none; }
-    //         .hidden-element { display: none; }
-    //         td ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
-    //         ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
-    //         li { list-style: none !important; }
-    //         .card-user-answers { background-color: #eeeeee; padding: 0px 25px 20px 25px; margin-top: 15px; margin-bottom: 10px;}
-    //       </style>
-    //     </head>
-    //     <body>
-    //     <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>";
-
-    // $pdf_content .= $tool_content;
-
-    // $pdf_content .= "</body></html>";
-
-    // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    // $fontDirs = $defaultConfig['fontDir'];
-    // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    // $fontData = $defaultFontConfig['fontdata'];
-
-    // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    // // for old courses
-    // if ($image_height_header > 50) {
-    //     $image_height_header = 20;
-    // }
-    // if ($image_height_footer > 50) {
-    //     $image_height_footer = 15;
-    // }
-    // $mpdf = new Mpdf\Mpdf([
-    //     'margin_top' => $image_height_header + 20,     // mm
-    //     'margin_bottom' => $image_height_footer + 10,  // mm
-    //     'tempDir' => _MPDF_TEMP_PATH,
-    //     'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-    //     'fontdata' => $fontData + [
-    //             'opensans' => [
-    //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-    //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-    //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-    //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-    //             ],
-    //             'roboto' => [
-    //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-    //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-    //             ]
-    //         ]
-    // ]);
-
-    // $mpdf->SetHTMLHeader(get_platform_logo());
-    // $footerHtml = '
-    // <div>
-    //     <table width="100%" style="border: none;">
-    //         <tr>
-    //             <td style="text-align: left;">{DATE j-n-Y}</td>
-    //             <td style="text-align: right;">{PAGENO} / {nb}</td>
-    //         </tr>
-    //     </table>
-    // </div>
-    // ' . get_platform_logo('','footer') . '';
-    // $mpdf->SetHTMLFooter($footerHtml);
-    // $mpdf->SetCreator(course_id_to_prof($course_id));
-    // $mpdf->SetAuthor(course_id_to_prof($course_id));
-    // $mpdf->WriteHTML($pdf_content);
-    // $mpdf->Output("$course_code poll_results.pdf", 'I'); // 'D' or 'I' for download / inline display
-    // exit;
 }
 
 /**
@@ -1285,94 +1220,6 @@ function pdf_session_poll_output($sid) {
     $course_title = q("$currentCourseName");
     $module_type_title = q($sessionTitle);
     html_to_pdf($pdf_title, $course_title, $module_type_title);
-
-    // $pdf_content = "
-    //     <!DOCTYPE html>
-    //     <html lang='el'>
-    //     <head>
-    //       <meta charset='utf-8'>
-    //       <title>" . q("$currentCourseName") . "</title>
-    //       <style>
-    //         * { font-family: 'opensans'; }
-    //         body { font-family: 'opensans'; font-size: 10pt; }
-    //         small, .small { font-size: 8pt; }
-    //         h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
-    //         h1 { font-size: 16pt; }
-    //         h2 { font-size: 12pt; border-bottom: 1px solid black; }
-    //         h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
-    //         th { text-align: left; border-bottom: 1px solid #999; }
-    //         td { text-align: left; }
-    //         .card-poll-results {border-left: 4px solid rgb(255, 255, 255) !important;}
-    //         table {min-width:100% !important;}
-    //         .ButtonsContent{ display: none; }
-    //         .hidden_names{ display: none; }
-    //         #hide{ display: none; }
-    //         em{ display: none; }
-    //         .hidden-element { display: none; }
-    //         .pollTotalAnswers{ display: block;}
-    //         td ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
-    //         ul { list-style: none !important; padding-left: 0 !important; margin-left: 0 !important; }
-    //         li { list-style: none !important; }
-    //         .card-user-answers { background-color: #eeeeee; padding: 0px 25px 20px 25px; margin-top: 15px; margin-bottom: 10px;}
-    //       </style>
-    //     </head>
-    //     <body>
-    //     <h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-    //     <h2> " . q($sessionTitle) . "</h2>";
-
-    // $pdf_content .= $tool_content;
-
-    // $pdf_content .= "</body></html>";
-
-    // $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
-    // $fontDirs = $defaultConfig['fontDir'];
-    // $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
-    // $fontData = $defaultFontConfig['fontdata'];
-    // $image_height_header = setting_get(SETTING_COURSE_IMAGE_PRINT_HEADER_WIDTH, $course_id);
-    // $image_height_footer = setting_get(SETTING_COURSE_IMAGE_PRINT_FOOTER_WIDTH, $course_id);
-    // // for old courses
-    // if ($image_height_header > 50) {
-    //     $image_height_header = 20;
-    // }
-    // if ($image_height_footer > 50) {
-    //     $image_height_footer = 15;
-    // }
-    // $mpdf = new Mpdf\Mpdf([
-    //     'margin_top' => $image_height_header + 20,     // mm
-    //     'margin_bottom' => $image_height_footer + 10,  // mm
-    //     'tempDir' => _MPDF_TEMP_PATH,
-    //     'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
-    //     'fontdata' => $fontData + [
-    //             'opensans' => [
-    //                 'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
-    //                 'B' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700.ttf',
-    //                 'I' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-italic.ttf',
-    //                 'BI' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-700italic.ttf'
-    //             ],
-    //             'roboto' => [
-    //                 'R' => 'roboto-v15-latin_greek_cyrillic_greek-ext-regular.ttf',
-    //                 'I' => 'roboto-v15-latin_greek_cyrillic_greek-ext-italic.ttf',
-    //             ]
-    //         ]
-    // ]);
-
-    // $mpdf->SetHTMLHeader(get_platform_logo());
-    // $footerHtml = '
-    // <div>
-    //     <table width="100%" style="border: none;">
-    //         <tr>
-    //             <td style="text-align: left;">{DATE j-n-Y}</td>
-    //             <td style="text-align: right;">{PAGENO} / {nb}</td>
-    //         </tr>
-    //     </table>
-    // </div>
-    // ' . get_platform_logo('','footer') . '';
-    // $mpdf->SetHTMLFooter($footerHtml);
-    // $mpdf->SetCreator(course_id_to_prof($course_id));
-    // $mpdf->SetAuthor(course_id_to_prof($course_id));
-    // $mpdf->WriteHTML($pdf_content);
-    // $mpdf->Output("$course_code poll_results.pdf", 'I'); // 'D' or 'I' for download / inline display
-    // exit;
 }
 
 
@@ -1403,36 +1250,43 @@ function total_number_of_users_answer_per_question($qid) {
 function poll_user_participation() {
     global $course_id;
 
-    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $_GET['pid']);
+    $poll = Database::get()->querySingle('SELECT * FROM poll WHERE course_id = ?d AND pid = ?d', $course_id, intval($_GET['pid']));
     $allUsers = [];
 
     $sid = $_GET['session'] ?? 0;
 
     if ($poll->assign_to_specific) {
-        $assign = Database::get()->queryArray("SELECT * FROM poll_to_specific WHERE poll_id = ?d", $poll->pid);
+        $assign = Database::get()->queryArray('SELECT * FROM poll_to_specific
+            WHERE poll_id = ?d', $poll->pid);
         foreach ($assign as $item) {
             if ($item->user_id) {
                 $allUsers[] = $item->user_id;
             } elseif ($item->group_id) {
-                $group_members = Database::get()->queryArray("SELECT user_id FROM group_members WHERE is_tutor = 0 AND group_id = ?d", $item->group_id);
+                $group_members = Database::get()->queryArray('SELECT user_id
+                    FROM group_members WHERE is_tutor = 0 AND group_id = ?d',
+                    $item->group_id);
                 foreach ($group_members as $member) {
                     $allUsers[] = $member->user_id;
                 }
             }
         }
     } else {
-        $allUsers = Database::get()->queryArray('SELECT user_id FROM course_user WHERE course_id = ?d AND editor = 0 AND status = ' . USER_STUDENT, $course_id);
+        $allUsers = Database::get()->queryArray('SELECT user_id FROM course_user
+            WHERE course_id = ?d AND editor = 0 AND status = ' . USER_STUDENT,
+            $course_id);
         $allUsers = array_map(function ($user) {
             return $user->user_id;
         }, $allUsers);
     }
 
-    $polledUsers = Database::get()->queryArray("SELECT id, uid, email, email_verification FROM poll_user_record WHERE pid = ?d AND session_id = ?d", $poll->pid, $sid);
+    $polledUsers = Database::get()->queryArray('SELECT id, uid, email, email_verification FROM poll_user_record WHERE pid = ?d AND session_id = ?d', $poll->pid, $sid);
     $okUsers = [];
     $emailUsers = [];
     $timestamp = [];
     foreach ($polledUsers as $user) {
-        $ts = Database::get()->querySingle("SELECT submit_date FROM poll_answer_record WHERE poll_user_record_id = ?d LIMIT 1", $user->id)->submit_date;
+        $ts = Database::get()->querySingle('SELECT submit_date
+                FROM poll_answer_record WHERE poll_user_record_id = ?d LIMIT 1',
+                $user->id)->submit_date;
         if ($user->uid) {
             $okUsers[] = $user->uid;
             $timestamp[$user->uid] = $ts;

@@ -37,7 +37,7 @@ class UploadFileAnswer extends QuestionType
                 $urlLink = $urlServer . "courses/$course_code/exercise/{$exerciseId}{$uploadedFilePath}";
                 $fileLink .= "<div class='col-12 d-flex align-items-center gap-2 mb-4'>
                                 <strong class='text-decoration-underline'>$langAnswer:</strong>
-                                <a id='uploadedFile_{$questionId}' class='linkColor TextBold' target='_blank' href='{$urlLink}'>$uploadedFileName</a>
+                                <a id='uploadedFile_{$questionId}' class='linkColor TextBold' target='_blank' href='" . q($urlLink) . "'>" . q($uploadedFileName) . "</a>
                                 <a id='delFile_{$questionId}' href='#' class='Accent-200-cl' data-bs-toggle='tooltip' title='$langDelete'><i class='fa-solid fa-xmark'></i></a>
                               </div>";
             }
@@ -168,7 +168,7 @@ class UploadFileAnswer extends QuestionType
 
         if (file_exists("$webDir/courses/$course_code/exercise/{$exerciseId}{$filePath}")) {
             $urlLink = $urlServer . "courses/$course_code/exercise/{$exerciseId}{$filePath}";
-            $fileLink .= "<a class='linkColor TextBold' target='_blank' href='{$urlLink}'>$fileName</a>";
+            $fileLink .= "<a class='linkColor TextBold' target='_blank' href='" . q($urlLink) . "'>" . q($fileName) . "</a>";
         }
         $html_content .= "<tr><td>$fileLink</td></tr>";
 

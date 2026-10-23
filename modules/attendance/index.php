@@ -635,7 +635,7 @@ if ($is_editor) {
             $attendance_title = $_POST['title'];
             $start_date = (new DateTime($_POST['start_date']))->format('Y-m-d H:i:s');
             $end_date = (new DateTime($_POST['end_date']))->format('Y-m-d H:i:s');
-            Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d ", $attendance_title, $attendance_limit, $start_date, $end_date, $attendance_id);
+            Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d AND course_id = ?d", $attendance_title, $attendance_limit, $start_date, $end_date, $attendance_id, $course_id);
             $log_details = array('id' => $attendance_id, 'title' => $attendance_title, 'attendance_limit' => $attendance_limit, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
             Session::flash('message',$langGradebookEdit);

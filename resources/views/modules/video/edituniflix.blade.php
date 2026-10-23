@@ -155,7 +155,7 @@
         $(document).ready(function() {
             $('#uniflix_videos_table_{{ $course_code }}').DataTable ({
                 'stateSave': true,
-                'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
+                'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && typeof MathJax.typeset === 'function' && MathJax.typeset(); },
                 'lengthMenu': [10, 20, 30 , -1],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
