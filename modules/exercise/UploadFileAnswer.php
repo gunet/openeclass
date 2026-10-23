@@ -35,19 +35,17 @@ class UploadFileAnswer extends QuestionType
             $uploadedFilePath = $fileInfo['filepath'] ?? '';
             if (file_exists("$webDir/courses/$course_code/exercise/{$exerciseId}{$uploadedFilePath}")) {
                 $urlLink = $urlServer . "courses/$course_code/exercise/{$exerciseId}{$uploadedFilePath}";
-                $fileLink .= "<div class='col-12 d-flex align-items-center gap-2 mb-4'>
-                                <strong class='text-decoration-underline'>$langAnswer:</strong>
-                                <a id='uploadedFile_{$questionId}' class='linkColor TextBold' target='_blank' href='" . q($urlLink) . "'>" . q($uploadedFileName) . "</a>
-                                <a id='delFile_{$questionId}' href='#' class='Accent-200-cl' data-bs-toggle='tooltip' title='$langDelete'><i class='fa-solid fa-xmark'></i></a>
-                              </div>";
+                $fileLink .= "<strong class='text-decoration-underline'>$langAnswer:</strong>
+                              <a id='uploadedFile_{$questionId}' class='linkColor TextBold' target='_blank' href='" . q($urlLink) . "'>" . q($uploadedFileName) . "</a>
+                              <a id='delFile_{$questionId}' href='#' class='Accent-200-cl' data-filepath='" . q($uploadedFilePath) . "' data-bs-toggle='tooltip' title='$langDelete'><i class='fa-solid fa-xmark'></i></a>";
             }
         }
 
         $head_content .= "<link href='{$urlAppend}js/bundle/uppy.min.css' rel='stylesheet'>";
         $html_content .= "<div class='form-group margin-bottom-fat'>
                             <div class='col-sm-12 margin-top-thin QuestionNumber_{$questionId}'>
-                                $fileLink
-                                <input type='hidden' id='choice_{$questionId}' name='choice[$questionId]' value='{$valueFile}'>
+                                <div id='fileAnswer_{$questionId}' class='col-12 d-flex align-items-center gap-2 mb-4" . ($fileLink ? '' : ' d-none') . "'>$fileLink</div>
+                                <input type='hidden' id='choice_{$questionId}' name='choice[$questionId]' value='" . q($valueFile) . "'>
                                 <div id='uppy_{$questionId}'></div>
                                 <div class='text-success mt-4' id='answerFile_{$questionId}'></div>
                             </div>
@@ -57,6 +55,17 @@ class UploadFileAnswer extends QuestionType
             <script>
                 document.addEventListener('DOMContentLoaded', () => {
                     let isUppyLoaded = false;
+
+                    // Show the uploaded file (link + delete button) without reloading the page
+                    function showUploadedFile_{$questionId}(fileName, fileUrl, filePath) {
+                        const container = $('#fileAnswer_{$questionId}');
+                        container.empty()
+                            .append($('<strong>', { 'class': 'text-decoration-underline', text: '" . js_escape($langAnswer) . ":' }))
+                            .append($('<a>', { id: 'uploadedFile_{$questionId}', 'class': 'linkColor TextBold', target: '_blank', href: fileUrl, text: fileName }))
+                            .append($('<a>', { id: 'delFile_{$questionId}', href: '#', 'class': 'Accent-200-cl', title: '" . js_escape($langDelete) . "', 'data-filepath': filePath })
+                                .append($('<i>', { 'class': 'fa-solid fa-xmark' })))
+                            .removeClass('d-none');
+                    }
 
                     async function loadUppy() {
                         try {
@@ -99,10 +108,10 @@ class UploadFileAnswer extends QuestionType
                                     try {
                                         const data = JSON.parse(responseText.responseText);
                                         if (data.success) {
-                                            setInterval(() => {
-                                                $('#choice_{$questionId}').val(data.fileInfo);
-                                                $('#uploadedFile_{$questionId}').addClass('text-decoration-line-through text-danger');
-                                            }, 500);
+                                            $('#choice_{$questionId}').val(data.fileInfo);
+                                            showUploadedFile_{$questionId}(data.fileName, data.fileUrl, data.filePath);
+                                            // Clear the dashboard so that the user can upload another file
+                                            setTimeout(() => uppy.cancelAll(), 1500);
                                         }
                                         return { url: '' };
                                     } catch(e) {
@@ -122,9 +131,10 @@ class UploadFileAnswer extends QuestionType
 
                     loadUppy();
 
-                    $('#delFile_{$questionId}').on('click', function (e) {
+                    $(document).on('click', '#delFile_{$questionId}', function (e) {
                         e.preventDefault();
-                        if (confirm('$langConfirmDeletePermantly')) {
+                        const filePath = $(this).data('filepath');
+                        if (confirm('" . js_escape($langConfirmDeletePermantly) . "')) {
                             $.ajax({
                                 url: '{$urlAppend}modules/exercise/exercise_submit.php?course={$course_code}&exerciseId={$exerciseId}&token={$token}',
                                 method: 'POST',
@@ -132,11 +142,10 @@ class UploadFileAnswer extends QuestionType
                                     file_uploaded_remove: 1,
                                     u_record_id: '{$eurid}',
                                     question_id: '{$questionId}',
-                                    old_file_path: '{$uploadedFilePath}'
+                                    old_file_path: filePath
                                 },
                                 success: function(response) {
-                                    $('#uploadedFile_{$questionId}').remove();
-                                    $('#delFile_{$questionId}').remove();
+                                    $('#fileAnswer_{$questionId}').empty().addClass('d-none');
                                     $('#choice_{$questionId}').val('');
                                 },
                             });

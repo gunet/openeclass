@@ -210,7 +210,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['new_upload_file'])) {
         $arrFileInfo = ['filename' => $filename, 'filepath' => $filepath];
         $info_file = serialize($arrFileInfo);
         Database::get()->query("UPDATE exercise_answer_record SET answer = ?s WHERE eurid = ?d AND question_id = ?d", $info_file, $u_rec, $question_id);
-        echo json_encode(['success' => true, 'fileInfo' => $info_file]);
+        echo json_encode([
+            'success' => true,
+            'fileInfo' => $info_file,
+            'fileName' => $filename,
+            'filePath' => $filepath,
+            'fileUrl' => $urlServer . "courses/$course_code/exercise/{$exercise_id}{$filepath}"
+        ]);
     } else {
         echo json_encode(['success' => false, 'error' => 'Failed to save uploaded file.']);
     }

@@ -359,28 +359,18 @@ function exercise_init_countdown(params) {
             }));
         }
 
-        // Checking oral answers
-        $('.btnSaveRecording').on('click', function() {
-            var id = $(this).attr('id');
-            var parts = id.split('-');
-            if (parts.length == 4) {
-                var qid = parts[3];
-                answered[qid] = true;
-            }
-        });
-        $('.deleteRecording').on('click', function() {
-            var qid = $(this).attr('data-id');
-            answered[qid] = false;
-        });
-
-        // Checking ordering answers
-        $('.sorting-controls .move-up, .sorting-controls .move-down').on('click', function() {
-            var qid = $(this).attr('data-question-id');
-            answered[qid] = true;
-        });
-        $('.reorder-btn .fa').on('mousedown', function() {
-            var qid = $(this).attr('data-icon');
-            answered[qid] = true;
+        // Checking ordering answers: any reordering of the items (buttons or
+        // drag with Sortable) changes the children of the CardList container
+        if ('MutationObserver' in window) {
+            $('.qPanel [id^=CardList_]').each(function () {
+                var qid = this.id.replace('CardList_', '');
+                new MutationObserver(function () {
+                    answered[qid] = true;
+                }).observe(this, { childList: true });
+            });
+        }
+        $('.qPanel').on('click', '.sorting-controls .move-up, .sorting-controls .move-down', function () {
+            answered[$(this).attr('data-question-id')] = true;
         });
 
         // Checking calculated through input-text answers
@@ -400,27 +390,25 @@ function exercise_init_countdown(params) {
             }
         });
 
-        // Checking drag and drop (text,markers) answers
-        $('.draggable').on('mouseup click', function() {
-            var poolId = $(this).attr('data-pool-id');
-            var parts = poolId.split('_');
-            var qid = parts[1];
-            setTimeout(function() {
-                var questionBlanks = document.querySelectorAll('#qPanel' + qid + ' .blank');
-                answered[qid] = true; // assume answered unless a blank isn't filled
-                questionBlanks.forEach(function(blank) {
-                    // Wrap the DOM element with jQuery for convenience
-                    var $blank = $(blank);
-                    // Check if the blank contains a div with class 'draggable dropped-word'
-                    var hasDraggable = $blank.find('div.draggable.dropped-word').length > 0;
-                    // Optional: also check if the blank's text is empty
-                    var isEmpty = $.trim($blank.text()) === '';
-                    if (!hasDraggable && isEmpty) {
-                        answered[qid] = false; // Found an unanswered blank
-                    }
-                });
-            }, 50); // 50ms delay
-        });
+        // Question types whose answer is set programmatically (no change events),
+        // so their state is read from the DOM at submit time
+        var checkAnsweredFromDom = function () {
+            qids.forEach(function (id) {
+                // Drag and drop (text, markers): every blank must contain a dropped word
+                var blanks = $('.blank[data-card-id="words_' + id + '"]');
+                if (blanks.length) {
+                    answered[id] = blanks.filter(function () {
+                        return $(this).find('.dropped-word').length === 0;
+                    }).length === 0;
+                    return;
+                }
+                // Oral (recording) and file upload: hidden input filled after a successful save / upload
+                var hidden = $('#hidden-recording-' + id + ', #choice_' + id);
+                if (hidden.length) {
+                    answered[id] = $.trim(hidden.val()) !== '';
+                }
+            });
+        }
 
         // Checking old question types with input texts , radio buttons and selections.
         // Do not calculate the input texts that have been initialized by calculated question.
@@ -460,6 +448,7 @@ function exercise_init_countdown(params) {
         $('.exercise').submit(function (e) {
             var unansweredCount = 0;
             var firstUnanswered;
+            checkAnsweredFromDom();
             if ('tinymce' in window) {
                 // Check for empty tinyMCE instances
                 tinymce.get().forEach(function (e) {
