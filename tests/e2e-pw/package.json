@@ -1,0 +1,23 @@
+{
+  "name": "open-eclass-e2e",
+  "private": true,
+  "description": "Playwright end-to-end tests for Open eClass. Kept apart from the app's package.json.",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report playwright-report",
+    "test:e2e:typecheck": "tsc -p .",
+    "test:e2e:install": "bun run e2e:reset && ECLASS_E2E_INSTALL=1 playwright test",
+    "e2e:compose": "docker compose -f ../../docker-compose.development.yaml -f ../../docker-compose.e2e.yaml",
+    "e2e:mountpoints": "cd ../.. && mkdir -p vendor js/mathjax js/h5p-standalone js/recordrtc js/video.js resources/fonts/mathjax-newcm-font storage",
+    "e2e:up": "bun run e2e:mountpoints && bun run e2e:compose up -d --wait",
+    "e2e:down": "bun run e2e:compose down",
+    "e2e:reset": "bun run e2e:compose down -v && bun run e2e:mountpoints && bun run e2e:compose up -d --wait --build"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.4",
+    "typescript": "^7.0.2"
+  }
+}
