@@ -56,5 +56,9 @@
         "allow-plugins": {
             "kylekatarnls/update-helper": true
         }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^4.0",
+        "phpunit/phpunit": "^11.5"
     }
 }
