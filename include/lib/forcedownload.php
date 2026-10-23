@@ -43,8 +43,13 @@
 
   ============================================================================== */
 
-function send_file_to_client($real_filename, $filename, $disposition = null, $send_name = false, $delete = false) {
+function send_file_to_client($real_filename, $filename, $disposition = null, $send_name = false, $delete = false): bool
+{
     if (!file_exists($real_filename)) {
+        return false;
+    }
+    // check if filename contains non ascii characters or `\``
+    if (preg_match('/[\x00-\x1F\x7F\\\\]/', $real_filename)) {
         return false;
     }
 
@@ -60,13 +65,13 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
         // Urlencode non-ASCII filenames for Internet Explorer and older Edge versions
         $use_urlencode = (preg_match('|Edge/(\d+)|', $user_agent, $m) && $m[1] < 70) ||
-            (strstr($user_agent, 'MSIE') !== false) ||
-            (strstr($user_agent, 'Trident') !== false);
+            (str_contains($user_agent, 'MSIE')) ||
+            (str_contains($user_agent, 'Trident'));
         if (preg_match('/[^\x20-\x7E]/', $filename) and $use_urlencode) {
             $filename = rawurlencode($filename);
         }
         // Add quotes to filename if it contains spaces
-        if (strpos($filename, ' ') !== false) {
+        if (str_contains($filename, ' ')) {
             $filename = '"' . $filename . '"';
         }
         $filenameattr = '; filename=' . $filename;
