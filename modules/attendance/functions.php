@@ -1483,16 +1483,23 @@ function delete_attendance($attendance_id) {
  */
 function delete_attendance_activity($attendance_id, $activity_id) {
 
-    global $langAttendanceDel, $langAttendanceDelFailure;
+    global $langAttendanceDel, $langAttendanceDelFailure, $course_id;
 
-    $delAct = Database::get()->query("DELETE FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $activity_id, $attendance_id)->affectedRows;
-    Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $activity_id)->affectedRows;
-    if($delAct) {
-        Session::flash('message',$langAttendanceDel);
-        Session::flash('alert-class', 'alert-success');
-    } else {
-        Session::flash('message',$langAttendanceDelFailure);
-        Session::flash('alert-class', 'alert-danger');
+    $q = Database::get()->queryArray("SELECT attendance.id FROM attendance_activities 
+            JOIN attendance 
+            ON attendance_activities.attendance_id = attendance.id 
+          WHERE attendance.id = ?d 
+          AND course_id = ?d", $attendance_id, $course_id);
+    if (count($q) > 0) {
+        $delAct = Database::get()->query("DELETE FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $activity_id, $attendance_id)->affectedRows;
+        Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $activity_id)->affectedRows;
+        if ($delAct) {
+            Session::flash('message', $langAttendanceDel);
+            Session::flash('alert-class', 'alert-success');
+        } else {
+            Session::flash('message', $langAttendanceDelFailure);
+            Session::flash('alert-class', 'alert-danger');
+        }
     }
 }
 
@@ -1504,13 +1511,20 @@ function delete_attendance_activity($attendance_id, $activity_id) {
  */
 function delete_attendance_user($attendance_id, $userid) {
 
-    global $langGradebookEdit;
+    global $langGradebookEdit, $course_id;
 
-    Database::get()->query("DELETE FROM attendance_book WHERE uid = ?d AND attendance_activity_id IN
+    $q = Database::get()->queryArray("SELECT attendance.id FROM attendance_activities 
+            JOIN attendance 
+            ON attendance_activities.attendance_id = attendance.id 
+          WHERE attendance.id = ?d 
+          AND course_id = ?d", $attendance_id, $course_id);
+    if (count($q) > 0) {
+        Database::get()->query("DELETE FROM attendance_book WHERE uid = ?d AND attendance_activity_id IN
                                 (SELECT id FROM attendance_activities WHERE attendance_id = ?d)", $userid, $attendance_id);
-    Database::get()->query("DELETE FROM attendance_users WHERE uid = ?d AND attendance_id = ?d", $userid, $attendance_id);
-    Session::flash('message',$langGradebookEdit);
-    Session::flash('alert-class', 'alert-success');
+        Database::get()->query("DELETE FROM attendance_users WHERE uid = ?d AND attendance_id = ?d", $userid, $attendance_id);
+        Session::flash('message', $langGradebookEdit);
+        Session::flash('alert-class', 'alert-success');
+    }
 }
 
 

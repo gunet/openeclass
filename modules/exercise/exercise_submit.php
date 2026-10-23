@@ -172,9 +172,26 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['new_upload_file'])) {
 
     header('Content-Type: application/json');
     
-    $exercise_id = intval($_GET['exerciseId']);
-    $question_id = intval($_GET['questionId']);
-    $u_rec = intval($_GET['exrecid']);
+    $exercise_id = intval($_GET['exerciseId'] ?? 0);
+    $question_id = intval($_GET['questionId'] ?? 0);
+    // Check if question is file upload type and belongs to the current exercise
+    $q_check = Database::get()->querySingle("SELECT eq.type
+                                             FROM exercise_question eq
+                                             JOIN exercise_with_questions ewq ON ewq.question_id = eq.id
+                                             WHERE ewq.exercise_id = ?d
+                                             AND eq.id = ?d", $exercise_id, $question_id);
+    if (!$q_check or ($q_check && $q_check->type != UPLOAD_FILE)) {
+        forbidden();
+    }
+    $u_rec = intval($_GET['exrecid'] ?? 0);
+    if ($u_rec == 0) {
+        forbidden();
+    }
+    // Check if exercise record belongs to the current user
+    $u_check = Database::get()->querySingle("SELECT `uid` FROM exercise_user_record WHERE eurid = ?d AND eid = ?d", $u_rec, $exercise_id);
+    if (!$u_check or ($u_check && $u_check->uid != $uid)) {
+        forbidden();
+    }
     $filename = $_FILES['new_upload_file']['name'];
     validateUploadedFile($filename); // check file type
     $filename = add_ext_on_mime($filename);
@@ -1436,6 +1453,18 @@ function unset_session_variables_of_questions($eurid, $type = '') {
                     unset($data['userSubset_'.$uid]);
                     $updatedJsonString = json_encode($data);
                     Database::get()->query("UPDATE exercise_question SET options = ?s WHERE id = ?d", $updatedJsonString, $qid);
+                }
+            }
+            // About oral questions
+            if ($type == 'cancel_exercise' && $typeQuestion[$qid] == ORAL) {
+                $fFile = Database::get()->querySingle("SELECT id,`path` FROM document WHERE course_id = ?d
+                                                        AND subsystem = ?d AND subsystem_id = ?d
+                                                        AND lock_user_id = ?d", $course_id, ORAL_QUESTION, $qid, $eurid);
+                if ($fFile) {
+                    if (file_exists("$webDir/courses/$course_code/image" . $fFile->path)) {
+                        unlink("$webDir/courses/$course_code/image" . $fFile->path);
+                    }
+                    Database::get()->query("DELETE FROM document WHERE id = ?d", $fFile->id);
                 }
             }
         }

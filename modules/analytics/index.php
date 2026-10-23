@@ -398,7 +398,7 @@ if (isset($_POST['insert_analytics'])) {
     } else if ($mode == 'showDetails') {
         $analytics = Database::get()->querySingle("SELECT * FROM analytics WHERE courseID = ?d AND id = ?d", $course_id, $analytics_id);
         if ($analytics) {
-            $periodTypes = PeriodType::periodType;
+            $periodTypes = PeriodType::periodType();
             $analytics->period_name = isset($periodTypes[$analytics->periodType]) ? $periodTypes[$analytics->periodType]['title'] : '-';
             $analytics->start_date_formatted = (!empty($analytics->start_date) && ($d = date_create_from_format('Y-m-d', $analytics->start_date))) ? date_format($d, 'd-m-Y') : '';
             $analytics->end_date_formatted = (!empty($analytics->end_date) && ($d = date_create_from_format('Y-m-d', $analytics->end_date))) ? date_format($d, 'd-m-Y') : '';
@@ -408,8 +408,8 @@ if (isset($_POST['insert_analytics'])) {
             $elements = array();
             foreach ($raw_elements as $el) {
                 $m_id = $el->module_id;
-                $el_title = isset(ElementTypes::elements[$m_id]) ? ElementTypes::elements[$m_id]['title'] : '';
-                $el_icon = isset(ElementTypes::elements[$m_id]) ? ElementTypes::elements[$m_id]['icon'] : 'fa fa-chart-line';
+                $el_title = isset(ElementTypes::elements()[$m_id]) ? ElementTypes::elements()[$m_id]['title'] : '';
+                $el_icon = isset(ElementTypes::elements()[$m_id]) ? ElementTypes::elements()[$m_id]['icon'] : 'fa fa-chart-line';
                 $resource_info = get_resource_info($el->resource, $m_id);
 
                 $element_actions = action_button(array(
@@ -499,7 +499,7 @@ if (isset($_POST['insert_analytics'])) {
 
             $pageName = $analytics->title;
             $add_buttons = array();
-            foreach (ElementTypes::elements as $elementType) {
+            foreach (ElementTypes::elements() as $elementType) {
                 $type = $elementType['link'];
                 $add_buttons[] = array(
                     'title' => $elementType['title'],
