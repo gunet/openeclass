@@ -36,7 +36,8 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'functions.php';
 
 check_activation_of_collaboration();
-check_user_belongs_in_session($_GET['session']);
+session_exists(intval($_GET['session'] ?? 0));
+check_user_belongs_in_session(intval($_GET['session'] ?? 0));
 
 $sessionTitle = title_session($course_id,$_GET['session']);
 $pageName = $langEditSession;

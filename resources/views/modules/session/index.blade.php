@@ -42,7 +42,7 @@
                 document.getElementById("about_session").value = session_id;
             });
             
-            $('#session-indexes-tb').DataTable ({
+            var sessionsTable = $('#session-indexes-tb').DataTable ({
                 "columns":  [
                                 @if(!$is_simple_user)
                                     null, null, null, null, null, null, null, null
@@ -87,6 +87,11 @@
                     $(this).removeAttr('aria-label');
                     $(this).attr('aria-hidden', 'true');
                 });
+            });
+
+            // Initialize popovers on all table rows (including those on other pages)
+            sessionsTable.$('[data-bs-toggle="popover"]').each(function() {
+                bootstrap.Popover.getOrCreateInstance(this, { html: true, sanitize: false });
             });
 
             choose_user_consultant();

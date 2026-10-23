@@ -2218,12 +2218,12 @@ function display_session_activities($element, $id, $session_id = 0) {
                                                                                         action_button(array(
                                                                                             array('title' => $langEditChange,
                                                                                                 'icon' => 'fa-edit',
-                                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;session=$session_id&amp;act_mod=$details->id",
+                                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
                                                                                                 'show' => in_array($details->activity_type, criteria_with_operators())
                                                                                             ),
                                                                                             array('title' => $langDelete,
                                                                                                 'icon' => 'fa-xmark',
-                                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;session=$session_id&amp;del_cert_res=$details->id",
+                                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
                                                                                                 'confirm' => $langConfirmDelete,
                                                                                                 'class' => 'delete'))).
                                                                                         "</td></tr>";
@@ -2402,7 +2402,7 @@ function display_session_modification_activity($element, $element_id, $activity_
     global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $urlAppend, $langImgFormsDes;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-    if (resource_usage($element, $activity_id)) { // check if resource has been used by user
+    if (resource_usage($element, $activity_id, $session_id)) { // check if resource has been used by user
         Session::flash('message',$langUsedCertRes);
         Session::flash('alert-class', 'alert-warning');
         if ($session_id) {

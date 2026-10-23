@@ -21,7 +21,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-if (!isset($_GET['session']) or !isset($_GET['u'])) {
+if (!isset($_GET['session']) && !isset($_GET['u'])) {
     Session::flash('message', $langForbidden);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page("modules/session/index.php?course=$course_code"); 

@@ -38,11 +38,14 @@ check_activation_of_collaboration();
 is_session_type_course();
 
 if (isset($_GET['session'])) {
-    $data['sessionID'] = $sessionID = $_GET['session'];
+    $data['sessionID'] = $sessionID = intval($_GET['session'] ?? 0);
 }
 if (isset($_GET['pid'])) {
-    $data['pid'] = $pid = $_GET['pid'];
+    $data['pid'] = $pid = intval($_GET['pid'] ?? 0);
 }
+
+session_exists(intval($_GET['session'] ?? 0));
+check_user_belongs_in_session(intval($_GET['session'] ?? 0));
 
 $pageName = $langCommentsByConsultant;
 $sessionTitle = title_session($course_id,$sessionID);

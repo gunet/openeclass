@@ -1046,3 +1046,4 @@ $langProcessForFiliInTool = "You are in the process of completing the tool regar
 $langConfirmParticipation = "Confirmation";
 $langReportAttendances = "Reports - Attendance records";
 $langUpdatePercentage = "Update session percentage of users";
+$langAlreadyUsedSession = "already used.";

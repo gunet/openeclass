@@ -184,3 +184,4 @@ $infoPrereqSession = "Η συνεδρία που θα επιλέξετε ως π
 $langConfirmParticipation = "Επιβεβαίωση συμμετοχής";
 $langReportAttendances = "Αναφορές - Παρουσιολόγια";
 $langUpdatePercentage = "Ενημέρωση ποσοστού ολοκλήρωσης συνεδριών";
+$langAlreadyUsedSession = "χρησιμοποιείται ήδη.";

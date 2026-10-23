@@ -58,9 +58,8 @@ $element = "badge";
 $display = TRUE;
 
 check_activation_of_collaboration();
-if (isset($_GET['session'])) {
-    check_user_belongs_in_session($_GET['session']);
-}
+session_exists(intval($_GET['session']));
+check_user_belongs_in_session(intval($_GET['session']));
 
 if ($is_consultant) {
 
@@ -68,7 +67,7 @@ if ($is_consultant) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
         $message_q = '';
-        $badge_id = $_POST['badgeId'];
+        $badge_id = intval($_POST['badgeId'] ?? 0);
         $oldCriteriaArr = [];
         $newCriteriaArr = [];
         $oldCriteria = Database::get()->queryArray("SELECT * FROM badge_criterion WHERE badge = ?d", $badge_id);
@@ -120,7 +119,7 @@ if ($is_consultant) {
                             Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d", $crid->id);
                             Database::get()->query("DELETE FROM badge_criterion WHERE id = ?d", $crid->id);
                         } else {
-                            if (!resource_usage($badge_id, $crid->id)) { // check if resource has been used by user
+                            if (!resource_usage($element, $crid->id, intval($_GET['session']))) { // check if resource has been used by user
                                 Database::get()->query("DELETE FROM badge_criterion WHERE id = ?d", $crid->id);
                             } else {
                                 if ($res_type == 'questionnaire') {
@@ -134,7 +133,7 @@ if ($is_consultant) {
                                 } else {
                                     $titleR = "$langWithAttendanceRegistrationByConsultant";
                                 }
-                                $message_q .= "<ul style='margin-bottom: 0px;'><li>$langTheResource&nbsp;<strong>$titleR</strong>&nbsp;$langAlreadyUsed</li></ul>";
+                                $message_q .= "<ul style='margin-bottom: 0px;'><li>$langTheResource&nbsp;<strong>$titleR</strong>&nbsp;$langAlreadyUsedSession</li></ul>";
                             }
                         }
                     } else {
@@ -162,7 +161,7 @@ if ($is_consultant) {
                     Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d", $cr->id);
                     Database::get()->query("DELETE FROM badge_criterion WHERE id = ?d", $cr->id);
                 } else {
-                    if (!resource_usage($badge_id, $cr->id)) { // check if resource has been used by user
+                    if (!resource_usage($element, $cr->id, intval($_GET['session']))) { // check if resource has been used by user
                         Database::get()->query("DELETE FROM badge_criterion WHERE id = ?d", $cr->id);
                     } else {
                         if ($cr->activity_type != 'consultant-completion') {
@@ -178,7 +177,7 @@ if ($is_consultant) {
                         } else {
                             $titleR = "$langWithAttendanceRegistrationByConsultant";
                         }
-                        $message_q .= "<ul style='margin-bottom: 0px;'><li>$langTheResource&nbsp;<strong>$titleR</strong>&nbsp;$langAlreadyUsed</li></ul>";
+                        $message_q .= "<ul style='margin-bottom: 0px;'><li>$langTheResource&nbsp;<strong>$titleR</strong>&nbsp;$langAlreadyUsedSession</li></ul>";
                     }
                 }
             }
@@ -218,8 +217,8 @@ if ($is_consultant) {
         } else {
             $session_resource_id = 0;
         }
-        $sessionID = $_GET['session'];
-        $course_code = $_GET['course'];
+        $sessionID = intval($_GET['session'] ?? 0);
+        $course_code = q($_GET['course']);
         $course_id = course_code_to_id($course_code);
         session_exists($sessionID);
         check_user_belongs_in_session($sessionID);
@@ -290,7 +289,7 @@ if ($is_consultant) {
         redirect_to_home_page("courses/$course_code/");
     }
 
-    $base_url = "modules/session/complete.php?course=$course_code&manage=1&$sessionID";
+    $base_url = "modules/session/complete.php?course=$course_code&manage=1&session=$sessionID";
     if (isset($_POST['mod_cert_activity'])) { // modify certificate activity
         modify_certificate_activity($element, $element_id, $_POST['activity_id']);
         Session::flash('message', $langQuotaSuccess);
@@ -362,16 +361,16 @@ if ($is_consultant) {
             $display = FALSE;
         } elseif (isset($_GET['del_cert_res'])) { // delete certificate / badge activity
             // You can delete badge activity if refers to tc-completed
-            $actType = Database::get()->querySingle("SELECT activity_type FROM badge_criterion WHERE id = ?d",$_GET['del_cert_res'])->activity_type;
+            $actType = Database::get()->querySingle("SELECT activity_type FROM badge_criterion WHERE id = ?d", intval($_GET['del_cert_res']))->activity_type;
             if($actType == 'tc-completed' or $actType == 'noactivity' or $actType == 'meeting-completed' or $actType == 'autocomplete'){
-                Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d",$_GET['del_cert_res']);
+                Database::get()->query("DELETE FROM user_badge_criterion WHERE badge_criterion = ?d", intval($_GET['del_cert_res']));
             }
-            if (resource_usage($element, $_GET['del_cert_res'])) { // check if resource has been used by user
+            if (resource_usage($element, intval($_GET['del_cert_res']), intval($_GET['session']))) { // check if resource has been used by user
                 Session::flash('message',"$langUsedCertRes");
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page($base_url);
             } else { // delete it otherwise
-                delete_activity($element, $element_id, $_GET['del_cert_res']);
+                delete_activity($element, $element_id, intval($_GET['del_cert_res']));
                 Session::flash('message',"$langAttendanceDel");
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page($base_url);

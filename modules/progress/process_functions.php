@@ -1561,17 +1561,25 @@ function delete_activity($element, $element_id, $activity_id) {
  * @param type $element_resource_id
  * @return boolean
  */
-function resource_usage($element, $element_resource_id) {
+function resource_usage($element, $element_resource_id, $session_id = null) {
 
+    $args = [$element_resource_id];
     if ($element == 'certificate') {
         $query = "SELECT user FROM user_certificate_criterion WHERE certificate_criterion = ?d";
     } elseif ($element == 'badge') {
         $query = "SELECT user FROM user_badge_criterion WHERE badge_criterion = ?d";
+        if (!is_null($session_id) && $session_id > 0) {
+            $query = "SELECT ubc.user FROM user_badge_criterion ubc
+                      JOIN badge_criterion bc ON bc.id = ubc.badge_criterion
+                      JOIN badge b ON b.id = bc.badge
+                      WHERE ubc.badge_criterion = ?d AND b.session_id = ?d";
+            $args[] = $session_id;
+        }
     } else { //points_game
         $query = "SELECT user FROM user_points_game_criterion WHERE points_game_criterion = ?d";
     }
     
-    $sql = Database::get()->querySingle($query, $element_resource_id);
+    $sql = Database::get()->querySingle($query, $args);
     if ($sql) {
         return true;
     } else {

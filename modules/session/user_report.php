@@ -38,9 +38,9 @@ require_once 'functions.php';
 check_activation_of_collaboration();
 
 if(isset($_GET['session'])){
-    $data['sessionID'] = $sessionID = $_GET['session'];
+    $data['sessionID'] = $sessionID = intval($_GET['session'] ?? 0);
 }elseif(isset($_GET['id'])){
-    $data['sessionID'] = $sessionID = $_GET['id'];
+    $data['sessionID'] = $sessionID = intval($_GET['id'] ?? 0);
 }
 
 session_exists($sessionID);
@@ -68,9 +68,9 @@ if(isset($_GET['material_pdf'])){
     $m = Database::get()->querySingle("SELECT content FROM session_user_material 
                                         WHERE course_id = ?d
                                         AND session_id = ?d
-                                        AND user_id = ?d", $course_id, $sessionID, $_GET['uMaterial']);
+                                        AND user_id = ?d", $course_id, $sessionID, intval($_GET['uMaterial']));
 
-    pdf_user_material_output($sessionID, $m->content, $_GET['uMaterial']);
+    pdf_user_material_output($sessionID, $m->content, intval($_GET['uMaterial']));
 }
 
 if(isset($_POST['add_material'])){
