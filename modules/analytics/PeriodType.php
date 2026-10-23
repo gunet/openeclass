@@ -25,11 +25,15 @@ define('TOTAL', 3);
 
 abstract class PeriodType {
 
-    const periodType = array(
-        DAILY => array('title' => 'Ημερήσιος Υπολογισμός'),
-        WEEKLY => array('title' => 'Εβδομαδιαίος Υπολογισμός'),
-        MONTHLY => array('title' => 'Μηνιαίος Υπολογισμός'),
-        TOTAL => array('title' => 'Συνολικός Υπολογισμός')
-    );
+    public static function periodType() {
+        global $langDailyCount, $langWeeklyCount, $langMonthlyCount, $langTotalCount;
+
+        return array(
+            DAILY => array('title' => $langDailyCount),
+            WEEKLY => array('title' => $langWeeklyCount),
+            MONTHLY => array('title' => $langMonthlyCount),
+            TOTAL => array('title' => $langTotalCount)
+        );
+    }
 }
 

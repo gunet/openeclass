@@ -178,12 +178,6 @@ function default_modules_collaboration() {
 }
 
 /**
- * @brief Import CADMOS file (.cdm) into course
- * @param string $code course code
- * @param string $filename CADMOS file path
- * @return boolean
- */
-/**
  * @brief Import CADMOS JSON data into course
  * @param int $course_id course ID
  * @param string $course_code course code
@@ -358,6 +352,12 @@ function import_cadmos_data($course_id, $course_code, $cadmos) {
     return true;
 }
 
+/**
+ * @brief Import CADMOS file (.cdm) into course
+ * @param string $code course code
+ * @param string $filename CADMOS file path
+ * @return boolean
+ */
 function import_cadmos_file($course_id, $course_code, $path) {
     global $webDir;
 
@@ -367,6 +367,12 @@ function import_cadmos_file($course_id, $course_code, $path) {
     }
     $zip = new ZipArchive;
     if ($zip->open($path)) {
+        for ($i = 0; $i < $zip->numFiles; $i++) { // check for file type in zip contents
+            $filename = $zip->getNameIndex($i);
+            if (!empty(my_basename($filename))) {
+                validateUploadedFile(my_basename($filename), 3, 'html', ['json']);
+            }
+        }
         $zip->extractTo($target);
         $zip->close();
         $cadmos = json_decode(file_get_contents("$target/source.json"));

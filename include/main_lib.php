@@ -4441,6 +4441,41 @@ function make_dir($dir) {
     return @mkdir($dir, 0755, true);
 }
 
+/**
+ * @brief Prevent (Apache) execution of scripts stored in course content directories
+ * (everything below courses/<CODE>/ except the courses/<CODE>/index.php stubs).
+ * The rules are appended to courses/.htaccess if not already there.
+ * @param string $courses_dir
+ * @return bool
+ */
+function protect_courses_dir($courses_dir) {
+    $marker = '# eclass: deny script execution in course content';
+    $htaccess = $courses_dir . '/.htaccess';
+    $existing = file_exists($htaccess) ? file_get_contents($htaccess) : '';
+    if ($existing !== false && strpos($existing, $marker) !== false) {
+        return true;
+    }
+    $rules = <<<EOT
+$marker
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule "^(?![^/]+/index\.php$)[^/]+/.+\.(php.?|phtml|phar)$" - [F,NC]
+</IfModule>
+<IfModule !mod_rewrite.c>
+    <FilesMatch "(?<!^index)\.(php.?|phtml|phar)$">
+        <IfModule mod_authz_core.c>
+            Require all denied
+        </IfModule>
+        <IfModule !mod_authz_core.c>
+            Deny from all
+        </IfModule>
+    </FilesMatch>
+</IfModule>
+
+EOT;
+    return @file_put_contents($htaccess, ($existing ? rtrim($existing) . "\n\n" : '') . $rules) !== false;
+}
+
 function setOpenCoursesExtraHTML() {
     global $urlAppend, $openCoursesExtraHTML, $langListOpenCourses,
         $langCourses,$langCourse,$langNationalOpenCourses,

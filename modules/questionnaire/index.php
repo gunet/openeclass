@@ -60,7 +60,7 @@ $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#polls').DataTable ({
                 'columns': [ null, null, null, { orderable: false } ],
-                'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && MathJax.typeset(); },
+                'fnDrawCallback': function (settings) { typeof MathJax !== 'undefined' && typeof MathJax.typeset === 'function' && MathJax.typeset(); },
                 'lengthMenu': [10, 20, 30 , -1],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
@@ -128,7 +128,7 @@ $head_content .= "<script type='text/javascript'>
                             }
                         });
                         dialog.init(function() {
-                            typeof MathJax !== 'undefined' && MathJax.typeset();
+                            typeof MathJax !== 'undefined' && typeof MathJax.typeset === 'function' && MathJax.typeset();
                         });
                     }
                   });

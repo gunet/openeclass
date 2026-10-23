@@ -109,13 +109,17 @@ if ($is_editor) {
 // AJAX request for DataTables
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
-    $limit = intval($_POST['length']);
-    $offset = intval($_POST['start']);
-    $keyword = '%' . $_POST['search']['value'] . '%';
+    $limit = isset($_POST['length'])? intval($_POST['length']): 0;
+    $offset = isset($_POST['start'])? intval($_POST['start']): 0;
+    $keyword = isset($_POST['search']['value'])? ('%' . $_POST['search']['value'] . '%'): null;
 
     $student_sql = $is_editor? '': 'AND visible = 1 AND (start_display <= NOW() OR start_display IS NULL) AND (stop_display >= NOW() OR stop_display IS NULL)';
     $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d $student_sql", $course_id);
-    $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql", $course_id, $keyword);
+    if ($keyword) {
+        $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql", $course_id, $keyword);
+    } else {
+        $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d $student_sql", $course_id);
+    }
     if ($limit > 0) {
         $extra_sql = 'LIMIT ?d, ?d';
         $extra_terms = array($offset, $limit);
@@ -123,7 +127,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $extra_sql = '';
         $extra_terms = array();
     }
-    $result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql ORDER BY `order` DESC , `date` DESC  $extra_sql", $course_id, $keyword, $extra_terms);
+    if ($keyword) {
+        $result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql ORDER BY `order` DESC , `date` DESC  $extra_sql", $course_id, $keyword, $extra_terms);
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d $student_sql ORDER BY `order` DESC , `date` DESC  $extra_sql", $course_id, $extra_terms);
+    }
 
     $data['recordsTotal'] = $all_announc->total;
     $data['recordsFiltered'] = $filtered_announc->total;

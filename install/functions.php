@@ -86,6 +86,7 @@ function create_directories() {
     mkdir_try('storage/views');
     mkdir_try('courses');
     touch_try('courses/index.php');
+    protect_courses_dir('courses');
     mkdir_try('courses/temp');
     touch_try('courses/temp/index.php');
     mkdir_try('courses/temp/pdf');

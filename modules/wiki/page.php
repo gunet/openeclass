@@ -436,11 +436,8 @@ switch ($action) {
             $pageName = $langWikiRecentChanges;
             break;
         }
+    case "exSearch":
     case "rqSearch": {
-            $pageName = $langSearch;
-            break;
-        }
-    case "exSearch": {
             $pageName = $langSearch;
             break;
         }
