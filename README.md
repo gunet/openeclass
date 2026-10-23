@@ -1,4 +1,4 @@
-# The Open eClass Platform 4.4.2
+# The Open eClass Platform 4.4.3
 
 http://www.openeclass.org/
 
@@ -25,7 +25,7 @@ GUnet eLearning Group
 October 2026
 
 
-# Πλατφόρμα Open eClass 4.4.2
+# Πλατφόρμα Open eClass 4.4.3
 
 http://www.openeclass.org/
 
