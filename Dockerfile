@@ -20,7 +20,7 @@ COPY --parents js/ include/ package.json modules/admin/tenant_functions.php .
 RUN bun install --frozen-lockfile
 
 # Final stage
-FROM alpine:3.23
+FROM alpine:3.24
 
 LABEL gr.gunet.e-class-docker.maintainer="eclass@gunet.gr"
 LABEL org.opencontainers.image.source="https://github.com/gunet/openeclass"
