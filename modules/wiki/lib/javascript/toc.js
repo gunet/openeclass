@@ -26,17 +26,18 @@
 ==============================================================================
 */
 
-function createTOC()
+function createTOC(blockId)
 {
     // to do : gracefully handle if h2 is top level id and not h1
 
     // configuration options
-    var page_block_id = 'mainContent'; // this is the id which contains our h1's etc
+    var page_block_id = blockId || 'mainContent'; // this is the id which contains our h1's etc
     var toc_page_position =-1; // used later to remember where in the page to put the final TOC
     var top_level ="H1";// default top level.. shouldn't matter what is here it is set at line 50 anyway
     var skip_first = true;
 
     var w = document.getElementById(page_block_id);
+    if (!w) return;
     var x = w.childNodes;
 
     //build our table tbody tr td - structure
